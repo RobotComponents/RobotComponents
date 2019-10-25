@@ -10,7 +10,7 @@ namespace RobotComponents.BaseClasses
         private ExternalAxis _externalAxis; // coupled with external axis: e.g. rotational poistioner, but can also be combined with a linear axis that moves the work object. 
         private Quaternion _orientation;
         private bool _robotHold;
-        private bool _userFrame;
+        private Plane _userFrame;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace RobotComponents.BaseClasses
             _plane = Plane.WorldXY;
             _externalAxis = null; // To do: shoud implement that an external axis can be null
             _robotHold = false;
-            _userFrame = false;
+            _userFrame = Plane.WorldXY;
             Initilize();
         }
 
@@ -31,7 +31,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
             _externalAxis = null;  // To do: shoud implement that an external axis can be null
             _robotHold = false;
-            _userFrame = false;
+            _userFrame = Plane.WorldXY;
             Initilize();
         }
 
@@ -41,7 +41,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
             _externalAxis = externalAxis;
             _robotHold = false;
-            _userFrame = false;
+            _userFrame = Plane.WorldXY;
             Initilize();
         }
 
@@ -105,14 +105,8 @@ namespace RobotComponents.BaseClasses
             }
 
             // Add User frame < ufprog of bool >
-            if (this.UserFrame)
-            {
-                result += "TRUE, ";
-            }
-            else
-            {
-                result += "FALSE, ";
-            }
+            // Todo..
+            // result +=
 
             // Add mechanical unit (an external axis or robot) < ufmec of string >
             // Todo..
@@ -142,7 +136,7 @@ namespace RobotComponents.BaseClasses
         #region properties
         public string Name { get => _name; set => _name = value; }
         public bool RobotHold { get => _robotHold; set => _robotHold = value; }
-        public bool UserFrame { get => _userFrame; set => _userFrame = value; }
+        public Plane UserFrame { get => _userFrame; set => _userFrame = value; }
         public Plane Plane { get => _plane; set => _plane = value; }
         public ExternalAxis ExternalAxis { get => _externalAxis; set => _externalAxis = value; }
         public Quaternion Orientation { get => _orientation; set => _orientation = value; }

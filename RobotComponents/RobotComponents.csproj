@@ -131,6 +131,7 @@
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
+    <Compile Include="Components\_Development\GetMechanicalUnitsComponent.cs" />
     <Compile Include="Goos\DIGoo.cs" />
     <Compile Include="Goos\ExternalLinearAxisGoo.cs" />
     <Compile Include="Goos\ExternalRotationalAxisGoo.cs" />

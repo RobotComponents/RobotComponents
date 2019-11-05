@@ -7,56 +7,79 @@ namespace RobotComponents.BaseClasses
     public class ExternalLinearAxis : ExternalAxis
     {
         #region fields
-        private Point3d _startPoint;
-        private Point3d _endPoint;
-        private double _attachmentDistance;
-
-        private Vector3d _axis;
-        private Point3d _attachmentOrigin;
-        private double _maxNegativeDistanceFromOrigin;
-        private double _maxPositiveDistanceFromOrigin;
-        private Interval _axisLimits;
-        private Curve _axisCurve;
-
-        private Plane _attachmentPlane;
-        private Plane _axisPlane; // Todo: now only the attachement plane is copied
-        private bool _isLinear;
-        private List<Mesh> _meshes;
-        private int? _axisNumber; // Todo
+        Plane _attachmentPlane;
+        Plane _axisPlane;          // Z-Axis of the _axisPlane is the linear axis
+        Interval _axisLimits;
+        int? _axisNumber;
+        Mesh _baseMesh;
+        Mesh _linkMesh;
+        Mesh _posedBaseMesh;
+        Mesh _posedLinkMesh;
+        Curve _axisCurve;
+        List<Mesh> _posedMeshes;
         #endregion
 
         #region constructors
         public ExternalLinearAxis()
         {
-            _startPoint = new Point3d(0, 0, 0);
-            _endPoint = new Point3d(0, 0, 0);
-            _attachmentDistance = 0;
-            _axisNumber = null; // Todo
-            Initilize();
+            _posedMeshes = new List<Mesh>();
         }
 
-        //public ExternalLinearAxis(Point3d startPoint, Point3d endPoint, double attachmentDistance)
-        //{
-        //    _startPoint = startPoint;
-        //    _endPoint = endPoint;
-        //    _attachmentDistance = attachmentDistance;
-        //    _axisNumber = -1; 
-        //   Initilize();
-        //}
-
-        public ExternalLinearAxis(Point3d startPoint, Point3d endPoint, Plane attachmentPlane)
+        public ExternalLinearAxis(Plane attachementPlane, Plane axisPlane, Interval axisLimits)
         {
-            _startPoint = startPoint;
-            _endPoint = endPoint;
-            _attachmentPlane = attachmentPlane;
-            _axisNumber = null; // Todo
-            _attachmentDistance = _startPoint.DistanceTo(_attachmentPlane.Origin);
+            _attachmentPlane = attachementPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; // to do
+            BaseMesh = null;
+            LinkMesh = null;
+            _posedMeshes = new List<Mesh>();
             Initilize();
         }
+
+        public ExternalLinearAxis(Plane attachementPlane, Vector3d axis, Interval axisLimits)
+        {
+            _attachmentPlane = attachementPlane;
+            axis.Unitize();
+            _axisPlane = new Plane(attachementPlane.Origin, axis);
+            _axisLimits = axisLimits;
+            _axisNumber = null; // to do
+            BaseMesh = null;
+            LinkMesh = null;
+            _posedMeshes = new List<Mesh>();
+            Initilize();
+        }
+
+        public ExternalLinearAxis(Plane attachementPlane, Vector3d axis, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _attachmentPlane = attachementPlane;
+            axis.Unitize();
+            _axisPlane = new Plane(attachementPlane.Origin, axis);
+            _axisLimits = axisLimits;
+            _axisNumber = null; // to do
+            BaseMesh = baseMesh;
+            LinkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+            Initilize();
+        }
+
+
+        public ExternalLinearAxis(Plane attachementPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _attachmentPlane = attachementPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; // to do
+            BaseMesh = baseMesh;
+            LinkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+            Initilize();
+        }
+
 
         public ExternalLinearAxis Duplicate()
         {
-            ExternalLinearAxis dup = new ExternalLinearAxis(StartPoint, EndPoint, AttachmentPlane);
+            ExternalLinearAxis dup = new ExternalLinearAxis(AttachmentPlane, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
             return dup;
         }
         #endregion
@@ -66,53 +89,49 @@ namespace RobotComponents.BaseClasses
         {
             get
             {
-                if (StartPoint == null) { return false; }
-                if (EndPoint == null) { return false; }
+                if (AttachmentPlane == null) { return false; }
+                if (AxisPlane == null) { return false; }
+                if (AxisLimits == null) { return false; }
                 return true;
             }
         }
 
-        public void GetAxis()
-        {
-            Vector3d axis = _endPoint - _startPoint;
-            axis.Unitize();
-            _axis = axis;
-        }
-
-        public void GetAttachmentOrigin()
-        {
-            _attachmentOrigin = AttachmentPlane.Origin;
-        }
-
-        public void GetMaxPositiveDistanceFromOrigin()
-        {
-            _maxPositiveDistanceFromOrigin = _attachmentPlane.Origin.DistanceTo(_endPoint);
-        }
-
-        public void GetMaxNegativeDistanceFromOrigin()
-        {
-            _maxNegativeDistanceFromOrigin = _attachmentPlane.Origin.DistanceTo(_startPoint);
-        }
-
-        public void GetAxisLimit()
-        {
-            _axisLimits = new Interval(-_maxNegativeDistanceFromOrigin, _maxPositiveDistanceFromOrigin);
-        }
-
         public void GetAxisCurve()
         {
-            Line line = new Line(_startPoint, _endPoint);
-            _axisCurve = line.ToNurbsCurve();
-            _axisCurve.Domain = new Interval(0, 1);
-            
-        }
-        public void GetAxisPlane()
-        {
-            // To do
-            _axisPlane = _attachmentPlane;
+            Line line = new Line(_attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Min, _attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Max);
+            AxisCurve = line.ToNurbsCurve();
+            AxisCurve.Domain = new Interval(0, 1);
+
         }
 
-        public override Plane CalculatePosition(double axisValue)
+        public override Plane CalculatePosition(double axisValue, out bool inLimits)
+        {
+            bool isInLimits;
+
+            // Check if value is within axis limits
+            if (axisValue < AxisLimits.Min)
+            {
+                isInLimits = false;
+            }
+            else if (axisValue > AxisLimits.Max)
+            {
+                isInLimits = false;
+            }
+            else
+            {
+                isInLimits = true;
+            }
+
+            // Transform
+            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Plane position = AttachmentPlane; // deep copy?
+            position.Transform(translateNow);
+
+            inLimits = isInLimits;
+            return position;
+        }
+
+        public override Plane CalculatePositionSave(double axisValue)
         {
             double value;
 
@@ -131,21 +150,26 @@ namespace RobotComponents.BaseClasses
             }
 
             // Transform
-            Transform translateNow = Transform.Translation(_axis * value);
-            Plane position = _attachmentPlane; // deep copy?
+            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Plane position = AttachmentPlane; // deep copy?
             position.Transform(translateNow);
 
             return position;
         }
 
+        override public void PoseMeshes(double axisValue)
+        {
+            _posedMeshes.Clear();
+            _posedMeshes.Add(_baseMesh.DuplicateMesh());
+            _posedMeshes.Add(_linkMesh.DuplicateMesh());
+
+            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            _posedMeshes[1].Transform(translateNow);
+        }
+
         public override void Initilize()
         {
-            GetAxis();
-            GetAttachmentOrigin();
             GetAxisCurve();
-            GetMaxPositiveDistanceFromOrigin();
-            GetMaxNegativeDistanceFromOrigin();
-            GetAxisLimit();
         }
 
         public override void ReInitilize()
@@ -156,21 +180,16 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region properties
-        public override Interval AxisLimits { get => _axisLimits; set => _axisLimits = value; }
+
+        override public Plane AttachmentPlane { get => _attachmentPlane; set => _attachmentPlane = value; }
+        override public Plane AxisPlane { get => _axisPlane; set => _axisPlane = value; }
+        override public Interval AxisLimits { get => _axisLimits; set => _axisLimits = value; }
+        override public int? AxisNumber { get => _axisNumber; set => _axisNumber = value; }
         public override AxisType AxisType { get => AxisType.LINEAR; }
-        public override Plane AttachmentPlane { get => _attachmentPlane; set => _attachmentPlane = value; }
-        public override Plane AxisPlane { get => _axisPlane; set => _axisPlane = value; }
-        public override int? AxisNumber { get => _axisNumber; set => _axisNumber = value; }
-        public Point3d StartPoint { get => _startPoint; set => _startPoint = value; }
-        public Point3d EndPoint { get => _endPoint; set => _endPoint = value; }
-        public double AttachmentDistance { get => _attachmentDistance; set => _attachmentDistance = value; }
-        public Vector3d Axis { get => _axis; set => _axis = value; }
-        public Point3d AttachmentOrigin { get => _attachmentOrigin; set => _attachmentOrigin = value; }
-        public double MaxNegativeDistanceFromOrigin { get => _maxNegativeDistanceFromOrigin; set => _maxNegativeDistanceFromOrigin = value; }
-        public double MaxPositiveDistanceFromOrigin { get => _maxPositiveDistanceFromOrigin; set => _maxPositiveDistanceFromOrigin = value; }
+        public Mesh BaseMesh { get => _baseMesh; set => _baseMesh = value; }
+        public Mesh LinkMesh { get => _linkMesh; set => _linkMesh = value; }
         public Curve AxisCurve { get => _axisCurve; set => _axisCurve = value; }
-        public bool IsLinear { get => _isLinear; set => _isLinear = value; }
-        public List<Mesh> Meshes { get => _meshes; set => _meshes = value; }
+        override public List<Mesh> PosedMeshes { get => _posedMeshes; set => _posedMeshes = value; }
         #endregion
     }
 }

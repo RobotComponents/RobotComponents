@@ -15,12 +15,13 @@ namespace RobotComponents.BaseClasses
         private bool _isLinear;
         private List<Mesh> _meshes;
         private int? _axisNumber;
+        List<Mesh> _posedMeshes;
         #endregion
 
         #region constructors
         public ExternalRotationalAxis()
         {
-
+            _posedMeshes = new List<Mesh>();
         }
 
         public ExternalRotationalAxis(Plane plane, double startDegree, Interval axisLimits)
@@ -30,6 +31,7 @@ namespace RobotComponents.BaseClasses
             _axisLimits = axisLimits;
             _axisNumber = null; // Todo
             _isLinear = false;
+            _posedMeshes = new List<Mesh>();
             Initilize();
         }
 
@@ -58,7 +60,35 @@ namespace RobotComponents.BaseClasses
             _axisCurve.Domain = new Interval(0, 1);
 
         }
-        public override Plane CalculatePosition(double axisValue)
+        public override Plane CalculatePosition(double axisValue, out bool inLimits)
+        {
+            bool isInLimits;
+
+            // Check if value is within axis limits
+            if (axisValue < _axisLimits.Min)
+            {
+                isInLimits = false;
+            }
+            else if (axisValue > _axisLimits.Max)
+            {
+                isInLimits = false;
+            }
+            else
+            {
+                isInLimits = true;
+            }
+
+            // Transform
+            double radians = Rhino.RhinoMath.ToRadians(axisValue);
+            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Plane position = _attachmentPlane; // deep copy?
+            position.Transform(orientNow);
+
+            inLimits = isInLimits;
+            return position;
+        }
+
+        public override Plane CalculatePositionSave(double axisValue)
         {
             double value;
 
@@ -77,13 +107,25 @@ namespace RobotComponents.BaseClasses
             }
 
             // Transform
-            double radians = Rhino.RhinoMath.ToRadians(axisValue);
+            double radians = Rhino.RhinoMath.ToRadians(value);
             Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane position = _attachmentPlane; // deep copy?
             position.Transform(orientNow);
 
             return position;
         }
+
+        override public void PoseMeshes(double axisValue)
+        {
+            _posedMeshes.Clear();
+            double radians = Rhino.RhinoMath.ToRadians(axisValue);
+            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            //_posedMeshes.Add(_baseMesh.DuplicateMesh());
+            //_posedMeshes.Add(_linkMesh.DuplicateMesh());
+            //_posedMeshes[1].Transform(translateNow);
+        }
+
+
 
         public void GetAxisPlane()
         {
@@ -112,6 +154,7 @@ namespace RobotComponents.BaseClasses
         public Curve AxisCurve { get => _axisCurve; set => _axisCurve = value; }
         public bool IsLinear { get => _isLinear; set => _isLinear = value; }
         public List<Mesh> Meshes { get => _meshes; set => _meshes = value; }
+        override public List<Mesh> PosedMeshes { get => _posedMeshes; set => _posedMeshes = value; }
         #endregion
     }
 }

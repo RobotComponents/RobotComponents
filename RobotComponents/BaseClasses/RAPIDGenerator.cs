@@ -57,9 +57,6 @@ namespace RobotComponents.BaseClasses
                 WriteRAPIDCodeToFile();
                 WriteBASECodeToFile();
             }
-
-            this._RAPIDCode = CreateRAPIDCode();
-            this._BASECode = CreateBaseCode();
           
         }
 
@@ -130,6 +127,7 @@ namespace RobotComponents.BaseClasses
             // Replaces@ with newLines
             RAPIDCode = RAPIDCode.Replace("@", System.Environment.NewLine);
 
+            _RAPIDCode = RAPIDCode;
             return RAPIDCode;
         }
 
@@ -192,6 +190,7 @@ namespace RobotComponents.BaseClasses
             // Replaces@ with newLines
             BASECode = BASECode.Replace("@", System.Environment.NewLine);
 
+            _BASECode = BASECode;
             return BASECode;
         }
 

@@ -20,7 +20,7 @@ namespace RobotComponents.Components
         /// </summary>
         public PlaneVisualizerComponent()
           : base("Plane Visualizer", "PV",
-              "Visualer for plane orientation."
+              "Visualizer for plane orientation."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
@@ -42,7 +42,7 @@ namespace RobotComponents.Components
         {
         }
 
-        GH_Structure<GH_Plane> planes = new GH_Structure<GH_Plane>();
+        List<Plane> planes = new List<Plane>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -52,7 +52,20 @@ namespace RobotComponents.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             planes.Clear();
-            if (!DA.GetDataTree(0, out planes)) { return; }
+
+            GH_Structure<GH_Plane> inputPlanes = new GH_Structure<GH_Plane>();
+
+            if (!DA.GetDataTree(0, out inputPlanes)) { return; }
+
+            for (int i = 0; i < inputPlanes.Branches.Count; i++)
+            {
+                var branches = inputPlanes.Branches[i];
+
+                for (int j = 0; j < branches.Count; j++)
+                {
+                    planes.Add(branches[j].Value);
+                }
+            }
         }
 
         /// <summary>
@@ -79,19 +92,13 @@ namespace RobotComponents.Components
 
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            for (int i = 0; i < planes.Branches.Count; i++)
+            for (int i = 0; i < planes.Count; i++)
             {
-                var branches = planes.Branches[i];
-
-                for (int j = 0; j < branches.Count; j++)
-                {
-                    Plane plane = branches[j].Value;
-                    args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-                    args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-                    args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
-                }
+                Plane plane = planes[i];
+                args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
             }
-
         }
     }
 }

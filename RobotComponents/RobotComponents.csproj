@@ -117,7 +117,7 @@
     <Compile Include="Components\Definitions\RobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
-    <Compile Include="Components\Code Generation\SetRobotToolComponent .cs" />
+    <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
     <Compile Include="Components\Code Generation\TimerComponent.cs" />
     <Compile Include="BaseClasses\DigitalOutput.cs" />
     <Compile Include="BaseClasses\ForwardKinematics.cs" />

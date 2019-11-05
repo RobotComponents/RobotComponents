@@ -9,7 +9,7 @@ using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
-    public class SetRobotToolComponent : GH_Component
+    public class OverrideRobotToolComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public 
@@ -18,9 +18,9 @@ namespace RobotComponents.Components
         /// Subcategory the panel. If you use non-existing tab or panel names, 
         /// new tabs/panels will automatically be created.
         /// </summary>
-        public SetRobotToolComponent()
-          : base("Action: Set Robot Tool", "Sets cuurent RobotTool",
-              "Defines an instruction to change the current robot tool of the ABB robot for RAPID base code generation."
+        public OverrideRobotToolComponent()
+          : base("Action: Override Robot Tool", "Overrides cuurent RobotTool",
+              "Defines an instruction to override the current robot tool of the ABB robot for RAPID base code generation."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -41,7 +41,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SetRobotToolParameter(), "Set Robot Tool", "RT", "Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new SetRobotToolParameter(), "Override Robot Tool", "ORT", "Override Robot Tool");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

@@ -31,6 +31,7 @@ namespace RobotComponents.BaseClasses
 
         List<Mesh> _meshes;                                         //Robot Meshes
         List<Mesh> _posedMeshes;                                    //Posed Robot Meshes
+        List<Mesh> _posedAxisMeshes;                                //Posed Axis Meshes
         Plane _endPlane;                                            //EndPlane placed on TargetPlane
         Plane _tcpPlane;                                            //TCP Plane of effector
 
@@ -65,14 +66,23 @@ namespace RobotComponents.BaseClasses
         public void Calculate()
         {
             this._posedMeshes = this._meshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            this.PosedAxisMeshes = new List<Mesh>();
             this._tcpPlane = this._robotInfo.ToolPlane;
-            // this._basePlane.Origin += new Vector3d(_robotInfo.ExternalLinearAxis.AttachementPlane.Origin.X, _robotInfo.ExternalLinearAxis.AttachementPlane.Origin.Y, _robotInfo.ExternalLinearAxis.AttachementPlane.Origin.Z);
+          
+            // Calculates External Axis
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
                 {
                     ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
-                    this._basePlane.Origin += externalLinearAxis.Axis * _externalAxisValues[0]; //External Axis Offset
+                    this._basePlane.Origin += externalLinearAxis.AxisPlane.ZAxis * _externalAxisValues[0]; //External Axis Offset
+                    externalLinearAxis.PoseMeshes(_externalAxisValues[0]);
+
+                    for (int j = 0; j < externalLinearAxis.PosedMeshes.Count; j++)
+                    {
+                        PosedAxisMeshes.Add(externalLinearAxis.PosedMeshes[j]);
+                    }
+         
                 }
             }
             
@@ -127,6 +137,7 @@ namespace RobotComponents.BaseClasses
             _posedMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
             // ----- endeffector transform
             _posedMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+
 
             _tcpPlane.Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
         }
@@ -296,6 +307,7 @@ namespace RobotComponents.BaseClasses
         public List<Interval> ExternalAxisLimits { get => _externalAxisLimits; set => _externalAxisLimits = value; }
         public List<bool> ExternalAxisInLimit { get => _externalAxisInLimit; set => _externalAxisInLimit = value; }
         public Plane BasePlane { get => _basePlane; set => _basePlane = value; }
+        public List<Mesh> PosedAxisMeshes { get => _posedAxisMeshes; set => _posedAxisMeshes = value; }
         #endregion
     }
 

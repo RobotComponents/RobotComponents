@@ -31,10 +31,15 @@ namespace RobotComponents.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPointParameter("Start Point", "SP", "External Linear Axis Start Point as Vector Position.", GH_ParamAccess.item);
-            pManager.AddPointParameter("End Point", "EP", "External Linear Axis End Point as Vector Position.", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment plane", "AP", "Attachement plane of robot. Overrides robot position plane.", GH_ParamAccess.item);
-           // pManager.AddNumberParameter("Robot Attachment Distance", "RAD", "Defines the Robot Attachment Distance from the start Point along the External Linear Axis as Number", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
+            pManager.AddIntervalParameter("Limits", "L", "Axis Limits as Domain", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
+
+            pManager[3].Optional = true;
+            pManager[4].Optional = true;
+            // pManager.AddNumberParameter("Robot Attachment Distance", "RAD", "Defines the Robot Attachment Distance from the start Point along the External Linear Axis as Number", GH_ParamAccess.item);
 
             //pManager[2].Optional = true;
         }
@@ -54,16 +59,29 @@ namespace RobotComponents.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Point3d startPoint = new Point3d(0,0,0);
-            Point3d endPoint = new Point3d(0, 0, 0);
-            //double robotAttachmentDistance = 0;
-            Plane attachmentPlane = new Plane();
+            Plane attachmentPlane = Plane.WorldXY;
+            Vector3d axis = new Vector3d(0,0,0);
+            Interval limits = new Interval(0, 0);
+            Mesh baseMesh = null;
+            Mesh linkMesh = null;
 
-            if (!DA.GetData(0, ref startPoint)) { return; }
-            if (!DA.GetData(1, ref endPoint)) { return; }
-            ///if (!DA.GetData(2, ref robotAttachmentDistance)) { robotAttachmentDistance = 0; }
-            if (!DA.GetData(2, ref attachmentPlane)) { return; }
-            ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(startPoint, endPoint, attachmentPlane);
+            if (!DA.GetData(0, ref attachmentPlane)) { return; }
+            if (!DA.GetData(1, ref axis)) { return; }
+            if (!DA.GetData(2, ref limits)) { return; }
+            if (!DA.GetData(3, ref baseMesh)) {  }
+            if (!DA.GetData(4, ref linkMesh)) {  }
+
+            if(baseMesh == null)
+            {
+                baseMesh = new Mesh(); ;
+            }
+
+            if(linkMesh == null)
+            {
+                linkMesh = new Mesh();
+            }
+
+            ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(attachmentPlane, axis, limits, baseMesh, linkMesh);
 
             DA.SetData(0, externalLinearAxis);
         }

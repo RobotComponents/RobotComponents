@@ -1,4 +1,5 @@
 ﻿using Rhino.Geometry;
+using System.Collections.Generic;
 
 namespace RobotComponents.BaseClasses
 {
@@ -16,18 +17,23 @@ namespace RobotComponents.BaseClasses
 
         #endregion
 
+        #region methods
+        public abstract Plane CalculatePosition(double axisValue, out bool inLimits);
+        public abstract Plane CalculatePositionSave(double axisValue);
+        public abstract void Initilize();
+        public abstract void ReInitilize();
+        public abstract void PoseMeshes(double axisValue);
+        #endregion
+
         #region properties
         public abstract Interval AxisLimits { get; set; }
         public abstract AxisType AxisType { get; }
         public abstract Plane AttachmentPlane { get; set; }
         public abstract Plane AxisPlane { get; set; }
         public abstract int? AxisNumber { get; set; }
+        public abstract List<Mesh> PosedMeshes { get; set; }
         #endregion
 
-        #region methods
-        public abstract Plane CalculatePosition(double axisValue);
-        public abstract void Initilize();
-        public abstract void ReInitilize();
-        #endregion
+
     }
 }

@@ -38,9 +38,11 @@ namespace RobotComponents.Components
             pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");
             pManager.AddBooleanParameter("Save To File", "S", "Saves RAPID Code to File", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates RAPID Code", GH_ParamAccess.item, true);
 
             pManager[3].Optional = true;
             pManager[4].Optional = true;
+            pManager[5].Optional = true;
         }
 
         /// <summary>
@@ -67,12 +69,14 @@ namespace RobotComponents.Components
             string moduleName = "";
             string filePath = "";
             bool saveToFile = false;
+            bool update = true;
 
             if (!DA.GetData(0, ref robInfo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref moduleName)) { moduleName = "MainModule"; }
             if (!DA.GetData(3, ref filePath)) { return; }
             if (!DA.GetData(4, ref saveToFile)) { return; }
+            if (!DA.GetData(5, ref update)) { return; }
 
             // Checks if module name exceeds max character limit for RAPID Code
             if (HelperMethods.VariableExeedsCharacterLimit32(moduleName))
@@ -92,6 +96,12 @@ namespace RobotComponents.Components
             if (rapidGenerator.FirstMovementIsMoveAbs == false)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
+            }
+
+            if(update == true)
+            {
+                rapidGenerator.CreateBaseCode();
+                rapidGenerator.CreateRAPIDCode();
             }
 
             DA.SetData(0, rapidGenerator.RAPIDCode);

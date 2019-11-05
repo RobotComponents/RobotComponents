@@ -117,7 +117,7 @@
     <Compile Include="Components\Definitions\RobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
-    <Compile Include="Components\Code Generation\SetRobotToolComponent .cs" />
+    <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
     <Compile Include="Components\Code Generation\TimerComponent.cs" />
     <Compile Include="BaseClasses\DigitalOutput.cs" />
     <Compile Include="BaseClasses\ForwardKinematics.cs" />
@@ -131,7 +131,6 @@
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
-    <Compile Include="Components\_Development\GetMechanicalUnitsComponent.cs" />
     <Compile Include="Goos\DIGoo.cs" />
     <Compile Include="Goos\ExternalLinearAxisGoo.cs" />
     <Compile Include="Goos\ExternalRotationalAxisGoo.cs" />

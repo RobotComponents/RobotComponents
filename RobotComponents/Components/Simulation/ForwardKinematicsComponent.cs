@@ -45,6 +45,7 @@ namespace RobotComponents.Components
         {
             pManager.Register_MeshParam("Robot Mesh", "RM", "Posed Robot Mesh");  //Todo: beef this up to be more informative.
             pManager.Register_PlaneParam("End Plane", "EP", "Robot EndEffector Plane placed on Target");
+            pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
 
         ForwardKinematics _fk = new ForwardKinematics();
@@ -92,6 +93,7 @@ namespace RobotComponents.Components
             _fk = forwardKinematics;
             DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Meshe of the Robot in Pose ( toggle this ? )
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
+            DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>
@@ -146,12 +148,20 @@ namespace RobotComponents.Components
                     {
                         args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
+                    for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                    {
+                        args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
                 else if (AxisAreValid == false)
                 {
                     for (int i = 0; i != _fk.PosedMeshes.Count; i++)
                     {
                         args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(150, 0, 0), 0.5));
+                    }
+                    for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                    {
+                        args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(150, 0, 0), 0.5));
                     }
                 }
             }

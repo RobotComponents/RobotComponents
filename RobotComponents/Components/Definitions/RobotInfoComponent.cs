@@ -77,10 +77,7 @@ namespace RobotComponents.Components.Definitions
             if (!DA.GetData(7, ref externalLinearAxisGoo))
             {
                 externalLinearAxisGoo = new ExternalLinearAxisGoo();
-                externalLinearAxisGoo.Value.StartPoint = positionPlane.Origin;
-                externalLinearAxisGoo.Value.EndPoint = positionPlane.Origin;
-                externalLinearAxisGoo.Value.AttachmentPlane = positionPlane;
-                externalLinearAxisGoo.Value.Initilize();
+                externalLinearAxisGoo.Value = new ExternalLinearAxis(positionPlane, positionPlane, new Interval(0, 0));
             }
             //if (!DA.GetData(7, ref externalLinearAxisGoo)) { externalLinearAxisGoo = null; }
 

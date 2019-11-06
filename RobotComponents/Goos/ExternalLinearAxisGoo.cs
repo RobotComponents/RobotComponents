@@ -73,12 +73,68 @@ namespace RobotComponents.Goos
         {
             get
             {
-                return BoundingBox.Empty; //Note: beef this up if needed
+                if (Value == null)
+                {
+                    return BoundingBox.Empty;
+                }
+
+                else
+                {
+                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Base mesh
+                    if (Value.BaseMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    // Link mesh
+                    if (Value.LinkMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    // Axis curve
+                    if (Value.AxisCurve != null)
+                    {
+                        MeshBoundingBox.Union(Value.AxisCurve.GetBoundingBox(true));
+                    }
+
+                    return MeshBoundingBox;
+                }
             }
         }
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            if (Value == null)
+            {
+                return BoundingBox.Empty;
+            }
+
+            else
+            {
+                BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                // Base mesh
+                if (Value.BaseMesh != null)
+                {
+                    MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                }
+
+                // Link mesh
+                if (Value.LinkMesh != null)
+                {
+                    MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                }
+
+                // Axis curve
+                if (Value.AxisCurve != null)
+                {
+                    MeshBoundingBox.Union(Value.AxisCurve.GetBoundingBox(true));
+                }
+
+                return MeshBoundingBox;
+            }
         }
         #endregion
 
@@ -132,12 +188,37 @@ namespace RobotComponents.Goos
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            //args.Pipeline.DrawCurve(Value.AxisCurve, System.Drawing.Color.Red, 1);
+            if (Value == null) { return; }
+
+            if (Value.BaseMesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
+
+            if (Value.LinkMesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            args.Pipeline.DrawCurve(Value.AxisCurve, args.Color, 1);
+            if (Value == null) { return; }
+
+            if (Value.BaseMesh != null)
+            {
+                args.Pipeline.DrawMeshWires(Value.BaseMesh, args.Color, -1);
+            }
+
+            if (Value.LinkMesh != null)
+            {
+                args.Pipeline.DrawMeshWires(Value.LinkMesh, args.Color, -1);
+            }
+
+            if (Value.AxisCurve != null & Value.LinkMesh == null & Value.BaseMesh == null)
+            {
+                args.Pipeline.DrawCurve(Value.AxisCurve, args.Color, 1);
+            }
         }
         #endregion
     }

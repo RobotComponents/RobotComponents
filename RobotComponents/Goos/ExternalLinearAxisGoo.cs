@@ -215,7 +215,7 @@ namespace RobotComponents.Goos
                 args.Pipeline.DrawMeshWires(Value.LinkMesh, args.Color, -1);
             }
 
-            if (Value.AxisCurve != null & Value.LinkMesh == null & Value.BaseMesh == null)
+            if (Value.AxisCurve.IsValid == true && Value.BaseMesh.IsValid == false && Value.LinkMesh.IsValid == false)
             {
                 args.Pipeline.DrawCurve(Value.AxisCurve, args.Color, 1);
             }

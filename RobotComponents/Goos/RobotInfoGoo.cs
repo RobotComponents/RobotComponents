@@ -96,24 +96,7 @@ namespace RobotComponents.Goos
         }
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            if (Value == null) { return BoundingBox.Empty; }
-            if (Value.Meshes == null) { return BoundingBox.Empty; }
-            else
-            {
-                // Make the bounding box at the base plane
-                BoundingBox MeshBoundingBox = BoundingBox.Empty;
-                for (int i = 0; i != Value.Meshes.Count; i++)
-                {
-                    MeshBoundingBox.Union(Value.Meshes[i].GetBoundingBox(true));
-                }
-
-                Transform orientNow;
-                orientNow = Rhino.Geometry.Transform.ChangeBasis(Value.BasePlane, Plane.WorldXY);
-                MeshBoundingBox.Transform(orientNow);
-
-                return MeshBoundingBox;
-            }
-
+            return Boundingbox;
         }
         #endregion
 

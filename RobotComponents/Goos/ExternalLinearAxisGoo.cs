@@ -106,35 +106,7 @@ namespace RobotComponents.Goos
         }
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            if (Value == null)
-            {
-                return BoundingBox.Empty;
-            }
-
-            else
-            {
-                BoundingBox MeshBoundingBox = BoundingBox.Empty;
-
-                // Base mesh
-                if (Value.BaseMesh != null)
-                {
-                    MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                }
-
-                // Link mesh
-                if (Value.LinkMesh != null)
-                {
-                    MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                }
-
-                // Axis curve
-                if (Value.AxisCurve != null)
-                {
-                    MeshBoundingBox.Union(Value.AxisCurve.GetBoundingBox(true));
-                }
-
-                return MeshBoundingBox;
-            }
+            return Boundingbox;
         }
         #endregion
 

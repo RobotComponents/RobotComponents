@@ -74,12 +74,14 @@ namespace RobotComponents.Goos
         {
             get
             {
-                return BoundingBox.Empty; //Note: beef this up if needed
+                if (Value == null) { return BoundingBox.Empty; }
+                else if (Value.Mesh == null) { return BoundingBox.Empty; }
+                else { return Value.Mesh.GetBoundingBox(true); }
             }
         }
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return Boundingbox;
         }
         #endregion
 

@@ -91,7 +91,7 @@ namespace RobotComponents.Components
                 _targets = _pathGenerator.Targets;
 
                 _paths.Clear();
-                _paths = _pathGenerator.GeneratePathCurves(_targets);
+                _paths = _pathGenerator.GeneratePathCurves();
 
                 ClearAxisValuesLists();
 

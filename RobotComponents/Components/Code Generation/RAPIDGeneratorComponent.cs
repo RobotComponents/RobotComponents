@@ -56,6 +56,7 @@ namespace RobotComponents.Components
 
         string MAINCode = "";
         string BASECode = "";
+        bool firstMovementIsMoveAbs = true;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -101,14 +102,14 @@ namespace RobotComponents.Components
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
                 BASECode = rapidGenerator.BASECode;
+                firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
             }
 
             // Checks if first Movement is MoveAbsJ
-            if (rapidGenerator.FirstMovementIsMoveAbs == false)
+            if (firstMovementIsMoveAbs == false)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
             }
-
 
             DA.SetData(0, MAINCode);
             DA.SetData(1, BASECode);

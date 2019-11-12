@@ -6,6 +6,8 @@ using Grasshopper.Kernel;
 using RobotComponents.Parameters;
 using RobotComponents.Goos;
 
+
+
 namespace RobotComponents.Components
 {
     public class DeconstructExternalLinearAxisComponent : GH_Component
@@ -35,11 +37,11 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_PlaneParam("Attachment Plane", "AP", "Attachment Plane as Plane");
-            pManager.Register_VectorParam("Axis", "A", "Axis as Vector");
-            pManager.Register_IntervalParam("Axis Limits", "AL", "Axis Limits as Domain");
-            pManager.Register_MeshParam("Base Mesh", "BM", "Base Mesh as Mesh");
-            pManager.Register_MeshParam("Link Mesh", "LM", "Link Mesh as Mesh");
+            pManager.AddPlaneParameter("Attachment Plane", "AP", "Attachment Plane as Plane", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
+            pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace RobotComponents.Components
             DA.SetData(1, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
             DA.SetData(2, externalLinearAxisGoo.Value.AxisLimits);
             DA.SetData(3, externalLinearAxisGoo.Value.BaseMesh);
-            DA.SetData(3, externalLinearAxisGoo.Value.LinkMesh);
+            DA.SetData(4, externalLinearAxisGoo.Value.LinkMesh);
         }
 
         /// <summary>

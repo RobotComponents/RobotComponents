@@ -81,11 +81,11 @@ namespace RobotComponents.BaseClasses
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
             Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
-            Plane position = _attachmentPlane; // deep copy?
-            position.Transform(orientNow);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(orientNow);
 
             inLimits = isInLimits;
-            return position;
+            return positionPlane;
         }
 
         public override Plane CalculatePositionSave(double axisValue)
@@ -109,10 +109,10 @@ namespace RobotComponents.BaseClasses
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(value);
             Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
-            Plane position = _attachmentPlane; // deep copy?
-            position.Transform(orientNow);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(orientNow);
 
-            return position;
+            return positionPlane;
         }
 
         override public void PoseMeshes(double axisValue)

@@ -165,7 +165,18 @@ namespace RobotComponents.BaseClasses
             this._internalAxisLimits = _robotInfo.InternalAxisLimits;
             this._internalAxisValues = internalAxisValues;
 
-            this._externalAxisPlanes = _robotInfo.ExternalAxisPlanes.ToArray();
+            this._externalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
+            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            {
+                if(_robotInfo.ExternalAxis[i].AxisType == AxisType.LINEAR)
+                {
+                    _externalAxisPlanes[i] = _basePlane;                                    // could be probably done better. Maybe we really should move the original Axis Plane, not just the Robot
+                }else if(_robotInfo.ExternalAxis[i].AxisType == AxisType.ROTATIONAL)
+                {
+                    _externalAxisPlanes[i] = _robotInfo.ExternalAxis[i].AxisPlane;         // needs to be reworked
+                }
+            }
+         
             this._externalAxisLimits = _robotInfo.ExternalAxisLimits;
             this._externalAxisValues = externalAxisValues;
 

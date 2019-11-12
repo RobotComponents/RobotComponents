@@ -94,6 +94,7 @@
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
     <Compile Include="Components\Controller Utility\SetDigitalInputComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
     <Compile Include="Components\Definitions\IRB1660ID_Component.cs" />
@@ -493,6 +494,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Naming_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructExternalLinearAxis_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

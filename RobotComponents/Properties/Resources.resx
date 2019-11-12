@@ -376,4 +376,7 @@
   <data name="Naming_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Naming_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

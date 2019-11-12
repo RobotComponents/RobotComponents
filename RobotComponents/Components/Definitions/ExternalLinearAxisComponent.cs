@@ -34,7 +34,7 @@ namespace RobotComponents.Components.Definitions
         {
             pManager.AddPlaneParameter("Attachment plane", "AP", "Attachement plane of robot. Overrides robot position plane.", GH_ParamAccess.item);
             pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
-            pManager.AddIntervalParameter("Limits", "L", "Axis Limits as Domain", GH_ParamAccess.item);
+            pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.list);
 

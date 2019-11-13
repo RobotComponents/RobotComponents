@@ -124,11 +124,11 @@ namespace RobotComponents.BaseClasses
 
             // Transform
             Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
-            Plane position = AttachmentPlane; // deep copy?
-            position.Transform(translateNow);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(translateNow);
 
             inLimits = isInLimits;
-            return position;
+            return positionPlane;
         }
 
         public override Plane CalculatePositionSave(double axisValue)
@@ -151,10 +151,10 @@ namespace RobotComponents.BaseClasses
 
             // Transform
             Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
-            Plane position = AttachmentPlane; // deep copy?
-            position.Transform(translateNow);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(translateNow);
 
-            return position;
+            return positionPlane;
         }
 
         override public void PoseMeshes(double axisValue)

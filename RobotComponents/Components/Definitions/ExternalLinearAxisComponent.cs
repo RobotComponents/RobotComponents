@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
@@ -33,9 +34,9 @@ namespace RobotComponents.Components.Definitions
         {
             pManager.AddPlaneParameter("Attachment plane", "AP", "Attachement plane of robot. Overrides robot position plane.", GH_ParamAccess.item);
             pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
-            pManager.AddIntervalParameter("Limits", "L", "Axis Limits as Domain", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.list);
 
             pManager[3].Optional = true;
             pManager[4].Optional = true;
@@ -62,24 +63,30 @@ namespace RobotComponents.Components.Definitions
             Plane attachmentPlane = Plane.WorldXY;
             Vector3d axis = new Vector3d(0,0,0);
             Interval limits = new Interval(0, 0);
-            Mesh baseMesh = null;
-            Mesh linkMesh = null;
+             List<Mesh> baseMeshes = new List<Mesh>();
+            List<Mesh> linkMeshes = new List<Mesh>();
 
+            
             if (!DA.GetData(0, ref attachmentPlane)) { return; }
             if (!DA.GetData(1, ref axis)) { return; }
             if (!DA.GetData(2, ref limits)) { return; }
-            if (!DA.GetData(3, ref baseMesh)) {  }
-            if (!DA.GetData(4, ref linkMesh)) {  }
+            if (!DA.GetDataList(3, baseMeshes)) {  }
+            if (!DA.GetDataList(4, linkMeshes)) {  }
 
-            if(baseMesh == null)
+
+            Mesh baseMesh = new Mesh();
+            Mesh linkMesh = new Mesh();
+
+            for (int i = 0; i < baseMeshes.Count; i++)
             {
-                baseMesh = new Mesh(); ;
+                baseMesh.Append(baseMeshes[i]);
             }
 
-            if(linkMesh == null)
+            for (int i = 0; i < linkMeshes.Count; i++)
             {
-                linkMesh = new Mesh();
+                linkMesh.Append(linkMeshes[i]);
             }
+
 
             ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(attachmentPlane, axis, limits, baseMesh, linkMesh);
 

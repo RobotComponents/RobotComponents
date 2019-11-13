@@ -68,14 +68,14 @@ namespace RobotComponents.BaseClasses
             this._posedMeshes = this._meshes.ConvertAll(mesh => mesh.DuplicateMesh());
             this.PosedAxisMeshes = new List<Mesh>();
             this._tcpPlane = this._robotInfo.ToolPlane;
-          
-            // Calculates External Axis
+
+            // Calculates external axes
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
                 {
                     ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
-                    this._basePlane.Origin += externalLinearAxis.AxisPlane.ZAxis * _externalAxisValues[0]; //External Axis Offset
+                    this._basePlane.Origin += externalLinearAxis.AxisPlane.ZAxis * _externalAxisValues[0]; //External Axis Offset: Use "CalculatePositionSave()" ?
                     externalLinearAxis.PoseMeshes(_externalAxisValues[0]);
 
                     for (int j = 0; j < externalLinearAxis.PosedMeshes.Count; j++)
@@ -86,70 +86,61 @@ namespace RobotComponents.BaseClasses
                 }
             }
             
-            // ----- First All Transformations -----
-            // ----- Rotate ----- 
-            // ----- Axis 1 -----
+            // Calculates interal axes
+            // First caculate all tansformations (rotations)
+            // Axis 1
             Transform rot1;
             rot1 = Transform.Rotation(_internalAxisRads[0], this._internalAxisPlanes[0].ZAxis, this._internalAxisPlanes[0].Origin);
-            // ----- Axis 2 -----
+            // Axis 2
             Transform rot2;
             Plane planeAxis2 = new Plane(_internalAxisPlanes[1]);
             planeAxis2.Transform(rot1);
             rot2 = Transform.Rotation(_internalAxisRads[1], planeAxis2.ZAxis, planeAxis2.Origin);
-            // ----- Axis 3 -----
+            // Axis 3
             Transform rot3;
             Plane planeAxis3 = new Plane(_internalAxisPlanes[2]);
             planeAxis3.Transform(rot2 * rot1);
             rot3 = Transform.Rotation(_internalAxisRads[2], planeAxis3.ZAxis, planeAxis3.Origin);
-            // ----- Axis 4 -----
+            // Axis 4
             Transform rot4;
             Plane planeAxis4 = new Plane(_internalAxisPlanes[3]);
             planeAxis4.Transform(rot3 * rot2 * rot1);
             rot4 = Transform.Rotation(_internalAxisRads[3], planeAxis4.ZAxis, planeAxis4.Origin);
-            // ----- Axis 5 -----
+            // Axis 5
             Transform rot5;
             Plane planeAxis5 = new Plane(_internalAxisPlanes[4]);
             planeAxis5.Transform(rot4 * rot3 * rot2 * rot1);
             rot5 = Transform.Rotation(_internalAxisRads[4], planeAxis5.ZAxis, planeAxis5.Origin);
-            // ----- Axis 6 -----
+            // Axis 6
             Transform rot6;
             Plane planeAxis6 = new Plane(_internalAxisPlanes[5]);
             planeAxis6.Transform(rot5 * rot4 * rot3 * rot2 * rot1);
             rot6 = Transform.Rotation(_internalAxisRads[5], planeAxis6.ZAxis, planeAxis6.Origin);
 
-            // ----- Move Relative to Base -----
+            // Move relative to base
             Transform transNow;
             transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
 
-            // ------ base link transform -----
+            // Apply transformations
+            // Base link transform
             _posedMeshes[0].Transform(transNow);
-            // ----- link_1 tranfrom -----
+            // Link_1 tranfrom 
             _posedMeshes[1].Transform(transNow * rot1);
-            // ----- link_2 tranfrom -----
+            // Link_2 tranfrom
             _posedMeshes[2].Transform(transNow * rot2 * rot1);
-            // ----- link_3 tranfrom -----
+            // Link_3 tranfrom
             _posedMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
-            // ----- link_4 tranfrom -----
+            // Link_4 tranfrom
             _posedMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
-            // ----- link_5 tranfrom -----
+            // Link_5 tranfrom
             _posedMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
-            // ----- link_6 tranfrom -----
+            // Link_6 tranfrom
             _posedMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
-            // ----- endeffector transform
+            // Endeffector transform
             _posedMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
-
-
+            // TCP plane transform
             _tcpPlane.Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
         }
-
-        // public void CheckAxisLimits()
-        // {
-        //     for (int i = 0; i < _internalAxisValues.Count; i++)
-        //     {
-        //         if (_internalAxisValues[i] > _internalAxisLimits[i][0] && _internalAxisValues[i] < _internalAxisLimits[i][1]) { _internalAxisInLimit.Add(true); }
-        //         else _internalAxisInLimit.Add(false);
-        //     }
-        // }
 
         public void Update(List<double> internalAxisValues, List<double> externalAxisValues)
         {
@@ -165,17 +156,19 @@ namespace RobotComponents.BaseClasses
             this._internalAxisLimits = _robotInfo.InternalAxisLimits;
             this._internalAxisValues = internalAxisValues;
 
-            this._externalAxisPlanes = _robotInfo.ExternalAxisPlanes.ToArray();
+            this._externalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
+
             this._externalAxisLimits = _robotInfo.ExternalAxisLimits;
             this._externalAxisValues = externalAxisValues;
 
-            this._meshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());           //"Deep Copy" Mesh to new Object
+            // "Deep dopy" mesh to new object
+            this._meshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
             this._posedMeshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
 
             _tcpPlane = _robotInfo.ToolPlane;
 
-            this._internalAxisRads = new double[_internalAxisValues.Count];   //Axis Values in Degree converted to Axis Values in Radiants
-
+            // Internal axis values in degrees converted to axis values in radiants
+            this._internalAxisRads = new double[_internalAxisValues.Count];
             _internalAxisRads[0] = (_internalAxisValues[0] / 180) * Math.PI;
             _internalAxisRads[1] = (_internalAxisValues[1] / 180) * Math.PI;
             _internalAxisRads[2] = (_internalAxisValues[2] / 180) * Math.PI;
@@ -183,8 +176,15 @@ namespace RobotComponents.BaseClasses
             _internalAxisRads[4] = (_internalAxisValues[4] / 180) * Math.PI;
             _internalAxisRads[5] = (_internalAxisValues[5] / 180) * Math.PI;
 
+            // Check axis limits
             CheckForInternalAxisLimits();
             CheckForExternalAxisLimits();
+
+            // Get the current location of the attachment plane of the external axes
+            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            {
+                _externalAxisPlanes[i] = _robotInfo.ExternalAxis[i].CalculatePositionSave(_externalAxisValues[i]);
+            }
         }
 
         public void CheckForInternalAxisLimits()

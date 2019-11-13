@@ -54,6 +54,10 @@ namespace RobotComponents.Components
             pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code");  //Todo: beef this up to be more informative.
         }
 
+        string MAINCode = "";
+        string BASECode = "";
+        bool firstMovementIsMoveAbs = true;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -91,21 +95,24 @@ namespace RobotComponents.Components
             }
 
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo, documentGUID);
-
-            // Checks if first Movement is MoveAbsJ
-            if (rapidGenerator.FirstMovementIsMoveAbs == false)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
-            }
-
+     
             if(update == true)
             {
                 rapidGenerator.CreateBaseCode();
                 rapidGenerator.CreateRAPIDCode();
+                MAINCode = rapidGenerator.RAPIDCode;
+                BASECode = rapidGenerator.BASECode;
+                firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
             }
 
-            DA.SetData(0, rapidGenerator.RAPIDCode);
-            DA.SetData(1, rapidGenerator.BASECode);
+            // Checks if first Movement is MoveAbsJ
+            if (firstMovementIsMoveAbs == false)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
+            }
+
+            DA.SetData(0, MAINCode);
+            DA.SetData(1, BASECode);
         }
 
         /// <summary>

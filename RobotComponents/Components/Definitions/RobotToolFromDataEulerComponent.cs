@@ -32,7 +32,7 @@ namespace RobotComponents.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Robot Tool Name as String", GH_ParamAccess.item, "default_tool");
-            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddNumberParameter("Translation X", "TX", "Translation in X direction", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Translation Y", "TY", "Translation in Y direction", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Translation Z", "TZ", "Translation in Z direction", GH_ParamAccess.item, 0.0);
@@ -89,7 +89,7 @@ namespace RobotComponents.Components
 
             // Inputs
             string name = "default_tool";
-            Mesh mesh = null;
+            List<Mesh> meshes = new List<Mesh>();
             double toolTransX = 0.0;
             double toolTransY = 0.0;
             double toolTransZ = 0.0;
@@ -100,13 +100,20 @@ namespace RobotComponents.Components
             Plane toolPlane = Plane.WorldXY;
 
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref mesh)) { return; }
+            if (!DA.GetDataList(1,  meshes)) { return; }
             if (!DA.GetData(2, ref toolTransX)) { return; }
             if (!DA.GetData(3, ref toolTransY)) { return; }
             if (!DA.GetData(4, ref toolTransZ)) { return; }
             if (!DA.GetData(5, ref toolRotX)) { return; }
             if (!DA.GetData(6, ref toolRotY)) { return; }
             if (!DA.GetData(7, ref toolRotZ)) { return; }
+
+            Mesh mesh = new Mesh();
+
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                mesh.Append(meshes[i]);
+            }
 
             toolPlane.Translate(new Vector3d(toolTransX, toolTransY, toolTransZ));
             toolPlane.Transform(Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), toolPlane.Origin));

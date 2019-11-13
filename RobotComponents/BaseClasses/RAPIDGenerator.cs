@@ -89,6 +89,7 @@ namespace RobotComponents.BaseClasses
             // Create Program
             RAPIDCode += "@@" + "\t" + "PROC main()";
 
+            _firstMovementIsMoveAbs = false;
             bool foundFirstMovement = false;
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)
@@ -101,15 +102,11 @@ namespace RobotComponents.BaseClasses
                     if(_actions[i] is Movement)
                     {
                        
-                        if(((Movement)_actions[i]).IsLinear == true)
-                        {
-                            _firstMovementIsMoveAbs = false;
-                        }
-                        else
+                        if(((Movement)_actions[i]).IsLinear == false)
                         {
                             _firstMovementIsMoveAbs = true;
                         }
-
+                       
                         foundFirstMovement = true;
                     }
                 }

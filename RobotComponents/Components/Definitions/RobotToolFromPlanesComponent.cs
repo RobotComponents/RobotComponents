@@ -34,7 +34,7 @@ namespace RobotComponents.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Robot Tool Name as String", GH_ParamAccess.item, "default_tool");
-            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
         }
@@ -85,14 +85,21 @@ namespace RobotComponents.Components
 
             // Inputs
             string name = "default_tool";
-            Mesh mesh = null;
+            List<Mesh> meshes = new List<Mesh>();
             Plane attachmentPlane = Plane.Unset;
             Plane toolPlane = Plane.Unset;
 
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref mesh)) { return; }
+            if (!DA.GetDataList(1,  meshes)) { return; }
             if (!DA.GetData(2, ref attachmentPlane)) { return; }
             if (!DA.GetData(3, ref toolPlane)) { return; };
+
+            Mesh mesh = new Mesh();
+
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                mesh.Append(meshes[i]);
+            }
 
             //RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, flippedToolPlane);
             RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);

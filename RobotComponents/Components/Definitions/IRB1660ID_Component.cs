@@ -16,8 +16,8 @@ namespace RobotComponents.Components
         /// Initializes a new instance of the IRB1660ID_Component class.
         /// </summary>
         public IRB1660ID_Component()
-          : base("ABB_IRB1660ID-6/1.55", "IRB1660ID",
-              "An ABB IRB1660ID-6/1.55 Robot Info preset component."
+          : base("ABB_IRB1660ID-X/1.55", "IRB1660ID",
+              "An ABB IRB1660ID-x/1.55 Robot Info preset component."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")

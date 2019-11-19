@@ -98,6 +98,7 @@
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
     <Compile Include="Components\Definitions\IRB1660ID_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
     <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
     <Compile Include="Components\Deconstruct\DeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotInfoComponent.cs" />
@@ -497,6 +498,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructExternalLinearAxis_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_125_3_2_link_2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

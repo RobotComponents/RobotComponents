@@ -643,6 +643,69 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to XLt3QIht+/9/7ZERyiyFkBHZhCLZWSWjlChJWjS0C0kD2asoZFNJUmkpKSsZySilohCiVBrye1/X/fzx/X28nuM83u/jOM7zWj3u23PfD0ESBPEPv6Qs/epMYVlpvMnOydnA2dHR2UlrwEobF1c7ZyfdSaPH6uA/43Qmjh47ZsxYrQEG7g5u7i42uk427m4u6x20Bixzt3Kwsza08TJxtrdx0p04cdy4KWNtdCZbT544ceL4Max0ESX57NHzbJwdbdxcvEYvtnHdxKDOb/vvMgrrXaw32W2zGb/BUXTeYuPk5O5i5cpsWO+2XhoSBIGS7rCbJkFMRz64ddFekYZQlJYnAklQrQEUcVf473na/lGE8v+e7GPR6yXzvrzsnvWJ6BZIDvo5KlXFvB39kP/NTikVCcKPJ/7Pr58z/q9ffsJ7Q+3Bg3fDTCz3Oucnz+zpWb6ZGHDobt75zSoH1B/N/L8n5EZOzCW337/nnbQ3liQKDKANSCLegCC2z/h/Iuv/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_0 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XJx1wBZF37a369pr9wZJAemS7pAGJaW7u7u7u7sRCWkBQUFSJEVAUkK6u7u/Ywb+eL/nPp6Z8/zFzM7uXvDcIKCoiqJ85Euo+PI1puqVW7Zq36F4h3btOrTPmKx6s85dWnVoXzB35mz5+F/2fLkyZ8uaNVvGZMW7te3arXOzgu2bdevauVHbjMkqdmvctlWTss16Ve3Qpln7grlyZc+eN1uzfHma5MmVK1eOrKa4yBdy78wlm3Vo16xr516Zv2/WpaVB3u7+6TJeo85NWrbq3ixH03Zuh47N2rfv1rlxF6Npo66NRJPjOJo4YUxaRSmATupUbqyrY0IxNT9oK9qbAZpSGyO+3n7UlDif7+zaiVPlS94+HuuP60rMEDXFo0ybEtV9Rz3F5968bwsrypM8yv98PSr8v7G70T264/2sHXleNhi3rvnGIjuSdivXLNPsHYvL9sifcfmZIv+7w+Yvnu9SB17d9XFAteKpegQl1B27ii/aMrCEogws/H/GH/9n [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_1 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XJ0FuNTWu6+TSSaZScZwdyvu7u4UiksFK+5S2Li7OxR3KLQUdyjQ4u7uXrw4m/N+a+/7POce3vvl9/tkrZVk5pQ/LXA1XdO0r/wQlR8BD5d637Vu07FT2U4dOnTqmC11vZZdu7Xp1LF4gRy5C/P/8hTOnyN3rly5s6Uu26N99x5dWxbv2LJH965N22dLXbNHs/Ztmldt2btOp3YtOxbPnz9PnkK5WxYu2Lxg/vz58+byyiHx1N45Krbs1KFl9669c1Rv2a21Sd3uGXOM07Rr89ZterbM26KDv1Pnlh079ujarJvZomn3pjLk8/k8coeRTJpWDJ3UpdpYv4EJy2VZc1PzfBzg0WY3N9XTfPrq0eLHPtndsxdqVHx0Js7ue1pkiJ72RfatyZp8pt8sdrbQH6k1bWUK7f/8eFHy/+YDf/rcOO/VkXta7562rK73ZKn/l9/zHm/2e9MHpf7vDl+/Hiyj77m0b/maJOVG57fK6VqD0npqp7ymDSz5v2L3/4r/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_2 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XJ1l2BRX1rW7S7qqq6WscXf34O4Owd3d3SFoSEIIwQPBJUhwDQSX4O4Owd1dv/sU+fF+89yzz1p77X2qu8k1zENCGJ/f5/N94Uuo+ApLHLWrt23XuUvJLp06demcOXntVt17tOvSuXCerDny85+c+XNnzZE9e47MyUv26tizV/dWhTu36tWze7OOmZN/26t5x3YtKrbqV7NLh1adC+fOnTNnvhyt8udtkTd37ty5sqviRVzv2VnLturSqVXP7v2yVm7Vo61CrvX++jJGs+4t2rbr3SpXy07BLl1bde7cq3vzHkrLZj2biSVd1yXxDq10Pl8hdFy3SqODMsYUx7CDfp/0frDk633w6+f58EXyxf77ZDdPna1S9t5Je9stnzXcn/Jplo2JGn5kXuS/3XzD2OwT9v3P19Oi/9vv29iySb2yA7an+dIj1/bnc4vF6VzO/+vBgduH1Y2XM2ejHcX+9wlTp+4o7t8+elfTTXdLHZgRLDW1++KSO07HL+3zDSn6 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_3 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XJ114BPH2rbXkt1ks8kmuLu7u7u7u7tLoYXiXmhxd6dIcXd3d3d39++a+fHH+x2u8+x9PzKzk2QDpS09iqooyk9+CBU/AhqXmlVbt+nYqVinDh06dUyfuGaLrt3adOpYIGfGLHn4X9Y8OTJmyZw5S/rExXq0796ja4sCHVv06N61Sfv0iSv3aNq+TbNyLXpX79SuRccCOXJkzZo7S4s8uZrlypEjR7bMHnGTaHLvjKVadOrQonvX3hkrtOjW2qBu9oy6jb9J12at2/Rska15B1+nzi06duzRtWk3o3mT7k3EkGVZmjihm0pR8qNju5T/y6djQuJyp4tX0b7005QLGPHj609Nif7rld07d7FiqcdnwzvvK+4gNemrDJvj1f9Gf9av2dzvMyvK8jTK//x4Veh/8+uzuh9ulX/OriZzfbu791xQONOKnjs+vR+wK9/ZVytyxFlZ+H93ODTTV1zdlXPvtktGiQs7f+IzFCu+OEYJRelf6P/Ezv8T/19NfDxy [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_4 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nLp5XE/7+/e75siQqQENCKkUSaMGhJAkVJQKSdI8aVSIUqmkqDQhVJokldJAStGkedRM0jyPdK617PN43Pf9O+f8cTxd63q9Xte13p+1PtveffdjfxEUQZAF+EV3+tdSDC6aJ68Ym1soWZiZWZhv36BpaG1jbGEuLykqJgO/d8lIiIrt3Cm2fYOSnamtnbWhvLmhna31BdPtG07YXTQ1NlAxdDxtYWJoLi8hsWuXtJihjJSBlISEhPhOkv6Q1czZosqGFmaGttaOoqqGNlcIyFmu/fsY1gvWBleMrxmKXzJbbGFpaG5uZ33Rhrh0wfYCvbRo0SKMfsIVAggiBz3A6ti9xTgINvpSkIkg2KwbhrzL/Pc2cwsYsua/N+uuqT+u3Fu9Mu8HssId3TQskrn+3DzMb/y3K91BIYgGifwfv4YV/09/N31cRvKZ44eq4tjccdcbe8f/8+KHOcOR4Xt7/88THmq2HUCR3PyFeuog+ho9iCL5+9HY1QcR5Ibi/1J5 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_5 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dLsHVFPdt+69SxQVAREFlSaiYEFQkSbNjgqCigpI70oVEAEhREUpUhVpUm2AFGnSu/SOKE2adKWFDqEk3wz/89177hn38sta85nPnGvttZMYwjvGi6AIgtDghx7pP9sxmO7euv/AyvqCtaWltZXQ/rvGtnYPrK1kxYVPSsHjlJSY8MkTJ04K7b9gb/HI3tZY1srY/pGtvoXQ/hv2BhYPDBWNnW5bmxtbyYqJnToledJYSsJQQkxMTPTEJvpF2Db2FlYwtrY0fmTrJHzd2O4+AXyGx/+5zDZ9W8P7Dx4bixpZbrV+aGxlZW9rYEcw0n+kT2/asmULRj/hDkEEkYH42kbJZysOgoU+zSsiCLZCwpC/iv+5m1Uahuz6rzsb+tWurPDvJ2vxMLLDDT0wfTyXU2sN6qn/1SuZA8cowpD/8TMt/z/z1k945LklwxJjo2qV8VNPz7JxeW05OKZeIpZn71rer3H2f+5AS0Ev8d2s+k6jbb6EIgS6Po8+ZbuEIE/l [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB6650_125_3_2_link_6 {
+            get {
+                return ResourceManager.GetString("IRB6650_125_3_2_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Movement_Icon {

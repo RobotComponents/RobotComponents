@@ -98,6 +98,7 @@
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
     <Compile Include="Components\Definitions\IRB1660ID_Component.cs" />
+    <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
     <Compile Include="Components\Definitions\IRB4600_20_2_50_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
     <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
@@ -542,6 +543,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB4600_20_2_50_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_X_2_05_link_0.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

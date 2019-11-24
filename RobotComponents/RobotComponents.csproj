@@ -323,27 +323,6 @@
     <None Include="Resources\Remote_ON_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_base_link.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_4.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_5.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_60_2_05_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB4600_Icon.png" />
   </ItemGroup>
   <ItemGroup>

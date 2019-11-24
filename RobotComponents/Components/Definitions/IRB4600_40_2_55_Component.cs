@@ -104,7 +104,7 @@ namespace RobotComponents.Components
                 new Vector3d(0.00, 1.00, 0.00)));
             // Axis 4
             axisPlanes.Add(new Plane(
-                new Point3d(175.00, 0.00, 1765.00),
+                new Point3d(505.60, 0.00, 1765.00),
                 new Vector3d(1.00, 0.00, 0.00)));
             // Axis 5
             axisPlanes.Add(new Plane(

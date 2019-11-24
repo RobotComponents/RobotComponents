@@ -131,6 +131,7 @@
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
+    <Compile Include="Components\Utilities\PlaneOrientationToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\DIGoo.cs" />

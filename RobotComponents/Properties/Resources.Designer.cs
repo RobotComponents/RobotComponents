@@ -560,6 +560,69 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dNwHWI5v/z/wa+9bZO+VTQmpUGZWFFmRnZFSaZFSIltkb2XvlZW99yg7FYVSEVllhPq9z/Pr+B+///84/l7PeX/e5+c8r+u6y/N46L7vi2EZhinFL1LJL4PDw2A3r0l+/l39fX39/ZrXGTw+MGiSv59DW0tre/ynlb2NpXXLltbN63QNmRwcEjjewW98SHDgmMnN6/QLGTt5kqfz+OkD/X3G+znY2LRqZWc93t7W09bGxqZ1S5FcpDw9t2WP8f6+44MDp1v2HR/kJaAvT/3vMtqYQE+vSVPHtx7nq/pPGe/nFxI4NkgYNyZ4DNmkKApHnmHZRgzTAXV5QJ8YlUcwIw/zO7EMVzyTY8I7/ff1/C7lmAr/vrLsJykuPd49LnfxLVM2mq33ucXp6sP/YL3rv712S00Ms1RjmEc1W8ed//m29P9Xvzpli3x01KV/tVOFTW/4bQ+i/8+c+X9+nVi56eqA8r2uHnm7aG+X+ZZdQ7N7dmWjqnRlmKiO/2tc/F/j [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_0 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to jNx3WI/v3z/wa+/rsvfInokkRWTvkZlRWclIA5WV7C17C9k7JDKTmdUwopRkFiokiqLu53V+/HH/fsfxO46fx/16v57n6zyv6833vm9f8u6iaIqiSvDD7OYPjcGL86BJk318u/h6e/v6WNZy9pjuN9nXp31rK+s2+J+WbWytrFu0sLas1SXAyz9gukd7H48A/+ljvSxrDQgY5zXZvY/H7CG+Uzx82tvatmxpb+3Rxs7dztbW1qYFb75JOXJvqx4evt4e/tNnW/Xz8JvEYS7O+O9tlLHT3SdNnuFhM95b9p3q4eMTMH2cHzd+rP9Y85AkSYz5MyzdkKLaoW+Y1jdYZhFKmS+DfGiKKZzPUN19/vv1FJUwVPl/v7L3iUn9e3x6Wib6A1V6MV3nW7NL1Vz/YN/4d9b+qkFRLRWKelLDZk/Urw8l/68e3GnMh0f1/K9fPRt7rW33uR2bvbX/ObBw5nXPNQN+tb3h35H6v37Mmlv1Fr2Au1VS8qiza8+OXeL7 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_1 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to jNsJVE3//y/+PZ59MmQeImVOREIqTQiZEkJRREkUDSrRaCalzELKWIYGpFRURANR0kQjzZQmpbnuc++P/1r3f9f63XV7fN9ez/ew9zmHj/Q+5/0lSIIg+vDFV/5rAIVfNq3fvcfGVsd23z5bG4Xxmyz2O+yxtdGcP0tJDf+bo6Y8S2n2bCWF8TpOex2d9lto2lg4Oe7fsVdh/Fons717zFdZHNpga21ho6msPGeOqpKFmoq5irKy8tzZLP8gw4R7z9K1sN1n4bj/0Cw9C4fdDMa5A/89TL8d+8137zlgMXfnPglbOwsbG6f9Zg7Mzh2OO/hFYrGY4p/hYDmC0EA9b7/aR4JGGMT/kp1HEFSnJ0Wk5v33arr6KGL4v1dWkZO/Rvdn9pDESmLwMXJi48zYsSbdmPf7t1Z1uARBjBYRxJdxcwPj2yv7/qeq0Hbr5876w68rrpzK+XPPZeF8xwF/7LUOvZ753/hC4v/4IomaN+RhxbeP2s7qkIQU2rvF5Gvd [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_2 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dNx3XI5/vD/wa++rEAoNe4cQRcrOCpnJTJJKJclIA9mbrIyyV2RmVaJSRiIrMyokIQlR1O91XV9/nN95PI7nefd+fd6fz3Xdd+cc467uL0ESBFGNX1rXfikUPowZMcPLz7+Pv6+vv1/bhmM8Zgd6+fv16NLOyhb/09HWup1Vhw5WbRv2CZo5J2i2Rw8/j6A5s91mtm04PGjqTC/3wR4LRvn7ePj1sLbu2NHGysO2q3tXa2vrTh1Y7UGM9Hu3c/Tw9/WYM3tBOyePwBkM5vzc/x5GcpvtPsNrrkenab6i/ywPP7+g2VMDmWluc9y0Q4IgUNozrNGCIOzQNwUMWSvSCIbah732JEFVhFPEFvv/Pp/Kaoqo/e8ze/soZ6hj0cOaye+IGhFk46+WlxtM+IP9Cf/O2lAGuINIEA/MOkUn/XpX/X/1+5sPXmpy3ePaz+Y1us81Dug53LAqJnCXx7UG2n2uefck/tev+UOjU0jicEq1g0lfsufOPiRxvDfZc1Bf [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_3 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ0DtBzd1q6rq1FVreqO+cW2bds2dmzbts0vtm3zi23bdv5nruSO8d87xt3PmfW+E2utqu59zs5OdnI0h6Zpv/kQlQ+/zqVqxWbN27Qt1LZ167ZtUsevGtGhY/O2bfJkTZshB//JmCNL2gzp02dIHb9Q51adOneIyNMmonOnDg1apY5fvnPDVs0blYroXrlty4g2ebJkyZgxe4aIHNkaZcuSJUum9G45JLLaO22xiLatIzp16J62TETHZi7qRpc/x3gbdGjUrHmXiEyNW1tt20W0adO5Q8OOrsYNOjWQIdM0dbnDUDJNy42Ob196lOXE2HL5EtWp6d/66tqLqE71NN9/61qUv0/24MLlssWeng/veaiFBjoSvkmzLXbtH/Q3/p3N/iSypg0lzsXNNGfXl4e//38qw90G/7Pvrxb4P3m74bOfjry9N7/2/3z8zjeuUNb3/fb//p2ocFj7WWikNqpghJa/sKb1y/e/Ys//iv+rJm+P2khXVweqa07NpbnB [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_4 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1zlFx7t66rVhmrqmLbtu10bNu2bdu27aRj29ixbVv3mbPzx7lnjJPnznrfiR/WSo+T2/vL7m2xWiyWv/wSlV9+g49qlVq0bNe+SPu2bdu3S5uwWtNOnVu2b5cve/pMufh/mXNlS58pY8ZMaRMW6dqmS9dOTfO1a9q1S6eGbdImrNC1UZuWjUs37Vmlfeum7fJly5Y5c85MTXPlaJwjW7ZsWTI65JAounf6Ek3bt23apVPP9GWbdm5hp+7qFnGMt2Gnxi1admuapUlbT/sOTdu169qpUWd7k4ZdGsqQ2+025IahFBZLXnRixzJjPDZMUD72LDYsxo/+hmXjYkOf5udfwxL135M9uny1XInnlyLte2wJDbYmfpcuPE6dX/R7/pvNWSSSxTIiisVyMV6WeXu+Pf77f2lwd+ukC/dW3r/bN71xniuJC3Va9TBN71UxDnRPFafu4iHxC1n+16/v108VsVgGHDjdJkXR5sm/iC+UdXLeomiB/xH7/kf8fzX5 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_5 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1luFRHs7ZnlssM7mzc2bi7u3sI7u7ubsElQCAJAUKAkGAJgeAS3N3d3T0Bvrt69o/znes63G9NPV1d3au7Z/bslzCrJhAMBAJf+CNe/oQ0HhrU6dCxW/ey3bt27d4tW+oGbXv17ti9W/ECOXIX5n95CufPkTtXrtzZUpft26VP315ti3dr27dPr5ZdsqWu1bdVl46tq7YdWK9757bdiufPnydPodxtCxdsXTB//vx5c5lykfhq7hwV23bv2rZPr4E5qrft3cEgbveLXMZr2at1h4792uZt09Xt3qNtt259e7XqbbRp2aelJDmOo8kK42QKBIrhZ/SsNtnVEbHlYcfaYED7OFwLrFsb2c+/X7RAgpid3T59rkbFB6fibr8TiDM6mPZ59o3Jm/xH/5CY3EJHwoHA8diBwMkUeRdsfX/ny//ln8t5ba+0o1yVwj89ytOilD/+5qtZnQrtOCTxL5VKBf7Xny/bX5cNBvbv/LI9ulxwR6Bcmtr7SgdLFSoX [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB140_6_0_81_link_6 {
+            get {
+                return ResourceManager.GetString("IRB140_6_0_81_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap IRB1660ID_Icon {

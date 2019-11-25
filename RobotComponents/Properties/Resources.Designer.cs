@@ -341,6 +341,69 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dN1juCRL167tqszKqmSpbdu2bduYbdu2bdu2ba62bdvd3xUxnx/728ex+3yjxh0jRmbWrNnPWr3Ur8vtcrn+8UNU8cNWeKleuUXLdu2LtG/btn27tAmrR3Tq3LJ9u3zZ02fKxf9lzpUtfaaMGTOlTVika5suXTtF5GsX0bVLp0Zt0ias2LVxm5ZNykT0rNq+dUS7fNmyZc6cM1NErhxNcmTLli1LRk08JIq8d/oSEe3bRnTp1DN9uYjOLTz0fd0iH2M26tSkRctuEVmatjXad4ho165rp8adPU0bdWkkhnRdV8Q7DKZwufJSJ3YsO8ZQCQHxEju96lJ+9ldc/vSq/Gp+/VNcUf/3lT2+fK18iReXQvufuIKD3Ynfp9sZp+5vzq+mi5zN2YHJEVFcrv/iZZm39/uTf/+veqj+rbJTT7Q8MO7ZvfC1gb0KbouXMf0Qq9mB/hsiwrOmDiro+r9+qLPKHI4ybMuhp13a7Kzk2lKYXNjtSl7E5RpQ4P9Y+/+P [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_0 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1llNzKknVVJJWqVCqpzIxtZmZmZma7zW1mZmZmZmZmZr5mZmam/nZm+8d8s9b0nqhz4kRkSu0363l8fe1RHIqiRPIlVHwZTj5qVGnZql37ou0jItq3S5e4Rninzq3at8ufI0Pm3PxPltzZM2TOlClzusRFu7bt0rVTeP524V27dGrcNl3iSl2btG3VtGx4z2rt24S3y589e5YsuTKH587ZNGf27NmzZvKIh0STd2coGd4+IrxLp54Zyod3bukm17pFPcbXuFPTlq26hWdtFqG37xDerl3XTk06u5s17tJYLHm9Xqd4QyulouRDJ3YsN0Z3YYLiI24Rl+L82d+pmEVc8rv5FelUov/7zh5fuVah5IvL9v4nijXYkfR9+p3x6v1mfrVw1G6uYdEUZQR1KUHWeXu/P4n8v1Ru369zINmKATcnxBhUaEf42LnB420P+O5eb7p02qJCyv/6cijXDk1TbhyKjAwrmtd5rch85UYRx4ANRRVlQMH/Ufv/R/1/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_1 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1juBxbt7armtXVqo5t205WVmzbtm3bNlds27Ztmzt2vnvMlR/nO9d1cr+jxzOeOeasWdWze+9kJ3k1XdO0v/yQLD98Nl6qVWrRsl37wu3btm3fLl2iak07dW7Zvl3+HBky5+Z/WXJnz5A5U6bM6RIV7tqmS9dOTfO3a9q1S6eGbdIlqtC1UZuWjUs37Vmlfeum7fJnz54lS67MTXPnbJwze/bsWTM55SJR1doZijdt37Zpl049M5Rt2rmFA9/dLfIyZsNOjVu07NY0a5O2nvYdmrZr17VTo86OJg27NJQmwzBsskMrpablI0/sWGaMx44IykvM9HbN9qO/TfOmt6u7+fnXpkX7d2ePL18rV/zFpdC+J5o1WE/yPv2OuHV+MX4pXWRvrp9RNG1EVE27GD/rvD3fnvz9v3LJZ/kW3c7eYP+hU72K5Mm7oODXiGRjZqbouv/Mi9nDd7c9WlD7Xz/Cbk84mGH+zYPZL9QsjC6UYf6tQiPjxiqiaQPC/kfs [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_2 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1jtCTJt/fxzKrMqqzMLLdtW6dt27Z52rZt27Zt27btnjaeb0T3i/vctW5/7q79ix2RUXW6Z81/ZhpXURVF+cM30cU328FL1YrNW0S2LdS2TZu2kWkSVG3SoWOLtpF5sqXLmIP/y5Qja7qMGTJkTJOgUOfWnTp3aJInsknnTh0atE6ToHznhq1bNCrVpHvltq2aRObJmjVTpuwZm+SIaBSRNWvWzBl08SZheXe6Yk3atmnSqUP3dGWadGyuMXd3+fs2ZoMOjZq36NIkc+M2nrbtmkRGdu7QsKPWuEGnBuKQYRgO8QkDyRUlN318+9KjPE6CX7zUnOtUHN/7OpSyc53yq/nxx6FE+feVPbp0tWyx5xeDex8rgYFqondpt8eu/ZP9aP/OZl8YVVGGhRXlQtzMc3Z/ffzn/+pzaiTp/Cdpi30FhqSpMjvD2vzL4/3M97RLs31JtqWeFWv74vzK//p28vyGA7oy8ECi3X8KbZkWq5CqFC94/Wm6worSL9// [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_3 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1juCPZu/fxpCqopKqSVGq3bdu2bbt327Zt27Zt27ZtG893rZ4X5znXdfpz7ty/da9VVdnpOTPT0/g7nA6H4y/fRBffDIWXqhWbNW/TtlDb1q3btkkdv2pkh47N27bJkzVthhz8X8YcWdJmSJ8+Q+r4hTq36tS5Q2SeNpGdO3Vo0Cp1/PKdG7Zq3qhUZPfKbVtGtsmTJUvGjNkzRObI1ihblixZMqV3i4fY8t5pi0W2bR3ZqUP3tGUiOzZzMfd2+fcYf4MOjZo17xKZqXFrX9t2kW3adO7QsKOrcYNODcQhTdMU8Q5DyRyO3PTx7UuP8qmEoHiZUU11KD/6Ko4x1VT51fz8qzgi/vvKHl26WrbY84vW3seO0EBnwndptseq/Yv9qv+dzb47qsMxzHY4LsTJNGf3t8d//6/uWTP09KAELfbVL3S5xqgFG/OfvFQ86pBcDfYpdXOVG1npSH7H//pWamREoa77+x64q4QLF/GvLJTO06vg+16pCzsc/fL9 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_4 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1ztCRJu7fhLGRlVValqm3btm3b2G3btm3btm3btm18d0TPH+c7a52+3tjPL55A5a6eNe/0zPSU4lIU5S8/RBU/Qm6+VK3YrHmbtoXatm7dtk3q+FUjOnRs3rZNnqxpM+TgfxlzZEmbIX36DKnjF+rcqlPnDhF52kR07tShQavU8ct3btiqeaNSEd0rt20Z0SZPliwZM2bPEJEjW6NsWbJkyZReFS8SSd6dtlhE29YRnTp0T1smomMzL32ty7+X0Rt0aNSseZeITI1bB9q2i2jTpnOHhh29jRt0aiA2+f1+t3hCO5mi5KaOb196VMBDsMSX6EfdivtHX7cSOuqW383Pv24l8n/f2aNLV8sWe37R2ftYsQe6Er5Lsz1W7V+sXzryb2/2PZEUZRjjQpxMc3Z/e/z3/6pyd7/y+0ouXlN1VKMW+b0xB3w8FK3ivrELh2ceO7V3fuV//RiutSrkUkIH/uaLVNilbBO5oGtfssJcku9/jL3/Y/x/PfHTIy/6 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_5 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to jJwJWE5tF+/3vDcyD0kSQsaikNKAzEMhLzKFZIqSRGkyT0XIECrzrEKmNAllKBlCpRQaJUVJUun877vnXNc55zrnuk6/b+219n+t59n7vnkH773Wx7AMwzTgh3jyo8bhMnP68hVOzpbOq1c7O/XvOtNhresKZyezoXqDjPE/A+MheoMGDhzUv6ul26p1bmsdzJwc3NatXbSqf9epbotXrbCf5OAxw9nRwclsyBADg2GDHIyN7I2GDBliOFAkD2lLv1tvnIPzaod1az30pji4Lhegy+sbH9N00Vr75SvWOxguWd3EeY2Dk5Pb2sWuwpJF6xaRIkVROPKGrXQZxhT+gMtk/yY8gpbkUpHAMNxfX44pTGhcTW0Dx7RTrSz/bbrVuK9preMLmFZb2e4/BkRpzqtDPlxVOyxeYZgZTRnmjZZhaOyfgob/lz98jPwYPshhota2+2Y74qzqvripNpM03nQE83/8NPjesmSZUwkNvh1Hs0w0iUeym7qPZphNFv+L [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB120_3_0_58_link_6 {
+            get {
+                return ResourceManager.GetString("IRB120_3_0_58_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to nJ1nmBRFtIZnunt6pqdneshBSZIkSc4ZySA555xzVJKI5CCgKCA5ZwREguSMAiIoklFQlKASTQjCfc/p/XGf+/PyPh/fV6erq6qre2d32VkNBAOBwAv+iMufmMFfzRp279G3X+V+ffr065svS9MuAwf16Ne3XPH8hYrlL1SqUPGi+QsXKlioUL4slYf0HjxkYJdyfbsMGTywQ+98WeoP6di7R6faXYY17terS99yxYoVLlyyUJdSJTqVKFasWJGCIZklpQ6ev3qXfn26DB44LH+dLoO6W9TDQ/15oh0GdureY2iXIp37OP36d+nbd8jAjoOszh0Gd5BOkUjEkCUmezUQKIuP71d2mmMSEvJXyzlGwPh3tBGoO8fQy3n6wgikSrq0m+cu1K1+59vk+38OJBsbzPrgtc9fbv2M42mS+pYMvxQIHETfZCyyaO8/P7/4/3rg//wJHihzuEOOe4fcs9Za/HVnw6PXg4GelQOBdyr8L+3/X/o/taQ//jqDuBEw [rest of string was truncated]&quot;;.
         /// </summary>
         public static string irb1200_5_90_base_link {

@@ -96,6 +96,7 @@
     <Compile Include="Components\Controller Utility\SetDigitalInputComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\Definitions\IRB1600_X_1_20_Component.cs" />
     <Compile Include="Components\Definitions\IRB140_6_0_81_Component.cs" />
     <Compile Include="Components\Definitions\IRB120_3_0_58_Component.cs" />
     <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
@@ -587,6 +588,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB140_6_0_81_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_X_1_2_link_1.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

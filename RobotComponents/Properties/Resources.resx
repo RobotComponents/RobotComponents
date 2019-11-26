@@ -526,4 +526,25 @@
   <data name="IRB1600_x_1_45_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1600_x_1_45_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="IRB2600_12_1_85_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_12_1_85_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_12_1_85_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

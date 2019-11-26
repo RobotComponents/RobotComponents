@@ -950,6 +950,69 @@ namespace RobotComponents.Properties {
         /// <summary>
         ///   Looks up a localized string similar to dN1jtCTJt/fxzEJmIYunbdu2PW3btm3btm3btm3b5vON3f3iPnet25+7a/9iR2RUndN3DXpm+q/pmqb94Yfq6odl46Vy+abNWrcp2KZVqzatU8Wr3Kh9h2ZtWufOkiZ9dv4vQ/bMadKnS5c+VbyCnVp27NS+Ue7WjTp1bF+vZap4ZTvVb9mswX+NulVs06JR69yZM2fIkC19o+xZG2TNnDlzxnRO9SYRcneaoo3atGrUsX23NKUadWjqYG52/vs2nnrtGzRt1rlRxoat3G3aNmrdulP7+h0cDet1rKcOuVwum/qEwaSalos+rl3JkW47IaBeIo+xa7bvfWyae4xdvpoff2xapH9f2cOLV0oXfXYhtOeRFhygJ3ibelvMmj/ZPzf679ls96Jq2tAITTsfO+PsXV8f/fm/+s/XhZvWzdpp77Uxf6LUGLI/X55Ry7+HD3Te27nVh12vvj3Mp/2vHw16HD1QeX7fAwWzRNrRLv6wguSCuta4oKb1zfs/as// [rest of string was truncated]&quot;;.
         /// </summary>
+        public static string IRB2600ID_15_1_85_link_0 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1jmCRLt7fxqkpVliuzx7Zt27Zt27Zt27Zt27axx573juj5cN5zXad/Z+X6x4rIrOreM/PM3oPjcDocjr98iC4+fC4uVSs2b9G2XaF2bdq0a5s6ftUmHTu1aNc2T9a0GXLwfxlzZEmbIX36DKnjF+rSunOXjk3ytG3SpXPHBq1Txy/fpWHrFo1KNelRuV2rJm3zZMmSMWP2DE1yZGuULUuWLJnSa+JFbPnstMWatGvTpHPHHmnLNOnUXGVudI18GU+Djo2at+jaJFPjNma79k3atu3SsWEntXGDzg3EIbfb7RLvMJTM4chNn9Ch9GhTIQTF5ckCzeH60c/luEEQHz//uhwR/z6zx5evlS324lJ43xNHaJAz4fs0O2LV/sX+gn9ns49K7HDkj+dwXIyTae6eb0/+/l/9adLP3auXG7//aJ7pLWPV25f//b0Bz6cOj3ugc/5r17OUv57f8b8+nP2rHJrijHqo+58Yhaq+HFVof9vRhVo4ohd2OPrn+x+1 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_1 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1jmF1Zt7b3Xttra1Vs27Zt2zY6tm3btjtWx7Zto8OOk+8eI/lxvnNdp+53rOcZmHPNtWunqytvUm2z22y2X3yIykfA4FKtUouW7doXbt+2bft2aRJUa9qxU8v27fJmS5cxJ//LlDNruowZMmRMk6Bwlzadu3Rsmrdd0y6dOzZskyZBhS6N2rRsXLppjyrtWzdtlzdr1kyZcmRsmjN74+xZs2bNnMElN4mse6cr3rR926adO/ZIV7ZppxZO6p6uv29jNuzYuEXLrk0zN2nra/9X03btunRs1MnZpGHnhjLk9XoNOaGV3GbLg07oUGa0z4EJy6VvB4fN+NrPsHXs4NCn+fbLsEX582QPL14pV/zZhYi9j2zWIHuiN2m3x67znX6uP7M5ekS12YZHttnOx808d/fnR7/+L71bqcWvb4Pi7UvTpl2fM1mXFWgX/7p/wK+O/0g98uB4BW3/6+Pn1eKFjjRrd+BXv9WFh/l6Fr51af3+rXfWF7HZ+uf/H7H3 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_2 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1j9CPbtvfxVCpOJVVJerdt27Zt927b3m3b3m3bNnfbtm0bz3fN7hf3uWPc/pyZ+Ztzrco/fc4YG61j02w22y++qa6+GXZeqlZs1rxN20JtW7du2yZ1/KqNO3Rs3rZNnqxpM+TgPxlzZEmbIX36DKnjF+rcqlPnDo3ztGncuVOH+q1Sxy/fuUGr5g1LNe5euW3Lxm3yZMmSMWP2DI1zZGuYLUuWLJnSO9UXich7py3WuG3rxp06dE9bpnHHZg727i6/v4yvfoeGzZp3aZypUWtv23aN27Tp3KFBR0ej+p3qq0sej8euPqGVzGbLTR/XvvRIr04w1cuau7rN/rWP3bbgri7fm2+/7LYof75n989fKlvsybnQ7gc2a4CW8HWarbFqf+e81Z+72U9Et9mGRGy2s3Eyzdr5+cGv/6vL7QWT97yasCnz2Wxn84f7Nvy1f0DcvcsydPic98ez/Lb/9e1I9wwFq9mi7g8UmVpYsx0udPZzzkL0wjZb33z/o3b/ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_3 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1jtCPbt/fxpFKpSlUlqUratm3btm3btm3btm3btvu0zee71u4X97lj3P7cmflbc63C3qfHObcP+u9yu1yuv/wQXfzwK3xUrdi8Rdt2hdq1adOuber4VZt07NSiXds8WdNmyMH/ZcyRJW2G9OkzpI5fqEvrzl06NsnTtkmXzh0btE4dv3yXhq1bNCrVpEfldq2atM2TJUvGjNkzNMmRrVG2LFmyZErvFQ+JJO+dtliTdm2adO7YI22ZJp2aq8z1rhGPMRt0bNS8RdcmmRq3Mdq1b9K2bZeODTupjRt0biAO+Xw+Rbyhk8zlyk2f0KH0aMNDsMXHtSlel/Kjn+I6RRA/fv5VXJH/fWWPL18rW+zFpdC+Jy5nkDvhuzQ7YtX+xf6kf2ezn0rkcuWP53JdjJNp7p5vT/7+X/337rc99xeZv//t4WRbnzxclv/0hNp/Cj1rtr93jIl//6aYlt/1v378+Xug0OrJiw42LrW+cOy+vQq7XSkKuecfKuxy9c/3 [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_4 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dJ1j1F1Zt60XNtbm2ju2bduoVGzbtm3bNiu2bdvGG9tO7jNH8uPc09rJc8fqffQx5lw7b6p9uamkcjRd07TffFOqvvkNHlUqNGvepm3htq1bt22TJkGVxh06Nm/bJm+2dBlz8v8y5cyaLmOGDBnTJCjcuVWnzh0a523TuHOnDvVbpUlQrnODVs0blmzcvVLblo3b5M2aNVOmHBkb58zeMHvWrFkzZ3Cql0SWu9MVa9y2deNOHbqnK924YzMHubvLn9d463do2Kx5l8aZG7X2tG3XuE2bzh0adHQ0qt+pvlqyLMtQnzCUXNPyoOPblxrlMTG2eiROZ2rGt76GFj2dKd+b778NLcrf71nExStlij29EN7zUAsN1BO9Sbstdq0fzO+k/bObo39UTRsWWdPOx808Z9eXh7//L/38qtTa0xOn7r3tG9q26+KpBbSnGcLXT9Xau3VEtG39cswpoP2vb5tO1SqypHad/edubShijRtURNfmFaq5e38RTeuX/3/U [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_5 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hLwHOJftG/9/7/vTkEqltJemJBqy2nv3JJVRJJQVyo7SkJQmyioNLU1pk4YS0USIBqlkhJQR//d11fE/vr/fcfyPf6/v+TnP832e13nfn4+H53F3XV+GZRimBX+IJ3/acngxXmRr5+g02cnBwclxeB9jaxdXOydHgzEjtHTxv1G6o0dojRypNbzP5A32bhtcrA0crTe4uayyH95nwQZLezur2dae/zmts3Y0GD161KhxWta6Y63Gjh49WnukSC6iQmePmG7t5GDt5uI5Yq61q60AXd749zKtV7lY2dpttNZe7dDKydna0XGDi6WrsHqV2yrSpFAoOHKH7QcxjD78vvVzglvxCJTJS242w3ANfhyTkf333TS2cEynf++s+HXOvOlfX3VILmHaB7D9qjRudjdtQv3gv95xYQqG2QJ72VM7+u7vkpb/L++hc2TJ1Wn/3dsTNWXe11HOExy2f6w5sHbGvdgLzwtH3rScwPxff1piAqb0XTj9fktMwhT2/bYp [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB2600ID_15_1_85_link_6 {
+            get {
+                return ResourceManager.GetString("IRB2600ID_15_1_85_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dN1jtCTJt/fxzEJmIYunbdu2PW3btm3btm3btm3b5vON3f3iPnet25+7a/9iR2RUndN3DXpm+q/pmqb94Yfq6odl46Vy+abNWrcp2KZVqzatU8Wr3Kh9h2ZtWufOkiZ9dv4vQ/bMadKnS5c+VbyCnVp27NS+Ue7WjTp1bF+vZap4ZTvVb9mswX+NulVs06JR69yZM2fIkC19o+xZG2TNnDlzxnRO9SYRcneaoo3atGrUsX23NKUadWjqYG52/vs2nnrtGzRt1rlRxoat3G3aNmrdulP7+h0cDet1rKcOuVwum/qEwaSalos+rl3JkW47IaBeIo+xa7bvfWyae4xdvpoff2xapH9f2cOLV0oXfXYhtOeRFhygJ3ibelvMmj/ZPzf679ls96Jq2tAITTsfO+PsXV8f/fm/+s/XhZvWzdpp77Uxf6LUGLI/X55Ry7+HD3Te27nVh12vvj3Mp/2vHw16HD1QeX7fAwWzRNrRLv6wguSCuta4oKb1zfs/as// [rest of string was truncated]&quot;;.
+        /// </summary>
         public static string IRB2600ID_8_2_0_link_0 {
             get {
                 return ResourceManager.GetString("IRB2600ID_8_2_0_link_0", resourceCulture);

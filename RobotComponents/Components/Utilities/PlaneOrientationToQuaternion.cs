@@ -35,10 +35,11 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_DoubleParam("A", "A", "The real part of the quaternion.");
-            pManager.Register_DoubleParam("B", "B", "The first imaginary coefficient of the quaternion.");
-            pManager.Register_DoubleParam("C", "C", "The second imaginary coefficient of the quaternion.");
-            pManager.Register_DoubleParam("D", "D", "The third imaginary coefficient of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion A", "A", "The real part of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion B", "B", "The first imaginary coefficient of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion C", "C", "The second imaginary coefficient of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion D", "D", "The third imaginary coefficient of the quaternion.");
+            pManager.Register_StringParam("String", "STR", "The quaternion in string format that can be used in RAPID code.");
         }
 
         /// <summary>
@@ -55,6 +56,7 @@ namespace RobotComponents.Components
             List<double> quatB = new List<double>();
             List<double> quatC = new List<double>();
             List<double> quatD = new List<double>();
+            List<string> text = new List<string>();
 
             Quaternion quat;
             Plane refPlane = Plane.WorldXY;
@@ -68,12 +70,14 @@ namespace RobotComponents.Components
                 quatB.Add(quat.B);
                 quatC.Add(quat.C);
                 quatD.Add(quat.D);
+                text.Add("[" + quat.A.ToString("0.######") + ", " + quat.B.ToString("0.######") + ", " + quat.C.ToString("0.######") + ", " + quat.D.ToString("0.######") + "]");
             }
 
             DA.SetDataList(0, quatA);
             DA.SetDataList(1, quatB);
             DA.SetDataList(2, quatC);
             DA.SetDataList(3, quatD);
+            DA.SetDataList(4, text);
         }
 
         /// <summary>

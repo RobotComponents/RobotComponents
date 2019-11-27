@@ -14,7 +14,7 @@ namespace RobotComponents.Utils
         /// X.00.XXX ---> minor release(for example new functions new components...etc.)
         /// X.XX.000 ---> Bug fixes small improvements
         /// </summary>
-        public static readonly string CurrentVersion = "0.04.017";
+        public static readonly string CurrentVersion = "0.04.018";
 
     }
 }

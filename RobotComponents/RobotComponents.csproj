@@ -720,6 +720,30 @@
   <ItemGroup>
     <None Include="Resources\IRB2600ID_15_1_85_link_6.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB120_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB140_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB160_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB2600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB2600ID_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlaneToQuat_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

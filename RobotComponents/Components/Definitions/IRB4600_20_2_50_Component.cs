@@ -166,8 +166,7 @@ namespace RobotComponents.Components
         {
             get
             {
-                return null; // Todo
-                //return Properties.Resources.IRB4600_20_2_50_Icon;
+                return Properties.Resources.IRB4600_Icon;
             }
         }
 

@@ -12,7 +12,7 @@ namespace RobotComponents.Components
         /// Initializes a new instance of the PlaneOrientation to Quarternion
         /// </summary>
         public PlaneOrientationToQuaternion()
-          : base("Plane orientation to Quaternion", "Plane orientation to Quaternion",
+          : base("Plane Orientation to Quaternion", "Plane Orientation to Quaternion",
               "Calculates the four coefficient values in a quarternion. "
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
@@ -87,7 +87,7 @@ namespace RobotComponents.Components
         {
             get
             {
-                return null; // Todo
+                return Properties.Resources.PlaneToQuat_Icon;
             }
         }
 

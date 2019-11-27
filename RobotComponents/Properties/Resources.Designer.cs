@@ -404,6 +404,16 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB120_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB120_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to nJ1nmBRFtIZnunt6pqdneshBSZIkSc4ZySA555xzVJKI5CCgKCA5ZwREguSMAiIoklFQlKASTQjCfc/p/XGf+/PyPh/fV6erq6qre2d32VkNBAOBwAv+iMufmMFfzRp279G3X+V+ffr065svS9MuAwf16Ne3XPH8hYrlL1SqUPGi+QsXKlioUL4slYf0HjxkYJdyfbsMGTywQ+98WeoP6di7R6faXYY17terS99yxYoVLlyyUJdSJTqVKFasWJGCIZklpQ6ev3qXfn26DB44LH+dLoO6W9TDQ/15oh0GdureY2iXIp37OP36d+nbd8jAjoOszh0Gd5BOkUjEkCUmezUQKIuP71d2mmMSEvJXyzlGwPh3tBGoO8fQy3n6wgikSrq0m+cu1K1+59vk+38OJBsbzPrgtc9fbv2M42mS+pYMvxQIHETfZCyyaO8/P7/4/3rg//wJHihzuEOOe4fcs9Za/HVnw6PXg4GelQOBdyr8L+3/X/o/taQ//jqDuBEw [rest of string was truncated]&quot;;.
         /// </summary>
         public static string irb1200_5_90_base_link {
@@ -619,6 +629,36 @@ namespace RobotComponents.Properties {
         public static string IRB140_6_0_81_link_6 {
             get {
                 return ResourceManager.GetString("IRB140_6_0_81_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB140_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB140_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB160_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB160_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB1600_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB1600_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -885,6 +925,16 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB2600_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB2600_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dN1jtCTJt/fxzEJmIYunbdu2PW3btm3btm3btm3b5vON3f3iPnet25+7a/9iR2RUndN3DXpm+q/pmqb94Yfq6odl46Vy+abNWrcp2KZVqzatU8Wr3Kh9h2ZtWufOkiZ9dv4vQ/bMadKnS5c+VbyCnVp27NS+Ue7WjTp1bF+vZap4ZTvVb9mswX+NulVs06JR69yZM2fIkC19o+xZG2TNnDlzxnRO9SYRcneaoo3atGrUsX23NKUadWjqYG52/vs2nnrtGzRt1rlRxoat3G3aNmrdulP7+h0cDet1rKcOuVwum/qEwaSalos+rl3JkW47IaBeIo+xa7bvfWyae4xdvpoff2xapH9f2cOLV0oXfXYhtOeRFhygJ3ibelvMmj/ZPzf679ls96Jq2tAITTsfO+PsXV8f/fm/+s/XhZvWzdpp77Uxf6LUGLI/X55Ry7+HD3Te27nVh12vvj3Mp/2vHw16HD1QeX7fAwWzRNrRLv6wguSCuta4oKb1zfs/as// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string IRB2600_X_1_65_link_0 {
@@ -1074,6 +1124,16 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB2600ID_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB2600ID_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dJ1jlCXrsrVzIRczF9u2bdu2bdu2bdu2bdvmbtv+njeqftzvjnHrOZFzxox4M7Oqz+jdu7U1i6Zp//hQqj4MK5dqlVq0bNe+cPu2bdu3S5OgWtNOnVu2b5c3W7qMOflfppxZ02XMkCFjmgSFu7bp0rVT07ztmnbt0qlhmzQJKnRt1KZl49JNe1Zp37ppu7xZs2bKlCNj05zZG2fPmjVr5gy6ekhY7p2ueNP2bZt26dQzXdmmnVvYyZ3dIh7jadipcYuW3ZpmbtLW3b5D03btunZq1NnepGGXhmrJ5XJZ1RsGkmtaHnRixzJj3DaMX13yTLZp1p/9rVqGyTb5bH79s2pRIj+zJ1eulyv+4nJw/1MtMNiS6H3anbHr/Gb+fVLEbo6U0TVteFjTLsXNPG/v96f//i9d37pFiduFNx8YfmhEgrhvDxSot6ukYW0w8MChNp/2vvnxpID2vz7yTz1xuNqiAYdTtT20u2PCkYXxhRfaqhbWtAH5/0ft/x/1/2Xq [rest of string was truncated]&quot;;.
         /// </summary>
         public static string IRB4600_20_2_50_link_0 {
@@ -1210,6 +1270,16 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IRB4600_Icon1 {
+            get {
+                object obj = ResourceManager.GetObject("IRB4600_Icon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dJ1jlCXrsrVzIRczF9u2bdu2bdu2bdu2bdvmbtv+njeqftzvjnHrOZFzxox4M7Oqz+jdu7U1i6Zp//hQqj4MK5dqlVq0bNe+cPu2bdu3S5OgWtNOnVu2b5c3W7qMOflfppxZ02XMkCFjmgSFu7bp0rVT07ztmnbt0qlhmzQJKnRt1KZl49JNe1Zp37ppu7xZs2bKlCNj05zZG2fPmjVr5gy6ekhY7p2ueNP2bZt26dQzXdmmnVvYyZ3dIh7jadipcYuW3ZpmbtLW3b5D03btunZq1NnepGGXhmrJ5XJZ1RsGkmtaHnRixzJj3DaMX13yTLZp1p/9rVqGyTb5bH79s2pRIj+zJ1eulyv+4nJw/1MtMNiS6H3anbHr/Gb+fVLEbo6U0TVteFjTLsXNPG/v96f//i9d37pFiduFNx8YfmhEgrhvDxSot6ukYW0w8MChNp/2vvnxpID2vz7yTz1xuNqiAYdTtT20u2PCkYXxhRfaqhbWtAH5/0ft/x/1/2Xq [rest of string was truncated]&quot;;.
         /// </summary>
         public static string IRB4600_X_2_05_link_0 {
@@ -1338,6 +1408,16 @@ namespace RobotComponents.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap IRB6650_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB6650_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Movement_Icon {
             get {
                 object obj = ResourceManager.GetObject("Movement_Icon", resourceCulture);
@@ -1391,6 +1471,16 @@ namespace RobotComponents.Properties {
         public static System.Drawing.Bitmap Plane_Visualizer_Icon {
             get {
                 object obj = ResourceManager.GetObject("Plane_Visualizer_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap PlaneToQuat_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PlaneToQuat_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

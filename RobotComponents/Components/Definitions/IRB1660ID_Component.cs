@@ -16,8 +16,8 @@ namespace RobotComponents.Components
         /// Initializes a new instance of the IRB1660ID_Component class.
         /// </summary>
         public IRB1660ID_Component()
-          : base("ABB_IRB1660ID-6/1.55", "IRB1660ID",
-              "An ABB IRB1660ID-6/1.55 Robot Info preset component."
+          : base("ABB_IRB1660ID-X/1.55", "IRB1660ID",
+              "An ABB IRB1660ID-x/1.55 Robot Info preset component."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
@@ -64,42 +64,58 @@ namespace RobotComponents.Components
             {
             }
 
+            // Robot mesh
             List<Mesh> meshes = new List<Mesh>();
-            string linkString = RobotComponents.Properties.Resources.irb1660ID_base_link;
+            // Base
+            string linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_0;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_1;
+            // Axis 1
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_1;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_2;
+            // Axis 2
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_2;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_3;
+            // Axis 3
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_3;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_4;
+            // Axis 4
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_4;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_5;
+            // Axis 5
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_5;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            linkString = RobotComponents.Properties.Resources.irb1666ID_link_6;
+            // Axis 6
+            linkString = RobotComponents.Properties.Resources.IRB1660ID_X_1_55_link_6;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
 
+            // Axis planes
             List<Plane> axisPlanes = new List<Plane>();
+            // Axis 1
             axisPlanes.Add(new Plane(
                 new Point3d(0, 0.00, 0),
                 new Vector3d(0.00, 0.00, 1.00)));
+            // Axis 2
             axisPlanes.Add(new Plane(
                 new Point3d(150.0, 0.00, 486.5),
                 new Vector3d(0.00, 1.00, 0.00)));
+            // Axis 3
             axisPlanes.Add(new Plane(
                 new Point3d(150.0, 0.00, 1186.5),
                 new Vector3d(0.00, 1.00, 0.00)));
+            // Axis 4
             axisPlanes.Add(new Plane(
-                new Point3d(150, 0.00, 1296.5),
+                new Point3d(284.00, 0.00, 1296.5),
                 new Vector3d(1.00, 0.00, 0.00)));
+            // Axis 5
             axisPlanes.Add(new Plane(
                 new Point3d(828.0, 0.00, 1296.5), 
                 new Vector3d(0.00, 1.00, 0.00)));
+            // Axis 6
             axisPlanes.Add(new Plane(
                 new Point3d(963.0, 0.00, 1296.5), 
                 new Vector3d(1.00, 0.00, 0.00)));
 
+            // Robot axis limits
             List<Interval> axisLimits = new List<Interval>{
                 new Interval(-180, 180),
                 new Interval(-90, 150),
@@ -108,11 +124,13 @@ namespace RobotComponents.Components
                 new Interval(-120, 120),
                 new Interval(-400, 400),};
 
+            // External axis limits
             for (int i = 0; i < externalAxis.Count; i++)
             {
                 axisLimits.Add(externalAxis[i].AxisLimits);
             }
 
+            // Tool mounting frame
             Plane mountingFrame = new Plane(
                 new Point3d(963.0, 0.00, 1296.5),
                 new Vector3d(1.00, 0.00, 0.00));
@@ -147,8 +165,6 @@ namespace RobotComponents.Components
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return Properties.Resources.IRB1660ID_Icon;
             }
         }

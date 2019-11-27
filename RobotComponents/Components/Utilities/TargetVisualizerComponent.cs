@@ -115,11 +115,6 @@ namespace RobotComponents.Components
                         TargetGoo targetGoo = new TargetGoo(target);
                         targetGoos.Append(targetGoo, iPath);
                     }
-                    else
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "A wrong datatype is used as input. " +
-                            "Use a Action : Target, Action : Movement or a plane as input for the actions.");
-                    }
                 }
             }
         }

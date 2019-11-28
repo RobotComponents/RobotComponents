@@ -22,6 +22,15 @@ namespace RobotComponents.Components.Definitions
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -54,6 +63,7 @@ namespace RobotComponents.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             string name = "default robot Info";
             List<Mesh> meshes = new List<Mesh>();
             List<Plane> axisPlanes = new List<Plane>();
@@ -79,7 +89,6 @@ namespace RobotComponents.Components.Definitions
                 externalLinearAxisGoo = new ExternalLinearAxisGoo();
                 externalLinearAxisGoo.Value = new ExternalLinearAxis(positionPlane, positionPlane, new Interval(0, 0));
             }
-            //if (!DA.GetData(7, ref externalLinearAxisGoo)) { externalLinearAxisGoo = null; }
 
             // Override position plane when an external axis is coupled
             if (externalLinearAxisGoo != null)
@@ -89,6 +98,7 @@ namespace RobotComponents.Components.Definitions
 
             RobotInfo robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
 
+            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -98,12 +108,7 @@ namespace RobotComponents.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.RobotInfo_Icon;
-            }
+            get { return Properties.Resources.RobotInfo_Icon; }
         }
 
         /// <summary>

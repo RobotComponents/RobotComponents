@@ -29,6 +29,15 @@ namespace RobotComponents.Components
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -101,7 +110,6 @@ namespace RobotComponents.Components
                 mesh.Append(meshes[i]);
             }
 
-            //RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, flippedToolPlane);
             RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
 
             // Checks if target name is already in use and counts duplicates
@@ -195,20 +203,16 @@ namespace RobotComponents.Components
                 }
             }
         }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.ToolPlane_Icon;
-            }
+            get { return Properties.Resources.ToolPlane_Icon; }
         }
-
+ 
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
         /// It is vital this Guid doesn't change otherwise old ghx files 

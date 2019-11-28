@@ -13,7 +13,7 @@ namespace RobotComponents.Components
     public class IRB4600_X_2_05_Component : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the IRB4600_40_55_Component class.
+        /// Initializes a new instance of the IRB4600_40_2_05_Component class.
         /// </summary>
         public IRB4600_X_2_05_Component()
           : base("ABB_IRB4600-X/2.05", "IRB4600",
@@ -22,6 +22,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -51,6 +60,7 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             Plane positionPlane = Plane.WorldXY;
             RobotToolGoo toolGoo = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
@@ -149,13 +159,15 @@ namespace RobotComponents.Components
                         positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
                     }
                 }
-                robotInfo = new RobotInfo("ABB_IRB4600-X/2.05", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
-            }
-            else
-            {
-                robotInfo = new RobotInfo("ABB_IRB4600-X/2.05", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                robotInfo = new RobotInfo("IRB4600-X/2.05", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
             }
 
+            else
+            {
+                robotInfo = new RobotInfo("IRB4600-X/2.05", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+            }
+
+            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -164,10 +176,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.IRB4600_Icon;
-            }
+            get { return Properties.Resources.IRB4600_Icon; }
         }
 
         /// <summary>

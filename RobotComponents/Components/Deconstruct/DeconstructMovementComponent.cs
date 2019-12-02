@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.Parameters;
@@ -37,7 +36,7 @@ namespace RobotComponents.Components
         {
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");
             pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Speed Data");
-            pManager.Register_BooleanParam("Is Linear", "IL", "Movement Type as bool");
+            pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");
         }
 
@@ -56,7 +55,7 @@ namespace RobotComponents.Components
             //Output
             DA.SetData(0, movementGoo.Value.Target);
             DA.SetData(1, movementGoo.Value.SpeedData);
-            DA.SetData(2, movementGoo.Value.IsLinear);
+            DA.SetData(2, movementGoo.Value.MovementType);
             DA.SetData(3, movementGoo.Value.Precision);
         }
 
@@ -65,12 +64,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructMovement_Icon;
-            }
+            get { return Properties.Resources.DeconstructMovement_Icon; }
         }
 
         /// <summary>

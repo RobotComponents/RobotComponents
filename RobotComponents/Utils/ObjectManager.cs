@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-
-using RobotComponents.BaseClasses;
 using RobotComponents.Components;
-using RobotComponents.Goos;
-using RobotComponents.Parameters;
 
 
 namespace RobotComponents
@@ -19,12 +9,12 @@ namespace RobotComponents
     /// <summary>
     /// The ObjectManager keeps track of different variables to enable global funcionalities
     /// </summary>
-    /// 
 
     public class ObjectManager
     {
         #region fields
         // contains information on all targets in file to notify user about duplicates
+        private Dictionary<Guid, AdvancedTargetComponent> _advancedTargetsByGuid;
         private Dictionary<Guid, TargetComponent> _targetsByGuid;
         private List<string> _targetNames;
 
@@ -44,6 +34,7 @@ namespace RobotComponents
         #region constructors
         public ObjectManager()
         {
+            _advancedTargetsByGuid = new Dictionary<Guid, AdvancedTargetComponent>();
             _targetsByGuid = new Dictionary<Guid, TargetComponent>();
             _targetNames = new List<string>();
 
@@ -59,6 +50,7 @@ namespace RobotComponents
         #endregion
 
         #region Properties
+        public Dictionary<Guid, AdvancedTargetComponent> AdvancedTargetsByGuid { get => _advancedTargetsByGuid; set => _advancedTargetsByGuid = value; }
         public Dictionary<Guid, TargetComponent> TargetsByGuid { get => _targetsByGuid; set => _targetsByGuid = value; }
         public List<string> TargetNames { get => _targetNames; set => _targetNames = value; }
         public Dictionary<Guid, SpeedDataComponent> SpeedDatasByGuid { get => _speedDatasByGuid; set => _speedDatasByGuid = value; }

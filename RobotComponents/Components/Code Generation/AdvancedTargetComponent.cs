@@ -19,7 +19,7 @@ namespace RobotComponents.Components
 		/// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public AdvancedTargetComponent()
-          : base("Advanced Action: Target", "AT",
+          : base("Action: Advanced Target", "AT",
               "Defines a target for an Action: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -33,6 +33,7 @@ namespace RobotComponents.Components
         /// </summary>
         public override GH_Exposure Exposure
         {
+            // Used secondary for advanced actions 
             get { return GH_Exposure.obscure | GH_Exposure.secondary; }
         }
 
@@ -89,6 +90,7 @@ namespace RobotComponents.Components
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");  //Todo: beef this up to be more informative.
         }
 
+        // Global component variables
         public List<string> targetNames = new List<string>();
         private string lastName = "";
         private bool namesUnique;
@@ -101,7 +103,7 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // clears speedDataNames
+            // Clears targetNames
             for (int i = 0; i < targetNames.Count; i++)
             {
                 objectManager.TargetNames.Remove(targetNames[i]);
@@ -138,6 +140,7 @@ namespace RobotComponents.Components
             List<int> axisConfigs = new List<int>();
             bool isRobTarget = true;
 
+            // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, planes)) { return; }
             if (!DA.GetDataList(2, axisConfigs)) { return; }
@@ -149,14 +152,12 @@ namespace RobotComponents.Components
             sizeValues[2] = axisConfigs.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
-
             // Keeps track of used indicies
             int nameCounter = -1;
             int planesCounter = -1;
             int axisConfigCounter = -1;
 
-
-            // Creates speed Datas
+            // Creates targets 
             List<Target> targets = new List<Target>();
             for (int i = 0; i < biggestSize; i++)
             {
@@ -255,11 +256,21 @@ namespace RobotComponents.Components
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
 
@@ -285,7 +296,8 @@ namespace RobotComponents.Components
             }
         }
 
-        #region methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        #region variable input parameters
         /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
         /// Since this method is potentially called on Canvas redraws, it must be fast.
@@ -402,8 +414,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            { return Properties.Resources.Target_Icon; }
+            get { return Properties.Resources.Target_Icon; }
         }
 
         /// <summary>

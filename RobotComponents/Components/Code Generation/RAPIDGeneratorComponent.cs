@@ -9,15 +9,12 @@ using RobotComponents.Utils;
 
 namespace RobotComponents.Components
 {
-
     public class RAPIDGeneratorComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public RAPIDGeneratorComponent()
           : base("RAPID Generator", "RG",
@@ -26,6 +23,16 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            // Always place the rapid generator at the end of the subcategory
+            get { return GH_Exposure.septenary; }
         }
 
         /// <summary>
@@ -54,6 +61,7 @@ namespace RobotComponents.Components
             pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code");  //Todo: beef this up to be more informative.
         }
 
+        // Global component variables
         string MAINCode = "";
         string BASECode = "";
         bool firstMovementIsMoveAbs = true;
@@ -68,6 +76,7 @@ namespace RobotComponents.Components
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
+            // Input variables
             RobotInfo robInfo = new RobotInfo();
             List<RobotComponents.BaseClasses.Action> actions = new List<RobotComponents.BaseClasses.Action>();
             string moduleName = "";
@@ -75,6 +84,7 @@ namespace RobotComponents.Components
             bool saveToFile = false;
             bool update = true;
 
+            // Catch the input data
             if (!DA.GetData(0, ref robInfo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref moduleName)) { moduleName = "MainModule"; }
@@ -94,8 +104,10 @@ namespace RobotComponents.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
+            // Initiaties the rapidGenerator
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo, documentGUID);
-     
+            
+            // Updates the rapid BASE and MAIN code
             if(update == true)
             {
                 rapidGenerator.CreateBaseCode();
@@ -111,6 +123,7 @@ namespace RobotComponents.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
             }
 
+            // Output
             DA.SetData(0, MAINCode);
             DA.SetData(1, BASECode);
         }
@@ -121,12 +134,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.RAPID_Icon;
-            }
+            get { return Properties.Resources.RAPID_Icon; }
         }
 
         /// <summary>

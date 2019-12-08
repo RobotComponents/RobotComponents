@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Parameters;
@@ -13,11 +12,9 @@ namespace RobotComponents.Components
     public class SpeedDataComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public SpeedDataComponent()
           : base("Action: Speed Data", "SD",
@@ -26,6 +23,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -46,23 +52,21 @@ namespace RobotComponents.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Speed Data");
-            //pManager.Register_StringParam("Debug", "D", "Debug Data");
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-        /// to store data in output parameters.</param>
-        /// 
+        // Global component variables
         private List<string> speedDataNames = new List<string>();
         private string lastName = "";
         private bool namesUnique;
         private ObjectManager objectManager;
 
+        /// <summary>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // clears speedDataNames
+            // Clears speedDataNames
             for (int i = 0; i < speedDataNames.Count; i++)
             {
                 objectManager.SpeedDataNames.Remove(speedDataNames[i]);
@@ -96,12 +100,12 @@ namespace RobotComponents.Components
             // Sets inputs and creates target
             Guid instanceGUID = this.InstanceGuid;
             List<string> names = new List<string>();
-
             List<double> v_tcps = new List<double>();
             List<double> v_oris = new List<double>();
             List<double> v_leaxs = new List<double>();
             List<double> v_reaxs = new List<double>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, v_tcps)) { return; }
             if (!DA.GetDataList(2, v_oris)) { return; }
@@ -116,7 +120,6 @@ namespace RobotComponents.Components
             sizeValues[3] = v_leaxs.Count;
             sizeValues[4] = v_reaxs.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
-
 
             // Keeps track of used indicies
             int nameCounter = -1;
@@ -199,7 +202,6 @@ namespace RobotComponents.Components
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
                     namesUnique = false;
                     lastName = "";
-                    //break;
                 }
                 else
                 {
@@ -215,7 +217,6 @@ namespace RobotComponents.Components
                             entry.Value.ExpireSolution(true);
                         }
                     }
-
                     lastName = names[i];
                 }
 
@@ -231,7 +232,6 @@ namespace RobotComponents.Components
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
                 }
             }
-
             #endregion
 
             // Sets Output
@@ -245,11 +245,21 @@ namespace RobotComponents.Components
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
 
@@ -275,7 +285,6 @@ namespace RobotComponents.Components
             }
         }
 
-
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -283,13 +292,8 @@ namespace RobotComponents.Components
         protected override System.Drawing.Bitmap Icon
         {
             get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.SpeedData_Icon;
-            }
+            { return Properties.Resources.SpeedData_Icon; }
         }
-
 
         /// <summary>
         /// Each component must have a unique Guid to identify it. 

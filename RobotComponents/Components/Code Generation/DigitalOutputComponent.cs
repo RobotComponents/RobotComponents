@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
 
 using RobotComponents.BaseClasses;
-using RobotComponents.Components;
-using RobotComponents.Goos;
 using RobotComponents.Parameters;
 using RobotComponents.Utils;
-
-
 
 namespace RobotComponents.Components
 {
@@ -19,11 +12,9 @@ namespace RobotComponents.Components
     public class DigitalOutputComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public DigitalOutputComponent()
           : base("Action: Digital Output", "DO",
@@ -32,6 +23,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -58,9 +58,11 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             string name = "";
             bool isActive = false;
-
+            
+            // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref isActive)) { return; }
 
@@ -76,7 +78,10 @@ namespace RobotComponents.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Output Name starts with a number which is not allowed in RAPID Code.");
             }
 
+            // Create the action
             DigitalOutput digitalOutput = new DigitalOutput(name, isActive);
+
+            // Output
             DA.SetData(0, digitalOutput);
         }
 
@@ -86,12 +91,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.DigitalOutput_Icon;
-            }
+            get { return Properties.Resources.DigitalOutput_Icon; }
         }
 
         /// <summary>

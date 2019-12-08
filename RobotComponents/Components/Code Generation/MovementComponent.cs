@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data; 
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Goos;
@@ -15,11 +14,9 @@ namespace RobotComponents.Components
     public class MovementComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public MovementComponent()
           : base("Action: Movement", "M",
@@ -28,6 +25,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -59,16 +65,20 @@ namespace RobotComponents.Components
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
+
+            // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
             List<IGH_Goo> inputSpeedDatas = new List<IGH_Goo>();
             List<bool> isLinears = new List<bool>();
             List<int> precisions = new List<int>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, targetGoos)) { return; }
             if (!DA.GetDataList(1, inputSpeedDatas)) { return; }
             if (!DA.GetDataList(2, isLinears)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
 
+            // Variables needed for speeddata creations and check
             bool speedValueWarningRaised = false;
             List<SpeedData> speedDatas = new List<SpeedData>();
 
@@ -180,6 +190,7 @@ namespace RobotComponents.Components
                 movements.Add(movement);
             }
 
+            // Check if the data for the precision is valid
             for (int i = 0; i < precisions.Count; i++)
             {
                 if (HelperMethods.PrecisionValueIsValid(precisions[i]) == false)
@@ -191,6 +202,7 @@ namespace RobotComponents.Components
                 }
             }
 
+            // Output
             DA.SetDataList(0, movements);
         }
 
@@ -200,12 +212,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponen;
-                return Properties.Resources.Movement_Icon;
-            }
+            get { return Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>

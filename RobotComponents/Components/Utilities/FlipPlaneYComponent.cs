@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses;
-
 namespace RobotComponents.Components
 {
     public class FlipPlaneYComponent : GH_Component
@@ -43,15 +41,19 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             List<Plane> planes = new List<Plane>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, planes)) { return; }
 
+            // Flips the planes
             for (int i = 0; i < planes.Count; i++)
             {
                 planes[i] = new Plane(planes[i].Origin, planes[i].XAxis, -planes[i].YAxis);
             }
 
+            // Output
             DA.SetDataList(0, planes);
         }
 
@@ -60,12 +62,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.FlipPlaneY_Icon;
-            }
+            get { return Properties.Resources.FlipPlaneY_Icon; }
         }
 
         /// <summary>

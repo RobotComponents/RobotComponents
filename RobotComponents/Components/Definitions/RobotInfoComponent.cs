@@ -33,7 +33,7 @@ namespace RobotComponents.Components.Definitions
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            pManager.AddGenericParameter("External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.item);
+            pManager.AddGenericParameter("External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
             pManager[7].Optional = true;
@@ -61,7 +61,7 @@ namespace RobotComponents.Components.Definitions
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
             RobotToolGoo toolGoo = null;
-            ExternalLinearAxisGoo externalLinearAxisGoo = null;
+            List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { return; }
@@ -74,20 +74,34 @@ namespace RobotComponents.Components.Definitions
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref toolGoo)) { toolGoo = new RobotToolGoo(); }
-            if (!DA.GetData(7, ref externalLinearAxisGoo))
+            if (!DA.GetDataList(7, externalAxis))
             {
-                externalLinearAxisGoo = new ExternalLinearAxisGoo();
-                externalLinearAxisGoo.Value = new ExternalLinearAxis(positionPlane, positionPlane, new Interval(0, 0));
             }
-            //if (!DA.GetData(7, ref externalLinearAxisGoo)) { externalLinearAxisGoo = null; }
+
+            // External axis limits
+            for (int i = 0; i < externalAxis.Count; i++)
+            {
+                axisLimits.Add(externalAxis[i].AxisLimits);
+            }
+
+            RobotInfo robotInfo = null;
 
             // Override position plane when an external axis is coupled
-            if (externalLinearAxisGoo != null)
+            if (externalAxis.Count != 0)
             {
-                positionPlane = externalLinearAxisGoo.Value.AttachmentPlane;
+                for (int i = 0; i < externalAxis.Count; i++)
+                {
+                    if (externalAxis[i] is ExternalLinearAxis)
+                    {
+                        positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
+                    }
+                }
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
             }
-
-            RobotInfo robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+            else
+            {
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+            }
 
             DA.SetData(0, robotInfo);
         }

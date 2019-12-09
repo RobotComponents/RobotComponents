@@ -6,7 +6,6 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Goos
 {
-
     /// <summary>
     /// RobotTool Goo wrapper class, makes sure RobotTool can be used in Grasshopper.
     /// </summary>
@@ -45,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -54,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid RobotTool instance: Did you define an AttachmentPlane and ToolPlane?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -61,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Robot Tool";
         }
+
         public override string TypeName
         {
             get { return ("RobotTool"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single RobotTool"); }
@@ -79,6 +82,7 @@ namespace RobotComponents.Goos
                 else { return Value.Mesh.GetBoundingBox(true); }
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return Boundingbox;
@@ -86,15 +90,15 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q robotTool)
         {
             //Cast to RobotTool.
             if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    robotTool = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    robotTool = (Q)(object)Value;
                 return true;
             }
 
@@ -102,19 +106,20 @@ namespace RobotComponents.Goos
             if (typeof(Q).IsAssignableFrom(typeof(Mesh)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    robotTool = default(Q);
                 else if (Value.Mesh == null)
-                    target = default(Q);
+                    robotTool = default(Q);
                 else
-                    target = (Q)(object)Value.Mesh.DuplicateShallow();
+                    robotTool = (Q)(object)Value.Mesh.DuplicateShallow();
                 return true;
             }
 
             //Todo: cast to point, number, mesh, curve?
 
-            target = default(Q);
+            robotTool = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -147,6 +152,7 @@ namespace RobotComponents.Goos
 
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             //if (Value == null) { return null; }
@@ -174,6 +180,7 @@ namespace RobotComponents.Goos
                 args.Pipeline.DrawMeshShaded(Value.Mesh, args.Material);
             }
         }
+
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             if (Value == null) { return; }

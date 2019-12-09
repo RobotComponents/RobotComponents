@@ -73,6 +73,7 @@ namespace RobotComponents.Components.Definitions
             RobotToolGoo toolGoo = null;
             ExternalLinearAxisGoo externalLinearAxisGoo = null;
 
+            // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { return; }
             if (!DA.GetDataList(2, axisPlanes))

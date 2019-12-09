@@ -44,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -53,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid SetRobotTool instance: Did you define a Name?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -60,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Set Robot Tool";
         }
+
         public override string TypeName
         {
             get { return ("ChangeTool"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single ChangeTool"); }
@@ -76,6 +80,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -98,6 +103,7 @@ namespace RobotComponents.Goos
             changeTool = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -118,6 +124,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

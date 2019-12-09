@@ -5,6 +5,9 @@ using ABB.Robotics.Controllers;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// Controller wrapper class, makes sure the controller can be used in Grasshopper.
+    /// </summary>
     public class ControllerGoo : GH_Goo<ABB.Robotics.Controllers.Controller>, IGH_Goo
     {
         #region constructors

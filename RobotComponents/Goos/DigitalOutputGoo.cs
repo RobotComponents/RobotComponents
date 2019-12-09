@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses;
 namespace RobotComponents.Goos
 {
     /// <summary>
-    /// Target Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Digital Output wrapper class, makes sure the Digital Output can be used in Grasshopper.
     /// </summary>
     public class DigitalOutputGoo : GH_GeometricGoo<DigitalOutput>, IGH_PreviewData
     {
@@ -44,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -60,10 +61,12 @@ namespace RobotComponents.Goos
             else
                 return "Digital Output";
         }
+
         public override string TypeName
         {
             get { return ("DigitalOutput"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single JointMovement"); }
@@ -76,6 +79,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -98,6 +102,7 @@ namespace RobotComponents.Goos
             digitalOutput = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -118,6 +123,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

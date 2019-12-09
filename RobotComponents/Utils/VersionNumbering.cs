@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RobotComponents.Utils
+﻿namespace RobotComponents.Utils
 {
     internal static class VersionNumbering
     {
@@ -15,6 +9,6 @@ namespace RobotComponents.Utils
         /// X.XX.000 ---> Bug fixes small improvements
         /// </summary>
         public static readonly string CurrentVersion = "0.04.018";
-
     }
+
 }

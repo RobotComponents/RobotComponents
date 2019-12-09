@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses;
 namespace RobotComponents.Goos
 {
     /// <summary>
-    /// Timer Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Axis configuration wrapper class, makes sure the auto axis configuration can be used in Grasshopper.
     /// </summary>
     public class AutoAxisConfigGoo : GH_GeometricGoo<AutoAxisConfig>, IGH_PreviewData
     {
@@ -53,6 +53,7 @@ namespace RobotComponents.Goos
                 return "Invalid Auto Axis Configuration instance: Did you set a bool?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -60,10 +61,12 @@ namespace RobotComponents.Goos
             else
                 return "Auto Axis Configuration";
         }
+
         public override string TypeName
         {
             get { return ("Auto Axis Configuration"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a Auto Axis Configuration."); }
@@ -76,6 +79,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -83,21 +87,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q wait)
+        public override bool CastTo<Q>(out Q config)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
-                    wait = default(Q);
+                    config = default(Q);
                 else
-                    wait = (Q)(object)Value;
+                    config = (Q)(object)Value;
                 return true;
             }
 
-            wait = default(Q);
+            config = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -118,6 +123,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

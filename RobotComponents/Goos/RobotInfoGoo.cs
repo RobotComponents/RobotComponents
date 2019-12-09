@@ -46,6 +46,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -55,6 +56,7 @@ namespace RobotComponents.Goos
                 return "Invalid RobotInfo instance: Did you define an AxisValues, AxisLimits, BasePlane and MountingFrame?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -62,10 +64,12 @@ namespace RobotComponents.Goos
             else
                 return "Robot Info";
         }
+
         public override string TypeName
         {
             get { return ("RobotInfo"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single RobotInfo"); }
@@ -94,6 +98,7 @@ namespace RobotComponents.Goos
                 }
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return Boundingbox;
@@ -101,15 +106,15 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q robotInfo)
         {
             //Cast to RobotInfo.
             if (typeof(Q).IsAssignableFrom(typeof(RobotInfo)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    robotInfo = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    robotInfo = (Q)(object)Value;
                 return true;
             }
 
@@ -117,19 +122,20 @@ namespace RobotComponents.Goos
             if (typeof(Q).IsAssignableFrom(typeof(List<Mesh>)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    robotInfo = default(Q);
                 else if (Value.Meshes == null)
-                    target = default(Q);
+                    robotInfo = default(Q);
                 else
-                    target = (Q)(object)Value.Meshes;
+                    robotInfo = (Q)(object)Value.Meshes;
                 return true;
             }
 
             //Todo: cast to point, number, mesh, curve?
 
-            target = default(Q);
+            robotInfo = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -150,6 +156,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

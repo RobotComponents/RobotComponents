@@ -6,6 +6,9 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// Comment wrapper class, makes sure the comment can be used in Grasshopper.
+    /// </summary>
     public class CommentGo : GH_GeometricGoo<Comment>, IGH_PreviewData
     {
         #region constructors
@@ -41,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -50,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid Comment instance: Did you define a String?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -57,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Comment";
         }
+
         public override string TypeName
         {
             get { return ("Comment"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single Comment."); }
@@ -73,6 +80,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -80,21 +88,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q comment)
         {
             //Cast to Comment.
             if (typeof(Q).IsAssignableFrom(typeof(Comment)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    comment = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    comment = (Q)(object)Value;
                 return true;
             }
 
-            target = default(Q);
+            comment = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }

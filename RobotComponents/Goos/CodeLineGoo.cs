@@ -6,6 +6,9 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// Code line wrapper class, makes sure the code line can be used in Grasshopper.
+    /// </summary>
     public class CodeLineGo : GH_GeometricGoo<CodeLine>, IGH_PreviewData
     {
         #region constructors
@@ -80,19 +83,19 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q codeLine)
         {
             //Cast to CodeLine.
             if (typeof(Q).IsAssignableFrom(typeof(CodeLine)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    codeLine = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    codeLine = (Q)(object)Value;
                 return true;
             }
 
-            target = default(Q);
+            codeLine = default(Q);
             return false;
         }
         public override bool CastFrom(object source)

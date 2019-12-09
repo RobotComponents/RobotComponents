@@ -44,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -53,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid ExternalLinearAxis instance: Did you define an interval?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -60,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "External Linear Axis";
         }
+
         public override string TypeName
         {
             get { return ("ExternalLinearAxis"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a ExternalLinearAxis."); }
@@ -104,6 +108,7 @@ namespace RobotComponents.Goos
                 }
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return Boundingbox;
@@ -111,21 +116,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q wait)
+        public override bool CastTo<Q>(out Q externalLinearAxis)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
                 if (Value == null)
-                    wait = default(Q);
+                    externalLinearAxis = default(Q);
                 else
-                    wait = (Q)(object)Value;
+                    externalLinearAxis = (Q)(object)Value;
                 return true;
             }
 
-            wait = default(Q);
+            externalLinearAxis = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -146,6 +152,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

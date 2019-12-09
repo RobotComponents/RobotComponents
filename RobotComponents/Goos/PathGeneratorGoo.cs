@@ -55,6 +55,7 @@ namespace RobotComponents.Goos
                 return "Invalid PathGenerator instance: Did you define ActionList, Interpolations, Step and RobotInfo"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -62,10 +63,12 @@ namespace RobotComponents.Goos
             else
                 return "Path Generator";
         }
+
         public override string TypeName
         {
             get { return ("PathGenerator"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single PathGenerator"); }
@@ -78,6 +81,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -85,15 +89,15 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q pathGenerator)
         {
             //Cast to PathGenerator.
             if (typeof(Q).IsAssignableFrom(typeof(PathGenerator)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    pathGenerator = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    pathGenerator = (Q)(object)Value;
                 return true;
             }
 
@@ -102,9 +106,10 @@ namespace RobotComponents.Goos
             {
             }
 
-            target = default(Q);
+            pathGenerator = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -125,6 +130,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;
@@ -141,6 +147,7 @@ namespace RobotComponents.Goos
         {
 
         }
+
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
 

@@ -3,6 +3,9 @@ using Grasshopper.Kernel.Types;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.
+    /// </summary>
     public class SignalGoo : GH_Goo<ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal>, IGH_Goo
     {
         #region constructors

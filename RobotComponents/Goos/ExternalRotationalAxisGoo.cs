@@ -46,6 +46,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -55,6 +56,7 @@ namespace RobotComponents.Goos
                 return "Invalid ExternalRotationalAxis instance: Did you define an interval?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -62,10 +64,12 @@ namespace RobotComponents.Goos
             else
                 return "External Rotational Axis";
         }
+
         public override string TypeName
         {
             get { return ("ExternalRotationalAxis"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a ExternalRotationalAxis."); }
@@ -78,6 +82,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -85,21 +90,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q wait)
+        public override bool CastTo<Q>(out Q externalRotationalAxis)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
-                    wait = default(Q);
+                    externalRotationalAxis = default(Q);
                 else
-                    wait = (Q)(object)Value;
+                    externalRotationalAxis = (Q)(object)Value;
                 return true;
             }
 
-            wait = default(Q);
+            externalRotationalAxis = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -120,6 +126,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

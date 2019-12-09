@@ -6,6 +6,9 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// Wait Digital Input wrapper class, makes sure the WaitDI can be used in Grasshopper.
+    /// </summary>
     public class WaitDIGoo : GH_GeometricGoo<WaitDI>, IGH_PreviewData
     {
         #region constructors
@@ -80,26 +83,27 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(out Q waitDI)
         {
-            //Cast to WaitDI.
+            // Cast to WaitDI
             if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    waitDI = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    waitDI = (Q)(object)Value;
                 return true;
             }
 
-            target = default(Q);
+            waitDI = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
 
-            //Cast from WaitDI
+            // Cast from WaitDI
             if (typeof(WaitDI).IsAssignableFrom(source.GetType()))
             {
                 Value = (WaitDI)source;
@@ -115,6 +119,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;
@@ -134,7 +139,6 @@ namespace RobotComponents.Goos
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
         }
-
         #endregion
     }
 }

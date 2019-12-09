@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses;
 namespace RobotComponents.Goos
 {
     /// <summary>
-    /// Timer Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Timer Goo wrapper class, makes sure Timer can be used in Grasshopper.
     /// </summary>
     public class TimerGoo : GH_GeometricGoo<Timer>, IGH_PreviewData
     {
@@ -44,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -53,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid Timer instance: Did you define a duration?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -60,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Timer";
         }
+
         public override string TypeName
         {
             get { return ("Timer"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a Timer."); }
@@ -76,6 +80,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -83,21 +88,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q wait)
+        public override bool CastTo<Q>(out Q timer)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
-                    wait = default(Q);
+                    timer = default(Q);
                 else
-                    wait = (Q)(object)Value;
+                    timer = (Q)(object)Value;
                 return true;
             }
 
-            wait = default(Q);
+            timer = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -118,6 +124,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

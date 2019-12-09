@@ -12,11 +12,9 @@ namespace RobotComponents.Components.Definitions
     public class ExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ExternalLinearAxisComponent()
           : base("EXPERIMENTAL: External Linear Axis", "External Linear Axis",
@@ -72,27 +70,33 @@ namespace RobotComponents.Components.Definitions
             List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
             
+            // Catch the input data
             if (!DA.GetData(0, ref attachmentPlane)) { return; }
             if (!DA.GetData(1, ref axis)) { return; }
             if (!DA.GetData(2, ref limits)) { return; }
             if (!DA.GetDataList(3, baseMeshes)) {  }
             if (!DA.GetDataList(4, linkMeshes)) {  }
 
+            // Make variables needed to join the base and link to one mesh
             Mesh baseMesh = new Mesh();
             Mesh linkMesh = new Mesh();
 
+            // Join the base meshes to one mesh
             for (int i = 0; i < baseMeshes.Count; i++)
             {
                 baseMesh.Append(baseMeshes[i]);
             }
 
+            // Join the link meshes to one mesh
             for (int i = 0; i < linkMeshes.Count; i++)
             {
                 linkMesh.Append(linkMeshes[i]);
             }
 
+            // Create the external linear axis
             ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(attachmentPlane, axis, limits, baseMesh, linkMesh);
 
+            // Output
             DA.SetData(0, externalLinearAxis);
         }
 

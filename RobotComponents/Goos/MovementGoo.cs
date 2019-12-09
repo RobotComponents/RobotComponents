@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses;
 namespace RobotComponents.Goos
 {
     /// <summary>
-    /// Movement Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Movement Goo wrapper class, makes sure the Movement can be used in Grasshopper.
     /// </summary>
     public class MovementGoo : GH_GeometricGoo<Movement>, IGH_PreviewData
     {
@@ -44,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -53,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid Movement instance: Did you define a Plane?"; //Todo: beef this up to be more informative.
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -60,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Movement";
         }
+
         public override string TypeName
         {
             get { return ("Movement"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single Movement"); }
@@ -76,6 +80,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -98,6 +103,7 @@ namespace RobotComponents.Goos
             movement = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -118,6 +124,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

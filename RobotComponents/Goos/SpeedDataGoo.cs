@@ -6,6 +6,9 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Goos
 {
+    /// <summary>
+    /// SpeedData wrapper class, makes sure SpeedData can be used in Grasshopper.
+    /// </summary>
     class SpeedDataGoo : GH_GeometricGoo<SpeedData>, IGH_PreviewData
     {
         #region constructors
@@ -41,6 +44,7 @@ namespace RobotComponents.Goos
                 return Value.IsValid;
             }
         }
+
         public override string IsValidWhyNot
         {
             get
@@ -50,6 +54,7 @@ namespace RobotComponents.Goos
                 return "Invalid SpeedData instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
             }
         }
+
         public override string ToString()
         {
             if (Value == null)
@@ -57,10 +62,12 @@ namespace RobotComponents.Goos
             else
                 return "Speed Data";
         }
+
         public override string TypeName
         {
             get { return ("SpeedData"); }
         }
+
         public override string TypeDescription
         {
             get { return ("Defines a single SpeedData"); }
@@ -73,6 +80,7 @@ namespace RobotComponents.Goos
                 return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
+
         public override BoundingBox GetBoundingBox(Transform xform)
         {
             return BoundingBox.Empty; //Note: beef this up if needed
@@ -80,21 +88,22 @@ namespace RobotComponents.Goos
         #endregion
 
         #region casting methods
-        public override bool CastTo<Q>(out Q movement)
+        public override bool CastTo<Q>(out Q speeddata)
         {
             //Cast to SpeedData.
             if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
                 if (Value == null)
-                    movement = default(Q);
+                    speeddata = default(Q);
                 else
-                    movement = (Q)(object)Value;
+                    speeddata = (Q)(object)Value;
                 return true;
             }
 
-            movement = default(Q);
+            speeddata = default(Q);
             return false;
         }
+
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
@@ -115,6 +124,7 @@ namespace RobotComponents.Goos
         {
             return null;
         }
+
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

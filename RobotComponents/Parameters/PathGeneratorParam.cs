@@ -8,7 +8,6 @@ using RobotComponents.Goos;
 
 namespace RobotComponents.Parameters
 {
-
     public class PathGeneratorParameter : GH_PersistentGeometryParam<PathGeneratorGoo>, IGH_PreviewObject
     {
         public PathGeneratorParameter()
@@ -25,34 +24,27 @@ namespace RobotComponents.Parameters
 
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.PathGen_Parameter_Icon;
-            }
+            get { return Properties.Resources.PathGen_Parameter_Icon; }
         }
         public override GH_Exposure Exposure
         {
-            get
-            {
-                // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.hidden;
-            }
+            get { return GH_Exposure.hidden; }
         }
         public override Guid ComponentGuid
         {
             get { return new Guid("9922B6D3-11A8-4670-AE6A-DA0F7D4D97DC"); }
         }
 
-        //We do not allow users to pick PathGenerator, 
-        //therefore the following 4 methods disable all this ui.
         protected override GH_GetterResult Prompt_Plural(ref List<PathGeneratorGoo> values)
         {
             return GH_GetterResult.cancel;
         }
+
         protected override GH_GetterResult Prompt_Singular(ref PathGeneratorGoo value)
         {
             return GH_GetterResult.cancel;
         }
+
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +52,7 @@ namespace RobotComponents.Parameters
             item.Visible = false;
             return item;
         }
+
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,11 +80,13 @@ namespace RobotComponents.Parameters
         }
 
         private bool m_hidden = false;
+
         public bool Hidden
         {
             get { return m_hidden; }
             set { m_hidden = value; }
         }
+
         public bool IsPreviewCapable
         {
             get { return true; }

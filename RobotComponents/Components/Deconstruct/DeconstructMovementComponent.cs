@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.Parameters;
@@ -11,7 +10,7 @@ namespace RobotComponents.Components
     public class DeconstructMovementComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent()
           : base("Deconstruct Movement", "DeConMove",
@@ -47,13 +46,13 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             MovementGoo movementGoo = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref movementGoo)) { return; }
 
-            //Output
+            // Output
             DA.SetData(0, movementGoo.Value.Target);
             DA.SetData(1, movementGoo.Value.SpeedData);
             DA.SetData(2, movementGoo.Value.IsLinear);
@@ -65,12 +64,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructMovement_Icon;
-            }
+            get { return Properties.Resources.DeconstructMovement_Icon; }
         }
 
         /// <summary>

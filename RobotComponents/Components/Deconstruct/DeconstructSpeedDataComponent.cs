@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.Goos;
@@ -10,7 +9,7 @@ namespace RobotComponents.Components
     public class DeconstructSpeedDataComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructSpeedData class.
         /// </summary>
         public DeconstructSpeedDataComponent()
           : base("Deconstruct Speed Data", "DeConSpeed",
@@ -47,13 +46,13 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             SpeedDataGoo speedDataGoo = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref speedDataGoo)) { return; }
 
-            //Output
+            // Output
             DA.SetData(0, speedDataGoo.Value.Name);
             DA.SetData(1, speedDataGoo.Value.V_TCP);
             DA.SetData(2, speedDataGoo.Value.V_ORI);
@@ -66,12 +65,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructSpeedData_Icon;
-            }
+            get { return Properties.Resources.DeconstructSpeedData_Icon; }
         }
 
         /// <summary>

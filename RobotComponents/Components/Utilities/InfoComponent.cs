@@ -1,30 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
-using RobotComponents.Goos;
-using RobotComponents.Parameters;
-using RobotComponents.Utils;
-
 namespace RobotComponents.Components
 {
-
     public class InfoComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public InfoComponent()
           : base("Info", "I",
-              "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinos Grasshopper. The plugin is a development from the Department of Experimental and Digital Design and Construction of the University of Kassel. Supervised by the head of the department Prof. Eversmann. The technical development is executed by student assistant Gabriel Rumpf and research associates Benedikt Wannemacher, Arjen Deetman, Mohamed Dawod, Zuardin Akbar and Andrea Rossi." + Environment.NewLine + Environment.NewLine + "Documentation and Example Files can be found under:" + Environment.NewLine  + Environment.NewLine + "https://github.com/EDEK-UniKassel/RobotComponents/wiki"
-                + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinos Grasshopper. " 
+                + "The plugin is a development from the Department of Experimental and Digital Design and Construction of the University of Kassel. " 
+                + "Supervised by the head of the department Prof. Eversmann. " 
+                + "The technical development is executed by student assistant Gabriel Rumpf and " 
+                +  "research associates Benedikt Wannemacher, Arjen Deetman, Mohamed Dawod, Zuardin Akbar and Andrea Rossi." 
+                + Environment.NewLine 
+                + Environment.NewLine 
+                + "Documentation and Example Files can be found under: " 
+                + Environment.NewLine 
+                + Environment.NewLine 
+                + "https://github.com/EDEK-UniKassel/RobotComponents/wiki"
+                + System.Environment.NewLine 
+                + "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -34,7 +35,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            
+            // This component has no input parameters
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-       
+            // This component has no output parameters
         }
 
         /// <summary>
@@ -55,19 +56,13 @@ namespace RobotComponents.Components
         
         }
 
-
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponen;
-                return Properties.Resources.Info_Icon;
-            }
+            get { return Properties.Resources.Info_Icon; }
         }
 
         /// <summary>

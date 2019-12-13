@@ -1,12 +1,8 @@
 ﻿using System;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponents.Parameters;
 using RobotComponents.Goos;
-
-
 
 namespace RobotComponents.Components
 {
@@ -50,13 +46,13 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             ExternalLinearAxisGoo externalLinearAxisGoo = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
 
-            //Output
+            // Output
             DA.SetData(0, externalLinearAxisGoo.Value.AttachmentPlane);
             DA.SetData(1, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
             DA.SetData(2, externalLinearAxisGoo.Value.AxisLimits);
@@ -69,11 +65,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                return Properties.Resources.DeconstructExternalLinearAxis_Icon;
-            }
+            get { return Properties.Resources.DeconstructExternalLinearAxis_Icon; }
         }
 
         /// <summary>

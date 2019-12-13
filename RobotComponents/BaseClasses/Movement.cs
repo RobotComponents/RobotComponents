@@ -4,15 +4,14 @@ using System;
 namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// Movement class, defines the Movement to a RobTarget.
+    /// Movement class
     /// </summary>
-    /// 
     public class Movement : Action
     {
         #region fields
         private Target _target;
         private SpeedData _speedData;
-        bool _isLinear;
+        int _movementType;
         int _precision;
         Guid _documentGUID;
         ObjectManager _objectManager;
@@ -28,13 +27,13 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         /// <param name="target">Robot movement target.</param>
         /// <param name="speedData">Robot movement speedData.</param>
-        /// <param name="isLinear">Robot movement Type.</param>
+        /// <param name="movementType">Robot movement type.</param>
         /// <param name="precision">Robot movement Precision. If this value is 0 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine.</param>
-        public Movement(Target target, SpeedData speedData, bool isLinear, int precision, Guid documentGUID)
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, Guid documentGUID)
         {
             this._target = target;
             this._speedData = speedData;
-            this._isLinear = isLinear;
+            this._movementType = movementType;
             this._precision = precision;
             this._documentGUID = documentGUID;
 
@@ -54,12 +53,12 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         /// <param name="target">Robot movement target.</param>
         /// <param name="speedData">Robot movement speedData.</param>
-        /// <param name="isLinear">Robot movement Type.</param>
-        public Movement(Target target, SpeedData speedData, bool isLinear, Guid documentGUID)
+        /// <param name="movementType">Robot movement type.</param>
+        public Movement(Target target, SpeedData speedData, int movementType, Guid documentGUID)
         {
             this._target = target;
             this._speedData = speedData;
-            this._isLinear = isLinear;
+            this._movementType = movementType;
             this._precision = 0;
             this._documentGUID = documentGUID;
 
@@ -80,7 +79,7 @@ namespace RobotComponents.BaseClasses
         /// <returns></returns>
         public Movement Duplicate()
         {
-            Movement dup = new Movement(Target, SpeedData, IsLinear, Precision, DocumentGUID);
+            Movement dup = new Movement(Target, SpeedData, MovementType, Precision, DocumentGUID);
             return dup;
         }
         #endregion
@@ -103,16 +102,21 @@ namespace RobotComponents.BaseClasses
             string robTargetVar = "VAR robtarget " + _target.RobTargetName;
             string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
 
-            if (IsLinear == true)
+            // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
+            if (MovementType == 1 || MovementType == 2)
             {
                 // Only adds target code if target is not already defined
                 if (!RAPIDcode.Contains(robTargetVar))
                 {
-                    //tempCode += ("@" + "\t" + robTargetVar + ":=[[" + _target.Plane.Origin.X.ToString("0.##") + ", " + _target.Plane.Origin.Y.ToString("0.##") + ", " + _target.Plane.Origin.Z.ToString("0.##") + "], ["
-                    //    + _target.Quat.A.ToString("0.######") + ", " + _target.Quat.B.ToString("0.######") + ", " + _target.Quat.C.ToString("0.######") + ", " + _target.Quat.D.ToString("0.######") + "],[0,0,0," + _target.AxisConfig + "],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];");
-
-                    tempCode += ("@" + "\t" + robTargetVar + ":=[[" + _target.Plane.Origin.X.ToString("0.##") + ", " + _target.Plane.Origin.Y.ToString("0.##") + ", " + _target.Plane.Origin.Z.ToString("0.##") + "], ["
-                        + _target.Quat.A.ToString("0.######") + ", " + _target.Quat.B.ToString("0.######") + ", " + _target.Quat.C.ToString("0.######") + ", " + _target.Quat.D.ToString("0.######") + "],[0,0,0," + _target.AxisConfig);
+                    tempCode += ("@" + "\t" + robTargetVar + ":=[[" 
+                        + _target.Plane.Origin.X.ToString("0.##") + ", " 
+                        + _target.Plane.Origin.Y.ToString("0.##") + ", " 
+                        + _target.Plane.Origin.Z.ToString("0.##") + "], ["
+                        + _target.Quat.A.ToString("0.######") + ", " 
+                        + _target.Quat.B.ToString("0.######") + ", " 
+                        + _target.Quat.C.ToString("0.######") + ", " 
+                        + _target.Quat.D.ToString("0.######") + "]," 
+                        + "[0,0,0," + _target.AxisConfig);
 
                     // Adds all External Axis Values
                     InverseKinematics inverseKinematics = new InverseKinematics(_target, robotInfo);
@@ -123,6 +127,7 @@ namespace RobotComponents.BaseClasses
                     {
                         tempCode += externalAxisValues[i].ToString("0.##") + ", ";
                     }
+
                     // Adds 9E9 for all missing external Axis Values
                     for (int i = externalAxisValues.Count; i < 6; i++)
                     {
@@ -130,9 +135,10 @@ namespace RobotComponents.BaseClasses
                     }
                     tempCode = tempCode.Remove(tempCode.Length - 2);
                     tempCode += "]];";
-
                 }
             }
+
+            // Create a jointtarget if the movement type is MoveAbsJ (0)
             else
             {
                 // Only adds target code if target is not already defined
@@ -169,26 +175,15 @@ namespace RobotComponents.BaseClasses
                     tempCode += "]];";
                 }
             }
-            //returns Code
+
+            // returns RAPID code
             return tempCode;
         }
 
         public override string ToRAPIDFunction()
         {
-
-            if (IsLinear == true)
-            {
-                if (_precision < 0)
-                {
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
-                }
-                else
-                {
-
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
-                }
-            }
-            else
+            // MoveAbsJ
+            if (MovementType == 0)
             {
                 if (_precision < 0)
                 {
@@ -198,6 +193,35 @@ namespace RobotComponents.BaseClasses
                 {
                     return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
                 }
+            }
+            // MoveL
+            else if (MovementType == 1)
+            {
+                if (_precision < 0)
+                {
+                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                }
+                else
+                {
+                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                }
+            }
+            // MoveJ
+            else if (MovementType == 2)
+            {
+                if (_precision < 0)
+                {
+                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                }
+                else
+                {
+                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                }
+            }
+            // Return nothing if a wrong movement type is used
+            else
+            {
+                return "";
             }
         }
         #endregion
@@ -222,10 +246,10 @@ namespace RobotComponents.BaseClasses
             get { return _speedData; }
             set { _speedData = value; }
         }
-        public bool IsLinear
+        public int MovementType
         {
-            get { return _isLinear; }
-            set { _isLinear = value; }
+            get { return _movementType; }
+            set { _movementType = value; }
         }
         public int Precision
         {
@@ -244,7 +268,6 @@ namespace RobotComponents.BaseClasses
             get => _objectManager;
             set => _objectManager = value;
         }
-
         #endregion
     }
 }

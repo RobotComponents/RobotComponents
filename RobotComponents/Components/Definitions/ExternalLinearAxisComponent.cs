@@ -12,11 +12,9 @@ namespace RobotComponents.Components.Definitions
     public class ExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ExternalLinearAxisComponent()
           : base("EXPERIMENTAL: External Linear Axis", "External Linear Axis",
@@ -25,6 +23,15 @@ namespace RobotComponents.Components.Definitions
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -40,9 +47,6 @@ namespace RobotComponents.Components.Definitions
 
             pManager[3].Optional = true;
             pManager[4].Optional = true;
-            // pManager.AddNumberParameter("Robot Attachment Distance", "RAD", "Defines the Robot Attachment Distance from the start Point along the External Linear Axis as Number", GH_ParamAccess.item);
-
-            //pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -56,40 +60,43 @@ namespace RobotComponents.Components.Definitions
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-        /// to store data in output parameters.</param>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             Plane attachmentPlane = Plane.WorldXY;
             Vector3d axis = new Vector3d(0,0,0);
             Interval limits = new Interval(0, 0);
-             List<Mesh> baseMeshes = new List<Mesh>();
+            List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
-
             
+            // Catch the input data
             if (!DA.GetData(0, ref attachmentPlane)) { return; }
             if (!DA.GetData(1, ref axis)) { return; }
             if (!DA.GetData(2, ref limits)) { return; }
             if (!DA.GetDataList(3, baseMeshes)) {  }
             if (!DA.GetDataList(4, linkMeshes)) {  }
 
-
+            // Make variables needed to join the base and link to one mesh
             Mesh baseMesh = new Mesh();
             Mesh linkMesh = new Mesh();
 
+            // Join the base meshes to one mesh
             for (int i = 0; i < baseMeshes.Count; i++)
             {
                 baseMesh.Append(baseMeshes[i]);
             }
 
+            // Join the link meshes to one mesh
             for (int i = 0; i < linkMeshes.Count; i++)
             {
                 linkMesh.Append(linkMeshes[i]);
             }
 
-
+            // Create the external linear axis
             ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(attachmentPlane, axis, limits, baseMesh, linkMesh);
 
+            // Output
             DA.SetData(0, externalLinearAxis);
         }
 
@@ -99,12 +106,7 @@ namespace RobotComponents.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.ExternalLinearAxis_Icon;
-            }
+            get { return Properties.Resources.ExternalLinearAxis_Icon; }
         }
 
         /// <summary>

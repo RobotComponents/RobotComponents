@@ -87,6 +87,7 @@
     <Compile Include="BaseClasses\ExternalRotationalAxis.cs" />
     <Compile Include="BaseClasses\SpeedData.cs" />
     <Compile Include="BaseClasses\WaitDI.cs" />
+    <Compile Include="Components\Code Generation\AdvancedTargetComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
     <Compile Include="Components\Code Generation\TargetComponent.cs" />

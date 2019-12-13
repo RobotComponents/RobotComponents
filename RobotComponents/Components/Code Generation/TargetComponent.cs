@@ -10,15 +10,12 @@ using RobotComponents.Utils;
 
 namespace RobotComponents.Components
 {
-
     public class TargetComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public TargetComponent()
           : base("Action: Target", "T",
@@ -27,6 +24,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -45,23 +51,21 @@ namespace RobotComponents.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");  //Todo: beef this up to be more informative.
-            //pManager.Register_StringParam("Debug", "D", "Debug Data");
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-        /// to store data in output parameters.</param>
-        /// 
+        // Global component variables
         public List<string> targetNames = new List<string>();
         private string lastName = "";
         private bool namesUnique;
         private ObjectManager objectManager;
 
+        /// <summary>
+        /// This is the method that actually does the work.
+        /// </summary>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // clears speedDataNames
+            // Clears targetNames
             for (int i = 0; i < targetNames.Count; i++)
             {
                 objectManager.TargetNames.Remove(targetNames[i]);
@@ -98,10 +102,10 @@ namespace RobotComponents.Components
             List<int> axisConfigs = new List<int>();
             bool isRobTarget = true;
 
+            // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, planes)) { return; }
             if (!DA.GetDataList(2, axisConfigs)) { return; }
-            //if (!DA.GetData(3, ref isRobTarget)) { return; }
 
             // Get longest Input List
             int[] sizeValues = new int[3];
@@ -110,14 +114,12 @@ namespace RobotComponents.Components
             sizeValues[2] = axisConfigs.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
-
             // Keeps track of used indicies
             int nameCounter = -1;
             int planesCounter = -1;
             int axisConfigCounter = -1;
 
-
-            // Creates speed Datas
+            // Creates targets
             List<Target> targets = new List<Target>();
             for (int i = 0; i < biggestSize; i++)
             {
@@ -216,11 +218,21 @@ namespace RobotComponents.Components
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
 
@@ -246,19 +258,13 @@ namespace RobotComponents.Components
             }
         }
 
-
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.Target_Icon;
-            }
+            get { return Properties.Resources.Target_Icon; }
         }
 
         /// <summary>

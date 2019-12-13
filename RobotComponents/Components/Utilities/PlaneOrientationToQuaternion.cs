@@ -48,31 +48,47 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             List<Plane> planes = new List<Plane>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, planes)) { return; }
 
+            // Output variables
             List<double> quatA = new List<double>();
             List<double> quatB = new List<double>();
             List<double> quatC = new List<double>();
             List<double> quatD = new List<double>();
             List<string> text = new List<string>();
 
+            // Create variables for necessary for getting the quarternion
             Quaternion quat;
             Plane refPlane = Plane.WorldXY;
 
+            // Loop over all the input planes and get the quarternion of the plane
             for (int i = 0; i < planes.Count; i++)
             {
+                // Get the individual plane
                 Plane plane = planes[i];
+
+                // Get the quarternion
                 quat = Quaternion.Rotation(refPlane, plane);
 
+                // Save the four quarternion values
                 quatA.Add(quat.A);
                 quatB.Add(quat.B);
                 quatC.Add(quat.C);
                 quatD.Add(quat.D);
-                text.Add("[" + quat.A.ToString("0.######") + ", " + quat.B.ToString("0.######") + ", " + quat.C.ToString("0.######") + ", " + quat.D.ToString("0.######") + "]");
+
+                // Writet the quarternion value in the string format that is used in the RAPID and BASE code
+                text.Add("[" 
+                    + quat.A.ToString("0.######") + ", " 
+                    + quat.B.ToString("0.######") + ", " 
+                    + quat.C.ToString("0.######") + ", " 
+                    + quat.D.ToString("0.######") + "]");
             }
 
+            // Output
             DA.SetDataList(0, quatA);
             DA.SetDataList(1, quatB);
             DA.SetDataList(2, quatC);
@@ -85,10 +101,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.PlaneToQuat_Icon;
-            }
+            get { return Properties.Resources.PlaneToQuat_Icon; }
         }
 
         /// <summary>

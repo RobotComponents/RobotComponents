@@ -6,7 +6,7 @@ namespace RobotComponents.BaseClasses
     public enum AxisType { LINEAR, ROTATIONAL };
     /// <summary>
     /// External axis class, main Class for external axis.
-    /// An external axis (linear and rotational) can be attahced to a robot or a workobject
+    /// An external axis (linear and rotational) can be attached to a robot or a workobject
     /// </summary>
     public abstract class ExternalAxis
     {

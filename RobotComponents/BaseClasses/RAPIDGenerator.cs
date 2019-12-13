@@ -10,8 +10,6 @@ namespace RobotComponents.BaseClasses
     /// <summary>
     /// RAPID Generator class, creates RAPID Code from Actions.
     /// </summary>
-    /// 
-
     public class RAPIDGenerator
     {
         #region fields
@@ -70,7 +68,7 @@ namespace RobotComponents.BaseClasses
         #region method
         public string CreateRAPIDCode()
         {
-            //Set's default RobotTool
+            // Set's default RobotTool
              _objectManager.CurrentTool = _robotInfo.Tool.Name;
 
             // Creates Main Module
@@ -91,25 +89,26 @@ namespace RobotComponents.BaseClasses
 
             _firstMovementIsMoveAbs = false;
             bool foundFirstMovement = false;
+
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)
             {
                 string rapidStr = _actions[i].ToRAPIDFunction();
 
                 // Checks if first movement is MoveAbsJ
-                if(foundFirstMovement == false)
+                if (foundFirstMovement == false)
                 {
-                    if(_actions[i] is Movement)
+                    if (_actions[i] is Movement)
                     {
-                       
-                        if(((Movement)_actions[i]).IsLinear == false)
+                        if (((Movement)_actions[i]).MovementType == 0)
                         {
                             _firstMovementIsMoveAbs = true;
                         }
-                       
+
                         foundFirstMovement = true;
                     }
                 }
+
                 RAPIDCode += rapidStr;
             }
 
@@ -158,8 +157,14 @@ namespace RobotComponents.BaseClasses
                 Point3d position = new Point3d(posX, posY, posZ);
                 Quaternion orientation = entry.Value.robTool.Orientation;
                 string name = entry.Value.robTool.Name;
-                toolData += " PERS tooldata " + name + " := [TRUE, [[" + position.X.ToString("0.##") + "," + position.Y.ToString("0.##") + "," + position.Z.ToString("0.##") + "], [" + 
-                    orientation.A.ToString("0.######") + "," + orientation.B.ToString("0.######") + "," + orientation.C.ToString("0.######") + "," + orientation.D.ToString("0.######") + "]],@";
+                toolData += " PERS tooldata " + name + " := [TRUE, [[" 
+                    + position.X.ToString("0.##") + "," 
+                    + position.Y.ToString("0.##") + "," 
+                    + position.Z.ToString("0.##") + "], [" 
+                    + orientation.A.ToString("0.######") + "," 
+                    + orientation.B.ToString("0.######") + "," 
+                    + orientation.C.ToString("0.######") + "," 
+                    + orientation.D.ToString("0.######") + "]],@";
                 toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
 
                 BASECode += toolData;
@@ -174,8 +179,14 @@ namespace RobotComponents.BaseClasses
                 Point3d position = new Point3d(posX, posY, posZ);
                 Quaternion orientation = entry.Value.robTool.Orientation;
                 string name = entry.Value.robTool.Name;
-                toolData += " PERS tooldata " + name + " := [TRUE, [[" + position.X.ToString("0.##") + "," + position.Y.ToString("0.##") + "," + position.Z.ToString("0.##") + "], [" +
-                    orientation.A.ToString("0.######") + ", " + orientation.B.ToString("0.######") + "," + orientation.C.ToString("0.######") + "," + orientation.D.ToString("0.######") + "]],@";
+                toolData += " PERS tooldata " + name + " := [TRUE, [[" 
+                    + position.X.ToString("0.##") + "," 
+                    + position.Y.ToString("0.##") + "," 
+                    + position.Z.ToString("0.##") + "], [" 
+                    + orientation.A.ToString("0.######") + ", " 
+                    + orientation.B.ToString("0.######") + "," 
+                    + orientation.C.ToString("0.######") + "," 
+                    + orientation.D.ToString("0.######") + "]],@";
                 toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
 
                 BASECode += toolData;

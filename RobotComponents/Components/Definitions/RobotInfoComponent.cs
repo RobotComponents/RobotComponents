@@ -22,6 +22,15 @@ namespace RobotComponents.Components.Definitions
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -33,7 +42,7 @@ namespace RobotComponents.Components.Definitions
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            pManager.AddGenericParameter("External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.item);
+            pManager.AddGenericParameter("External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
             pManager[7].Optional = true;
@@ -54,6 +63,7 @@ namespace RobotComponents.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             string name = "default robot Info";
             List<Mesh> meshes = new List<Mesh>();
             List<Plane> axisPlanes = new List<Plane>();
@@ -61,8 +71,9 @@ namespace RobotComponents.Components.Definitions
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
             RobotToolGoo toolGoo = null;
-            ExternalLinearAxisGoo externalLinearAxisGoo = null;
+            List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
+            // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { return; }
             if (!DA.GetDataList(2, axisPlanes))
@@ -74,21 +85,36 @@ namespace RobotComponents.Components.Definitions
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref toolGoo)) { toolGoo = new RobotToolGoo(); }
-            if (!DA.GetData(7, ref externalLinearAxisGoo))
+            if (!DA.GetDataList(7, externalAxis))
             {
-                externalLinearAxisGoo = new ExternalLinearAxisGoo();
-                externalLinearAxisGoo.Value = new ExternalLinearAxis(positionPlane, positionPlane, new Interval(0, 0));
             }
-            //if (!DA.GetData(7, ref externalLinearAxisGoo)) { externalLinearAxisGoo = null; }
+
+            // External axis limits
+            for (int i = 0; i < externalAxis.Count; i++)
+            {
+                axisLimits.Add(externalAxis[i].AxisLimits);
+            }
+
+            RobotInfo robotInfo = null;
 
             // Override position plane when an external axis is coupled
-            if (externalLinearAxisGoo != null)
+            if (externalAxis.Count != 0)
             {
-                positionPlane = externalLinearAxisGoo.Value.AttachmentPlane;
+                for (int i = 0; i < externalAxis.Count; i++)
+                {
+                    if (externalAxis[i] is ExternalLinearAxis)
+                    {
+                        positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
+                    }
+                }
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
+            }
+            else
+            {
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
             }
 
-            RobotInfo robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
-
+            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -98,12 +124,7 @@ namespace RobotComponents.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.RobotInfo_Icon;
-            }
+            get { return Properties.Resources.RobotInfo_Icon; }
         }
 
         /// <summary>

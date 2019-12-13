@@ -13,17 +13,24 @@ namespace RobotComponents.Components
     public class RobotToolFromDataEulerComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public RobotToolFromDataEulerComponent()
           : base("Robot Tool From Data", "RobToool",
               "Defines a robot tool based on translation and rotation values.",
               "RobotComponents", "Definitions")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -51,7 +58,7 @@ namespace RobotComponents.Components
             pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 
-
+        // Global component variables
         public string lastName = "";
         public bool nameUnique;
         public RobotTool robTool = new RobotTool();
@@ -59,8 +66,7 @@ namespace RobotComponents.Components
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-        /// to store data in output parameters.</param>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Gets Document ID
@@ -87,7 +93,7 @@ namespace RobotComponents.Components
                 objectManager.ToolNames.Remove(lastName);
             }
 
-            // Inputs
+            // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
             double toolTransX = 0.0;
@@ -99,6 +105,7 @@ namespace RobotComponents.Components
             Plane attachmentPlane = Plane.WorldXY;
             Plane toolPlane = Plane.WorldXY;
 
+            // Catch teh input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1,  meshes)) { return; }
             if (!DA.GetData(2, ref toolTransX)) { return; }
@@ -108,8 +115,10 @@ namespace RobotComponents.Components
             if (!DA.GetData(6, ref toolRotY)) { return; }
             if (!DA.GetData(7, ref toolRotZ)) { return; }
 
+            // Tool mesh
             Mesh mesh = new Mesh();
 
+            // Join the tool mesh to one single mesh
             for (int i = 0; i < meshes.Count; i++)
             {
                 mesh.Append(meshes[i]);
@@ -120,9 +129,10 @@ namespace RobotComponents.Components
             toolPlane.Transform(Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), toolPlane.Origin));
             toolPlane.Transform(Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), toolPlane.Origin));
 
+            // Create the robot tool
             RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
 
-            // Checks if target name is already in use and counts duplicates
+            // Checks if tool name is already in use and counts duplicates
             #region NameCheck
             if (objectManager.ToolNames.Contains(robotTool.Name))
             {
@@ -132,7 +142,7 @@ namespace RobotComponents.Components
             }
             else
             {
-                // Adds Target Name to list
+                // Adds Robot Tool Name to list
                 objectManager.ToolNames.Add(robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
@@ -181,6 +191,11 @@ namespace RobotComponents.Components
             }
         }
 
+        /// <summary>
+        /// This method detects if the user deletes the component from the Grasshopper canvas. 
+        /// </summary>
+        /// <param name="sender"> </param>
+        /// <param name="e"> </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             // Gets Document ID
@@ -227,12 +242,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.ToolData_Icon;
-            }
+            get { return Properties.Resources.ToolData_Icon; }
         }
 
         /// <summary>

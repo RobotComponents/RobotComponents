@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
@@ -9,15 +10,12 @@ using RobotComponents.Goos;
 
 namespace RobotComponents.Components
 {
-
     public class ForwardKinematicsComponent : GH_Component 
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ForwardKinematicsComponent()
           : base("Forward Kinematics", "FK",
@@ -48,7 +46,9 @@ namespace RobotComponents.Components
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
 
+        // Global component variables
         ForwardKinematics _fk = new ForwardKinematics();
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -56,44 +56,109 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //variables
+            // Input variables
             RobotInfoGoo robotInfo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
             List<Mesh> robotMeshes = new List<Mesh>();
 
-            //inputs
+            // Catch input data
             if (!DA.GetData(0, ref robotInfo)) { return; }
             if (!DA.GetDataList(1, internalAxisValues)) { return; }
             if (!DA.GetDataList(2, externalAxisValues)) { return; }
 
-            //add up missing internal axisValues
+            // Add up missing internal axisValues
             for (int i = internalAxisValues.Count; i <6; i++)
             {
                 internalAxisValues.Add(0);
             }
 
-            //add up missing external axisValues
+            // Add up missing external axisValues
             for (int i = externalAxisValues.Count; i < 6; i++)
             {
                 externalAxisValues.Add(0);
             }
 
-            //calculations
+            // Calcuate the robot pose
             ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfo.Value, internalAxisValues, externalAxisValues);
             forwardKinematics.Calculate();
 
-            //valuesCheck
+            // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
             {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
             }
 
-            //output
+            // Output
             _fk = forwardKinematics;
-            DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Meshe of the Robot in Pose ( toggle this ? )
+            DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
             DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+        }
+
+        /// <summary>
+        /// This method displays the robot pose for the given axis values. 
+        /// </summary>
+        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            // Check if there is a mesh available to display
+            if (_fk.PosedMeshes != null)
+            {
+                // A boolean that defines if the axis values are valid.
+                bool AxisAreValid = true;
+
+                // Chekc if the internal axis values are valid
+                for (int i = 0; i < _fk.InternalAxisInLimit.Count; i++)
+                {
+                    if (_fk.InternalAxisInLimit[i] == false)
+                    {
+                        AxisAreValid = false;
+                        break;
+                    }
+                }
+
+                // Check if the external axis values are valid
+                if (AxisAreValid == true)
+                {
+                    for (int i = 0; i < _fk.ExternalAxisInLimit.Count; i++)
+                    {
+                        if (_fk.ExternalAxisInLimit[i] == false)
+                        {
+                            AxisAreValid = false;
+                            break;
+                        }
+                    }
+                }
+
+                // Initiate the display color and transparancy of the robot mesh
+                Color color;
+                double trans;
+
+                // Set the display color and transparancy of the robot mesh
+                if (AxisAreValid == true)
+                {
+                    color = Color.FromArgb(225, 225, 225);
+                    trans = 0.0;
+                }
+                else
+                {
+                    color = Color.FromArgb(150, 0, 0);
+                    trans = 0.5;
+                }
+
+                // Display the internal axes of the robot
+                for (int i = 0; i != _fk.PosedMeshes.Count; i++)
+                {
+                    args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                }
+
+                // Display the external axes
+                for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                {
+                    args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                }
+            }
         }
 
         /// <summary>
@@ -102,12 +167,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.ForwardKinematics_Icon;
-            }
+            get { return Properties.Resources.ForwardKinematics_Icon; }
         }
 
         /// <summary>
@@ -120,53 +180,5 @@ namespace RobotComponents.Components
             get { return new Guid("C1B950EA-B10E-4AD8-A676-8320DB465F14"); }
         }
 
-        public override void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            if (_fk.PosedMeshes != null)
-            {
-                bool AxisAreValid = true;
-
-                for (int i = 0; i < _fk.InternalAxisInLimit.Count; i++)
-                {
-                    if (_fk.InternalAxisInLimit[i] == false)
-                    {
-                        AxisAreValid = false;
-                    }
-                }
-
-                for (int i = 0; i < _fk.ExternalAxisInLimit.Count; i++)
-                {
-                    if (_fk.ExternalAxisInLimit[i] == false)
-                    {
-                        AxisAreValid = false;
-                    }
-                }
-
-                if (AxisAreValid == true)
-                {
-                    for (int i = 0; i != _fk.PosedMeshes.Count; i++)
-                    {
-                        args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
-                    }
-                    for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
-                    {
-                        args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
-                    }
-                }
-                else if (AxisAreValid == false)
-                {
-                    for (int i = 0; i != _fk.PosedMeshes.Count; i++)
-                    {
-                        args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(150, 0, 0), 0.5));
-                    }
-                    for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
-                    {
-                        args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(150, 0, 0), 0.5));
-                    }
-                }
-            }
-        }
     }
-
-
 }

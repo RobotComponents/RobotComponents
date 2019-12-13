@@ -110,7 +110,8 @@ namespace RobotComponents.BaseClasses
                     // Points for path curve
                     List<Point3d> points = new List<Point3d>();
 
-                    if (movements[i + 1].IsLinear == false)
+                    // Targets and path for joint movements MoveAbsJ and MoveJ
+                    if (movements[i + 1].MovementType == 0 || movements[i + 1].MovementType == 2)
                     {
                         // _inverseKinematics.Update(_target1);
                         InverseKinematics IK1 = new InverseKinematics(_target1, _robotInfo);
@@ -189,6 +190,7 @@ namespace RobotComponents.BaseClasses
                         }
                     }
 
+                    // Targets and paths for linear movement: MoveL
                     else
                     {
                         // MainTarget Plane Position Difference

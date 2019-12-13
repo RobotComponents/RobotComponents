@@ -23,7 +23,6 @@ namespace RobotComponents.Components
         {
         }
 
-
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
@@ -53,29 +52,30 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             RobotInfoGoo robotInfoGoo = null;
-            //Variables
-            string name = null;
-            List<Mesh> meshes = new List<Mesh>();
-            List<Plane> axisPlanes = new List<Plane>();
-            List<Interval> axisLimits = new List<Interval>();
-            Plane basePlane = Plane.Unset;
-            Plane mountingFrame = Plane.Unset;
-            Plane toolPlane = Plane.Unset;
-            RobotToolGoo tool = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }
 
-            //Check input
+            // Check if the input is valid
             if (!robotInfoGoo.IsValid || !robotInfoGoo.Value.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo is not Valid");
                 return;
             }
 
-            //Name
+            // Output variables
+            string name;
+            List<Mesh> meshes;
+            List<Plane> axisPlanes;
+            List<Interval> axisLimits;
+            Plane basePlane;
+            Plane mountingFrame;
+            Plane toolPlane;
+            RobotToolGoo tool;
+
+            // Name
             if (robotInfoGoo.Value.Name != null)
             {
                 name = robotInfoGoo.Value.Name;
@@ -86,7 +86,7 @@ namespace RobotComponents.Components
                 name = null;
             }
 
-            //Meshes
+            // Meshes
             if (robotInfoGoo.Value.Meshes != null)
             {
                 meshes = robotInfoGoo.Value.Meshes;
@@ -97,7 +97,7 @@ namespace RobotComponents.Components
                 meshes = null;
             }
 
-            //AxisPlanes
+            // AxisPlanes
             if (robotInfoGoo.Value.InternalAxisPlanes != null)
             {
                 axisPlanes = robotInfoGoo.Value.InternalAxisPlanes;
@@ -108,7 +108,7 @@ namespace RobotComponents.Components
                 axisPlanes = null;
             }
 
-            //AxisLimits
+            // AxisLimits
             if (robotInfoGoo.Value.InternalAxisLimits != null)
             {
                 axisLimits = robotInfoGoo.Value.InternalAxisLimits;
@@ -119,7 +119,7 @@ namespace RobotComponents.Components
                 axisLimits = null;
             }
 
-            //BasePlane
+            // BasePlane
             if (robotInfoGoo.Value.BasePlane.IsValid)
             {
                 basePlane = robotInfoGoo.Value.BasePlane;
@@ -130,7 +130,7 @@ namespace RobotComponents.Components
                 basePlane = Plane.Unset;
             }
 
-            //MountingFrame
+            // Mounting Frame / Attachment Plane
             if (robotInfoGoo.Value.MountingFrame.IsValid)
             {
                 mountingFrame = robotInfoGoo.Value.MountingFrame;
@@ -141,7 +141,7 @@ namespace RobotComponents.Components
                 mountingFrame = Plane.Unset;
             }
 
-            //ToolPlane
+            // Tool Plane
             if (robotInfoGoo.Value.ToolPlane.IsValid)
             {
                 toolPlane = robotInfoGoo.Value.ToolPlane;
@@ -152,7 +152,7 @@ namespace RobotComponents.Components
                 toolPlane = Plane.Unset;
             }
 
-            //Tool
+            // Robot Tool
             if (robotInfoGoo.Value.Tool.IsValid)
             {
                 tool = new RobotToolGoo(robotInfoGoo.Value.Tool);
@@ -163,7 +163,7 @@ namespace RobotComponents.Components
                 tool = null;
             }
 
-            //Output
+            // Output
             DA.SetData(0, name);
             DA.SetDataList(1, meshes);
             DA.SetDataList(2, axisPlanes);
@@ -179,12 +179,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructRobotInfoComponent_Icon;
-            }
+            get { return Properties.Resources.DeconstructRobotInfoComponent_Icon; }
         }
 
         /// <summary>

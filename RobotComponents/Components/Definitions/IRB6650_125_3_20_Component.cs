@@ -13,7 +13,7 @@ namespace RobotComponents.Components
     public class IRB6650_125_3_20_Component : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the IRB4600_40_55_Component class.
+        /// Initializes a new instance of the IRB6650_125_3_20_Component class.
         /// </summary>
         public IRB6650_125_3_20_Component()
           : base("ABB_IRB6650-125/3.2", "IRB6650",
@@ -22,6 +22,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -51,6 +60,7 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             Plane positionPlane = Plane.WorldXY;
             RobotToolGoo toolGoo = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
@@ -89,7 +99,7 @@ namespace RobotComponents.Components
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
 
             // Axis planes
-            List<Plane> axisPlanes = new List<Plane>();
+            List<Plane> axisPlanes = new List<Plane>() { };
             // Axis 1
             axisPlanes.Add(new Plane(
                 new Point3d(0.00, 0.00, 0.00),
@@ -137,7 +147,7 @@ namespace RobotComponents.Components
             mountingFrame.Rotate(Math.PI * -0.5, mountingFrame.Normal);
 
 
-            RobotInfo robotInfo = null;
+            RobotInfo robotInfo;
 
             // Override position plane when an external axis is coupled
             if (externalAxis.Count != 0)
@@ -149,13 +159,15 @@ namespace RobotComponents.Components
                         positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
                     }
                 }
-                robotInfo = new RobotInfo("ABB_IRB6650-125/3.2", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
-            }
-            else
-            {
-                robotInfo = new RobotInfo("ABB_IRB6650-125/3.2", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                robotInfo = new RobotInfo("IRB6650-125/3.2", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
             }
 
+            else
+            {
+                robotInfo = new RobotInfo("IRB6650-125/3.2", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+            }
+
+            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -164,10 +176,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.IRB6650_Icon;
-            }
+            get { return Properties.Resources.IRB6650_Icon; }
         }
 
         /// <summary>

@@ -25,6 +25,15 @@ namespace RobotComponents.Components
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -51,6 +60,7 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             Plane positionPlane = Plane.WorldXY;
             RobotToolGoo toolGoo = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
@@ -89,7 +99,7 @@ namespace RobotComponents.Components
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
 
             // Axis planes
-            List<Plane> axisPlanes = new List<Plane>();
+            List<Plane> axisPlanes = new List<Plane>() { };
             // Axis 1
             axisPlanes.Add(new Plane(
                 new Point3d(0.00, 0.00, 0.00),
@@ -137,7 +147,7 @@ namespace RobotComponents.Components
                 new Vector3d(1.00, 0.00, 0.00));
             mountingFrame.Rotate(Math.PI * -0.5, mountingFrame.Normal);
 
-            RobotInfo robotInfo = null;
+            RobotInfo robotInfo;
 
             // Override position plane when an external axis is coupled
             if (externalAxis.Count != 0)
@@ -152,11 +162,13 @@ namespace RobotComponents.Components
 
                 robotInfo = new RobotInfo("IRB2600ID-8/2.0", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
             }
+
             else
             {
                 robotInfo = new RobotInfo("IRB2600ID-8/2.0", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
             }
 
+            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -165,10 +177,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.IRB2600ID_Icon;
-            }
+            get { return Properties.Resources.IRB2600ID_Icon; }
         }
 
         /// <summary>

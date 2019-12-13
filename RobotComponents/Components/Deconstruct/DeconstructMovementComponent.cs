@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.Parameters;
@@ -11,7 +10,7 @@ namespace RobotComponents.Components
     public class DeconstructMovementComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent()
           : base("Deconstruct Movement", "DeConMove",
@@ -37,7 +36,7 @@ namespace RobotComponents.Components
         {
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");
             pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Speed Data");
-            pManager.Register_BooleanParam("Is Linear", "IL", "Movement Type as bool");
+            pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");
         }
 
@@ -47,16 +46,16 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             MovementGoo movementGoo = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref movementGoo)) { return; }
 
-            //Output
+            // Output
             DA.SetData(0, movementGoo.Value.Target);
             DA.SetData(1, movementGoo.Value.SpeedData);
-            DA.SetData(2, movementGoo.Value.IsLinear);
+            DA.SetData(2, movementGoo.Value.MovementType);
             DA.SetData(3, movementGoo.Value.Precision);
         }
 
@@ -65,12 +64,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructMovement_Icon;
-            }
+            get { return Properties.Resources.DeconstructMovement_Icon; }
         }
 
         /// <summary>

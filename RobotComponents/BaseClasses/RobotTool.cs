@@ -160,8 +160,8 @@ namespace RobotComponents.BaseClasses
             return result;
         }
 
-        private string CreateToolDataString(Vector3d offset, Quaternion orientation,
-            bool robotHold = true, double mass = 1, Vector3d cog = new Vector3d(), Quaternion cogOrientation = new Quaternion(), Vector3d inertia = new Vector3d())
+        private string CreateToolDataString(Vector3d offset, Quaternion orientation, bool robotHold = true, double mass = 1, 
+            Vector3d cog = new Vector3d(), Quaternion cogOrientation = new Quaternion(), Vector3d inertia = new Vector3d())
         {
             string result = "";
 
@@ -176,15 +176,28 @@ namespace RobotComponents.BaseClasses
             }
 
             // Add coordinate of toolframe < tframe of pose > < trans of pos >
-            result += offset.X.ToString("0.######") + "," + offset.Y.ToString("0.######") + "," + offset.Z.ToString("0.######") + "],[";
+            result += offset.X.ToString("0.######") 
+                + "," + offset.Y.ToString("0.######") 
+                + "," + offset.Z.ToString("0.######") + "],[";
 
             // Add orientation of tool frame < tframe of pose > < rot of orient >
-            result += orientation.A.ToString("0.######") + "," + orientation.B.ToString("0.######") + "," + orientation.C.ToString("0.######") + "," + orientation.D.ToString("0.######") + "]],[";
+            result += orientation.A.ToString("0.######") 
+                + "," + orientation.B.ToString("0.######") 
+                + "," + orientation.C.ToString("0.######") 
+                + "," + orientation.D.ToString("0.######") + "]],[";
 
             // Add tool load < tload of loaddata >
-            result += mass.ToString("0.######") + ",[" + cog.X.ToString("0.######") + "," + cog.Y.ToString("0.######") + "," + cog.Z.ToString("0.######") + "],[" +
-                cogOrientation.A.ToString("0.######") + "," + cogOrientation.B.ToString("0.######") + "," + cogOrientation.C.ToString("0.######") + "," + cogOrientation.D.ToString("0.######") + ",]," +
-                inertia.X.ToString("0.######") + "," + inertia.Y.ToString("0.######") + "," + inertia.Z.ToString("0.######") + "]]";
+            result += mass.ToString("0.######") + ",[" 
+                + cog.X.ToString("0.######") + "," 
+                + cog.Y.ToString("0.######") + "," 
+                + cog.Z.ToString("0.######") + "],[" +
+                cogOrientation.A.ToString("0.######") + "," 
+                + cogOrientation.B.ToString("0.######") + "," 
+                + cogOrientation.C.ToString("0.######") + "," 
+                + cogOrientation.D.ToString("0.######") + ",]," 
+                + inertia.X.ToString("0.######") + "," 
+                + inertia.Y.ToString("0.######") + "," 
+                + inertia.Z.ToString("0.######") + "]]";
 
             return result;
         }

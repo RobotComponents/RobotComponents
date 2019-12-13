@@ -6,17 +6,14 @@ using RobotComponents.BaseClasses;
 using RobotComponents.Goos;
 using RobotComponents.Parameters;
 
-
 namespace RobotComponents.Components
 {
     public class OverrideRobotToolComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public OverrideRobotToolComponent()
           : base("Action: Override Robot Tool", "Overrides cuurent RobotTool",
@@ -25,6 +22,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -54,11 +60,16 @@ namespace RobotComponents.Components
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
+            // Input variables
             RobotToolGoo _tool = new RobotToolGoo();
 
+            // Catch input data
             if (!DA.GetData(0, ref _tool)) { _tool.Value.Name = "tool0"; ; }
 
+            // Create action
             SetRobotTool setRobotTool = new SetRobotTool(_tool.Value, documentGUID);
+
+            // Output
             DA.SetData(0, setRobotTool);
         }
 
@@ -68,12 +79,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.ChangeTool_Icon;
-            }
+            get { return Properties.Resources.ChangeTool_Icon; }
         }
 
         /// <summary>
@@ -85,7 +91,6 @@ namespace RobotComponents.Components
         {
             get { return new Guid("FEDDD15A-F7F9-4575-A7E8-6FC3C3B3E7AF"); }
         }
+
     }
-
-
 }

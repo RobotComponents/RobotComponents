@@ -13,15 +13,13 @@ namespace RobotComponents.Components
     public class PathGeneratorComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public PathGeneratorComponent()
           : base("Path Generator", "PG",
-              "EXPERIMENTAL: Generates and display the movement path for a defined ABB robot based on a list of Actions."
+              "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
@@ -52,10 +50,10 @@ namespace RobotComponents.Components
             pManager.Register_CurveParam("Movement Paths", "P", "Movement Paths as Curves");
         }
 
+        // Global component variables
         PathGenerator _pathGenerator = new PathGenerator();
         List<Target> _targets = new List<Target>();
         List<Curve> _paths = new List<Curve>();
-        InverseKinematics _inverseKinematics = new InverseKinematics();
         List<List<double>> _internalAxisValues = new List<List<double>>();
         List<List<double>> _externalAxisValues = new List<List<double>>();
         int lastInterpolations = 0;
@@ -67,6 +65,7 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             RobotInfoGoo robotInfoGoo = new RobotInfoGoo();
             List<RobotComponents.BaseClasses.Action> actions = new List<RobotComponents.BaseClasses.Action>();
             int interpolations = 0;
@@ -74,6 +73,7 @@ namespace RobotComponents.Components
             bool displayPath = false;
             bool update = false;
 
+            // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
@@ -81,33 +81,44 @@ namespace RobotComponents.Components
             if (!DA.GetData(4, ref displayPath)) { return; }
             if (!DA.GetData(5, ref update)) { return; }
 
+            // Create the path generator
             _pathGenerator = new PathGenerator(robotInfoGoo.Value);
 
+            // Update the path
             if (update == true || lastInterpolations != interpolations)
             {
+                // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
 
+                // Get all the targets
                 _targets.Clear();
                 _targets = _pathGenerator.Targets;
 
+                // Get the new path curve
                 _paths.Clear();
                 _paths = _pathGenerator.GeneratePathCurves();
 
+                // Clear the lists with the internal and external axis values
                 ClearAxisValuesLists();
 
+                // Re-calculate all the internal and external axis values
                 for (int i = 0; i < _targets.Count; i++)
                 {
                     InverseKinematics IK = new InverseKinematics(_targets[i], robotInfoGoo.Value);
                     IK.Calculate();
+
                     _internalAxisValues.Add(IK.InternalAxisValues);
                     _externalAxisValues.Add(IK.ExternalAxisValues);
                 }
 
+                // Store the number of interpolations that are used, to check if this value is changed. 
                 lastInterpolations = interpolations;
             }
 
+            // Get the index number of the current target
             int targetIndex = (int)(((_targets.Count - 1) * interpolationSlider));
           
+            // Output
             DA.SetData(0, _targets[targetIndex]);
             DA.SetDataList(1, _internalAxisValues[targetIndex]);
             DA.SetDataList(2, _externalAxisValues[targetIndex]);
@@ -122,18 +133,24 @@ namespace RobotComponents.Components
             }
         }
 
+        /// <summary>
+        /// This method clears the two lists with internal and external values
+        /// </summary>
         private void ClearAxisValuesLists()
         {
+            // Clear the all the individual lists with internal axis values
             for (int i = 0; i < _internalAxisValues.Count; i++)
             {
                 _internalAxisValues[i].Clear();
             }
 
+            // Clear the all the individual lists with external axis values
             for (int i = 0; i < _externalAxisValues.Count; i++)
             {
                 _externalAxisValues.Clear();
             }
 
+            // Clear both primary lists
             _internalAxisValues.Clear();
             _externalAxisValues.Clear();
         }
@@ -144,12 +161,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.PathGen_Icon;
-            }
+            get { return Properties.Resources.PathGen_Icon; }
         }
 
         /// <summary>

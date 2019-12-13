@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
-using Rhino.Geometry;
-
-using RobotComponents.BaseClasses;
 
 namespace RobotComponents.Components
 {
@@ -47,19 +42,21 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Initiate
-            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
-            GH_Structure<IGH_Goo> data = new GH_Structure<IGH_Goo>();
+            // Input variables
+            GH_Structure<IGH_Goo> data;
             string name = String.Empty;
 
-            // Get input
+            // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataTree(1, out data)) return;
 
-            // Get paths
+            // Get tthe paths of the datatree
             var paths = data.Paths;
 
-            // Make the data tree
+            // Output variable
+            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
+
+            // Make the output datatree with names
             for (int i = 0; i < data.Branches.Count; i++)
             {
                 var branches = data.Branches[i];
@@ -75,6 +72,7 @@ namespace RobotComponents.Components
                 }
             }
 
+            // Output
             DA.SetDataTree(0, names);
         }
 
@@ -83,13 +81,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-
-                return Properties.Resources.Naming_Icon;
-            }
+            get { return Properties.Resources.Naming_Icon; }
         }
 
         /// <summary>
@@ -99,5 +91,6 @@ namespace RobotComponents.Components
         {
             get { return new Guid("74DE087C-11F8-4212-AB08-A5B572644D57"); }
         }
+
     }
 }

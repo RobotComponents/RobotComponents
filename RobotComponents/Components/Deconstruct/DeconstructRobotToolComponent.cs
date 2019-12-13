@@ -46,25 +46,26 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             RobotToolGoo robotToolGoo = null;
-            //Variables rest
-            string name = null;
-            Mesh mesh = null;
-            Plane attachmentPlane = Plane.Unset;
-            Plane toolPlane = Plane.Unset;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref robotToolGoo)) { return; }
 
-            //Check input
+            // Check input
             if (!robotToolGoo.IsValid || !robotToolGoo.Value.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool is not Valid");
                 return;
             }
 
-            //Name
+            // Output variables
+            string name;
+            Mesh mesh;
+            Plane attachmentPlane;
+            Plane toolPlane;
+
+            // Name
             if (robotToolGoo.Value.Name != null)
             {
                 name = robotToolGoo.Value.Name;
@@ -75,7 +76,7 @@ namespace RobotComponents.Components
                 name = null;
             }
 
-            //Meshes
+            // Meshes
             if (robotToolGoo.Value.Mesh != null)
             {
                 mesh = robotToolGoo.Value.Mesh;
@@ -86,7 +87,7 @@ namespace RobotComponents.Components
                 mesh = null;
             }
 
-            //AttachmentPlane
+            // Attachment Plane
             if (robotToolGoo.Value.AttachmentPlane.IsValid)
             {
                 attachmentPlane = robotToolGoo.Value.AttachmentPlane;
@@ -97,7 +98,7 @@ namespace RobotComponents.Components
                 attachmentPlane = Plane.Unset;
             }
 
-            //ToolPlane
+            // Tool Plane
             if (robotToolGoo.Value.ToolPlane.IsValid)
             {
                 toolPlane = robotToolGoo.Value.ToolPlane;
@@ -108,7 +109,7 @@ namespace RobotComponents.Components
                 toolPlane = Plane.Unset;
             }
 
-            //Output
+            // Output
             DA.SetData(0, name);
             DA.SetData(1, mesh);
             DA.SetData(2, attachmentPlane);
@@ -120,12 +121,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructRobotTool_Icon;
-            }
+            get { return Properties.Resources.DeconstructRobotTool_Icon; }
         }
 
         /// <summary>

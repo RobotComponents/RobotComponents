@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data; 
+using Grasshopper.Kernel.Special;
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Goos;
@@ -15,11 +17,9 @@ namespace RobotComponents.Components
     public class MovementComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, subcategory the panel. 
+        /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public MovementComponent()
           : base("Action: Movement", "M",
@@ -31,13 +31,22 @@ namespace RobotComponents.Components
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Target", "T", "Target as Action: Target", GH_ParamAccess.list);
             pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Action: Speed Data or as a number (vTCP)", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("Is Linear", "IL", "Movement Type as bool", GH_ParamAccess.list, false);
+            pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
 
@@ -46,29 +55,72 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "JM", "Robot Movement Instructions");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Robot Movement Instructions");  //Todo: beef this up to be more informative.
+        }
+
+        /// <summary>
+        /// Creates the value list for the motion type and connects it the input parameter is other source is connected
+        /// </summary>
+        private void CreateValueList()
+        {
+            // Gets the input parameter
+            var parameter = this.Params.Input[2];
+
+            // Create and add an valuelist when no input is connected to the parameter
+            if (parameter.SourceCount == 0)
+            {
+                // Creates the empty value list
+                GH_ValueList obj = new GH_ValueList();
+                obj.CreateAttributes();
+                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+                obj.ListItems.Clear();
+
+                // Add the items to the value list
+                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
+
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
+                parameter.CollectData();
+
+                // Expire
+                obj.ExpirePreview(true);
+                obj.ExpireSolution(true);
+            }
         }
 
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
-        /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
-        /// to store data in output parameters.</param>
+        /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Creates the input value list and attachs it to the input parameter
+            CreateValueList();
+
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
+            // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
             List<IGH_Goo> inputSpeedDatas = new List<IGH_Goo>();
-            List<bool> isLinears = new List<bool>();
+            List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, targetGoos)) { return; }
             if (!DA.GetDataList(1, inputSpeedDatas)) { return; }
-            if (!DA.GetDataList(2, isLinears)) { return; }
+            if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
 
+            // Variables needed for speeddata creations and check
             bool speedValueWarningRaised = false;
             List<SpeedData> speedDatas = new List<SpeedData>();
 
@@ -116,14 +168,14 @@ namespace RobotComponents.Components
             int[] sizeValues = new int[4];
             sizeValues[0] = targetGoos.Count;
             sizeValues[1] = speedDatas.Count;
-            sizeValues[2] = isLinears.Count;
+            sizeValues[2] = movementTypes.Count;
             sizeValues[3] = precisions.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
             // Keeps track of used indicies
             int targetGooCounter = -1;
             int speedDataCounter = -1;
-            int isLinearCounter = -1;
+            int movementTypeCounter = -1;
             int precisionCounter = -1;
 
             // Creates movements
@@ -131,10 +183,10 @@ namespace RobotComponents.Components
 
             for (int i = 0; i < biggestSize; i++)
             {
-                TargetGoo targetGoo = null;
-                SpeedData speedData = null;
-                bool isLinear = false;
-                int precision = 0;
+                TargetGoo targetGoo;
+                SpeedData speedData;
+                int movementType;
+                int precision; ;
 
                 if (i < targetGoos.Count)
                 {
@@ -156,14 +208,14 @@ namespace RobotComponents.Components
                     speedData = speedDatas[speedDataCounter];
                 }
 
-                if (i < isLinears.Count)
+                if (i < movementTypes.Count)
                 {
-                    isLinear = isLinears[i];
-                    isLinearCounter++;
+                    movementType = movementTypes[i];
+                    movementTypeCounter++;
                 }
                 else
                 {
-                    isLinear = isLinears[isLinearCounter];
+                    movementType = movementTypes[movementTypeCounter];
                 }
 
                 if (i < precisions.Count)
@@ -176,10 +228,22 @@ namespace RobotComponents.Components
                     precision = precisions[precisionCounter];
                 }
 
-                Movement movement = new Movement(targetGoo.Value, speedData, isLinear, precision, documentGUID);
+                Movement movement = new Movement(targetGoo.Value, speedData, movementType, precision, documentGUID);
                 movements.Add(movement);
             }
 
+            // Check if a right value is used for the movement type
+            for (int i = 0; i < movementTypes.Count; i++)
+            {
+                if (movementTypes[i] != 0 && movementTypes[i] != 1 && movementTypes[i] != 2)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value <" + i + "> is invalid. " +
+                        "In can only be set to 0, 1 and 2. Use 1 for MoveAbsJ, 2 for MoveL and 3 for MoveJ.");
+                    break;
+                }
+            }
+
+            // Check if a right value is used for the input of the precision
             for (int i = 0; i < precisions.Count; i++)
             {
                 if (HelperMethods.PrecisionValueIsValid(precisions[i]) == false)
@@ -191,6 +255,7 @@ namespace RobotComponents.Components
                 }
             }
 
+            // Output
             DA.SetDataList(0, movements);
         }
 
@@ -200,12 +265,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponen;
-                return Properties.Resources.Movement_Icon;
-            }
+            get { return Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>
@@ -217,6 +277,7 @@ namespace RobotComponents.Components
         {
             get { return new Guid("F2BBBB2D-96F7-4D65-9031-A6C08D14A448"); }
         }
+
     }
 
 }

@@ -9,7 +9,7 @@ namespace RobotComponents.Components
     public class DeconstructTargetComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
         public DeconstructTargetComponent()
           : base("Deconstruct Target", "DeConTar",
@@ -44,13 +44,13 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Variables input
+            // Input variables
             TargetGoo targetGoo = null;
 
-            //Get the data from the input
+            // Catch the input data
             if (!DA.GetData(0, ref targetGoo)) { return; }
 
-            //Output
+            // Output
             DA.SetData(0, targetGoo.Value.Name);
             DA.SetData(1, targetGoo.Value.Plane);
             DA.SetData(2, targetGoo.Value.AxisConfig);
@@ -61,12 +61,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.DeconstructTarget_Icon;
-            }
+            get { return Properties.Resources.DeconstructTarget_Icon; }
         }
 
         /// <summary>

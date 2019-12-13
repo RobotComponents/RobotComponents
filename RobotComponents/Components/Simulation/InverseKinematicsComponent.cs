@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Rhino.Geometry;
 
 using System;
 
@@ -9,15 +8,12 @@ using RobotComponents.Goos;
 
 namespace RobotComponents.Components
 {
-
     public class InverseKinematicsComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public InverseKinematicsComponent()
           : base("Inverse Kinematics", "IK",
@@ -54,19 +50,19 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //variables
+            // Input variables
             RobotInfoGoo robotInfo = null;
             TargetGoo target= null;
 
-            //inputs
+            // Catch the input data
             if (!DA.GetData(0, ref robotInfo)) { return; }
             if (!DA.GetData(1, ref target)) { return; }
 
-            //calculations
+            // Calculate the robot pose
             InverseKinematics inverseKinematics = new InverseKinematics(target.Value, robotInfo.Value);
             inverseKinematics.Calculate();
 
-            //output
+            // Output
             DA.SetDataList(0, inverseKinematics.InternalAxisValues);
             DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
         }
@@ -77,12 +73,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.InverseKinematics_Icon;
-            }
+            get { return Properties.Resources.InverseKinematics_Icon; }
         }
 
         /// <summary>

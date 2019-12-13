@@ -52,6 +52,10 @@ namespace RobotComponents.Components
         ABB.Robotics.Controllers.Controller controller = null;
         SignalGoo signalGoo;
 
+        string currentSignalName = "";
+        string currentSystemName = "";
+        string currentCtrName = "";
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -173,11 +177,19 @@ namespace RobotComponents.Components
         /// <returns> The ABB Robotics signal. </returns>
         private SignalGoo GetSignal(string name)
         {
-            // Check if the signal name is valid
-            if (!ValidSignal(name))
+            // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
+            if (name != currentSignalName || controller.SystemName != currentSystemName || controller.Name != currentCtrName)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The Signal " + name + " does not exist in the current Controller");
-                return null;
+                if (!ValidSignal(name))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The Signal " + name + " does not exist in the current Controller");
+                    return null;
+                }
+
+                // Update the current names
+                currentSignalName = (string)name.Clone();
+                currentSystemName = (string)controller.SystemName.Clone();
+                currentCtrName = (string)controller.Name.Clone();
             }
 
             // Get the signal from the defined controller

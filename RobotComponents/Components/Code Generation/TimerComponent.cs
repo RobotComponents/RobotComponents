@@ -7,15 +7,12 @@ using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
-
     public class TimerComponent : GH_Component
     {
         /// <summary>
-        /// Each implementation of GH_Component must provide a public 
-        /// constructor without any arguments.
-        /// Category represents the Tab in which the component will appear, 
-        /// Subcategory the panel. If you use non-existing tab or panel names, 
-        /// new tabs/panels will automatically be created.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public TimerComponent()
           : base("Action: Timer", "T",
@@ -24,6 +21,15 @@ namespace RobotComponents.Components
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -49,11 +55,16 @@ namespace RobotComponents.Components
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Input variables
             double duration = 0;
 
+            // Catch the input variables
             if (!DA.GetData(0, ref duration)) { return; }
 
+            // Create the action
             Timer timer = new Timer(duration);
+
+            // Output
             DA.SetData(0, timer);
         }
 
@@ -63,12 +74,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                // You can add image files to your project resources and access them like this:
-                //return Resources.IconForThisComponent;
-                return Properties.Resources.Timer_Icon;
-            }
+            get { return Properties.Resources.Timer_Icon; }
         }
 
         /// <summary>
@@ -81,6 +87,5 @@ namespace RobotComponents.Components
             get { return new Guid("86776D1A-672D-44F5-B655-B60D2FCE58AA"); }
         }
     }
-
 
 }

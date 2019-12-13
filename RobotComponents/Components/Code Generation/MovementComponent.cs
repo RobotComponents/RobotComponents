@@ -31,6 +31,15 @@ namespace RobotComponents.Components
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -99,18 +108,19 @@ namespace RobotComponents.Components
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
-            // The input variables
+            // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
             List<IGH_Goo> inputSpeedDatas = new List<IGH_Goo>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
 
+            // Catch the input data
             if (!DA.GetDataList(0, targetGoos)) { return; }
             if (!DA.GetDataList(1, inputSpeedDatas)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
 
-            // Variables needed for creating and checking the speeddata
+            // Variables needed for speeddata creations and check
             bool speedValueWarningRaised = false;
             List<SpeedData> speedDatas = new List<SpeedData>();
 

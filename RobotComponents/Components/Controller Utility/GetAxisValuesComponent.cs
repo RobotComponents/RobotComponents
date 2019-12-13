@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponents.Goos;
 
@@ -34,8 +36,10 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("InternalAxisValues", "IAV", "Extracted internal Axis Values", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ExternalAxisValues", "EAV", "Extracted external Axis Values", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.list);
+            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.list);
+            //pManager.AddNumberParameter("Axis Values", "AV", "All the axis values in a datatree structure", GH_ParamAccess.tree);
+            //pManager.AddTextParameter("Mechanical Units", "MU", "The names of the mechanical units", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace RobotComponents.Components
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }
 
-            // Interal axis values
+            // Internal axis values
             internalAxisValues = GetInternalAxisValuesAsList(controllerGoo.Value.MotionSystem.MechanicalUnits[0].GetPosition());
 
             // Try to get the external axis values: if there is no external axis connected the mechanical unit does not exist
@@ -66,9 +70,52 @@ namespace RobotComponents.Components
                 externalAxisValues = new List<double> {0, 0, 0, 0, 0, 0};
             }
 
+            /**
+            // Output variables         
+            GH_Structure<GH_Number> axisValues = new GH_Structure<GH_Number>();
+            List<string> mechanicalUnitnames = new List<string>() { };
+
+            // Data needed for making the datatree with axis values
+            ABB.Robotics.Controllers.MotionDomain.MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            List<double> values;
+
+            // Make the output datatree with names with a branch for each mechanical unit
+            for (int i = 0; i < mechanicalUnits.Count; i++)
+            {
+                // Get the ABB joint target of the mechanical unit
+                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnits[i].GetPosition();
+
+                // For internal axis values
+                if (mechanicalUnits[i].Type.ToString() ==  "TcpRobot")
+                {
+                    values = GetInternalAxisValuesAsList(jointTarget);
+                }
+
+                // For external axis values
+                else
+                {
+                    values = GetExternalAxisValuesAsList(jointTarget);
+                }
+
+                // Path number of the datatree for storing the axis values
+                GH_Path path = new GH_Path(i);
+
+                // Add mechanical unit name to the list with names
+                mechanicalUnitnames.Add(mechanicalUnits[i].Name);
+
+                // Save the axis values
+                for (int j = 0; j < mechanicalUnits[i].NumberOfAxes; j++)
+                {
+                    axisValues.Append(new GH_Number(values[j]), path);
+                }
+            }
+            **/
+
             // Output
             DA.SetDataList(0, internalAxisValues);
             DA.SetDataList(1, externalAxisValues);
+            //DA.SetDataTree(2, axisValues);
+            //DA.SetDataList(3, mechanicalUnitnames);
         }
 
         // Additional methods

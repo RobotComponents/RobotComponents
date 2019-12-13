@@ -87,9 +87,9 @@ namespace RobotComponents.Components
         //  Additional methods
         #region additional methods
         /// <summary>
-        /// 
+        /// Get the controller
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The picked controller. </returns>
         private ABB.Robotics.Controllers.Controller GetController()
         {
             // Initiate and clear variables

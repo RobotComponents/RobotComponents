@@ -150,7 +150,7 @@ namespace RobotComponents.BaseClasses
             }
 
             // Transform
-            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * value);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 

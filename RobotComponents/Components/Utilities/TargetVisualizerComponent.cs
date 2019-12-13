@@ -65,7 +65,7 @@ namespace RobotComponents.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variable for catchint the datatree 
-            GH_Structure<IGH_Goo> actions = new GH_Structure<IGH_Goo>();
+            GH_Structure<IGH_Goo> actions;
 
             // Clear the list with targets before catching new input data
             targetGoos.Clear();
@@ -106,7 +106,7 @@ namespace RobotComponents.Components
                     // Make a target from the input plane if the input data is a plane
                     else if (actions.Branches[i][j] is GH_Plane)
                     {
-                        string targetName = "";
+                        string targetName;
                         if (actions.Branches.Count == 1)
                         {
                             targetName = "plane" + "_" + j;

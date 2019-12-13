@@ -60,7 +60,6 @@ namespace RobotComponents.Components
             RobotInfoGoo robotInfo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
-            List<Mesh> robotMeshes = new List<Mesh>();
 
             // Catch input data
             if (!DA.GetData(0, ref robotInfo)) { return; }

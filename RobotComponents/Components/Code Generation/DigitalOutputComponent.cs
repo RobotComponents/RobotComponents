@@ -8,7 +8,6 @@ using RobotComponents.Utils;
 
 namespace RobotComponents.Components
 {
-
     public class DigitalOutputComponent : GH_Component
     {
         /// <summary>

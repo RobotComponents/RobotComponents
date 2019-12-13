@@ -46,7 +46,7 @@ namespace RobotComponents.BaseClasses
 
         public override string ToRAPIDFunction()
         {
-            string value = "";
+            string value;
 
             if(_value == true)
             {

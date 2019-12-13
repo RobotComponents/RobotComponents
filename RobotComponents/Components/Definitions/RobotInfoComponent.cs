@@ -95,7 +95,7 @@ namespace RobotComponents.Components.Definitions
                 axisLimits.Add(externalAxis[i].AxisLimits);
             }
 
-            RobotInfo robotInfo = null;
+            RobotInfo robotInfo;
 
             // Override position plane when an external axis is coupled
             if (externalAxis.Count != 0)

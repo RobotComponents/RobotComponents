@@ -86,7 +86,7 @@ namespace RobotComponents.BaseClasses
 
             _basePlane = GetClosestBasePlane();
             Transform trans = Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
-            this._targetPlane = toolTransformation(_targetPlane, _robotInfo.Tool.AttachmentPlane, _robotInfo.Tool.ToolPlane);
+            this._targetPlane = ToolTransformation(_targetPlane, _robotInfo.Tool.AttachmentPlane, _robotInfo.Tool.ToolPlane);
 
             this._endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips Plane for TCP Offset moving in in right direction
             this._endPlane.Transform(trans);
@@ -352,21 +352,20 @@ namespace RobotComponents.BaseClasses
             _internalAxisValues[2] = _internalAxisValues[2] - 90;
         }
 
-        private Plane toolTransformation(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
+        private Plane ToolTransformation(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
         {
             //Plane result = new Plane(attachmentPlane);
             //result.Transform(Transform.PlaneToPlane(toolPlane, targetPlane));
             //return result;
             Plane result = new Plane(attachmentPlane);
             result.Rotate(Math.PI, attachmentPlane.ZAxis); //fixes the Flipped Problem
-            Transform trans = new Transform();
-            trans = Transform.PlaneToPlane(toolPlane, targetPlane);
+            Transform trans = Transform.PlaneToPlane(toolPlane, targetPlane);
 
             result.Transform(trans);
             return result;
         }
 
-        private Plane offsetPlane(Plane plane, double distance, Vector3d direction)
+        private Plane OffsetPlane(Plane plane, double distance, Vector3d direction)
         {
             Plane planeNow = new Plane(plane.Origin, plane.XAxis, plane.YAxis); // BW Added to avoid problems of not deepcopying
             Vector3d _vecOffset = Vector3d.Multiply(distance, direction);

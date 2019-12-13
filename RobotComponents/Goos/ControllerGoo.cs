@@ -1,6 +1,6 @@
-﻿// ----- Grasshopper Libs -----
+﻿// Grasshopper Libs
 using Grasshopper.Kernel.Types;
-// ----- ABB Robotic Libs -----
+// ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
 namespace RobotComponents.Goos

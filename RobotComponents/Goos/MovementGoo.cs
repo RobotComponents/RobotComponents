@@ -88,17 +88,6 @@ namespace RobotComponents.Goos
                 return "Null Movement";
             }
 
-            else if (Value.IsLinear == false) // Todo: update to MovementType after merge with MoveJ branch
-            {
-                return "Absolute Joint Movement";
-            }
-
-            else if (Value.IsLinear == true) // Todo: update to MovementType after merge with MoveJ branch
-            {
-                return "Linear Movement";
-            }
-
-            /**
             else if (Value.MovementType == 0)
             {
                 return "Absolute Joint Movement";
@@ -113,9 +102,11 @@ namespace RobotComponents.Goos
             {
                 return "Joint Movement";
             }
-            **/
 
-            return "Movement";
+            else
+            {
+                return "Movement";
+            }
         }
 
         /// <summary>

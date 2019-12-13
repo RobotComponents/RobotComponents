@@ -66,14 +66,14 @@ namespace RobotComponents.Components
             }
 
             // Output variables
-            string name = null;
-            List<Mesh> meshes = new List<Mesh>();
-            List<Plane> axisPlanes = new List<Plane>();
-            List<Interval> axisLimits = new List<Interval>();
-            Plane basePlane = Plane.Unset;
-            Plane mountingFrame = Plane.Unset;
-            Plane toolPlane = Plane.Unset;
-            RobotToolGoo tool = null;
+            string name;
+            List<Mesh> meshes;
+            List<Plane> axisPlanes;
+            List<Interval> axisLimits;
+            Plane basePlane;
+            Plane mountingFrame;
+            Plane toolPlane;
+            RobotToolGoo tool;
 
             // Name
             if (robotInfoGoo.Value.Name != null)

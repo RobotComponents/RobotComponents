@@ -1,25 +1,19 @@
 ﻿using System;
-
-using Grasshopper.Kernel;
 using System.IO;
 using System.Linq;
 using System.Xml;
-
+// Grasshopper Libs
+using Grasshopper.Kernel;
+// RobotComponents Libs
+using RobotComponents.Goos;
+// ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
-using RobotComponents.Goos;
 
 namespace RobotComponents.Components
 {
     public class RemoteConnection : GH_Component
     {
-        Controller controller;
-        bool ctr = true;
-        string msg;
-        string cStatus = "Not connected.";
-        string uStatus = "No actions.";
-        int count = 0;
-
         /// <summary>
         /// Initializes a new instance of the RemoteConnection class.
         /// </summary>
@@ -53,17 +47,22 @@ namespace RobotComponents.Components
             pManager.AddTextParameter("Status", "S", "Updates about what is going on here!", GH_ParamAccess.item);
         }
 
+        // Global component variables
+        Controller controller;
+        bool ctr = true;
+        string msg;
+        string cStatus = "Not connected.";
+        string uStatus = "No actions.";
+        int count = 0;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Getting the Controller information
+            // Input variables
             ControllerGoo controllerGoo = null;
-            if (!DA.GetData(0, ref controllerGoo)) { return; }
-            controller = controllerGoo.Value;
-
             bool connect = false;
             bool upload = false;
             bool run = false;
@@ -71,6 +70,8 @@ namespace RobotComponents.Components
             string RAPID= null;
             string BaseCode= null;
 
+            // Catch input data
+            if (!DA.GetData(0, ref controllerGoo)) { return; }
             if (!DA.GetData(1, ref connect)) { return; }
             if (!DA.GetData(2, ref upload)) { return; }
             if (!DA.GetData(3, ref run)) { return; }
@@ -79,65 +80,96 @@ namespace RobotComponents.Components
             if (!DA.GetData(6, ref BaseCode)) { return; }
             base.DestroyIconCache();
 
+            // Get controller value
+            controller = controllerGoo.Value;
+            
+            // Connect
             if (connect)
             {
+                // Setup the connection
                 Connect();
 
+                // Run the program when toggled
                 if (run)
                 {
                     Run();
                 }
 
+                // Stop the program
                 if (stop)
                 {
                     Stop();
                 }
 
+                // Upload the code
                 if (upload)
                 {
+                    // First stop the current program
                     Stop();
 
+                    // Get path
                     string path = Path.Combine(Util.LibraryPath(), "temp");
 
+                    // Check if the parh already exists
                     if (Directory.Exists(path))
                     {
+                        // Delete if it already exists
                         Directory.Delete(path, true);
                     }
+
+                    // Create new path / folder
                     Directory.CreateDirectory(path);
 
+                    // Save the RAPID code
                     SaveRapid(path, RAPID, BaseCode);
 
+                    // Get file path / directory to save on the controller
                     string localDirectory = Path.Combine(path, "RAPID");
                     string str3 = Path.Combine(controller.FileSystem.RemoteDirectory, "RAPID");
-                    string filePath = string.Empty;
+                    string filePath;
 
+                    // Upload to the virtual controller
                     if (!controller.IsVirtual)
                     {
                         controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
                         controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
                         filePath = Path.Combine(str3, "RAPID_T_ROB1.pgf");
                     }
+                    // Upload to a physical controller
                     else
                     {
                         filePath = Path.Combine(localDirectory, "RAPID_T_ROB1.pgf");
                     }
 
+                    // The real upload
                     using (Mastership.Request(controller.Rapid))
                     {
+                        // Get current task
                         Task task = controller.Rapid.GetTasks().First<Task>();
+
+                        // Delete current task
                         task.DeleteProgram();
+
+                        // Reset current BASE code if no new base code is provided
                         if (BaseCode == null)
                         {
                             Module Base = task.GetModule("BASE");
                             Base.Delete();
                         }
+
+                        // Grant acces
                         controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
+
+                        // Load the new program from the created file
                         task.LoadProgramFromFile(filePath, RapidLoadMode.Replace);
+
+                        // Update action status message
                         this.uStatus = "The RAPID code is succesfully uploaded.";
                     }
                 }
             }
 
+            // Disconnect
             else
             {
                 Disconnect();
@@ -147,10 +179,221 @@ namespace RobotComponents.Components
                 }
             }
 
+            // Output message
             msg = $"The remote connection status:\n\nController: {cStatus}\nActions: {uStatus}";
 
+            // Output
             DA.SetData(0, msg);
         }
+
+        //  Addtional methods
+        #region additional methods
+        /// <summary>
+        /// Method to connect to the controller. 
+        /// </summary>
+        public void Connect()
+        {
+            // Log on 
+            controller.Logon(UserInfo.DefaultUser);
+
+            // Update controller status message
+            this.cStatus = "You are connected.";
+
+            // Update controller connection status
+            ctr = true;
+
+            // Update action status message
+            if (count == 0)
+            {
+                uStatus = "All set to go.";
+                count = 1;
+            }
+        }
+
+        /// <summary>
+        /// Method to disconnect the current controller
+        /// </summary>
+        public void Disconnect()
+        {
+            // Only disconnect when there is a connection
+            if (controller != null)
+            {
+                // Logoff
+                controller.Logoff();
+
+                // Set a null controller
+                controller = null;
+
+                // Update controller status message
+                this.cStatus = "You are disconnected.";
+                
+                // Update controller connection status
+                ctr = false;
+
+                // Update action message
+                if (count == 1)
+                {
+                    uStatus = "Try to reconnect first.";
+                    count = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to start the program.
+        /// </summary>
+        public void Run()
+        {
+            this.uStatus = StartCommand();
+        }
+
+        /// <summary>
+        /// Method to run the program and returns the action message. 
+        /// </summary>
+        /// <returns> The action message / status. </returns>
+        public string StartCommand()
+        {
+            // Check the mode of the controller
+            if (controller.OperatingMode != ControllerOperatingMode.Auto)
+            {
+                return ("Controller not set in automatic.");
+            }
+
+            // Check if the motors are enabled
+            if (controller.State != ControllerState.MotorsOn)
+            {
+                return ("Motors not on.");
+            }
+
+            // Execute the program
+            using (Mastership.Request(controller.Rapid))
+            {
+                controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
+            }
+
+            // Return status message
+            return ("Program started.");
+        }
+
+        /// <summary>
+        /// Method to stop the program.
+        /// </summary>
+        public void Stop()
+        {
+            this.uStatus = StopCommand();
+        }
+
+        /// <summary>
+        /// Method to stop the program and returns the action message. 
+        /// </summary>
+        /// <returns> The action message / status. </returns>
+        private string StopCommand()
+        {
+            // Check the mode of the controller
+            if (controller.OperatingMode != ControllerOperatingMode.Auto)
+            {
+                return "Controller not set in automatic mode.";
+            }
+
+            // Stop the program
+            using (Mastership.Request(controller.Rapid))
+            {
+                controller.Rapid.Stop(StopMode.Instruction);
+                
+            }
+
+            // Return status message
+            return "Program stopped.";
+        }
+
+        /// <summary>
+        /// Method to get the library path of the user
+        /// </summary>
+        public static class Util
+        {
+            public static string LibraryPath()
+            {
+                return (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RobotComponents"));
+            }
+        }
+
+        /// <summary>
+        /// Method to save the RAPID code
+        /// </summary>
+        /// <param name="_path"> The directory where to save the RAPID code. </param>
+        /// <param name="RAPID"> The RAPID main code. </param>
+        /// <param name="BaseCode"> The RAPID base code. </param>
+        public void SaveRapid(string _path, string RAPID, string BaseCode)
+        {
+            // Create the path: sub folder
+            string path = Path.Combine(_path, "RAPID");
+
+            // Check if the directory / folder already exists
+            if (Directory.Exists(path))
+            {
+                // Delete if it already exists
+                Directory.Delete(path, true);
+            }
+
+            // Create new folder
+            Directory.CreateDirectory(path);
+
+            // Create an empty xml document for saving the program files
+            string saveProgram = Path.Combine(path, "RAPID_T_ROB1.xml");
+            XmlDocument xdoc = new XmlDocument();
+
+            if (BaseCode != null)
+            {
+                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module><Module>BASE.sys</Module></Program>");
+            }
+            else
+            {
+                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module></Program>");
+            }
+
+            // Save xml doc and change extension
+            xdoc.Save(saveProgram);
+            File.Move(saveProgram, Path.ChangeExtension(saveProgram, ".pgf"));
+
+            // Save the main code
+            if (RAPID != null)
+            {
+                // Make an empy txt file for the main code
+                string savePathRapid = Path.Combine(path, "MainModule.txt");
+
+                // Save the txt file
+                StreamWriter fileRapid = new StreamWriter(savePathRapid);
+
+                // Write the main code to the file
+                fileRapid.WriteLine(RAPID);
+
+                // Close the file
+                fileRapid.Close();
+
+                // Save the file at the right location with the correct extension
+                File.Move(savePathRapid, Path.ChangeExtension(savePathRapid, ".mod"));
+            }
+
+            // Save the base code
+            if (BaseCode != null)
+            {
+                // Make an empy txt file for the base code
+                string savePathBase = Path.Combine(path, "BASE.txt");
+
+                // Save the txt file
+                StreamWriter fileBase = new StreamWriter(savePathBase);
+
+                // Write the base code to the file
+                fileBase.WriteLine(BaseCode);
+
+                // Close the file
+                fileBase.Close();
+
+                // Save the file at the right location with the correct extension
+                File.Move(savePathBase, Path.ChangeExtension(savePathBase, ".sys"));
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -159,9 +402,6 @@ namespace RobotComponents.Components
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-
                 if (ctr)
                 {
                     return Properties.Resources.Remote_ON_Icon;
@@ -173,132 +413,6 @@ namespace RobotComponents.Components
             }
         }
 
-        //  ----- Additional Functions -----
-        #region Additional Functions
-        public void Connect()
-        {
-            controller.Logon(UserInfo.DefaultUser);
-            this.cStatus = "You are connected.";
-            ctr = true;
-            if(count == 0)
-            {
-                uStatus = "All set to go!";
-                count = 1;
-            }
-        }
-
-        public void Disconnect()
-        {
-            if (controller != null)
-            {
-                controller.Logoff();
-                //controller.Dispose();
-                controller = null;
-                this.cStatus = "You are disconnected.";
-                
-                ctr = false;
-
-                if (count == 1)
-                {
-                    uStatus = "Try to reconnect first.";
-                    count = 0;
-                }
-            }
-        }
-
-        public void Run()
-        {
-            this.uStatus = StartCommand();
-        }
-
-        public string StartCommand()
-        {
-            if (controller.OperatingMode != ControllerOperatingMode.Auto)
-            {
-                return ("Controller not set in automatic.");
-            }
-            if (controller.State != ControllerState.MotorsOn)
-            {
-                return ("Motors not on.");
-            }
-            using (Mastership.Request(controller.Rapid))
-            {
-                controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
-            }
-            return ("Program started.");
-        }
-
-        public void Stop()
-        {
-            this.uStatus = StopCommand();
-        }
-
-        private string StopCommand()
-        {
-            if (controller.OperatingMode != ControllerOperatingMode.Auto)
-            {
-                return "Controller not set in automatic mode.";
-            }
-            using (Mastership.Request(controller.Rapid))
-            {
-                controller.Rapid.Stop(StopMode.Instruction);
-                
-            }
-            return "Program stopped.";
-        }
-
-        public static class Util
-        {
-            public static string LibraryPath()
-            {
-                return (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RobotComponents"));
-            }
-        }
-
-        public void SaveRapid(string _path, string RAPID, string BaseCode)
-        {
-            string path = Path.Combine(_path, "RAPID");
-
-            if (Directory.Exists(path))
-            {
-                Directory.Delete(path, true);
-            }
-
-            Directory.CreateDirectory(path);
-
-            //Saving the program File
-            string saveProgram = Path.Combine(path, "RAPID_T_ROB1.xml"); // To do: Update for later use, multi move has multiple robots
-            XmlDocument xdoc = new XmlDocument();
-
-            if (BaseCode != null)
-            {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module><Module>BASE.sys</Module></Program>");
-            }
-            else
-            {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module></Program>");
-            }
-            xdoc.Save(saveProgram);
-            File.Move(saveProgram, Path.ChangeExtension(saveProgram, ".pgf"));
-
-            //saving the RAPID code
-            string savePathRapid = Path.Combine(path, "MainModule.txt");
-            StreamWriter fileRapid = new StreamWriter(savePathRapid);
-            fileRapid.WriteLine(RAPID);
-            fileRapid.Close();
-            File.Move(savePathRapid, Path.ChangeExtension(savePathRapid, ".mod"));
-            if (BaseCode != null)
-            {
-                //saving the BASE code
-                string savePathBase = Path.Combine(path, "BASE.txt");
-                StreamWriter fileBase = new StreamWriter(savePathBase);
-                fileBase.WriteLine(BaseCode);
-                fileBase.Close();
-                File.Move(savePathBase, Path.ChangeExtension(savePathBase, ".sys"));
-            }
-        }
-
-        #endregion
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>

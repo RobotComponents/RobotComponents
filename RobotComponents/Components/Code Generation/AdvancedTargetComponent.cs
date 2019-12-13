@@ -33,8 +33,11 @@ namespace RobotComponents.Components
         /// </summary>
         public override GH_Exposure Exposure
         {
-            // Used secondary for advanced actions 
-            get { return GH_Exposure.obscure | GH_Exposure.secondary; }
+            // Use secondary for advanced actions 
+            // get { return GH_Exposure.obscure | GH_Exposure.secondary; } // <--- use this code line for a newer release
+
+            // For now hide this component: release it in a newer version
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -51,10 +54,10 @@ namespace RobotComponents.Components
         }
 
         // Register the number of fixed input parameters
-        private int fixedParamNumInput = 3;
+        private readonly int fixedParamNumInput = 3;
 
         // Create an array with the variable input parameters
-        IGH_Param[] variableInputParameters = new IGH_Param[6]
+        readonly IGH_Param[] variableInputParameters = new IGH_Param[6]
         {
             new Param_Number() { Name = "External Axis Value A", NickName = "EAa", Description = "Overrides the first external axis value", Access = GH_ParamAccess.list, Optional = true },
             new Param_Number() { Name = "External Axis Value B", NickName = "EAb", Description = "Overrides the second external axis value", Access = GH_ParamAccess.list, Optional = true },

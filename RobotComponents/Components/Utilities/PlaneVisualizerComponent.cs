@@ -54,7 +54,7 @@ namespace RobotComponents.Components
             planes.Clear();
 
             // Create an empty datatree structure for catching the input data
-            GH_Structure<GH_Plane> inputPlanes = new GH_Structure<GH_Plane>();
+            GH_Structure<GH_Plane> inputPlanes;
 
             // Catch input data
             if (!DA.GetDataTree(0, out inputPlanes)) { return; }

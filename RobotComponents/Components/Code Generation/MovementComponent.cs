@@ -183,10 +183,10 @@ namespace RobotComponents.Components
 
             for (int i = 0; i < biggestSize; i++)
             {
-                TargetGoo targetGoo = null;
-                SpeedData speedData = null;
-                int movementType = 0;
-                int precision = 0;
+                TargetGoo targetGoo;
+                SpeedData speedData;
+                int movementType;
+                int precision; ;
 
                 if (i < targetGoos.Count)
                 {

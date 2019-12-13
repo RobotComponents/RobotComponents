@@ -7,7 +7,6 @@ using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
-
     public class WaitDIComponent : GH_Component
     {
         /// <summary>
@@ -71,7 +70,6 @@ namespace RobotComponents.Components
             DA.SetData(0, waitDI);
         }
 
-
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -80,7 +78,6 @@ namespace RobotComponents.Components
         {
             get { return Properties.Resources.WaitDI_Icon; }
         }
-
 
         /// <summary>
         /// Each component must have a unique Guid to identify it. 

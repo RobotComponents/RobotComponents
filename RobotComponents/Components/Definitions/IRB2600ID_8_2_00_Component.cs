@@ -99,7 +99,7 @@ namespace RobotComponents.Components
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
 
             // Axis planes
-            List<Plane> axisPlanes = new List<Plane>();
+            List<Plane> axisPlanes = new List<Plane>() { };
             // Axis 1
             axisPlanes.Add(new Plane(
                 new Point3d(0.00, 0.00, 0.00),
@@ -147,7 +147,7 @@ namespace RobotComponents.Components
                 new Vector3d(1.00, 0.00, 0.00));
             mountingFrame.Rotate(Math.PI * -0.5, mountingFrame.Normal);
 
-            RobotInfo robotInfo = null;
+            RobotInfo robotInfo;
 
             // Override position plane when an external axis is coupled
             if (externalAxis.Count != 0)

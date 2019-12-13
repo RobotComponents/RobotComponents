@@ -43,8 +43,7 @@ namespace RobotComponents.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
-            GH_Structure<IGH_Goo> data = new GH_Structure<IGH_Goo>();
+            GH_Structure<IGH_Goo> data;
             string name = String.Empty;
 
             // Catch the input data
@@ -53,6 +52,9 @@ namespace RobotComponents.Components
 
             // Get tthe paths of the datatree
             var paths = data.Paths;
+
+            // Output variable
+            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
 
             // Make the output datatree with names
             for (int i = 0; i < data.Branches.Count; i++)

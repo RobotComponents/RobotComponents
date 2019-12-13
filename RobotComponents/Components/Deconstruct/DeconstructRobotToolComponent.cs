@@ -60,10 +60,10 @@ namespace RobotComponents.Components
             }
 
             // Output variables
-            string name = null;
-            Mesh mesh = null;
-            Plane attachmentPlane = Plane.Unset;
-            Plane toolPlane = Plane.Unset;
+            string name;
+            Mesh mesh;
+            Plane attachmentPlane;
+            Plane toolPlane;
 
             // Name
             if (robotToolGoo.Value.Name != null)

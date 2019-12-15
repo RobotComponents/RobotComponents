@@ -65,33 +65,28 @@ namespace RobotComponents.Components
             // Gets the input parameter
             var parameter = this.Params.Input[2];
 
-            // Create and add an valuelist when no input is connected to the parameter
-            if (parameter.SourceCount == 0)
-            {
-                // Creates the empty value list
-                GH_ValueList obj = new GH_ValueList();
-                obj.CreateAttributes();
-                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-                obj.ListItems.Clear();
+            // Creates the empty value list
+            GH_ValueList obj = new GH_ValueList();
+            obj.CreateAttributes();
+            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListItems.Clear();
 
-                // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+            // Add the items to the value list
+            obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+            obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+            obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
 
-                // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+            // Make point where the valuelist should be created on the canvas
+            obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
 
-                // Add the value list to the active canvas
-                Instances.ActiveCanvas.Document.AddObject(obj, false);
+            // Add the value list to the active canvas
+            Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-                // Connect the value list to the input parameter
-                parameter.AddSource(obj);
-                parameter.CollectData();
+            // Connect the value list to the input parameter
+            parameter.AddSource(obj);
 
-                // Expire solution
-                ExpireSolution(true);
-            }
+            // Clear input data
+            parameter.ClearData();
         }
 
         /// <summary>
@@ -100,9 +95,6 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Creates the input value list and attachs it to the input parameter
-            CreateValueList();
-
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
@@ -111,6 +103,12 @@ namespace RobotComponents.Components
             List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
+
+            // Creates the input value list and attachs it to the input parameter
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                CreateValueList();
+            }
 
             // Catch the input data
             if (!DA.GetDataList(0, targetGoos)) { return; }

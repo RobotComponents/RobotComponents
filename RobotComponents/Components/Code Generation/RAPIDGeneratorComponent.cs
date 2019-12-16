@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Utils;
-
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -31,7 +31,7 @@ namespace RobotComponents.Components
         /// </summary>
         public override GH_Exposure Exposure
         {
-            // Always place the rapid generator at the end of the subcategory
+            // Always place the rapid generator in the last sub category
             get { return GH_Exposure.septenary; }
         }
 
@@ -40,7 +40,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Info", "RI", "RobotInfo as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
             pManager.AddGenericParameter("Actions", "A", "Actions as Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");

@@ -54,7 +54,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
             pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 

@@ -45,7 +45,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AutoAxisConfigParameter(), "Auto Axis Config", "AAC", "Auto Axis Config Data");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AutoAxisConfigParameter(), "Auto Axis Config", "AAC", " Resutling Auto Axis Configurator");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

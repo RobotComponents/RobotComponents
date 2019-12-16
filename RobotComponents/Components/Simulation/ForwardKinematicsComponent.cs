@@ -7,6 +7,7 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -31,7 +32,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Info", "RI", "Contains Robot Data", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
         }
@@ -57,12 +58,12 @@ namespace RobotComponents.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfo = null;
+            RobotInfoGoo robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 
             // Catch input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
             if (!DA.GetDataList(1, internalAxisValues)) { return; }
             if (!DA.GetDataList(2, externalAxisValues)) { return; }
 
@@ -79,7 +80,7 @@ namespace RobotComponents.Components
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfo.Value, internalAxisValues, externalAxisValues);
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
             forwardKinematics.Calculate();
 
             // Check the values

@@ -4,6 +4,7 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -26,7 +27,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Input", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool", GH_ParamAccess.item);
         }
 
         /// <summary>

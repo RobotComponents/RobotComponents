@@ -6,6 +6,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Resources;
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -36,6 +37,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Robotic Controller", GH_ParamAccess.item);
         }
 

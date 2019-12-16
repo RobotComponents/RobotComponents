@@ -51,7 +51,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Speed Data");
+            pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Resulting Speed Data");
         }
 
         // Global component variables

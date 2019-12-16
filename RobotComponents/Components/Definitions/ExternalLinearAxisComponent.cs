@@ -54,7 +54,7 @@ namespace RobotComponents.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "Contains External Linear Axis Data");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "Resulting External Linear Axis");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

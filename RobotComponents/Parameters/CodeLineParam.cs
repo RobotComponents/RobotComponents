@@ -15,7 +15,7 @@ namespace RobotComponents.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
         /// </summary>
         public CodeLineParameter()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", "Defines a single CodeLine.", "RobotComponents", "Actions"))
+          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", "Defines a single CodeLine.", "RobotComponents", "Parameters"))
         {
         }
 
@@ -32,11 +32,6 @@ namespace RobotComponents.Parameters
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
         public override string Name { get => "Colde Line"; set => base.Name = value; }
-
-        /// <summary>
-        /// Gets or sets the description of the object. This field typically remains fixed during the lifetime of an object.
-        /// </summary>
-        public override string Description { get => "Resulting Code Line"; set => base.Description = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 

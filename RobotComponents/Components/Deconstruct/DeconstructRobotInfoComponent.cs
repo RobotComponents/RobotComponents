@@ -28,7 +28,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Info", "RI", "Robot Info as Input", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as RobotTool, tool0 as default Tool", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool, uses tool0 as default Robot Tool", GH_ParamAccess.item);
             pManager[0].Optional = true;
         }
 
@@ -47,7 +47,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SetRobotToolParameter(), "Override Robot Tool", "ORT", "Override Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new SetRobotToolParameter(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -61,13 +61,13 @@ namespace RobotComponents.Components
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
             // Input variables
-            RobotToolGoo _tool = new RobotToolGoo();
+            RobotToolGoo _toolGoo = new RobotToolGoo();
 
             // Catch input data
-            if (!DA.GetData(0, ref _tool)) { _tool.Value.Name = "tool0"; ; }
+            if (!DA.GetData(0, ref _toolGoo)) { _toolGoo.Value.Name = "tool0"; ; }
 
             // Create action
-            SetRobotTool setRobotTool = new SetRobotTool(_tool.Value, documentGUID);
+            SetRobotTool setRobotTool = new SetRobotTool(_toolGoo.Value, documentGUID);
 
             // Output
             DA.SetData(0, setRobotTool);

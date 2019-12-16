@@ -33,11 +33,6 @@ namespace RobotComponents.Parameters
         public override string Name { get => "Auto Axis Configurator"; set => base.Name = value; }
 
         /// <summary>
-        /// Gets or sets the description of the object. This field typically remains fixed during the lifetime of an object.
-        /// </summary>
-        public override string Description { get => "Resulting Auto Axis Configurator"; set => base.Description = value; }
-
-        /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
         /// The result of this property is cached, so don't worry if icon retrieval is not very fast.
         /// </summary>

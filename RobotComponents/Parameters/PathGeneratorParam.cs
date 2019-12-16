@@ -14,7 +14,7 @@ namespace RobotComponents.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
         /// </summary>
         public PathGeneratorParameter()
-          : base(new GH_InstanceDescription("Path Generator", "PG", "Generates Path from Actions.", "RobotComponents", "Simulation"))
+          : base(new GH_InstanceDescription("Path Generator", "PG", "Generates Path from Actions.", "RobotComponents", "Parameters"))
         {
         }
 
@@ -31,11 +31,6 @@ namespace RobotComponents.Parameters
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
         public override string Name { get => "Path Generator"; set => base.Name = value; }
-
-        /// <summary>
-        /// Gets or sets the description of the object. This field typically remains fixed during the lifetime of an object.
-        /// </summary>
-        public override string Description { get => "Resulting Path Generator"; set => base.Description = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 

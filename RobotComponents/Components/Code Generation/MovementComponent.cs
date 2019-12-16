@@ -22,7 +22,7 @@ namespace RobotComponents.Components
         /// </summary>
         public MovementComponent()
           : base("Action: Movement", "M",
-              "Defines a linear or nonlinear movement instruction for simulation and code generation."
+              "Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -43,8 +43,8 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Action: Target", GH_ParamAccess.list);
-            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Action: Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
@@ -54,7 +54,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Robot Movement Instructions");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Movement");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

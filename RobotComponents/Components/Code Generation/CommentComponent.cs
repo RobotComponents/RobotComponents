@@ -45,7 +45,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new CommentParameter(), "Comment", "C", "Comment Data");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new CommentParameter(), "Comment", "C", "Resulting Comment");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

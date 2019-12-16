@@ -1,11 +1,14 @@
-﻿using Grasshopper.Kernel.Types;
+﻿// Grasshopper Libs
+using Grasshopper.Kernel.Types;
+// ABB Robotic Libs
+using ABB.Robotics.Controllers.IOSystemDomain;
 
 namespace RobotComponents.Goos
 {
     /// <summary>
     /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.
     /// </summary>
-    public class SignalGoo : GH_Goo<ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal>, IGH_Goo
+    public class SignalGoo : GH_Goo<DigitalSignal>
     {
         #region constructors
         /// <summary>
@@ -20,7 +23,7 @@ namespace RobotComponents.Goos
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
         /// <param name="signal"> Signal Value to store inside this Goo instance. </param>
-        public SignalGoo(ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal signal)
+        public SignalGoo(DigitalSignal signal)
         {
             this.Value = signal;
         }

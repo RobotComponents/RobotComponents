@@ -6,6 +6,7 @@ using System.Xml;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 // ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
@@ -29,6 +30,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Connect", "C", "Create an online conncetion with the Robot", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Upload", "U", "Upload your RAPID code to the Robot", GH_ParamAccess.item);
@@ -36,7 +38,6 @@ namespace RobotComponents.Components
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
             pManager.AddTextParameter("Main Code", "M", "Insert here the MainCode", GH_ParamAccess.item);
             pManager.AddTextParameter("Base Code", "B", "Insert here the BaseCode", GH_ParamAccess.item);
-
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Updates about what is going on here!", GH_ParamAccess.item);
+            pManager.AddTextParameter("Status", "S", "Updates about what is going on here.", GH_ParamAccess.item);
         }
 
         // Global component variables

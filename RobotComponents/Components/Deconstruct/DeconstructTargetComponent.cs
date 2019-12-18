@@ -3,6 +3,7 @@
 using Grasshopper.Kernel;
 
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -25,7 +26,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Target", "T", "Target as Input", GH_ParamAccess.item);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.item);
         }
 
         /// <summary>

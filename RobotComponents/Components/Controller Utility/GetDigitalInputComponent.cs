@@ -6,6 +6,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Resources;
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
@@ -30,8 +31,9 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddGenericParameter("DI Name", "N", "Digital Input Name as string", GH_ParamAccess.item);
+            pManager.AddTextParameter("DI Name", "N", "Digital Input Name as string", GH_ParamAccess.item);
             pManager[1].Optional = true;
         }
 
@@ -40,6 +42,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Signal", "S", "The Digital Input Signal", GH_ParamAccess.item);
             pManager.AddBooleanParameter("State", "S", "The State of the Digital Input.", GH_ParamAccess.item);
         }

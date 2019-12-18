@@ -46,7 +46,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new WaitDIParameter(), "Wait DI", "WDI", "WaitDI Data");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new WaitDIParameter(), "Wait DI", "WDI", "Resulting Wait DI");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

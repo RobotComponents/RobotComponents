@@ -4,7 +4,7 @@ using System;
 
 using RobotComponents.BaseClasses;
 using RobotComponents.Goos;
-
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -29,9 +29,8 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Target", "T", "Target as Target", GH_ParamAccess.item);
-         
+            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -51,15 +50,15 @@ namespace RobotComponents.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfo = null;
-            TargetGoo target= null;
+            RobotInfoGoo robotInfoGoo = null;
+            TargetGoo targetGoo = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
-            if (!DA.GetData(1, ref target)) { return; }
+            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(1, ref targetGoo)) { return; }
 
             // Calculate the robot pose
-            InverseKinematics inverseKinematics = new InverseKinematics(target.Value, robotInfo.Value);
+            InverseKinematics inverseKinematics = new InverseKinematics(targetGoo.Value, robotInfoGoo.Value);
             inverseKinematics.Calculate();
 
             // Output

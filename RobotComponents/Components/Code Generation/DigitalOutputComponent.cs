@@ -47,7 +47,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new DigitalOutputParameter(), "Digital Output", "DO", "Digital Output");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new DigitalOutputParameter(), "Digital Output", "DO", "Resulting Digital Output");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

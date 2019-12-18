@@ -45,7 +45,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new CodeLineParameter(), "Code Line", "CL", "Code Line");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new CodeLineParameter(), "Code Line", "CL", "Resulting Code Line");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

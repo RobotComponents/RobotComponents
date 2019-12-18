@@ -3,6 +3,7 @@
 using Grasshopper.Kernel;
 
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 
 namespace RobotComponents.Components
 {
@@ -25,7 +26,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Input", GH_ParamAccess.item);
+            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number", GH_ParamAccess.item);
         }
 
         /// <summary>

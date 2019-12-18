@@ -8,7 +8,7 @@ namespace RobotComponents.Goos
     /// <summary>
     /// Controller wrapper class, makes sure the controller can be used in Grasshopper.
     /// </summary>
-    public class ControllerGoo : GH_Goo<ABB.Robotics.Controllers.Controller>, IGH_Goo
+    public class ControllerGoo : GH_Goo<Controller>, IGH_Goo
     {
         #region constructors
         /// <summary>
@@ -16,14 +16,14 @@ namespace RobotComponents.Goos
         /// </summary>
         public ControllerGoo()
         {
-            this.Value = new ABB.Robotics.Controllers.Controller();
+            this.Value = new Controller();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
         /// <param name="controller"> Controller Value to store inside this Goo instance. </param>
-        public ControllerGoo(ABB.Robotics.Controllers.Controller controller)
+        public ControllerGoo(Controller controller)
         {
             if (controller == null)
                 controller = new Controller();

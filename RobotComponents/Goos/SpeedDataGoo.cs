@@ -84,9 +84,17 @@ namespace RobotComponents.Goos
         public override string ToString()
         {
             if (Value == null)
+            {
                 return "Null SpeedData";
+            }
+            else if (Value.PreDefinied == true)
+            {
+                return "Predefined Speed Data";
+            }
             else
-                return "Speed Data";
+            {
+                return "Custom Speed Data";
+            }
         }
 
         /// <summary>
@@ -159,10 +167,17 @@ namespace RobotComponents.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from SpeedData
+            //Cast from SpeedData: Custom SpeedData
             if (typeof(SpeedData).IsAssignableFrom(source.GetType()))
             {
                 Value = (SpeedData)source;
+                return true;
+            }
+
+            //Cast from number: Predefined SpeedData
+            if (source is GH_Number)
+            {
+                Value = new SpeedData((source as GH_Number).Value);
                 return true;
             }
 

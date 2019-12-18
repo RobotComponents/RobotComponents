@@ -6,6 +6,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Resources;
 using RobotComponents.Goos;
+using RobotComponents.Parameters;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
@@ -30,8 +31,9 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddGenericParameter("DO Name", "N", "Name of the Digital Output", GH_ParamAccess.item);
+            pManager.AddTextParameter("DO Name", "N", "Name of the Digital Output", GH_ParamAccess.item);
             pManager.AddBooleanParameter("State", "S", "State of the Digital Output", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input", GH_ParamAccess.item, false);
 
@@ -42,9 +44,10 @@ namespace RobotComponents.Components
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
-            {
-                pManager.AddGenericParameter("Signal", "S", "The Signal of the Digital Output", GH_ParamAccess.item);
-            }
+        {
+            // To do: replace generic parameter with an RobotComponents Parameter
+            pManager.AddGenericParameter("Signal", "S", "The Signal of the Digital Output", GH_ParamAccess.item);
+        }
 
         // Global component variables
         public int pickedIndex = 0;

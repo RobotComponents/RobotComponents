@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Special;
 
 using RobotComponents.BaseClasses;
@@ -23,7 +22,7 @@ namespace RobotComponents.Components
         /// </summary>
         public MovementComponent()
           : base("Action: Movement", "M",
-              "Defines a linear or nonlinear movement instruction for simulation and code generation."
+              "Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -44,8 +43,8 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Target", "T", "Target as Action: Target", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Action: Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
@@ -55,7 +54,7 @@ namespace RobotComponents.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Robot Movement Instructions");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Movement");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -66,34 +65,28 @@ namespace RobotComponents.Components
             // Gets the input parameter
             var parameter = this.Params.Input[2];
 
-            // Create and add an valuelist when no input is connected to the parameter
-            if (parameter.SourceCount == 0)
-            {
-                // Creates the empty value list
-                GH_ValueList obj = new GH_ValueList();
-                obj.CreateAttributes();
-                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-                obj.ListItems.Clear();
+            // Creates the empty value list
+            GH_ValueList obj = new GH_ValueList();
+            obj.CreateAttributes();
+            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListItems.Clear();
 
-                // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+            // Add the items to the value list
+            obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+            obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+            obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
 
-                // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+            // Make point where the valuelist should be created on the canvas
+            obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
 
-                // Add the value list to the active canvas
-                Instances.ActiveCanvas.Document.AddObject(obj, false);
+            // Add the value list to the active canvas
+            Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-                // Connect the value list to the input parameter
-                parameter.AddSource(obj);
-                parameter.CollectData();
+            // Connect the value list to the input parameter
+            parameter.AddSource(obj);
 
-                // Expire
-                obj.ExpirePreview(true);
-                obj.ExpireSolution(true);
-            }
+            // Clear input data
+            parameter.ClearData();
         }
 
         /// <summary>
@@ -102,79 +95,38 @@ namespace RobotComponents.Components
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Creates the input value list and attachs it to the input parameter
-            CreateValueList();
-
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
             // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
-            List<IGH_Goo> inputSpeedDatas = new List<IGH_Goo>();
+            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
 
+            // Creates the input value list and attachs it to the input parameter
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                CreateValueList();
+            }
+
             // Catch the input data
             if (!DA.GetDataList(0, targetGoos)) { return; }
-            if (!DA.GetDataList(1, inputSpeedDatas)) { return; }
+            if (!DA.GetDataList(1, speedDataGoos)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
-
-            // Variables needed for speeddata creations and check
-            bool speedValueWarningRaised = false;
-            List<SpeedData> speedDatas = new List<SpeedData>();
-
-            // Check if input is speedata or a single tcp speed
-            for (int i = 0; i < inputSpeedDatas.Count; i++)
-            {
-                // If input is a double: create pre-defined speed data
-                if (inputSpeedDatas[i] is GH_Number)
-                {
-                    GH_Number speedNumber = inputSpeedDatas[i] as GH_Number;
-                    double speedValue = speedNumber.Value;
-                    SpeedData speedData = new SpeedData(speedValue);
-                    speedDatas.Add(speedData);
-
-                    // Check value
-                    if (speedValueWarningRaised == false)
-                    {
-                        if (HelperMethods.PredefinedSpeedValueIsValid(speedValue) == false)
-                        {
-                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed value <" + speedValue.ToString() +
-                                "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
-                                "Pre-defined speed data can be set to 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, " +
-                                "400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000 or 7000.");
-
-                            speedValueWarningRaised = true;
-                        }
-                    }
-                }
-                // Else process the speeddata that is used as input
-                else if (inputSpeedDatas[i] is SpeedDataGoo)
-                {
-                    SpeedDataGoo speedDataGoo = inputSpeedDatas[i] as SpeedDataGoo;
-                    SpeedData speedData = speedDataGoo.Value;
-                    speedDatas.Add(speedData);
-                }
-                // Wrong input is used
-                else
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The wrong datatype is used as an input for the speed data. " +
-                        "Use a number or create custom speed data with the speed data component.");
-                }
-            }
 
             // Get longest Input List
             int[] sizeValues = new int[4];
             sizeValues[0] = targetGoos.Count;
-            sizeValues[1] = speedDatas.Count;
+            sizeValues[1] = speedDataGoos.Count;
             sizeValues[2] = movementTypes.Count;
             sizeValues[3] = precisions.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
             // Keeps track of used indicies
             int targetGooCounter = -1;
-            int speedDataCounter = -1;
+            int speedDataGooCounter = -1;
             int movementTypeCounter = -1;
             int precisionCounter = -1;
 
@@ -184,7 +136,7 @@ namespace RobotComponents.Components
             for (int i = 0; i < biggestSize; i++)
             {
                 TargetGoo targetGoo;
-                SpeedData speedData;
+                SpeedDataGoo speedDataGoo;
                 int movementType;
                 int precision; ;
 
@@ -198,14 +150,14 @@ namespace RobotComponents.Components
                     targetGoo = targetGoos[targetGooCounter];
                 }
 
-                if (i < speedDatas.Count)
+                if (i < speedDataGoos.Count)
                 {
-                    speedData = speedDatas[i];
-                    speedDataCounter++;
+                    speedDataGoo = speedDataGoos[i];
+                    speedDataGooCounter++;
                 }
                 else
                 {
-                    speedData = speedDatas[speedDataCounter];
+                    speedDataGoo = speedDataGoos[speedDataGooCounter];
                 }
 
                 if (i < movementTypes.Count)
@@ -228,7 +180,7 @@ namespace RobotComponents.Components
                     precision = precisions[precisionCounter];
                 }
 
-                Movement movement = new Movement(targetGoo.Value, speedData, movementType, precision, documentGUID);
+                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, documentGUID);
                 movements.Add(movement);
             }
 
@@ -252,6 +204,22 @@ namespace RobotComponents.Components
                         "In can only be set to -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
                         "A value of -1 will be interpreted as fine movement in RAPID Code.");
                     break;
+                }
+            }
+
+            // Check if a right predefined speeddata value is used
+            for (int i = 0; i < speedDataGoos.Count; i++)
+            {
+                if (speedDataGoos[i].Value.PreDefinied == true)
+                {
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
+                            "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
+                            "Pre-defined speed data can be set to 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, " +
+                            "400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000 or 7000.");
+                        break;
+                    }
                 }
             }
 

@@ -84,7 +84,7 @@ namespace RobotComponents.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null DigitalOutput";
+                return "Null Digital Output";
             else
                 return "Digital Output";
         }
@@ -94,7 +94,7 @@ namespace RobotComponents.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("DigitalOutput"); }
+            get { return ("Digital Output"); }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace RobotComponents.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single JointMovement"); }
+            get { return ("Defines a Digital Output"); }
         }
 
         /// <summary>

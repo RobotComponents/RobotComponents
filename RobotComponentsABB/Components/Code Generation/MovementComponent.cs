@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
+using Grasshopper.Kernel.Parameters;
 
 using RobotComponents.BaseClasses;
 
@@ -12,9 +15,9 @@ using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponents.Components
+namespace RobotComponentsABB.Components
 {
-    public class MovementComponent : GH_Component
+    public class MovementComponent : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
@@ -27,7 +30,10 @@ namespace RobotComponents.Components
                 + System.Environment.NewLine +
                 "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
+
         {
+            // Create the component label with a message
+            this.Message = "EXTENDABLE";
         }
 
         /// <summary>
@@ -49,6 +55,18 @@ namespace RobotComponents.Components
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
+
+        // Register the number of fixed input parameters
+        private readonly int fixedParamNumInput = 4;
+
+        // Create an array with the variable input parameters
+        readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
+        {
+            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true },
+            // Todo: Make a work object parameter and change the generic object to the WorkObjectParameter
+            new Param_GenericObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
+            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
+        };
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -99,23 +117,40 @@ namespace RobotComponents.Components
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
-            // Input variables
-            List<TargetGoo> targetGoos = new List<TargetGoo>();
-            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
-            List<int> movementTypes = new List<int>();
-            List<int> precisions = new List<int>();
-
             // Creates the input value list and attachs it to the input parameter
             if (this.Params.Input[2].SourceCount == 0)
             {
                 CreateValueList();
             }
 
-            // Catch the input data
+            // Input variables
+            List<TargetGoo> targetGoos = new List<TargetGoo>();
+            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
+            List<int> movementTypes = new List<int>();
+            List<int> precisions = new List<int>();
+            List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
+            List<WorkObject> workObjectGoos = new List<WorkObject>(); // To do: Make WorkObjectGoo
+            List<DigitalOutputGoo> digitalOutputGoos = new List<DigitalOutputGoo>();
+
+            // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targetGoos)) { return; }
             if (!DA.GetDataList(1, speedDataGoos)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
+
+            // Catch the input data from the variable parameteres
+            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
+            {
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos)) return;
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
+            {
+                if (!DA.GetDataList(variableInputParameters[1].Name, workObjectGoos)) return;
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
+            {
+                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputGoos)) return;
+            }
 
             // Get longest Input List
             int[] sizeValues = new int[4];
@@ -228,6 +263,164 @@ namespace RobotComponents.Components
             DA.SetDataList(0, movements);
         }
 
+        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
+        #region menu items
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Robot Tool", MenuItemClickRobotTool, true, Params.Input.Any(x => x.Name == variableInputParameters[0].Name));
+            Menu_AppendItem(menu, "Work Object", MenuItemClickWorkObject, true, Params.Input.Any(x => x.Name == variableInputParameters[1].Name));
+            Menu_AppendItem(menu, "Digital Output", MenuItemClickDigitalOutput, true, Params.Input.Any(x => x.Name == variableInputParameters[2].Name));
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Robot Tool" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickRobotTool(object sender, EventArgs e)
+        {
+            // Add or remove the robot tool input parameter
+            AddParameter(0);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Work Object" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickWorkObject(object sender, EventArgs e)
+        {
+            // Add or remove the work object input parameter
+            AddParameter(1);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Digital Output" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickDigitalOutput(object sender, EventArgs e)
+        {
+            // Add or remove the digital output parameter
+            AddParameter(2);
+        }
+
+        /// <summary>
+        /// Adds or destroys the input parameter to the component.
+        /// </summary>
+        /// <param name="index"> The index number of the parameter that needs to be added. </param>
+        public void AddParameter(int index)
+        {
+            // Pick the parameter
+            IGH_Param parameter = variableInputParameters[index];
+
+            // Parameter name
+            string name = variableInputParameters[index].Name;
+
+            // If the parameter already exist: unregister it
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                // Unregister the parameter
+                Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
+            }
+
+            // Else add the reference plane parameter
+            else
+            {
+                // The index where the parameter should be added
+                int insertIndex = fixedParamNumInput;
+
+                // Check if other parameters are already added and correct the insert index
+                for (int i = 0; i < index; i++)
+                {
+                    if (Params.Input.Any(x => x.Name == variableInputParameters[i].Name))
+                    {
+                        insertIndex += 1;
+                    }
+                }
+
+                // Register the input parameter
+                Params.RegisterInputParam(parameter, insertIndex);
+            }
+
+            // Expire solution and refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
+        }
+        #endregion
+
+        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        #region variable input parameters
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location </returns>
+        bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location. </returns>
+        bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will be called when a new parameter is about to be inserted. 
+        /// You must provide a valid parameter or insertion will be skipped. 
+        /// You do not, repeat not, need to insert the parameter yourself.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> A valid IGH_Param instance to be inserted. In our case a null value. </returns>
+        IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// This function will be called when a parameter is about to be removed. 
+        /// You do not need to do anything, but this would be a good time to remove 
+        /// any event handlers that might be attached to the parameter in question.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if the parameter in question can indeed be removed. Note, this is only in emergencies, 
+        /// typically the CanRemoveParameter function should return false if the parameter in question is not removable. </returns>
+        bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This method will be called when a closely related set of variable parameter operations completes. 
+        /// This would be a good time to ensure all Nicknames and parameter properties are correct. 
+        /// This method will also be called upon IO operations such as Open, Paste, Undo and Redo.
+        /// </summary>
+        void IGH_VariableParameterComponent.VariableParameterMaintenance()
+        {
+            // empty
+        }
+        #endregion
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -244,7 +437,7 @@ namespace RobotComponents.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F2BBBB2D-96F7-4D65-9031-A6C08D14A448"); }
+            get { return new Guid("B1E7F4C2-2FDC-4E9B-8D8A-9F5FBBB5B64F"); }
         }
 
     }

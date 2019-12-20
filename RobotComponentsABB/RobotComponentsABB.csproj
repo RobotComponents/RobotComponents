@@ -122,6 +122,7 @@
     <Compile Include="Components\Utilities\PlaneOrientationToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
+    <Compile Include="Goos\WorkObjectGoo.cs" />
     <Compile Include="Goos\AutoAxisConfigGoo.cs" />
     <Compile Include="Goos\CodeLineGoo.cs" />
     <Compile Include="Goos\CommentGoo.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\WorkObjectParam.cs" />
     <Compile Include="Parameters\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\CodeLineParam.cs" />
     <Compile Include="Parameters\CommentParam.cs" />

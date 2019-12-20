@@ -65,7 +65,7 @@ namespace RobotComponentsABB.Components
         {
             new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true},
             // Todo: Make a work object parameter and change the generic object to the WorkObjectParameter
-            new Param_GenericObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
+            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
             new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
@@ -144,7 +144,7 @@ namespace RobotComponentsABB.Components
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
             List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
-            List<WorkObject> workObjectGoos = new List<WorkObject>(); // To do: Make WorkObjectGoo
+            List<WorkObjectGoo> workObjectGoos = new List<WorkObjectGoo>(); // To do: Make WorkObjectGoo
             List<DigitalOutputGoo> digitalOutputGoos = new List<DigitalOutputGoo>();
 
             // Catch the input data from the fixed parameters

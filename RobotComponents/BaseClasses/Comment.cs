@@ -5,8 +5,6 @@ namespace RobotComponents.BaseClasses
     /// <summary>
     /// Comment class, defines a Comment in RAPID Code.
     /// </summary>
-    /// 
-
     public class Comment : Action
     {
         #region fields
@@ -30,22 +28,6 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public string Com
-        {
-            get { return _comment; }
-            set { _comment = value; }
-        }
-        #endregion
-
         #region method
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
         {
@@ -64,6 +46,19 @@ namespace RobotComponents.BaseClasses
             }
 
             return tempCode;
+        }
+        #endregion
+
+        #region properties
+        public bool IsValid
+        {
+            get { return true; }
+        }
+
+        public string Com
+        {
+            get { return _comment; }
+            set { _comment = value; }
         }
         #endregion
     }

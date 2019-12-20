@@ -47,13 +47,44 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Duplicates a robot movement.
+        /// Duplicates a SpeedData
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The duplicate value of the speeddata. </returns>
         public SpeedData Duplicate()
         {
             SpeedData dup = new SpeedData(Name, V_TCP, V_ORI, V_LEAX, V_REAX, PreDefinied);
             return dup;
+        }
+        #endregion
+
+        #region method
+        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        {
+            if (_predefined == false) 
+            {
+                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public string InitRAPIDVar()
+        {
+            if (_predefined == false)
+            {
+                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public override string ToRAPIDFunction(string robotToolName)
+        {
+            return "";
         }
         #endregion
 
@@ -70,7 +101,7 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
-        public String Name
+        public string Name
         {
             get { return _name; }
             set { _name = value; }
@@ -99,39 +130,6 @@ namespace RobotComponents.BaseClasses
         {
             get { return _predefined; }
             set { _predefined = value; }
-        }
-        #endregion
-
-        #region method
-        // never used in RAPID Generator
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
-        {
-            if (_predefined == false) 
-            {
-                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
-            }
-            else
-            {
-                return "";
-            }
-        }
-
-        // uses instead this method in InitRAPIDVar method of movement class
-        public string InitRAPIDVar()
-        {
-            if (_predefined == false)
-            {
-                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
-            }
-            else
-            {
-                return "";
-            }
-        }
-
-        public override string ToRAPIDFunction(string robotToolName)
-        {
-            return "";
         }
         #endregion
 

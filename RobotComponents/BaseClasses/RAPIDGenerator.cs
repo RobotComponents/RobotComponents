@@ -1,12 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
-
-using Rhino.Geometry;
-
-using RobotComponents.BaseClasses;
-
-//using RobotComponents.Components;
 
 namespace RobotComponents.BaseClasses
 {
@@ -23,9 +16,7 @@ namespace RobotComponents.BaseClasses
         private string _RAPIDCode;
         private string _BASECode;
         private string _ModuleName;
-        private Guid _documentGUID;
         private string _roboToolName;
-        //private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs;
         #endregion
 
@@ -34,7 +25,7 @@ namespace RobotComponents.BaseClasses
         {
         }
 
-        public RAPIDGenerator(string moduleName,  List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo, Guid documentGUID)
+        public RAPIDGenerator(string moduleName,  List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
         {
             this._ModuleName = moduleName;
             this._robotInfo = robotInfo;
@@ -42,8 +33,6 @@ namespace RobotComponents.BaseClasses
 
             this._filePath = filePath;
             this._saveToFile = saveToFile;
-
-            this._documentGUID = documentGUID;
 
             this._roboToolName = _robotInfo.Tool.Name;
 
@@ -57,7 +46,7 @@ namespace RobotComponents.BaseClasses
 
         public RAPIDGenerator Duplicate()
         {
-            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, Actions, FilePath, SaveToFile, RobotInfo, DocumentGUID);
+            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, Actions, FilePath, SaveToFile, RobotInfo);
             return dup;
         }
         #endregion
@@ -188,40 +177,53 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
+
         public List<RobotComponents.BaseClasses.Action> Actions
         {
             get { return _actions; }
             set { _actions = value; }
         }
+
         public string FilePath
         {
             get { return _filePath; }
             set { _filePath = value; }
         }
+
         public bool SaveToFile
         {
             get { return _saveToFile; }
             set { _saveToFile = value; }
         }
+
         public string RAPIDCode
         {
             get { return _RAPIDCode; }
             set { _RAPIDCode = value; }
         }
+
         public string BASECode
         {
             get { return _BASECode; }
             set { _BASECode = value; }
         }
+
         public RobotInfo RobotInfo
         {
             get { return _robotInfo; }
             set { _robotInfo = value; }
         }
 
-        public Guid DocumentGUID { get => _documentGUID; set => _documentGUID = value; }
-        public string ModuleName { get => _ModuleName; set => _ModuleName = value; }
-        public bool FirstMovementIsMoveAbs { get => _firstMovementIsMoveAbs;}
+        public string ModuleName 
+        {
+            get { return _ModuleName; }
+            set { _ModuleName = value; }
+        }
+
+        public bool FirstMovementIsMoveAbs 
+        {
+            get { return _firstMovementIsMoveAbs; }
+        }
         #endregion
     }
 

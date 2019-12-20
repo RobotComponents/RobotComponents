@@ -1,10 +1,8 @@
-﻿
-namespace RobotComponents.BaseClasses
+﻿namespace RobotComponents.BaseClasses
 {
     /// <summary>
     /// Auto Axis Configurator Class, sets Auto Axis Configuration to True or False.
     /// </summary>
-    /// 
     public class AutoAxisConfig : Action
     {
         #region fields
@@ -28,21 +26,6 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
-        public bool IsActive
-        {
-            get { return _isActive; }
-            set { _isActive = value; }
-        }
-        #endregion
-
         #region method
         public override string InitRAPIDVar(RobotInfo robInfo, string RAPIDcode)
         {
@@ -62,6 +45,18 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
+        #region properties
+        public bool IsValid
+        {
+            get { return true; }
+        }
+
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set { _isActive = value; }
+        }
+        #endregion
     }
 
 }

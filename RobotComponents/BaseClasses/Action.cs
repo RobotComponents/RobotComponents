@@ -1,5 +1,4 @@
-﻿
-namespace RobotComponents.BaseClasses
+﻿namespace RobotComponents.BaseClasses
 {
     /// <summary>
     /// Action class, main Class for all actions.
@@ -17,12 +16,12 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        #endregion
-
         #region methods
         public abstract string InitRAPIDVar(RobotInfo robInfo, string RAPIDCode);
         public abstract string ToRAPIDFunction(string robotToolName);
+        #endregion
+
+        #region properties
         #endregion
     }
 }

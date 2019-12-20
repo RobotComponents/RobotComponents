@@ -27,7 +27,7 @@ namespace RobotComponents.BaseClasses
         public RobotTool()
         {
             this._name = "tool0";
-            this._mesh = new Mesh(); // causes Display error
+            this._mesh = new Mesh();
             this._attachmentPlane = Plane.WorldXY;
             this._toolPlane = Plane.WorldXY;
 
@@ -83,76 +83,7 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                if (AttachmentPlane == null) { return false; }
-                if (ToolPlane == null) { return false; }
-
-                return true;
-            }
-        }
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-        public Mesh Mesh
-        {
-            get { return _mesh; }
-            set { _mesh = value; }
-        }
-        public Plane AttachmentPlane
-        {
-            get { return _attachmentPlane; }
-            set { _attachmentPlane = value; }
-        }
-        public Plane ToolPlane
-        {
-            get { return _toolPlane; }
-            set { _toolPlane = value; }
-        }
-        public bool RobotHold
-        {
-            get { return _robotHold; }
-            set { _robotHold = value; }
-        }
-        public Vector3d Offset
-        {
-            get { return _offset; }
-            set { _offset = value; }
-        }
-        public Quaternion Orientation
-        {
-            get { return _orientation; }
-            set { _orientation = value; }
-        }
-        public double Mass
-        {
-            get { return _mass; }
-            set { _mass = value; }
-        }
-        public Vector3d Cog
-        {
-            get { return _cog; }
-            set { _cog = value; }
-        }
-        public Quaternion CogOrientation
-        {
-            get { return _cogOrientation; }
-            set { _cogOrientation = value; }
-        }
-        public Vector3d Inertia
-        {
-            get { return _inertia; }
-            set { _inertia = value; }
-        }
-        #endregion
-
         #region methods
-
         public string GetRSToolData()
         {
             string result = "";
@@ -203,6 +134,83 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
+        #region properties
+        public bool IsValid
+        {
+            get
+            {
+                if (AttachmentPlane == null) { return false; }
+                if (ToolPlane == null) { return false; }
+
+                return true;
+            }
+        }
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        public Mesh Mesh
+        {
+            get { return _mesh; }
+            set { _mesh = value; }
+        }
+
+        public Plane AttachmentPlane
+        {
+            get { return _attachmentPlane; }
+            set { _attachmentPlane = value; }
+        }
+
+        public Plane ToolPlane
+        {
+            get { return _toolPlane; }
+            set { _toolPlane = value; }
+        }
+
+        public bool RobotHold
+        {
+            get { return _robotHold; }
+            set { _robotHold = value; }
+        }
+
+        public Vector3d Offset
+        {
+            get { return _offset; }
+            set { _offset = value; }
+        }
+
+        public Quaternion Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
+        }
+
+        public double Mass
+        {
+            get { return _mass; }
+            set { _mass = value; }
+        }
+
+        public Vector3d Cog
+        {
+            get { return _cog; }
+            set { _cog = value; }
+        }
+
+        public Quaternion CogOrientation
+        {
+            get { return _cogOrientation; }
+            set { _cogOrientation = value; }
+        }
+
+        public Vector3d Inertia
+        {
+            get { return _inertia; }
+            set { _inertia = value; }
+        }
+        #endregion
     }
 
 }

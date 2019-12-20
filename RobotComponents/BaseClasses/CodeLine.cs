@@ -1,11 +1,8 @@
-﻿
-namespace RobotComponents.BaseClasses
+﻿namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// CodeLine class, defines a CodeLine in RAPID Code.
+    /// Code Line class, defines a CodeLine in RAPID Code.
     /// </summary>
-    /// 
-
     public class CodeLine : Action
     {
         #region fields
@@ -29,22 +26,6 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public string Code
-        {
-            get { return _code; }
-            set { _code = value; }
-        }
-        #endregion
-
         #region method
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
         {
@@ -54,6 +35,19 @@ namespace RobotComponents.BaseClasses
         public override string ToRAPIDFunction(string robotToolName)
         {
             return ("@" + "\t" + _code); ;
+        }
+        #endregion
+
+        #region properties
+        public bool IsValid
+        {
+            get { return true; }
+        }
+
+        public string Code
+        {
+            get { return _code; }
+            set { _code = value; }
         }
         #endregion
     }

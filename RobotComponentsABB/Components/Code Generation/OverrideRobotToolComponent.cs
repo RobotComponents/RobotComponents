@@ -68,7 +68,7 @@ namespace RobotComponentsABB.Components
             if (!DA.GetData(0, ref _toolGoo)) { _toolGoo.Value.Name = "tool0"; ; }
 
             // Create action
-            OverrideRobotTool OverrideRobotTool = new OverrideRobotTool(_toolGoo.Value, documentGUID);
+            OverrideRobotTool OverrideRobotTool = new OverrideRobotTool(_toolGoo.Value);
 
             // Output
             DA.SetData(0, OverrideRobotTool);

@@ -1,11 +1,8 @@
-﻿
-namespace RobotComponents.BaseClasses
+﻿namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// Joint Movement class, defines the Movement to a RobTarget.
+    /// Digital Output class
     /// </summary>
-    /// 
-
     public class DigitalOutput : Action
     {
         #region fields
@@ -31,6 +28,25 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
+        #region method
+        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        {
+            return ("");
+        }
+
+        public override string ToRAPIDFunction(string robotToolName)
+        {
+            if (_isActive == true)
+            {
+                return ("@" + "\t" + "SetDO " + _name + ",  1;");
+            }
+            else
+            {
+                return ("@" + "\t" + "SetDO " + _name + ",  0;"); ;
+            }
+        }
+        #endregion
+
         #region properties
         public bool IsValid
         {
@@ -51,26 +67,5 @@ namespace RobotComponents.BaseClasses
             set { _isActive = value; }
         }
         #endregion
-
-        #region method
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
-        {
-            return ("");
-        }
-
-        public override string ToRAPIDFunction(string robotToolName)
-        {
-            if (_isActive == true)
-            {
-                return ("@" + "\t" + "SetDO " + _name + ",  1;");
-            }
-            else
-            {
-                return ("@" + "\t" + "SetDO " + _name + ",  0;"); ;
-            }
-        }
-        #endregion
-
     }
-
 }

@@ -1,5 +1,4 @@
-﻿
-namespace RobotComponents.BaseClasses
+﻿namespace RobotComponents.BaseClasses
 {
     public class WaitDI : Action
     {
@@ -25,19 +24,6 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public bool Value { get => _value; set => _value = value; }
-        public string DIName { get => _DIName; set => _DIName = value; }
-        #endregion
-
         #region method
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
         {
@@ -58,6 +44,25 @@ namespace RobotComponents.BaseClasses
             }
 
             return ("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); ;
+        }
+        #endregion
+
+        #region properties
+        public bool IsValid
+        {
+            get { return true; }
+        }
+
+        public bool Value 
+        { 
+            get => _value; 
+            set => _value = value; 
+        }
+
+        public string DIName 
+        { 
+            get => _DIName; 
+            set => _DIName = value; 
         }
         #endregion
     }

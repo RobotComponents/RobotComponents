@@ -47,20 +47,20 @@ namespace RobotComponents.BaseClasses
         /// <param name="axisConfig">Robot target axisConfiguration.</param>
         public Target(string name,  Plane plane, int axisConfig)
         {
-            this._name = name;
-            this._plane = plane;
-            this._quat = CalcQuaternion();
-            this._axisConfig = axisConfig;
-            this._robTargetName = name + "_rt";
-            this._jointTargetName = name + "_jt";
+            _name = name;
+            _plane = plane;
+            _quat = CalcQuaternion();
+            _axisConfig = axisConfig;
+            _robTargetName = name + "_rt";
+            _jointTargetName = name + "_jt";
 
             // External axis values
-            this._Eax_a = null;
-            this._Eax_b = null;
-            this._Eax_c = null;
-            this._Eax_d = null;
-            this._Eax_e = null;
-            this._Eax_f = null;
+            _Eax_a = null;
+            _Eax_b = null;
+            _Eax_c = null;
+            _Eax_d = null;
+            _Eax_e = null;
+            _Eax_f = null;
         }
 
         /// <summary>
@@ -70,46 +70,66 @@ namespace RobotComponents.BaseClasses
         /// <param name="plane">Robot target plane.</param>
         public Target(string name, Plane plane)
         {
-            this._name = name;
-            this._plane = plane;
-            this._quat = CalcQuaternion();
-            this._axisConfig = 0;
-            this._robTargetName = name + "_rt";
-            this._jointTargetName = name + "_jt";
+            _name = name;
+            _plane = plane;
+            _quat = CalcQuaternion();
+            _axisConfig = 0;
+            _robTargetName = name + "_rt";
+            _jointTargetName = name + "_jt";
 
             // External axis values
-            this._Eax_a = null;
-            this._Eax_b = null;
-            this._Eax_c = null;
-            this._Eax_d = null;
-            this._Eax_e = null;
-            this._Eax_f = null;
+            _Eax_a = null;
+            _Eax_b = null;
+            _Eax_c = null;
+            _Eax_d = null;
+            _Eax_e = null;
+            _Eax_f = null;
         }
 
         public Target(string name, Guid instanceGuid, Plane plane, int axisConfig, bool isRobTarget)
         {
-            this._name = name;
-            this._instanceGuid = instanceGuid;
-            this._plane = plane;
-            this._quat = CalcQuaternion();
-            this._axisConfig = axisConfig;
-            this._isRobTarget = isRobTarget;
-            this._robTargetName = name + "_rt";
-            this._jointTargetName = name + "_jt";
+            _name = name;
+            _instanceGuid = instanceGuid;
+            _plane = plane;
+            _quat = CalcQuaternion();
+            _axisConfig = axisConfig;
+            _isRobTarget = isRobTarget;
+            _robTargetName = name + "_rt";
+            _jointTargetName = name + "_jt";
 
             // External axis values
-            this._Eax_a = null;
-            this._Eax_b = null;
-            this._Eax_c = null;
-            this._Eax_d = null;
-            this._Eax_e = null;
-            this._Eax_f = null;
+            _Eax_a = null;
+            _Eax_b = null;
+            _Eax_c = null;
+            _Eax_d = null;
+            _Eax_e = null;
+            _Eax_f = null;
         }
 
         public Target Duplicate()
         {
             Target dup = new Target(Name, InstanceGuid, Plane, AxisConfig, IsRobTarget);
             return dup;
+        }
+        #endregion
+
+        #region method
+        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        {
+            return "";
+        }
+
+        public override string ToRAPIDFunction(string robotToolName)
+        {
+            return ("");
+        }
+
+        public Quaternion CalcQuaternion()
+        {
+            Plane refPlane = new Plane(Plane.WorldXY);
+            Quaternion quat = Quaternion.Rotation(refPlane, _plane);
+            double[] quaternion = new double[] { quat.A, quat.B, quat.C, quat.D };
+            return quat;
         }
         #endregion
 
@@ -140,51 +160,30 @@ namespace RobotComponents.BaseClasses
         }
         public Quaternion Quat
         {
-            get { return this._quat; }
-            set { this._quat = value; }
+            get { return _quat; }
+            set { _quat = value; }
         }
         public int AxisConfig
         {
-            get { return this._axisConfig; }
-            set { this._axisConfig = value; }
+            get { return _axisConfig; }
+            set { _axisConfig = value; }
         }
         public bool IsRobTarget
         {
-            get { return this._isRobTarget; }
-            set { this._isRobTarget = value; }
+            get { return _isRobTarget; }
+            set { _isRobTarget = value; }
         }
         public string JointTargetName
         {
-            get { return this._jointTargetName; }
-            set { this._jointTargetName = value; }
+            get { return _jointTargetName; }
+            set { _jointTargetName = value; }
         }
         public string RobTargetName
         {
-            get { return this._robTargetName; }
-            set { this._robTargetName = value; }
+            get { return _robTargetName; }
+            set { _robTargetName = value; }
         }
         #endregion
-
-        #region method
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
-        {
-            return "";
-        }
-
-        public override string ToRAPIDFunction(string robotToolName)
-        {
-            return ("");
-        }
-
-        public Quaternion CalcQuaternion()
-        {
-            Plane refPlane = new Plane(Plane.WorldXY);
-            Quaternion quat = Quaternion.Rotation(refPlane, _plane);
-            double[] quaternion = new double[] { quat.A, quat.B, quat.C, quat.D };
-            return quat;
-        }
-        #endregion
-
     }
 
 }

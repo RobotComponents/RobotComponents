@@ -426,21 +426,25 @@ namespace RobotComponents.BaseClasses
             get { return _basePlane; }
             set { _basePlane = value; }
         }
+
         public Plane ToolPlane
         {
             get { return _toolPlane; }
             set { _toolPlane = value; }
         }
+
         public Plane TargetPlane
         {
             get { return _targetPlane; }
             set { _targetPlane = value; }
         }
+
         public Plane EndPlane
         {
             get { return _endPlane; }
             set { _endPlane = value; }
         }
+
         public Plane[] AxisPlanes
         {
             get { return _axisPlanes; }
@@ -459,7 +463,11 @@ namespace RobotComponents.BaseClasses
             set { _axisConfig = value; }
         }
 
-        public List<double> ExternalAxisValues { get => _externalAxisValues; set => _externalAxisValues = value; }
+        public List<double> ExternalAxisValues 
+        {
+            get { return _externalAxisValues; }
+            set { _externalAxisValues = value; }
+        }
         #endregion
     }
 

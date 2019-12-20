@@ -236,7 +236,6 @@ namespace RobotComponents.BaseClasses
                 if (InternalAxisPlanes == null) { return false; }
                 if (InternalAxisLimits == null) { return false; }
                 if (InternalAxisValues == null) { return false; }
-
                 return true;
             }
         }
@@ -246,11 +245,13 @@ namespace RobotComponents.BaseClasses
             get { return _robotInfo; }
             set { _robotInfo = value; }
         }
+
         public List<Mesh> Meshes
         {
             get { return _meshes; }
             set { _meshes = value; }
         }
+
         public List<Mesh> PosedMeshes
         {
             get { return _posedMeshes; }
@@ -280,34 +281,72 @@ namespace RobotComponents.BaseClasses
             get { return _internalAxisLimits; }
             set { _internalAxisLimits = value; }
         }
+
         public List<bool> InternalAxisInLimit
         {
             get { return _internalAxisInLimit; }
             set { _internalAxisInLimit = value; }
         }
+
         public List<string> ErrorText
         {
             get { return _errorText; }
             set { _errorText = value; }
         }
+
         public List<double> InternalAxisValues
         {
             get { return _internalAxisValues; }
             set { _internalAxisValues = value; }
         }
+
         public Double[] InternalAxisRads
         {
             get { return _internalAxisRads; }
             set { _internalAxisRads = value; }
         }
 
-        public Plane[] ExternalAxisPlanes { get => _externalAxisPlanes; set => _externalAxisPlanes = value; }
-        public List<double> ExternalAxisValues { get => _externalAxisValues; set => _externalAxisValues = value; }
-        public double[] ExternalAxisRads { get => _externalAxisRads; set => _externalAxisRads = value; }
-        public List<Interval> ExternalAxisLimits { get => _externalAxisLimits; set => _externalAxisLimits = value; }
-        public List<bool> ExternalAxisInLimit { get => _externalAxisInLimit; set => _externalAxisInLimit = value; }
-        public Plane BasePlane { get => _basePlane; set => _basePlane = value; }
-        public List<Mesh> PosedAxisMeshes { get => _posedAxisMeshes; set => _posedAxisMeshes = value; }
+        public Plane[] ExternalAxisPlanes 
+        {
+            get { return _externalAxisPlanes; }
+            set { _externalAxisPlanes = value; }
+        }
+
+        public List<double> ExternalAxisValues 
+        {
+            get { return _externalAxisValues; }
+            set { _externalAxisValues = value; }
+        }
+
+        public double[] ExternalAxisRads 
+        {
+            get { return _externalAxisRads; }
+            set { _externalAxisRads = value; }
+        }
+
+        public List<Interval> ExternalAxisLimits 
+        {
+            get { return _externalAxisLimits; }
+            set { _externalAxisLimits = value; }
+        }
+        
+        public List<bool> ExternalAxisInLimit 
+        {
+            get { return _externalAxisInLimit; }
+            set { _externalAxisInLimit = value; }
+        }
+
+        public Plane BasePlane 
+        {
+            get { return _basePlane; }
+            set { _basePlane = value; }
+        }
+
+        public List<Mesh> PosedAxisMeshes 
+        {
+            get { return _posedAxisMeshes; }
+            set { _posedAxisMeshes = value; }
+        }
         #endregion
     }
 

@@ -3,9 +3,8 @@
 namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// ToolChange class, defines the Movement to a RobTarget.
+    /// Override Robot Tool class
     /// </summary>
-    /// 
 
     public class OverrideRobotTool : Action
     {
@@ -13,8 +12,6 @@ namespace RobotComponents.BaseClasses
         private RobotTool _robotTool;
         private string _toolName;
         private string _toolData;
-        private Guid _documentGUID;
-        //private ObjectManager _objectManager;
         #endregion
 
         #region constructors
@@ -22,58 +19,18 @@ namespace RobotComponents.BaseClasses
         {
         }
 
-        public OverrideRobotTool(RobotTool robotTool, Guid documentGUID)
+        public OverrideRobotTool(RobotTool robotTool)
         {
             this._robotTool = robotTool;
             this._toolName = _robotTool.Name;
             this._toolData = GetToolData();
-            this._documentGUID = documentGUID;
-
-            /**
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(_documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[_documentGUID];
-               **/
         }
 
         public OverrideRobotTool Duplicate()
         {
-            OverrideRobotTool dup = new OverrideRobotTool(RobotTool, DocumentGUID);
+            OverrideRobotTool dup = new OverrideRobotTool(RobotTool);
             return dup;
         }
-        #endregion
-
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                if (ToolName == null) { return false; }
-                return true;
-            }
-        }
-        public string ToolName
-        {
-            get { return _toolName; }
-            set { _toolName = value; }
-        }
-        public RobotTool RobotTool
-        {
-            get { return _robotTool; }
-            set { _robotTool = value; }
-        }
-        public string ToolData
-        {
-                get { return _toolData; }
-                set { _toolData = value; }
-        }
-
-        public Guid DocumentGUID { get => _documentGUID; set => _documentGUID = value; }
         #endregion
 
         #region method
@@ -98,8 +55,31 @@ namespace RobotComponents.BaseClasses
         }
         #endregion
 
+
+        #region properties
+        public bool IsValid
+        {
+            get
+            {
+                if (ToolName == null) { return false; }
+                return true;
+            }
+        }
+        public string ToolName
+        {
+            get { return _toolName; }
+            set { _toolName = value; }
+        }
+        public RobotTool RobotTool
+        {
+            get { return _robotTool; }
+            set { _robotTool = value; }
+        }
+        public string ToolData
+        {
+            get { return _toolData; }
+            set { _toolData = value; }
+        }
+        #endregion
     }
-
-
-
 }

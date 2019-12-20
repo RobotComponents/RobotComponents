@@ -63,7 +63,6 @@ namespace RobotComponents.BaseClasses
             Initilize();
         }
 
-
         public ExternalLinearAxis(Plane attachementPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             _attachmentPlane = attachementPlane;
@@ -75,7 +74,6 @@ namespace RobotComponents.BaseClasses
             _posedMeshes = new List<Mesh>();
             Initilize();
         }
-
 
         public ExternalLinearAxis Duplicate()
         {
@@ -181,15 +179,58 @@ namespace RobotComponents.BaseClasses
 
         #region properties
 
-        override public Plane AttachmentPlane { get => _attachmentPlane; set => _attachmentPlane = value; }
-        override public Plane AxisPlane { get => _axisPlane; set => _axisPlane = value; }
-        override public Interval AxisLimits { get => _axisLimits; set => _axisLimits = value; }
-        override public int? AxisNumber { get => _axisNumber; set => _axisNumber = value; }
-        public override AxisType AxisType { get => AxisType.LINEAR; }
-        public Mesh BaseMesh { get => _baseMesh; set => _baseMesh = value; }
-        public Mesh LinkMesh { get => _linkMesh; set => _linkMesh = value; }
-        public Curve AxisCurve { get => _axisCurve; set => _axisCurve = value; }
-        override public List<Mesh> PosedMeshes { get => _posedMeshes; set => _posedMeshes = value; }
+        override public Plane AttachmentPlane 
+        {
+            get { return _attachmentPlane; }
+            set { _attachmentPlane = value; }
+        }
+
+        override public Plane AxisPlane 
+        { 
+            get { return _axisPlane; }
+            set { _axisPlane = value; }
+        }
+
+        override public Interval AxisLimits 
+        { 
+            get { return _axisLimits; }
+            set { _axisLimits = value; }
+        }
+
+        override public int? AxisNumber 
+        { 
+            get { return _axisNumber; }
+            set { _axisNumber = value; }
+        }
+
+        public override AxisType AxisType 
+        { 
+            get { return AxisType.LINEAR; }
+        }
+
+        public Mesh BaseMesh 
+        { 
+            get { return _baseMesh; }
+            set { _baseMesh = value; }
+        }
+
+        public Mesh LinkMesh 
+        { 
+            get { return _linkMesh; }
+            set { _linkMesh = value; }
+        }
+
+        public Curve AxisCurve 
+        { 
+            get { return _axisCurve; }
+            set { _axisCurve = value; }
+        }
+
+        override public List<Mesh> PosedMeshes 
+        { 
+            get { return _posedMeshes; }
+            set { _posedMeshes = value; }
+        }
         #endregion
     }
 }

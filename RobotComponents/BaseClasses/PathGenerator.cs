@@ -21,34 +21,6 @@ namespace RobotComponents.BaseClasses
         List<List<Double>> _externalAxisValues;
         #endregion
 
-        #region properties
-        public bool IsValid
-        {
-            get
-            {
-                if (_robotInfo == null) { return false; };
-                return true;
-            }
-        }
-
-        public InverseKinematics InverseKinematics
-        {
-            get { return _inverseKinematics; }
-            set { _inverseKinematics = value; }
-        }
-
-        public RobotInfo RobotInfo
-        {
-            get { return _robotInfo; }
-            set { _robotInfo = value; }
-        }
-
-        public List<Target> Targets { get => _targets; set => _targets = value; }
-        public List<Curve> Paths { get => _paths; set => _paths = value; }
-        public List<List<double>> InternalAxisValues { get => _internalAxisValues; set => _internalAxisValues = value; }
-        public List<List<double>> ExternalAxisValues { get => _externalAxisValues; set => _externalAxisValues = value; }
-        #endregion
-
         #region constructors
         public PathGenerator()
         {
@@ -306,6 +278,53 @@ namespace RobotComponents.BaseClasses
                 }
             }
             return movements;
+        }
+        #endregion
+
+        #region properties
+        public bool IsValid
+        {
+            get
+            {
+                if (_robotInfo == null) { return false; };
+                return true;
+            }
+        }
+
+        public InverseKinematics InverseKinematics
+        {
+            get { return _inverseKinematics; }
+            set { _inverseKinematics = value; }
+        }
+
+        public RobotInfo RobotInfo
+        {
+            get { return _robotInfo; }
+            set { _robotInfo = value; }
+        }
+
+        public List<Target> Targets 
+        {
+            get { return _targets; }
+            set { _targets = value; }
+        }
+
+        public List<Curve> Paths 
+        {
+            get { return _paths; }
+            set { _paths = value; }
+        }
+
+        public List<List<double>> InternalAxisValues 
+        {
+            get { return _internalAxisValues; }
+            set { _internalAxisValues = value; }
+        }
+
+        public List<List<double>> ExternalAxisValues 
+        {
+            get { return _externalAxisValues; }
+            set { _externalAxisValues = value; }
         }
         #endregion
     }

@@ -2,6 +2,9 @@
 
 namespace RobotComponents.BaseClasses
 {
+    /// <summary>
+    /// Work Object class
+    /// </summary>
     public class WorkObject
     {
         #region fields
@@ -134,12 +137,41 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region properties
-        public string Name { get => _name; set => _name = value; }
-        public bool RobotHold { get => _robotHold; set => _robotHold = value; }
-        public Plane UserFrame { get => _userFrame; set => _userFrame = value; }
-        public Plane Plane { get => _plane; set => _plane = value; }
-        public ExternalAxis ExternalAxis { get => _externalAxis; set => _externalAxis = value; }
-        public Quaternion Orientation { get => _orientation; set => _orientation = value; }
+        public string Name 
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        public bool RobotHold
+        {
+            get { return _robotHold; }
+            set { _robotHold = value; }
+        }
+
+        public Plane UserFrame 
+        { 
+            get {return _userFrame; }
+            set { _userFrame = value; }
+        }
+
+        public Plane Plane
+        {
+            get { return _plane; }
+            set { _plane = value; }
+        }
+
+        public ExternalAxis ExternalAxis 
+        {
+            get { return _externalAxis; } 
+            set { _externalAxis = value; } 
+        }
+
+        public Quaternion Orientation 
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
+        }
         #endregion
     }
 }

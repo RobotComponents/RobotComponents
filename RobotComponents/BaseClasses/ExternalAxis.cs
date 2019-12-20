@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace RobotComponents.BaseClasses
 {
     public enum AxisType { LINEAR, ROTATIONAL };
+
     /// <summary>
     /// External axis class, main Class for external axis.
     /// An external axis (linear and rotational) can be attached to a robot or a workobject
@@ -33,7 +34,6 @@ namespace RobotComponents.BaseClasses
         public abstract int? AxisNumber { get; set; }
         public abstract List<Mesh> PosedMeshes { get; set; }
         #endregion
-
 
     }
 }

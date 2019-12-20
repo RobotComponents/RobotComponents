@@ -63,7 +63,6 @@ namespace RobotComponents.BaseClasses
             this._toolPlane = GetAttachedToolPlane(_tool, mountingFrame);
         }
 
-
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
             this._name = name;
@@ -123,6 +122,7 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
+
         public string Name
         {
             get { return _name; }
@@ -134,43 +134,59 @@ namespace RobotComponents.BaseClasses
             get { return _meshes; }
             set { _meshes = value; }
         }
+
         public List<Plane> InternalAxisPlanes
         {
             get { return _internalAxisPlanes; }
             set { _internalAxisPlanes = value; }
         }
+
         public List<Interval> InternalAxisLimits
         {
             get { return _internalAxisLimits; }
             set { _internalAxisLimits = value; }
         }
+
         public Plane BasePlane
         {
             get { return _basePlane; }
             set { _basePlane = value; }
         }
+
         public Plane MountingFrame
         {
             get { return _mountingFrame; }
             set { _mountingFrame = value; }
         }
+
         public Plane ToolPlane
         {
             get { return _toolPlane; }
             set { _toolPlane = value; }
         }
+
         public RobotTool Tool
         {
             get { return _tool; }
             set { _tool = value; }
         }
 
-        public List<Plane> ExternalAxisPlanes { get => _externalAxisPlanes; set => _externalAxisPlanes = value; }
-        public List<Interval> ExternalAxisLimits { get => _externalAxisLimits; set => _externalAxisLimits = value; }
-        public List<ExternalAxis> ExternalAxis { get => _externalAxis; set => _externalAxis = value; }
+        public List<Plane> ExternalAxisPlanes 
+        {
+            get { return _externalAxisPlanes; }
+            set { _externalAxisPlanes = value; }
+        }
+        public List<Interval> ExternalAxisLimits 
+        {
+            get { return _externalAxisLimits; }
+            set { _externalAxisLimits = value; }
+        }
+        public List<ExternalAxis> ExternalAxis 
+        {
+            get { return _externalAxis; }
+            set { _externalAxis = value; }
+        }
         #endregion
-
-
     }
 
 }

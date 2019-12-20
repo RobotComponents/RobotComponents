@@ -121,7 +121,7 @@ namespace RobotComponentsABB.Components
             _objectManager.CurrentTool = robInfo.Tool.Name;
 
             // Initiaties the rapidGenerator
-            RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo, documentGUID);
+            RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
 
             // Updates the rapid BASE and MAIN code 
             if(update == true)

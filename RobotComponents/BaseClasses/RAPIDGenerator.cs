@@ -24,6 +24,7 @@ namespace RobotComponents.BaseClasses
         private string _BASECode;
         private string _ModuleName;
         private Guid _documentGUID;
+        private string _roboToolName;
         //private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs;
         #endregion
@@ -44,6 +45,7 @@ namespace RobotComponents.BaseClasses
 
             this._documentGUID = documentGUID;
 
+            this._roboToolName = _robotInfo.Tool.Name;
 
             if (_saveToFile == true)
             {
@@ -66,6 +68,9 @@ namespace RobotComponents.BaseClasses
             // Creates Main Module
             string RAPIDCode = "MODULE " + _ModuleName+"@";
 
+            // Creates Tool Name
+            string toolName = _roboToolName;
+
             // Creates Vars
             for (int i = 0; i != _actions.Count; i++)
             {
@@ -85,7 +90,7 @@ namespace RobotComponents.BaseClasses
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)
             {
-                string rapidStr = _actions[i].ToRAPIDFunction();
+                string rapidStr = _actions[i].ToRAPIDFunction(toolName);
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
@@ -99,6 +104,12 @@ namespace RobotComponents.BaseClasses
 
                         foundFirstMovement = true;
                     }
+                }
+
+                // Checks if action is of Type OverrideRobotTool
+                if(_actions[i] is OverrideRobotTool)
+                {
+                    toolName = ((OverrideRobotTool)_actions[i]).GetToolName();
                 }
 
                 RAPIDCode += rapidStr;

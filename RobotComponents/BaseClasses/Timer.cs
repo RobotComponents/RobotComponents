@@ -50,7 +50,7 @@
             return ("");
         }
 
-        public override string ToRAPIDFunction()
+        public override string ToRAPIDFunction(string robotToolName)
         {
             return ("@" + "\t" + "WaitTime " + _duration + ";"); ;
         }

@@ -184,11 +184,9 @@ namespace RobotComponents.BaseClasses
             return tempCode;
         }
 
-        public override string ToRAPIDFunction()
+        public override string ToRAPIDFunction(string robotToolName)
         {
-            // To do
-            // Was set as _objectManager.CurrentTool;
-            string toolName = "tool0";
+            string toolName = robotToolName;
 
             // MoveAbsJ
             if (MovementType == 0)

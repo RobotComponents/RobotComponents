@@ -108,6 +108,9 @@ namespace RobotComponentsABB.Components
             parameter.ClearData();
         }
 
+        // Fields
+        ObjectManager _objectManager;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -116,6 +119,17 @@ namespace RobotComponentsABB.Components
         {
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
+
+
+            // Checks if ObjectManager for this document already exists. If not it creates a new one
+            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
+            {
+                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
+            }
+
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.ObjectManagers[documentGUID];
+
 
             // Creates the input value list and attachs it to the input parameter
             if (this.Params.Input[2].SourceCount == 0)

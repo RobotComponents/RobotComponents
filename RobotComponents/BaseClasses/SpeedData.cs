@@ -129,7 +129,7 @@ namespace RobotComponents.BaseClasses
             }
         }
 
-        public override string ToRAPIDFunction()
+        public override string ToRAPIDFunction(string robotToolName)
         {
             return "";
         }

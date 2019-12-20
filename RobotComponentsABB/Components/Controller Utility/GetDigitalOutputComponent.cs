@@ -10,7 +10,7 @@ using RobotComponentsABB.Parameters;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
-namespace RobotComponents.Components
+namespace RobotComponentsABB.Components
 {
     public class GetDigitalOutputComponent : GH_Component
     {

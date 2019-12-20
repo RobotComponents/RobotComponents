@@ -13,7 +13,7 @@ namespace RobotComponentsABB
     {
         #region fields
         // contains information on all targets in file to notify user about duplicates
-        private Dictionary<Guid, AdvancedTargetComponent> _advancedTargetsByGuid;
+        private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, TargetComponent> _targetsByGuid;
         private List<string> _targetNames;
 
@@ -33,7 +33,7 @@ namespace RobotComponentsABB
         #region constructors
         public ObjectManager()
         {
-            _advancedTargetsByGuid = new Dictionary<Guid, AdvancedTargetComponent>();
+            _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _targetsByGuid = new Dictionary<Guid, TargetComponent>();
             _targetNames = new List<string>();
 
@@ -49,7 +49,7 @@ namespace RobotComponentsABB
         #endregion
 
         #region Properties
-        public Dictionary<Guid, AdvancedTargetComponent> AdvancedTargetsByGuid { get => _advancedTargetsByGuid; set => _advancedTargetsByGuid = value; }
+        public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid { get => _oldTargetsByGuid; set => _oldTargetsByGuid = value; }
         public Dictionary<Guid, TargetComponent> TargetsByGuid { get => _targetsByGuid; set => _targetsByGuid = value; }
         public List<string> TargetNames { get => _targetNames; set => _targetNames = value; }
         public Dictionary<Guid, SpeedDataComponent> SpeedDatasByGuid { get => _speedDatasByGuid; set => _speedDatasByGuid = value; }

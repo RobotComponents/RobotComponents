@@ -133,18 +133,22 @@ namespace RobotComponentsABB.Components
 
             // Catch name input
             if (!DA.GetDataList(0, names)) { return; } // Fixed index
+            
             // Catch target planes input
             if (!DA.GetDataList(1, planes)) { return; } // Fixed index
-            // Catch axis configuration input
-            if (Params.Input.Any(x => x.Name == "Axis Configuration"))
-            {
-                if (!DA.GetDataList("Axis Configuration", axisConfigs)) return;
-            }
+
             // Catch reference plane input
             if (Params.Input.Any(x => x.Name == "Reference Plane"))
             {
                 if (!DA.GetDataList("Reference Plane", refPlanes)) return;
             }
+
+            // Catch axis configuration input
+            if (Params.Input.Any(x => x.Name == "Axis Configuration"))
+            {
+                if (!DA.GetDataList("Axis Configuration", axisConfigs)) return;
+            }
+
             // Catch input data for overriding external axis values
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {

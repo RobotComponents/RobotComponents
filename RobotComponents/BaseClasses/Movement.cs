@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
-
-using RobotComponents.BaseClasses;
 
 namespace RobotComponents.BaseClasses
 {
@@ -11,70 +8,83 @@ namespace RobotComponents.BaseClasses
     public class Movement : Action
     {
         #region fields
-        private Target _target;
-        private SpeedData _speedData;
+        // Fixed fields
+        Target _target;
+        SpeedData _speedData;
         int _movementType;
         int _precision;
-        Guid _documentGUID;
-        // ObjectManager _objectManager;
+
+        // Variable fields: can be null
+        RobotTool _robotTool;
+        WorkObject _workObject;
+        DigitalOutput _digitalOutput;
         #endregion
 
         #region constructors
+        /// <summary>
+        /// An empty movement constructor.
+        /// </summary>
         public Movement()
         {
         }
 
         /// <summary>
-        /// Defines a robot movement.
+        /// Method to create a robot movement. 
         /// </summary>
-        /// <param name="target">Robot movement target.</param>
-        /// <param name="speedData">Robot movement speedData.</param>
-        /// <param name="movementType">Robot movement type.</param>
-        /// <param name="precision">Robot movement Precision. If this value is 0 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine.</param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, Guid documentGUID)
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision)
         {
-            this._target = target;
-            this._speedData = speedData;
-            this._movementType = movementType;
-            this._precision = precision;
-            this._documentGUID = documentGUID;
-
-            /**
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(_documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[_documentGUID];
-            **/
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = null;
+            _workObject = new WorkObject(); //wobj0
+            _digitalOutput = null;
         }
 
         /// <summary>
-        /// Defines a robot movement with fine precision.
+        /// Method to create a robot movement. 
         /// </summary>
-        /// <param name="target">Robot movement target.</param>
-        /// <param name="speedData">Robot movement speedData.</param>
-        /// <param name="movementType">Robot movement type.</param>
-        public Movement(Target target, SpeedData speedData, int movementType, Guid documentGUID)
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject)
         {
-            this._target = target;
-            this._speedData = speedData;
-            this._movementType = movementType;
-            this._precision = 0;
-            this._documentGUID = documentGUID;
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = 0;
+            _robotTool = robotTool;
+            _workObject = workObject;
+            _digitalOutput = null;
+        }
 
-            /**
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(_documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[_documentGUID];
-            **/
+        /// <summary>
+        /// Method to create a robot movement. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = 0;
+            _robotTool = robotTool;
+            _workObject = workObject;
+            _digitalOutput = digitalOutput;
         }
 
         /// <summary>
@@ -83,7 +93,7 @@ namespace RobotComponents.BaseClasses
         /// <returns></returns>
         public Movement Duplicate()
         {
-            Movement dup = new Movement(Target, SpeedData, MovementType, Precision, DocumentGUID);
+            Movement dup = new Movement(Target, SpeedData, MovementType, Precision, RobotTool, WorkObject, DigitalOutput);
             return dup;
         }
         #endregion
@@ -186,43 +196,40 @@ namespace RobotComponents.BaseClasses
 
         public override string ToRAPIDFunction(string robotToolName)
         {
-            string toolName = robotToolName;
+            // Set tool name
+            string toolName;
+            if (_robotTool == null) { toolName = robotToolName; }
+            else { toolName = _robotTool.Name; }
+
+            // Set zone data text (precision value)
+            string zoneName;
+            if (_precision < 0) { zoneName = @", fine, "; }
+            else { zoneName = @", z" + _precision.ToString() + ", "; }
 
             // MoveAbsJ
-            if (MovementType == 0)
+            if (_movementType == 0)
             {
-                if (_precision < 0)
-                {
-                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
-                }
-                else
-                {
-                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
-                }
+                return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
             }
             // MoveL
-            else if (MovementType == 1)
+            else if (_movementType == 1 && _digitalOutput == null)
             {
-                if (_precision < 0)
-                {
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
-                }
-                else
-                {
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
-                }
+                return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
             }
             // MoveJ
-            else if (MovementType == 2)
+            else if (_movementType == 2 && _digitalOutput == null)
             {
-                if (_precision < 0)
-                {
-                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
-                }
-                else
-                {
-                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
-                }
+                return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
+            }
+            // MoveL
+            else if (_movementType == 1 && _digitalOutput != null)
+            {
+                return ("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
+            }
+            // MoveJ
+            else if (_movementType == 2 && _digitalOutput != null)
+            {
+                return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
             }
             // Return nothing if a wrong movement type is used
             else
@@ -242,39 +249,48 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
+
         public Target Target
         {
             get { return _target; }
             set { _target = value; }
         }
+
         public SpeedData SpeedData
         {
             get { return _speedData; }
             set { _speedData = value; }
         }
+
         public int MovementType
         {
             get { return _movementType; }
             set { _movementType = value; }
         }
+
         public int Precision
         {
             get { return _precision; }
             set { _precision = value; }
         }
 
-        public Guid DocumentGUID
+        public RobotTool RobotTool
         {
-            get => _documentGUID;
-            set => _documentGUID = value;
+            get { return _robotTool; }
+            set { _robotTool = value; }
         }
-        /**
-        public ObjectManager ObjectManager
+
+        public WorkObject WorkObject
         {
-            get => _objectManager;
-            set => _objectManager = value;
+            get { return _workObject; }
+            set { _workObject = value; }
         }
-        **/
+
+        public DigitalOutput DigitalOutput
+        {
+            get { return _digitalOutput; }
+            set { _digitalOutput = value; }
+        }
         #endregion
     }
 }

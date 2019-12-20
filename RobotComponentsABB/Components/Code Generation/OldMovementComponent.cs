@@ -181,7 +181,7 @@ namespace RobotComponentsABB.Components
                     precision = precisions[precisionCounter];
                 }
 
-                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, documentGUID);
+                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision);
                 movements.Add(movement);
             }
 

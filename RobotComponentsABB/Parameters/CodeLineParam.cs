@@ -8,7 +8,9 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
-
+    /// <summary>
+    /// Class for CodeLine Parameter
+    /// </summary>
     public class CodeLineParameter : GH_PersistentGeometryParam<CodeLineGo>, IGH_PreviewObject
     {
         /// <summary>

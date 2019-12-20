@@ -1476,17 +1476,18 @@ namespace RobotComponentsABB.Properties {
         ///using System.Windows.Forms;
         ///
         ///using RobotComponents.BaseClasses;
-        ///using RobotComponents.Components;
-        ///using RobotComponents.Parameters;
-        ///using RobotComponents.Goos;
         ///
-        ///namespace RobotComponents.Resources
+        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Parameters;
+        ///using RobotComponentsABB.Goos;
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    public partial class PickControllerForm : Form
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        public PickContr [rest of string was truncated]&quot;;.
+        ///        pu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm {
             get {
@@ -1495,7 +1496,7 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponents.Resources
+        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickControllerForm
         ///    {
@@ -1509,7 +1510,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;/summary&gt;
         ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
         ///        protected override void Dispose(bool disposing)
-        ///        [rest of string was truncated]&quot;;.
+        ///     [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm_designer {
             get {
@@ -1553,18 +1554,18 @@ namespace RobotComponentsABB.Properties {
         ///using System.Windows.Forms;
         ///
         ///using RobotComponents.BaseClasses;
-        ///using RobotComponents.Components;
-        ///using RobotComponents.Parameters;
-        ///using RobotComponents.Goos;
         ///
-        ///namespace RobotComponents.Resources
+        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Parameters;
+        ///using RobotComponentsABB.Goos;
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    public partial class PickDIForm : Form
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        public PickDIForm()
-        ///    [rest of string was truncated]&quot;;.
+        ///        public Pic [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm {
             get {
@@ -1573,7 +1574,7 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponents.Resources
+        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickDIForm
         ///    {
@@ -1588,7 +1589,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
         ///        protected override void Dispose(bool disposing)
         ///        {
-        ///     [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm_designer {
             get {
@@ -1632,18 +1633,18 @@ namespace RobotComponentsABB.Properties {
         ///using System.Windows.Forms;
         ///
         ///using RobotComponents.BaseClasses;
-        ///using RobotComponents.Components;
-        ///using RobotComponents.Parameters;
-        ///using RobotComponents.Goos;
         ///
-        ///namespace RobotComponents.Resources
+        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Parameters;
+        ///using RobotComponentsABB.Goos;
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    public partial class PickDOForm : Form
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        public PickDOForm()
-        ///    [rest of string was truncated]&quot;;.
+        ///        public Pic [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm {
             get {
@@ -1652,7 +1653,7 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponents.Resources
+        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickDOForm
         ///    {
@@ -1667,7 +1668,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
         ///        protected override void Dispose(bool disposing)
         ///        {
-        ///     [rest of string was truncated]&quot;;.
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm_designer {
             get {

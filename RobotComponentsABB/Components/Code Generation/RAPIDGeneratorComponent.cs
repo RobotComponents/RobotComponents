@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses;
@@ -66,6 +67,7 @@ namespace RobotComponentsABB.Components
         string MAINCode = "";
         string BASECode = "";
         bool firstMovementIsMoveAbs = true;
+        ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -76,6 +78,16 @@ namespace RobotComponentsABB.Components
         {
             // Gets Document ID
             Guid documentGUID = this.OnPingDocument().DocumentID;
+
+  
+          // Checks if ObjectManager for this document already exists. If not it creates a new one
+          if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
+          {
+              DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
+          }
+
+          // Gets ObjectManager of this document
+          _objectManager = DocumentManager.ObjectManagers[documentGUID];
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();
@@ -105,13 +117,17 @@ namespace RobotComponentsABB.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
+            // Sets the current Robot Tool in the object Manager
+            _objectManager.CurrentTool = robInfo.Tool.Name;
+
             // Initiaties the rapidGenerator
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo, documentGUID);
-            
-            // Updates the rapid BASE and MAIN code
+
+            // Updates the rapid BASE and MAIN code 
             if(update == true)
             {
-                rapidGenerator.CreateBaseCode();
+                string toolBaseCode = GetToolBaseCode();
+                rapidGenerator.CreateBaseCode(toolBaseCode);
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
                 BASECode = rapidGenerator.BASECode;
@@ -136,6 +152,61 @@ namespace RobotComponentsABB.Components
         protected override System.Drawing.Bitmap Icon
         {
             get { return RobotComponentsABB.Properties.Resources.RAPID_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the Base Code for all RobotTools from the object manager.
+        /// </summary>
+        /// <returns></returns>
+        private string GetToolBaseCode()
+        {
+            string BASECode = "";
+
+            foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
+            {
+                string toolData = "";
+                double posX = entry.Value.robTool.AttachmentPlane.Origin.X + entry.Value.robTool.ToolPlane.Origin.X;
+                double posY = entry.Value.robTool.AttachmentPlane.Origin.Y + entry.Value.robTool.ToolPlane.Origin.Y;
+                double posZ = entry.Value.robTool.AttachmentPlane.Origin.Z + entry.Value.robTool.ToolPlane.Origin.Z;
+                Point3d position = new Point3d(posX, posY, posZ);
+                Quaternion orientation = entry.Value.robTool.Orientation;
+                string name = entry.Value.robTool.Name;
+                toolData += " PERS tooldata " + name + " := [TRUE, [["
+                    + position.X.ToString("0.##") + ","
+                    + position.Y.ToString("0.##") + ","
+                    + position.Z.ToString("0.##") + "], ["
+                    + orientation.A.ToString("0.######") + ","
+                    + orientation.B.ToString("0.######") + ","
+                    + orientation.C.ToString("0.######") + ","
+                    + orientation.D.ToString("0.######") + "]],@";
+                toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
+
+                BASECode += toolData;
+            }
+
+            foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
+            {
+                string toolData = "";
+                double posX = entry.Value.robTool.AttachmentPlane.Origin.X + entry.Value.robTool.ToolPlane.Origin.X;
+                double posY = entry.Value.robTool.AttachmentPlane.Origin.Y + entry.Value.robTool.ToolPlane.Origin.Y;
+                double posZ = entry.Value.robTool.AttachmentPlane.Origin.Z + entry.Value.robTool.ToolPlane.Origin.Z;
+                Point3d position = new Point3d(posX, posY, posZ);
+                Quaternion orientation = entry.Value.robTool.Orientation;
+                string name = entry.Value.robTool.Name;
+                toolData += " PERS tooldata " + name + " := [TRUE, [["
+                    + position.X.ToString("0.##") + ","
+                    + position.Y.ToString("0.##") + ","
+                    + position.Z.ToString("0.##") + "], ["
+                    + orientation.A.ToString("0.######") + ", "
+                    + orientation.B.ToString("0.######") + ","
+                    + orientation.C.ToString("0.######") + ","
+                    + orientation.D.ToString("0.######") + "]],@";
+                toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
+
+                BASECode += toolData;
+            }
+
+            return BASECode;
         }
 
         /// <summary>

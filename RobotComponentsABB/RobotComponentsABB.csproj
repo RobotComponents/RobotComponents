@@ -134,7 +134,7 @@
     <Compile Include="Goos\PathGeneratorGoo.cs" />
     <Compile Include="Goos\RobotInfoGoo.cs" />
     <Compile Include="Goos\RobotToolGoo.cs" />
-    <Compile Include="Goos\SetRobotToolGoo.cs" />
+    <Compile Include="Goos\OverrideRobotToolGoo.cs" />
     <Compile Include="Goos\SignalGoo.cs" />
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="Parameters\PathGeneratorParam.cs" />
     <Compile Include="Parameters\RobotInfoParam.cs" />
     <Compile Include="Parameters\RobotToolParam.cs" />
-    <Compile Include="Parameters\SetRobotToolParam.cs" />
+    <Compile Include="Parameters\OverrideRobotToolParam.cs" />
     <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\TargetParam.cs" />
     <Compile Include="Parameters\TimerParam.cs" />

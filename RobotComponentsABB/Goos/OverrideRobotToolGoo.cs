@@ -9,44 +9,44 @@ namespace RobotComponentsABB.Goos
     /// <summary>
     /// Movement Goo wrapper class, makes sure Target can be used in Grasshopper.
     /// </summary>
-    public class SetRobotToolGoo : GH_GeometricGoo<SetRobotTool>, IGH_PreviewData
+    public class OverrideRobotToolGoo : GH_GeometricGoo<OverrideRobotTool>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public SetRobotToolGoo()
+        public OverrideRobotToolGoo()
         {
-            this.Value = new SetRobotTool();
+            this.Value = new OverrideRobotTool();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="setRobotTool"> SetRobotTool Value to store inside this Goo instance. </param>
-        public SetRobotToolGoo(SetRobotTool setRobotTool)
+        /// <param name="OverrideRobotTool"> OverrideRobotTool Value to store inside this Goo instance. </param>
+        public OverrideRobotToolGoo(OverrideRobotTool OverrideRobotTool)
         {
-            if (setRobotTool == null)
-                setRobotTool = new SetRobotTool();
-            this.Value = setRobotTool;
+            if (OverrideRobotTool == null)
+                OverrideRobotTool = new OverrideRobotTool();
+            this.Value = OverrideRobotTool;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the SetRobotToolGoo. </returns>
+        /// <returns> A duplicate of the OverrideRobotToolGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateSetRobotToolGoo();
+            return DuplicateOverrideRobotToolGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the SetRobotToolGoo. </returns>
-        public SetRobotToolGoo DuplicateSetRobotToolGoo()
+        /// <returns> A duplicate of the OverrideRobotToolGoo. </returns>
+        public OverrideRobotToolGoo DuplicateOverrideRobotToolGoo()
         {
-            return new SetRobotToolGoo(Value == null ? new SetRobotTool() : Value.Duplicate());
+            return new OverrideRobotToolGoo(Value == null ? new OverrideRobotTool() : Value.Duplicate());
         }
         #endregion
 
@@ -73,7 +73,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal Set Robot Tool instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid SetRobotTool instance: Did you define a Name?"; //Todo: beef this up to be more informative.
+                return "Invalid OverrideRobotTool instance: Did you define a Name?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -136,8 +136,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q changeTool)
         {
-            //Cast to SetRobotTool.
-            if (typeof(Q).IsAssignableFrom(typeof(SetRobotTool)))
+            //Cast to OverrideRobotTool.
+            if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
             {
                 if (Value == null)
                     changeTool = default(Q);
@@ -159,10 +159,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from SetRobotTool.
-            if (typeof(SetRobotTool).IsAssignableFrom(source.GetType()))
+            //Cast from OverrideRobotTool.
+            if (typeof(OverrideRobotTool).IsAssignableFrom(source.GetType()))
             {
-                Value = (SetRobotTool)source;
+                Value = (OverrideRobotTool)source;
                 return true;
             }
 

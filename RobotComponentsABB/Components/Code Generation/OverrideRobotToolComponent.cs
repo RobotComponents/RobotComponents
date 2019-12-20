@@ -48,7 +48,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SetRobotToolParameter(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new OverrideRobotToolParameter(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace RobotComponentsABB.Components
             if (!DA.GetData(0, ref _toolGoo)) { _toolGoo.Value.Name = "tool0"; ; }
 
             // Create action
-            SetRobotTool setRobotTool = new SetRobotTool(_toolGoo.Value, documentGUID);
+            OverrideRobotTool OverrideRobotTool = new OverrideRobotTool(_toolGoo.Value, documentGUID);
 
             // Output
-            DA.SetData(0, setRobotTool);
+            DA.SetData(0, OverrideRobotTool);
         }
 
         /// <summary>

@@ -110,7 +110,7 @@
     <Compile Include="BaseClasses\RobotInfo.cs" />
     <Compile Include="BaseClasses\Target.cs" />
     <Compile Include="BaseClasses\Timer.cs" />
-    <Compile Include="BaseClasses\SetRobotTool.cs" />
+    <Compile Include="BaseClasses\OverrideRobotTool.cs" />
     <Compile Include="Utils\VersionNumbering.cs" />
   </ItemGroup>
   <ItemGroup>

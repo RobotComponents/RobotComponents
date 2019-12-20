@@ -7,7 +7,7 @@ namespace RobotComponents.BaseClasses
     /// </summary>
     /// 
 
-    public class SetRobotTool : Action
+    public class OverrideRobotTool : Action
     {
         #region fields
         private RobotTool _robotTool;
@@ -18,11 +18,11 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region constructors
-        public SetRobotTool()
+        public OverrideRobotTool()
         {
         }
 
-        public SetRobotTool(RobotTool robotTool, Guid documentGUID)
+        public OverrideRobotTool(RobotTool robotTool, Guid documentGUID)
         {
             this._robotTool = robotTool;
             this._toolName = _robotTool.Name;
@@ -41,9 +41,9 @@ namespace RobotComponents.BaseClasses
                **/
         }
 
-        public SetRobotTool Duplicate()
+        public OverrideRobotTool Duplicate()
         {
-            SetRobotTool dup = new SetRobotTool(RobotTool, DocumentGUID);
+            OverrideRobotTool dup = new OverrideRobotTool(RobotTool, DocumentGUID);
             return dup;
         }
         #endregion

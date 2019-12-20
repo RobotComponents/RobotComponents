@@ -8,13 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
-    public class SetRobotToolParameter : GH_PersistentGeometryParam<SetRobotToolGoo>, IGH_PreviewObject
+    public class OverrideRobotToolParameter : GH_PersistentGeometryParam<OverrideRobotToolGoo>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
         /// </summary>
-        public SetRobotToolParameter()
-          : base(new GH_InstanceDescription("SetRobotTool", "RT", "Maintains SetRobotTool data.", "RobotComponents", "Parameters"))
+        public OverrideRobotToolParameter()
+          : base(new GH_InstanceDescription("OverrideRobotTool", "RT", "Maintains OverrideRobotTool data.", "RobotComponents", "Parameters"))
         {
         }
 
@@ -24,13 +24,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Set Robot Tool";
+            return "Override Robot Tool";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Set Robot Tool"; set => base.Name = value; }
+        public override string Name { get => "Override Robot Tool"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -60,12 +60,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<SetRobotToolGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<OverrideRobotToolGoo> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref SetRobotToolGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref OverrideRobotToolGoo value)
         {
             return GH_GetterResult.cancel;
         }

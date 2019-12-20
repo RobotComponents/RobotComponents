@@ -186,6 +186,12 @@ namespace RobotComponentsABB.Components
                 }
             }
 
+            // Make sure variable input has a default value
+            if (referencePlanes.Count == 0)
+            {
+                referencePlanes.Add(Plane.WorldXY);
+            }
+
             // Get longest Input List
             int[] sizeValues = new int[4];
             sizeValues[0] = names.Count;
@@ -193,12 +199,6 @@ namespace RobotComponentsABB.Components
             sizeValues[2] = referencePlanes.Count;
             sizeValues[3] = axisConfigs.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
-
-            // Make sure variable input has a default value
-            if (referencePlanes.Count == 0)
-            {
-                referencePlanes.Add(Plane.WorldXY);
-            }
 
             // Keeps track of used indicies
             int nameCounter = -1;

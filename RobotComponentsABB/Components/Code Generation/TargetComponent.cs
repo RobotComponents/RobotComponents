@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
 using Rhino.Geometry;
 
@@ -390,6 +391,9 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, index);
+
+                // Add default data to the input parameter
+                Params.Input[index].AddVolatileData(new GH_Path(0), 0, Plane.WorldXY);
             }
 
             // Expire solution and refresh parameters since they changed
@@ -444,6 +448,9 @@ namespace RobotComponentsABB.Components
 
             // Register the input parameter
             Params.RegisterInputParam(parameter, fixedParamNumInput + index);
+
+            // Add default data to the input parameter
+            Params.Input[fixedParamNumInput + index].AddVolatileData(new GH_Path(0), 0, null);
 
             // Refresh parameters since they changed
             Params.OnParametersChanged();

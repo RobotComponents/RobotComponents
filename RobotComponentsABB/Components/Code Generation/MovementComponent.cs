@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 using Grasshopper;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel.Parameters;
 
@@ -62,7 +63,7 @@ namespace RobotComponentsABB.Components
         // Create an array with the variable input parameters
         readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true },
+            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true},
             // Todo: Make a work object parameter and change the generic object to the WorkObjectParameter
             new Param_GenericObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
             new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
@@ -363,6 +364,9 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, insertIndex);
+
+                // Add default data to the input parameter
+                Params.Input[insertIndex].AddVolatileData(new GH_Path(0), 0, null);
             }
 
             // Expire solution and refresh parameters since they changed

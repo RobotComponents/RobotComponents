@@ -716,12 +716,17 @@
   <ItemGroup>
     <None Include="Resources\WaitDI_Parameter_Icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Target_Icon_Old.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
       <Name>RobotComponents</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Movement_Icon_Old.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

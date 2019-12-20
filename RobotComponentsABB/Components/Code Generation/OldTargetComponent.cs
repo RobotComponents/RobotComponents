@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; } // Hide after new component is working
+            get { return GH_Exposure.hidden; } // Hide after new component is working
         }
 
         /// <summary>
@@ -265,7 +265,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Target_Icon; }
+            get { return Properties.Resources.Target_Icon_Old; }
         }
 
         /// <summary>

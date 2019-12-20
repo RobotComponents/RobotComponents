@@ -167,12 +167,30 @@ namespace RobotComponentsABB.Components
                 if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputGoos)) return;
             }
 
+            // Make sure variable input parameters have a default value
+            if (robotToolGoos.Count == 0)
+            {
+                robotToolGoos.Add(null);
+            }
+            if (workObjectGoos.Count == 0)
+            {
+                workObjectGoos.Add(new WorkObjectGoo());
+            }
+            if (digitalOutputGoos.Count == 0)
+            {
+                digitalOutputGoos.Add(null);
+            }
+
             // Get longest Input List
-            int[] sizeValues = new int[4];
+            int[] sizeValues = new int[7];
             sizeValues[0] = targetGoos.Count;
             sizeValues[1] = speedDataGoos.Count;
             sizeValues[2] = movementTypes.Count;
             sizeValues[3] = precisions.Count;
+            sizeValues[4] = robotToolGoos.Count;
+            sizeValues[5] = workObjectGoos.Count;
+            sizeValues[6] = digitalOutputGoos.Count;
+
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
             // Keeps track of used indicies
@@ -180,7 +198,10 @@ namespace RobotComponentsABB.Components
             int speedDataGooCounter = -1;
             int movementTypeCounter = -1;
             int precisionCounter = -1;
-
+            int robotToolGooCounter = -1;
+            int workObjectGooCounter = -1;
+            int digitalOutputGooCounter = -1;
+            
             // Creates movements
             List<Movement> movements = new List<Movement>();
 
@@ -189,8 +210,12 @@ namespace RobotComponentsABB.Components
                 TargetGoo targetGoo;
                 SpeedDataGoo speedDataGoo;
                 int movementType;
-                int precision; ;
+                int precision;
+                RobotToolGoo robotToolGoo;
+                WorkObjectGoo workObjectGoo;
+                DigitalOutputGoo digitalOutputGoo;
 
+                // Target counter
                 if (i < targetGoos.Count)
                 {
                     targetGoo = targetGoos[i];
@@ -201,6 +226,7 @@ namespace RobotComponentsABB.Components
                     targetGoo = targetGoos[targetGooCounter];
                 }
 
+                // Workobject counter
                 if (i < speedDataGoos.Count)
                 {
                     speedDataGoo = speedDataGoos[i];
@@ -211,6 +237,7 @@ namespace RobotComponentsABB.Components
                     speedDataGoo = speedDataGoos[speedDataGooCounter];
                 }
 
+                // Movement type counter
                 if (i < movementTypes.Count)
                 {
                     movementType = movementTypes[i];
@@ -221,6 +248,7 @@ namespace RobotComponentsABB.Components
                     movementType = movementTypes[movementTypeCounter];
                 }
 
+                // Precision counter
                 if (i < precisions.Count)
                 {
                     precision = precisions[i];
@@ -231,7 +259,41 @@ namespace RobotComponentsABB.Components
                     precision = precisions[precisionCounter];
                 }
 
-                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision);
+                // Robot tool counter
+                if (i < robotToolGoos.Count)
+                {
+                    robotToolGoo = robotToolGoos[i];
+                    robotToolGooCounter++;
+                }
+                else
+                {
+                    robotToolGoo = robotToolGoos[robotToolGooCounter];
+                }
+
+                // Work Object counter
+                if (i < workObjectGoos.Count)
+                {
+                    workObjectGoo = workObjectGoos[i];
+                    workObjectGooCounter++;
+                }
+                else
+                {
+                    workObjectGoo = workObjectGoos[workObjectGooCounter];
+                }
+
+                // Digital Output counter
+                if (i < digitalOutputGoos.Count)
+                {
+                    digitalOutputGoo = digitalOutputGoos[i];
+                    digitalOutputGooCounter++;
+                }
+                else
+                {
+                    digitalOutputGoo = digitalOutputGoos[digitalOutputGooCounter];
+                }
+
+                // Constructor
+                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, robotToolGoo.Value, workObjectGoo.Value, digitalOutputGoo.Value);
                 movements.Add(movement);
             }
 

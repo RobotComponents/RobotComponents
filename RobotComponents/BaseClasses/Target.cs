@@ -7,17 +7,15 @@ namespace RobotComponents.BaseClasses
     /// <summary>
     /// Target class, defines Target Data.
     /// </summary>
-    /// 
-
     public class Target : Action
     {
         #region fields
         string _name;
         Guid _instanceGuid;
-        private Plane _plane;
-        private Quaternion _quat;
-        private int _axisConfig;
-        private bool _isRobTarget;
+        Plane _plane;
+        Quaternion _quat;
+        int _axisConfig;
+        bool _isRobTarget;
         string _jointTargetName;
         string _robTargetName;
 
@@ -26,17 +24,47 @@ namespace RobotComponents.BaseClasses
         // If external axis values are null: 9.0e9
         // If external axis values are null and an external axis is connected: use our own inverse kinematics
         // If external axis values are defined and an external axis is connected: use the user defined axis position
-        private double? _Eax_a;
-        private double? _Eax_b;
-        private double? _Eax_c;
-        private double? _Eax_d;
-        private double? _Eax_e;
-        private double? _Eax_f;
+        double? _Eax_a;
+        double? _Eax_b;
+        double? _Eax_c;
+        double? _Eax_d;
+        double? _Eax_e;
+        double? _Eax_f;
         #endregion
 
         #region constructors
         public Target()
         {
+        }
+
+        /// <summary>
+        ///  Defines a robot target.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axisConfiguration.</param>
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig)
+        {
+            _name = name;
+            _plane = plane;
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.ChangeBasis(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+            
+            _quat = CalcQuaternion();
+            _axisConfig = axisConfig;
+            _robTargetName = name + "_rt";
+            _jointTargetName = name + "_jt";
+
+            // External axis values
+            _Eax_a = null;
+            _Eax_b = null;
+            _Eax_c = null;
+            _Eax_d = null;
+            _Eax_e = null;
+            _Eax_f = null;
         }
 
         /// <summary>
@@ -86,10 +114,9 @@ namespace RobotComponents.BaseClasses
             _Eax_f = null;
         }
 
-        public Target(string name, Guid instanceGuid, Plane plane, int axisConfig, bool isRobTarget)
+        public Target(string name, Plane plane, int axisConfig, bool isRobTarget)
         {
             _name = name;
-            _instanceGuid = instanceGuid;
             _plane = plane;
             _quat = CalcQuaternion();
             _axisConfig = axisConfig;
@@ -108,7 +135,7 @@ namespace RobotComponents.BaseClasses
 
         public Target Duplicate()
         {
-            Target dup = new Target(Name, InstanceGuid, Plane, AxisConfig, IsRobTarget);
+            Target dup = new Target(Name, Plane, AxisConfig, IsRobTarget);
             return dup;
         }
         #endregion

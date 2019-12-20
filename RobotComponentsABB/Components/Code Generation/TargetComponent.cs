@@ -120,9 +120,8 @@ namespace RobotComponentsABB.Components
             Guid instanceGUID = this.InstanceGuid;
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
-            List<Plane> refPlanes = new List<Plane>();
+            List<Plane> referencePlanes = new List<Plane>();
             List<int> axisConfigs = new List<int>();
-            bool isRobTarget = true;
 
             // Override external axis values input variables
             List<double> externalAxisValueA = new List<double>();
@@ -141,7 +140,7 @@ namespace RobotComponentsABB.Components
             // Catch reference plane input
             if (Params.Input.Any(x => x.Name == "Reference Plane"))
             {
-                if (!DA.GetDataList("Reference Plane", refPlanes)) return;
+                if (!DA.GetDataList("Reference Plane", referencePlanes)) return;
             }
 
             // Catch axis configuration input
@@ -188,15 +187,23 @@ namespace RobotComponentsABB.Components
             }
 
             // Get longest Input List
-            int[] sizeValues = new int[3];
+            int[] sizeValues = new int[4];
             sizeValues[0] = names.Count;
             sizeValues[1] = planes.Count;
-            sizeValues[2] = axisConfigs.Count;
+            sizeValues[2] = referencePlanes.Count;
+            sizeValues[3] = axisConfigs.Count;
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+
+            // Make sure variable input has a default value
+            if (referencePlanes.Count == 0)
+            {
+                referencePlanes.Add(Plane.WorldXY);
+            }
 
             // Keeps track of used indicies
             int nameCounter = -1;
             int planesCounter = -1;
+            int referencePlaneCounter = -1;
             int axisConfigCounter = -1;
 
             // Creates targets
@@ -205,8 +212,10 @@ namespace RobotComponentsABB.Components
             {
                 string name = "";
                 Plane plane = new Plane();
+                Plane referencePlane = new Plane();
                 int axisConfig = 0;
-
+                
+                // Names counter
                 if (i < names.Count)
                 {
                     name = names[i];
@@ -217,6 +226,7 @@ namespace RobotComponentsABB.Components
                     name = names[nameCounter] + "_" + (i - nameCounter);
                 }
 
+                // Target planes counter
                 if (i < planes.Count)
                 {
                     plane = planes[i];
@@ -227,6 +237,18 @@ namespace RobotComponentsABB.Components
                     plane = planes[planesCounter];
                 }
 
+                // Reference plane counter
+                if (i < referencePlanes.Count)
+                {
+                    referencePlane = referencePlanes[i];
+                    referencePlaneCounter++;
+                }
+                else
+                {
+                    referencePlane = referencePlanes[referencePlaneCounter];
+                }
+
+                // Axis configuration counter
                 if (i < axisConfigs.Count)
                 {
                     axisConfig = axisConfigs[i];
@@ -237,7 +259,7 @@ namespace RobotComponentsABB.Components
                     axisConfig = axisConfigs[axisConfigCounter];
                 }
 
-                Target target = new Target(name, instanceGUID, planes[i], axisConfig, isRobTarget);
+                Target target = new Target(name, plane, referencePlane, axisConfig);
                 targets.Add(target);
             }
 
@@ -393,7 +415,7 @@ namespace RobotComponentsABB.Components
                 Params.RegisterInputParam(parameter, index);
 
                 // Add default data to the input parameter
-                Params.Input[index].AddVolatileData(new GH_Path(0), 0, Plane.WorldXY);
+                Params.Input[index].AddVolatileDataList(new GH_Path(0), new List<Plane>() { Plane.WorldXY });
             }
 
             // Expire solution and refresh parameters since they changed

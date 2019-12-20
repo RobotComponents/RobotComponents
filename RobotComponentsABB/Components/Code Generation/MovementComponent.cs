@@ -170,15 +170,15 @@ namespace RobotComponentsABB.Components
             // Make sure variable input parameters have a default value
             if (robotToolGoos.Count == 0)
             {
-                robotToolGoos.Add(null);
+                robotToolGoos.Add(new RobotToolGoo()); // Makes a default tool (tool0)
             }
             if (workObjectGoos.Count == 0)
             {
-                workObjectGoos.Add(new WorkObjectGoo());
+                workObjectGoos.Add(new WorkObjectGoo()); // Makes a default WorkObject (wobj0)
             }
             if (digitalOutputGoos.Count == 0)
             {
-                digitalOutputGoos.Add(null);
+                digitalOutputGoos.Add(new DigitalOutputGoo()); // Makes an invalid DigitalOutputGoo
             }
 
             // Get longest Input List
@@ -428,7 +428,7 @@ namespace RobotComponentsABB.Components
                 Params.RegisterInputParam(parameter, insertIndex);
 
                 // Add default data to the input parameter
-                Params.Input[insertIndex].AddVolatileData(new GH_Path(0), 0, null);
+                // Params.Input[insertIndex].AddVolatileData(new GH_Path(0), 0, null);
             }
 
             // Expire solution and refresh parameters since they changed

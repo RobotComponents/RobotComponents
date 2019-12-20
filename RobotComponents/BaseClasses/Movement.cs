@@ -198,13 +198,13 @@ namespace RobotComponents.BaseClasses
         {
             // Set tool name
             string toolName;
-            if (_robotTool == null) { toolName = robotToolName; }
+            if (_robotTool.Name == "tool0") { toolName = robotToolName; }
             else { toolName = _robotTool.Name; }
 
             // Set zone data text (precision value)
             string zoneName;
             if (_precision < 0) { zoneName = @", fine, "; }
-            else { zoneName = @", z" + _precision.ToString() + ", "; }
+            else { zoneName = @", z" + _precision.ToString() + @", "; }
 
             // MoveAbsJ
             if (_movementType == 0)
@@ -212,22 +212,22 @@ namespace RobotComponents.BaseClasses
                 return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
             }
             // MoveL
-            else if (_movementType == 1 && _digitalOutput == null)
+            else if (_movementType == 1 && _digitalOutput.IsValid == false)
             {
                 return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
             }
             // MoveJ
-            else if (_movementType == 2 && _digitalOutput == null)
+            else if (_movementType == 2 && _digitalOutput.IsValid == false)
             {
                 return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
             }
             // MoveL
-            else if (_movementType == 1 && _digitalOutput != null)
+            else if (_movementType == 1 && _digitalOutput.IsValid == true)
             {
                 return ("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
             }
             // MoveJ
-            else if (_movementType == 2 && _digitalOutput != null)
+            else if (_movementType == 2 && _digitalOutput.IsValid == true)
             {
                 return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
             }

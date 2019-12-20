@@ -4,7 +4,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Resources;
+using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 // ABB Robotic Libs

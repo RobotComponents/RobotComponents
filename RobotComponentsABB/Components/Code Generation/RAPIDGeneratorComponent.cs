@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponents.Components
+namespace RobotComponentsABB.Components
 {
     public class RAPIDGeneratorComponent : GH_Component
     {

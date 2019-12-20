@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 
 //using RobotComponents.Components;
 
-namespace RobotComponentsABB.BaseClasses
+namespace RobotComponents.BaseClasses
 {
     /// <summary>
     /// RAPID Generator class, creates RAPID Code from Actions.

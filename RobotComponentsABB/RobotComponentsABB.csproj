@@ -163,33 +163,39 @@
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\ObjectManager.cs" />
-    <None Include="Resources\PickControllerForm.cs" />
-    <None Include="Resources\PickControllerForm.designer.cs">
+    <Compile Include="Resources\PickControllerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickControllerForm.designer.cs">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
-    </None>
-    <None Include="Resources\PickDIForm.cs" />
-    <None Include="Resources\PickDIForm.designer.cs">
+    </Compile>
+    <Compile Include="Resources\PickDIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickDIForm.designer.cs">
       <DependentUpon>PickDIForm.cs</DependentUpon>
-    </None>
-    <None Include="Resources\PickDOForm.cs" />
-    <None Include="Resources\PickDOForm.designer.cs">
+    </Compile>
+    <Compile Include="Resources\PickDOForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickDOForm.designer.cs">
       <DependentUpon>PickDOForm.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Resources\PickDOForm.resx">
+    <EmbeddedResource Include="Resources\PickDOForm.resx">
       <DependentUpon>PickDOForm.cs</DependentUpon>
-    </None>
-    <None Include="Resources\PickDIForm.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PickDIForm.resx">
       <DependentUpon>PickDIForm.cs</DependentUpon>
-    </None>
-    <None Include="Resources\PickControllerForm.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PickControllerForm.resx">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Auto_Icon.png" />

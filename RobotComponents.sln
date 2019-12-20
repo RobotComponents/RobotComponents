@@ -1,36 +1,60 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents", "RobotComponents\RobotComponents.csproj", "{496BA2CE-D067-42B3-BD7F-D1BB429A4987}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E84B28BC-8FC5-4D16-917E-4733DA520162}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponentsABB", "RobotComponentsABB\RobotComponentsABB.csproj", "{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponentsEDEK", "RobotComponentsEDEK\RobotComponentsEDEK.csproj", "{BC672ACB-0E21-4FB0-94C9-6388AF07A759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug32|Any CPU = Debug32|Any CPU
 		Debug64|Any CPU = Debug64|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Release64|Any CPU = Release64|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug|Any CPU.ActiveCfg = Debug64|Any CPU
+		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug|Any CPU.Build.0 = Debug64|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug32|Any CPU.ActiveCfg = Debug32|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug32|Any CPU.Build.0 = Debug32|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug64|Any CPU.ActiveCfg = Debug64|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Debug64|Any CPU.Build.0 = Debug64|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Release64|Any CPU.ActiveCfg = Release|Any CPU
+		{496BA2CE-D067-42B3-BD7F-D1BB429A4987}.Release64|Any CPU.Build.0 = Release|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug32|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug32|Any CPU.Build.0 = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug64|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Debug64|Any CPU.Build.0 = Debug|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Release64|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}.Release64|Any CPU.Build.0 = Release|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug32|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug32|Any CPU.Build.0 = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug64|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Debug64|Any CPU.Build.0 = Debug|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Release64|Any CPU.ActiveCfg = Release|Any CPU
+		{BC672ACB-0E21-4FB0-94C9-6388AF07A759}.Release64|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://experimentaldigitaldesignconstruction.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = RobotComponents\\RobotComponents.csproj
-		SccProjectName1 = RobotComponents
-		SccLocalPath1 = RobotComponents
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E19442A4-E1B7-4B79-B8F5-9A8A2151AB15}
 	EndGlobalSection
 EndGlobal

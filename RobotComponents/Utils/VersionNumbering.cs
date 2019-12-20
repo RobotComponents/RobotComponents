@@ -1,6 +1,6 @@
 ﻿namespace RobotComponents.Utils
 {
-    internal static class VersionNumbering
+    public static class VersionNumbering
     {
         /// <summary>
         /// Returns the Current Version of the RobotComponent Plugin. Has to be manually updated each time

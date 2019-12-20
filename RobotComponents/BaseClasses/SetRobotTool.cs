@@ -14,7 +14,7 @@ namespace RobotComponents.BaseClasses
         private string _toolName;
         private string _toolData;
         private Guid _documentGUID;
-        private ObjectManager _objectManager;
+        //private ObjectManager _objectManager;
         #endregion
 
         #region constructors
@@ -29,6 +29,7 @@ namespace RobotComponents.BaseClasses
             this._toolData = GetToolData();
             this._documentGUID = documentGUID;
 
+            /**
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
             {
@@ -37,6 +38,7 @@ namespace RobotComponents.BaseClasses
 
             // Gets ObjectManager of this document
             _objectManager = DocumentManager.ObjectManagers[_documentGUID];
+               **/
         }
 
         public SetRobotTool Duplicate()
@@ -72,7 +74,7 @@ namespace RobotComponents.BaseClasses
         }
 
         public Guid DocumentGUID { get => _documentGUID; set => _documentGUID = value; }
-        public ObjectManager ObjectManager { get => _objectManager; set => _objectManager = value; }
+        //public ObjectManager ObjectManager { get => _objectManager; set => _objectManager = value; }
         #endregion
 
         #region method
@@ -83,7 +85,7 @@ namespace RobotComponents.BaseClasses
 
         public override string ToRAPIDFunction()
         {
-            _objectManager.CurrentTool = _toolName;
+            // _objectManager.CurrentTool = _toolName;
             return "";
         }
 

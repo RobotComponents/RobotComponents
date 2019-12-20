@@ -3,9 +3,12 @@ using System.IO;
 using System.Collections.Generic;
 
 using Rhino.Geometry;
-using RobotComponents.Components;
 
-namespace RobotComponents.BaseClasses
+using RobotComponents.BaseClasses;
+
+//using RobotComponents.Components;
+
+namespace RobotComponentsABB.BaseClasses
 {
     /// <summary>
     /// RAPID Generator class, creates RAPID Code from Actions.
@@ -14,14 +17,14 @@ namespace RobotComponents.BaseClasses
     {
         #region fields
         private RobotInfo _robotInfo;
-        private List<Action> _actions = new List<Action>();
+        private List<RobotComponents.BaseClasses.Action> _actions = new List<RobotComponents.BaseClasses.Action>();
         private string _filePath;
         private bool _saveToFile;
         private string _RAPIDCode;
         private string _BASECode;
         private string _ModuleName;
         private Guid _documentGUID;
-        private ObjectManager _objectManager;
+        //private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs;
         #endregion
 
@@ -30,7 +33,7 @@ namespace RobotComponents.BaseClasses
         {
         }
 
-        public RAPIDGenerator(string moduleName,  List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo, Guid documentGUID)
+        public RAPIDGenerator(string moduleName,  List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo, Guid documentGUID)
         {
             this._ModuleName = moduleName;
             this._robotInfo = robotInfo;
@@ -41,6 +44,7 @@ namespace RobotComponents.BaseClasses
 
             this._documentGUID = documentGUID;
 
+            /**
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
             {
@@ -49,6 +53,7 @@ namespace RobotComponents.BaseClasses
 
             // Gets ObjectManager of this document
             _objectManager = DocumentManager.ObjectManagers[_documentGUID];
+            **/
 
             if (_saveToFile == true)
             {
@@ -69,7 +74,7 @@ namespace RobotComponents.BaseClasses
         public string CreateRAPIDCode()
         {
             // Set's default RobotTool
-             _objectManager.CurrentTool = _robotInfo.Tool.Name;
+            //_objectManager.CurrentTool = _robotInfo.Tool.Name;
 
             // Creates Main Module
             string RAPIDCode = "MODULE " + _ModuleName+"@";
@@ -147,6 +152,7 @@ namespace RobotComponents.BaseClasses
 
             BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0];@@";
 
+            /**
             // Creates all available Tool Data 
             foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
             {
@@ -188,9 +194,10 @@ namespace RobotComponents.BaseClasses
                     + orientation.C.ToString("0.######") + "," 
                     + orientation.D.ToString("0.######") + "]],@";
                 toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
-
+                
                 BASECode += toolData;
             }
+            **/
 
             // End Module
             BASECode += "ENDMODULE";
@@ -230,7 +237,7 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
-        public List<Action> Actions
+        public List<RobotComponents.BaseClasses.Action> Actions
         {
             get { return _actions; }
             set { _actions = value; }
@@ -262,7 +269,7 @@ namespace RobotComponents.BaseClasses
         }
 
         public Guid DocumentGUID { get => _documentGUID; set => _documentGUID = value; }
-        public ObjectManager ObjectManager { get => _objectManager; set => _objectManager = value; }
+        //public ObjectManager ObjectManager { get => _objectManager; set => _objectManager = value; }
         public string ModuleName { get => _ModuleName; set => _ModuleName = value; }
         public bool FirstMovementIsMoveAbs { get => _firstMovementIsMoveAbs;}
         #endregion

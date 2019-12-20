@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System;
 
+using RobotComponents.BaseClasses;
+
 namespace RobotComponents.BaseClasses
 {
     /// <summary>
@@ -14,7 +16,7 @@ namespace RobotComponents.BaseClasses
         int _movementType;
         int _precision;
         Guid _documentGUID;
-        ObjectManager _objectManager;
+        // ObjectManager _objectManager;
         #endregion
 
         #region constructors
@@ -37,7 +39,7 @@ namespace RobotComponents.BaseClasses
             this._precision = precision;
             this._documentGUID = documentGUID;
 
-
+            /**
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
             {
@@ -46,6 +48,7 @@ namespace RobotComponents.BaseClasses
 
             // Gets ObjectManager of this document
             _objectManager = DocumentManager.ObjectManagers[_documentGUID];
+            **/
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace RobotComponents.BaseClasses
             this._precision = 0;
             this._documentGUID = documentGUID;
 
-
+            /**
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(_documentGUID))
             {
@@ -71,6 +74,7 @@ namespace RobotComponents.BaseClasses
 
             // Gets ObjectManager of this document
             _objectManager = DocumentManager.ObjectManagers[_documentGUID];
+            **/
         }
 
         /// <summary>
@@ -182,16 +186,20 @@ namespace RobotComponents.BaseClasses
 
         public override string ToRAPIDFunction()
         {
+            // To do
+            // Was set as _objectManager.CurrentTool;
+            string toolName = "tool0";
+
             // MoveAbsJ
             if (MovementType == 0)
             {
                 if (_precision < 0)
                 {
-                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
                 }
                 else
                 {
-                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
                 }
             }
             // MoveL
@@ -199,11 +207,11 @@ namespace RobotComponents.BaseClasses
             {
                 if (_precision < 0)
                 {
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
                 }
                 else
                 {
-                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
                 }
             }
             // MoveJ
@@ -211,11 +219,11 @@ namespace RobotComponents.BaseClasses
             {
                 if (_precision < 0)
                 {
-                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", fine, " + toolName + "\\WObj:=wobj0;");
                 }
                 else
                 {
-                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + _objectManager.CurrentTool + "\\WObj:=wobj0;");
+                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + ", z" + Precision.ToString() + ", " + toolName + "\\WObj:=wobj0;");
                 }
             }
             // Return nothing if a wrong movement type is used
@@ -262,12 +270,13 @@ namespace RobotComponents.BaseClasses
             get => _documentGUID;
             set => _documentGUID = value;
         }
-
+        /**
         public ObjectManager ObjectManager
         {
             get => _objectManager;
             set => _objectManager = value;
         }
+        **/
         #endregion
     }
 }

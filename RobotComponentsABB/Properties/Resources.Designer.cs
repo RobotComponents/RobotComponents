@@ -1418,6 +1418,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Movement_Icon_Old {
+            get {
+                object obj = ResourceManager.GetObject("Movement_Icon_Old", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Movement_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Movement_Parameter_Icon", resourceCulture);
@@ -1827,6 +1837,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap Target_Icon {
             get {
                 object obj = ResourceManager.GetObject("Target_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Target_Icon_Old {
+            get {
+                object obj = ResourceManager.GetObject("Target_Icon_Old", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponents.Components
+namespace RobotComponentsABB.Components
 {
     public class IRB1600_X_1_20_Component : GH_Component
     {

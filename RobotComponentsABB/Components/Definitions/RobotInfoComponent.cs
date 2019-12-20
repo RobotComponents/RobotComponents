@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components.Definitions
+namespace RobotComponentsABB.Components
 {
     public class RobotInfoComponent : GH_Component
     {

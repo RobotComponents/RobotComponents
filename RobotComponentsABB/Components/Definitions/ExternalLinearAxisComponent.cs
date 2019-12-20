@@ -7,7 +7,7 @@ using Rhino.Geometry;
 using RobotComponentsABB.Parameters;
 using RobotComponents.BaseClasses;
 
-namespace RobotComponentsABB.Components.Definitions
+namespace RobotComponentsABB.Components
 {
     public class ExternalLinearAxisComponent : GH_Component
     {

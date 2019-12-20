@@ -74,7 +74,6 @@ namespace RobotComponents.BaseClasses
         }
 
         public Guid DocumentGUID { get => _documentGUID; set => _documentGUID = value; }
-        //public ObjectManager ObjectManager { get => _objectManager; set => _objectManager = value; }
         #endregion
 
         #region method
@@ -83,15 +82,19 @@ namespace RobotComponents.BaseClasses
             return _toolData;
         }
 
-        public override string ToRAPIDFunction()
+        public override string ToRAPIDFunction(string robotToolName)
         {
-            // _objectManager.CurrentTool = _toolName;
             return "";
         }
 
         public string GetToolData()
         {
             return "";
+        }
+
+        public string GetToolName()
+        {
+            return _toolName;
         }
         #endregion
 

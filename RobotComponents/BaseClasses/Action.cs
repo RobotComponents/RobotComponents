@@ -22,7 +22,7 @@ namespace RobotComponents.BaseClasses
 
         #region methods
         public abstract string InitRAPIDVar(RobotInfo robInfo, string RAPIDCode);
-        public abstract string ToRAPIDFunction();
+        public abstract string ToRAPIDFunction(string robotToolName);
         #endregion
     }
 }

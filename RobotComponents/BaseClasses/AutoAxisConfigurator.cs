@@ -49,7 +49,7 @@ namespace RobotComponents.BaseClasses
             return ("");
         }
 
-        public override string ToRAPIDFunction()
+        public override string ToRAPIDFunction(string robotToolName)
         {
             if (_isActive == true)
             {

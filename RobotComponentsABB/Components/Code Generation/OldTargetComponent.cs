@@ -101,7 +101,6 @@ namespace RobotComponentsABB.Components
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
             List<int> axisConfigs = new List<int>();
-            bool isRobTarget = true;
 
             // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
@@ -158,7 +157,7 @@ namespace RobotComponentsABB.Components
                     axisConfig = axisConfigs[axisConfigCounter];
                 }
 
-                Target target = new Target(name, planes[i], axisConfig, isRobTarget);
+                Target target = new Target(name, plane, axisConfig);
                 targets.Add(target);
             }
 

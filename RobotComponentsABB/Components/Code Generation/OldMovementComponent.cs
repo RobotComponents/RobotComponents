@@ -64,7 +64,7 @@ namespace RobotComponentsABB.Components
         private void CreateValueList()
         {
             // Gets the input parameter
-            var parameter = this.Params.Input[2];
+            var parameter = Params.Input[2];
 
             // Creates the empty value list
             GH_ValueList obj = new GH_ValueList();
@@ -86,8 +86,11 @@ namespace RobotComponentsABB.Components
             // Connect the value list to the input parameter
             parameter.AddSource(obj);
 
-            // Clear input data
-            parameter.ClearData();
+            // Collect data
+            parameter.CollectData();
+
+            // Expire the solution
+            ExpireSolution(true);
         }
 
         /// <summary>

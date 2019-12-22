@@ -55,6 +55,8 @@ namespace RobotComponentsABB.Components
             pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
+
+            pManager[2].Optional = true;
         }
 
         // Register the number of fixed input parameters
@@ -64,7 +66,6 @@ namespace RobotComponentsABB.Components
         readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
             new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true},
-            // Todo: Make a work object parameter and change the generic object to the WorkObjectParameter
             new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
             new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
@@ -82,35 +83,38 @@ namespace RobotComponentsABB.Components
         /// </summary>
         private void CreateValueList()
         {
-            // Gets the input parameter
-            var parameter = this.Params.Input[2];
+            if (Params.Input[2].SourceCount == 0)
+            {
+                // Gets the input parameter
+                var parameter = this.Params.Input[2];
 
-            // Creates the empty value list
-            GH_ValueList obj = new GH_ValueList();
-            obj.CreateAttributes();
-            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-            obj.ListItems.Clear();
+                // Creates the empty value list
+                GH_ValueList obj = new GH_ValueList();
+                obj.CreateAttributes();
+                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+                obj.ListItems.Clear();
 
-            // Add the items to the value list
-            obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+                // Add the items to the value list
+                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
 
-            // Make point where the valuelist should be created on the canvas
-            obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
 
-            // Add the value list to the active canvas
-            Instances.ActiveCanvas.Document.AddObject(obj, false);
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-            // Connect the value list to the input parameter
-            parameter.AddSource(obj);
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
 
-            // Clear input data
-            parameter.ClearData();
+                // Collect data
+                parameter.CollectData();
+
+                // Expire the solution
+                ExpireSolution(true);
+            }
         }
-
-        // Fields
-        ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -118,25 +122,11 @@ namespace RobotComponentsABB.Components
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
-
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentGUID];
-
-
             // Creates the input value list and attachs it to the input parameter
-            if (this.Params.Input[2].SourceCount == 0)
-            {
-                CreateValueList();
-            }
+            CreateValueList();
+
+            // Add volatiledata
+            CreateVolatileData();
 
             // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
@@ -402,14 +392,14 @@ namespace RobotComponentsABB.Components
             // Parameter name
             string name = variableInputParameters[index].Name;
 
-            // If the parameter already exist: unregister it
+            // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
             {
                 // Unregister the parameter
                 Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
             }
 
-            // Else add the reference plane parameter
+            // Else remove the variable input parameter
             else
             {
                 // The index where the parameter should be added
@@ -426,14 +416,65 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, insertIndex);
-
-                // Add default data to the input parameter
-                // Params.Input[insertIndex].AddVolatileData(new GH_Path(0), 0, null);
             }
 
             // Expire solution and refresh parameters since they changed
             Params.OnParametersChanged();
             ExpireSolution(true);
+        }
+
+        /// <summary>
+        /// Adds the default data to the variable input parameters.
+        /// </summary>
+        public void CreateVolatileData()
+        {
+            // Variables
+            bool changed = false;
+            string name;
+            int index;
+
+            // Robot Tool
+            name = variableInputParameters[0].Name;
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                index = Params.Input.FindIndex(x => x.Name == name);
+                if (Params.Input[index].VolatileData.DataCount == 0)
+                {
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo());
+                    changed = true;
+                }
+            }
+
+            // Work Object
+            name = variableInputParameters[1].Name;
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                index = Params.Input.FindIndex(x => x.Name == name);
+                if (Params.Input[index].VolatileData.DataCount == 0)
+                {
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new WorkObjectGoo());
+                    changed = true;
+                }
+            }
+
+            // Digital Output
+            name = variableInputParameters[2].Name;
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                index = Params.Input.FindIndex(x => x.Name == name);
+                if (Params.Input[index].VolatileData.DataCount == 0)
+                {
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo());
+                    changed = true;
+                }
+            }
+
+            // Expire solution when default data was added
+            if (changed == true)
+            {
+                Params.OnParametersChanged();
+                ExpireSolution(true);
+            }
         }
         #endregion
 

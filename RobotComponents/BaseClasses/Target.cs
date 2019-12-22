@@ -15,7 +15,6 @@ namespace RobotComponents.BaseClasses
         Plane _plane;
         Quaternion _quat;
         int _axisConfig;
-        bool _isRobTarget;
         string _jointTargetName;
         string _robTargetName;
 
@@ -24,12 +23,12 @@ namespace RobotComponents.BaseClasses
         // If external axis values are null: 9.0e9
         // If external axis values are null and an external axis is connected: use our own inverse kinematics
         // If external axis values are defined and an external axis is connected: use the user defined axis position
-        double? _Eax_a;
-        double? _Eax_b;
-        double? _Eax_c;
-        double? _Eax_d;
-        double? _Eax_e;
-        double? _Eax_f;
+        double _Eax_a;
+        double _Eax_b;
+        double _Eax_c;
+        double _Eax_d;
+        double _Eax_e;
+        double _Eax_f;
         #endregion
 
         #region constructors
@@ -59,12 +58,12 @@ namespace RobotComponents.BaseClasses
             _jointTargetName = name + "_jt";
 
             // External axis values
-            _Eax_a = null;
-            _Eax_b = null;
-            _Eax_c = null;
-            _Eax_d = null;
-            _Eax_e = null;
-            _Eax_f = null;
+            _Eax_a = 9e9;
+            _Eax_b = 9e9;
+            _Eax_c = 9e9;
+            _Eax_d = 9e9;
+            _Eax_e = 9e9;
+            _Eax_f = 9e9;
         }
 
         /// <summary>
@@ -83,12 +82,12 @@ namespace RobotComponents.BaseClasses
             _jointTargetName = name + "_jt";
 
             // External axis values
-            _Eax_a = null;
-            _Eax_b = null;
-            _Eax_c = null;
-            _Eax_d = null;
-            _Eax_e = null;
-            _Eax_f = null;
+            _Eax_a = 9e9;
+            _Eax_b = 9e9;
+            _Eax_c = 9e9;
+            _Eax_d = 9e9;
+            _Eax_e = 9e9;
+            _Eax_f = 9e9;
         }
 
         /// <summary>
@@ -106,36 +105,17 @@ namespace RobotComponents.BaseClasses
             _jointTargetName = name + "_jt";
 
             // External axis values
-            _Eax_a = null;
-            _Eax_b = null;
-            _Eax_c = null;
-            _Eax_d = null;
-            _Eax_e = null;
-            _Eax_f = null;
-        }
-
-        public Target(string name, Plane plane, int axisConfig, bool isRobTarget)
-        {
-            _name = name;
-            _plane = plane;
-            _quat = CalcQuaternion();
-            _axisConfig = axisConfig;
-            _isRobTarget = isRobTarget;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            // External axis values
-            _Eax_a = null;
-            _Eax_b = null;
-            _Eax_c = null;
-            _Eax_d = null;
-            _Eax_e = null;
-            _Eax_f = null;
+            _Eax_a = 9e9;
+            _Eax_b = 9e9;
+            _Eax_c = 9e9;
+            _Eax_d = 9e9;
+            _Eax_e = 9e9;
+            _Eax_f = 9e9;
         }
 
         public Target Duplicate()
         {
-            Target dup = new Target(Name, Plane, AxisConfig, IsRobTarget);
+            Target dup = new Target(Name, Plane, AxisConfig);
             return dup;
         }
         #endregion
@@ -170,21 +150,25 @@ namespace RobotComponents.BaseClasses
                 return true;
             }
         }
+
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
+
         public Guid InstanceGuid
         {
             get { return _instanceGuid; }
             set { _instanceGuid = value; }
         }
+
         public Plane Plane
         {
             get { return _plane; }
             set { _plane = value; }
         }
+
         public Quaternion Quat
         {
             get { return _quat; }
@@ -195,16 +179,13 @@ namespace RobotComponents.BaseClasses
             get { return _axisConfig; }
             set { _axisConfig = value; }
         }
-        public bool IsRobTarget
-        {
-            get { return _isRobTarget; }
-            set { _isRobTarget = value; }
-        }
+
         public string JointTargetName
         {
             get { return _jointTargetName; }
             set { _jointTargetName = value; }
         }
+
         public string RobTargetName
         {
             get { return _robTargetName; }

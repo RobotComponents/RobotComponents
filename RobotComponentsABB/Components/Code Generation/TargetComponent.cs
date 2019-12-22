@@ -86,6 +86,9 @@ namespace RobotComponentsABB.Components
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Add volatiledata
+            CreateVolatileData();
+
             // Clears targetNames
             for (int i = 0; i < targetNames.Count; i++)
             {
@@ -187,10 +190,13 @@ namespace RobotComponentsABB.Components
             }
 
             // Make sure variable input has a default value
-            if (referencePlanes.Count == 0)
-            {
-                referencePlanes.Add(Plane.WorldXY);
-            }
+            if (referencePlanes.Count == 0) { referencePlanes.Add(Plane.WorldXY); }
+            if (externalAxisValueA.Count == 0) { externalAxisValueA.Add(9e9); }
+            if (externalAxisValueB.Count == 0) { externalAxisValueB.Add(9e9); }
+            if (externalAxisValueC.Count == 0) { externalAxisValueC.Add(9e9); }
+            if (externalAxisValueD.Count == 0) { externalAxisValueD.Add(9e9); }
+            if (externalAxisValueE.Count == 0) { externalAxisValueE.Add(9e9); }
+            if (externalAxisValueF.Count == 0) { externalAxisValueF.Add(9e9); }
 
             // Get longest Input List
             int[] sizeValues = new int[4];
@@ -321,16 +327,6 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
-        {
-
-        }
-
-        /// <summary>
         /// Detect if the components gets removed from the canvas and deletes the 
         /// objects created with this components from the object manager. 
         /// </summary>
@@ -413,9 +409,6 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, index);
-
-                // Add default data to the input parameter
-                Params.Input[index].AddVolatileDataList(new GH_Path(0), new List<Plane>() { Plane.WorldXY });
             }
 
             // Expire solution and refresh parameters since they changed
@@ -471,12 +464,54 @@ namespace RobotComponentsABB.Components
             // Register the input parameter
             Params.RegisterInputParam(parameter, fixedParamNumInput + index);
 
-            // Add default data to the input parameter
-            Params.Input[fixedParamNumInput + index].AddVolatileData(new GH_Path(0), 0, null);
-
             // Refresh parameters since they changed
             Params.OnParametersChanged();
             ExpireSolution(true);
+        }
+
+        /// <summary>
+        /// Adds the default data to the variable input parameters.
+        /// </summary>
+        public void CreateVolatileData()
+        {
+            // Variables
+            bool changed = false;
+            string name;
+            int index;
+
+            // Reference plane
+            name = "Reference Plane";
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                index = Params.Input.FindIndex(x => x.Name == name);
+                if (Params.Input[index].VolatileData.DataCount == 0)
+                {
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, Plane.WorldXY);
+                    changed = true;
+                }
+            }
+
+            // Work Object
+            for (int i = 0; i < externalAxisParameters.Length; i++)
+            {
+                name = externalAxisParameters[i].Name;
+                if (Params.Input.Any(x => x.Name == name))
+                {
+                    index = Params.Input.FindIndex(x => x.Name == name);
+                    if (Params.Input[index].VolatileData.DataCount == 0)
+                    {
+                        Params.Input[index].AddVolatileData(new GH_Path(0), 0, 9e9);
+                        changed = true;
+                    }
+                }
+            }
+
+            // Expire solution when default data was added
+            if (changed == true)
+            {
+                Params.OnParametersChanged();
+                ExpireSolution(true);
+            }
         }
         #endregion
 

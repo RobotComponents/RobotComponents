@@ -157,7 +157,7 @@ namespace RobotComponents.Components
                     axisConfig = axisConfigs[axisConfigCounter];
                 }
 
-                Target target = new Target(name, instanceGUID, planes[i], axisConfig, isRobTarget);
+                Target target = new Target(name, instanceGUID, plane, axisConfig, isRobTarget);
                 targets.Add(target);
             }
 

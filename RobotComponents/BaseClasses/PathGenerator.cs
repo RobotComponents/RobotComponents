@@ -174,7 +174,7 @@ namespace RobotComponents.BaseClasses
 
                             _forwardKinematics.Update(_internalAxisValues, _externalAxisValues);
                             _forwardKinematics.Calculate();
-                            targets.Add(new Target(_target1.Name + "_interpolation_" + j, _forwardKinematics.TCPPlane));
+                            targets.Add(new Target(_target1.Name + "_interpolation_" + j, _forwardKinematics.TCPPlane, _target2.AxisConfig));
 
                             // Add points to path
                             points.Add(_forwardKinematics.TCPPlane.Origin);
@@ -233,7 +233,7 @@ namespace RobotComponents.BaseClasses
                         {
                             Plane plane = new Plane(_planePoints[l], _axisDirections[l][0], _axisDirections[l][1]);
                             _subTargetPlanes.Add(plane);
-                            targets.Add(new Target(_target1.Name + "_interpolation_" + l, plane));
+                            targets.Add(new Target(_target1.Name + "_interpolation_" + l, plane, _target2.AxisConfig));
                         }
 
                         // Start and end point of straight line

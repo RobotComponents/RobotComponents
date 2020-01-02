@@ -62,32 +62,44 @@ namespace RobotComponents.Components
         /// </summary>
         private void CreateValueList()
         {
-            // Gets the input parameter
-            var parameter = this.Params.Input[2];
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                // Gets the input parameter
+                var parameter = Params.Input[2];
 
-            // Creates the empty value list
-            GH_ValueList obj = new GH_ValueList();
-            obj.CreateAttributes();
-            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-            obj.ListItems.Clear();
+                // Creates the empty value list
+                GH_ValueList obj = new GH_ValueList();
+                obj.CreateAttributes();
+                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+                obj.ListItems.Clear();
 
-            // Add the items to the value list
-            obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+                // Add the items to the value list
+                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
 
-            // Make point where the valuelist should be created on the canvas
-            obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
 
-            // Add the value list to the active canvas
-            Instances.ActiveCanvas.Document.AddObject(obj, false);
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-            // Connect the value list to the input parameter
-            parameter.AddSource(obj);
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
 
-            // Clear input data
-            parameter.ClearData();
+                // Collect data
+                parameter.CollectData();
+
+                // Set bool for expire solution of this component
+                _expire = true;
+
+                // First expire the solution of the value list
+                obj.ExpireSolution(true);
+            }
         }
+
+        // Fields
+        bool _expire = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -105,9 +117,13 @@ namespace RobotComponents.Components
             List<int> precisions = new List<int>();
 
             // Creates the input value list and attachs it to the input parameter
-            if (this.Params.Input[2].SourceCount == 0)
+            CreateValueList();
+
+            // Expire solution of this component
+            if (_expire == true)
             {
-                CreateValueList();
+                _expire = !_expire;
+                this.ExpireSolution(true);
             }
 
             // Catch the input data

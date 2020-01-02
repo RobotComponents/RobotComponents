@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="commentGoo"> CommentGoo to store inside this Goo instance. </param>
+        public CommentGoo(CommentGoo commentGoo)
+        {
+            if (commentGoo == null)
+                commentGoo = new CommentGoo();
+            this.Value = commentGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the CommentGoo. </returns>

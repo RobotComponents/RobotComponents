@@ -34,6 +34,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="externalRotationalAxisGoo"> ExternalRotationalAxisGoo to store inside this Goo instance. </param>
+        public ExternalRotationalAxisGoo(ExternalRotationalAxisGoo externalRotationalAxisGoo)
+        {
+            if (externalRotationalAxisGoo == null)
+                externalRotationalAxisGoo = new ExternalRotationalAxisGoo();
+            this.Value = externalRotationalAxisGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the ExternalRationalAxisGoo. </returns>

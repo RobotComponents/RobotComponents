@@ -7,6 +7,9 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Deconstruct Movement component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DeconstructMovementComponent : GH_Component
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace RobotComponentsABB.Components
           : base("Deconstruct Movement", "DeConMove",
               "Deconstructs a Movement Component into its parameters."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -35,9 +38,12 @@ namespace RobotComponentsABB.Components
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");
-            pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Speed Data");
+            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");
+            pManager.RegisterParam(new RobotToolParameter(), "Override Robot Tool", "RT", "Override Robot Tool");
+            pManager.RegisterParam(new WorkObjectParameter(), "Override Work Object", "WO", "Override Work Object");
+            pManager.RegisterParam(new DigitalOutputParameter(), "Set Digital Output", "DO", "Digital Output for creation of MoveLDO and MoveJDO");
         }
 
         /// <summary>
@@ -57,6 +63,9 @@ namespace RobotComponentsABB.Components
             DA.SetData(1, movementGoo.Value.SpeedData);
             DA.SetData(2, movementGoo.Value.MovementType);
             DA.SetData(3, movementGoo.Value.Precision);
+            DA.SetData(4, movementGoo.Value.RobotTool);
+            DA.SetData(5, movementGoo.Value.WorkObject);
+            DA.SetData(6, movementGoo.Value.DigitalOutput);
         }
 
         /// <summary>

@@ -8,6 +8,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Deconstruct Robot Tool component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DeconstructRobotToolComponent : GH_Component
     {
         /// <summary>
@@ -17,7 +20,7 @@ namespace RobotComponentsABB.Components
           : base("Deconstruct Robot Tool", "DeRobTool",
               "Deconstructs a robot tool definition into its constituent parts"
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

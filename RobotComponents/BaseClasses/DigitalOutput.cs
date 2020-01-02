@@ -52,7 +52,7 @@
         {
             get
             {
-                if (Name == null) { return false; };
+                if (Name == null) { return false; }; 
                 return true;
             }
         }

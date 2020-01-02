@@ -6,6 +6,9 @@ using Grasshopper.Kernel.Data;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Naming component. An inherent from the GH_Component Class.
+    /// </summary>
     public class NamingComponent : GH_Component
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace RobotComponentsABB.Components
         public NamingComponent()
           : base("Naming", "N",
               "This components makes the datatree for the target and speed datas names if datatrees are used." 
-                + System.Environment.NewLine + "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

@@ -8,6 +8,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Timer component. An inherent from the GH_Component Class.
+    /// </summary>
     public class TimerComponent : GH_Component
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace RobotComponentsABB.Components
           : base("Action: Timer", "T",
               "Defines an instruction to wait a given amount of time between two other robot instructions for RAPID main code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

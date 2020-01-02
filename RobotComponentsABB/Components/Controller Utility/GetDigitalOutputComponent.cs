@@ -12,6 +12,9 @@ using ABB.Robotics.Controllers;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
+    /// </summary>
     public class GetDigitalOutputComponent : GH_Component
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace RobotComponentsABB.Components
           : base("Get Digital Output", "GetDO",
               "Gets the signal of a digital output from a defined ABB robot controller."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -47,11 +50,10 @@ namespace RobotComponentsABB.Components
             pManager.AddBooleanParameter("State", "S", "The Digital Output State", GH_ParamAccess.item);
         }
 
-        // Global component variables
+        // Fields
         public int pickedIndex = 0;
         public static List<SignalGoo> signalGooList = new List<SignalGoo>();
         ABB.Robotics.Controllers.Controller controller = null;
-
         string currentSignalName = "";
         string currentSystemName = "";
         string currentCtrName = "";

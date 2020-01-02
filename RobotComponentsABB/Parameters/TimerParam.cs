@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Timer parameter
+    /// </summary>
     public class TimerParameter : GH_PersistentGeometryParam<TimerGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<TimerGoo> class
         /// </summary>
         public TimerParameter()
           : base(new GH_InstanceDescription("Wait", "W", "Maintains Wait data.", "RobotComponents", "Parameters"))

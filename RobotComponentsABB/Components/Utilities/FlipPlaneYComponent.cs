@@ -6,6 +6,9 @@ using Rhino.Geometry;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Flip Plane (make y-axis negative) component. An inherent from the GH_Component Class.
+    /// </summary>
     public class FlipPlaneYComponent : GH_Component
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace RobotComponentsABB.Components
         public FlipPlaneYComponent()
           : base("Flip Plane Y", "Flip Plane Y",
               "Flips the plane to the oposite direction by setting it's y-Axis negativ."
-                + System.Environment.NewLine + "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

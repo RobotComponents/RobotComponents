@@ -10,6 +10,9 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Target visualization component. An inherent from the GH_Component Class.
+    /// </summary>
     public class TargetVisualizerComponent : GH_Component
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace RobotComponentsABB.Components
           : base("Target Visualizer", "TV",
               "Displays Target Information."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -48,7 +51,7 @@ namespace RobotComponentsABB.Components
             // This component has no output parameters.
         }
 
-        // Global component variables
+        // Fields
         GH_Structure<TargetGoo> targetGoos = new GH_Structure<TargetGoo>();
         System.Drawing.Color color = new System.Drawing.Color();
         bool displayNames = true;

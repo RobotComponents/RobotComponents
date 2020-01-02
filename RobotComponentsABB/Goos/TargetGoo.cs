@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="targetGoo"> TargetGoo to store inside this Goo instance. </param>
+        public TargetGoo(TargetGoo targetGoo)
+        {
+            if (targetGoo == null)
+                targetGoo = new TargetGoo();
+            this.Value = targetGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the TargetGoo. </returns>
@@ -214,6 +225,10 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            Plane plane = Value.Plane;
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
         }
 
         /// <summary>
@@ -222,6 +237,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            // GH_Plane.DrawPlane(args.Pipeline, Value.Plane);
         }
         #endregion
 

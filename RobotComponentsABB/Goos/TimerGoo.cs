@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="timerGoo"> TimerGoo to store inside this Goo instance. </param>
+        public TimerGoo(TimerGoo timerGoo)
+        {
+            if (timerGoo == null)
+                timerGoo = new TimerGoo();
+            this.Value = timerGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the TimerGoo. </returns>

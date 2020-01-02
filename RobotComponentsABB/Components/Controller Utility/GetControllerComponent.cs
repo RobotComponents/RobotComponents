@@ -10,6 +10,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Controller Utility : Get and connect to an ABB controller. An inherent from the GH_Component Class.
+    /// </summary>
     public class GetControllerComponent : GH_Component
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace RobotComponentsABB.Components
           : base("Get Controller", "GC",
               "Connects to a virtual or real ABB controller to extract data from it."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -41,7 +44,7 @@ namespace RobotComponentsABB.Components
             pManager.AddGenericParameter("Robot Controller", "RC", "Robotic Controller", GH_ParamAccess.item);
         }
 
-        // Global component variables
+        // Fields
         public int pickedIndex = 0;
         public static List<ABB.Robotics.Controllers.Controller> controllerInstance = new List<ABB.Robotics.Controllers.Controller>();
         public ControllerGoo controllerGoo;

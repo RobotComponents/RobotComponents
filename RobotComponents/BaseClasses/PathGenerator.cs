@@ -79,6 +79,9 @@ namespace RobotComponents.BaseClasses
                     Target _target1 = movements[i].Target;
                     Target _target2 = movements[i + 1].Target;
 
+                    RobotTool currentTool1 = movements[i].RobotTool;
+                    RobotTool currentTool2 = movements[i+1].RobotTool;
+
                     // Points for path curve
                     List<Point3d> points = new List<Point3d>();
 
@@ -86,13 +89,13 @@ namespace RobotComponents.BaseClasses
                     if (movements[i + 1].MovementType == 0 || movements[i + 1].MovementType == 2)
                     {
                         // _inverseKinematics.Update(_target1);
-                        InverseKinematics IK1 = new InverseKinematics(_target1, _robotInfo);
+                        InverseKinematics IK1 = new InverseKinematics(_target1, _robotInfo, currentTool1);
                         IK1.Calculate();
                         List<double> _target1InternalAxisValues = IK1.InternalAxisValues;
                         List<double> _target1ExternalAxisValues = IK1.ExternalAxisValues;
 
                         //_inverseKinematics.Update(_target2);
-                        InverseKinematics IK2 = new InverseKinematics(_target2, _robotInfo);
+                        InverseKinematics IK2 = new InverseKinematics(_target2, _robotInfo, currentTool2);
                         IK2.Calculate();
                         List<double> _target2InternalAxisValues = IK2.InternalAxisValues;
                         List<double> _target2ExternalAxisValues = IK2.ExternalAxisValues;
@@ -146,7 +149,7 @@ namespace RobotComponents.BaseClasses
 
                             _forwardKinematics.Update(_internalAxisValues, _externalAxisValues);
                             _forwardKinematics.Calculate();
-                            targets.Add(new Target(_target1.Name + "_interpolation_" + j, _forwardKinematics.TCPPlane));
+                            targets.Add(new Target(_target1.Name + "_interpolation_" + j, _forwardKinematics.TCPPlane, _target2.AxisConfig, _externalAxisValues));
 
                             // Add points to path
                             points.Add(_forwardKinematics.TCPPlane.Origin);
@@ -165,6 +168,7 @@ namespace RobotComponents.BaseClasses
                     // Targets and paths for linear movement: MoveL
                     else
                     {
+                        #region calculate interpolated target plane
                         // MainTarget Plane Position Difference
                         Vector3d _posDif = _target2.Plane.Origin - _target1.Plane.Origin;
 
@@ -198,14 +202,51 @@ namespace RobotComponents.BaseClasses
                             _axisDir.Add(_target1.Plane.ZAxis + _zAxisChange * k);
                             _axisDirections.Add(_axisDir);
                         }
+                        #endregion
+
+                        #region caclulate interpolated external axis value
+                        // _inverseKinematics.Update(_target1);
+                        InverseKinematics IK1 = new InverseKinematics(_target1, _robotInfo, currentTool1);
+                        IK1.Calculate();
+                        List<double> _target1ExternalAxisValues = IK1.ExternalAxisValues;
+
+                        //_inverseKinematics.Update(_target2);
+                        InverseKinematics IK2 = new InverseKinematics(_target2, _robotInfo, currentTool2);
+                        IK2.Calculate();
+                        List<double> _target2ExternalAxisValues = IK2.ExternalAxisValues;
+
+                        // Calculate Axis Value Difference between both Targets
+                        List<double> _externalAxisValueDifferences = new List<double>();
+                        for (int j = 0; j < _target1ExternalAxisValues.Count; j++)
+                        {
+                            double _difference = _target2ExternalAxisValues[j] - _target1ExternalAxisValues[j];
+                            _externalAxisValueDifferences.Add(_difference);
+                        }
+
+                        // Calculates Axis Value Change per Interpolation Step
+                        List<double> _externalAxisValueChange = new List<double>();
+                        for (int j = 0; j < _target1ExternalAxisValues.Count; j++)
+                        {
+                            double _valueChange = _externalAxisValueDifferences[j] / interpolations;
+                            _externalAxisValueChange.Add(_valueChange);
+                        }
+                        #endregion
+
 
                         // SubTarget Planes
                         List<Plane> _subTargetPlanes = new List<Plane>();
                         for (int l = 0; l < interpolations; l++)
                         {
+                            List<double> _externalAxisValues = new List<double>();
+                            for (int k = 0; k < _target1ExternalAxisValues.Count; k++)
+                            {
+                                double _valueAddition = _target1ExternalAxisValues[k] + _externalAxisValueChange[k] * l;
+                                _externalAxisValues.Add(_valueAddition);
+                            }
+
                             Plane plane = new Plane(_planePoints[l], _axisDirections[l][0], _axisDirections[l][1]);
                             _subTargetPlanes.Add(plane);
-                            targets.Add(new Target(_target1.Name + "_interpolation_" + l, plane));
+                            targets.Add(new Target(_target1.Name + "_interpolation_" + l, plane, _target2.AxisConfig, _externalAxisValues));
                         }
 
                         // Start and end point of straight line
@@ -270,11 +311,28 @@ namespace RobotComponents.BaseClasses
         {
             List<Movement> movements = new List<Movement>();
 
+            RobotTool currentTool = _robotInfo.Tool;
+
             for (int i = 0; i < actions.Count; i++)
             {
-                if (actions[i] is Movement)
+                if (actions[i] is OverrideRobotTool)
                 {
-                    movements.Add(((Movement)actions[i]));
+                    OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
+                    currentTool = overrideRobotTool.RobotTool;
+                }
+
+                else if (actions[i] is Movement)
+                {
+                    Movement movement = ((Movement)actions[i]).Duplicate();
+                    
+                    // Set the current tool if no tool is set
+                    if (movement.RobotTool.Name == "tool0")
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+                    // Otherwise: don't set a tool. Last overwrite is used
+
+                    movements.Add(movement);
                 }
             }
             return movements;

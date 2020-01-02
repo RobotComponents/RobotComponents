@@ -9,6 +9,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponents.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Digital Output component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DigitalOutputComponent : GH_Component
     {
         /// <summary>
@@ -20,7 +23,7 @@ namespace RobotComponents.Components
           : base("Action: Digital Output", "DO",
               "Defines an instruction to change the state of a digital output of the robot controller for RAPID code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

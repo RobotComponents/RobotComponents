@@ -11,6 +11,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// OBSOLETE: RobotComponents Action : Target component. Will be removed in the future. An inherent from the GH_Component Class.
+    /// </summary>
     public class OldTargetComponent : GH_Component
     {
         /// <summary>
@@ -20,9 +23,9 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public OldTargetComponent()
           : base("Action: Target", "T",
-              "Defines a target for an Action: Movement or Inverse Kinematics component."
+              "OBSOLETE: Defines a target for an Action: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -33,7 +36,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; } // Hide after new component is working
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -54,7 +57,7 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
         }
 
-        // Global component variables
+        // Fields
         public List<string> targetNames = new List<string>();
         private string lastName = "";
         private bool namesUnique;
@@ -74,7 +77,7 @@ namespace RobotComponentsABB.Components
             targetNames.Clear();
 
             // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
+            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
             // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
             if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID)) {
@@ -219,20 +222,11 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
-        /// 
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
 
@@ -259,12 +253,20 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Target_Icon_Old; }
+            get { return Properties.Resources.Target_Icon; }
         }
 
         /// <summary>

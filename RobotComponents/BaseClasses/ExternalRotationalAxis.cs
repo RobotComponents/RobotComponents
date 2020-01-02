@@ -32,7 +32,7 @@ namespace RobotComponents.BaseClasses
             _axisNumber = null; // Todo
             _isLinear = false;
             _posedMeshes = new List<Mesh>();
-            Initilize();
+            Initialize();
         }
 
         public ExternalRotationalAxis Duplicate()
@@ -132,14 +132,14 @@ namespace RobotComponents.BaseClasses
             _axisPlane = _attachmentPlane;
         }
         
-        public override void Initilize()
+        public override void Initialize()
         {
             GetAxisCurve();
             GetAxisPlane();
         }
-        public override void ReInitilize()
+        public override void ReInitialize()
         {
-            Initilize();
+            Initialize();
         }
         #endregion
 

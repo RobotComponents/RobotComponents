@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// External Rotational Axis parameter
+    /// </summary>
     public class ExternalRotationalAxisParameter : GH_PersistentGeometryParam<ExternalLinearAxisGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalRotanionalAxisGoo> class
         /// </summary>
         public ExternalRotationalAxisParameter()
           : base(new GH_InstanceDescription("External Rotational Axis", "ERA", "Maintains External Rotational Axis data.", "RobotComponents", "Parameters"))

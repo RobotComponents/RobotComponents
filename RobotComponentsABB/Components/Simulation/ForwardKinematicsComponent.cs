@@ -11,6 +11,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
+    /// </summary>
     public class ForwardKinematicsComponent : GH_Component 
     {
         /// <summary>
@@ -22,7 +25,7 @@ namespace RobotComponentsABB.Components
           : base("Forward Kinematics", "FK",
               "Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
         }
@@ -47,7 +50,7 @@ namespace RobotComponentsABB.Components
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
 
-        // Global component variables
+        // Fields
         ForwardKinematics _fk = new ForwardKinematics();
 
         /// <summary>

@@ -14,6 +14,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// OBSOLETE: RobotComponents Action : Momvement component. Will be removed in the future. An inherent from the GH_Component Class.
+    /// </summary>
     public class OldMovementComponent : GH_Component
     {
         /// <summary>
@@ -23,9 +26,9 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public OldMovementComponent()
           : base("Action: Movement", "M",
-              "Defines a robot movement instruction for simulation and code generation."
+              "OBSOLETE: Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -45,7 +48,7 @@ namespace RobotComponentsABB.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
-            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
@@ -63,35 +66,44 @@ namespace RobotComponentsABB.Components
         /// </summary>
         private void CreateValueList()
         {
-            // Gets the input parameter
-            var parameter = Params.Input[2];
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                // Gets the input parameter
+                var parameter = Params.Input[2];
 
-            // Creates the empty value list
-            GH_ValueList obj = new GH_ValueList();
-            obj.CreateAttributes();
-            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-            obj.ListItems.Clear();
+                // Creates the empty value list
+                GH_ValueList obj = new GH_ValueList();
+                obj.CreateAttributes();
+                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+                obj.ListItems.Clear();
 
-            // Add the items to the value list
-            obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-            obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+                // Add the items to the value list
+                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
 
-            // Make point where the valuelist should be created on the canvas
-            obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
 
-            // Add the value list to the active canvas
-            Instances.ActiveCanvas.Document.AddObject(obj, false);
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-            // Connect the value list to the input parameter
-            parameter.AddSource(obj);
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
 
-            // Collect data
-            parameter.CollectData();
+                // Collect data
+                parameter.CollectData();
 
-            // Expire the solution
-            ExpireSolution(true);
+                // Set bool for expire solution of this component
+                _expire = true;
+
+                // First expire the solution of the value list
+                obj.ExpireSolution(true);
+            }
         }
+
+        // Fields
+        bool _expire = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -99,9 +111,6 @@ namespace RobotComponentsABB.Components
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
-
             // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
             List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
@@ -109,9 +118,13 @@ namespace RobotComponentsABB.Components
             List<int> precisions = new List<int>();
 
             // Creates the input value list and attachs it to the input parameter
-            if (this.Params.Input[2].SourceCount == 0)
+            CreateValueList();
+
+            // Expire solution of this component
+            if (_expire == true)
             {
-                CreateValueList();
+                _expire = !_expire;
+                this.ExpireSolution(true);
             }
 
             // Catch the input data
@@ -232,12 +245,20 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.Movement_Icon_Old; }
+            get { return RobotComponentsABB.Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>

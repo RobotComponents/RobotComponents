@@ -29,6 +29,15 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="signalGoo"> SignalGoo to store inside this Goo instance. </param>
+        public SignalGoo(SignalGoo signalGoo)
+        {
+            this.Value = signalGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the SignalGoo. </returns>

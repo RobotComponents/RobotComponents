@@ -8,7 +8,8 @@ using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
-using Grasshopper.Kernel.Parameters;
+
+using GH_IO.Serialization;
 
 using RobotComponents.BaseClasses;
 
@@ -18,6 +19,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
+    /// </summary>
     public class MovementComponent : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
@@ -29,12 +33,12 @@ namespace RobotComponentsABB.Components
           : base("Action: Movement", "M",
               "Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
 
         {
             // Create the component label with a message
-            this.Message = "EXTENDABLE";
+            Message = "EXTENDABLE";
         }
 
         /// <summary>
@@ -52,11 +56,12 @@ namespace RobotComponentsABB.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
-            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            // To do: Something goes wrong with (de)serialization of the speed data parameter if it is used here. 
+            // The problem occurs since it is a IGH_VariableParameterComponent. Without the IGH_VariableParameterComponent it works smooth. 
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
-
-            pManager[2].Optional = true;
         }
 
         // Register the number of fixed input parameters
@@ -78,43 +83,11 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Movement");  //Todo: beef this up to be more informative.
         }
 
-        /// <summary>
-        /// Creates the value list for the motion type and connects it the input parameter is other source is connected
-        /// </summary>
-        private void CreateValueList()
-        {
-            if (Params.Input[2].SourceCount == 0)
-            {
-                // Gets the input parameter
-                var parameter = this.Params.Input[2];
-
-                // Creates the empty value list
-                GH_ValueList obj = new GH_ValueList();
-                obj.CreateAttributes();
-                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-                obj.ListItems.Clear();
-
-                // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
-
-                // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
-
-                // Add the value list to the active canvas
-                Instances.ActiveCanvas.Document.AddObject(obj, false);
-
-                // Connect the value list to the input parameter
-                parameter.AddSource(obj);
-
-                // Collect data
-                parameter.CollectData();
-
-                // Expire the solution
-                ExpireSolution(true);
-            }
-        }
+        // Fields
+        bool _expire = false;
+        private bool _overrideRobotTool = false;
+        private bool _overrideWorkObject = false;
+        private bool _setDigitalOutput = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -125,6 +98,13 @@ namespace RobotComponentsABB.Components
             // Creates the input value list and attachs it to the input parameter
             CreateValueList();
 
+            // Expire solution of this component
+            if (_expire == true)
+            {
+                _expire = false;
+                this.ExpireSolution(true);
+            }
+
             // Add volatiledata
             CreateVolatileData();
 
@@ -134,7 +114,7 @@ namespace RobotComponentsABB.Components
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
             List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
-            List<WorkObjectGoo> workObjectGoos = new List<WorkObjectGoo>(); // To do: Make WorkObjectGoo
+            List<WorkObjectGoo> workObjectGoos = new List<WorkObjectGoo>();
             List<DigitalOutputGoo> digitalOutputGoos = new List<DigitalOutputGoo>();
 
             // Catch the input data from the fixed parameters
@@ -160,7 +140,7 @@ namespace RobotComponentsABB.Components
             // Make sure variable input parameters have a default value
             if (robotToolGoos.Count == 0)
             {
-                robotToolGoos.Add(new RobotToolGoo()); // Makes a default tool (tool0)
+                robotToolGoos.Add(new RobotToolGoo()); // Makes a default RobotTool (tool0)
             }
             if (workObjectGoos.Count == 0)
             {
@@ -168,7 +148,7 @@ namespace RobotComponentsABB.Components
             }
             if (digitalOutputGoos.Count == 0)
             {
-                digitalOutputGoos.Add(new DigitalOutputGoo()); // Makes an invalid DigitalOutputGoo
+                digitalOutputGoos.Add(new DigitalOutputGoo()); // InValid DO
             }
 
             // Get longest Input List
@@ -282,7 +262,7 @@ namespace RobotComponentsABB.Components
                     digitalOutputGoo = digitalOutputGoos[digitalOutputGooCounter];
                 }
 
-                // Constructor
+                // Movement constructor
                 Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, robotToolGoo.Value, workObjectGoo.Value, digitalOutputGoo.Value);
                 movements.Add(movement);
             }
@@ -330,8 +310,111 @@ namespace RobotComponentsABB.Components
             DA.SetDataList(0, movements);
         }
 
-        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
+        // Method for creating the value list with movement types
+        #region valuelist
+        /// <summary>
+        /// Creates the value list for the motion type and connects it the input parameter is other source is connected
+        /// </summary>
+        private void CreateValueList()
+        {
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                // Gets the input parameter
+                var parameter = Params.Input[2];
+
+                // Creates the empty value list
+                GH_ValueList obj = new GH_ValueList();
+                obj.CreateAttributes();
+                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+                obj.ListItems.Clear();
+
+                // Add the items to the value list
+                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
+                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
+
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
+
+                // Collect data
+                parameter.CollectData();
+
+                // Set bool for expire solution of this component
+                _expire = true;
+
+                // First expire the solution of the value list
+                obj.ExpireSolution(true);
+            }
+        }
+        #endregion
+
+        // Methods and properties for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for overriding the Robot Tool is checked
+        /// </summary>
+        public bool OverrideRobotTool
+        {
+            get { return _overrideRobotTool; }
+            set { _overrideRobotTool = value; }
+        }
+
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for overriding the Work Object is checked
+        /// </summary>
+        public bool OverrideWorkObject
+        {
+            get { return _overrideWorkObject; }
+            set { _overrideWorkObject = value; }
+        }
+
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for setting a Digital Output is is checked
+        /// </summary>
+        public bool SetDigitalOutput
+        {
+            get { return _setDigitalOutput; }
+            set { _setDigitalOutput = value; }
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            // Add our own fields
+            writer.SetBoolean("Override Robot Tool", OverrideRobotTool);
+            writer.SetBoolean("Override Work Object", OverrideWorkObject);
+            writer.SetBoolean("Set Digital Output", SetDigitalOutput);
+
+            // Call the base class implementation.
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            // Read our own fields
+            OverrideRobotTool = reader.GetBoolean("Override Robot Tool");
+            OverrideWorkObject = reader.GetBoolean("Override Work Object");
+            SetDigitalOutput = reader.GetBoolean("Set Digital Output");
+            
+            // Call the base class implementation.
+            return base.Read(reader);
+        }
+
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -342,9 +425,9 @@ namespace RobotComponentsABB.Components
             Menu_AppendSeparator(menu);
 
             // Add custom menu items
-            Menu_AppendItem(menu, "Robot Tool", MenuItemClickRobotTool, true, Params.Input.Any(x => x.Name == variableInputParameters[0].Name));
-            Menu_AppendItem(menu, "Work Object", MenuItemClickWorkObject, true, Params.Input.Any(x => x.Name == variableInputParameters[1].Name));
-            Menu_AppendItem(menu, "Digital Output", MenuItemClickDigitalOutput, true, Params.Input.Any(x => x.Name == variableInputParameters[2].Name));
+            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
+            Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, OverrideWorkObject);
+            Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, SetDigitalOutput);
         }
 
         /// <summary>
@@ -354,6 +437,10 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClickRobotTool(object sender, EventArgs e)
         {
+            // Change bool
+            RecordUndoEvent("Override Robot Tool");
+            OverrideRobotTool = !OverrideRobotTool;
+
             // Add or remove the robot tool input parameter
             AddParameter(0);
         }
@@ -365,6 +452,10 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClickWorkObject(object sender, EventArgs e)
         {
+            // Change bool
+            RecordUndoEvent("Override Work Object");
+            OverrideWorkObject = !OverrideWorkObject;
+
             // Add or remove the work object input parameter
             AddParameter(1);
         }
@@ -376,6 +467,10 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClickDigitalOutput(object sender, EventArgs e)
         {
+            // Change bool
+            RecordUndoEvent("Set Digital Output");
+            SetDigitalOutput = !SetDigitalOutput;
+
             // Add or remove the digital output parameter
             AddParameter(2);
         }
@@ -416,11 +511,15 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, insertIndex);
+
+                // Add volatile data
+                CreateVolatileData();
             }
 
-            // Expire solution and refresh parameters since they changed
-            Params.OnParametersChanged();
-            ExpireSolution(true);
+        // Expire solution and refresh parameters since they changed
+        Params.OnParametersChanged();
+        ExpireSolution(true);
+
         }
 
         /// <summary>
@@ -440,7 +539,7 @@ namespace RobotComponentsABB.Components
                 index = Params.Input.FindIndex(x => x.Name == name);
                 if (Params.Input[index].VolatileData.DataCount == 0)
                 {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo());
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo()); // tool0
                     changed = true;
                 }
             }
@@ -452,7 +551,7 @@ namespace RobotComponentsABB.Components
                 index = Params.Input.FindIndex(x => x.Name == name);
                 if (Params.Input[index].VolatileData.DataCount == 0)
                 {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new WorkObjectGoo());
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new WorkObjectGoo()); // wobj0
                     changed = true;
                 }
             }
@@ -464,7 +563,7 @@ namespace RobotComponentsABB.Components
                 index = Params.Input.FindIndex(x => x.Name == name);
                 if (Params.Input[index].VolatileData.DataCount == 0)
                 {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo());
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo()); // InValid DO
                     changed = true;
                 }
             }
@@ -475,6 +574,7 @@ namespace RobotComponentsABB.Components
                 Params.OnParametersChanged();
                 ExpireSolution(true);
             }
+
         }
         #endregion
 
@@ -538,7 +638,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            // empty
+            
         }
         #endregion
 

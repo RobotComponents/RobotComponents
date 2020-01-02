@@ -10,6 +10,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
+    /// </summary>
     public class PathGeneratorComponent : GH_Component
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace RobotComponentsABB.Components
           : base("Path Generator", "PG",
               "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
         }
@@ -50,7 +53,7 @@ namespace RobotComponentsABB.Components
             pManager.Register_CurveParam("Movement Paths", "P", "Movement Paths as Curves");
         }
 
-        // Global component variables
+        // Fields
         PathGenerator _pathGenerator = new PathGenerator();
         List<Target> _targets = new List<Target>();
         List<Curve> _paths = new List<Curve>();

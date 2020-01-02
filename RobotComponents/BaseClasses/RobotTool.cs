@@ -119,13 +119,16 @@ namespace RobotComponents.BaseClasses
 
             // Add tool load < tload of loaddata >
             result += mass.ToString("0.######") + ",[" 
+
                 + cog.X.ToString("0.######") + "," 
                 + cog.Y.ToString("0.######") + "," 
-                + cog.Z.ToString("0.######") + "],[" +
-                cogOrientation.A.ToString("0.######") + "," 
+                + cog.Z.ToString("0.######") + "],["
+
+                + cogOrientation.A.ToString("0.######") + "," 
                 + cogOrientation.B.ToString("0.######") + "," 
                 + cogOrientation.C.ToString("0.######") + "," 
                 + cogOrientation.D.ToString("0.######") + ",]," 
+
                 + inertia.X.ToString("0.######") + "," 
                 + inertia.Y.ToString("0.######") + "," 
                 + inertia.Z.ToString("0.######") + "]]";

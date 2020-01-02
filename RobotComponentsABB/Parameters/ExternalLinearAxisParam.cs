@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// External Linear Axis parameter
+    /// </summary>
     public class ExternalLinearAxisParameter : GH_PersistentGeometryParam<ExternalLinearAxisGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalLinearAxisGoo> class
         /// </summary>
         public ExternalLinearAxisParameter()
           : base(new GH_InstanceDescription("External Linear Axis", "ELA", "Maintains External Linear Axis data.", "RobotComponents", "Parameters"))

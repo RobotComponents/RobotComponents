@@ -6,6 +6,9 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
+
+using GH_IO.Serialization;
+
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses;
@@ -15,6 +18,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
+    /// </summary>
     public class TargetComponent : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
@@ -26,11 +32,11 @@ namespace RobotComponentsABB.Components
           : base("Action: Target", "T",
               "Defines a target for an Action: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
             // Create the component label with a message
-            this.Message = "EXTENDABLE";
+            Message = "EXTENDABLE";
         }
 
         /// <summary>
@@ -74,11 +80,14 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
         }
 
-        // Global component variables
+        // fields
         public List<string> targetNames = new List<string>();
         private string lastName = "";
         private bool namesUnique;
         private ObjectManager objectManager;
+        
+        private bool _setReferencePlane = false;
+        private bool _overrideExternalAxisValues = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -88,7 +97,7 @@ namespace RobotComponentsABB.Components
         {
             // Add volatiledata
             CreateVolatileData();
-
+            
             // Clears targetNames
             for (int i = 0; i < targetNames.Count; i++)
             {
@@ -97,7 +106,7 @@ namespace RobotComponentsABB.Components
             targetNames.Clear();
 
             // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
+            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
             // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
             if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID)) {
@@ -199,11 +208,19 @@ namespace RobotComponentsABB.Components
             if (externalAxisValueF.Count == 0) { externalAxisValueF.Add(9e9); }
 
             // Get longest Input List
-            int[] sizeValues = new int[4];
+            int[] sizeValues = new int[10];
             sizeValues[0] = names.Count;
             sizeValues[1] = planes.Count;
             sizeValues[2] = referencePlanes.Count;
             sizeValues[3] = axisConfigs.Count;
+
+            sizeValues[4] = externalAxisValueA.Count;
+            sizeValues[5] = externalAxisValueB.Count;
+            sizeValues[6] = externalAxisValueC.Count;
+            sizeValues[7] = externalAxisValueD.Count;
+            sizeValues[8] = externalAxisValueE.Count;
+            sizeValues[9] = externalAxisValueF.Count;
+
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
             // Keeps track of used indicies
@@ -211,6 +228,13 @@ namespace RobotComponentsABB.Components
             int planesCounter = -1;
             int referencePlaneCounter = -1;
             int axisConfigCounter = -1;
+
+            int externalAxisValueCounterA = -1;
+            int externalAxisValueCounterB= -1;
+            int externalAxisValueCounterC = -1;
+            int externalAxisValueCounterD = -1;
+            int externalAxisValueCounterE = -1;
+            int externalAxisValueCounterF = -1;
 
             // Creates targets
             List<Target> targets = new List<Target>();
@@ -220,7 +244,9 @@ namespace RobotComponentsABB.Components
                 Plane plane = new Plane();
                 Plane referencePlane = new Plane();
                 int axisConfig = 0;
-                
+
+                double[] axisValues = new double[6];
+
                 // Names counter
                 if (i < names.Count)
                 {
@@ -265,7 +291,73 @@ namespace RobotComponentsABB.Components
                     axisConfig = axisConfigs[axisConfigCounter];
                 }
 
-                Target target = new Target(name, plane, referencePlane, axisConfig);
+                // External Axis Value A
+                if (i < externalAxisValueA.Count)
+                {
+                    axisValues[0] = externalAxisValueA[i];
+                    externalAxisValueCounterA++;
+                }
+                else
+                {
+                    axisValues[0] = externalAxisValueA[externalAxisValueCounterA];
+                }
+
+                // External Axis Value B
+                if (i < externalAxisValueB.Count)
+                {
+                    axisValues[1] = externalAxisValueB[i];
+                    externalAxisValueCounterB++;
+                }
+                else
+                {
+                    axisValues[1] = externalAxisValueB[externalAxisValueCounterB];
+                }
+
+                // External Axis Value C
+                if (i < externalAxisValueC.Count)
+                {
+                    axisValues[2] = externalAxisValueC[i];
+                    externalAxisValueCounterC++;
+                }
+                else
+                {
+                    axisValues[2] = externalAxisValueC[externalAxisValueCounterC];
+                }
+
+                // External Axis Value D
+                if (i < externalAxisValueD.Count)
+                {
+                    axisValues[3] = externalAxisValueD[i];
+                    externalAxisValueCounterD++;
+                }
+                else
+                {
+                    axisValues[3] = externalAxisValueD[externalAxisValueCounterD];
+                }
+
+                // External Axis Value E
+                if (i < externalAxisValueE.Count)
+                {
+                    axisValues[4] = externalAxisValueE[i];
+                    externalAxisValueCounterE++;
+                }
+                else
+                {
+                    axisValues[4] = externalAxisValueE[externalAxisValueCounterE];
+                }
+
+                // External Axis Value F
+                if (i < externalAxisValueF.Count)
+                {
+                    axisValues[5] = externalAxisValueF[i];
+                    externalAxisValueCounterF++;
+                }
+                else
+                {
+                    axisValues[5] = externalAxisValueF[externalAxisValueCounterF];
+                }
+
+                Target target = new Target(name, plane, referencePlane, axisConfig, axisValues);
                 targets.Add(target);
             }
 
@@ -357,9 +449,56 @@ namespace RobotComponentsABB.Components
             }
         }
 
-
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for setting the Reference Plane is checked
+        /// </summary>
+        public bool SetReferencePlane
+        {
+            get { return _setReferencePlane; }
+            set { _setReferencePlane = value; }
+        }
+
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for overriding the External Axis Values Wis checked
+        /// </summary>
+        public bool OverrideExternalAxisValues
+        {
+            get { return _overrideExternalAxisValues ; }
+            set { _overrideExternalAxisValues = value; }
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            // Add our own fields
+            writer.SetBoolean("Set Reference Plane", SetReferencePlane);
+            writer.SetBoolean("Override External Axis Values", OverrideExternalAxisValues);
+
+            // Call the base class implementation.
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            // Read our own fields
+            SetReferencePlane = reader.GetBoolean("Set Reference Plane");
+            OverrideExternalAxisValues= reader.GetBoolean("Override External Axis Values");
+
+            // Call the base class implementation.
+            return base.Read(reader);
+        }
+
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -370,8 +509,8 @@ namespace RobotComponentsABB.Components
             Menu_AppendSeparator(menu);
 
             // Add custom menu items
-            Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, Params.Input.Any(x => x.Name == "Reference Plane"));
-            Menu_AppendItem(menu, "External Axis Values", MenuItemClickExternalAxisValue, true, Params.Input.Any(x => x.Name == externalAxisParameters[0].Name));
+            Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, SetReferencePlane);
+            Menu_AppendItem(menu, "External Axis Values", MenuItemClickExternalAxisValue, true, OverrideExternalAxisValues);
         }
 
         /// <summary>
@@ -381,6 +520,10 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClickReferencePlane(object sender, EventArgs e)
         {
+            // Change bool
+            RecordUndoEvent("Set Reference Plane");
+            SetReferencePlane = !SetReferencePlane;
+
             // Input parameter name
             string name = "Reference Plane";
 
@@ -409,6 +552,9 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, index);
+
+                // Add volatile data
+                CreateVolatileData();
             }
 
             // Expire solution and refresh parameters since they changed
@@ -423,6 +569,10 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClickExternalAxisValue(object sender, EventArgs e)
         {
+            // Change bool
+            RecordUndoEvent("Override External Axis Values");
+            OverrideExternalAxisValues = !OverrideExternalAxisValues;
+
             // Register if a parameter was unregistered
             bool deleted = false;
 
@@ -435,6 +585,7 @@ namespace RobotComponentsABB.Components
                     deleted = true;
                 }
             }
+
             // Else add the firs external axis parameter
             if (deleted == false)
             {
@@ -463,6 +614,9 @@ namespace RobotComponentsABB.Components
 
             // Register the input parameter
             Params.RegisterInputParam(parameter, fixedParamNumInput + index);
+
+            // Add volatile data
+            CreateVolatileData();
 
             // Refresh parameters since they changed
             Params.OnParametersChanged();
@@ -684,7 +838,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            // empty
+            CreateVolatileData();
         }
         #endregion
 

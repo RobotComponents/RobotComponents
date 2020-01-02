@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="config"> AutoAxisConfigGoo to store inside this Goo instance. </param>
+        public AutoAxisConfigGoo(AutoAxisConfigGoo configGoo)
+        {
+            if (configGoo == null)
+                configGoo = new AutoAxisConfigGoo();
+            this.Value = configGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the AutoAxisConfigGoo. </returns>

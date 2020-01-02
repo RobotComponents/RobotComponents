@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Auto Axis Configuration parameter
+    /// </summary>
     public class AutoAxisConfigParameter : GH_PersistentGeometryParam<AutoAxisConfigGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
         /// </summary>
         public AutoAxisConfigParameter()
           : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", "Sets Auto Axis Configuration to True or False.", "RobotComponents", "Parameters"))

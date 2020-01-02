@@ -11,6 +11,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
+    /// </summary>
     public class RAPIDGeneratorComponent : GH_Component
     {
         /// <summary>
@@ -22,7 +25,7 @@ namespace RobotComponentsABB.Components
           : base("RAPID Generator", "RG",
               "Generates the RAPID main and base code for the ABB IRC5 robot controller from a list of Actions."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -77,17 +80,17 @@ namespace RobotComponentsABB.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
+            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
-  
-          // Checks if ObjectManager for this document already exists. If not it creates a new one
-          if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
-          {
-              DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-          }
 
-          // Gets ObjectManager of this document
-          _objectManager = DocumentManager.ObjectManagers[documentGUID];
+            // Checks if ObjectManager for this document already exists. If not it creates a new one
+            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
+            {
+                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
+            }
+
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.ObjectManagers[documentGUID];
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();

@@ -6,6 +6,9 @@ using Rhino.Geometry;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.
+    /// </summary>
     public class PlaneOrientationToQuaternion : GH_Component
     {
         /// <summary>
@@ -17,7 +20,7 @@ namespace RobotComponentsABB.Components
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
-                + "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

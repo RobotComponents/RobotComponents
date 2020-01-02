@@ -8,6 +8,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Auto Axis Configuration component. An inherent from the GH_Component Class.
+    /// </summary>
     public class AutoAxisConfigComponent : GH_Component
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace RobotComponentsABB.Components
           : base("Action: Auto Axis Configurator", "AAC",
               "Defines an instruction to set the axis configuration of the robot automatically in RAPID code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

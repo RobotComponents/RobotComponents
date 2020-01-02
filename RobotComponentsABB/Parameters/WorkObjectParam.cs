@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Work Object parameter
+    /// </summary>
     public class WorkObjectParameter : GH_PersistentGeometryParam<WorkObjectGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<WorkObjectGoo> class
         /// </summary>
         public WorkObjectParameter()
           : base(new GH_InstanceDescription("Work Object Parameter", "WO", "Maintains the Work Object data", "RobotComponents", "Parameters"))

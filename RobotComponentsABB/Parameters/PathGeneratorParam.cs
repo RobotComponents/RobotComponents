@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Path Generator parameter
+    /// </summary>
     public class PathGeneratorParameter : GH_PersistentGeometryParam<PathGeneratorGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<PathGeneratorGoo> class
         /// </summary>
         public PathGeneratorParameter()
           : base(new GH_InstanceDescription("Path Generator", "PG", "Generates Path from Actions.", "RobotComponents", "Parameters"))

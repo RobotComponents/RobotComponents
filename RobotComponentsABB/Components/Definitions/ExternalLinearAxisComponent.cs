@@ -9,6 +9,9 @@ using RobotComponents.BaseClasses;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.
+    /// </summary>
     public class ExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
@@ -17,10 +20,10 @@ namespace RobotComponentsABB.Components
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ExternalLinearAxisComponent()
-          : base("EXPERIMENTAL: External Linear Axis", "External Linear Axis",
+          : base("External Linear Axis", "External Linear Axis",
               "Defines an External Linear Axis for any Robot."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

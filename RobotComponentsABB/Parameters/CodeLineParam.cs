@@ -9,12 +9,12 @@ using RobotComponentsABB.Goos;
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
-    /// Class for CodeLine Parameter
+    /// CodeLine parameter
     /// </summary>
-    public class CodeLineParameter : GH_PersistentGeometryParam<CodeLineGo>, IGH_PreviewObject
+    public class CodeLineParameter : GH_PersistentGeometryParam<CodeLineGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<CodeLineGoo> class
         /// </summary>
         public CodeLineParameter()
           : base(new GH_InstanceDescription("Code Line Parameter", "CLP", "Defines a single CodeLine.", "RobotComponents", "Parameters"))
@@ -63,12 +63,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<CodeLineGo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<CodeLineGoo> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref CodeLineGo value)
+        protected override GH_GetterResult Prompt_Singular(ref CodeLineGoo value)
         {
             return GH_GetterResult.cancel;
         }

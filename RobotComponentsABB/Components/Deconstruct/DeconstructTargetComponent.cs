@@ -7,6 +7,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DeconstructTargetComponent : GH_Component
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace RobotComponentsABB.Components
           : base("Deconstruct Target", "DeConTar",
               "Deconstructs a Target into its parameters."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -37,6 +40,7 @@ namespace RobotComponentsABB.Components
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
             pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.");
+            pManager.Register_DoubleParam("External Axis Values", "EAV", "The user definied override external axis values.");
         }
 
         /// <summary>
@@ -55,6 +59,7 @@ namespace RobotComponentsABB.Components
             DA.SetData(0, targetGoo.Value.Name);
             DA.SetData(1, targetGoo.Value.Plane);
             DA.SetData(2, targetGoo.Value.AxisConfig);
+            DA.SetDataList(3, targetGoo.Value.ExternalAxisValues);
         }
 
         /// <summary>

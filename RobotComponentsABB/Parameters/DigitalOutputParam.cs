@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Digital Output parameter
+    /// </summary>
     public class DigitalOutputParameter : GH_PersistentGeometryParam<DigitalOutputGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<DigitalOutputGoo> class
         /// </summary>
         public DigitalOutputParameter()
           : base(new GH_InstanceDescription("Digital Output", "DO", "Maintains Digital Output data.", "RobotComponents", "Parameters"))

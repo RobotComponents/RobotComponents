@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="digitalOutputGoo"> DigitalOutputGoo to store inside this Goo instance. </param>
+        public DigitalOutputGoo(DigitalOutputGoo digitalOutputGoo)
+        {
+            if (digitalOutputGoo == null)
+                digitalOutputGoo = new DigitalOutputGoo();
+            this.Value = digitalOutputGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the DigitalOutputGoo. </returns>
@@ -85,6 +96,8 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
                 return "Null Digital Output";
+            else if (Value.Name == null)
+                return "Empty Digital Output";
             else
                 return "Digital Output";
         }

@@ -72,12 +72,12 @@
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
-    <Compile Include="Components\Code Generation\OldMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
     <Compile Include="Components\Code Generation\RAPIDGeneratorComponent.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
     <Compile Include="Components\Code Generation\TargetComponent.cs" />
-    <Compile Include="Components\Code Generation\OldTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldTargetComponent.cs" />
     <Compile Include="Components\Code Generation\TimerComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponent.cs" />
@@ -737,8 +737,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Erase "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>

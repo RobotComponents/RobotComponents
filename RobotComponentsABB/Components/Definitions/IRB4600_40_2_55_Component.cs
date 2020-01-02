@@ -10,6 +10,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents IRB4600-40/2.55 preset component. An inherent from the GH_Component Class.
+    /// </summary>
     public class IRB4600_40_2_55_Component : GH_Component
     {
         /// <summary>
@@ -19,7 +22,7 @@ namespace RobotComponentsABB.Components
           : base("ABB_IRB4600-40/2.55", "IRB4600",
               "An ABB IRB4600-40/2.55 Info preset component."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

@@ -3,21 +3,24 @@
 namespace RobotComponentsABB.Utils
 {
     /// <summary>
-    /// Helper methods
+    /// Helper methods and properties
     /// </summary>
     public static class HelperMethods
     {
+        #region fields
         /// <summary>
         /// List with the pre-defined precision values that can be used for defining the precision of a robot movement. 
         /// </summary>
-        private static int[] _validPrecisionValues = new int[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
+        private static readonly int[] _validPrecisionValues = new int[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
 
         /// <summary>
         /// List with the pre-defined tcp speed values that can be used for defining the speed of a robot movement. 
         /// </summary>
-        private static double[] _validPredefiniedSpeedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300,
+        private static readonly double[] _validPredefiniedSpeedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300,
             400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
+        #endregion
 
+        #region methods
         /// <summary>
         /// Method to check if a string variable is longer then 32 characters. 
         /// </summary>
@@ -164,5 +167,24 @@ namespace RobotComponentsABB.Utils
 
             return value;
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// List with the pre-defined precision values that can be used for defining the precision of a robot movement. 
+        /// </summary>
+        public static int[] ValidPrecisionValues
+        {
+            get { return _validPrecisionValues; }
+        }
+
+        /// <summary>
+        /// List with the pre-defined tcp speed values that can be used for defining the speed of a robot movement. 
+        /// </summary>
+        public static double[] ValidPredefiniedSpeedValues
+        {
+            get { return _validPredefiniedSpeedValues; }
+        }
+        #endregion
     }
 }

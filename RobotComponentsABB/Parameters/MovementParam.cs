@@ -8,11 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
-
+    /// <summary>
+    /// Movement parameter
+    /// </summary>
     public class MovementParameter : GH_PersistentGeometryParam<MovementGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
         /// </summary>
         public MovementParameter()
           : base(new GH_InstanceDescription("Movement", "M", "Maintains Movement data.", "RobotComponents", "Parameters"))

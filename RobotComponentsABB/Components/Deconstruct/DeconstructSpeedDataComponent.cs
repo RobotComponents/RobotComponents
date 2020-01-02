@@ -7,6 +7,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Deconstruct Speed Data component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DeconstructSpeedDataComponent : GH_Component
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace RobotComponentsABB.Components
           : base("Deconstruct Speed Data", "DeConSpeed",
               "Deconstructs a Speed Data Component into its parameters."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -26,7 +29,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new SpeedDataParam(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number", GH_ParamAccess.item);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number", GH_ParamAccess.item);
         }
 
         /// <summary>

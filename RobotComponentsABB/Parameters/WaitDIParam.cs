@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Wait for Digital Input parameter
+    /// </summary>
     public class WaitDIParameter : GH_PersistentGeometryParam<WaitDIGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<WaitDIGoo> class
         /// </summary>
         public WaitDIParameter()
           : base(new GH_InstanceDescription("WaitDI", "WDI", "Contains WaitDI Data.", "RobotComponents", "Parameters"))

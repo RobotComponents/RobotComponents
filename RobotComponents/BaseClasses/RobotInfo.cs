@@ -168,7 +168,11 @@ namespace RobotComponents.BaseClasses
         public RobotTool Tool
         {
             get { return _tool; }
-            set { _tool = value; }
+            set 
+            { 
+                _tool = value;
+                _toolPlane = GetAttachedToolPlane(_tool, MountingFrame);
+            }
         }
 
         public List<Plane> ExternalAxisPlanes 

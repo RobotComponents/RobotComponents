@@ -9,6 +9,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Override Robot Tool component. An inherent from the GH_Component Class.
+    /// </summary>
     public class OverrideRobotToolComponent : GH_Component
     {
         /// <summary>
@@ -20,7 +23,7 @@ namespace RobotComponentsABB.Components
           : base("Action: Override Robot Tool", "Overrides cuurent RobotTool",
               "Defines an instruction to override the current robot tool of the ABB robot for RAPID base code generation."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

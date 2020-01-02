@@ -9,13 +9,13 @@ namespace RobotComponentsABB.Goos
     /// <summary>
     /// Code line wrapper class, makes sure the code line can be used in Grasshopper.
     /// </summary>
-    public class CodeLineGo : GH_GeometricGoo<CodeLine>, IGH_PreviewData
+    public class CodeLineGoo : GH_GeometricGoo<CodeLine>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public CodeLineGo()
+        public CodeLineGoo()
         {
             this.Value = new CodeLine();
         }
@@ -24,11 +24,22 @@ namespace RobotComponentsABB.Goos
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
         /// <param name="codeLine"> CodeLine Value to store inside this Goo instance. </param>
-        public CodeLineGo(CodeLine codeLine)
+        public CodeLineGoo(CodeLine codeLine)
         {
             if (codeLine == null)
                 codeLine = new CodeLine();
             this.Value = codeLine;
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="codeLineGoo"> CodeLineGoo to store inside this Goo instance. </param>
+        public CodeLineGoo(CodeLineGoo codeLineGoo)
+        {
+            if (codeLineGoo == null)
+                codeLineGoo = new CodeLineGoo();
+            this.Value = codeLineGoo.Value;
         }
 
         /// <summary>
@@ -44,9 +55,9 @@ namespace RobotComponentsABB.Goos
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the CodeLineGoo. </returns>
-        public CodeLineGo DuplicateCodeLine()
+        public CodeLineGoo DuplicateCodeLine()
         {
-            return new CodeLineGo(Value == null ? new CodeLine() : Value.Duplicate());
+            return new CodeLineGoo(Value == null ? new CodeLine() : Value.Duplicate());
         }
         #endregion
 

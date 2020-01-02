@@ -32,6 +32,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="workObjectGoo"> WorkObjectGoo to store inside this Goo instance. </param>
+        public WorkObjectGoo(WorkObjectGoo workObjectGoo)
+        {
+            if (workObjectGoo == null)
+                workObjectGoo = new WorkObjectGoo();
+            this.Value = workObjectGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the WorkObjectGoo. </returns>

@@ -10,13 +10,16 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
+    /// </summary>
     public class RobotInfoComponent : GH_Component
     {
         public RobotInfoComponent()
           : base("Robot Info", "RobInfo",
               "Defines a robot which is needed for Code Generation and Simulation"
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

@@ -10,6 +10,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Robot Tool from Planes component. An inherent from the GH_Component Class.
+    /// </summary>
     public class RobotToolFromPlanesComponent : GH_Component
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace RobotComponentsABB.Components
           : base("Robot Tool From Planes", "RobToool",
               "Generates a robot tool based on attachment and effector planes."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }
@@ -55,7 +58,7 @@ namespace RobotComponentsABB.Components
             pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 
-        // Global component variables
+        // Fields
         public string lastName = "";
         public bool nameUnique;
         public RobotTool robTool = new RobotTool();
@@ -68,7 +71,7 @@ namespace RobotComponentsABB.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Gets Document ID
-            Guid documentID = this.OnPingDocument().DocumentID;
+            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
@@ -175,7 +178,7 @@ namespace RobotComponentsABB.Components
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             // Gets Document ID
-            Guid documentID = this.OnPingDocument().DocumentID;
+            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(documentID))

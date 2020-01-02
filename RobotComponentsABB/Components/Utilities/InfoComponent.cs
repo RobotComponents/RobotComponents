@@ -4,6 +4,9 @@ using Grasshopper.Kernel;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Info component. An inherent from the GH_Component Class.
+    /// </summary>
     public class InfoComponent : GH_Component
     {
         /// <summary>
@@ -25,7 +28,7 @@ namespace RobotComponentsABB.Components
                 + Environment.NewLine 
                 + "https://github.com/EDEK-UniKassel/RobotComponents/wiki"
                 + System.Environment.NewLine 
-                + "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

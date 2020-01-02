@@ -13,6 +13,9 @@ using ABB.Robotics.Controllers.RapidDomain;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.
+    /// </summary>
     public class RemoteConnection : GH_Component
     {
         /// <summary>
@@ -20,7 +23,9 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public RemoteConnection()
           : base("Remote Connection", "Remote Connection",
-              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB robot controller.",
+              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB robot controller."
+              + System.Environment.NewLine +
+              "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -48,7 +53,7 @@ namespace RobotComponentsABB.Components
             pManager.AddTextParameter("Status", "S", "Updates about what is going on here.", GH_ParamAccess.item);
         }
 
-        // Global component variables
+        // Fields
         Controller controller;
         bool ctr = true;
         string msg;

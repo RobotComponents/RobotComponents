@@ -10,6 +10,9 @@ using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.
+    /// </summary>
     public class SpeedDataComponent : GH_Component
     {
         /// <summary>
@@ -21,7 +24,7 @@ namespace RobotComponentsABB.Components
           : base("Action: Speed Data", "SD",
               "Defines a speed data for robot movements."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -52,7 +55,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SpeedDataParam(), "Speed Data", "SD", "Resulting Speed Data");
+            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data");
         }
 
         // Global component variables
@@ -75,7 +78,7 @@ namespace RobotComponentsABB.Components
             speedDataNames.Clear();
 
             // Gets Document ID
-            Guid documentID = this.OnPingDocument().DocumentID;
+            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
             // Checks if ObjectManager for this document already exists. If not it creates a new one
             if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
@@ -247,20 +250,11 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
-        /// 
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnSolutionExpired(object sender, GH_SolutionExpiredEventArgs e)
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
 

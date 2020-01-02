@@ -12,6 +12,7 @@ namespace RobotComponents.BaseClasses
     public abstract class ExternalAxis
     {
         #region fields
+
         #endregion
 
         #region constructors
@@ -21,8 +22,8 @@ namespace RobotComponents.BaseClasses
         #region methods
         public abstract Plane CalculatePosition(double axisValue, out bool inLimits);
         public abstract Plane CalculatePositionSave(double axisValue);
-        public abstract void Initilize();
-        public abstract void ReInitilize();
+        public abstract void Initialize();
+        public abstract void ReInitialize();
         public abstract void PoseMeshes(double axisValue);
         #endregion
 

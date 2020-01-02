@@ -32,6 +32,37 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="speedDataGoo"> SpeedDataGoo to store inside this Goo instance. </param>
+        public SpeedDataGoo(SpeedDataGoo speedDataGoo)
+        {
+            if (speedDataGoo == null)
+                speedDataGoo = new SpeedDataGoo();
+            this.Value = speedDataGoo.Value;
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public SpeedDataGoo(GH_Number tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed.Value);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public SpeedDataGoo(double tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed);
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the SpeedDataGoo. </returns>
@@ -139,7 +170,7 @@ namespace RobotComponentsABB.Goos
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="speeddata"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q speeddata)

@@ -4,16 +4,22 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
+using GH_IO.Serialization;
+
+using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
-    class SpeedDataParam : GH_PersistentGeometryParam<SpeedDataGoo>, IGH_PreviewObject
+    /// <summary>
+    /// Speed Data parameter
+    /// </summary>
+    class SpeedDataParameter : GH_PersistentGeometryParam<SpeedDataGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<SpeedDataGoo> class
         /// </summary>
-        public SpeedDataParam()
+        public SpeedDataParameter()
          : base(new GH_InstanceDescription("Speed Data", "SD", "Maintains Speed Data.", "RobotComponents", "Parameters"))
         {
         }

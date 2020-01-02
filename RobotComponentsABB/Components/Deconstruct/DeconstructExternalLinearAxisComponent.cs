@@ -7,6 +7,9 @@ using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
+    /// <summary>
+    /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.
+    /// </summary>
     public class DeconstructExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace RobotComponentsABB.Components
           : base("Deconstruct External Linear Axis", "DeConELA",
               "Deconstructs an External Linear Axis into its parameters."
                 + System.Environment.NewLine +
-                "RobotComponent V : " + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

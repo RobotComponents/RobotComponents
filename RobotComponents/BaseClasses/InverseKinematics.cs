@@ -45,6 +45,13 @@ namespace RobotComponents.BaseClasses
         {
         }
 
+        public InverseKinematics(Target target, RobotInfo robotInfo, RobotTool robotTool)
+        {
+            this._robotInfo = robotInfo;
+            this._robotInfo.Tool = robotTool;
+            Update(target);
+        }
+
         public InverseKinematics(Target target, RobotInfo robotInfo)
         {
             this._robotInfo = robotInfo;
@@ -64,7 +71,7 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region methods
-        public void Update(Target target)
+        private void Update(Target target)
         {
             _axis1Angles.Clear();
             _axis2Angles.Clear();
@@ -99,6 +106,27 @@ namespace RobotComponents.BaseClasses
             this._wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
         }
 
+        public void Update(RobotInfo robotInfo, Movement movement)
+        {
+            // Set the robot info
+            this._robotInfo = robotInfo;
+
+            // Check robot tool: override the movement contains are robotTool
+            if (movement.RobotTool.Name != "tool0")
+            {
+                this._robotInfo.Tool = movement.RobotTool;
+            }
+
+            // Deep copy the target
+            Target target = movement.Target.Duplicate();
+
+            // Change the target plane from a local plane to global plane
+            target.Plane = movement.GlobalTargetPlane;
+
+            // Update
+            Update(target);
+
+        }
         public void Update(RobotInfo robotInfo, Target target)
         {
             this._robotInfo = robotInfo;
@@ -379,15 +407,25 @@ namespace RobotComponents.BaseClasses
         {
             Plane plane = new Plane(_robotInfo.BasePlane);
 
-            double param = 0;
-
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                if(_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
+                if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
                 {
-                    ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
-                    externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out param);
-                    plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                    // Calculate closest base plane
+                    if (_target.ExternalAxisValues[i] == 9e9)
+                    {
+                        ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
+                        externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
+                        plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                    }
+
+                    // User overwrite external axis values
+                    else
+                    {
+                        ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
+                        plane = externalLinearAxis.CalculatePosition(_target.ExternalAxisValues[i], out bool inLimits);
+                    }
+
                 }
             }
 

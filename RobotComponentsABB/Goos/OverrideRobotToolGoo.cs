@@ -23,12 +23,23 @@ namespace RobotComponentsABB.Goos
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="OverrideRobotTool"> OverrideRobotTool Value to store inside this Goo instance. </param>
-        public OverrideRobotToolGoo(OverrideRobotTool OverrideRobotTool)
+        /// <param name="overrideRobotTool"> OverrideRobotTool Value to store inside this Goo instance. </param>
+        public OverrideRobotToolGoo(OverrideRobotTool overrideRobotTool)
         {
-            if (OverrideRobotTool == null)
-                OverrideRobotTool = new OverrideRobotTool();
-            this.Value = OverrideRobotTool;
+            if (overrideRobotTool == null)
+                overrideRobotTool = new OverrideRobotTool();
+            this.Value = overrideRobotTool;
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="overrideRobotToolGoo"> OverrideRobotToolGoo to store inside this Goo instance. </param>
+        public OverrideRobotToolGoo(OverrideRobotToolGoo overrideRobotToolGoo)
+        {
+            if (overrideRobotToolGoo == null)
+                overrideRobotToolGoo = new OverrideRobotToolGoo();
+            this.Value = overrideRobotToolGoo.Value;
         }
 
         /// <summary>

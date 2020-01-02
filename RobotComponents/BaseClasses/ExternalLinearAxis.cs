@@ -34,7 +34,7 @@ namespace RobotComponents.BaseClasses
             BaseMesh = null;
             LinkMesh = null;
             _posedMeshes = new List<Mesh>();
-            Initilize();
+            Initialize();
         }
 
         public ExternalLinearAxis(Plane attachementPlane, Vector3d axis, Interval axisLimits)
@@ -47,7 +47,7 @@ namespace RobotComponents.BaseClasses
             BaseMesh = null;
             LinkMesh = null;
             _posedMeshes = new List<Mesh>();
-            Initilize();
+            Initialize();
         }
 
         public ExternalLinearAxis(Plane attachementPlane, Vector3d axis, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
@@ -60,7 +60,7 @@ namespace RobotComponents.BaseClasses
             BaseMesh = baseMesh;
             LinkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
-            Initilize();
+            Initialize();
         }
 
         public ExternalLinearAxis(Plane attachementPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
@@ -72,7 +72,7 @@ namespace RobotComponents.BaseClasses
             BaseMesh = baseMesh;
             LinkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
-            Initilize();
+            Initialize();
         }
 
         public ExternalLinearAxis Duplicate()
@@ -165,14 +165,14 @@ namespace RobotComponents.BaseClasses
             _posedMeshes[1].Transform(translateNow);
         }
 
-        public override void Initilize()
+        public override void Initialize()
         {
             GetAxisCurve();
         }
 
-        public override void ReInitilize()
+        public override void ReInitialize()
         {
-            Initilize();
+            Initialize();
         }
 
         #endregion

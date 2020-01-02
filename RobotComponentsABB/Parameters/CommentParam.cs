@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Comment parameter
+    /// </summary>
     public class CommentParameter : GH_PersistentGeometryParam<CommentGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
         /// </summary>
         public CommentParameter()
           : base(new GH_InstanceDescription("Comment", "C", "Defines a Comment.", "RobotComponents", "Parameters"))

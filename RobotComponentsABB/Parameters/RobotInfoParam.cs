@@ -8,10 +8,13 @@ using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters
 {
+    /// <summary>
+    /// Robot Info parameter
+    /// </summary>
     public class RobotInfoParameter : GH_PersistentGeometryParam<RobotInfoGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<T> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<RobotInfoGoo> class
         /// </summary>
         public RobotInfoParameter()
           : base(new GH_InstanceDescription("Robot Info", "Robot Info", "Maintains the Robot data.", "RobotComponents", "Parameters"))

@@ -34,6 +34,17 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="pathGeneratorGoo"> PathGeneratorGoo to store inside this Goo instance. </param>
+        public PathGeneratorGoo(PathGeneratorGoo pathGeneratorGoo)
+        {
+            if (pathGeneratorGoo == null)
+                pathGeneratorGoo = new PathGeneratorGoo();
+            this.Value = pathGeneratorGoo.Value;
+        }
+
+        /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the PathGeneratorGoo. </returns>

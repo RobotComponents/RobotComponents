@@ -127,10 +127,11 @@ namespace RobotComponentsABB.Components
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
 
             // Updates the rapid BASE and MAIN code 
-            if(update == true)
+            if (update == true)
             {
-                string toolBaseCode = GetToolBaseCode();
-                rapidGenerator.CreateBaseCode(toolBaseCode);
+                string toolsBaseCode = GetToolBaseCode();
+                string workObjectsBaseCode = GetWorkObjectsBaseCode();
+                rapidGenerator.CreateBaseCode(toolsBaseCode, workObjectsBaseCode);
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
                 BASECode = rapidGenerator.BASECode;
@@ -168,12 +169,12 @@ namespace RobotComponentsABB.Components
             foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
             {
                 string toolData = "";
-                double posX = entry.Value.robTool.AttachmentPlane.Origin.X + entry.Value.robTool.ToolPlane.Origin.X;
-                double posY = entry.Value.robTool.AttachmentPlane.Origin.Y + entry.Value.robTool.ToolPlane.Origin.Y;
-                double posZ = entry.Value.robTool.AttachmentPlane.Origin.Z + entry.Value.robTool.ToolPlane.Origin.Z;
+                double posX = entry.Value.robotTool.AttachmentPlane.Origin.X + entry.Value.robotTool.ToolPlane.Origin.X;
+                double posY = entry.Value.robotTool.AttachmentPlane.Origin.Y + entry.Value.robotTool.ToolPlane.Origin.Y;
+                double posZ = entry.Value.robotTool.AttachmentPlane.Origin.Z + entry.Value.robotTool.ToolPlane.Origin.Z;
                 Point3d position = new Point3d(posX, posY, posZ);
-                Quaternion orientation = entry.Value.robTool.Orientation;
-                string name = entry.Value.robTool.Name;
+                Quaternion orientation = entry.Value.robotTool.Orientation;
+                string name = entry.Value.robotTool.Name;
                 toolData += " PERS tooldata " + name + " := [TRUE, [["
                     + position.X.ToString("0.##") + ","
                     + position.Y.ToString("0.##") + ","
@@ -181,8 +182,8 @@ namespace RobotComponentsABB.Components
                     + orientation.A.ToString("0.######") + ","
                     + orientation.B.ToString("0.######") + ","
                     + orientation.C.ToString("0.######") + ","
-                    + orientation.D.ToString("0.######") + "]],@";
-                toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
+                    + orientation.D.ToString("0.######") + "]], ";
+                toolData += "[0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
 
                 BASECode += toolData;
             }
@@ -203,13 +204,27 @@ namespace RobotComponentsABB.Components
                     + orientation.A.ToString("0.######") + ", "
                     + orientation.B.ToString("0.######") + ","
                     + orientation.C.ToString("0.######") + ","
-                    + orientation.D.ToString("0.######") + "]],@";
-                toolData += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
+                    + orientation.D.ToString("0.######") + "]], ";
+                toolData += "[0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
 
                 BASECode += toolData;
             }
 
             return BASECode;
+        }
+
+        private string GetWorkObjectsBaseCode()
+        {
+            string woData = "";
+
+            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
+            {
+                woData += " ";
+                woData += entry.Value.WorkObject.GetWorkObjData();
+                woData += "@";
+            }
+
+            return woData;
         }
 
         /// <summary>

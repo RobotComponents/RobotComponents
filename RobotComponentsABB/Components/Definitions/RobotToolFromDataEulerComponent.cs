@@ -66,7 +66,8 @@ namespace RobotComponentsABB.Components
         // Fields
         public string lastName = "";
         public bool nameUnique;
-        public RobotTool robTool = new RobotTool();
+        public RobotTool robotTool = new RobotTool();
+        ObjectManager objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -84,13 +85,10 @@ namespace RobotComponentsABB.Components
             }
 
             // Gets ObjectManager of this document
-            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
+            objectManager = DocumentManager.ObjectManagers[documentID];
 
-            // Adds Component to ToolsByGuid Dictionary
-            if (!objectManager.ToolsEulerByGuid.ContainsKey(this.InstanceGuid))
-            {
-                objectManager.ToolsEulerByGuid.Add(this.InstanceGuid, this);
-            }
+            // Clears toolNames
+            objectManager.ToolNames.Remove(robotTool.Name);
 
             // Removes lastName from toolNameList
             if (objectManager.ToolNames.Contains(lastName))
@@ -135,7 +133,7 @@ namespace RobotComponentsABB.Components
             toolPlane.Transform(Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), toolPlane.Origin));
 
             // Create the robot tool
-            RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
+            robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
 
             // Checks if tool name is already in use and counts duplicates
             #region NameCheck
@@ -184,9 +182,14 @@ namespace RobotComponentsABB.Components
             #endregion
 
             // Outputs
-            robTool = robotTool;
             DA.SetData(0, robotTool);
             DA.SetData(1, robotTool.GetRSToolData());
+
+            // Adds Component to ToolsByGuid Dictionary
+            if (!objectManager.ToolsEulerByGuid.ContainsKey(this.InstanceGuid))
+            {
+                objectManager.ToolsEulerByGuid.Add(this.InstanceGuid, this);
+            }
 
             // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
             GH_Document doc = this.OnPingDocument();
@@ -203,18 +206,6 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
-
             if (e.Objects.Contains(this))
             {
                 if (nameUnique == true)
@@ -226,17 +217,11 @@ namespace RobotComponentsABB.Components
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
                 foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in objectManager.ToolsEulerByGuid)
                 {
-                    if (entry.Value.lastName == "")
-                    {
                         entry.Value.ExpireSolution(true);
-                    }
                 }
                 foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in objectManager.ToolsPlanesByGuid)
                 {
-                    if (entry.Value.lastName == "")
-                    {
                         entry.Value.ExpireSolution(true);
-                    }
                 }
             }
         }

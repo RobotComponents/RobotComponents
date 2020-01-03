@@ -98,13 +98,6 @@ namespace RobotComponentsABB.Components
             // Add volatiledata
             CreateVolatileData();
             
-            // Clears targetNames
-            for (int i = 0; i < targetNames.Count; i++)
-            {
-                objectManager.TargetNames.Remove(targetNames[i]);
-            }
-            targetNames.Clear();
-
             // Gets Document ID
             string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
@@ -115,6 +108,13 @@ namespace RobotComponentsABB.Components
 
             // Gets ObjectManager of this document
             objectManager = DocumentManager.ObjectManagers[documentGUID];
+
+            // Clears targetNames
+            for (int i = 0; i < targetNames.Count; i++)
+            {
+                objectManager.TargetNames.Remove(targetNames[i]);
+            }
+            targetNames.Clear();
 
             // Adds Component to TargetByGuid Dictionary
             if (!objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))

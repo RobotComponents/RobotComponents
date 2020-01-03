@@ -62,6 +62,7 @@ namespace RobotComponentsABB.Components
         public string lastName = "";
         public bool nameUnique;
         public RobotTool robTool = new RobotTool();
+        private ObjectManager objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -80,13 +81,10 @@ namespace RobotComponentsABB.Components
             }
 
             // Gets ObjectManager of this document
-            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
+            objectManager = DocumentManager.ObjectManagers[documentID];
 
-            // Adds Component to ToolsByGuid Dictionary
-            if (!objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
-            {
-                objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
-            }
+            // Clears tool name
+            objectManager.ToolNames.Remove(robTool.Name);
 
             // Removes lastName from toolNameList
             if (objectManager.ToolNames.Contains(lastName))
@@ -168,6 +166,22 @@ namespace RobotComponentsABB.Components
             robTool = robotTool;
             DA.SetData(0, robotTool);
             DA.SetData(1, robotTool.GetRSToolData());
+
+
+            // Adds Component to ToolsByGuid Dictionary
+            if (!objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
+            {
+                objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
+            }
+
+
+            // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+
         }
 
         /// <summary>
@@ -177,41 +191,25 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
-
             if (e.Objects.Contains(this))
             {
-                if (nameUnique == true)
-                {
-                    objectManager.ToolNames.Remove(lastName);
-                }
-                objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in objectManager.ToolsEulerByGuid)
-                {
-                    if (entry.Value.lastName == "")
+                    if (nameUnique == true)
+                    {
+                        objectManager.ToolNames.Remove(lastName);
+                    }
+                    objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
+
+                    // Run SolveInstance on other Tools with no unique Name to check if their name is now available
+                    foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in objectManager.ToolsEulerByGuid)
                     {
                         entry.Value.ExpireSolution(true);
                     }
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in objectManager.ToolsPlanesByGuid)
-                {
-                    if (entry.Value.lastName == "")
+                    foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in objectManager.ToolsPlanesByGuid)
                     {
                         entry.Value.ExpireSolution(true);
                     }
-                }
+             
             }
         }
 

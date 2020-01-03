@@ -26,6 +26,10 @@ namespace RobotComponentsABB
         private Dictionary<Guid, RobotToolFromPlanesComponent> _toolsPlanesByGuid;
         private List<string> _toolNames;
 
+        // contains information on all work objects in file for code generation
+        private Dictionary<Guid, WorkObjectComponent> _workObjectsByGuid;
+        private List<string> _workObjectNames;
+
         // global ToolString for Code Generation
         private string _currentTool; //tool0 = defaulTool
         #endregion
@@ -44,64 +48,62 @@ namespace RobotComponentsABB
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
             _toolNames = new List<string>() { "tool0" };
 
+            _workObjectsByGuid = new Dictionary<Guid, WorkObjectComponent>();
+            _workObjectNames = new List<string>() { "wobj0" };
+
             _currentTool = "tool0"; //tool0 = defaulTool
         }
         #endregion
 
         #region Properties
-        public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid 
+        public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid
         {
             get { return _oldTargetsByGuid; }
-            set { _oldTargetsByGuid = value; }
         }
 
-        public Dictionary<Guid, TargetComponent> TargetsByGuid 
+        public Dictionary<Guid, TargetComponent> TargetsByGuid
         {
             get { return _targetsByGuid; }
-            set { _targetsByGuid = value; }
         }
 
-        public List<string> TargetNames 
+        public List<string> TargetNames
         {
             get { return _targetNames; }
-            set { _targetNames = value; }
         }
 
-        public Dictionary<Guid, SpeedDataComponent> SpeedDatasByGuid 
+        public Dictionary<Guid, SpeedDataComponent> SpeedDatasByGuid
         {
             get { return _speedDatasByGuid; }
-            set { _speedDatasByGuid = value; }
         }
 
-        public List<string> SpeedDataNames 
+        public List<string> SpeedDataNames
         {
             get { return _speedDataNames; }
-            set { _speedDataNames = value; }
         }
 
-        public Dictionary<Guid, RobotToolFromDataEulerComponent> ToolsEulerByGuid 
+        public Dictionary<Guid, RobotToolFromDataEulerComponent> ToolsEulerByGuid
         {
             get { return _toolsEulerByGuid; }
-            set { _toolsEulerByGuid = value; }
         }
 
-        public Dictionary<Guid, RobotToolFromPlanesComponent> ToolsPlanesByGuid 
+        public Dictionary<Guid, RobotToolFromPlanesComponent> ToolsPlanesByGuid
         {
             get { return _toolsPlanesByGuid; }
-            set { _toolsPlanesByGuid = value; }
         }
 
-        public List<string> ToolNames 
+        public List<string> ToolNames
         {
             get { return _toolNames; }
-            set { _toolNames = value; }
         }
 
-        public string CurrentTool 
+        public string CurrentTool
         {
             get { return _currentTool; }
             set { _currentTool = value; }
         }
+
+        public Dictionary<Guid, WorkObjectComponent> WorkObjectsByGuid { get => _workObjectsByGuid; }
+        public List<string> WorkObjectNames { get => _workObjectNames; }
         #endregion
     }
 }

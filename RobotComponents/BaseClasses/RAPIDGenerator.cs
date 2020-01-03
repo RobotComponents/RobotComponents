@@ -25,7 +25,7 @@ namespace RobotComponents.BaseClasses
         {
         }
 
-        public RAPIDGenerator(string moduleName,  List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
+        public RAPIDGenerator(string moduleName, List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
         {
             this._ModuleName = moduleName;
             this._robotInfo = robotInfo;
@@ -41,7 +41,7 @@ namespace RobotComponents.BaseClasses
                 WriteRAPIDCodeToFile();
                 WriteBASECodeToFile();
             }
-          
+
         }
 
         public RAPIDGenerator Duplicate()
@@ -55,7 +55,7 @@ namespace RobotComponents.BaseClasses
         public string CreateRAPIDCode()
         {
             // Creates Main Module
-            string RAPIDCode = "MODULE " + _ModuleName+"@";
+            string RAPIDCode = "MODULE " + _ModuleName + "@";
 
             // Creates Tool Name
             string toolName = _roboToolName;
@@ -96,7 +96,7 @@ namespace RobotComponents.BaseClasses
                 }
 
                 // Checks if action is of Type OverrideRobotTool
-                if(_actions[i] is OverrideRobotTool)
+                if (_actions[i] is OverrideRobotTool)
                 {
                     toolName = ((OverrideRobotTool)_actions[i]).GetToolName();
                 }
@@ -116,7 +116,7 @@ namespace RobotComponents.BaseClasses
             return RAPIDCode;
         }
 
-        public string CreateBaseCode(string toolBaseCode)
+        public string CreateBaseCode(string toolBaseCode, string workObjectBaseCode)
         {
             // Creates Main Module
             string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)@@";
@@ -128,17 +128,19 @@ namespace RobotComponents.BaseClasses
             BASECode += " ! Do not translate or delete tool0, wobj0, load0@";
 
             // Creates Predefined System Data
-            BASECode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]],@";
-            BASECode += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0]];@@";
+            BASECode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
+            BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];@";
+            BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];@@";
 
-            BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0],[1, 0, 0, 0]],@";
-            BASECode += "\t" + "\t" + "\t" + "\t" + "\t" + "\t" + "[[0, 0, 0],[1, 0, 0, 0]]];@@";
-
-            BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001],[1, 0, 0, 0], 0, 0, 0];@@";
-
-            // Adds Tool Base Code
+            BASECode += " ! User defined tooldata @";
+            // Adds Tools Base Code
             BASECode += toolBaseCode;
-  
+
+            BASECode += "@";
+            BASECode += " ! User defined wobjdata @";
+            // Adds Work Objects Base Code
+            BASECode += workObjectBaseCode;
+
             // End Module
             BASECode += "ENDMODULE";
 
@@ -214,13 +216,13 @@ namespace RobotComponents.BaseClasses
             set { _robotInfo = value; }
         }
 
-        public string ModuleName 
+        public string ModuleName
         {
             get { return _ModuleName; }
             set { _ModuleName = value; }
         }
 
-        public bool FirstMovementIsMoveAbs 
+        public bool FirstMovementIsMoveAbs
         {
             get { return _firstMovementIsMoveAbs; }
         }

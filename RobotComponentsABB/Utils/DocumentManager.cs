@@ -24,7 +24,7 @@ namespace RobotComponentsABB
         {
             // Get the Grasshopper document ID to create the first part of the ID
             string GrasshopperDocID = document.DocumentID.ToString();
-
+ 
             // Get the file path
             string FilePath = document.FilePath;
 
@@ -42,6 +42,7 @@ namespace RobotComponentsABB
 
             // Return
             return GrasshopperDocID + "-" + FilePathHash;
+
         }
     }
 

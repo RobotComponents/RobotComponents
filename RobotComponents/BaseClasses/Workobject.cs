@@ -22,7 +22,7 @@ namespace RobotComponents.BaseClasses
         #region constructors
         public WorkObject()
         {
-            _name = "wobj1";
+            _name = "wobj0";
             _plane = Plane.WorldXY;
             _externalAxis = null; // To do: shoud implement that an external axis can be null
             _robotHold = false;
@@ -129,7 +129,7 @@ namespace RobotComponents.BaseClasses
             }
             else
             {
-                result += "False, ";
+                result += "FALSE, ";
             }
 
             // Add mechanical unit (an external axis or robot) < ufmec of string >

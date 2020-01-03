@@ -151,12 +151,12 @@ namespace RobotComponents.BaseClasses
             foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
             {
                 string toolData = "";
-                double posX = entry.Value.robTool.AttachmentPlane.Origin.X + entry.Value.robTool.ToolPlane.Origin.X;
-                double posY = entry.Value.robTool.AttachmentPlane.Origin.Y + entry.Value.robTool.ToolPlane.Origin.Y;
-                double posZ = entry.Value.robTool.AttachmentPlane.Origin.Z + entry.Value.robTool.ToolPlane.Origin.Z;
+                double posX = entry.Value.robotTool.AttachmentPlane.Origin.X + entry.Value.robotTool.ToolPlane.Origin.X;
+                double posY = entry.Value.robotTool.AttachmentPlane.Origin.Y + entry.Value.robotTool.ToolPlane.Origin.Y;
+                double posZ = entry.Value.robotTool.AttachmentPlane.Origin.Z + entry.Value.robotTool.ToolPlane.Origin.Z;
                 Point3d position = new Point3d(posX, posY, posZ);
-                Quaternion orientation = entry.Value.robTool.Orientation;
-                string name = entry.Value.robTool.Name;
+                Quaternion orientation = entry.Value.robotTool.Orientation;
+                string name = entry.Value.robotTool.Name;
                 toolData += " PERS tooldata " + name + " := [TRUE, [[" 
                     + position.X.ToString("0.##") + "," 
                     + position.Y.ToString("0.##") + "," 

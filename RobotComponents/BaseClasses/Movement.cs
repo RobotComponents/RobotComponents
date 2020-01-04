@@ -118,11 +118,11 @@ namespace RobotComponents.BaseClasses
         public void CalculateGlobalTargetPlane()
         {
             // Deep copy the target plane
-            GlobalTargetPlane = new Plane(Target.Plane);
+            _globalTargetPlane = new Plane(Target.Plane);
 
             // Re-orient the target plane to the work object plane
-            Transform orient = Transform.ChangeBasis(Plane.WorldXY, WorkObject.Plane);
-            GlobalTargetPlane.Transform(orient);
+            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.Plane);
+            _globalTargetPlane.Transform(orient);
         }
 
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
@@ -142,6 +142,10 @@ namespace RobotComponents.BaseClasses
             string robTargetVar = "VAR robtarget " + _target.RobTargetName;
             string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
 
+            // Target with global plane (for ik)
+            Target globalTarget = _target.Duplicate();
+            globalTarget.Plane = GlobalTargetPlane;
+
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
             if (MovementType == 1 || MovementType == 2)
             {
@@ -159,7 +163,7 @@ namespace RobotComponents.BaseClasses
                         + "[0,0,0," + _target.AxisConfig);
 
                     // Adds all External Axis Values
-                    InverseKinematics inverseKinematics = new InverseKinematics(_target, robotInfo);
+                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
                     inverseKinematics.Calculate();
                     List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
                     tempCode += "], [";
@@ -193,7 +197,7 @@ namespace RobotComponents.BaseClasses
                 if (!RAPIDcode.Contains(jointTargetVar))
                 {
                     // Calculates AxisValues
-                    InverseKinematics inverseKinematics = new InverseKinematics(_target, robotInfo);
+                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
                     inverseKinematics.Calculate();
                     List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
                     List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;

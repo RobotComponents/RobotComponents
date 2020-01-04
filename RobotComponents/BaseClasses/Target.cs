@@ -50,7 +50,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
 
             // Re-orient the plane to the reference plane
-            Transform orient = Transform.ChangeBasis(referencePlane, Plane.WorldXY);
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
             
             _axisConfig = axisConfig;
@@ -150,7 +150,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
 
             // Re-orient the plane to the reference plane
-            Transform orient = Transform.ChangeBasis(referencePlane, Plane.WorldXY);
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
             _axisConfig = axisConfig;
@@ -174,7 +174,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
 
             // Re-orient the plane to the reference plane
-            Transform orient = Transform.ChangeBasis(referencePlane, Plane.WorldXY);
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
             _axisConfig = axisConfig;
@@ -200,7 +200,7 @@ namespace RobotComponents.BaseClasses
             _plane = plane;
 
             // Re-orient the plane to the reference plane
-            Transform orient = Transform.ChangeBasis(referencePlane, Plane.WorldXY);
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
             _axisConfig = axisConfig;

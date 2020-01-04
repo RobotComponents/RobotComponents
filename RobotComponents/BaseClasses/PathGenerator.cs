@@ -74,10 +74,14 @@ namespace RobotComponents.BaseClasses
             {
                 for (int i = 0; i < movements.Count - 1; i++)
                 {
-                    targets.Add(movements[i].Target);
+                    Target _target1 = movements[i].Target.Duplicate();
+                    Target _target2 = movements[i + 1].Target.Duplicate();
 
-                    Target _target1 = movements[i].Target;
-                    Target _target2 = movements[i + 1].Target;
+                    // Change local target plane to local plane
+                    _target1.Plane = movements[i].GlobalTargetPlane;
+                    _target2.Plane = movements[i + 1].GlobalTargetPlane;
+
+                    targets.Add(_target1);
 
                     RobotTool currentTool1 = movements[i].RobotTool;
                     RobotTool currentTool2 = movements[i+1].RobotTool;
@@ -263,7 +267,8 @@ namespace RobotComponents.BaseClasses
             }
 
             // Get TargetAxisAngle for last MainTarget
-            Target _lastTarget = movements[movements.Count - 1].Target;
+            Target _lastTarget = movements[movements.Count - 1].Target.Duplicate();
+            _lastTarget.Plane = movements[movements.Count - 1].GlobalTargetPlane;
             targets.Add(_lastTarget);
 
             return targets;

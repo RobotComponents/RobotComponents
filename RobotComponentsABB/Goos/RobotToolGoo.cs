@@ -96,6 +96,8 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
                 return "Null RobotTool";
+            if (Value.Name == "" || Value.Name == null)
+                return "Empty Robot Tool";
             else
                 return "Robot Tool";
         }

@@ -135,6 +135,26 @@ namespace RobotComponents.BaseClasses
 
             return result;
         }
+
+        /// <summary>
+        /// Clear / unset all the fields and properties of the object.
+        /// Used for constructing an empty Robot Tool object. 
+        /// Since our empty constructor creates the default Robot Tool tool0.
+        /// </summary>
+        public void Clear()
+        {
+            _name = "";
+            _mesh = new Mesh();
+            _attachmentPlane = Plane.Unset;
+            _toolPlane = Plane.Unset;
+            _robotHold = false;
+            _offset = Vector3d.Unset;
+            _orientation = Quaternion.Zero;
+            _mass = 0; 
+            _cog = Vector3d.Unset;
+            _cogOrientation = Quaternion.Zero;
+            _inertia = Vector3d.Unset;
+    }
         #endregion
 
         #region properties

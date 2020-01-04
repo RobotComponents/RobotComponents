@@ -140,7 +140,12 @@ namespace RobotComponentsABB.Components
             // Make sure variable input parameters have a default value
             if (robotToolGoos.Count == 0)
             {
-                robotToolGoos.Add(new RobotToolGoo()); // Makes a default RobotTool (tool0)
+                // Create an empty Robot Tool
+                RobotTool emptyRobotTool = new RobotTool();
+                emptyRobotTool.Clear();
+
+                // Add the empty robot tool as default tool if no input is definied
+                robotToolGoos.Add(new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
             }
             if (workObjectGoos.Count == 0)
             {
@@ -148,7 +153,7 @@ namespace RobotComponentsABB.Components
             }
             if (digitalOutputGoos.Count == 0)
             {
-                digitalOutputGoos.Add(new DigitalOutputGoo()); // InValid DO
+                digitalOutputGoos.Add(new DigitalOutputGoo()); // InValid / empty DO
             }
 
             // Get longest Input List
@@ -539,7 +544,12 @@ namespace RobotComponentsABB.Components
                 index = Params.Input.FindIndex(x => x.Name == name);
                 if (Params.Input[index].VolatileData.DataCount == 0)
                 {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo()); // tool0
+                    // Create an empty Robot Tool
+                    RobotTool emptyRobotTool = new RobotTool();
+                    emptyRobotTool.Clear();
+
+                    // Set the empty Robot Tool as default input
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
                     changed = true;
                 }
             }
@@ -563,7 +573,7 @@ namespace RobotComponentsABB.Components
                 index = Params.Input.FindIndex(x => x.Name == name);
                 if (Params.Input[index].VolatileData.DataCount == 0)
                 {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo()); // InValid DO
+                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo()); // InValid / empty DO
                     changed = true;
                 }
             }

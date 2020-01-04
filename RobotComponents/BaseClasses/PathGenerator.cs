@@ -329,14 +329,14 @@ namespace RobotComponents.BaseClasses
                 else if (actions[i] is Movement)
                 {
                     Movement movement = ((Movement)actions[i]).Duplicate();
-                    
-                    // Set the current tool if no tool is set
-                    if (movement.RobotTool.Name == "tool0")
+
+                    // Set the current tool if no tool is set in the movement object
+                    if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null)
                     {
                         movement.RobotTool = currentTool.Duplicate();
                     }
-                    // Otherwise: don't set a tool. Last overwrite is used
 
+                    // Otherwise: don't set a tool. Last overwrite is used
                     movements.Add(movement);
                 }
             }

@@ -141,7 +141,7 @@ namespace RobotComponentsABB.Components
             // Checks if first Movement is MoveAbsJ
             if (firstMovementIsMoveAbs == false)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "First movement is defined as a linear movement.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as a absolute joint movement.");
             }
 
             // Output

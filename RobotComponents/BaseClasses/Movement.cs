@@ -44,9 +44,11 @@ namespace RobotComponents.BaseClasses
             _speedData = speedData;
             _movementType = movementType;
             _precision = precision;
-            _robotTool = new RobotTool(); //tool0
-            _workObject = new WorkObject(); //wobj0
-            _digitalOutput = new DigitalOutput(); // InValid DO
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            
             Initialize();
         }
 
@@ -67,7 +69,7 @@ namespace RobotComponents.BaseClasses
             _precision = 0;
             _robotTool = robotTool;
             _workObject = workObject;
-            _digitalOutput = new DigitalOutput(); // InValid DO
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
             Initialize();
         }
 
@@ -242,8 +244,9 @@ namespace RobotComponents.BaseClasses
         public override string ToRAPIDFunction(string robotToolName)
         {
             // Set tool name
-            string toolName = robotToolName;
-            if (_robotTool.Name != "tool0") { toolName = _robotTool.Name; }
+            string toolName;
+            if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = robotToolName; }
+            else { toolName = _robotTool.Name; }
 
             // Set zone data text (precision value)
             string zoneName;
@@ -254,55 +257,70 @@ namespace RobotComponents.BaseClasses
             bool moveDO = false;
             if (_digitalOutput.IsValid == true) { moveDO = true; }
 
-            // MoveAbsJ
-            if (_movementType == 0 && moveDO == false)
+            // A movement not combined with a digital output
+            if (moveDO == false)
             {
-                return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
+                // MoveAbsJ
+                if (_movementType == 0)
+                {
+                    return ("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
+                }
+
+                // MoveL
+                else if (_movementType == 1)
+                {
+                    return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
+                }
+
+                // MoveJ
+                else if (_movementType == 2)
+                {
+                    return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
+                }
+
+                // Return nothing if a wrong movement type is used
+                else
+                {
+                    return "";
+                }
             }
 
-            // MoveL
-            else if (_movementType == 1 && moveDO == false)
-            {
-                return ("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-            }
-
-            // MoveJ
-            else if (_movementType == 2 && moveDO == false)
-            {
-                return ("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-            }
-
-            // MoveAbsJ + SetDO: There is no RAPDID function that combines the an absolute joint movement and a DO.
-            // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
-            else if (_movementType == 0 && moveDO == true)
-            {
-                // Empty string
-                string tempCode = "";
-                // Add the code line for the absolute joint movement
-                tempCode += "@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";";
-                // Add the code line for the digital output
-                tempCode += _digitalOutput.ToRAPIDFunction(robotToolName);
-                // Return code
-                return tempCode;
-            }
-
-            // MoveLDO
-            else if (_movementType == 1 && moveDO == true)
-            {
-                return ("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
-            }
-
-            // MoveJDO
-            else if (_movementType == 2 && moveDO == true)
-            {
-                return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
-            }
-
-            // Return nothing if a wrong movement type is used
+            // A movement combined with a digital output
             else
             {
-                return "";
+                // MoveAbsJ + SetDO: There is no RAPDID function that combines the an absolute joint movement and a DO.
+                // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
+                if (_movementType == 0)
+                {
+                    // Empty string
+                    string tempCode = "";
+                    // Add the code line for the absolute joint movement
+                    tempCode += "@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";";
+                    // Add the code line for the digital output
+                    tempCode += _digitalOutput.ToRAPIDFunction(robotToolName);
+                    // Return code
+                    return tempCode;
+                }
+
+                // MoveLDO
+                else if (_movementType == 1)
+                {
+                    return ("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
+                }
+
+                // MoveJDO
+                else if (_movementType == 2)
+                {
+                    return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
+                }
+
+                // Return nothing if a wrong movement type is used
+                else
+                {
+                    return "";
+                }
             }
+
         }
         #endregion
 

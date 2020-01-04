@@ -32,6 +32,25 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
+        /// Method to create a robot movement with als only argument an robot target. 
+        /// This construct is made to automatically cast a robot target to a robot movement. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        public Movement(Target target)
+        {
+            _target = target;
+            _speedData = new SpeedData(5); // Slowest predefined tcp speed
+            _movementType = 1;
+            _precision = 0;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Method to create a robot movement. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
@@ -132,7 +151,7 @@ namespace RobotComponents.BaseClasses
             string tempCode = "";
 
             // Creates Speed Data Variable Code
-            string speedDataCode = _speedData.InitRAPIDVar();
+            string speedDataCode = _speedData.InitRAPIDVar(robotInfo, RAPIDcode);
 
             // Only adds speedData Variable if not already in RAPID Code
             if (!RAPIDcode.Contains(speedDataCode))

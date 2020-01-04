@@ -88,7 +88,9 @@ namespace RobotComponents.BaseClasses
             get
             {
                 if (AttachmentPlane == null) { return false; }
+                if (AttachmentPlane == Plane.Unset) { return false; }
                 if (AxisPlane == null) { return false; }
+                if (AxisPlane == Plane.Unset) { return false; }
                 if (AxisLimits == null) { return false; }
                 return true;
             }

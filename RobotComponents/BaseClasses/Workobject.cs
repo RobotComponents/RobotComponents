@@ -3,45 +3,62 @@
 namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// Work Object class
+    /// The WorkObject class creates the work object data for the RAPID base code.
+    /// Work object data is used to describe the work object that the robot welds, processes, moves within, etc.
+    /// The work object is typically combined with a robot movement to defined the global coordinate of the robot target. 
     /// </summary>
     public class WorkObject
     {
         #region fields
-        private string _name;
-        private Plane _plane;
-        private ExternalAxis _externalAxis; // coupled with external axis: e.g. rotational poistioner, but can also be combined with a linear axis that moves the work object. 
-        private Quaternion _orientation;
-        private bool _robotHold;
-        private bool _fixedFrame;
-        private Plane _userFrame;
-        private Quaternion _userFrameOrientation;
-
+        private string _name; // The work object name
+        private Plane _plane; // The work object coordinate system
+        private Quaternion _orientation; // The orientation of the work object coordinate system
+        private ExternalAxis _externalAxis; // The coupled mechanical unit
+        private bool _robotHold; // Bool that indicates if the robot holds the work object
+        private bool _fixedFrame; // Bool that indicates if the workobject is fixed (true) or movable (false)
+        private Plane _userFrame; // The user frame coordinate system
+        private Quaternion _userFrameOrientation; // the orienation of the user frame coordinate system
         #endregion
 
         #region constructors
+        /// <summary>
+        /// An empty constructr that creates the the work object data wobj0 in such a way 
+        /// that the object coordinate system coincides with the world coordinate system. 
+        /// The robot does not hold the work object. 
+        /// </summary>
         public WorkObject()
         {
             _name = "wobj0";
             _plane = Plane.WorldXY;
-            _externalAxis = null; // To do: shoud implement that an external axis can be null
+            _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
             _fixedFrame = true;
-            Initilize();
+            Initialize();
         }
 
+        /// <summary>
+        /// The constructor to create a fixed user defined work object coordinate system. 
+        /// </summary>
+        /// <param name="name"> The work object name. </param>
+        /// <param name="plane"> The work object coorindate system as a Plane. </param>
         public WorkObject(string name, Plane plane)
         {
             _name = name;
             _plane = plane;
-            _externalAxis = null;  // To do: shoud implement that an external axis can be null
+            _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
             _fixedFrame = true;
-            Initilize();
+            Initialize();
         }
 
+        /// <summary>
+        /// The constructor to create a movable usre definied work object coordinate system.
+        /// </summary>
+        /// <param name="name"> The work object name. </param>
+        /// <param name="plane"> The work object coorindate system as a Plane. </param>
+        /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
         {
             _name = name;
@@ -49,10 +66,20 @@ namespace RobotComponents.BaseClasses
             _externalAxis = externalAxis;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-            _fixedFrame = true;
-            Initilize();
+
+            // Set to a movable frame if an exernal axes is coupled
+            if (_externalAxis != null)
+                _fixedFrame = false;
+            else
+                _fixedFrame = true;
+
+            Initialize();
         }
 
+        /// <summary>
+        /// A method to duplicate the work object. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the work object. </returns>
         public WorkObject Duplicate()
         {
             WorkObject dup = new WorkObject(Name, Plane, ExternalAxis);
@@ -61,40 +88,45 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region methods
-        public bool IsValid
-        {
-            get
-            {
-                if (Plane == null) { return false; }
-                return true;
-            }
-        }
-
+        /// <summary>
+        /// Method that calculates the quarternion orientation of the work object coordinate system. 
+        /// </summary>
         public void GetOrientation()
         {
-            _orientation = Quaternion.Rotation(Plane.WorldXY, _plane); // Todo: needs to be checked, is this correct?
-            // From target class: as example
-            // Plane refPlane = new Plane(Plane.WorldXY);
-            // Quaternion quat = Quaternion.Rotation(refPlane, _plane);
-            // double[] quaternion = new double[] { quat.A, quat.B, quat.C, quat.D };
-            // return quat;
+            _orientation = Quaternion.Rotation(Plane.WorldXY, _plane);
         }
 
+        /// <summary>
+        /// Method that calculates the quarternion orientation of the user frame coordinate system. 
+        /// </summary>
         public void GetUserFrameOrientation()
         {
-            _userFrameOrientation = Quaternion.Rotation(Plane.WorldXY, _userFrame); // Todo: needs to be checked, is this correct?
+            _userFrameOrientation = Quaternion.Rotation(Plane.WorldXY, _userFrame);
         }
 
-        public void Initilize()
+        /// <summary>
+        /// A method that calls all the other methods that are needed to initialize the 
+        /// data that is needed to construct a valid work object. 
+        /// </summary>
+        private void Initialize()
         {
             GetOrientation();
             GetUserFrameOrientation();
         }
 
-        public void ReInitilize()
+        /// <summary>
+        /// A method that can be called to reinitialize all the data that is needed to 
+        /// construct a valid work object. 
+        /// </summary>
+        public void ReInitialize()
         {
-            Initilize();
+            Initialize();
         }
+
+        /// <summary>
+        /// Method for creating the work object data for the system BASE code. 
+        /// </summary>
+        /// <returns> Returns the work object BASE code as a string. </returns>
         public string GetWorkObjData()
         {
             string result = "";
@@ -102,6 +134,10 @@ namespace RobotComponents.BaseClasses
             return result;
         }
 
+        /// <summary>
+        /// Private method for creating the work object data for the system BASE code. 
+        /// </summary>
+        /// <returns> Returns the work object BASE code as a string. </returns>
         private string CreateWorkObjString()
         {
             string result = "";
@@ -136,6 +172,17 @@ namespace RobotComponents.BaseClasses
             // Todo..
             result += "\"\", "; // Redo this when mechanical unit is implemented
 
+            /**
+            if (_externalAxis != null)
+            {
+                result += $"{_externalAxis.Name}, ";
+            }
+            else
+            {
+                result += "\"\", ";
+            }
+            **/
+
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X}, {_userFrame.Origin.Y}, {_userFrame.Origin.Z}], ";
 
@@ -150,46 +197,98 @@ namespace RobotComponents.BaseClasses
 
             return result;
         }
-
         #endregion
 
         #region properties
+        /// <summary>
+        /// A boolean that indicates if the work object is valid. 
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                if (Name == null) { return false;  }
+                if (Name == "") { return false; }
+                if (Plane == null) { return false; }
+                if (Plane == Plane.Unset) { return false; }
+                if (UserFrame == null) {return false; }
+                if (UserFrame == Plane.Unset) { return false;  }
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// The name of the work object.
+        /// </summary>
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
+        /// <summary>
+        /// Defines whether or not the robot in the actual program task is holding the work object. 
+        /// </summary>
         public bool RobotHold
         {
             get { return _robotHold; }
             set { _robotHold = value; }
         }
 
+        /// <summary>
+        /// The user coordinate system, i.e. the position of the current work surface or fixture.
+        /// If the robot is holding the tool, the user coordinate system is defined in the world 
+        /// coordinate system (in the wrist coordinate system if a stationary tool is used). For 
+        /// movable user frame (FixedFrame = false), the user frame is continuously defined by 
+        /// the system.
+        /// </summary>
         public Plane UserFrame
         {
             get { return _userFrame; }
             set { _userFrame = value; }
         }
 
+        /// <summary>
+        /// The object coordinate system as a plane (e.g. the position of the current work object).
+        /// The object coordinate system is defined in the user coordinate system.
+        /// </summary>
         public Plane Plane
         {
             get { return _plane; }
             set { _plane = value; }
         }
 
+        /// <summary>
+        /// The external axis (mechanical unit) with which the robot movements are coordinated. 
+        /// Only specified in the case of movable user coordinate systems
+        /// </summary>
         public ExternalAxis ExternalAxis
         {
             get { return _externalAxis; }
             set { _externalAxis = value; }
         }
 
+        /// <summary>
+        /// The Quaternion orientation of the work object coordinate system.
+        /// </summary>
         public Quaternion Orientation
         {
-            get { return _orientation; }
-            set { _orientation = value; }
+            get { return _userFrameOrientation; }
         }
 
+        /// <summary>
+        /// The Quaternion orientation of the user frame coordinate system.
+        /// </summary>
+        public Quaternion UserFrameOrientation
+        {
+            get { return _userFrameOrientation; }
+        }
+
+        /// <summary>
+        /// Defines whether or not a fixed user coordinate system is used.
+        /// True indicates that the user frame is fixed. 
+        /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).
+        /// </summary>
         public bool FixedFrame
         {
             get { return _fixedFrame; }

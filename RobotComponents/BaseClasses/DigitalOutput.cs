@@ -1,26 +1,38 @@
 ﻿namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// Digital Output class
+    /// Digital Output class. Is used to change the value of a digital output signal.
     /// </summary>
     public class DigitalOutput : Action
     {
         #region fields
-        private string _name;
-        private bool _isActive;
+        private string _name; // the name of the signal to be changed.
+        private bool _isActive; // the desired value of the signal 0 or 1.
         #endregion
 
         #region constructors
+        /// <summary>
+        /// Defines an empty DigitalOutput object.
+        /// </summary>
         public DigitalOutput()
         {
         }
 
+        /// <summary>
+        /// Defines a digital ouput signal and the desired value / state.
+        /// </summary>
+        /// <param name="Name">The name of the digital output signal to be changed.</param>
+        /// <param name="IsActive">The desired value / stage of the digital output signal 0 (false) or 1 (true).</param>
         public DigitalOutput(string Name, bool IsActive)
         {
             this._name = Name;
             this._isActive = IsActive;
         }
 
+        /// <summary>
+        /// A method to duplicate the DigitalOutput object.
+        /// </summary>
+        /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
         public DigitalOutput Duplicate()
         {
             DigitalOutput dup = new DigitalOutput(Name,IsActive);
@@ -29,11 +41,22 @@
         #endregion
 
         #region method
+        /// <summary>
+        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
+        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
+        /// <returns>Return the RAPID variable code.</returns>
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
         {
             return ("");
         }
 
+        /// <summary>
+        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotToolName">Defines the robot rool name.</param>
+        /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
             if (_isActive == true)
@@ -48,19 +71,31 @@
         #endregion
 
         #region properties
+        /// <summary>
+        /// A boolean that indicates if the DigitalOutput object is valid. 
+        /// </summary>
         public bool IsValid
         {
             get
             {
                 if (Name == null) { return false; }; 
+                if (Name == "") { return false; };
                 return true;
             }
         }
+
+        /// <summary>
+        /// The name of the digital output signal to be changed.
+        /// </summary>
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
+
+        /// <summary>
+        /// The desired value / stage of the digital output signal 0 (false) or 1 (true).
+        /// </summary>
         public bool IsActive
         {
             get { return _isActive; }

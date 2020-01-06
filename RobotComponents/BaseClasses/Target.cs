@@ -6,91 +6,30 @@ using Rhino.Geometry;
 namespace RobotComponents.BaseClasses
 {
     /// <summary>
-    /// Target class, defines Target Data.
+    /// Target class, defines target data. The target data is used to define the position of the robot and external axes.
     /// </summary>
     public class Target : Action
     {
         #region fields
-        string _name;
-        Guid _instanceGuid;
-        Plane _plane;
-        Quaternion _quat;
-        int _axisConfig;
-        string _jointTargetName;
-        string _robTargetName;
+        string _name; // target variable name
+        Plane _plane; // target plane (defines the required position and orientation of the tool)
+        Quaternion _quat; // target plane orientation (as quarternion)
+        int _axisConfig; // the axis configuration of the robot 
 
-        // External axis values:
-        // To do in inverse kinematics:
-        // If external axis values are null: 9.0e9
-        // If external axis values are null and an external axis is connected: use our own inverse kinematics
-        // If external axis values are defined and an external axis is connected: use the user defined axis position
-        double _Eax_a;
-        double _Eax_b;
-        double _Eax_c;
-        double _Eax_d;
-        double _Eax_e;
-        double _Eax_f;
+        double _Eax_a; // the user override position of the external logical axis “a” expressed in degrees or mm 
+        double _Eax_b; // the user override position of the external logical axis “b” expressed in degrees or mm
+        double _Eax_c; // the user override position of the external logical axis “c” expressed in degrees or mm
+        double _Eax_d; // the user override position of the external logical axis “d” expressed in degrees or mm
+        double _Eax_e; // the user override position of the external logical axis “e” expressed in degrees or mm
+        double _Eax_f; // the user override position of the external logical axis “f” expressed in degrees or mm
         #endregion
 
         #region constructors
+        /// <summary>
+        /// Defines an empty Target object.
+        /// </summary>
         public Target()
         {
-        }
-
-        /// <summary>
-        ///  Defines a robot target.
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axisConfiguration.</param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig)
-        {
-            _name = name;
-            _plane = plane;
-
-            // Re-orient the plane to the reference plane
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-            
-            _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            // External axis values
-            _Eax_a = 9e9;
-            _Eax_b = 9e9;
-            _Eax_c = 9e9;
-            _Eax_d = 9e9;
-            _Eax_e = 9e9;
-            _Eax_f = 9e9;
-
-            Initialize();
-        }
-
-        /// <summary>
-        ///  Defines a robot target.
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="axisConfig">Robot target axisConfiguration.</param>
-        public Target(string name,  Plane plane, int axisConfig)
-        {
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            // External axis values
-            _Eax_a = 9e9;
-            _Eax_b = 9e9;
-            _Eax_c = 9e9;
-            _Eax_d = 9e9;
-            _Eax_e = 9e9;
-            _Eax_f = 9e9;
-
-            Initialize();
         }
 
         /// <summary>
@@ -103,8 +42,6 @@ namespace RobotComponents.BaseClasses
             _name = name;
             _plane = plane;
             _axisConfig = 0;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
 
             // External axis values
             _Eax_a = 9e9;
@@ -118,32 +55,69 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Defines a robot target with default axis configuration.
+        /// Defines a robot target with a user defined axis configuration.
         /// </summary>
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
-        public Target(string name, Plane plane, List<double> Eax)
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        public Target(string name, Plane plane, int axisConfig)
         {
-            _name = name; 
+            _name = name;
             _plane = plane;
-            _axisConfig = 0;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            Eax = CheckExternalAxisValues(Eax);
+            _axisConfig = axisConfig;
 
             // External axis values
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
+            _Eax_a = 9e9;
+            _Eax_b = 9e9;
+            _Eax_c = 9e9;
+            _Eax_d = 9e9;
+            _Eax_e = 9e9;
+            _Eax_f = 9e9;
 
             Initialize();
         }
 
+        /// <summary>
+        /// Defines a robot target that will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig)
+        {
+            _name = name;
+            _plane = plane;            
+            _axisConfig = axisConfig;
 
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+
+            // External axis values
+            _Eax_a = 9e9;
+            _Eax_b = 9e9;
+            _Eax_c = 9e9;
+            _Eax_d = 9e9;
+            _Eax_e = 9e9;
+            _Eax_f = 9e9;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot target with user defined (override) external axis values. 
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="Eax_a"></param>
+        /// <param name="Eax_b"></param>
+        /// <param name="Eax_c"></param>
+        /// <param name="Eax_d"></param>
+        /// <param name="Eax_e"></param>
+        /// <param name="Eax_f"></param>
         public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b, double Eax_c, double Eax_d, double Eax_e, double Eax_f)
         {
             _name = name;
@@ -154,8 +128,6 @@ namespace RobotComponents.BaseClasses
             _plane.Transform(orient);
 
             _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
 
             // External axis values
             _Eax_a = Eax_a;
@@ -168,65 +140,18 @@ namespace RobotComponents.BaseClasses
             Initialize();
         }
 
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
-        {
-            _name = name;
-            _plane = plane;
-
-            // Re-orient the plane to the reference plane
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-
-            _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            Eax = CheckExternalAxisValues(Eax);
-
-            // External axis values
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
-
-            Initialize();
-        }
-
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
-        {
-            _name = name;
-            _plane = plane;
-
-            // Re-orient the plane to the reference plane
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-
-            _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
-
-            Eax = CheckExternalAxisValues(Eax);
-
-            // External axis values
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
-
-            Initialize();
-        }
-
+        /// <summary>
+        /// Defines a robot target with user defined (override) external axis values. 
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="Eax">The user defined external axis values as a list.</param>
         public Target(string name, Plane plane, int axisConfig, List<double> Eax)
         {
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
-            _robTargetName = name + "_rt";
-            _jointTargetName = name + "_jt";
 
             Eax = CheckExternalAxisValues(Eax);
 
@@ -241,6 +166,76 @@ namespace RobotComponents.BaseClasses
             Initialize();
         }
 
+        /// <summary>
+        /// Defines a robot target with user defined (override) external axis values.
+        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="Eax">The user defined external axis values as a list.</param>
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
+        {
+            _name = name;
+            _plane = plane;
+            _axisConfig = axisConfig;
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+
+            // Check the length of the list with external axis values
+            Eax = CheckExternalAxisValues(Eax);
+
+            // External axis values
+            _Eax_a = Eax[0];
+            _Eax_b = Eax[1];
+            _Eax_c = Eax[2];
+            _Eax_d = Eax[3];
+            _Eax_e = Eax[4];
+            _Eax_f = Eax[5];
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot target with user defined (override) external axis values.
+        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="Eax">The user defined external axis values as an array.</param>
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
+        {
+            _name = name;
+            _plane = plane;
+            _axisConfig = axisConfig;
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+
+            // Check the length of the araay with external axis values
+            Eax = CheckExternalAxisValues(Eax);
+
+            // External axis values
+            _Eax_a = Eax[0];
+            _Eax_b = Eax[1];
+            _Eax_c = Eax[2];
+            _Eax_d = Eax[3];
+            _Eax_e = Eax[4];
+            _Eax_f = Eax[5];
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Method to duplicate the Target object.
+        /// </summary>
+        /// <returns>Returns a deep copy of the Target object.</returns>
         public Target Duplicate()
         {
             Target dup = new Target(Name, Plane, AxisConfig, ExternalAxisValues);
@@ -249,16 +244,29 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region method
-        public void Initialize()
+        /// <summary>
+        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid target object. 
+        /// </summary>
+        private void Initialize()
         {
             _quat = CalcQuaternion();
         }
 
+        /// <summary>
+        /// A method that can be called to reinitialize all the data that is needed to construct a valid target object.
+        /// </summary>
         public void ReInitialize()
         {
             Initialize();
         }
 
+        /// <summary>
+        /// Method that checks the list with external axis values. 
+        /// Always returns a list with 6 external axis values. 
+        /// For missing values 9e9 (not connected) will be used. 
+        /// </summary>
+        /// <param name="axisValues">A list with the external axis values.</param>
+        /// <returns>Returns a list with 6 external axis values.</returns>
         private List<double> CheckExternalAxisValues(List<double> axisValues)
         {
             List<double> result = new List<double>();
@@ -279,6 +287,12 @@ namespace RobotComponents.BaseClasses
             return result;
         }
 
+        /// <summary></summary>
+        /// Method that checks the array with external axis values. 
+        /// Always returns a list with 6 external axis values. 
+        /// For missing values 9e9 (not connected) will be used. 
+        /// <param name="axisValues">A list with the external axis values.</param>
+        /// <returns>Returns an array with 6 external axis values.</returns>
         private double[] CheckExternalAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
@@ -299,16 +313,10 @@ namespace RobotComponents.BaseClasses
             return result;
         }
 
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
-        {
-            return "";
-        }
-
-        public override string ToRAPIDFunction(string robotToolName)
-        {
-            return ("");
-        }
-
+        /// <summary>
+        /// Calculate the four quarternion coefficients of the target plane needed for writing the RAPID code. 
+        /// </summary>
+        /// <returns>The four quarternion coefficients of the target plane.</returns>
         public Quaternion CalcQuaternion()
         {
             Plane refPlane = new Plane(Plane.WorldXY);
@@ -316,60 +324,102 @@ namespace RobotComponents.BaseClasses
             double[] quaternion = new double[] { quat.A, quat.B, quat.C, quat.D };
             return quat;
         }
+
+        /// <summary>
+        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
+        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
+        /// <returns>Return the RAPID variable code.</returns>
+        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        {
+            return "";
+        }
+
+        /// <summary>
+        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotToolName">Defines the robot rool name.</param>
+        /// <returns>Returns the RAPID main code.</returns>
+        public override string ToRAPIDFunction(string robotToolName)
+        {
+            return ("");
+        }
         #endregion
 
         #region properties
+        /// <summary>
+        /// A boolean that indicuate if the Target object is valid.
+        /// </summary>
         public bool IsValid
         {
             get
             {
                 if (Plane == null) { return false; }
+                if (Plane == Plane.Unset) { return false; }
                 if (Name == null) { return false; }
+                if (Name == "") { return false; }
+                if (AxisConfig < 0) { return false; }
+                if (AxisConfig > 7) { return false; }
                 return true;
             }
         }
 
+        /// <summary>
+        /// The target variable name, must be unique.
+        /// </summary>
         public string Name
         {
             get { return _name; }
             set { _name = value; }
         }
 
-        public Guid InstanceGuid
-        {
-            get { return _instanceGuid; }
-            set { _instanceGuid = value; }
-        }
-
+        /// <summary>
+        /// The position and orientation of the tool center as a plane. 
+        /// </summary>
         public Plane Plane
         {
             get { return _plane; }
             set { _plane = value; }
         }
 
+        /// <summary>
+        /// The orientation of the tool, expressed in the form of a quaternion (q1, q2, q3, and q4). 
+        /// </summary>
         public Quaternion Quat
         {
             get { return _quat; }
             set { _quat = value; }
         }
+
+        /// <summary>
+        /// The axis configuration of the robot (0-7).
+        /// </summary>
         public int AxisConfig
         {
             get { return _axisConfig; }
             set { _axisConfig = value; }
         }
 
+        /// <summary>
+        /// The robot target name when it is used as a joint target.
+        /// </summary>
         public string JointTargetName
         {
-            get { return _jointTargetName; }
-            set { _jointTargetName = value; }
+            get { return Name + "_jt"; }
         }
 
+        /// <summary>
+        /// The robot target name when it is used as a robot target.
+        /// </summary>
         public string RobTargetName
         {
-            get { return _robTargetName; }
-            set { _robTargetName = value; }
+            get { return Name + "_rt"; }
         }
 
+        /// <summary>
+        /// The external axis values as a list.
+        /// </summary>
         public List<double> ExternalAxisValues
         {
             get
@@ -379,36 +429,60 @@ namespace RobotComponents.BaseClasses
             }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “a” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueA
         {
             get { return _Eax_a; }
             set { _Eax_a = value; }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “b” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueB
         {
             get { return _Eax_b; }
             set { _Eax_b = value; }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “c” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueC
         {
             get { return _Eax_c; }
             set { _Eax_c = value; }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “d” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueD
         {
             get { return _Eax_d; }
             set { _Eax_d = value; }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “e” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueE
         {
             get { return _Eax_e; }
             set { _Eax_e = value; }
         }
 
+        /// <summary>
+        /// The position of the external logical axis “f” expressed in degrees or mm (depending on the type of axis).
+        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// </summary>
         public double ExternalAxisValueF
         {
             get { return _Eax_f; }

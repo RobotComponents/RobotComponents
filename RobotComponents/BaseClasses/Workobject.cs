@@ -77,9 +77,9 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// A method to duplicate the work object. 
+        /// A method to duplicate the WorkObject object. 
         /// </summary>
-        /// <returns> Returns a deep copy for the work object. </returns>
+        /// <returns> Returns a deep copy for the WorkObject object. </returns>
         public WorkObject Duplicate()
         {
             WorkObject dup = new WorkObject(Name, Plane, ExternalAxis);
@@ -105,8 +105,7 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the 
-        /// data that is needed to construct a valid work object. 
+        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid work object. 
         /// </summary>
         private void Initialize()
         {
@@ -115,8 +114,7 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to 
-        /// construct a valid work object. 
+        /// A method that can be called to reinitialize all the data that is needed to construct a valid work object. 
         /// </summary>
         public void ReInitialize()
         {
@@ -201,7 +199,7 @@ namespace RobotComponents.BaseClasses
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the work object is valid. 
+        /// A boolean that indicates if the WorkObject object is valid. 
         /// </summary>
         public bool IsValid
         {

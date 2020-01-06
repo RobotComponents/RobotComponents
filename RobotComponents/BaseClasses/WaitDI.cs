@@ -13,14 +13,14 @@
 
         #region constructors
         /// <summary>
-        /// A constructor to create an empty Wait for Digital Input.
+        /// Defines an empty WaitDI object.
         /// </summary>
         public WaitDI()
         {
         }
 
         /// <summary>
-        /// Constructor to create a Wait for Digital Output object. 
+        /// Defines a WaitDI object. 
         /// </summary>
         /// <param name="DIName"> The name of the signal. </param>
         /// <param name="value"> The desired state / value of the digtal input signal. </param>
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// Method to duplicate the Wait for Digital Input object.
+        /// Method to duplicate the WaitDI object.
         /// </summary>
         /// <returns> Returns a deep copy of the WaitDI object. </returns>
         public WaitDI Duplicate()
@@ -77,7 +77,7 @@
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Wait for Digital Input object is valid.
+        /// A boolean that indicates if the WaitDI object is valid.
         /// </summary>
         public bool IsValid
         {

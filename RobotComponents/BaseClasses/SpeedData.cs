@@ -22,7 +22,7 @@ namespace RobotComponents.BaseClasses
 
         #region constructors
         /// <summary>
-        /// Constructor for creating an empty SpeedData. 
+        /// Defines an empty SpeedData object. 
         /// </summary>
         public SpeedData()
         {
@@ -82,9 +82,9 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Duplicates a SpeedData
+        /// Duplicates a SpeedData object
         /// </summary>
-        /// <returns> The duplicate value of the speeddata. </returns>
+        /// <returns> Returns a deep copy of the SpeedData object. </returns>
         public SpeedData Duplicate()
         {
             SpeedData dup = new SpeedData(Name, V_TCP, V_ORI, V_LEAX, V_REAX, PreDefinied);

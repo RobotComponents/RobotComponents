@@ -206,7 +206,7 @@ namespace RobotComponentsABB.Goos
             }
 
             //Cast from number: Predefined SpeedData
-            if (source is GH_Number)
+            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 Value = new SpeedData((source as GH_Number).Value);
                 return true;

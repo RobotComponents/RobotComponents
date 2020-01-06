@@ -105,9 +105,6 @@ namespace RobotComponentsABB.Components
                 this.ExpireSolution(true);
             }
 
-            // Add volatiledata
-            CreateVolatileData();
-
             // Input variables
             List<TargetGoo> targetGoos = new List<TargetGoo>();
             List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
@@ -116,6 +113,10 @@ namespace RobotComponentsABB.Components
             List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
             List<WorkObjectGoo> workObjectGoos = new List<WorkObjectGoo>();
             List<DigitalOutputGoo> digitalOutputGoos = new List<DigitalOutputGoo>();
+
+            // Create an empty Robot Tool
+            RobotTool emptyRobotTool = new RobotTool();
+            emptyRobotTool.Clear();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targetGoos)) { return; }
@@ -126,25 +127,29 @@ namespace RobotComponentsABB.Components
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos)) return;
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos))
+                {
+                    robotToolGoos = new List<RobotToolGoo>() { new RobotToolGoo(emptyRobotTool) };
+                }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[1].Name, workObjectGoos)) return;
+                if (!DA.GetDataList(variableInputParameters[1].Name, workObjectGoos))
+                {
+                    workObjectGoos = new List<WorkObjectGoo>() { new WorkObjectGoo() };
+                }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputGoos)) return;
+                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputGoos))
+                {
+                    digitalOutputGoos = new List<DigitalOutputGoo>() { new DigitalOutputGoo() };
+                }
             }
 
             // Make sure variable input parameters have a default value
             if (robotToolGoos.Count == 0)
             {
-                // Create an empty Robot Tool
-                RobotTool emptyRobotTool = new RobotTool();
-                emptyRobotTool.Clear();
-
-                // Add the empty robot tool as default tool if no input is definied
                 robotToolGoos.Add(new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
             }
             if (workObjectGoos.Count == 0)
@@ -516,74 +521,11 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, insertIndex);
-
-                // Add volatile data
-                CreateVolatileData();
             }
 
         // Expire solution and refresh parameters since they changed
         Params.OnParametersChanged();
         ExpireSolution(true);
-
-        }
-
-        /// <summary>
-        /// Adds the default data to the variable input parameters.
-        /// </summary>
-        public void CreateVolatileData()
-        {
-            // Variables
-            bool changed = false;
-            string name;
-            int index;
-
-            // Robot Tool
-            name = variableInputParameters[0].Name;
-            if (Params.Input.Any(x => x.Name == name))
-            {
-                index = Params.Input.FindIndex(x => x.Name == name);
-                if (Params.Input[index].VolatileData.DataCount == 0)
-                {
-                    // Create an empty Robot Tool
-                    RobotTool emptyRobotTool = new RobotTool();
-                    emptyRobotTool.Clear();
-
-                    // Set the empty Robot Tool as default input
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
-                    changed = true;
-                }
-            }
-
-            // Work Object
-            name = variableInputParameters[1].Name;
-            if (Params.Input.Any(x => x.Name == name))
-            {
-                index = Params.Input.FindIndex(x => x.Name == name);
-                if (Params.Input[index].VolatileData.DataCount == 0)
-                {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new WorkObjectGoo()); // wobj0
-                    changed = true;
-                }
-            }
-
-            // Digital Output
-            name = variableInputParameters[2].Name;
-            if (Params.Input.Any(x => x.Name == name))
-            {
-                index = Params.Input.FindIndex(x => x.Name == name);
-                if (Params.Input[index].VolatileData.DataCount == 0)
-                {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, new DigitalOutputGoo()); // InValid / empty DO
-                    changed = true;
-                }
-            }
-
-            // Expire solution when default data was added
-            if (changed == true)
-            {
-                Params.OnParametersChanged();
-                ExpireSolution(true);
-            }
 
         }
         #endregion

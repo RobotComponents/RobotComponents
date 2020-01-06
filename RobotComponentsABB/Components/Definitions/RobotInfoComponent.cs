@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Components
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
             // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddGenericParameter("External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
             pManager[7].Optional = true;
@@ -91,6 +91,12 @@ namespace RobotComponentsABB.Components
             if (!DA.GetData(6, ref toolGoo)) { toolGoo = new RobotToolGoo(); }
             if (!DA.GetDataList(7, externalAxis))
             {
+            }
+
+            // Check number of external linear axes
+            if (externalAxis.Count > 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "At the moment RobotComponents supports one external linear axis.");
             }
 
             // External axis limits

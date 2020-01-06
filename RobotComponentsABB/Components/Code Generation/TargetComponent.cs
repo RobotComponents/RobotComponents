@@ -94,10 +94,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
-        {
-            // Add volatiledata
-            CreateVolatileData();
-            
+        {           
             // Gets Document ID
             string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 
@@ -152,7 +149,10 @@ namespace RobotComponentsABB.Components
             // Catch reference plane input
             if (Params.Input.Any(x => x.Name == "Reference Plane"))
             {
-                if (!DA.GetDataList("Reference Plane", referencePlanes)) return;
+                if (!DA.GetDataList("Reference Plane", referencePlanes))
+                {
+                    referencePlanes = new List<Plane>() { Plane.WorldXY };
+                }
             }
 
             // Catch axis configuration input
@@ -165,36 +165,49 @@ namespace RobotComponentsABB.Components
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
                 // External axis A
-                if (!DA.GetDataList(externalAxisParameters[0].Name, externalAxisValueA)) return;
-
-                // External axis B
-                if (Params.Input.Any(x => x.Name == externalAxisParameters[1].Name))
+                if (!DA.GetDataList(externalAxisParameters[0].Name, externalAxisValueA))
                 {
-                    if (!DA.GetDataList(externalAxisParameters[1].Name, externalAxisValueB)) return;
-
-                    // External axis C
-                    if (Params.Input.Any(x => x.Name == externalAxisParameters[2].Name))
-                    {
-                        if (!DA.GetDataList(externalAxisParameters[2].Name, externalAxisValueC)) return;
-
-                        // External axis D
-                        if (Params.Input.Any(x => x.Name == externalAxisParameters[3].Name))
-                        {
-                            if (!DA.GetDataList(externalAxisParameters[3].Name, externalAxisValueD)) return;
-
-                            // External axis E
-                            if (Params.Input.Any(x => x.Name == externalAxisParameters[4].Name))
-                            {
-                                if (!DA.GetDataList(externalAxisParameters[4].Name, externalAxisValueE)) return;
-
-                                // External axis F
-                                if (Params.Input.Any(x => x.Name == externalAxisParameters[5].Name))
-                                {
-                                    if (!DA.GetDataList(externalAxisParameters[5].Name, externalAxisValueF)) return;
-                                }
-                            }
-                        }
-                    }
+                    externalAxisValueA = new List<double>() { 9e9 };
+                }
+            }
+            // External axis B
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[1].Name))
+            {
+                if (!DA.GetDataList(externalAxisParameters[1].Name, externalAxisValueB))
+                {
+                    externalAxisValueB = new List<double>() { 9e9 };
+                }
+            }
+            // External axis C
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[2].Name))
+            {
+                if (!DA.GetDataList(externalAxisParameters[2].Name, externalAxisValueC))
+                {
+                    externalAxisValueC = new List<double>() { 9e9 };
+                }
+            }
+            // External axis D
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[3].Name))
+            {
+                if (!DA.GetDataList(externalAxisParameters[3].Name, externalAxisValueD))
+                {
+                    externalAxisValueD = new List<double>() { 9e9 };
+                }
+            }
+            // External axis E
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[4].Name))
+            {
+                if (!DA.GetDataList(externalAxisParameters[4].Name, externalAxisValueE))
+                {
+                    externalAxisValueE = new List<double>() { 9e9 };
+                }
+            }
+            // External axis F
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[5].Name))
+            {
+                if (!DA.GetDataList(externalAxisParameters[5].Name, externalAxisValueF))
+                {
+                    externalAxisValueF = new List<double>() { 9e9 };
                 }
             }
 
@@ -552,9 +565,6 @@ namespace RobotComponentsABB.Components
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, index);
-
-                // Add volatile data
-                CreateVolatileData();
             }
 
             // Expire solution and refresh parameters since they changed
@@ -615,57 +625,9 @@ namespace RobotComponentsABB.Components
             // Register the input parameter
             Params.RegisterInputParam(parameter, fixedParamNumInput + index);
 
-            // Add volatile data
-            CreateVolatileData();
-
             // Refresh parameters since they changed
             Params.OnParametersChanged();
             ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Adds the default data to the variable input parameters.
-        /// </summary>
-        public void CreateVolatileData()
-        {
-            // Variables
-            bool changed = false;
-            string name;
-            int index;
-
-            // Reference plane
-            name = "Reference Plane";
-            if (Params.Input.Any(x => x.Name == name))
-            {
-                index = Params.Input.FindIndex(x => x.Name == name);
-                if (Params.Input[index].VolatileData.DataCount == 0)
-                {
-                    Params.Input[index].AddVolatileData(new GH_Path(0), 0, Plane.WorldXY);
-                    changed = true;
-                }
-            }
-
-            // Work Object
-            for (int i = 0; i < externalAxisParameters.Length; i++)
-            {
-                name = externalAxisParameters[i].Name;
-                if (Params.Input.Any(x => x.Name == name))
-                {
-                    index = Params.Input.FindIndex(x => x.Name == name);
-                    if (Params.Input[index].VolatileData.DataCount == 0)
-                    {
-                        Params.Input[index].AddVolatileData(new GH_Path(0), 0, 9e9);
-                        changed = true;
-                    }
-                }
-            }
-
-            // Expire solution when default data was added
-            if (changed == true)
-            {
-                Params.OnParametersChanged();
-                ExpireSolution(true);
-            }
         }
         #endregion
 
@@ -838,7 +800,6 @@ namespace RobotComponentsABB.Components
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            CreateVolatileData();
         }
         #endregion
 

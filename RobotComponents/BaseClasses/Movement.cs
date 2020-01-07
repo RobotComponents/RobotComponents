@@ -40,7 +40,7 @@ namespace RobotComponents.BaseClasses
         {
             _target = target;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
-            _movementType = 1;
+            _movementType = 0;
             _precision = 0;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -85,10 +85,11 @@ namespace RobotComponents.BaseClasses
             _target = target;
             _speedData = speedData;
             _movementType = movementType;
-            _precision = 0;
+            _precision = precision;
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+
             Initialize();
         }
 
@@ -107,10 +108,11 @@ namespace RobotComponents.BaseClasses
             _target = target;
             _speedData = speedData;
             _movementType = movementType;
-            _precision = 0;
+            _precision = precision;
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
+
             Initialize();
         }
 

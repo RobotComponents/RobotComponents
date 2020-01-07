@@ -52,6 +52,12 @@ namespace RobotComponents.BaseClasses
             Update(target);
         }
 
+        public InverseKinematics(Movement movement, RobotInfo robotInfo)
+        {
+            this._robotInfo = robotInfo;
+            Update(robotInfo, movement);
+        }
+
         public InverseKinematics(Target target, RobotInfo robotInfo)
         {
             this._robotInfo = robotInfo;
@@ -112,7 +118,7 @@ namespace RobotComponents.BaseClasses
             this._robotInfo = robotInfo;
 
             // Check robot tool: override the movement contains are robotTool
-            if (movement.RobotTool.Name != "tool0")
+            if (movement.RobotTool.Name != "" && movement.RobotTool.Name != null)
             {
                 this._robotInfo.Tool = movement.RobotTool;
             }

@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Components
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.item);
+            pManager.AddParameter(new MovementParameter(), "Movement", "M", "Movement or target input. A target will automatically be casted to a movement.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,14 +54,14 @@ namespace RobotComponentsABB.Components
         {
             // Input variables
             RobotInfoGoo robotInfoGoo = null;
-            TargetGoo targetGoo = null;
+            MovementGoo MovementGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }
-            if (!DA.GetData(1, ref targetGoo)) { return; }
+            if (!DA.GetData(1, ref MovementGoo)) { return; }
 
             // Calculate the robot pose
-            InverseKinematics inverseKinematics = new InverseKinematics(targetGoo.Value, robotInfoGoo.Value);
+            InverseKinematics inverseKinematics = new InverseKinematics(MovementGoo.Value, robotInfoGoo.Value);
             inverseKinematics.Calculate();
 
             // Output

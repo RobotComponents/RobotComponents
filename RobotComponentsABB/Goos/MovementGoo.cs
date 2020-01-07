@@ -197,6 +197,22 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast from TargetGoo
+            if (typeof(TargetGoo).IsAssignableFrom(source.GetType()))
+            {
+                TargetGoo targetGoo = (TargetGoo)source;
+                Value = new Movement(targetGoo.Value);
+                return true;
+            }
+
+            //Cast from Target
+            if (typeof(Target).IsAssignableFrom(source.GetType()))
+            {
+                Target target = (Target)source;
+                Value = new Movement(target);
+                return true;
+            }
+
             return false;
         }
         #endregion

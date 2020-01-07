@@ -93,9 +93,9 @@
         /// The desired state / value of the digtal input signal
         /// </summary>
         public bool Value 
-        { 
-            get => _value; 
-            set => _value = value; 
+        {
+            get { return _value; }
+            set { _value = value; }
         }
 
         /// <summary>
@@ -103,8 +103,8 @@
         /// </summary>
         public string DIName 
         { 
-            get => _DIName; 
-            set => _DIName = value; 
+            get { return _DIName; }
+            set { _DIName = value; }
         }
         #endregion
     }

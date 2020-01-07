@@ -177,6 +177,13 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            // Cast from number
+            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
+            {
+                GH_Number ghNumber = (GH_Number)source;
+                Value = new Timer(ghNumber.Value);
+                return true;
+            }
             return false;
         }
         #endregion

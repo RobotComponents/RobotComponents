@@ -148,7 +148,7 @@ namespace RobotComponentsABB.Goos
         public override bool CastTo<Q>(out Q config)
         {
             //Cast to AutoAxisConfig
-            if (typeof(Q).IsAssignableFrom(typeof(Timer)))
+            if (typeof(Q).IsAssignableFrom(typeof(AutoAxisConfig)))
             {
                 if (Value == null)
                     config = default(Q);
@@ -174,6 +174,14 @@ namespace RobotComponentsABB.Goos
             if (typeof(AutoAxisConfig).IsAssignableFrom(source.GetType()))
             {
                 Value = (AutoAxisConfig)source;
+                return true;
+            }
+
+            //Cast from Boolean
+            if (typeof(GH_Boolean).IsAssignableFrom(source.GetType()))
+            {
+                GH_Boolean ghBoolean = (GH_Boolean)source;
+                Value = new AutoAxisConfig(ghBoolean.Value);
                 return true;
             }
 

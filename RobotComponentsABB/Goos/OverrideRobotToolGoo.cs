@@ -177,6 +177,14 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            // Cast from RobotToolGoo
+            if (typeof(RobotToolGoo).IsAssignableFrom(source.GetType()))
+            {
+                RobotToolGoo robotToolGoo = (RobotToolGoo)source;
+                Value = new OverrideRobotTool(robotToolGoo.Value);
+                return true;
+            }
+
             return false;
         }
         #endregion

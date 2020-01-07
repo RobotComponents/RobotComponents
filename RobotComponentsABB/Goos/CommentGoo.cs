@@ -177,6 +177,14 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            // Cast from string
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                GH_String ghString = (GH_String)source;
+                Value = new Comment(ghString.Value);
+                return true;
+            }
+
             return false;
         }
         #endregion

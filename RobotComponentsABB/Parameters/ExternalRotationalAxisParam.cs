@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalRotanionalAxisGoo> class
         /// </summary>
         public ExternalRotationalAxisParameter()
-          : base(new GH_InstanceDescription("External Rotational Axis", "ERA", "Maintains External Rotational Axis data.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("External Rotational Axis", "ERA", 
+                "Maintains the External Rotational Axis data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -52,7 +56,7 @@ namespace RobotComponentsABB.Parameters
             get
             {
                 // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.hidden;
+                return GH_Exposure.hidden; // make secondary
             }
         }
 

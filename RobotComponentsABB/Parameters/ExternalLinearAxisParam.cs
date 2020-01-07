@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalLinearAxisGoo> class
         /// </summary>
         public ExternalLinearAxisParameter()
-          : base(new GH_InstanceDescription("External Linear Axis", "ELA", "Maintains External Linear Axis data.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("External Linear Axis", "ELA", 
+                "Maintains the External Linear Axis data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -49,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

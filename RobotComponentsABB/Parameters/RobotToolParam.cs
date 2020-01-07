@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<RobotToolGoo> class
         /// </summary>
         public RobotToolParameter()
-          : base(new GH_InstanceDescription("Robot Tool", "Robot Tool", "Maintains the Robot Tool data.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Robot Tool", "RT", 
+                "Maintains the Robot Tool data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -49,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

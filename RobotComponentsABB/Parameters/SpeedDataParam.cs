@@ -20,7 +20,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<SpeedDataGoo> class
         /// </summary>
         public SpeedDataParameter()
-         : base(new GH_InstanceDescription("Speed Data", "SD", "Maintains Speed Data.", "RobotComponents", "Parameters"))
+         : base(new GH_InstanceDescription("Speed Data", "SD", 
+                "Maintains the Speed Data data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -52,7 +56,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>

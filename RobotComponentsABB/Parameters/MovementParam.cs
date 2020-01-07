@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
         /// </summary>
         public MovementParameter()
-          : base(new GH_InstanceDescription("Movement", "M", "Maintains Movement data.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Movement", "M", 
+                "Maintains the Movement data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -49,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>

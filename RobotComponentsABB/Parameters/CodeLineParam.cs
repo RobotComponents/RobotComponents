@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<CodeLineGoo> class
         /// </summary>
         public CodeLineParameter()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", "Defines a single CodeLine.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", 
+                "Maintains the Code Line data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -33,7 +37,7 @@ namespace RobotComponentsABB.Parameters
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Colde Line"; set => base.Name = value; }
+        public override string Name { get => "Code Line"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -49,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>

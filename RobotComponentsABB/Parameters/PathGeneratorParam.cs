@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<PathGeneratorGoo> class
         /// </summary>
         public PathGeneratorParameter()
-          : base(new GH_InstanceDescription("Path Generator", "PG", "Generates Path from Actions.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Path Generator", "PG", 
+                "Generates Path from Actions."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 

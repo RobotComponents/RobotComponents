@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
         /// </summary>
         public AutoAxisConfigParameter()
-          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", "Sets Auto Axis Configuration to True or False.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", 
+                "Maintains the Auto Axis Configuration data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -49,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>

@@ -17,7 +17,11 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
         /// </summary>
         public CommentParameter()
-          : base(new GH_InstanceDescription("Comment", "C", "Defines a Comment.", "RobotComponents", "Parameters"))
+          : base(new GH_InstanceDescription("Comment", "C", 
+                "Maintains the Comment data."
+                + System.Environment.NewLine +
+                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "RobotComponents", "Parameters"))
         {
         }
 
@@ -52,7 +56,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>

@@ -72,6 +72,7 @@
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />

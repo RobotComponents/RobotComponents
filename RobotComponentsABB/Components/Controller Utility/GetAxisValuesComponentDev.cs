@@ -6,25 +6,33 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetAxisValuesComponent : GH_Component
+    public class GetAxisValuesComponentDev : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
-        public GetAxisValuesComponent()
+        public GetAxisValuesComponentDev()
           : base("Get Axis Values", "GA",
               "Gets the current robot axis values from a defined ABB robot controller."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -41,8 +49,8 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.list);
-            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Axis Values", "AV", "All the axis values in a datatree structure", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Mechanical Units", "MU", "The names of the mechanical units", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -53,29 +61,52 @@ namespace RobotComponentsABB.Components
         {
             // Input variables
             ControllerGoo controllerGoo = null;
-            List<double> internalAxisValues;
-            List<double> externalAxisValues;
 
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }
 
-            // Internal axis values
-            internalAxisValues = GetInternalAxisValuesAsList(controllerGoo.Value.MotionSystem.MechanicalUnits[0].GetPosition());
+            // Output variables         
+            GH_Structure<GH_Number> axisValues = new GH_Structure<GH_Number>();
+            List<string> mechanicalUnitnames = new List<string>() { };
 
-            // Try to get the external axis values: if there is no external axis connected the mechanical unit does not exist
-            if (controllerGoo.Value.MotionSystem.MechanicalUnits.Count > 1)
+            // Data needed for making the datatree with axis values
+            ABB.Robotics.Controllers.MotionDomain.MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            List<double> values;
+
+            // Make the output datatree with names with a branch for each mechanical unit
+            for (int i = 0; i < mechanicalUnits.Count; i++)
             {
-                externalAxisValues = GetExternalAxisValuesAsList(controllerGoo.Value.MotionSystem.MechanicalUnits[1].GetPosition());
-            }
-            // If there is not external axis connected set all the axis values equal to zero. 
-            else
-            {
-                externalAxisValues = new List<double> {0, 0, 0, 0, 0, 0};
+                // Get the ABB joint target of the mechanical unit
+                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnits[i].GetPosition();
+
+                // For internal axis values
+                if (mechanicalUnits[i].Type.ToString() ==  "TcpRobot")
+                {
+                    values = GetInternalAxisValuesAsList(jointTarget);
+                }
+
+                // For external axis values
+                else
+                {
+                    values = GetExternalAxisValuesAsList(jointTarget);
+                }
+
+                // Path number of the datatree for storing the axis values
+                GH_Path path = new GH_Path(i);
+
+                // Add mechanical unit name to the list with names
+                mechanicalUnitnames.Add(mechanicalUnits[i].Name);
+
+                // Save the axis values
+                for (int j = 0; j < mechanicalUnits[i].NumberOfAxes; j++)
+                {
+                    axisValues.Append(new GH_Number(values[j]), path);
+                }
             }
 
             // Output
-            DA.SetDataList(0, internalAxisValues);
-            DA.SetDataList(1, externalAxisValues);
+            DA.SetDataTree(0, axisValues);
+            DA.SetDataList(1, mechanicalUnitnames);
         }
 
         // Additional methods
@@ -156,7 +187,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("691a3c83-114a-4c80-81b9-2e1407004a24"); }
+            get { return new Guid("D5369096-A801-4150-B792-8F70298F3FEE"); }
         }
     }
 }

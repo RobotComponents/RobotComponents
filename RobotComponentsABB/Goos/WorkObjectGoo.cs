@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an Work Object."); }
+            get { return ("Defines a Work Object."); }
         }
 
         /// <summary>
@@ -143,21 +143,31 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="workObject"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q workObject)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to Work Object
             if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
             {
                 if (Value == null)
-                    workObject = default(Q);
+                    target = default(Q);
                 else
-                    workObject = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            workObject = default(Q);
+            //Cast to plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object) new GH_Plane(Value.Plane);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 

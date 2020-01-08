@@ -143,21 +143,21 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="codeLine"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q codeLine)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to CodeLine.
             if (typeof(Q).IsAssignableFrom(typeof(CodeLine)))
             {
                 if (Value == null)
-                    codeLine = default(Q);
+                    target = default(Q);
                 else
-                    codeLine = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            codeLine = default(Q);
+            target = default(Q);
             return false;
         }
 

@@ -171,21 +171,33 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="externalLinearAxis"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q externalLinearAxis)
+        public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Wait.
+            //Cast to ExternalLinearAxis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
                 if (Value == null)
-                    externalLinearAxis = default(Q);
+                    target = default(Q);
                 else
-                    externalLinearAxis = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            externalLinearAxis = default(Q);
+            //Cast to Curve.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Curve)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.AxisCurve == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object) new GH_Curve(Value.AxisCurve);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 

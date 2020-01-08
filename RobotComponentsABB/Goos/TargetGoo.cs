@@ -157,6 +157,18 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast to plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Plane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Plane(Value.Plane);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }

@@ -145,21 +145,21 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="externalRotationalAxis"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q externalRotationalAxis)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
-                    externalRotationalAxis = default(Q);
+                    target = default(Q);
                 else
-                    externalRotationalAxis = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            externalRotationalAxis = default(Q);
+            target = default(Q);
             return false;
         }
 

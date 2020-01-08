@@ -147,35 +147,33 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="robotTool"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q robotTool)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to RobotTool.
             if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
                 if (Value == null)
-                    robotTool = default(Q);
+                    target = default(Q);
                 else
-                    robotTool = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
             //Cast to Mesh.
-            if (typeof(Q).IsAssignableFrom(typeof(Mesh)))
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
             {
                 if (Value == null)
-                    robotTool = default(Q);
+                    target = default(Q);
                 else if (Value.Mesh == null)
-                    robotTool = default(Q);
+                    target = default(Q);
                 else
-                    robotTool = (Q)(object)Value.Mesh.DuplicateShallow();
+                    target = (Q)(object) new GH_Mesh(Value.Mesh);
                 return true;
             }
 
-            //Todo: cast to point, number, mesh, curve?
-
-            robotTool = default(Q);
+            target = default(Q);
             return false;
         }
 

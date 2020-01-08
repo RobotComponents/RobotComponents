@@ -145,21 +145,21 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="digitalOutput"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q digitalOutput)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to DigitalOutput.
             if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
             {
                 if (Value == null)
-                    digitalOutput = default(Q);
+                    target = default(Q);
                 else
-                    digitalOutput = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            digitalOutput = default(Q);
+            target = default(Q);
             return false;
         }
 

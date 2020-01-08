@@ -171,21 +171,21 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to. </typeparam>
-        /// <param name="speeddata"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q speeddata)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to SpeedData.
             if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
                 if (Value == null)
-                    speeddata = default(Q);
+                    target = default(Q);
                 else
-                    speeddata = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            speeddata = default(Q);
+            target = default(Q);
             return false;
         }
 

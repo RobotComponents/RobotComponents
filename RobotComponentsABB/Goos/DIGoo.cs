@@ -143,21 +143,21 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="waitDI"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q waitDI)
+        public override bool CastTo<Q>(out Q target)
         {
             // Cast to WaitDI
             if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
             {
                 if (Value == null)
-                    waitDI = default(Q);
+                    target = default(Q);
                 else
-                    waitDI = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            waitDI = default(Q);
+            target = default(Q);
             return false;
         }
 

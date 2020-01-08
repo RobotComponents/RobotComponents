@@ -143,21 +143,31 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="timer"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q timer)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to Wait.
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
-                    timer = default(Q);
+                    target = default(Q);
                 else
-                    timer = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            timer = default(Q);
+            //Cast to Number
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Number(Value.Duration);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 

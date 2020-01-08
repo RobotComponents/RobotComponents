@@ -163,21 +163,33 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="movement"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q movement)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to Movement.
             if (typeof(Q).IsAssignableFrom(typeof(Movement)))
             {
                 if (Value == null)
-                    movement = default(Q);
+                    target = default(Q);
                 else
-                    movement = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            movement = default(Q);
+            //Cast to plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.GlobalTargetPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 

@@ -162,35 +162,29 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="robotInfo"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q robotInfo)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to RobotInfo.
             if (typeof(Q).IsAssignableFrom(typeof(RobotInfo)))
             {
                 if (Value == null)
-                    robotInfo = default(Q);
+                    target = default(Q);
                 else
-                    robotInfo = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
             //Cast to Mesh.
-            if (typeof(Q).IsAssignableFrom(typeof(List<Mesh>)))
-            {
-                if (Value == null)
-                    robotInfo = default(Q);
-                else if (Value.Meshes == null)
-                    robotInfo = default(Q);
-                else
-                    robotInfo = (Q)(object)Value.Meshes;
-                return true;
-            }
 
-            //Todo: cast to point, number, mesh, curve?
+            // Casting is only possible from one to one (does not work with lists)
+            // The Robot Info mesh is stored in a list.
+            // It can only be returned as one single mesh and not as list with a mesh for the separate links. 
+            // Therefore, casting to a mesh is not implemented. 
+            // If the users wants to get the robot mesh they can use the Deconstuct Robot Info Component. 
 
-            robotInfo = default(Q);
+            target = default(Q);
             return false;
         }
 

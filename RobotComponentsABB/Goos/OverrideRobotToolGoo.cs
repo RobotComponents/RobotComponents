@@ -143,21 +143,33 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="changeTool"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q changeTool)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to OverrideRobotTool.
             if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
             {
                 if (Value == null)
-                    changeTool = default(Q);
+                    target = default(Q);
                 else
-                    changeTool = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            changeTool = default(Q);
+            //Cast to RobotToolGoo
+            if (typeof(Q).IsAssignableFrom(typeof(RobotToolGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.RobotTool == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object) new RobotToolGoo(Value.RobotTool);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 
@@ -177,7 +189,7 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            // Cast from RobotToolGoo
+            //Cast from RobotToolGoo
             if (typeof(RobotToolGoo).IsAssignableFrom(source.GetType()))
             {
                 RobotToolGoo robotToolGoo = (RobotToolGoo)source;

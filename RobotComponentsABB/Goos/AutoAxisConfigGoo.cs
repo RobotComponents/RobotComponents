@@ -143,21 +143,31 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="config"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q config)
+        public override bool CastTo<Q>(out Q target)
         {
             //Cast to AutoAxisConfig
             if (typeof(Q).IsAssignableFrom(typeof(AutoAxisConfig)))
             {
                 if (Value == null)
-                    config = default(Q);
+                    target = default(Q);
                 else
-                    config = (Q)(object)Value;
+                    target = (Q)(object)Value;
                 return true;
             }
 
-            config = default(Q);
+            //Cast to Boolean
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object) new GH_Boolean(Value.IsActive);
+                return true;
+            }
+
+            target = default(Q);
             return false;
         }
 

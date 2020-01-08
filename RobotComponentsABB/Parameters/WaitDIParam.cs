@@ -17,8 +17,8 @@ namespace RobotComponentsABB.Parameters
         /// Initializes a new instance of the GH_PersistentGeometryParam<WaitDIGoo> class
         /// </summary>
         public WaitDIParameter()
-          : base(new GH_InstanceDescription("WaitDI", "WDI", 
-                "Contains the Wait for Digital Input data."
+          : base(new GH_InstanceDescription("Wait for Digital Input", "WDI", 
+                "Maintains the Wait for Digital Input data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -37,7 +37,7 @@ namespace RobotComponentsABB.Parameters
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "WaitDI"; set => base.Name = value; }
+        public override string Name { get => "Wait for Digital Input"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 

@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal WaitDI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitDI instance: Did you define the DIName and Value?"; //Todo: beef this up to be more informative.
+                return "Invalid WaitDI instance: Did you define the Digital Input Name and Value?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("WaitDI"); }
+            get { return ("Wait for Digital Input"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single WaitDI."); }
+            get { return ("Defines a single Wait for Digital Input data."); }
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace RobotComponentsABB.Components
         // Fields
         ForwardKinematics _fk = new ForwardKinematics();
 
-        private bool _onlyTCP = false;
+        private bool _hideMesh = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -90,7 +90,7 @@ namespace RobotComponentsABB.Components
 
             // Calcuate the robot pose
             ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
-            forwardKinematics.Calculate(_onlyTCP);
+            forwardKinematics.Calculate(_hideMesh);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
@@ -100,7 +100,7 @@ namespace RobotComponentsABB.Components
 
             // Output
             _fk = forwardKinematics;
-            if (!_onlyTCP)
+            if (!_hideMesh)
             {
                 DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
             }
@@ -119,7 +119,7 @@ namespace RobotComponentsABB.Components
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_fk.PosedMeshes != null && !_onlyTCP)
+            if (_fk.PosedMeshes != null && !_hideMesh)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -182,10 +182,10 @@ namespace RobotComponentsABB.Components
         /// <summary>
         /// Boolean that indicates if the custom menu item for setting the Reference Plane is checked
         /// </summary>
-        public bool SetOnlyTCP
+        public bool SetHideMesh
         {
-            get { return _onlyTCP; }
-            set { _onlyTCP = value; }
+            get { return _hideMesh; }
+            set { _hideMesh = value; }
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace RobotComponentsABB.Components
         public override bool Write(GH_IWriter writer)
         {
             // Add our own fields
-            writer.SetBoolean("Set Only TCP", SetOnlyTCP);
+            writer.SetBoolean("Set Hide Mesh", SetHideMesh);
 
             // Call the base class implementation.
             return base.Write(writer);
@@ -210,7 +210,7 @@ namespace RobotComponentsABB.Components
         public override bool Read(GH_IReader reader)
         {
             // Read our own fields
-            SetOnlyTCP = reader.GetBoolean("Set Only TCP");
+            SetHideMesh = reader.GetBoolean("Set Hide Mesh");
 
             // Call the base class implementation.
             return base.Read(reader);
@@ -226,7 +226,7 @@ namespace RobotComponentsABB.Components
             Menu_AppendSeparator(menu);
 
             // Add custom menu items
-            Menu_AppendItem(menu, "Only Calculate TCP", MenuItemClickOnlyTCP, true, SetOnlyTCP);
+            Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
         }
 
         /// <summary>
@@ -234,10 +234,10 @@ namespace RobotComponentsABB.Components
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickOnlyTCP(object sender, EventArgs e)
+        public void MenuItemClickHideMesh(object sender, EventArgs e)
         {
-            RecordUndoEvent("Set Only TCP");
-            _onlyTCP = !_onlyTCP;
+            RecordUndoEvent("Set Hide Mesh");
+            _hideMesh = !_hideMesh;
 
             // Expire solution
             ExpireSolution(true);

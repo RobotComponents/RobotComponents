@@ -152,7 +152,7 @@ namespace RobotComponents.BaseClasses
                             }
 
                             _forwardKinematics.Update(_internalAxisValues, _externalAxisValues);
-                            _forwardKinematics.Calculate();
+                            _forwardKinematics.Calculate(); // TODO this could be .Calculated(true) to "hide mesh" ... so it would run faster 
                             targets.Add(new Target(_target1.Name + "_interpolation_" + j, _forwardKinematics.TCPPlane, _target2.AxisConfig, _externalAxisValues));
 
                             // Add points to path

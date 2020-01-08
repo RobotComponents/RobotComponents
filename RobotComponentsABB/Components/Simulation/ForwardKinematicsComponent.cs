@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 using Grasshopper.Kernel;
+
+using GH_IO.Serialization;
+
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses;
@@ -53,6 +57,8 @@ namespace RobotComponentsABB.Components
         // Fields
         ForwardKinematics _fk = new ForwardKinematics();
 
+        private bool _onlyTCP = false;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -84,7 +90,7 @@ namespace RobotComponentsABB.Components
 
             // Calcuate the robot pose
             ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
-            forwardKinematics.Calculate();
+            forwardKinematics.Calculate(_onlyTCP);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
@@ -94,7 +100,14 @@ namespace RobotComponentsABB.Components
 
             // Output
             _fk = forwardKinematics;
-            DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
+            if (!_onlyTCP)
+            {
+                DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
+            }
+            else
+            {
+                DA.SetDataList(0, null); 
+            }
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
             DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
         }
@@ -105,8 +118,8 @@ namespace RobotComponentsABB.Components
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Check if there is a mesh available to display
-            if (_fk.PosedMeshes != null)
+            // Check if there is a mesh available to display and the onlyTCP function not active
+            if (_fk.PosedMeshes != null && !_onlyTCP)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -163,6 +176,73 @@ namespace RobotComponentsABB.Components
                 }
             }
         }
+
+        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
+        #region menu items
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for setting the Reference Plane is checked
+        /// </summary>
+        public bool SetOnlyTCP
+        {
+            get { return _onlyTCP; }
+            set { _onlyTCP = value; }
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            // Add our own fields
+            writer.SetBoolean("Set Only TCP", SetOnlyTCP);
+
+            // Call the base class implementation.
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            // Read our own fields
+            SetOnlyTCP = reader.GetBoolean("Set Only TCP");
+
+            // Call the base class implementation.
+            return base.Read(reader);
+        }
+
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Only Calculate TCP", MenuItemClickOnlyTCP, true, SetOnlyTCP);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Reference Plane" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickOnlyTCP(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Set Only TCP");
+            _onlyTCP = !_onlyTCP;
+
+            // Expire solution
+            ExpireSolution(true);
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

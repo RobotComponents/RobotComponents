@@ -63,7 +63,7 @@ namespace RobotComponents.BaseClasses
 
         #region methods
         // Calculates Forward Kinematics
-        public void Calculate()
+        public void Calculate(bool onlyTCP = false)
         {
             this._posedMeshes = this._meshes.ConvertAll(mesh => mesh.DuplicateMesh());
             this.PosedAxisMeshes = new List<Mesh>();
@@ -76,13 +76,16 @@ namespace RobotComponents.BaseClasses
                 {
                     ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
                     this._basePlane.Origin += externalLinearAxis.AxisPlane.ZAxis * _externalAxisValues[0]; //External Axis Offset: Use "CalculatePositionSave()" ?
-                    externalLinearAxis.PoseMeshes(_externalAxisValues[0]);
-
-                    for (int j = 0; j < externalLinearAxis.PosedMeshes.Count; j++)
+                    
+                    if (!onlyTCP)
                     {
-                        PosedAxisMeshes.Add(externalLinearAxis.PosedMeshes[j]);
+                        externalLinearAxis.PoseMeshes(_externalAxisValues[0]); // Should the 0 here not be i? and should _robotInfo.ExternalAxis.Count == _externalAxisValues.Count
+
+                        for (int j = 0; j < externalLinearAxis.PosedMeshes.Count; j++)
+                        {
+                            PosedAxisMeshes.Add(externalLinearAxis.PosedMeshes[j]);
+                        }
                     }
-         
                 }
             }
             
@@ -122,24 +125,27 @@ namespace RobotComponents.BaseClasses
             transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
 
             // Apply transformations
-            // Base link transform
-            _posedMeshes[0].Transform(transNow);
-            // Link_1 tranfrom 
-            _posedMeshes[1].Transform(transNow * rot1);
-            // Link_2 tranfrom
-            _posedMeshes[2].Transform(transNow * rot2 * rot1);
-            // Link_3 tranfrom
-            _posedMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
-            // Link_4 tranfrom
-            _posedMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
-            // Link_5 tranfrom
-            _posedMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
-            // Link_6 tranfrom
-            _posedMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
-            // Endeffector transform
-            _posedMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
             // TCP plane transform
             _tcpPlane.Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+            if (!onlyTCP)
+            {
+                // Base link transform
+                _posedMeshes[0].Transform(transNow);
+                // Link_1 tranfrom 
+                _posedMeshes[1].Transform(transNow * rot1);
+                // Link_2 tranfrom
+                _posedMeshes[2].Transform(transNow * rot2 * rot1);
+                // Link_3 tranfrom
+                _posedMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
+                // Link_4 tranfrom
+                _posedMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
+                // Link_5 tranfrom
+                _posedMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
+                // Link_6 tranfrom
+                _posedMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+                // Endeffector transform
+                _posedMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+            }
         }
 
         public void Update(List<double> internalAxisValues, List<double> externalAxisValues)
@@ -161,7 +167,7 @@ namespace RobotComponents.BaseClasses
             this._externalAxisLimits = _robotInfo.ExternalAxisLimits;
             this._externalAxisValues = externalAxisValues;
 
-            // "Deep dopy" mesh to new object
+            // "Deep copy" mesh to new object
             this._meshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
             this._posedMeshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
 

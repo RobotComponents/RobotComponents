@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "WaitDI";
+            return "Wait for Digital Input";
         }
 
         /// <summary>

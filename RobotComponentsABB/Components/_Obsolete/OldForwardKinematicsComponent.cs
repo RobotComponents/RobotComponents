@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 using Grasshopper.Kernel;
-
-using GH_IO.Serialization;
 
 using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
@@ -16,20 +13,29 @@ namespace RobotComponentsABB.Components
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ForwardKinematicsComponent : GH_Component 
+    public class OldForwardKinematicsComponent : GH_Component 
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ForwardKinematicsComponent()
+        public OldForwardKinematicsComponent()
           : base("Forward Kinematics", "FK",
-              "Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
+              "OBSOLETE: Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -54,7 +60,6 @@ namespace RobotComponentsABB.Components
 
         // Fields
         ForwardKinematics _fk = new ForwardKinematics();
-        private bool _hideMesh = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -87,7 +92,7 @@ namespace RobotComponentsABB.Components
 
             // Calcuate the robot pose
             ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
-            forwardKinematics.Calculate(_hideMesh);
+            forwardKinematics.Calculate();
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
@@ -97,16 +102,17 @@ namespace RobotComponentsABB.Components
 
             // Output
             _fk = forwardKinematics;
-            if (!_hideMesh)
-            {
-                DA.SetDataList(0, forwardKinematics.PosedMeshes);
-            }
-            else
-            {
-                DA.SetDataList(0, null); 
-            }
+            DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
             DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -115,8 +121,8 @@ namespace RobotComponentsABB.Components
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_fk.PosedMeshes != null && !_hideMesh)
+            // Check if there is a mesh available to display
+            if (_fk.PosedMeshes != null)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -174,73 +180,6 @@ namespace RobotComponentsABB.Components
             }
         }
 
-        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
-        #region menu items
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for hding the robot mesh is checked
-        /// </summary>
-        public bool SetHideMesh
-        {
-            get { return _hideMesh; }
-            set { _hideMesh = value; }
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            // Add our own fields
-            writer.SetBoolean("Set Hide Mesh", SetHideMesh);
-
-            // Call the base class implementation.
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            // Read our own fields
-            SetHideMesh = reader.GetBoolean("Set Hide Mesh");
-
-            // Call the base class implementation.
-            return base.Read(reader);
-        }
-
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            // Add menu separator
-            Menu_AppendSeparator(menu);
-
-            // Add custom menu items
-            Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Hide Mesh" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void MenuItemClickHideMesh(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Set Hide Mesh");
-            _hideMesh = !_hideMesh;
-
-            // Expire solution
-            ExpireSolution(true);
-        }
-        #endregion
-
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -257,7 +196,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5D6207E3-2051-4DAD-A1D9-C4A9EAD371FB"); }
+            get { return new Guid("C1B950EA-B10E-4AD8-A676-8320DB465F14"); }
         }
 
     }

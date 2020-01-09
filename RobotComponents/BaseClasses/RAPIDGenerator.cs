@@ -10,13 +10,12 @@ namespace RobotComponents.BaseClasses
     {
         #region fields
         private RobotInfo _robotInfo;
-        private List<RobotComponents.BaseClasses.Action> _actions = new List<RobotComponents.BaseClasses.Action>();
+        private List<Action> _actions = new List<Action>();
         private string _filePath;
         private bool _saveToFile;
         private string _RAPIDCode;
         private string _BASECode;
         private string _ModuleName;
-        private string _roboToolName;
         private bool _firstMovementIsMoveAbs;
         #endregion
 
@@ -25,7 +24,7 @@ namespace RobotComponents.BaseClasses
         {
         }
 
-        public RAPIDGenerator(string moduleName, List<RobotComponents.BaseClasses.Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
+        public RAPIDGenerator(string moduleName, List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
         {
             this._ModuleName = moduleName;
             this._robotInfo = robotInfo;
@@ -33,8 +32,6 @@ namespace RobotComponents.BaseClasses
 
             this._filePath = filePath;
             this._saveToFile = saveToFile;
-
-            this._roboToolName = _robotInfo.Tool.Name;
 
             if (_saveToFile == true)
             {
@@ -58,7 +55,7 @@ namespace RobotComponents.BaseClasses
             string RAPIDCode = "MODULE " + _ModuleName + "@";
 
             // Creates Tool Name
-            string toolName = _roboToolName;
+            string toolName = _robotInfo.Tool.Name;
 
             // Creates Vars
             for (int i = 0; i != _actions.Count; i++)
@@ -116,7 +113,7 @@ namespace RobotComponents.BaseClasses
             return RAPIDCode;
         }
 
-        public string CreateBaseCode(string toolBaseCode, string workObjectBaseCode)
+        public string CreateBaseCode(List<RobotTool> robotTools, List<WorkObject> workObjects)
         {
             // Creates Main Module
             string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)@@";
@@ -132,23 +129,66 @@ namespace RobotComponents.BaseClasses
             BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];@";
             BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];@@";
 
-            BASECode += " ! User defined tooldata @";
             // Adds Tools Base Code
-            BASECode += toolBaseCode;
+            if (robotTools.Count != 0)
+            {
+                BASECode += " ! User defined tooldata @";
+                BASECode += CreateToolBaseCode(robotTools);
+                BASECode += "@ ";
+            }
 
-            BASECode += "@";
-            BASECode += " ! User defined wobjdata @";
             // Adds Work Objects Base Code
-            BASECode += workObjectBaseCode;
+            if (workObjects.Count != 0)
+            {
+                BASECode += " ! User defined wobjdata @";
+                BASECode += CreateWorkObjectBaseCode(workObjects);
+                BASECode += "@ ";
+            }
 
             // End Module
             BASECode += "ENDMODULE";
 
-            // Replaces@ with newLines
+            // Replaces @ with newLines
             BASECode = BASECode.Replace("@", System.Environment.NewLine);
 
             _BASECode = BASECode;
             return BASECode;
+        }
+
+        /// <summary>
+        /// Gets the Base Code for all Robot Tools in the list.
+        /// </summary>
+        /// <param name="robotTools"> The list with Robot Tools. </param>
+        /// <returns> Returns the robot tool base code as a string. </returns>
+        private string CreateToolBaseCode(List<RobotTool> robotTools)
+        {
+            string result = " ";
+
+            for (int i = 0; i != robotTools.Count; i++)
+            {
+                result += robotTools[i].GetRSToolData();
+                result += System.Environment.NewLine + " ";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the Base Code for all Robot Tools in the list.
+        /// </summary>
+        /// <param name="workObjects"> The list with Robot Tools. </param>
+        /// <returns> Returns the robot tool base code as a string. </returns>
+        private string CreateWorkObjectBaseCode(List<WorkObject> workObjects)
+        {
+            string result = " ";
+
+            for (int i = 0; i != workObjects.Count; i++)
+            {
+                result += workObjects[i].GetWorkObjData();
+                result += System.Environment.NewLine + " ";
+            }
+
+            return result;
         }
 
         //writes RAPID Code to File on Harddrive
@@ -180,7 +220,7 @@ namespace RobotComponents.BaseClasses
             }
         }
 
-        public List<RobotComponents.BaseClasses.Action> Actions
+        public List<Action> Actions
         {
             get { return _actions; }
             set { _actions = value; }

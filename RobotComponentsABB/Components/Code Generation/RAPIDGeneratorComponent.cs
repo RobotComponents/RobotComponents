@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses;
@@ -129,9 +128,9 @@ namespace RobotComponentsABB.Components
             // Updates the rapid BASE and MAIN code 
             if (update == true)
             {
-                string toolsBaseCode = GetToolBaseCode();
-                string workObjectsBaseCode = GetWorkObjectsBaseCode();
-                rapidGenerator.CreateBaseCode(toolsBaseCode, workObjectsBaseCode);
+                List<RobotTool> robotTools = GetRobotTools(); // Gets all the robot tools from the object manager
+                List<WorkObject> workObjects = GetWorkObjects(); // Gets all the work objects from the object manager
+                rapidGenerator.CreateBaseCode(robotTools, workObjects);
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
                 BASECode = rapidGenerator.BASECode;
@@ -141,7 +140,7 @@ namespace RobotComponentsABB.Components
             // Checks if first Movement is MoveAbsJ
             if (firstMovementIsMoveAbs == false)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as a absolute joint movement.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
             }
 
             // Output
@@ -159,72 +158,40 @@ namespace RobotComponentsABB.Components
         }
 
         /// <summary>
-        /// Gets the Base Code for all RobotTools from the object manager.
+        /// Gets all the robot tools from the object manager.
         /// </summary>
-        /// <returns></returns>
-        private string GetToolBaseCode()
+        /// <returns> Returns all the robot tools in a list. </returns>
+        private List<RobotTool> GetRobotTools()
         {
-            string BASECode = "";
+            List<RobotTool> robotTools = new List<RobotTool>();
 
             foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
             {
-                string toolData = "";
-                double posX = entry.Value.robotTool.AttachmentPlane.Origin.X + entry.Value.robotTool.ToolPlane.Origin.X;
-                double posY = entry.Value.robotTool.AttachmentPlane.Origin.Y + entry.Value.robotTool.ToolPlane.Origin.Y;
-                double posZ = entry.Value.robotTool.AttachmentPlane.Origin.Z + entry.Value.robotTool.ToolPlane.Origin.Z;
-                Point3d position = new Point3d(posX, posY, posZ);
-                Quaternion orientation = entry.Value.robotTool.Orientation;
-                string name = entry.Value.robotTool.Name;
-                toolData += " PERS tooldata " + name + " := [TRUE, [["
-                    + position.X.ToString("0.##") + ","
-                    + position.Y.ToString("0.##") + ","
-                    + position.Z.ToString("0.##") + "], ["
-                    + orientation.A.ToString("0.######") + ","
-                    + orientation.B.ToString("0.######") + ","
-                    + orientation.C.ToString("0.######") + ","
-                    + orientation.D.ToString("0.######") + "]], ";
-                toolData += "[0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
-
-                BASECode += toolData;
+                robotTools.Add(entry.Value.robotTool);
             }
 
             foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
             {
-                string toolData = "";
-                double posX = entry.Value.robTool.AttachmentPlane.Origin.X + entry.Value.robTool.ToolPlane.Origin.X;
-                double posY = entry.Value.robTool.AttachmentPlane.Origin.Y + entry.Value.robTool.ToolPlane.Origin.Y;
-                double posZ = entry.Value.robTool.AttachmentPlane.Origin.Z + entry.Value.robTool.ToolPlane.Origin.Z;
-                Point3d position = new Point3d(posX, posY, posZ);
-                Quaternion orientation = entry.Value.robTool.Orientation;
-                string name = entry.Value.robTool.Name;
-                toolData += " PERS tooldata " + name + " := [TRUE, [["
-                    + position.X.ToString("0.##") + ","
-                    + position.Y.ToString("0.##") + ","
-                    + position.Z.ToString("0.##") + "], ["
-                    + orientation.A.ToString("0.######") + ", "
-                    + orientation.B.ToString("0.######") + ","
-                    + orientation.C.ToString("0.######") + ","
-                    + orientation.D.ToString("0.######") + "]], ";
-                toolData += "[0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
-
-                BASECode += toolData;
+                robotTools.Add(entry.Value.robTool);
             }
 
-            return BASECode;
+            return robotTools;
         }
 
-        private string GetWorkObjectsBaseCode()
+        /// <summary>
+        /// Gets all the work objects from the object manager.
+        /// </summary>
+        /// <returns> Returns all the work objects in a list. </returns>
+        private List<WorkObject> GetWorkObjects()
         {
-            string woData = "";
+            List<WorkObject> workObjects = new List<WorkObject>();
 
             foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
             {
-                woData += " ";
-                woData += entry.Value.WorkObject.GetWorkObjData();
-                woData += "@";
+                workObjects.Add(entry.Value.WorkObject.Duplicate());
             }
 
-            return woData;
+            return workObjects;
         }
 
         /// <summary>

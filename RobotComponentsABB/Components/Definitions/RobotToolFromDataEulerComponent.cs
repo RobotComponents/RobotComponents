@@ -105,10 +105,8 @@ namespace RobotComponentsABB.Components
             double toolRotX = 0.0;
             double toolRotY = 0.0;
             double toolRotZ = 0.0;
-            Plane attachmentPlane = Plane.WorldXY;
-            Plane toolPlane = Plane.WorldXY;
 
-            // Catch teh input data
+            // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1,  meshes)) { return; }
             if (!DA.GetData(2, ref toolTransX)) { return; }
@@ -127,13 +125,8 @@ namespace RobotComponentsABB.Components
                 mesh.Append(meshes[i]);
             }
 
-            toolPlane.Translate(new Vector3d(toolTransX, toolTransY, toolTransZ));
-            toolPlane.Transform(Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), toolPlane.Origin));
-            toolPlane.Transform(Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), toolPlane.Origin));
-            toolPlane.Transform(Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), toolPlane.Origin));
-
             // Create the robot tool
-            robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
+            robotTool = new RobotTool(name, mesh, toolTransX, toolTransY, toolTransZ, toolRotX, toolRotY, toolRotZ);
 
             // Checks if tool name is already in use and counts duplicates
             #region NameCheck

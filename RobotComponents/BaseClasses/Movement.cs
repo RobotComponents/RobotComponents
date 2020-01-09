@@ -144,7 +144,7 @@ namespace RobotComponents.BaseClasses
             _globalTargetPlane = new Plane(Target.Plane);
 
             // Re-orient the target plane to the work object plane
-            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.Plane);
+            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
             _globalTargetPlane.Transform(orient);
         }
 

@@ -163,7 +163,7 @@ namespace RobotComponentsABB.Goos
                 if (Value == null)
                     target = default(Q);
                 else
-                    target = (Q)(object) new GH_Plane(Value.Plane);
+                    target = (Q)(object) new GH_Plane(Value.GlobalWorkObjectPlane);
                 return true;
             }
 

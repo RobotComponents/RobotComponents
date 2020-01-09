@@ -18,6 +18,7 @@ namespace RobotComponents.BaseClasses
         private bool _fixedFrame; // Bool that indicates if the workobject is fixed (true) or movable (false)
         private Plane _userFrame; // The user frame coordinate system
         private Quaternion _userFrameOrientation; // the orienation of the user frame coordinate system
+        private Plane _globalPlane; // global work object plane
         #endregion
 
         #region constructors
@@ -105,12 +106,27 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
+        /// Calculates the global work object plane since the work object coordinate system and 
+        /// the user frame coordinate system can both be un equal to the worldc coordinate system. 
+        /// </summary>
+        public void GetGlobalWorkObjectPlane()
+        {
+            // Create a deep copy of the work object plane
+            _globalPlane = new Plane(_plane);
+
+            // Re-orient the plane
+            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
+            _globalPlane.Transform(orient);
+        }
+
+        /// <summary>
         /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid work object. 
         /// </summary>
         private void Initialize()
         {
             GetOrientation();
             GetUserFrameOrientation();
+            GetGlobalWorkObjectPlane();
         }
 
         /// <summary>
@@ -167,7 +183,7 @@ namespace RobotComponents.BaseClasses
             }
 
             // Add mechanical unit (an external axis or robot) < ufmec of string >
-            // Todo..
+            // TODO: Add mechanical unit
             result += "\"\", "; // Redo this when mechanical unit is implemented
 
             /**
@@ -234,6 +250,15 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
+        /// Returns the global work object plane since the work object coordinate system and 
+        /// the user frame coordinate system can both be unequal to the world coordinate system.
+        /// </summary>
+        public Plane GlobalWorkObjectPlane
+        {
+            get { return _globalPlane; }
+        }
+
+        /// <summary>
         /// The user coordinate system, i.e. the position of the current work surface or fixture.
         /// If the robot is holding the tool, the user coordinate system is defined in the world 
         /// coordinate system (in the wrist coordinate system if a stationary tool is used). For 
@@ -243,7 +268,11 @@ namespace RobotComponents.BaseClasses
         public Plane UserFrame
         {
             get { return _userFrame; }
-            set { _userFrame = value; }
+            set 
+            { 
+                _userFrame = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>
@@ -253,7 +282,11 @@ namespace RobotComponents.BaseClasses
         public Plane Plane
         {
             get { return _plane; }
-            set { _plane = value; }
+            set 
+            { 
+                _plane = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>
@@ -263,7 +296,7 @@ namespace RobotComponents.BaseClasses
         public ExternalAxis ExternalAxis
         {
             get { return _externalAxis; }
-            set { _externalAxis = value; }
+            set { _externalAxis = value; } //TODO: Reinitilize the planes and the fixed frame if suddenly an external axis is set
         }
 
         /// <summary>

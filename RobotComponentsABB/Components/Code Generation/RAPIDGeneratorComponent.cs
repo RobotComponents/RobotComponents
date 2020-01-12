@@ -68,6 +68,8 @@ namespace RobotComponentsABB.Components
         // Fields
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs = true;
+        private string _BASECode = "";
+        private string _MAINCode = "";
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -117,10 +119,6 @@ namespace RobotComponentsABB.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
-            // Initiate output and other variables
-            string BASECode = "";
-            string MAINCode = "";
-
             // Initiaties the rapidGenerator
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
 
@@ -129,10 +127,11 @@ namespace RobotComponentsABB.Components
             {
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
                 List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
-                rapidGenerator.CreateBaseCode(robotTools, workObjects);
+                List<string> customCode = new List<string>() { };
+                rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
                 rapidGenerator.CreateRAPIDCode();
-                MAINCode = rapidGenerator.RAPIDCode;
-                BASECode = rapidGenerator.BASECode;
+                _MAINCode = rapidGenerator.RAPIDCode;
+                _BASECode = rapidGenerator.BASECode;
                 _firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
             }
 
@@ -143,8 +142,8 @@ namespace RobotComponentsABB.Components
             }
 
             // Output
-            DA.SetData(0, MAINCode);
-            DA.SetData(1, BASECode);
+            DA.SetData(0, _MAINCode);
+            DA.SetData(1, _BASECode);
         }
 
         /// <summary>

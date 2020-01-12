@@ -119,17 +119,14 @@ namespace RobotComponentsABB.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
-            // Sets the current Robot Tool in the object Manager
-            _objectManager.CurrentTool = robInfo.Tool.Name;
-
             // Initiaties the rapidGenerator
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
 
             // Updates the rapid BASE and MAIN code 
             if (update == true)
             {
-                List<RobotTool> robotTools = GetRobotTools(); // Gets all the robot tools from the object manager
-                List<WorkObject> workObjects = GetWorkObjects(); // Gets all the work objects from the object manager
+                List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
+                List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
                 rapidGenerator.CreateBaseCode(robotTools, workObjects);
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
@@ -155,43 +152,6 @@ namespace RobotComponentsABB.Components
         protected override System.Drawing.Bitmap Icon
         {
             get { return RobotComponentsABB.Properties.Resources.RAPID_Icon; }
-        }
-
-        /// <summary>
-        /// Gets all the robot tools from the object manager.
-        /// </summary>
-        /// <returns> Returns all the robot tools in a list. </returns>
-        private List<RobotTool> GetRobotTools()
-        {
-            List<RobotTool> robotTools = new List<RobotTool>();
-
-            foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
-            {
-                robotTools.Add(entry.Value.robotTool);
-            }
-
-            foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-            {
-                robotTools.Add(entry.Value.robTool);
-            }
-
-            return robotTools;
-        }
-
-        /// <summary>
-        /// Gets all the work objects from the object manager.
-        /// </summary>
-        /// <returns> Returns all the work objects in a list. </returns>
-        private List<WorkObject> GetWorkObjects()
-        {
-            List<WorkObject> workObjects = new List<WorkObject>();
-
-            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
-            {
-                workObjects.Add(entry.Value.WorkObject.Duplicate());
-            }
-
-            return workObjects;
         }
 
         /// <summary>

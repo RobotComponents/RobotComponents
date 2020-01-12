@@ -61,7 +61,7 @@ namespace RobotComponentsABB.Components
         // Fields
         public string lastName = "";
         public bool nameUnique;
-        public RobotTool robTool = new RobotTool();
+        public RobotTool robotTool = new RobotTool();
         private ObjectManager objectManager;
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Components
             objectManager = DocumentManager.ObjectManagers[documentID];
 
             // Clears tool name
-            objectManager.ToolNames.Remove(robTool.Name);
+            objectManager.ToolNames.Remove(robotTool.Name);
 
             // Removes lastName from toolNameList
             if (objectManager.ToolNames.Contains(lastName))
@@ -114,7 +114,7 @@ namespace RobotComponentsABB.Components
             }
 
             // Create the Robot Tool
-            RobotTool robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
+            robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
 
             // Checks if the tool name is already in use and counts duplicates
             #region NameCheck
@@ -163,7 +163,6 @@ namespace RobotComponentsABB.Components
             #endregion
 
             // Outputs
-            robTool = robotTool;
             DA.SetData(0, robotTool);
             DA.SetData(1, robotTool.GetRSToolData());
 

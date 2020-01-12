@@ -113,12 +113,10 @@ namespace RobotComponents.BaseClasses
         {
             get
             {
-                //if (Meshes == null) { return false; }
                 if (InternalAxisPlanes == null) { return false; }
                 if (InternalAxisLimits == null) { return false; }
                 if (BasePlane == null) { return false; }
                 if (MountingFrame == null) { return false; }
-
                 return true;
             }
         }
@@ -167,7 +165,10 @@ namespace RobotComponents.BaseClasses
 
         public RobotTool Tool
         {
-            get { return _tool; }
+            get 
+            { 
+                return _tool; 
+            }
             set 
             { 
                 _tool = value;

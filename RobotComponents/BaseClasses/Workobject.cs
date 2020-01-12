@@ -90,26 +90,31 @@ namespace RobotComponents.BaseClasses
 
         #region methods
         /// <summary>
-        /// Method that calculates the quarternion orientation of the work object coordinate system. 
+        /// Method that calculates the quaternion orientation of the work object coordinate system. 
         /// </summary>
-        public void GetOrientation()
+        /// <returns> Returns the quaternion orientation of the work object. </returns>
+        public Quaternion GetOrientation()
         {
             _orientation = Quaternion.Rotation(Plane.WorldXY, _plane);
+            return _orientation;
         }
 
         /// <summary>
-        /// Method that calculates the quarternion orientation of the user frame coordinate system. 
+        /// Method that calculates the quaternion orientation of the user frame coordinate system. 
         /// </summary>
-        public void GetUserFrameOrientation()
+        /// <returns> Returns the quaternion orientation of the user frame. </returns>
+        public Quaternion GetUserFrameOrientation()
         {
             _userFrameOrientation = Quaternion.Rotation(Plane.WorldXY, _userFrame);
+            return _userFrameOrientation;
         }
 
         /// <summary>
         /// Calculates the global work object plane since the work object coordinate system and 
         /// the user frame coordinate system can both be un equal to the worldc coordinate system. 
         /// </summary>
-        public void GetGlobalWorkObjectPlane()
+        /// <returns> Returns the global work object plane. </returns>
+        public Plane GetGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
             _globalPlane = new Plane(_plane);
@@ -117,6 +122,8 @@ namespace RobotComponents.BaseClasses
             // Re-orient the plane
             Transform orient = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
             _globalPlane.Transform(orient);
+
+            return _globalPlane;
         }
 
         /// <summary>
@@ -160,7 +167,7 @@ namespace RobotComponents.BaseClasses
             result += "PERS wobjdata ";
 
             // Adds work object name
-            result += $"{_name}:=";
+            result += $"{_name} := ";
 
             // Add robot hold < robhold of bool >
             if (_robotHold)
@@ -267,7 +274,10 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         public Plane UserFrame
         {
-            get { return _userFrame; }
+            get 
+            { 
+                return _userFrame; 
+            }
             set 
             { 
                 _userFrame = value;
@@ -281,7 +291,10 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         public Plane Plane
         {
-            get { return _plane; }
+            get 
+            { 
+                return _plane; 
+            }
             set 
             { 
                 _plane = value;

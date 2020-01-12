@@ -32,7 +32,7 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Method to create a robot movement with als only argument an robot target. 
+        /// Method to create a robot movement with as only argument an robot target. 
         /// This construct is made to automatically cast a robot target to a robot movement. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
@@ -51,7 +51,7 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Method to create a robot movement. 
+        /// Method to create a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
@@ -72,7 +72,7 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// Method to create a robot movement. 
+        /// Method to create a robot movement with an empty digital output.
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
@@ -128,17 +128,26 @@ namespace RobotComponents.BaseClasses
         #endregion
 
         #region method
-        public void Initialize()
+        /// <summary>
+        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid movement object. 
+        /// </summary>
+        private void Initialize()
         {
             CalculateGlobalTargetPlane();
         }
 
+        /// <summary>
+        /// A method that can be called to reinitialize all the data that is needed to construct a valid movement object.
+        /// </summary>
         public void ReInitialize()
         {
             Initialize();
         }
 
-        public void CalculateGlobalTargetPlane()
+        /// <summary>
+        /// Calculate the position and the orientation of the target in the global coordinate system. 
+        /// </summary>
+        private void CalculateGlobalTargetPlane()
         {
             // Deep copy the target plane
             _globalTargetPlane = new Plane(Target.Plane);
@@ -148,6 +157,12 @@ namespace RobotComponents.BaseClasses
             _globalTargetPlane.Transform(orient);
         }
 
+        /// <summary>
+        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
+        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
+        /// <returns>Return the RAPID variable code.</returns>
         public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
         {
             string tempCode = "";
@@ -175,7 +190,7 @@ namespace RobotComponents.BaseClasses
                 // Only adds target code if target is not already defined
                 if (!RAPIDcode.Contains(robTargetVar))
                 {
-                    tempCode += ("@" + "\t" + robTargetVar + ":=[[" 
+                    tempCode += ("@" + "\t" + robTargetVar + " := [[" 
                         + _target.Plane.Origin.X.ToString("0.##") + ", " 
                         + _target.Plane.Origin.Y.ToString("0.##") + ", " 
                         + _target.Plane.Origin.Z.ToString("0.##") + "], ["
@@ -262,6 +277,11 @@ namespace RobotComponents.BaseClasses
             return tempCode;
         }
 
+        /// <summary>
+        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// </summary>
+        /// <param name="robotToolName">Defines the robot rool name.</param>
+        /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
             // Set tool name
@@ -341,11 +361,13 @@ namespace RobotComponents.BaseClasses
                     return "";
                 }
             }
-
         }
         #endregion
 
         #region properties
+        /// <summary>
+        /// A boolean that indicuate if the Movement object is valid.
+        /// </summary>
         public bool IsValid
         {
             get
@@ -356,24 +378,41 @@ namespace RobotComponents.BaseClasses
             }
         }
 
+        /// <summary>
+        /// The destination target of the robot and external axes.
+        /// </summary>
         public Target Target
         {
             get { return _target; }
             set { _target = value; }
         }
 
+        /// <summary>
+        /// The speed data that applies to movements. Speed data defines the velocity 
+        /// for the tool center point, the tool reorientation, and external axes.
+        /// </summary>
         public SpeedData SpeedData
         {
             get { return _speedData; }
             set { _speedData = value; }
         }
 
+        /// <summary>
+        /// The movement type.
+        /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
+        /// Two is used for linear movements with robtarget (MoveL)
+        /// Three is used for joint movements with robtargets (MoveJ).
+        /// </summary>
         public int MovementType
         {
             get { return _movementType; }
             set { _movementType = value; }
         }
 
+        /// <summary>
+        /// Precision for the movement that describes the ABB zondedata. 
+        /// It defines the size of the generated corner path.
+        /// </summary>
         public int Precision
         {
             get { return _precision; }
@@ -381,25 +420,37 @@ namespace RobotComponents.BaseClasses
         }
 
         /// <summary>
-        /// The local target plane re-oriented to the work object plane. 
+        /// The position and the orientation of the used target in the global coordinate system. 
         /// </summary>
         public Plane GlobalTargetPlane
         {
             get { return _globalTargetPlane; }
             set { _globalTargetPlane = value; }
         }
+
+        /// <summary>
+        /// The tool in use when the robot moves. 
+        /// </summary>
         public RobotTool RobotTool
         {
             get { return _robotTool; }
             set { _robotTool = value; }
         }
 
+        /// <summary>
+        /// The work object (coordinate system) to which the robot position in the instruction is related.
+        /// </summary>
         public WorkObject WorkObject
         {
             get { return _workObject; }
             set { _workObject = value; }
         }
 
+        /// <summary>
+        /// The digital output. If an empty digital output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
+        /// If a valid digital output is combined movement will be created (MoveLDO or MoveJDO). 
+        /// In case an absolute joint movement is set an extra code line will be added that sets the digital output (SetDO).
+        /// </summary>
         public DigitalOutput DigitalOutput
         {
             get { return _digitalOutput; }

@@ -59,7 +59,7 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
         public Target(string name, Plane plane, int axisConfig)
         {
             _name = name;
@@ -83,7 +83,7 @@ namespace RobotComponents.BaseClasses
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
         public Target(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
             _name = name;
@@ -110,15 +110,15 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origin (WorldXY). </param>
+        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
         /// <param name="Eax_a"></param>
         /// <param name="Eax_b"></param>
         /// <param name="Eax_c"></param>
         /// <param name="Eax_d"></param>
         /// <param name="Eax_e"></param>
         /// <param name="Eax_f"></param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b, double Eax_c, double Eax_d, double Eax_e, double Eax_f)
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
         {
             _name = name;
             _plane = plane;
@@ -379,8 +379,15 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         public Plane Plane
         {
-            get { return _plane; }
-            set { _plane = value; }
+            get 
+            { 
+                return _plane; 
+            }
+            set 
+            { 
+                _plane = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>
@@ -431,7 +438,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “a” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueA
         {
@@ -441,7 +448,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “b” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueB
         {
@@ -451,7 +458,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “c” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueC
         {
@@ -461,7 +468,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “d” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueD
         {
@@ -471,7 +478,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “e” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueE
         {
@@ -481,7 +488,7 @@ namespace RobotComponents.BaseClasses
 
         /// <summary>
         /// The position of the external logical axis “f” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculated the axis value.
+        /// If 9e9 is used the inverse kinematics will calculate the axis value.
         /// </summary>
         public double ExternalAxisValueF
         {

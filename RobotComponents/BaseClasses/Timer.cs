@@ -62,7 +62,7 @@
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Timer object is valid.
+        /// A boolean that indicates if the Timer object is valid.
         /// </summary>
         public bool IsValid
         {

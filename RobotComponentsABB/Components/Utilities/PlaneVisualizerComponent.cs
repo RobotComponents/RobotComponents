@@ -44,7 +44,7 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        List<Plane> planes = new List<Plane>();
+        private List<Plane> _planes = new List<Plane>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -54,7 +54,7 @@ namespace RobotComponentsABB.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Clear the list with plans before catching the input data
-            planes.Clear();
+            _planes.Clear();
 
             // Create an empty datatree structure for catching the input data
             GH_Structure<GH_Plane> inputPlanes;
@@ -69,7 +69,7 @@ namespace RobotComponentsABB.Components
 
                 for (int j = 0; j < branches.Count; j++)
                 {
-                    planes.Add(branches[j].Value);
+                    _planes.Add(branches[j].Value);
                 }
             }
         }
@@ -80,9 +80,9 @@ namespace RobotComponentsABB.Components
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            for (int i = 0; i < planes.Count; i++)
+            for (int i = 0; i < _planes.Count; i++)
             {
-                Plane plane = planes[i];
+                Plane plane = _planes[i];
                 args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
                 args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
                 args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);

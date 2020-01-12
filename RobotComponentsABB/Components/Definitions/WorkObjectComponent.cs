@@ -53,12 +53,11 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Resulting Work Object", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
         }
 
-
         // Fields
-        public string lastName = "";
-        public bool nameUnique;
-        public WorkObject WorkObject = new WorkObject();
-        private ObjectManager objectManager;
+        private string _lastName = "";
+        private bool _nameUnique;
+        private WorkObject _workObject = new WorkObject();
+        private ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -78,16 +77,16 @@ namespace RobotComponentsABB.Components
             }
 
             // Gets ObjectManager of this document
-            objectManager = DocumentManager.ObjectManagers[documentID];
+            _objectManager = DocumentManager.ObjectManagers[documentID];
 
             // Clears Work Object Name
-            objectManager.WorkObjectNames.Remove(WorkObject.Name);
+            _objectManager.WorkObjectNames.Remove(_workObject.Name);
 
 
-            // Removes lastName from toolNameList
-            if (objectManager.WorkObjectNames.Contains(lastName))
+            // Removes lastName from WorkObjectNameList
+            if (_objectManager.WorkObjectNames.Contains(_lastName))
             {
-                objectManager.WorkObjectNames.Remove(lastName);
+                _objectManager.WorkObjectNames.Remove(_lastName);
             }
 
             // Input variables
@@ -98,55 +97,55 @@ namespace RobotComponentsABB.Components
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref plane)) { return; }
 
-            WorkObject = new WorkObject(name, plane);
+            _workObject = new WorkObject(name, plane);
 
-            // Checks if the tool name is already in use and counts duplicates
+            // Checks if the work object name is already in use and counts duplicates
             #region NameCheck
-            if (objectManager.WorkObjectNames.Contains(WorkObject.Name))
+            if (_objectManager.WorkObjectNames.Contains(_workObject.Name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name already in use.");
-                nameUnique = false;
-                lastName = "";
+                _nameUnique = false;
+                _lastName = "";
             }
             else
             {
-                // Adds Robot Tool Name to list
-                objectManager.WorkObjectNames.Add(WorkObject.Name);
+                // Adds Work Object name to list
+                _objectManager.WorkObjectNames.Add(_workObject.Name);
 
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in objectManager.WorkObjectsByGuid)
+                // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
+                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
                 {
-                    if (entry.Value.lastName == "")
+                    if (entry.Value._lastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }
                 }
 
-                lastName = WorkObject.Name;
-                nameUnique = true;
+                _lastName = _workObject.Name;
+                _nameUnique = true;
             }
 
             // Checks if variable name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(WorkObject.Name))
+            if (HelperMethods.VariableExeedsCharacterLimit32(_workObject.Name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name exceeds character limit of 32 characters.");
             }
 
             // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(WorkObject.Name))
+            if (HelperMethods.VariableStartsWithNumber(_workObject.Name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name starts with a number which is not allowed in RAPID Code.");
             }
             #endregion
 
             // Output
-            DA.SetData(0, WorkObject);
+            DA.SetData(0, _workObject);
 
 
-            // Adds Component to ToolsByGuid Dictionary
-            if (!objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
+            // Adds Component to WorkObjectsByGuid Dictionary
+            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
             {
-                objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
+                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
             }
 
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
@@ -167,21 +166,28 @@ namespace RobotComponentsABB.Components
         {
             if (e.Objects.Contains(this))
             {
-                    if (nameUnique == true)
+                    if (_nameUnique == true)
                     {
-                        objectManager.WorkObjectNames.Remove(lastName);
+                        _objectManager.WorkObjectNames.Remove(_lastName);
                     }
-                    objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
+                    _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
 
 
                 // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in objectManager.WorkObjectsByGuid)
+                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
                 {
                         entry.Value.ExpireSolution(true);
                 }
             }
         }
 
+        /// <summary>
+        /// The work object created by this component
+        /// </summary>
+        public WorkObject WorkObject
+        {
+            get { return _workObject; }
+        }
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -199,11 +205,6 @@ namespace RobotComponentsABB.Components
         public override Guid ComponentGuid
         {
             get { return new Guid("60F2B882-E88B-4928-8517-AA5666F8137F"); }
-        }
-
-        public override string ToString()
-        {
-            return "Work Object";
         }
     }
 }

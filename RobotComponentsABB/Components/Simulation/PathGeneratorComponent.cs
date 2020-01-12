@@ -54,12 +54,12 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        PathGenerator _pathGenerator = new PathGenerator();
-        List<Target> _targets = new List<Target>();
-        List<Curve> _paths = new List<Curve>();
-        List<List<double>> _internalAxisValues = new List<List<double>>();
-        List<List<double>> _externalAxisValues = new List<List<double>>();
-        int lastInterpolations = 0;
+        private PathGenerator _pathGenerator = new PathGenerator();
+        private List<Target> _targets = new List<Target>();
+        private List<Curve> _paths = new List<Curve>();
+        private List<List<double>> _internalAxisValues = new List<List<double>>();
+        private List<List<double>> _externalAxisValues = new List<List<double>>();
+        private int _lastInterpolations = 0;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -88,7 +88,7 @@ namespace RobotComponentsABB.Components
             _pathGenerator = new PathGenerator(robotInfoGoo.Value);
 
             // Update the path
-            if (update == true || lastInterpolations != interpolations)
+            if (update == true || _lastInterpolations != interpolations)
             {
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
@@ -115,7 +115,7 @@ namespace RobotComponentsABB.Components
                 }
 
                 // Store the number of interpolations that are used, to check if this value is changed. 
-                lastInterpolations = interpolations;
+                _lastInterpolations = interpolations;
             }
 
             // Get the index number of the current target

@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using RobotComponents.BaseClasses;
-
 using RobotComponentsABB.Components;
-using RobotComponentsABB.Parameters;
-using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Resources
 {
@@ -51,11 +42,11 @@ namespace RobotComponentsABB.Resources
 
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = GetControllerComponent.controllerInstance[comboBox1.SelectedIndex].Name.ToString();
-            this.labelSystemNameInfo.Text = GetControllerComponent.controllerInstance[comboBox1.SelectedIndex].SystemName.ToString();
-            this.labelIPInfo.Text = GetControllerComponent.controllerInstance[comboBox1.SelectedIndex].IPAddress.ToString();
-            this.labelIsVirtualInfo.Text = GetControllerComponent.controllerInstance[comboBox1.SelectedIndex].IsVirtual.ToString();
-            this.labelOperationModeInfo.Text = GetControllerComponent.controllerInstance[comboBox1.SelectedIndex].OperatingMode.ToString();
+            this.labelNameInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].Name.ToString();
+            this.labelSystemNameInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].SystemName.ToString();
+            this.labelIPInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].IPAddress.ToString();
+            this.labelIsVirtualInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].IsVirtual.ToString();
+            this.labelOperationModeInfo.Text = GetControllerComponent.ControllerInstance[comboBox1.SelectedIndex].OperatingMode.ToString();
         }
     }
 }

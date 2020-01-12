@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using RobotComponents.BaseClasses;
-
 using RobotComponentsABB.Components;
-using RobotComponentsABB.Parameters;
-using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Resources
 {
@@ -40,11 +31,11 @@ namespace RobotComponentsABB.Resources
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = GetDigitalInputComponent.signalGooList[comboBox1.SelectedIndex].Value.Name.ToString();
-            this.labelValueInfo.Text = GetDigitalInputComponent.signalGooList[comboBox1.SelectedIndex].Value.Value.ToString();
-            this.labelTypeInfo.Text = GetDigitalInputComponent.signalGooList[comboBox1.SelectedIndex].Value.Type.ToString();
-            this.labelMinValueInfo.Text = GetDigitalInputComponent.signalGooList[comboBox1.SelectedIndex].Value.MinValue.ToString();
-            this.labelMaxValueInfo.Text = GetDigitalInputComponent.signalGooList[comboBox1.SelectedIndex].Value.MaxValue.ToString();
+            this.labelNameInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Name.ToString();
+            this.labelValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Value.ToString();
+            this.labelTypeInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Type.ToString();
+            this.labelMinValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.MinValue.ToString();
+            this.labelMaxValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.MaxValue.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)

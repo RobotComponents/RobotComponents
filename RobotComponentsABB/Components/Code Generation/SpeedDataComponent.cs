@@ -58,11 +58,11 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data");
         }
 
-        // Global component variables
-        private List<string> speedDataNames = new List<string>();
-        private string lastName = "";
-        private bool namesUnique;
-        private ObjectManager objectManager;
+        // Fields
+        private List<string> _speedDataNames = new List<string>();
+        private string _lastName = "";
+        private bool _namesUnique;
+        private ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -71,11 +71,11 @@ namespace RobotComponentsABB.Components
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Clears speedDataNames
-            for (int i = 0; i < speedDataNames.Count; i++)
+            for (int i = 0; i < _speedDataNames.Count; i++)
             {
-                objectManager.SpeedDataNames.Remove(speedDataNames[i]);
+                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
             }
-            speedDataNames.Clear();
+            _speedDataNames.Clear();
 
             // Gets Document ID
             string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
@@ -87,18 +87,18 @@ namespace RobotComponentsABB.Components
             }
 
             // Gets ObjectManager of this document
-            objectManager = DocumentManager.ObjectManagers[documentID];
+            _objectManager = DocumentManager.ObjectManagers[documentID];
 
             // Adds Component to SpeedDataByGuid Dictionary
-            if (!objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
             {
-                objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
+                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
             }
 
             // Removes lastName from speedDataNameList
-            if (objectManager.SpeedDataNames.Contains(lastName))
+            if (_objectManager.SpeedDataNames.Contains(_lastName))
             {
-                objectManager.SpeedDataNames.Remove(lastName);
+                _objectManager.SpeedDataNames.Remove(_lastName);
             }
 
             // Sets inputs and creates target
@@ -142,7 +142,8 @@ namespace RobotComponentsABB.Components
                 double v_leax = 0;
                 double v_reax = 0;
 
-                if(i < names.Count)
+                // Names counter
+                if (i < names.Count)
                 {
                     name = names[i];
                     nameCounter++;
@@ -152,6 +153,7 @@ namespace RobotComponentsABB.Components
                     name = names[nameCounter] + "_" + (i - nameCounter);
                 }
 
+                // TCP speed counter
                 if (i < v_tcps.Count)
                 {
                     v_tcp = v_tcps[i];
@@ -162,6 +164,7 @@ namespace RobotComponentsABB.Components
                     v_tcp = v_tcps[v_tcpCounter];
                 }
 
+                // Re-orientation speed counter
                 if (i < v_oris.Count)
                 {
                     v_ori = v_oris[i];
@@ -172,6 +175,7 @@ namespace RobotComponentsABB.Components
                     v_ori = v_oris[v_oriCounter];
                 }
 
+                // External linear axis speed counter
                 if (i < v_leaxs.Count)
                 {
                     v_leax = v_leaxs[i];
@@ -182,6 +186,7 @@ namespace RobotComponentsABB.Components
                     v_leax = v_leaxs[v_leaxCounter];
                 }
 
+                // External revolving axis counter
                 if (i < v_reaxs.Count)
                 {
                     v_reax = v_reaxs[i];
@@ -192,36 +197,37 @@ namespace RobotComponentsABB.Components
                     v_reax = v_reaxs[v_reaxCounter];
                 }
 
+                // Construct speed data
                 SpeedData speedData = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
                 speedDatas.Add(speedData);
             }
 
-            namesUnique = true;
+            _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
                 // Checks if speed Data name is already in use and counts duplicates
                 #region NameCheck
-                if (objectManager.SpeedDataNames.Contains(names[i]))
+                if (_objectManager.SpeedDataNames.Contains(names[i]))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
-                    namesUnique = false;
-                    lastName = "";
+                    _namesUnique = false;
+                    _lastName = "";
                 }
                 else
                 {
                     // Adds Speed Data Name to list
-                    speedDataNames.Add(names[i]);
-                    objectManager.SpeedDataNames.Add(names[i]);
+                    _speedDataNames.Add(names[i]);
+                    _objectManager.SpeedDataNames.Add(names[i]);
 
                     // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, SpeedDataComponent> entry in objectManager.SpeedDatasByGuid)
+                    foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
                     {
-                        if (entry.Value.lastName == "")
+                        if (entry.Value._lastName == "")
                         {
                             entry.Value.ExpireSolution(true);
                         }
                     }
-                    lastName = names[i];
+                    _lastName = names[i];
                 }
 
                 // Checks if Speed Data Name exceeds max character limit for RAPID Code
@@ -257,22 +263,21 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
-
             if (e.Objects.Contains(this))
             {
-                if (namesUnique == true)
+                if (_namesUnique == true)
                 {
-                    for (int i = 0; i < speedDataNames.Count; i++)
+                    for (int i = 0; i < _speedDataNames.Count; i++)
                     {
-                        objectManager.SpeedDataNames.Remove(speedDataNames[i]);
+                        _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
                     }
                 }
-                objectManager.SpeedDatasByGuid.Remove(this.InstanceGuid);
+                _objectManager.SpeedDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, SpeedDataComponent> entry in objectManager.SpeedDatasByGuid)
+                foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
                 {
-                    if (entry.Value.lastName == "")
+                    if (entry.Value._lastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }

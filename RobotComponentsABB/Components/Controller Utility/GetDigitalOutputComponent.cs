@@ -51,12 +51,12 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        public int pickedIndex = 0;
-        public static List<SignalGoo> signalGooList = new List<SignalGoo>();
-        ABB.Robotics.Controllers.Controller controller = null;
-        string currentSignalName = "";
-        string currentSystemName = "";
-        string currentCtrName = "";
+        private int _pickedIndex = 0;
+        private static List<SignalGoo> _signalGooList = new List<SignalGoo>();
+        private ABB.Robotics.Controllers.Controller _controller = null; 
+        private string _currentSignalName = "";
+        private string _currentSystemName = "";
+        private string _currentCtrName = "";
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -77,8 +77,8 @@ namespace RobotComponentsABB.Components
             }
 
             // Get controller and logon
-            controller = controllerGoo.Value;
-            controller.Logon(UserInfo.DefaultUser);
+            _controller = controllerGoo.Value;
+            _controller.Logon(UserInfo.DefaultUser);
 
             // Ouput variables
             SignalGoo signalGoo;
@@ -122,11 +122,11 @@ namespace RobotComponentsABB.Components
         private SignalGoo PickSignal()
         {
             // Clear the list with signals
-            signalGooList.Clear();
+            _signalGooList.Clear();
 
             // Get the signal ins the robot controller
             ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
+            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
 
             // Initate the list with signal names
             List<string> signalNames = new List<string>();
@@ -135,27 +135,27 @@ namespace RobotComponentsABB.Components
             for (int i = 0; i < signalCollection.Count; i++)
             {
                 // Check if there is write acces
-                if (controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
+                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
-                    signalGooList.Add(new SignalGoo(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
+                    _signalGooList.Add(new SignalGoo(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
                 }
             }
 
             // Return nothing if no signals were found
-            if (signalGooList.Count == 0 || signalGooList == null)
+            if (_signalGooList.Count == 0 || _signalGooList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No signal found with write access!");
                 return null;
             }
 
             // Display the form with signal names and let the used pick one of the available signals
-            pickedIndex = DisplayForm(signalNames);
+            _pickedIndex = DisplayForm(signalNames);
 
             // Return the picked signals if the index number of the picked signal is valid
-            if (pickedIndex >= 0)
+            if (_pickedIndex >= 0)
             {
-                return signalGooList[pickedIndex];
+                return _signalGooList[_pickedIndex];
             }
 
             // Else return nothing if the user did not pick a signal
@@ -174,7 +174,7 @@ namespace RobotComponentsABB.Components
         private SignalGoo GetSignal(string name)
         {
             // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
-            if (name != currentSignalName || controller.SystemName != currentSystemName || controller.Name != currentCtrName)
+            if (name != _currentSignalName || _controller.SystemName != _currentSystemName || _controller.Name != _currentCtrName)
             {
                 if (!ValidSignal(name))
                 {
@@ -183,13 +183,13 @@ namespace RobotComponentsABB.Components
                 }
 
                 // Update the current names
-                currentSignalName = (string)name.Clone();
-                currentSystemName = (string)controller.SystemName.Clone();
-                currentCtrName = (string)controller.Name.Clone();
+                _currentSignalName = (string)name.Clone();
+                _currentSystemName = (string)_controller.SystemName.Clone();
+                _currentCtrName = (string)_controller.Name.Clone();
             }
 
             // Get the signal from the defined controller
-            ABB.Robotics.Controllers.IOSystemDomain.Signal signal = controller.IOSystem.GetSignal(name) as ABB.Robotics.Controllers.IOSystemDomain.Signal;
+            ABB.Robotics.Controllers.IOSystemDomain.Signal signal = _controller.IOSystem.GetSignal(name) as ABB.Robotics.Controllers.IOSystemDomain.Signal;
 
             // Check for null return
             if (signal != null)
@@ -247,7 +247,7 @@ namespace RobotComponentsABB.Components
         {
             // Get the signals that are defined in the controller
             ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
+            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
 
             // Initiate the list with signal names
             List<string> signalNames = new List<string>();
@@ -256,7 +256,7 @@ namespace RobotComponentsABB.Components
             for (int i = 0; i < signalCollection.Count; i++)
             {
                 // Check if there is write access
-                if (controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
+                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
                 }
@@ -317,6 +317,14 @@ namespace RobotComponentsABB.Components
             ExpireSolution(true);
         }
         #endregion
+
+        /// <summary>
+        /// The list with all the digital output signals
+        /// </summary>
+        public static List<SignalGoo> SignalGooList
+        {
+            get { return _signalGooList; }
+        }
 
         /// <summary>
         /// Provides an Icon for the component.

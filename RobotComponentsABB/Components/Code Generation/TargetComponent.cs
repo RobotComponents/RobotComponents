@@ -80,11 +80,11 @@ namespace RobotComponentsABB.Components
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
         }
 
-        // fields
-        public List<string> targetNames = new List<string>();
-        private string lastName = "";
-        private bool namesUnique;
-        private ObjectManager objectManager;
+        // Fields
+        private List<string> _targetNames = new List<string>();
+        private string _lastName = "";
+        private bool _namesUnique;
+        private ObjectManager _objectManager;
         
         private bool _setReferencePlane = false;
         private bool _overrideExternalAxisValues = false;
@@ -104,25 +104,25 @@ namespace RobotComponentsABB.Components
             }
 
             // Gets ObjectManager of this document
-            objectManager = DocumentManager.ObjectManagers[documentGUID];
+            _objectManager = DocumentManager.ObjectManagers[documentGUID];
 
             // Clears targetNames
-            for (int i = 0; i < targetNames.Count; i++)
+            for (int i = 0; i < _targetNames.Count; i++)
             {
-                objectManager.TargetNames.Remove(targetNames[i]);
+                _objectManager.TargetNames.Remove(_targetNames[i]);
             }
-            targetNames.Clear();
+            _targetNames.Clear();
 
             // Adds Component to TargetByGuid Dictionary
-            if (!objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
             {
-                objectManager.TargetsByGuid.Add(this.InstanceGuid, this);
+                _objectManager.TargetsByGuid.Add(this.InstanceGuid, this);
             }
 
             // Removes lastName from targetNameList
-            if (objectManager.TargetNames.Contains(lastName))
+            if (_objectManager.TargetNames.Contains(_lastName))
             {
-                objectManager.TargetNames.Remove(lastName);
+                _objectManager.TargetNames.Remove(_lastName);
             }
 
             // Sets inputs and creates target
@@ -376,32 +376,32 @@ namespace RobotComponentsABB.Components
 
             // Checks if target name is already in use and counts duplicates
             #region NameCheck
-            namesUnique = true;
+            _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
-                if (objectManager.TargetNames.Contains(names[i]))
+                if (_objectManager.TargetNames.Contains(names[i]))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
-                    namesUnique = false;
-                    lastName = "";
+                    _namesUnique = false;
+                    _lastName = "";
                     break;
                 }
                 else
                 {
                     // Adds Target Name to list
-                    targetNames.Add(names[i]);
-                    objectManager.TargetNames.Add(names[i]);
+                    _targetNames.Add(names[i]);
+                    _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, TargetComponent> entry in objectManager.TargetsByGuid)
+                    foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
                     {
-                        if (entry.Value.lastName == "")
+                        if (entry.Value._lastName == "")
                         {
                             entry.Value.ExpireSolution(true);
                         }
                     }
 
-                    lastName = names[i];
+                    _lastName = names[i];
                 }
 
                 // Checks if variable name exceeds max character limit for RAPID Code
@@ -439,22 +439,21 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
-
             if (e.Objects.Contains(this))
             {
-                if (namesUnique == true)
+                if (_namesUnique == true)
                 {
-                    for (int i = 0; i < targetNames.Count; i++)
+                    for (int i = 0; i < _targetNames.Count; i++)
                     {
-                        objectManager.TargetNames.Remove(targetNames[i]);
+                        _objectManager.TargetNames.Remove(_targetNames[i]);
                     }
                 }
-                objectManager.TargetsByGuid.Remove(this.InstanceGuid);
+                _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, TargetComponent> entry in objectManager.TargetsByGuid)
+                foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
                 {
-                    if (entry.Value.lastName == "")
+                    if (entry.Value._lastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }

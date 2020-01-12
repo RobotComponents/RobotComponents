@@ -54,12 +54,12 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        Controller controller;
-        bool ctr = true;
-        string msg;
-        string cStatus = "Not connected.";
-        string uStatus = "No actions.";
-        int count = 0;
+        private Controller _controller;
+        private bool _ctr = true;
+        private string _msg;
+        private string _cStatus = "Not connected.";
+        private string _uStatus = "No actions.";
+        private int _count = 0;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Components
             base.DestroyIconCache();
 
             // Get controller value
-            controller = controllerGoo.Value;
+            _controller = controllerGoo.Value;
             
             // Connect
             if (connect)
@@ -131,14 +131,14 @@ namespace RobotComponentsABB.Components
 
                     // Get file path / directory to save on the controller
                     string localDirectory = Path.Combine(path, "RAPID");
-                    string str3 = Path.Combine(controller.FileSystem.RemoteDirectory, "RAPID");
+                    string str3 = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
                     string filePath;
 
                     // Upload to the virtual controller
-                    if (!controller.IsVirtual)
+                    if (!_controller.IsVirtual)
                     {
-                        controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
-                        controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
+                        _controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
+                        _controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
                         filePath = Path.Combine(str3, "RAPID_T_ROB1.pgf");
                     }
                     // Upload to a physical controller
@@ -148,10 +148,10 @@ namespace RobotComponentsABB.Components
                     }
 
                     // The real upload
-                    using (Mastership.Request(controller.Rapid))
+                    using (Mastership.Request(_controller.Rapid))
                     {
                         // Get current task
-                        Task task = controller.Rapid.GetTasks().First<Task>();
+                        Task task = _controller.Rapid.GetTasks().First<Task>();
 
                         // Delete current task
                         task.DeleteProgram();
@@ -164,13 +164,13 @@ namespace RobotComponentsABB.Components
                         }
 
                         // Grant acces
-                        controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
+                        _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
                         task.LoadProgramFromFile(filePath, RapidLoadMode.Replace);
 
                         // Update action status message
-                        this.uStatus = "The RAPID code is succesfully uploaded.";
+                        _uStatus = "The RAPID code is succesfully uploaded.";
                     }
                 }
             }
@@ -181,15 +181,15 @@ namespace RobotComponentsABB.Components
                 Disconnect();
                 if (run || stop || upload)
                 {
-                    uStatus = "Please connect first.";
+                    _uStatus = "Please connect first.";
                 }
             }
 
             // Output message
-            msg = $"The remote connection status:\n\nController: {cStatus}\nActions: {uStatus}";
+            _msg = $"The remote connection status:\n\nController: {_cStatus}\nActions: {_uStatus}";
 
             // Output
-            DA.SetData(0, msg);
+            DA.SetData(0, _msg);
         }
 
         //  Addtional methods
@@ -200,19 +200,19 @@ namespace RobotComponentsABB.Components
         public void Connect()
         {
             // Log on 
-            controller.Logon(UserInfo.DefaultUser);
+            _controller.Logon(UserInfo.DefaultUser);
 
             // Update controller status message
-            this.cStatus = "You are connected.";
+            _cStatus = "You are connected.";
 
             // Update controller connection status
-            ctr = true;
+            _ctr = true;
 
             // Update action status message
-            if (count == 0)
+            if (_count == 0)
             {
-                uStatus = "All set to go.";
-                count = 1;
+                _uStatus = "All set to go.";
+                _count = 1;
             }
         }
 
@@ -222,25 +222,25 @@ namespace RobotComponentsABB.Components
         public void Disconnect()
         {
             // Only disconnect when there is a connection
-            if (controller != null)
+            if (_controller != null)
             {
                 // Logoff
-                controller.Logoff();
+                _controller.Logoff();
 
                 // Set a null controller
-                controller = null;
+                _controller = null;
 
                 // Update controller status message
-                this.cStatus = "You are disconnected.";
+                _cStatus = "You are disconnected.";
                 
                 // Update controller connection status
-                ctr = false;
+                _ctr = false;
 
                 // Update action message
-                if (count == 1)
+                if (_count == 1)
                 {
-                    uStatus = "Try to reconnect first.";
-                    count = 0;
+                    _uStatus = "Try to reconnect first.";
+                    _count = 0;
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public void Run()
         {
-            this.uStatus = StartCommand();
+            _uStatus = StartCommand();
         }
 
         /// <summary>
@@ -260,21 +260,21 @@ namespace RobotComponentsABB.Components
         public string StartCommand()
         {
             // Check the mode of the controller
-            if (controller.OperatingMode != ControllerOperatingMode.Auto)
+            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
             {
                 return ("Controller not set in automatic.");
             }
 
             // Check if the motors are enabled
-            if (controller.State != ControllerState.MotorsOn)
+            if (_controller.State != ControllerState.MotorsOn)
             {
                 return ("Motors not on.");
             }
 
             // Execute the program
-            using (Mastership.Request(controller.Rapid))
+            using (Mastership.Request(_controller.Rapid))
             {
-                controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
+                _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
             }
 
             // Return status message
@@ -286,7 +286,7 @@ namespace RobotComponentsABB.Components
         /// </summary>
         public void Stop()
         {
-            this.uStatus = StopCommand();
+            _uStatus = StopCommand();
         }
 
         /// <summary>
@@ -296,15 +296,15 @@ namespace RobotComponentsABB.Components
         private string StopCommand()
         {
             // Check the mode of the controller
-            if (controller.OperatingMode != ControllerOperatingMode.Auto)
+            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
             {
                 return "Controller not set in automatic mode.";
             }
 
             // Stop the program
-            using (Mastership.Request(controller.Rapid))
+            using (Mastership.Request(_controller.Rapid))
             {
-                controller.Rapid.Stop(StopMode.Instruction);
+                _controller.Rapid.Stop(StopMode.Instruction);
                 
             }
 
@@ -408,7 +408,7 @@ namespace RobotComponentsABB.Components
         {
             get
             {
-                if (ctr)
+                if (_ctr)
                 {
                     return Properties.Resources.Remote_ON_Icon;
                 }

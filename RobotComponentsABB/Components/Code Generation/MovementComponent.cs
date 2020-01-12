@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        bool _expire = false;
+        private bool _expire = false;
         private bool _overrideRobotTool = false;
         private bool _overrideWorkObject = false;
         private bool _setDigitalOutput = false;

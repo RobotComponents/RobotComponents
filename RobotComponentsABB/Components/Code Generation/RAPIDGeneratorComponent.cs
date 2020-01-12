@@ -65,11 +65,9 @@ namespace RobotComponentsABB.Components
             pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code");  //Todo: beef this up to be more informative.
         }
 
-        // Global component variables
-        string MAINCode = "";
-        string BASECode = "";
-        bool firstMovementIsMoveAbs = true;
-        ObjectManager _objectManager;
+        // Fields
+        private ObjectManager _objectManager;
+        private bool _firstMovementIsMoveAbs = true;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -119,6 +117,10 @@ namespace RobotComponentsABB.Components
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
+            // Initiate output and other variables
+            string BASECode = "";
+            string MAINCode = "";
+
             // Initiaties the rapidGenerator
             RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
 
@@ -131,11 +133,11 @@ namespace RobotComponentsABB.Components
                 rapidGenerator.CreateRAPIDCode();
                 MAINCode = rapidGenerator.RAPIDCode;
                 BASECode = rapidGenerator.BASECode;
-                firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
+                _firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
             }
 
             // Checks if first Movement is MoveAbsJ
-            if (firstMovementIsMoveAbs == false)
+            if (_firstMovementIsMoveAbs == false)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
             }

@@ -68,13 +68,13 @@ namespace RobotComponentsABB
             // Add robot tools that are created from Euler data
             foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _toolsEulerByGuid)
             {
-                robotTools.Add(entry.Value.robotTool);
+                robotTools.Add(entry.Value.RobotTool);
             }
 
             // Add robot tools that are created from Planes
             foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _toolsPlanesByGuid)
             {
-                robotTools.Add(entry.Value.robotTool);
+                robotTools.Add(entry.Value.RobotTool);
             }
 
             // Sort based on name

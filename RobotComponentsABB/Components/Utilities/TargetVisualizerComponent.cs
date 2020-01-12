@@ -52,13 +52,13 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        GH_Structure<TargetGoo> targetGoos = new GH_Structure<TargetGoo>();
-        System.Drawing.Color color = new System.Drawing.Color();
-        bool displayNames = true;
-        bool displayPoints = true;
-        bool displayDirections = false;
-        int textSize = 7;
-        int pointSize = 2;
+        private GH_Structure<TargetGoo> _targetGoos = new GH_Structure<TargetGoo>();
+        private System.Drawing.Color _color = new System.Drawing.Color();
+        private bool _displayNames = true;
+        private bool _displayPoints = true;
+        private bool _displayDirections = false;
+        private int _textSize = 7;
+        private int _pointSize = 2;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -71,16 +71,16 @@ namespace RobotComponentsABB.Components
             GH_Structure<IGH_Goo> actions;
 
             // Clear the list with targets before catching new input data
-            targetGoos.Clear();
+            _targetGoos.Clear();
 
             // Catch the input data
             if (!DA.GetDataTree(0, out actions)) { return; }
-            if (!DA.GetData(1, ref displayNames)) { return; }
-            if (!DA.GetData(2, ref displayPoints)) { return; }
-            if (!DA.GetData(3, ref displayDirections)) { return; }
-            if (!DA.GetData(4, ref color)) { return; }
-            if (!DA.GetData(5, ref textSize)) { return; }
-            if (!DA.GetData(6, ref pointSize)) { return; }
+            if (!DA.GetData(1, ref _displayNames)) { return; }
+            if (!DA.GetData(2, ref _displayPoints)) { return; }
+            if (!DA.GetData(3, ref _displayDirections)) { return; }
+            if (!DA.GetData(4, ref _color)) { return; }
+            if (!DA.GetData(5, ref _textSize)) { return; }
+            if (!DA.GetData(6, ref _pointSize)) { return; }
 
             // Get the paths of the datatree with actions
             var paths = actions.Paths;
@@ -98,13 +98,13 @@ namespace RobotComponentsABB.Components
                     {
                         MovementGoo movementGoo = actions.Branches[i][j] as MovementGoo;
                         TargetGoo targetGoo = new TargetGoo(movementGoo.Value.Target);
-                        targetGoos.Append(targetGoo, iPath);
+                        _targetGoos.Append(targetGoo, iPath);
                     }
                     // Get the target data directly if the input data is a target
                     else if (actions.Branches[i][j] is TargetGoo)
                     {
                         TargetGoo targetGoo = actions.Branches[i][j] as TargetGoo;
-                        targetGoos.Append(targetGoo, iPath);
+                        _targetGoos.Append(targetGoo, iPath);
                     }
                     // Make a target from the input plane if the input data is a plane
                     else if (actions.Branches[i][j] is GH_Plane)
@@ -122,7 +122,7 @@ namespace RobotComponentsABB.Components
                         GH_Plane planeGoo = actions.Branches[i][j] as GH_Plane;
                         Target target = new Target(targetName, planeGoo.Value);
                         TargetGoo targetGoo = new TargetGoo(target);
-                        targetGoos.Append(targetGoo, iPath);
+                        _targetGoos.Append(targetGoo, iPath);
                     }
                     // Let all other data pass (raise no warning or error)
                     else
@@ -139,12 +139,11 @@ namespace RobotComponentsABB.Components
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects.</param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-
             // Loop over all the branches in the datatree structure with targets
-            for (int i = 0; i < targetGoos.Branches.Count; i++)
+            for (int i = 0; i < _targetGoos.Branches.Count; i++)
             {
                 // Get the indvidual branch
-                var branches = targetGoos.Branches[i];
+                var branches = _targetGoos.Branches[i];
 
                 // Loop over all the items in the individual branch
                 for (int j = 0; j < branches.Count; j++)
@@ -153,7 +152,7 @@ namespace RobotComponentsABB.Components
                     Target target = branches[j].Value;
 
                     // Display the name of the target
-                    if (displayNames == true)
+                    if (_displayNames == true)
                     {
                         double pixelsPerUnit;
                         args.Viewport.GetWorldToScreenScale(target.Plane.Origin, out pixelsPerUnit);
@@ -162,17 +161,17 @@ namespace RobotComponentsABB.Components
                         args.Viewport.GetCameraFrame(out plane);
                         plane.Origin = target.Plane.Origin + target.Plane.ZAxis * 2;
 
-                        args.Display.Draw3dText(target.Name, color, plane, textSize / pixelsPerUnit, "Lucida Console");
+                        args.Display.Draw3dText(target.Name, _color, plane, _textSize / pixelsPerUnit, "Lucida Console");
                     }
 
                     // Display the origin of the target plane
-                    if (displayPoints == true)
+                    if (_displayPoints == true)
                     {
-                        args.Display.DrawPoint(target.Plane.Origin, Rhino.Display.PointStyle.Simple, pointSize, color);
+                        args.Display.DrawPoint(target.Plane.Origin, Rhino.Display.PointStyle.Simple, _pointSize, _color);
                     }
 
                     // Display the direction / orientation of the target plane
-                    if (displayDirections == true)
+                    if (_displayDirections == true)
                     {
                         Plane planeVisual = target.Plane;
                         args.Display.DrawDirectionArrow(planeVisual.Origin, planeVisual.ZAxis, System.Drawing.Color.Blue);

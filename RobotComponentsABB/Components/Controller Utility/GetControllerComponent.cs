@@ -45,11 +45,10 @@ namespace RobotComponentsABB.Components
         }
 
         // Fields
-        public int pickedIndex = 0;
-        public static List<ABB.Robotics.Controllers.Controller> controllerInstance = new List<ABB.Robotics.Controllers.Controller>();
-        public ControllerGoo controllerGoo;
-        public string outputString = "";
-        public bool fromMenu = false;
+        private int _pickedIndex = 0;
+        private static List<ABB.Robotics.Controllers.Controller> _controllerInstance = new List<ABB.Robotics.Controllers.Controller>();
+        private ControllerGoo _controllerGoo;
+        private bool _fromMenu = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -64,14 +63,14 @@ namespace RobotComponentsABB.Components
             if (!DA.GetData(0, ref update)) { return; }
 
             // Pick a new controller when the input is toggled or the user selects one sfrom the menu
-            if (update || fromMenu)
+            if (update || _fromMenu)
             {
                 Rhino.RhinoApp.WriteLine("GetController call component");
 
                 var controllerNow = GetController();
                 if (controllerNow != null)
                 {
-                    controllerGoo = new ControllerGoo(controllerNow as ABB.Robotics.Controllers.Controller);
+                    _controllerGoo = new ControllerGoo(controllerNow as ABB.Robotics.Controllers.Controller);
                     Rhino.RhinoApp.WriteLine("Controller");
                 }
                 else
@@ -86,7 +85,7 @@ namespace RobotComponentsABB.Components
             }
 
             // Output
-            DA.SetData(0, controllerGoo);
+            DA.SetData(0, _controllerGoo);
         }
 
         //  Additional methods
@@ -98,7 +97,7 @@ namespace RobotComponentsABB.Components
         private ABB.Robotics.Controllers.Controller GetController()
         {
             // Initiate and clear variables
-            controllerInstance.Clear();
+            _controllerInstance.Clear();
             ABB.Robotics.Controllers.ControllerInfo[] controllers;
             List<string> controllerNames = new List<string>() { };
 
@@ -121,23 +120,23 @@ namespace RobotComponentsABB.Components
             // Get the names of all the controllers in the scanned network
             for (int i = 0; i < controllers.Length; i++)
             {
-                controllerInstance.Add(ABB.Robotics.Controllers.ControllerFactory.CreateFrom(controllers[i]));
-                controllerNames.Add(controllerInstance[i].Name);
+                _controllerInstance.Add(ABB.Robotics.Controllers.ControllerFactory.CreateFrom(controllers[i]));
+                controllerNames.Add(_controllerInstance[i].Name);
             }
 
             // Automatically pick the controller when one controller is available. 
             if (controllerNames.Count == 1)
             {
-                pickedIndex = 0;
+                _pickedIndex = 0;
             }
             // Display the form and let the user pick a controller when more then one controller is available. 
             else if (controllerNames.Count > 1)
             {
                 // Display the form and return the index of the picked controller. 
-                pickedIndex = DisplayForm(controllerNames);
+                _pickedIndex = DisplayForm(controllerNames);
 
                 // Return a null value when the picked index is incorrect. 
-                if (pickedIndex < 0)
+                if (_pickedIndex < 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Station picked from menu!");
                     return null;
@@ -152,7 +151,7 @@ namespace RobotComponentsABB.Components
             }
 
             // Select the picked controller
-            return controllerInstance[pickedIndex];
+            return _controllerInstance[_pickedIndex];
         }
 
         /// <summary>
@@ -196,11 +195,19 @@ namespace RobotComponentsABB.Components
         /// <param name="e"> The event data. </param>
         public void MenuItemClick(object sender, EventArgs e)
         {
-            fromMenu = true;
+            _fromMenu = true;
             ExpireSolution(true);
-            fromMenu = false;
+            _fromMenu = false;
         }
         #endregion
+
+        /// <summary>
+        /// List with all the ABB controllers in the network
+        /// </summary>
+        public static List<ABB.Robotics.Controllers.Controller> ControllerInstance
+        {
+            get { return _controllerInstance; }
+        }
 
         /// <summary>
         /// Provides an Icon for the component.

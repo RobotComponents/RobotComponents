@@ -96,7 +96,11 @@ namespace RobotComponentsABB
             // Add all the work objects
             foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
             {
-                workObjects.Add(entry.Value.WorkObject.Duplicate());
+                for (int i = 0; i < entry.Value.WorkObjects.Count; i++)
+                {
+                    workObjects.Add(entry.Value.WorkObjects[i]);
+                }
+              
             }
 
             // Sort based on name

@@ -39,8 +39,8 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Work Object Name as String", GH_ParamAccess.item, "default_wo");
-            pManager.AddPlaneParameter("Plane", "P", "Plane of the Work Object as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddTextParameter("Name", "N", "Work Object Name as String", GH_ParamAccess.list, "default_wo");
+            pManager.AddPlaneParameter("Plane", "P", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
 
             pManager[1].Optional = true;
         }
@@ -50,14 +50,15 @@ namespace RobotComponentsABB.Components
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Resulting Work Object", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Resulting Work Object");  //Todo: beef this up to be more informative.
         }
 
         // Fields
+        private List<string> _woNames = new List<string>();
         private string _lastName = "";
-        private bool _nameUnique;
-        private WorkObject _workObject = new WorkObject();
+        private bool _namesUnique;
         private ObjectManager _objectManager;
+        private List<WorkObject> _workObjects = new List<WorkObject>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -80,8 +81,11 @@ namespace RobotComponentsABB.Components
             _objectManager = DocumentManager.ObjectManagers[documentID];
 
             // Clears Work Object Name
-            _objectManager.WorkObjectNames.Remove(_workObject.Name);
-
+            for (int i = 0; i < _woNames.Count; i++)
+            {
+                _objectManager.WorkObjectNames.Remove(_woNames[i]);
+            }
+            _woNames.Clear();
 
             // Removes lastName from WorkObjectNameList
             if (_objectManager.WorkObjectNames.Contains(_lastName))
@@ -89,57 +93,110 @@ namespace RobotComponentsABB.Components
                 _objectManager.WorkObjectNames.Remove(_lastName);
             }
 
+            // Clears Work Objects Local List
+            _workObjects.Clear();
+
             // Input variables
-            string name = "default_wo";
-            Plane plane = Plane.WorldXY;
+            List<string> names = new List<string>();
+            List<Plane> planes = new List<Plane>();
 
             // Catch the input data
-            if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref plane)) { return; }
+            if (!DA.GetDataList(0, names)) { return; }
+            if (!DA.GetDataList(1, planes)) { return; }
 
-            _workObject = new WorkObject(name, plane);
+            // Get longest Input List
+            int[] sizeValues = new int[10];
+            sizeValues[0] = names.Count;
+            sizeValues[1] = planes.Count;
+            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+
+            // Keeps track of used indicies
+            int nameCounter = -1;
+            int planesCounter = -1;
+
+            // Creates targets
+            List<WorkObject> workObjects = new List<WorkObject>();
+            for (int i = 0; i < biggestSize; i++)
+            {
+                string name = "";
+                Plane plane = new Plane();
+
+                // Names counter
+                if (i < names.Count)
+                {
+                    name = names[i];
+                    nameCounter++;
+                }
+                else
+                {
+                    name = names[nameCounter] + "_" + (i - nameCounter);
+                }
+
+                // Target planes counter
+                if (i < planes.Count)
+                {
+                    plane = planes[i];
+                    planesCounter++;
+                }
+                else
+                {
+                    plane = planes[planesCounter];
+                }
+
+              
+                WorkObject workObject = new WorkObject(name, plane);
+                workObjects.Add(workObject);
+            }
 
             // Checks if the work object name is already in use and counts duplicates
             #region NameCheck
-            if (_objectManager.WorkObjectNames.Contains(_workObject.Name))
+            _namesUnique = true;
+            for (int i = 0; i < names.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name already in use.");
-                _nameUnique = false;
-                _lastName = "";
-            }
-            else
-            {
-                // Adds Work Object name to list
-                _objectManager.WorkObjectNames.Add(_workObject.Name);
-
-                // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
+                if (_objectManager.WorkObjectNames.Contains(names[i]))
                 {
-                    if (entry.Value._lastName == "")
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name already in use.");
+                    _namesUnique = false;
+                    _lastName = "";
+                    break;
+                }
+                else
+                {
+                    // Adds Work Object Name to list
+                    _woNames.Add(names[i]);
+                    _objectManager.WorkObjectNames.Add(names[i]);
+
+                    // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
+                    foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
                     {
-                        entry.Value.ExpireSolution(true);
+                        if (entry.Value._lastName == "")
+                        {
+                            entry.Value.ExpireSolution(true);
+                        }
                     }
+
+                    _lastName = names[i];
                 }
 
-                _lastName = _workObject.Name;
-                _nameUnique = true;
-            }
+                // Checks if variable name exceeds max character limit for RAPID Code
+                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name exceeds character limit of 32 characters.");
+                    break;
+                }
 
-            // Checks if variable name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(_workObject.Name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name exceeds character limit of 32 characters.");
-            }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(_workObject.Name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name starts with a number which is not allowed in RAPID Code.");
+                // Checks if variable name starts with a number
+                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name starts with a number which is not allowed in RAPID Code.");
+                    break;
+                }
             }
             #endregion
 
             // Output
-            DA.SetData(0, _workObject);
+            _workObjects = workObjects;
+            DA.SetDataList(0, workObjects);
 
 
             // Adds Component to WorkObjectsByGuid Dictionary
@@ -166,17 +223,22 @@ namespace RobotComponentsABB.Components
         {
             if (e.Objects.Contains(this))
             {
-                    if (_nameUnique == true)
+                if (_namesUnique == true)
+                {
+                    for (int i = 0; i < _woNames.Count; i++)
                     {
-                        _objectManager.WorkObjectNames.Remove(_lastName);
+                        _objectManager.WorkObjectNames.Remove(_woNames[i]);
                     }
-                    _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
+                }
+                _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
 
-
-                // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
+                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
                 foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
                 {
+                    if (entry.Value._lastName == "")
+                    {
                         entry.Value.ExpireSolution(true);
+                    }
                 }
             }
         }
@@ -184,9 +246,9 @@ namespace RobotComponentsABB.Components
         /// <summary>
         /// The work object created by this component
         /// </summary>
-        public WorkObject WorkObject
+        public List<WorkObject> WorkObjects
         {
-            get { return _workObject; }
+            get { return _workObjects; }
         }
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

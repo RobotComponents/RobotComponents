@@ -12,6 +12,10 @@ using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.05.000 (January 2020)
+// It is replaced with a new movement component. 
+
 namespace RobotComponentsABB.Components
 {
     /// <summary>

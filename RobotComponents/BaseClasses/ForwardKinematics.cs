@@ -197,7 +197,7 @@ namespace RobotComponents.BaseClasses
             _tcpPlane = _robotInfo.ToolPlane;
 
             // Internal axis values in degrees converted to axis values in radians
-            UpdateInterAxisValuesRadians();
+            UpdateInternalAxisValuesRadians();
 
             // Check axis limits
             CheckForInternalAxisLimits();
@@ -213,7 +213,7 @@ namespace RobotComponents.BaseClasses
         /// <summary>
         /// Updates the list with internal axis values in degrees based from the array with internal axis values in radians. 
         /// </summary>
-        private void UpdateIntervalAxisValuesDegrees()
+        private void UpdateInternalAxisValuesDegrees()
         {
             _internalAxisValues = new List<double>() { 0, 0, 0, 0, 0, 0};
             _internalAxisValues[0] = (_internalAxisRads[0] * 180) / Math.PI;
@@ -227,7 +227,7 @@ namespace RobotComponents.BaseClasses
         /// <summary>
         /// Updates the array with internal axis values in radians based from the list withi internal axis values in degrees. 
         /// </summary>
-        private void UpdateInterAxisValuesRadians()
+        private void UpdateInternalAxisValuesRadians()
         {
             _internalAxisRads = new double[_internalAxisValues.Count];
             _internalAxisRads[0] = (_internalAxisValues[0] / 180) * Math.PI;
@@ -393,7 +393,7 @@ namespace RobotComponents.BaseClasses
             set 
             { 
                 _internalAxisValues = value;
-                UpdateInterAxisValuesRadians();
+                UpdateInternalAxisValuesRadians();
             }
         }
 
@@ -409,7 +409,7 @@ namespace RobotComponents.BaseClasses
             set 
             { 
                 _internalAxisRads = value;
-                UpdateIntervalAxisValuesDegrees();
+                UpdateInternalAxisValuesDegrees();
             }
         }
 

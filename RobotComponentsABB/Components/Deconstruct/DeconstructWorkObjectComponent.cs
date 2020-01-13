@@ -8,12 +8,12 @@ using RobotComponentsABB.Parameters;
 namespace RobotComponentsABB.Components
 {
     /// <summary>
-    /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Work Object component. An inherent from the GH_Component Class.
     /// </summary>
     public class DeconstructWorkObjectComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructTarget class.
+        /// Initializes a new instance of the DeconstructWorkObject class.
         /// </summary>
         public DeconstructWorkObjectComponent()
           : base("Deconstruct Work Object", "DeConTar",

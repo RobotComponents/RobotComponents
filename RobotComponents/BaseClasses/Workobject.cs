@@ -29,7 +29,7 @@ namespace RobotComponents.BaseClasses
         /// </summary>
         public WorkObject()
         {
-            _name = "default_wo";
+            _name = "wobj0";
             _plane = Plane.WorldXY;
             _externalAxis = null;
             _robotHold = false;

@@ -73,6 +73,7 @@
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
     <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
@@ -736,6 +737,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WorkObject_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructWorkObject_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

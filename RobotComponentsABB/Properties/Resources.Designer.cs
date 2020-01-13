@@ -1478,18 +1478,9 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using System;
         ///using System.Collections.Generic;
-        ///using System.ComponentModel;
-        ///using System.Drawing;
-        ///using System.Linq;
-        ///using System.Text;
-        ///using System.Threading.Tasks;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponents.BaseClasses;
-        ///
         ///using RobotComponentsABB.Components;
-        ///using RobotComponentsABB.Parameters;
-        ///using RobotComponentsABB.Goos;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1497,7 +1488,15 @@ namespace RobotComponentsABB.Properties {
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        pu [rest of string was truncated]&quot;;.
+        ///        public PickControllerForm()
+        ///        {
+        ///            InitializeComponent();
+        ///        }
+        ///
+        ///        public PickControllerForm(List&lt;string&gt; items)
+        ///        {
+        ///            InitializeComponent();
+        ///            for (int i = 0; i &lt; items.Count [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm {
             get {
@@ -1556,18 +1555,9 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using System;
         ///using System.Collections.Generic;
-        ///using System.ComponentModel;
-        ///using System.Drawing;
-        ///using System.Linq;
-        ///using System.Text;
-        ///using System.Threading.Tasks;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponents.BaseClasses;
-        ///
         ///using RobotComponentsABB.Components;
-        ///using RobotComponentsABB.Parameters;
-        ///using RobotComponentsABB.Goos;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1575,7 +1565,17 @@ namespace RobotComponentsABB.Properties {
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        public Pic [rest of string was truncated]&quot;;.
+        ///        public PickDIForm()
+        ///        {
+        ///            InitializeComponent();
+        ///        }
+        ///
+        ///        public PickDIForm(List&lt;string&gt; items)
+        ///        {
+        ///            InitializeComponent();
+        ///            for (int i = 0; i &lt; items.Count; i++)
+        ///            {
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm {
             get {
@@ -1635,18 +1635,9 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized string similar to using System;
         ///using System.Collections.Generic;
-        ///using System.ComponentModel;
-        ///using System.Drawing;
-        ///using System.Linq;
-        ///using System.Text;
-        ///using System.Threading.Tasks;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponents.BaseClasses;
-        ///
         ///using RobotComponentsABB.Components;
-        ///using RobotComponentsABB.Parameters;
-        ///using RobotComponentsABB.Goos;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1654,7 +1645,17 @@ namespace RobotComponentsABB.Properties {
         ///    {
         ///        public static int stationIndex = 0;
         ///
-        ///        public Pic [rest of string was truncated]&quot;;.
+        ///        public PickDOForm()
+        ///        {
+        ///            InitializeComponent();
+        ///        }
+        ///
+        ///        public PickDOForm(List&lt;string&gt; items)
+        ///        {
+        ///            InitializeComponent();
+        ///            for (int i = 0; i &lt; items.Count; i++)
+        ///            {
+        ///  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm {
             get {
@@ -1947,6 +1948,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap Work_Object_Icon {
             get {
                 object obj = ResourceManager.GetObject("Work_Object_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WorkObject_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WorkObject_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

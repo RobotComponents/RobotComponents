@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Parameters
         protected override System.Drawing.Bitmap Icon
         {
             // To do: get { return Properties.Resources.Work_Object_Paramter_Icon; }
-            get { return null; }
+            get { return Properties.Resources.WorkObject_Parameter_Icon;  }
         }
 
         /// <summary>

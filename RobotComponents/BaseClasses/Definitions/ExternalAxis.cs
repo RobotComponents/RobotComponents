@@ -1,7 +1,7 @@
 ﻿using Rhino.Geometry;
 using System.Collections.Generic;
 
-namespace RobotComponents.BaseClasses
+namespace RobotComponents.BaseClasses.Definitions
 {
     public enum AxisType { LINEAR, ROTATIONAL };
 

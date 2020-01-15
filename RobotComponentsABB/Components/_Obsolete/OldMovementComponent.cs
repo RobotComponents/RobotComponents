@@ -6,8 +6,7 @@ using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 
-using RobotComponents.BaseClasses;
-
+using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;

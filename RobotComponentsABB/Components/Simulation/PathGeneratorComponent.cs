@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
@@ -70,7 +71,7 @@ namespace RobotComponentsABB.Components.Simulation
         {
             // Input variables
             RobotInfoGoo robotInfoGoo = new RobotInfoGoo();
-            List<RobotComponents.BaseClasses.Action> actions = new List<RobotComponents.BaseClasses.Action>();
+            List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool displayPath = false;

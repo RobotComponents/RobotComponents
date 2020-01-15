@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Kinematics
 {
     /// <summary>
     /// PathGenerator class
@@ -277,7 +280,7 @@ namespace RobotComponents.BaseClasses
         /// <summary>
         /// Calculates new Points from SubtargetValues and creates Path
         /// </summary>
-        public void Calculate(List<Action> actions, int interpolations)
+        public void Calculate(List<RobotComponents.BaseClasses.Actions.Action> actions, int interpolations)
         {
             List<Movement> movements = GetMovementsFromActions(actions);
 
@@ -312,7 +315,7 @@ namespace RobotComponents.BaseClasses
             return paths;
         }
 
-        private List<Movement> GetMovementsFromActions(List<Action> actions)
+        private List<Movement> GetMovementsFromActions(List<RobotComponents.BaseClasses.Actions.Action> actions)
         {
             List<Movement> movements = new List<Movement>();
 

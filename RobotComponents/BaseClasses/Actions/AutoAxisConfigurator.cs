@@ -1,41 +1,40 @@
-﻿namespace RobotComponents.BaseClasses
+﻿using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Digital Output class. Is used to change the value of a digital output signal.
+    /// Auto Axis Configurator Class, sets Auto Axis Configuration to True or False.
     /// </summary>
-    public class DigitalOutput : Action
+    public class AutoAxisConfig : Action
     {
         #region fields
-        private string _name; // the name of the signal to be changed.
-        private bool _isActive; // the desired value of the signal 0 or 1.
+        private bool _isActive; // boolean that indicates if the auto axis configuration is active
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty DigitalOutput object.
+        /// Defines an empty AutoAxisConfiguration object.
         /// </summary>
-        public DigitalOutput()
+        public AutoAxisConfig()
         {
         }
 
         /// <summary>
-        /// Defines a digital ouput signal and the desired value / state.
+        /// Defines an Auto Axis configuration.
         /// </summary>
-        /// <param name="Name">The name of the digital output signal to be changed.</param>
-        /// <param name="IsActive">The desired value / stage of the digital output signal 0 (false) or 1 (true).</param>
-        public DigitalOutput(string Name, bool IsActive)
+        /// <param name="isActive">Bool that enables (true) or disables (false) the auto axis configuration.</param>
+        public AutoAxisConfig(bool isActive)
         {
-            this._name = Name;
-            this._isActive = IsActive;
+            this._isActive = isActive;
         }
 
         /// <summary>
-        /// A method to duplicate the DigitalOutput object.
+        /// A method to duplicate the AutoAxisConfiguration object.
         /// </summary>
-        /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
-        public DigitalOutput Duplicate()
+        /// <returns> Returns a deep copy of the AutoAxisConfiguration object. </returns>
+        public AutoAxisConfig Duplicate()
         {
-            DigitalOutput dup = new DigitalOutput(Name,IsActive);
+            AutoAxisConfig dup = new AutoAxisConfig(IsActive);
             return dup;
         }
         #endregion
@@ -61,40 +60,26 @@
         {
             if (_isActive == true)
             {
-                return ("@" + "\t" + "SetDO " + _name + ",  1;");
+                return ("@" + "\t" + "ConfJ\\off;" + "@" + "\t" + "ConfL\\off;"); ;
             }
             else
             {
-                return ("@" + "\t" + "SetDO " + _name + ",  0;"); ;
+                return ("@" + "\t" + "ConfJ\\on;" + "@" + "\t" + "ConfL\\on;"); ;
             }
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the DigitalOutput object is valid. 
+        /// A boolean that indicates if the AutoAxisConfiguration object is valid.
         /// </summary>
         public bool IsValid
         {
-            get
-            {
-                if (Name == null) { return false; }; 
-                if (Name == "") { return false; };
-                return true;
-            }
+            get { return true; }
         }
 
         /// <summary>
-        /// The name of the digital output signal to be changed.
-        /// </summary>
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-
-        /// <summary>
-        /// The desired value / stage of the digital output signal 0 (false) or 1 (true).
+        /// A boolean that indicates if the auto axis configruation is enabled.
         /// </summary>
         public bool IsActive
         {
@@ -103,4 +88,5 @@
         }
         #endregion
     }
+
 }

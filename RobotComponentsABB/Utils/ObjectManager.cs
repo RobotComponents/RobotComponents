@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Components.Obsolete;
 using RobotComponentsABB.Components.CodeGeneration;
 using RobotComponentsABB.Components.Definitions;

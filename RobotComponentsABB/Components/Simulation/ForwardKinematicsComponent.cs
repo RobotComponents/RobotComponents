@@ -7,7 +7,7 @@ using Grasshopper.Kernel;
 
 using GH_IO.Serialization;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 

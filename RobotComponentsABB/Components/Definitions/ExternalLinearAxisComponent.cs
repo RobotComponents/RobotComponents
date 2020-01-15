@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponentsABB.Parameters;
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponentsABB.Components.Definitions
 {

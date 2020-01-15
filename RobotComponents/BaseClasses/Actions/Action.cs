@@ -1,4 +1,6 @@
-﻿namespace RobotComponents.BaseClasses
+﻿using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Action class, abstract main class for all actions.

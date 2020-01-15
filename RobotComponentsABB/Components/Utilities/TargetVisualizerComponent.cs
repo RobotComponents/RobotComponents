@@ -5,7 +5,7 @@ using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Components.Utilities

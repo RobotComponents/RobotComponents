@@ -2,7 +2,7 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
 
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;

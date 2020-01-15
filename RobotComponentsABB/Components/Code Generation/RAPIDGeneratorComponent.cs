@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 
 using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters;
@@ -93,7 +94,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();
-            List<RobotComponents.BaseClasses.Action> actions = new List<RobotComponents.BaseClasses.Action>();
+            List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             string moduleName = "";
             string filePath = "";
             bool saveToFile = false;

@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Kinematics
 {
     /// <summary>
     /// Inverse Kinematics class, defines the basic properties and methods for any Inverse Kinematics.
@@ -199,7 +202,7 @@ namespace RobotComponents.BaseClasses
 
                 Circle circ = new Circle();
                 Rhino.Geometry.Intersect.Intersection.SphereSphere(sphere1, sphere2, out circ);
-
+                
                 double par1, par2;
                 Rhino.Geometry.Intersect.Intersection.PlaneCircle(elbowPlane, circ, out par1, out par2);
 

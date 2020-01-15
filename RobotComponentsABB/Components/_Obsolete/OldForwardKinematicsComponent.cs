@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 

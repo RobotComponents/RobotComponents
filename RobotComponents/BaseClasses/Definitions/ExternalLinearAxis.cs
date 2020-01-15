@@ -2,7 +2,7 @@
 
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses
+namespace RobotComponents.BaseClasses.Definitions
 {
     public class ExternalLinearAxis : ExternalAxis
     {

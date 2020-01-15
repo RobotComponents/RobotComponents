@@ -4,7 +4,7 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponentsABB.Goos
 {

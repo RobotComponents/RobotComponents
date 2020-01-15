@@ -2,7 +2,7 @@
 
 using System;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 

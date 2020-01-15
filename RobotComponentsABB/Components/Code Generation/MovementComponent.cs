@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
 
 using GH_IO.Serialization;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;

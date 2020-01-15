@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 
-namespace RobotComponents.BaseClasses
+using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// RAPID Generator class, creates RAPID Code from Actions.

@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.

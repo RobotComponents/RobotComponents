@@ -8,7 +8,7 @@ using Rhino.Geometry;
 using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Target visualization component. An inherent from the GH_Component Class.

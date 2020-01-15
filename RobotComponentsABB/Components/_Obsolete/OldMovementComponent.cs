@@ -16,7 +16,7 @@ using RobotComponentsABB.Utils;
 // It is OBSOLETE since version 0.05.000 (January 2020)
 // It is replaced with a new movement component. 
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Obsolete
 {
     /// <summary>
     /// OBSOLETE: RobotComponents Action : Momvement component. Will be removed in the future. An inherent from the GH_Component Class.

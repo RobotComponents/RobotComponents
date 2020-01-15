@@ -11,7 +11,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

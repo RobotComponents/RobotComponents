@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponents.Components
+namespace RobotComponents.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Digital Output component. An inherent from the GH_Component Class.

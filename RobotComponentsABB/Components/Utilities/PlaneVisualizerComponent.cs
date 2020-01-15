@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 using Rhino.Geometry;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Plane visualization component. An inherent from the GH_Component Class.

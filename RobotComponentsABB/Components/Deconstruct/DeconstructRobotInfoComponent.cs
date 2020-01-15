@@ -7,7 +7,7 @@ using Rhino.Geometry;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Robot Info component. An inherent from the GH_Component Class.

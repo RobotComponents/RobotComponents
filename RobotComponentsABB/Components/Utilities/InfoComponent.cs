@@ -2,7 +2,7 @@
 
 using Grasshopper.Kernel;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Info component. An inherent from the GH_Component Class.

@@ -6,7 +6,7 @@ using RobotComponents.BaseClasses;
 
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Wait for Digital Input component. An inherent from the GH_Component Class.

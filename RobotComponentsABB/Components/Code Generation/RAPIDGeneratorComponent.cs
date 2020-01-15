@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.

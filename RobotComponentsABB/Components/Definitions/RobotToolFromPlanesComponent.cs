@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Tool from Planes component. An inherent from the GH_Component Class.

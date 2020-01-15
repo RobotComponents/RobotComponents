@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.

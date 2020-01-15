@@ -6,9 +6,8 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get and connect to an ABB controller. An inherent from the GH_Component Class.

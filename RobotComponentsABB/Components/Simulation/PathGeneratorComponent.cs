@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.

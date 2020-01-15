@@ -6,12 +6,11 @@ using System.Xml;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
 // ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.

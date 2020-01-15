@@ -16,7 +16,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.

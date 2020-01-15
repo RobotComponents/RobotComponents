@@ -3,9 +3,11 @@ using System.Linq;
 using System.Collections.Generic;
 
 using RobotComponents.BaseClasses;
-using RobotComponentsABB.Components;
+using RobotComponentsABB.Components.Obsolete;
+using RobotComponentsABB.Components.CodeGeneration;
+using RobotComponentsABB.Components.Definitions;
 
-namespace RobotComponentsABB
+namespace RobotComponentsABB.Utils
 {
     /// <summary>
     /// The ObjectManager keeps track of different variables to enable global funcionalities

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using RobotComponentsABB.Components;
+using RobotComponentsABB.Components.ControllerUtility;
 
 namespace RobotComponentsABB.Resources
 {

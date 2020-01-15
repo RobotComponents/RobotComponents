@@ -8,7 +8,7 @@ using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
     /// RobotComponents IRB6650-125/3.2 preset component. An inherent from the GH_Component Class.

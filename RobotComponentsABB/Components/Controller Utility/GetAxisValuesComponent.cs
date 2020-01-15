@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.

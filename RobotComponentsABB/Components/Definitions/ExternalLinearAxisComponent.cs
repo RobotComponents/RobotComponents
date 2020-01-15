@@ -7,7 +7,7 @@ using Rhino.Geometry;
 using RobotComponentsABB.Parameters;
 using RobotComponents.BaseClasses;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
     /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.

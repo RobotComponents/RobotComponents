@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
@@ -12,7 +12,7 @@ using RobotComponentsABB.Parameters;
 // It is OBSOLETE since version 0.05.000 (January 2020)
 // It is replaced with a new forward kinematics component. 
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

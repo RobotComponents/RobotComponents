@@ -6,11 +6,10 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get and set the Digital Outputs on a defined controller. An inherent from the GH_Component Class.

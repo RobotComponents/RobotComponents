@@ -1,4 +1,6 @@
-﻿namespace RobotComponents.BaseClasses
+﻿using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 

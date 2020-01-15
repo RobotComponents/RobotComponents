@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 
 using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
@@ -93,7 +94,7 @@ namespace RobotComponentsABB.Components
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();
-            List<RobotComponents.BaseClasses.Action> actions = new List<RobotComponents.BaseClasses.Action>();
+            List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             string moduleName = "";
             string filePath = "";
             bool saveToFile = false;

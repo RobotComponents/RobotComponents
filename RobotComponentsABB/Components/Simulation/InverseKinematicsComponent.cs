@@ -2,11 +2,11 @@
 
 using System;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.

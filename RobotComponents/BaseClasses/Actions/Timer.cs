@@ -1,38 +1,40 @@
-﻿namespace RobotComponents.BaseClasses
+﻿using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Code Line class, defines a CodeLine in RAPID Code.
+    /// Timer class, defines waiting time between two actions. This command is used to wait a given amount of time.
     /// </summary>
-    public class CodeLine : Action
+    public class Timer : Action
     {
         #region fields
-        private string _code;
+        private double _duration; // the time expressed in seconds
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty CodeLine object.
+        /// Defines an empty Timer object. 
         /// </summary>
-        public CodeLine()
+        public Timer()
         {
         }
 
         /// <summary>
-        /// Defines a RAPID code line.
+        /// Constructor to create a wait time object. 
         /// </summary>
-        /// <param name="code">The code line as a text string.</param>
-        public CodeLine(string code)
+        /// <param name="Duration"> The time, expressed in seconds, that program execution is to wait. </param>
+        public Timer(double Duration)
         {
-            this._code = code;
+            this._duration = Duration;
         }
 
         /// <summary>
-        /// A method to duplicate the CodeLine object.
+        /// Method to duplicate the Timer object.
         /// </summary>
-        /// <returns> Returns a deep copy of the CodeLine object. </returns>
-        public CodeLine Duplicate()
+        /// <returns> Returns a deep copy of the Timer object.</returns>
+        public Timer Duplicate()
         {
-            CodeLine dup = new CodeLine(Code);
+            Timer dup = new Timer(Duration);
             return dup;
         }
         #endregion
@@ -56,30 +58,30 @@
         /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
-            return ("@" + "\t" + _code); ;
+            return ("@" + "\t" + "WaitTime " + _duration + ";"); ;
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the CodeLine object is valid.
+        /// A boolean that indicates if the Timer object is valid.
         /// </summary>
         public bool IsValid
         {
-            get 
-            { 
-                if (Code == null) { return false; }
-                return true; 
+            get
+            {
+                if (Duration < 0) { return false; }
+                else { return true; }
             }
         }
 
         /// <summary>
-        /// The custom RAPID code line
+        /// The time, expressed in seconds, that program execution is to wait. Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
         /// </summary>
-        public string Code
+        public double Duration
         {
-            get { return _code; }
-            set { _code = value; }
+            get { return _duration; }
+            set { _duration = value; }
         }
         #endregion
     }

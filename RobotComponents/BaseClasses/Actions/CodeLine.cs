@@ -1,42 +1,40 @@
-﻿using System;
+﻿using RobotComponents.BaseClasses.Definitions;
 
-namespace RobotComponents.BaseClasses
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Comment class, defines a Comment in RAPID Code.
-    /// A comment is only used to make the program easier to understand. 
-    /// It has no effect on the execution of the program.
+    /// Code Line class, defines a CodeLine in RAPID Code.
     /// </summary>
-    public class Comment : Action
+    public class CodeLine : Action
     {
         #region fields
-        private string _comment; // the comment as a string
+        private string _code;
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty Comment object.
+        /// Defines an empty CodeLine object.
         /// </summary>
-        public Comment()
+        public CodeLine()
         {
         }
 
         /// <summary>
-        /// A comment constructor inserted into the program to make it easier to understand.
+        /// Defines a RAPID code line.
         /// </summary>
-        /// <param name="comment">The comment as a text string.</param>
-        public Comment(string comment)
+        /// <param name="code">The code line as a text string.</param>
+        public CodeLine(string code)
         {
-            this._comment = comment;
+            this._code = code;
         }
 
         /// <summary>
-        /// A method to duplicate the Comment object.
+        /// A method to duplicate the CodeLine object.
         /// </summary>
-        /// <returns> Returns a deep copy of the Comment object. </returns>
-        public Comment Duplicate()
+        /// <returns> Returns a deep copy of the CodeLine object. </returns>
+        public CodeLine Duplicate()
         {
-            Comment dup = new Comment(Com);
+            CodeLine dup = new CodeLine(Code);
             return dup;
         }
         #endregion
@@ -60,39 +58,30 @@ namespace RobotComponents.BaseClasses
         /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
-            string tempCode = "";
-
-            string[] lines = _comment.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                tempCode += "@" + "\t" + "! " + lines[i];
-            }
-
-            return tempCode;
+            return ("@" + "\t" + _code); ;
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Comment object is valid. 
+        /// A boolean that indicates if the CodeLine object is valid.
         /// </summary>
         public bool IsValid
         {
             get 
-            {
-                if (Com == null) { return false; };
+            { 
+                if (Code == null) { return false; }
                 return true; 
             }
         }
 
         /// <summary>
-        /// Comment line as a string.
+        /// The custom RAPID code line
         /// </summary>
-        public string Com
+        public string Code
         {
-            get { return _comment; }
-            set { _comment = value; }
+            get { return _code; }
+            set { _code = value; }
         }
         #endregion
     }

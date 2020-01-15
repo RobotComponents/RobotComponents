@@ -1,38 +1,44 @@
-﻿namespace RobotComponents.BaseClasses
+﻿using System;
+
+using RobotComponents.BaseClasses.Definitions;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Timer class, defines waiting time between two actions. This command is used to wait a given amount of time.
+    /// Comment class, defines a Comment in RAPID Code.
+    /// A comment is only used to make the program easier to understand. 
+    /// It has no effect on the execution of the program.
     /// </summary>
-    public class Timer : Action
+    public class Comment : Action
     {
         #region fields
-        private double _duration; // the time expressed in seconds
+        private string _comment; // the comment as a string
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty Timer object. 
+        /// Defines an empty Comment object.
         /// </summary>
-        public Timer()
+        public Comment()
         {
         }
 
         /// <summary>
-        /// Constructor to create a wait time object. 
+        /// A comment constructor inserted into the program to make it easier to understand.
         /// </summary>
-        /// <param name="Duration"> The time, expressed in seconds, that program execution is to wait. </param>
-        public Timer(double Duration)
+        /// <param name="comment">The comment as a text string.</param>
+        public Comment(string comment)
         {
-            this._duration = Duration;
+            this._comment = comment;
         }
 
         /// <summary>
-        /// Method to duplicate the Timer object.
+        /// A method to duplicate the Comment object.
         /// </summary>
-        /// <returns> Returns a deep copy of the Timer object.</returns>
-        public Timer Duplicate()
+        /// <returns> Returns a deep copy of the Comment object. </returns>
+        public Comment Duplicate()
         {
-            Timer dup = new Timer(Duration);
+            Comment dup = new Comment(Com);
             return dup;
         }
         #endregion
@@ -56,30 +62,39 @@
         /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
-            return ("@" + "\t" + "WaitTime " + _duration + ";"); ;
+            string tempCode = "";
+
+            string[] lines = _comment.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                tempCode += "@" + "\t" + "! " + lines[i];
+            }
+
+            return tempCode;
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Timer object is valid.
+        /// A boolean that indicates if the Comment object is valid. 
         /// </summary>
         public bool IsValid
         {
-            get
+            get 
             {
-                if (Duration < 0) { return false; }
-                else { return true; }
+                if (Com == null) { return false; };
+                return true; 
             }
         }
 
         /// <summary>
-        /// The time, expressed in seconds, that program execution is to wait. Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
+        /// Comment line as a string.
         /// </summary>
-        public double Duration
+        public string Com
         {
-            get { return _duration; }
-            set { _duration = value; }
+            get { return _comment; }
+            set { _comment = value; }
         }
         #endregion
     }

@@ -2,7 +2,7 @@
 
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses
+namespace RobotComponents.BaseClasses.Definitions
 {
     /// <summary>
     /// RobotInfo class, defines the basic properties and methods for any RobotInfo.

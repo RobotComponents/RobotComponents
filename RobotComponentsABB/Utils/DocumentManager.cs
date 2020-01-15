@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Grasshopper.Kernel;
 
-namespace RobotComponentsABB
+namespace RobotComponentsABB.Utils
 {
     /// <summary>
     /// Document Manager class

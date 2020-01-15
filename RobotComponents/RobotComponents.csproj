@@ -83,23 +83,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseClasses\ExternalAxis.cs" />
-    <Compile Include="BaseClasses\Action.cs" />
-    <Compile Include="BaseClasses\AutoAxisConfigurator.cs" />
-    <Compile Include="BaseClasses\CodeLine.cs" />
-    <Compile Include="BaseClasses\Comment.cs" />
-    <Compile Include="BaseClasses\Movement.cs" />
-    <Compile Include="BaseClasses\RAPIDGenerator.cs" />
-    <Compile Include="BaseClasses\RobotTool.cs" />
-    <Compile Include="BaseClasses\WorkObject.cs" />
-    <Compile Include="BaseClasses\ExternalLinearAxis.cs" />
-    <Compile Include="BaseClasses\ExternalRotationalAxis.cs" />
-    <Compile Include="BaseClasses\SpeedData.cs" />
-    <Compile Include="BaseClasses\WaitDI.cs" />
-    <Compile Include="BaseClasses\DigitalOutput.cs" />
-    <Compile Include="BaseClasses\ForwardKinematics.cs" />
-    <Compile Include="BaseClasses\InverseKinematics.cs" />
-    <Compile Include="BaseClasses\PathGenerator.cs" />
+    <Compile Include="BaseClasses\Definitions\ExternalAxis.cs" />
+    <Compile Include="BaseClasses\Actions\Action.cs" />
+    <Compile Include="BaseClasses\Actions\AutoAxisConfigurator.cs" />
+    <Compile Include="BaseClasses\Actions\CodeLine.cs" />
+    <Compile Include="BaseClasses\Actions\Comment.cs" />
+    <Compile Include="BaseClasses\Actions\Movement.cs" />
+    <Compile Include="BaseClasses\Actions\RAPIDGenerator.cs" />
+    <Compile Include="BaseClasses\Definitions\RobotTool.cs" />
+    <Compile Include="BaseClasses\Definitions\WorkObject.cs" />
+    <Compile Include="BaseClasses\Definitions\ExternalLinearAxis.cs" />
+    <Compile Include="BaseClasses\Definitions\ExternalRotationalAxis.cs" />
+    <Compile Include="BaseClasses\Actions\SpeedData.cs" />
+    <Compile Include="BaseClasses\Actions\WaitDI.cs" />
+    <Compile Include="BaseClasses\Actions\DigitalOutput.cs" />
+    <Compile Include="BaseClasses\Kinematics\ForwardKinematics.cs" />
+    <Compile Include="BaseClasses\Kinematics\InverseKinematics.cs" />
+    <Compile Include="BaseClasses\Kinematics\PathGenerator.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -107,10 +107,10 @@
     </Compile>
     <Compile Include="RobotComponentsInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BaseClasses\RobotInfo.cs" />
-    <Compile Include="BaseClasses\Target.cs" />
-    <Compile Include="BaseClasses\Timer.cs" />
-    <Compile Include="BaseClasses\OverrideRobotTool.cs" />
+    <Compile Include="BaseClasses\Definitions\RobotInfo.cs" />
+    <Compile Include="BaseClasses\Actions\Target.cs" />
+    <Compile Include="BaseClasses\Actions\Timer.cs" />
+    <Compile Include="BaseClasses\Actions\OverrideRobotTool.cs" />
     <Compile Include="Utils\VersionNumbering.cs" />
   </ItemGroup>
   <ItemGroup>

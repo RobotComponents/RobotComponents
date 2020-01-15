@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Goos;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Movement component. An inherent from the GH_Component Class.

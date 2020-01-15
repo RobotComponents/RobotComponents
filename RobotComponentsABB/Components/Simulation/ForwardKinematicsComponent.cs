@@ -7,11 +7,11 @@ using Grasshopper.Kernel;
 
 using GH_IO.Serialization;
 
-using RobotComponents.BaseClasses;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

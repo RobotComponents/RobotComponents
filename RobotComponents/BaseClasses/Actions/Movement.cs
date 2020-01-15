@@ -2,7 +2,10 @@
 
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses
+using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.BaseClasses.Kinematics;
+
+namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Movement class

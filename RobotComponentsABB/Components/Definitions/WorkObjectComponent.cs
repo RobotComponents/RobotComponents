@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses;
-using RobotComponentsABB.Goos;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
-namespace RobotComponentsABB.Components
+namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.

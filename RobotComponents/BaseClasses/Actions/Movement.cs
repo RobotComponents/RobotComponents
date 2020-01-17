@@ -14,11 +14,11 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         // Fixed fields
-        Target _target;
-        SpeedData _speedData;
-        int _movementType;
-        int _precision;
-        Plane _globalTargetPlane;
+        private Target _target;
+        private SpeedData _speedData;
+        private int _movementType;
+        private int _precision;
+        private Plane _globalTargetPlane;
 
         // Variable fields
         RobotTool _robotTool;

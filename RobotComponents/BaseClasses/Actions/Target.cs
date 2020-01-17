@@ -13,17 +13,17 @@ namespace RobotComponents.BaseClasses.Actions
     public class Target : Action
     {
         #region fields
-        string _name; // target variable name
-        Plane _plane; // target plane (defines the required position and orientation of the tool)
-        Quaternion _quat; // target plane orientation (as quarternion)
-        int _axisConfig; // the axis configuration of the robot 
+        private string _name; // target variable name
+        private Plane _plane; // target plane (defines the required position and orientation of the tool)
+        private Quaternion _quat; // target plane orientation (as quarternion)
+        private int _axisConfig; // the axis configuration of the robot 
 
-        double _Eax_a; // the user override position of the external logical axis “a” expressed in degrees or mm 
-        double _Eax_b; // the user override position of the external logical axis “b” expressed in degrees or mm
-        double _Eax_c; // the user override position of the external logical axis “c” expressed in degrees or mm
-        double _Eax_d; // the user override position of the external logical axis “d” expressed in degrees or mm
-        double _Eax_e; // the user override position of the external logical axis “e” expressed in degrees or mm
-        double _Eax_f; // the user override position of the external logical axis “f” expressed in degrees or mm
+        private double _Eax_a; // the user override position of the external logical axis “a” expressed in degrees or mm 
+        private double _Eax_b; // the user override position of the external logical axis “b” expressed in degrees or mm
+        private double _Eax_c; // the user override position of the external logical axis “c” expressed in degrees or mm
+        private double _Eax_d; // the user override position of the external logical axis “d” expressed in degrees or mm
+        private double _Eax_e; // the user override position of the external logical axis “e” expressed in degrees or mm
+        private double _Eax_f; // the user override position of the external logical axis “f” expressed in degrees or mm
         #endregion
 
         #region constructors
@@ -319,11 +319,10 @@ namespace RobotComponents.BaseClasses.Actions
         /// Calculate the four quarternion coefficients of the target plane needed for writing the RAPID code. 
         /// </summary>
         /// <returns>The four quarternion coefficients of the target plane.</returns>
-        public Quaternion CalcQuaternion()
+        private Quaternion CalcQuaternion()
         {
             Plane refPlane = new Plane(Plane.WorldXY);
             Quaternion quat = Quaternion.Rotation(refPlane, _plane);
-            double[] quaternion = new double[] { quat.A, quat.B, quat.C, quat.D };
             return quat;
         }
 

@@ -10,78 +10,99 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponents.BaseClasses.Kinematics
 {
     /// <summary>
-    /// Inverse Kinematics class, defines the basic properties and methods for any Inverse Kinematics.
+    /// Inverse Kinematics class, defines the basic properties and methods for 
+    /// the inverse kinematics of a 6-axis robot.
     /// </summary>
     public class InverseKinematics
     {
         #region fields
-        RobotInfo _robotInfo;
-        Target _target;
-        Plane _basePlane;           //robot basePlane
-        Plane _mountingFrame;       //robot mountingFrame
-        Plane _toolPlane;           //robot toolPlane
-        Plane _targetPlane;         //targetPlane
-        Plane _endPlane;
+        private RobotInfo _robotInfo;
+        private Movement _movement;
+        private Target _target;
+        private Plane _basePlane;      
+        private Plane _toolPlane;   
+        private Plane _targetPlane;
+        private Plane _endPlane;
 
-        Plane[] _axisPlanes;        //RobotAxisLocations
-        int _axisConfig = 2;        //????
+        private Plane[] _axisPlanes;
+        private int _axisConfig;  
 
-        Point3d _wrist;
-        double _wristOffset;
-        double _lowerArmLength;
-        double _upperArmLength;
-        double _axis4offsetAngle;
+        private Point3d _wrist;
+        private double _wristOffset;
+        private double _lowerArmLength;
+        private double _upperArmLength;
+        private double _axis4offsetAngle;
 
-        List<double> _axis1Angles = new List<double>();
-        List<double> _axis2Angles = new List<double>();
-        List<double> _axis3Angles = new List<double>();
-        List<double> _axis4Angles = new List<double>();
-        List<double> _axis5Angles = new List<double>();
-        List<double> _axis6Angles = new List<double>();
+        private List<double> _axis1Angles = new List<double>();
+        private List<double> _axis2Angles = new List<double>();
+        private List<double> _axis3Angles = new List<double>();
+        private List<double> _axis4Angles = new List<double>();
+        private List<double> _axis5Angles = new List<double>();
+        private List<double> _axis6Angles = new List<double>();
 
-        List<double> _internalAxisValues = new List<double>(); //Final Calculated Internal AxisAngles
-        List<double> _externalAxisValues = new List<double>(); //Final Calculated External AxisAngles
+        private List<double> _internalAxisValues = new List<double>(); // Final calculated internal axis values
+        private List<double> _externalAxisValues = new List<double>(); // Final calculated external axis values
         #endregion
 
         #region constructors
+        /// <summary>
+        /// Defines an empty Inverse Kinematics object
+        /// </summary>
         public InverseKinematics()
         {
         }
 
-        public InverseKinematics(Target target, RobotInfo robotInfo, RobotTool robotTool)
-        {
-            this._robotInfo = robotInfo;
-            this._robotInfo.Tool = robotTool;
-            Update(target);
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="movement"></param>
+        /// <param name="robotInfo"></param>
         public InverseKinematics(Movement movement, RobotInfo robotInfo)
         {
-            this._robotInfo = robotInfo;
-            Update(robotInfo, movement);
+            _robotInfo = robotInfo;
+            _movement = movement;
+            Initialize();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="robotInfo"></param>
         public InverseKinematics(Target target, RobotInfo robotInfo)
         {
-            this._robotInfo = robotInfo;
-            Update(target);
+            _robotInfo = robotInfo;
+            _movement = new Movement(target);
+            Initialize();
         }
 
-        public InverseKinematics(RobotInfo robotInfo)
-        {
-            this._robotInfo = robotInfo;
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public InverseKinematics Duplicate()
         {
-            InverseKinematics dup = new InverseKinematics(Target, RobotInfo);
+            InverseKinematics dup = new InverseKinematics(Movement, RobotInfo);
             return dup;
         }
         #endregion
 
         #region methods
-        private void Update(Target target)
+        private void Initialize()
         {
+
+            // Check robot tool: override the movement contains are robotTool
+            if (_movement.RobotTool.Name != "" && _movement.RobotTool.Name != null)
+            {
+                _robotInfo.Tool = _movement.RobotTool;
+            }
+
+            // Deep copy the target
+            _target = _movement.Target.Duplicate();
+
+            // Change the target plane from a local plane to global plane
+            _target.Plane = _movement.GlobalTargetPlane;
+
             _axis1Angles.Clear();
             _axis2Angles.Clear();
             _axis3Angles.Clear();
@@ -92,60 +113,36 @@ namespace RobotComponents.BaseClasses.Kinematics
             _internalAxisValues.Clear();
             _externalAxisValues.Clear();
 
-            this._target = target;
-            this._basePlane = _robotInfo.BasePlane;
-            this._mountingFrame = _robotInfo.MountingFrame;
-            this._toolPlane = _robotInfo.ToolPlane;
-            this._targetPlane = target.Plane;
-            this._axisPlanes = _robotInfo.InternalAxisPlanes.ToArray();
-            this._axisConfig = target.AxisConfig;
+            _basePlane = _robotInfo.BasePlane;
+            _toolPlane = _robotInfo.ToolPlane;
+            _targetPlane = _target.Plane;
+            _axisPlanes = _robotInfo.InternalAxisPlanes.ToArray();
+            _axisConfig = _target.AxisConfig;
 
             _basePlane = GetClosestBasePlane();
             Transform trans = Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
-            this._targetPlane = ToolTransformation(_targetPlane, _robotInfo.Tool.AttachmentPlane, _robotInfo.Tool.ToolPlane);
+            _targetPlane = ToolTransformation(_targetPlane, _robotInfo.Tool.AttachmentPlane, _robotInfo.Tool.ToolPlane);
 
-            this._endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips Plane for TCP Offset moving in in right direction
-            this._endPlane.Transform(trans);
+            _endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips Plane for TCP Offset moving in in right direction
+            _endPlane.Transform(trans);
 
-            this._wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
-            this._lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
-            this._upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
-            this._axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
+            _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
+            _lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
+            _upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
+            _axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
 
-            this._wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
+            _wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
         }
 
-        public void Update(RobotInfo robotInfo, Movement movement)
-        {
-            // Set the robot info
-            this._robotInfo = robotInfo;
-
-            // Check robot tool: override the movement contains are robotTool
-            if (movement.RobotTool.Name != "" && movement.RobotTool.Name != null)
-            {
-                this._robotInfo.Tool = movement.RobotTool;
-            }
-
-            // Deep copy the target
-            Target target = movement.Target.Duplicate();
-
-            // Change the target plane from a local plane to global plane
-            target.Plane = movement.GlobalTargetPlane;
-
-            // Update
-            Update(target);
-
-        }
-        public void Update(RobotInfo robotInfo, Target target)
-        {
-            this._robotInfo = robotInfo;
-            Update(target);
-        }
+        // Make to calculaion methods?
+        // One method is caluclating all axis configurations? 
+        // One method is calculating only one axis configuration?
 
         public void Calculate()
         {
             _internalAxisValues.Clear();
             _externalAxisValues.Clear();
+
             _axis1Angles.Clear();
             _axis2Angles.Clear();
             _axis3Angles.Clear();
@@ -238,7 +235,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     {
                         Vector3d axis4 = new Vector3d(_wrist - elbowPt);
                         axis4.Rotate(-_axis4offsetAngle, elbowPlane.ZAxis);
-                        Vector3d lowerArm = new Vector3d(elbowPt - p1A);
+                        //Vector3d lowerArm = new Vector3d(elbowPt - p1A);
                         Plane tempPlane = new Plane(elbowPlane);
                         tempPlane.Rotate(axis2Angle + axis3Angle, tempPlane.ZAxis);
 
@@ -443,6 +440,9 @@ namespace RobotComponents.BaseClasses.Kinematics
         #endregion
 
         #region properties
+        /// <summary>
+        /// A boolean that indicates if the Inverse Kinematics object is valid. 
+        /// </summary>
         public bool IsValid
         {
             get
@@ -450,28 +450,28 @@ namespace RobotComponents.BaseClasses.Kinematics
                 if (BasePlane == null) { return false; }
                 if (ToolPlane == null) { return false; }
                 if (TargetPlane == null) { return false; }
-                if (AxisPlanes == null) { return false; }
-
                 return true;
             }
         }
 
+        /// <summary>
+        /// The robot info where the axis values are calculated for.
+        /// </summary>
         public RobotInfo RobotInfo
         {
             get { return _robotInfo; }
             set { _robotInfo = value; }
         }
 
-        public Target Target
+        public Movement Movement
         {
-            get { return _target; }
-            set { _target = value; }
+            get { return _movement; }
+            set { _movement = value; }
         }
 
         public Plane BasePlane
         {
             get { return _basePlane; }
-            set { _basePlane = value; }
         }
 
         public Plane ToolPlane
@@ -480,6 +480,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             set { _toolPlane = value; }
         }
 
+        // Global target plane?
         public Plane TargetPlane
         {
             get { return _targetPlane; }
@@ -492,28 +493,26 @@ namespace RobotComponents.BaseClasses.Kinematics
             set { _endPlane = value; }
         }
 
-        public Plane[] AxisPlanes
-        {
-            get { return _axisPlanes; }
-            set { _axisPlanes = value; }
-        }
-
-        public List<double> InternalAxisValues
-        {
-            get { return this._internalAxisValues; }
-            set { this._internalAxisValues = value; }
-        }
-
+        // Can be removed: store in Movement.Target
         public int AxisConfig
         {
             get { return _axisConfig; }
-            set { _axisConfig = value; }
         }
 
+        /// <summary>
+        /// The calculated internal axis values
+        /// </summary>
+        public List<double> InternalAxisValues
+        {
+            get { return _internalAxisValues; }
+        }
+
+        /// <summary>
+        /// The calculated external axis values
+        /// </summary>
         public List<double> ExternalAxisValues 
         {
             get { return _externalAxisValues; }
-            set { _externalAxisValues = value; }
         }
         #endregion
     }

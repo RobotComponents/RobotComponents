@@ -106,7 +106,7 @@ namespace RobotComponentsABB.Components.Obsolete
 
             // Output
             _fk = forwardKinematics;
-            DA.SetDataList(0, forwardKinematics.PosedMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
+            DA.SetDataList(0, forwardKinematics.PosedInternalAxisMeshes); // Output the Mesh of the Robot in Pose ( toggle this ? )
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
             DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
         }
@@ -126,7 +126,7 @@ namespace RobotComponentsABB.Components.Obsolete
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display
-            if (_fk.PosedMeshes != null)
+            if (_fk.PosedInternalAxisMeshes != null)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -171,15 +171,15 @@ namespace RobotComponentsABB.Components.Obsolete
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _fk.PosedMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedInternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_fk.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes
-                for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedExternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_fk.PosedExternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
             }
         }

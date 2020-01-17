@@ -29,8 +29,8 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         private readonly List<string> _errorText = new List<string>(); // Error text
 
-        private List<Mesh> _posedMeshes; // Posed Robot Meshes
-        private List<Mesh> _posedAxisMeshes; //Posed Axis Meshes
+        private List<Mesh> _posedInternalAxisMeshes; // Posed Robot Meshes
+        private List<Mesh> _posedExternalAxisMeshes; //Posed Axis Meshes
         private Plane _tcpPlane; // TCP Plane of effector
 
         private bool _hideMesh;
@@ -90,13 +90,13 @@ namespace RobotComponents.BaseClasses.Kinematics
             // Deep copy the mehses if the pose should be calculated
             if (_hideMesh == false)
             {
-                _posedMeshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
-                _posedAxisMeshes = new List<Mesh>();
+                _posedInternalAxisMeshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
+                _posedExternalAxisMeshes = new List<Mesh>();
             }
             else
             {
-                _posedMeshes = new List<Mesh>();
-                _posedAxisMeshes = new List<Mesh>();
+                _posedInternalAxisMeshes = new List<Mesh>();
+                _posedExternalAxisMeshes = new List<Mesh>();
             }
 
             // Calculates external axes position
@@ -127,7 +127,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                     for (int j = 0; j < externalAxis.PosedMeshes.Count; j++)
                     {
-                        _posedAxisMeshes.Add(externalAxis.PosedMeshes[j].DuplicateMesh());
+                        _posedExternalAxisMeshes.Add(externalAxis.PosedMeshes[j].DuplicateMesh());
                     }
                 }
             }
@@ -174,21 +174,21 @@ namespace RobotComponents.BaseClasses.Kinematics
             if (_hideMesh == false)
             {
                 // Base link transform
-                _posedMeshes[0].Transform(transNow);
+                _posedInternalAxisMeshes[0].Transform(transNow);
                 // Link_1 tranform 
-                _posedMeshes[1].Transform(transNow * rot1);
+                _posedInternalAxisMeshes[1].Transform(transNow * rot1);
                 // Link_2 tranform
-                _posedMeshes[2].Transform(transNow * rot2 * rot1);
+                _posedInternalAxisMeshes[2].Transform(transNow * rot2 * rot1);
                 // Link_3 tranform
-                _posedMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
+                _posedInternalAxisMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
                 // Link_4 tranform
-                _posedMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
+                _posedInternalAxisMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
                 // Link_5 tranform
-                _posedMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
+                _posedInternalAxisMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
                 // Link_6 tranform
-                _posedMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+                _posedInternalAxisMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
                 // End-effector transform
-                _posedMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+                _posedInternalAxisMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
             }
         }
 
@@ -339,9 +339,9 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Calcualte robot pose meshes
         /// </summary>
-        public List<Mesh> PosedMeshes
+        public List<Mesh> PosedInternalAxisMeshes
         {
-            get { return _posedMeshes; }
+            get { return _posedInternalAxisMeshes; }
         }
 
         /// <summary>
@@ -457,10 +457,9 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// A List of meshes in pose for the external axis.
         /// </summary>
-        public List<Mesh> PosedAxisMeshes 
+        public List<Mesh> PosedExternalAxisMeshes 
         {
-            get { return _posedAxisMeshes; }
-            set { _posedAxisMeshes = value; }
+            get { return _posedExternalAxisMeshes; }
         }
 
         /// <summary>

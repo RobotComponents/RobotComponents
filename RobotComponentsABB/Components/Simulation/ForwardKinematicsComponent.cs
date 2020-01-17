@@ -99,7 +99,7 @@ namespace RobotComponentsABB.Components.Simulation
             _fk = forwardKinematics;
             if (_hideMesh == false)
             {
-                DA.SetDataList(0, forwardKinematics.PosedMeshes);
+                DA.SetDataList(0, forwardKinematics.PosedInternalAxisMeshes);
             }
             else
             {
@@ -116,7 +116,7 @@ namespace RobotComponentsABB.Components.Simulation
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_fk.PosedMeshes != null && !_hideMesh)
+            if (_fk.PosedInternalAxisMeshes != null && !_hideMesh)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -161,15 +161,15 @@ namespace RobotComponentsABB.Components.Simulation
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _fk.PosedMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedInternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_fk.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes
-                for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedExternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_fk.PosedExternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
             }
         }

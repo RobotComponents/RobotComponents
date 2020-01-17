@@ -86,8 +86,8 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
-            forwardKinematics.Calculate(_hideMesh);
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues, _hideMesh);
+            forwardKinematics.Calculate();
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
@@ -97,7 +97,7 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Output
             _fk = forwardKinematics;
-            if (!_hideMesh)
+            if (_hideMesh == false)
             {
                 DA.SetDataList(0, forwardKinematics.PosedMeshes);
             }

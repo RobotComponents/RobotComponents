@@ -33,7 +33,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Defines a Path Generator with the a robot info go.
+        /// Defines a Path Generator with a robot info.
         /// </summary>
         /// <param name="robotInfo"> The robot info to construct the path for. </param>
         public PathGenerator(RobotInfo robotInfo)
@@ -80,15 +80,17 @@ namespace RobotComponents.BaseClasses.Kinematics
         public void GetAxisValues(List<Movement> movements, int interpolations)
         {
             // Initialize the forward kinematics
-            ForwardKinematics forwardKinematics = new ForwardKinematics(_robotInfo);
-
-            // Initialize the inverse kinematics for the target to move from (movement 1)
-            List<double> target1InternalAxisValues;
-            List<double> target1ExternalAxisValues;
+            ForwardKinematics forwardKinematics = new ForwardKinematics(_robotInfo, true);
 
             // Initialize the inverse kinematics for the target to move to (movement 2)
             InverseKinematics inverseKinematics = new InverseKinematics(movements[0], _robotInfo);
             inverseKinematics.Calculate();
+
+            // Initialize the internal and external axis values of the first target
+            List<double> target1InternalAxisValues;
+            List<double> target1ExternalAxisValues;
+
+            // Initialize the internal and external axis values of the second target
             List<double> target2InternalAxisValues = inverseKinematics.InternalAxisValues;
             List<double> target2ExternalAxisValues = inverseKinematics.ExternalAxisValues;
 
@@ -178,7 +180,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                             // Calculate point to be able to draw the path curve
                             forwardKinematics.Update(internalAxisValues, externalAxisValues);
-                            forwardKinematics.Calculate(true);
+                            forwardKinematics.Calculate();
                             Point3d point = forwardKinematics.TCPPlane.Origin;
 
                             // Add te calculated axis values and plane to the class property

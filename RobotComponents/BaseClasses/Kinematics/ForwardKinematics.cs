@@ -30,7 +30,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         private readonly List<string> _errorText = new List<string>(); // Error text
 
         private List<Mesh> _posedInternalAxisMeshes; // Posed Robot Meshes
-        private List<Mesh> _posedExternalAxisMeshes; //Posed Axis Meshes
+        private List<List<Mesh>> _posedExternalAxisMeshes; //Posed Axis Meshes
         private Plane _tcpPlane; // TCP Plane of effector
 
         private bool _hideMesh;
@@ -91,12 +91,12 @@ namespace RobotComponents.BaseClasses.Kinematics
             if (_hideMesh == false)
             {
                 _posedInternalAxisMeshes = _robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
-                _posedExternalAxisMeshes = new List<Mesh>();
+                _posedExternalAxisMeshes = new List<List<Mesh>>();
             }
             else
             {
                 _posedInternalAxisMeshes = new List<Mesh>();
-                _posedExternalAxisMeshes = new List<Mesh>();
+                _posedExternalAxisMeshes = new List<List<Mesh>>();
             }
 
             // Calculates external axes position
@@ -124,19 +124,20 @@ namespace RobotComponents.BaseClasses.Kinematics
                 {
                     // Update the mesh pose of the axis
                     externalAxis.PoseMeshes(_externalAxisValues[i]);
-
-                    for (int j = 0; j < externalAxis.PosedMeshes.Count; j++)
-                    {
-                        _posedExternalAxisMeshes.Add(externalAxis.PosedMeshes[j].DuplicateMesh());
-                    }
+                    _posedExternalAxisMeshes.Add(externalAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
                 }
             }
-            
-            // Calculates interal axes
+
+            // Move relative to base
+            Transform transNow;
+            transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
+
+            // Calculates internal axes
             // First caculate all tansformations (rotations)
             // Axis 1
             Transform rot1;
-            rot1 = Transform.Rotation(_internalAxisRads[0], _internalAxisPlanes[0].ZAxis, _internalAxisPlanes[0].Origin);
+            Plane planeAxis1 = new Plane(_internalAxisPlanes[0]);
+            rot1 = Transform.Rotation(_internalAxisRads[0], planeAxis1.ZAxis, planeAxis1.Origin);
             // Axis 2
             Transform rot2;
             Plane planeAxis2 = new Plane(_internalAxisPlanes[1]);
@@ -162,10 +163,6 @@ namespace RobotComponents.BaseClasses.Kinematics
             Plane planeAxis6 = new Plane(_internalAxisPlanes[5]);
             planeAxis6.Transform(rot5 * rot4 * rot3 * rot2 * rot1);
             rot6 = Transform.Rotation(_internalAxisRads[5], planeAxis6.ZAxis, planeAxis6.Origin);
-
-            // Move relative to base
-            Transform transNow;
-            transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
 
             // Apply transformations on tcp plane
             _tcpPlane.Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
@@ -217,7 +214,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Update external axis data and set the external axis values
             _externalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
-            _externalAxisLimits = _robotInfo.ExternalAxisLimits;
+            _externalAxisLimits = _robotInfo.ExternalAxisLimits; //TODO: update for multiple external axes
             _externalAxisValues = externalAxisValues;
 
             // Check axis limits
@@ -301,7 +298,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                     _errorText.Add("External Axis Value " + i + " is not in Range.");
                     _externalAxisInLimit.Add(false);
                 }
-
             }
         }
         #endregion
@@ -345,20 +341,19 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Calculated posed TCP plane of robot tool
+        /// A List of meshes in pose for the external axis.
+        /// </summary>
+        public List<List<Mesh>> PosedExternalAxisMeshes
+        {
+            get { return _posedExternalAxisMeshes; }
+        }
+
+        /// <summary>
+        /// Calculated posed TCP plane of the robot tool
         /// </summary>
         public Plane TCPPlane
         {
             get { return _tcpPlane; }
-        }
-
-        /// <summary>
-        /// List of intervals defining the axis limits.
-        /// </summary>
-        public List<Interval> InternalAxisLimits
-        {
-            get { return _internalAxisLimits; }
-            set { _internalAxisLimits = value; }
         }
 
         /// <summary>
@@ -367,19 +362,18 @@ namespace RobotComponents.BaseClasses.Kinematics
         public List<bool> InternalAxisInLimit
         {
             get { return _internalAxisInLimit; }
-            set { _internalAxisInLimit = value; }
         }
 
         /// <summary>
-        /// List of strings collecting error messages which can be displayed in a grasshopper component.
+        /// List of bools defining if the external axes are in their limit.
         /// </summary>
-        public List<string> ErrorText
+        public List<bool> ExternalAxisInLimit
         {
-            get { return _errorText; }
+            get { return _externalAxisInLimit; }
         }
 
         /// <summary>
-        /// List of internal axis values in degree.
+        /// List of internal axis values in degrees.
         /// </summary>
         public List<double> InternalAxisValues
         {
@@ -411,7 +405,16 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Array of external axis palnes.
+        /// List of external axis values in ?. A external axis can be meter or degree
+        /// </summary>
+        public List<double> ExternalAxisValues
+        {
+            get { return _externalAxisValues; }
+            set { _externalAxisValues = value; }
+        }
+
+        /// <summary>
+        /// Array of external axis planes.
         /// </summary>
         public Plane[] ExternalAxisPlanes 
         {
@@ -419,47 +422,11 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// List of external axis values in ?. A external axis can be meter or degree
+        /// List of strings collecting error messages which can be displayed in a grasshopper component.
         /// </summary>
-        public List<double> ExternalAxisValues 
+        public List<string> ErrorText
         {
-            get { return _externalAxisValues; }
-            set { _externalAxisValues = value; }
-        }
-
-        /// <summary>
-        /// List of intervals defining the external axis limits. 
-        /// </summary>
-        public List<Interval> ExternalAxisLimits 
-        {
-            get { return _externalAxisLimits; }
-            set { _externalAxisLimits = value; }
-        }
-
-        /// <summary>
-        /// List of bools defining if the external axes are in their limit.
-        /// </summary>
-        public List<bool> ExternalAxisInLimit 
-        {
-            get { return _externalAxisInLimit; }
-            set { _externalAxisInLimit = value; }
-        }
-
-        /// <summary>
-        /// Defines the BasePlane
-        /// </summary>
-        public Plane BasePlane 
-        {
-            get { return _basePlane; }
-            set { _basePlane = value; }
-        }
-
-        /// <summary>
-        /// A List of meshes in pose for the external axis.
-        /// </summary>
-        public List<Mesh> PosedExternalAxisMeshes 
-        {
-            get { return _posedExternalAxisMeshes; }
+            get { return _errorText; }
         }
 
         /// <summary>

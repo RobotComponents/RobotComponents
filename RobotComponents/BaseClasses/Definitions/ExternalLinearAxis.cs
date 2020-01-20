@@ -13,8 +13,6 @@ namespace RobotComponents.BaseClasses.Definitions
         int? _axisNumber;
         Mesh _baseMesh;
         Mesh _linkMesh;
-        Mesh _posedBaseMesh;
-        Mesh _posedLinkMesh;
         Curve _axisCurve;
         List<Mesh> _posedMeshes;
         #endregion
@@ -30,9 +28,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachementPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // to do
-            BaseMesh = null;
-            LinkMesh = null;
+            _axisNumber = null; //TODO
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
             Initialize();
         }
@@ -43,9 +41,9 @@ namespace RobotComponents.BaseClasses.Definitions
             axis.Unitize();
             _axisPlane = new Plane(attachementPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; // to do
-            BaseMesh = null;
-            LinkMesh = null;
+            _axisNumber = null; //TODO
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
             Initialize();
         }
@@ -56,9 +54,9 @@ namespace RobotComponents.BaseClasses.Definitions
             axis.Unitize();
             _axisPlane = new Plane(attachementPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; // to do
-            BaseMesh = baseMesh;
-            LinkMesh = linkMesh;
+            _axisNumber = null; //TODO
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
             Initialize();
         }
@@ -68,9 +66,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachementPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // to do
-            BaseMesh = baseMesh;
-            LinkMesh = linkMesh;
+            _axisNumber = null; //TODO
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
             Initialize();
         }
@@ -83,24 +81,12 @@ namespace RobotComponents.BaseClasses.Definitions
         #endregion
 
         #region methods
-        public bool IsValid
-        {
-            get
-            {
-                if (AttachmentPlane == null) { return false; }
-                if (AttachmentPlane == Plane.Unset) { return false; }
-                if (AxisPlane == null) { return false; }
-                if (AxisPlane == Plane.Unset) { return false; }
-                if (AxisLimits == null) { return false; }
-                return true;
-            }
-        }
 
         public void GetAxisCurve()
         {
             Line line = new Line(_attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Min, _attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Max);
-            AxisCurve = line.ToNurbsCurve();
-            AxisCurve.Domain = new Interval(0, 1);
+            _axisCurve = line.ToNurbsCurve();
+            _axisCurve.Domain = new Interval(0, 1);
 
         }
 
@@ -167,7 +153,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _posedMeshes[1].Transform(translateNow);
         }
 
-        public override void Initialize()
+        private void Initialize()
         {
             GetAxisCurve();
         }
@@ -180,26 +166,38 @@ namespace RobotComponents.BaseClasses.Definitions
         #endregion
 
         #region properties
+        public bool IsValid
+        {
+            get
+            {
+                if (AttachmentPlane == null) { return false; }
+                if (AttachmentPlane == Plane.Unset) { return false; }
+                if (AxisPlane == null) { return false; }
+                if (AxisPlane == Plane.Unset) { return false; }
+                if (AxisLimits == null) { return false; }
+                return true;
+            }
+        }
 
-        override public Plane AttachmentPlane 
+        public override Plane AttachmentPlane 
         {
             get { return _attachmentPlane; }
             set { _attachmentPlane = value; }
         }
 
-        override public Plane AxisPlane 
+        public override Plane AxisPlane 
         { 
             get { return _axisPlane; }
             set { _axisPlane = value; }
         }
 
-        override public Interval AxisLimits 
+        public override Interval AxisLimits 
         { 
             get { return _axisLimits; }
             set { _axisLimits = value; }
         }
 
-        override public int? AxisNumber 
+        public override int? AxisNumber 
         { 
             get { return _axisNumber; }
             set { _axisNumber = value; }
@@ -225,13 +223,11 @@ namespace RobotComponents.BaseClasses.Definitions
         public Curve AxisCurve 
         { 
             get { return _axisCurve; }
-            set { _axisCurve = value; }
         }
 
-        override public List<Mesh> PosedMeshes 
+        public override List<Mesh> PosedMeshes 
         { 
             get { return _posedMeshes; }
-            set { _posedMeshes = value; }
         }
         #endregion
     }

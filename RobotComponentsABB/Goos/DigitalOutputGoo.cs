@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal DigitalOutput instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid DigitalOutput instance: Did you define a name and output?"; //Todo: beef this up to be more informative.
+                return "Invalid DigitalOutput instance: Did you define the digital output name and value?"; //Todo: beef this up to be more informative.
             }
         }
 

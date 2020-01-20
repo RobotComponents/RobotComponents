@@ -99,7 +99,9 @@ namespace RobotComponents.BaseClasses.Kinematics
             List<double> externalAxisValueChange = new List<double>();
 
             // Initiate sub inverse kinematics
-            InverseKinematics inverseKinematicsSub;
+            InverseKinematics inverseKinematicsSub = new InverseKinematics(movements[0], _robotInfo);
+            Target subTarget;
+            Movement subMovement;
 
             // Make path if we have at least two movements with targets
             if (movements.Count > 1)
@@ -117,7 +119,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     target1ExternalAxisValues = new List<double>(target2ExternalAxisValues);
 
                     // Calculate the axis values for the second target
-                    inverseKinematics = new InverseKinematics(movements[i+1], _robotInfo);
+                    inverseKinematics.Movement = movements[i+1];
                     inverseKinematics.Calculate();
                     target2InternalAxisValues = inverseKinematics.InternalAxisValues;
                     target2ExternalAxisValues = inverseKinematics.ExternalAxisValues;
@@ -275,12 +277,12 @@ namespace RobotComponents.BaseClasses.Kinematics
                             Plane plane = new Plane(planePoints[l], axisDirections[l][0], axisDirections[l][1]);
 
                             // Update sub target and sub movement
-                            Target subTarget = new Target("subTarget", plane, movements[i + 1].Target.AxisConfig, externalAxisValues);
-                            Movement subMovement = new Movement(subTarget);
+                            subTarget = new Target("subTarget", plane, movements[i + 1].Target.AxisConfig, externalAxisValues);
+                            subMovement = new Movement(subTarget);
                             subMovement.RobotTool = movements[i + 1].RobotTool;
 
                             // Calculate internal axis values
-                            inverseKinematicsSub = new InverseKinematics(subMovement, _robotInfo);
+                            inverseKinematicsSub.Movement = subMovement;
                             inverseKinematicsSub.Calculate();
                             List<double> internalAxisValues = inverseKinematicsSub.InternalAxisValues;
 

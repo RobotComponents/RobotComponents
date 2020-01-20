@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Movement instance: Did you define a Plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Movement instance: Did you define a target?"; //Todo: beef this up to be more informative.
             }
         }
 

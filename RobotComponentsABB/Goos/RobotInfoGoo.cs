@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal RobotInfo instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotInfo instance: Did you define an AxisValues, AxisLimits, BasePlane and MountingFrame?"; //Todo: beef this up to be more informative.
+                return "Invalid RobotInfo instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
             }
         }
 

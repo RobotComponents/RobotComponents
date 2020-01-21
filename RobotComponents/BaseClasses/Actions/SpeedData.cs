@@ -47,6 +47,23 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
+        /// </summary>
+        /// <param name="v_tcp">  The velocity of the tool center point (TCP) in mm/s. </param>
+        public SpeedData(int v_tcp)
+        {
+            double tcp = Convert.ToDouble(v_tcp);
+            tcp = Math.Round(tcp, 0);
+
+            _name = "v" + tcp.ToString();
+            _v_tcp = tcp;
+            _v_ori = 500;
+            _v_leax = 5000;
+            _v_reax = 1000;
+            _predefined = true;
+        }
+
+        /// <summary>
         /// Constructor for creating an custom SpeedData. 
         /// </summary>
         /// <param name="name"> The SpeedData variable name. </param>

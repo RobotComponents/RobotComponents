@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using GH_IO.Serialization;
-
-using RobotComponents.BaseClasses;
 using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Parameters

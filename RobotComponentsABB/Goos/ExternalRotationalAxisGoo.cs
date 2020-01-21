@@ -10,8 +10,6 @@ namespace RobotComponentsABB.Goos
     /// <summary>
     /// ExternalRotationalAxis Goo wrapper class, makes sure ExternalRotationalAxis can be used in Grasshopper.
     /// </summary>
-    
-    // Todo: make inherent from abstract class external axis
     public class ExternalRotationalAxisGoo : GH_GeometricGoo<ExternalRotationalAxis>, IGH_PreviewData
     {
         #region constructors
@@ -126,7 +124,29 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                return BoundingBox.Empty; //Note: beef this up if needed
+                if (Value == null)
+                {
+                    return BoundingBox.Empty;
+                }
+
+                else
+                {
+                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Base mesh
+                    if (Value.BaseMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    // Link mesh
+                    if (Value.LinkMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    return MeshBoundingBox;
+                }
             }
         }
 
@@ -137,7 +157,7 @@ namespace RobotComponentsABB.Goos
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return Boundingbox;
         }
         #endregion
 
@@ -228,7 +248,17 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            //args.Pipeline.DrawCurve(Value.AxisCurve, System.Drawing.Color.Red, 1);
+            if (Value == null) { return; }
+
+            if (Value.BaseMesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
+
+            if (Value.LinkMesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
         }
 
         /// <summary>
@@ -237,7 +267,17 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            args.Pipeline.DrawCurve(Value.AxisCurve, args.Color, 1);
+            if (Value == null) { return; }
+
+            if (Value.BaseMesh != null)
+            {
+                args.Pipeline.DrawMeshWires(Value.BaseMesh, args.Color, -1);
+            }
+
+            if (Value.LinkMesh != null)
+            {
+                args.Pipeline.DrawMeshWires(Value.LinkMesh, args.Color, -1);
+            }
         }
         #endregion
     }

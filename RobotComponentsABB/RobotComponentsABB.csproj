@@ -144,6 +144,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\WorkObjectParam.cs" />
     <Compile Include="Parameters\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\CodeLineParam.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Parameters\RobotInfoParam.cs" />
     <Compile Include="Parameters\RobotToolParam.cs" />
     <Compile Include="Parameters\OverrideRobotToolParam.cs" />
-    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\TargetParam.cs" />
     <Compile Include="Parameters\TimerParam.cs" />
     <Compile Include="Parameters\WaitDIParam.cs" />

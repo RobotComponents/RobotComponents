@@ -10,7 +10,7 @@ namespace RobotComponentsABB.Goos
     /// <summary>
     /// SpeedData wrapper class, makes sure SpeedData can be used in Grasshopper.
     /// </summary>
-    class SpeedDataGoo : GH_GeometricGoo<SpeedData>, IGH_PreviewData
+    public class SpeedDataGoo : GH_GeometricGoo<SpeedData>, IGH_PreviewData
     {
         #region constructors
         /// <summary>

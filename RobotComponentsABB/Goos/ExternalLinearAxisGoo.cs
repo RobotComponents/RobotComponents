@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal ExternalLinearAxis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalLinearAxis instance: Did you define an interval?"; //Todo: beef this up to be more informative.
+                return "Invalid ExternalLinearAxis instance: Did you define an interval, attachment plane and axis vector?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,7 +95,7 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null ExternalLinearAxis";
+                return "Null External Linear Axis";
             else
                 return "External Linear Axis";
         }
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("ExternalLinearAxis"); }
+            get { return ("External Linear Axis"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a ExternalLinearAxis."); }
+            get { return ("Defines a External Linear Axis."); }
         }
 
         /// <summary>

@@ -86,7 +86,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal PathGenerator instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid PathGenerator instance: Did you define ActionList, Interpolations, Step and RobotInfo"; //Todo: beef this up to be more informative.
+                return "Invalid PathGenerator instance: Did you define a lis with action and a robot info?"; //Todo: beef this up to be more informative.
             }
         }
 

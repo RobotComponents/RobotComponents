@@ -1,4 +1,5 @@
-﻿using Grasshopper.Kernel;
+﻿using System;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
@@ -57,7 +58,46 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
         /// the the SpeedData value stored inside this Goo instance. </param>
+        public SpeedDataGoo(GH_Integer tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed.Value);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public SpeedDataGoo(GH_String tcpSpeed)
+        {
+            if (tcpSpeed == null)
+            {
+                this.Value = new SpeedData();
+            }
+            else
+            {
+                string text = tcpSpeed.Value;
+                double speed = Convert.ToDouble(text);
+                this.Value = new SpeedData(speed);
+            }
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
         public SpeedDataGoo(double tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public SpeedDataGoo(int tcpSpeed)
         {
             this.Value = new SpeedData(tcpSpeed);
         }

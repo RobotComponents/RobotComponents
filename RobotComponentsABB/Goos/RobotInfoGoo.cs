@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal RobotInfo instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotInfo instance: Did you define an AxisValues, AxisLimits, BasePlane and MountingFrame?"; //Todo: beef this up to be more informative.
+                return "Invalid RobotInfo instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -262,11 +262,11 @@ namespace RobotComponentsABB.Goos
                 ForwardKinematics forwardKinematics = new ForwardKinematics(this.Value, internalAxisValues, externalAxisValues);
                 forwardKinematics.Calculate();
 
-                if (forwardKinematics.PosedMeshes != null)
+                if (forwardKinematics.PosedInternalAxisMeshes != null)
                 {
-                    for (int i = 0; i != forwardKinematics.PosedMeshes.Count; i++)
+                    for (int i = 0; i != forwardKinematics.PosedInternalAxisMeshes.Count; i++)
                     {
-                        args.Pipeline.DrawMeshShaded(forwardKinematics.PosedMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
                 }
             }
@@ -289,11 +289,11 @@ namespace RobotComponentsABB.Goos
                 ForwardKinematics forwardKinematics = new ForwardKinematics(this.Value, internalAxisValues, externalAxisValues);
                 forwardKinematics.Calculate();
 
-                if (forwardKinematics.PosedMeshes != null)
+                if (forwardKinematics.PosedInternalAxisMeshes != null)
                 {
-                    for (int i = 0; i != forwardKinematics.PosedMeshes.Count; i++)
+                    for (int i = 0; i != forwardKinematics.PosedInternalAxisMeshes.Count; i++)
                     {
-                        args.Pipeline.DrawMeshWires(forwardKinematics.PosedMeshes[i], args.Color, -1);
+                        args.Pipeline.DrawMeshWires(forwardKinematics.PosedInternalAxisMeshes[i], args.Color, -1);
                     }
                 }
             }

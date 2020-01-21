@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 using Rhino.Geometry;
 
 namespace RobotComponents.BaseClasses.Definitions
 {
     /// <summary>
-    /// RobotInfo class, defines the basic properties and methods for any RobotInfo.
+    /// RobotInfo class, defines the basic properties and methods for any Robot Info.
     /// </summary>
     public class RobotInfo
     {
@@ -31,14 +33,14 @@ namespace RobotComponents.BaseClasses.Definitions
 
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis) 
         {
-            this._name = name;
-            this._meshes = meshes;
+            _name = name;
+            _meshes = meshes;
 
-            this._internalAxisPlanes = internalAxisPlanes;
-            this._internalAxisLimits = internalAxisLimits;
-            this._externalAxisPlanes = new List<Plane> { };
-            this._externalAxis = externalAxis;
-            this._externalAxisLimits = new List<Interval> { }; //improve this
+            _internalAxisPlanes = internalAxisPlanes;
+            _internalAxisLimits = internalAxisLimits;
+            _externalAxisPlanes = new List<Plane> { };
+            _externalAxis = externalAxis;
+            _externalAxisLimits = new List<Interval> { }; //improve this
             for (int i = 0; i < 6; i++)
             {
                 if (_externalAxis.Count > i && _externalAxis[i] != null)
@@ -54,33 +56,33 @@ namespace RobotComponents.BaseClasses.Definitions
             }
           
             
-            this._basePlane = basePlane;
-            this._mountingFrame = mountingFrame;
+            _basePlane = basePlane;
+            _mountingFrame = mountingFrame;
 
-            this._tool = tool;
+            _tool = tool;
 
-            this._meshes.Add(GetAttachedToolMesh(_tool, mountingFrame));
-            this._toolPlane = GetAttachedToolPlane(_tool, mountingFrame);
+            _meshes.Add(GetAttachedToolMesh(_tool, mountingFrame));
+            _toolPlane = GetAttachedToolPlane(_tool, mountingFrame);
         }
 
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
-            this._name = name;
-            this._meshes = meshes;
+            _name = name;
+            _meshes = meshes;
 
-            this._internalAxisPlanes = internalAxisPlanes;
-            this._internalAxisLimits = internalAxisLimits;
-            this._externalAxisPlanes = new List<Plane> { Plane.WorldXY, Plane.WorldXY, Plane.WorldXY, Plane.WorldXY, Plane.WorldXY, Plane.WorldXY }; //improve this
-            this._externalAxisLimits = new List<Interval> { new Interval(0, 0), new Interval(0, 0), new Interval(0, 0), new Interval(0, 0), new Interval(0, 0), new Interval(0, 0) }; //improve this
+            _internalAxisPlanes = internalAxisPlanes;
+            _internalAxisLimits = internalAxisLimits;
+            _externalAxisPlanes = Enumerable.Repeat(Plane.WorldXY, 6).ToList();
+            _externalAxisLimits = Enumerable.Repeat(new Interval(0, 0), 6).ToList();
 
-            this._basePlane = basePlane;
-            this._mountingFrame = mountingFrame;
+            _basePlane = basePlane;
+            _mountingFrame = mountingFrame;
 
-            this._tool = tool;
-            this._externalAxis = new List<ExternalAxis>();
+            _tool = tool;
+            _externalAxis = new List<ExternalAxis>();
 
-            this._meshes.Add(GetAttachedToolMesh(_tool, mountingFrame));
-            this._toolPlane = GetAttachedToolPlane(_tool, mountingFrame);
+            _meshes.Add(GetAttachedToolMesh(_tool, mountingFrame));
+            _toolPlane = GetAttachedToolPlane(_tool, mountingFrame);
         }
 
         public RobotInfo Duplicate()
@@ -160,7 +162,6 @@ namespace RobotComponents.BaseClasses.Definitions
         public Plane ToolPlane
         {
             get { return _toolPlane; }
-            set { _toolPlane = value; }
         }
 
         public RobotTool Tool

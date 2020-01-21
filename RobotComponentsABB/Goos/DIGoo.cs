@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal WaitDI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitDI instance: Did you define the Digital Input Name and Value?"; //Todo: beef this up to be more informative.
+                return "Invalid WaitDI instance: Did you define the digital input name and value?"; //Todo: beef this up to be more informative.
             }
         }
 

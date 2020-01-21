@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal Set Robot Tool instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid OverrideRobotTool instance: Did you define a Name?"; //Todo: beef this up to be more informative.
+                return "Invalid OverrideRobotTool instance: Did you define a robot tool?"; //Todo: beef this up to be more informative.
             }
         }
 

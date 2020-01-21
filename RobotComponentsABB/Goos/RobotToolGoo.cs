@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal RobotTool instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotTool instance: Did you define an AttachmentPlane and ToolPlane?"; //Todo: beef this up to be more informative.
+                return "Invalid RobotTool instance: Did you define the attachment plane and TCP plane?"; //Todo: beef this up to be more informative.
             }
         }
 

@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 
 using GH_IO.Serialization;
+
+using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
@@ -47,7 +51,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_MeshParam("Robot Mesh", "RM", "Posed Robot Mesh");  //Todo: beef this up to be more informative.
+            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");  //Todo: beef this up to be more informative.
             pManager.Register_PlaneParam("End Plane", "EP", "Robot EndEffector Plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
@@ -86,8 +90,8 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
-            forwardKinematics.Calculate(_hideMesh);
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues, _hideMesh);
+            forwardKinematics.Calculate();
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
@@ -95,18 +99,64 @@ namespace RobotComponentsABB.Components.Simulation
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
             }
 
+            // Create data tree for output of all posed meshes
+            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
+
+            // Fill data tree with meshes
+            if (_hideMesh == false)
+            {
+                meshes = GetPosedMeshesDataTree(forwardKinematics);
+            }
+
             // Output
             _fk = forwardKinematics;
-            if (!_hideMesh)
-            {
-                DA.SetDataList(0, forwardKinematics.PosedMeshes);
-            }
-            else
-            {
-                DA.SetDataList(0, null); 
-            }
+            DA.SetDataTree(0, meshes); 
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
             DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+        }
+
+        /// <summary>
+        /// Transform the posed meshes rom the forward kinematics to a datatree
+        /// </summary>
+        /// <param name="forwardKinematics"> The forward kinematics the posed meshes will be extracted from. </param>
+        /// <returns> The data tree structure with all the posed meshes. </returns>
+        public GH_Structure<GH_Mesh> GetPosedMeshesDataTree(ForwardKinematics forwardKinematics)
+        {
+            // Create data tree for output of alle posed meshes
+            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
+
+            {
+                // Robot pose meshes
+                List<Mesh> posedInternalAxisMeshes = forwardKinematics.PosedInternalAxisMeshes;
+
+                // Data tree path
+                GH_Path path = new GH_Path(0);
+
+                // Save the posed meshes
+                for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
+                {
+                    meshes.Append(new GH_Mesh(posedInternalAxisMeshes[i]), path);
+                }
+
+                // Extenal axis meshes
+                List<List<Mesh>> posedExternalAxisMeshes = forwardKinematics.PosedExternalAxisMeshes;
+
+                // Loop over all the external axes
+                for (int i = 0; i < posedExternalAxisMeshes.Count; i++)
+                {
+                    // Data tree path
+                    path = new GH_Path(i + 1);
+
+                    // Save the posed meshes
+                    for (int j = 0; j < posedExternalAxisMeshes[i].Count; j++)
+                    {
+                        meshes.Append(new GH_Mesh(posedExternalAxisMeshes[i][j]), path);
+                    }
+                }
+            }
+            
+            // Return the data tree stucture
+            return meshes;
         }
 
         /// <summary>
@@ -116,7 +166,7 @@ namespace RobotComponentsABB.Components.Simulation
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_fk.PosedMeshes != null && !_hideMesh)
+            if (_fk.PosedInternalAxisMeshes != null && !_hideMesh)
             {
                 // A boolean that defines if the axis values are valid.
                 bool AxisAreValid = true;
@@ -161,15 +211,18 @@ namespace RobotComponentsABB.Components.Simulation
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _fk.PosedMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedInternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_fk.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes
-                for (int i = 0; i != _fk.PosedAxisMeshes.Count; i++)
+                for (int i = 0; i != _fk.PosedExternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    for (int j = 0; j != _fk.PosedExternalAxisMeshes[i].Count; j++)
+                    {
+                        args.Display.DrawMeshShaded(_fk.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                    }
                 }
             }
         }

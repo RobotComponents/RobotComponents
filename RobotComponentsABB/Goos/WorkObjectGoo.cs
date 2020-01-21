@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal Work Object instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Work Object instance: Did you set a plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Work Object instance: Did you set a plane and name?"; //Todo: beef this up to be more informative.
             }
         }
 

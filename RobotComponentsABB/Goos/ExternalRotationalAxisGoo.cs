@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Goos
             {
                 if (Value == null) { return "No internal ExternalRotationalAxis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalRotationalAxis instance: Did you define an interval?"; //Todo: beef this up to be more informative.
+                return "Invalid ExternalRotationalAxis instance: Did you define an interval, attachment plane and axis plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -98,7 +98,7 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null ExternalRotationalAxis";
+                return "Null External Rotational Axis";
             else
                 return "External Rotational Axis";
         }
@@ -108,7 +108,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("ExternalRotationalAxis"); }
+            get { return ("External Rotational Axis"); }
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a ExternalRotationalAxis."); }
+            get { return ("Defines a External Rotational Axis."); }
         }
 
         /// <summary>

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
@@ -48,7 +47,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Current Target Data");  //Todo: beef this up to be more informative.
+            pManager.Register_PlaneParam("Plane", "P", "Current Target Plane");  //Todo: beef this up to be more informative.
             pManager.Register_DoubleParam("Internal Axis Values", "IAV", "Contains Internal Axis Values");  //Todo: beef this up to be more informative.
             pManager.Register_DoubleParam("External Axis Values", "EAV", "Contains External Axis Values");  //Todo: beef this up to be more informative.
             pManager.Register_CurveParam("Movement Paths", "P", "Movement Paths as Curves");
@@ -56,7 +55,7 @@ namespace RobotComponentsABB.Components.Simulation
 
         // Fields
         private PathGenerator _pathGenerator = new PathGenerator();
-        private List<Target> _targets = new List<Target>();
+        private List<Plane> _planes = new List<Plane>();
         private List<Curve> _paths = new List<Curve>();
         private List<List<double>> _internalAxisValues = new List<List<double>>();
         private List<List<double>> _externalAxisValues = new List<List<double>>();
@@ -95,37 +94,29 @@ namespace RobotComponentsABB.Components.Simulation
                 _pathGenerator.Calculate(actions, interpolations);
 
                 // Get all the targets
-                _targets.Clear();
-                _targets = _pathGenerator.Targets;
+                _planes.Clear();
+                _planes = _pathGenerator.Planes;
 
                 // Get the new path curve
                 _paths.Clear();
-                _paths = _pathGenerator.GeneratePathCurves();
+                _paths = _pathGenerator.Paths;
 
                 // Clear the lists with the internal and external axis values
                 ClearAxisValuesLists();
-
-                // Re-calculate all the internal and external axis values
-                for (int i = 0; i < _targets.Count; i++)
-                {
-                    InverseKinematics IK = new InverseKinematics(_targets[i], robotInfoGoo.Value);
-                    IK.Calculate();
-
-                    _internalAxisValues.Add(IK.InternalAxisValues);
-                    _externalAxisValues.Add(IK.ExternalAxisValues);
-                }
+                _internalAxisValues = _pathGenerator.InternalAxisValues;
+                _externalAxisValues = _pathGenerator.ExternalAxisValues;
 
                 // Store the number of interpolations that are used, to check if this value is changed. 
                 _lastInterpolations = interpolations;
             }
 
             // Get the index number of the current target
-            int targetIndex = (int)(((_targets.Count - 1) * interpolationSlider));
+            int index = (int)(((_planes.Count - 1) * interpolationSlider));
           
             // Output
-            DA.SetData(0, _targets[targetIndex]);
-            DA.SetDataList(1, _internalAxisValues[targetIndex]);
-            DA.SetDataList(2, _externalAxisValues[targetIndex]);
+            DA.SetData(0, _planes[index]);
+            DA.SetDataList(1, _internalAxisValues[index]);
+            DA.SetDataList(2, _externalAxisValues[index]);
 
             if (displayPath == true)
             {

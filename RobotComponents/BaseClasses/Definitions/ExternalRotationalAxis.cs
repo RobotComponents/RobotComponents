@@ -9,10 +9,8 @@ namespace RobotComponents.BaseClasses.Definitions
         #region fields
         private Plane _attachmentPlane;
         private Plane _axisPlane; // Todo: now only the attachment plane is copied
-        private double _startDegree;
         private Interval _axisLimits;
         private Curve _axisCurve;
-        private bool _isLinear;
         private List<Mesh> _meshes;
         private int? _axisNumber;
         List<Mesh> _posedMeshes;
@@ -24,20 +22,19 @@ namespace RobotComponents.BaseClasses.Definitions
             _posedMeshes = new List<Mesh>();
         }
 
-        public ExternalRotationalAxis(Plane plane, double startDegree, Interval axisLimits)
+        public ExternalRotationalAxis(Plane plane, Interval axisLimits)
         {
             _attachmentPlane = plane;
-            _startDegree = startDegree;
             _axisLimits = axisLimits;
             _axisNumber = null; // Todo
-            _isLinear = false;
             _posedMeshes = new List<Mesh>();
             Initialize();
         }
 
         public ExternalRotationalAxis Duplicate()
         {
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(AttachmentPlane, StartDegree, AxisLimits);
+            //TODO: Make a proper constructor that duplicates all the properties..
+            ExternalRotationalAxis dup = new ExternalRotationalAxis(AttachmentPlane, AxisLimits);
             return dup;
         }
         #endregion
@@ -116,7 +113,7 @@ namespace RobotComponents.BaseClasses.Definitions
             return positionPlane;
         }
 
-        override public void PoseMeshes(double axisValue)
+        public override void PoseMeshes(double axisValue)
         {
             _posedMeshes.Clear();
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
@@ -132,7 +129,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _axisPlane = _attachmentPlane;
         }
         
-        public override void Initialize()
+        private void Initialize()
         {
             GetAxisCurve();
             GetAxisPlane();
@@ -173,22 +170,9 @@ namespace RobotComponents.BaseClasses.Definitions
             set { _axisNumber = value; }
         }
 
-        public double StartDegree 
-        { 
-            get { return _startDegree; }
-            set { _startDegree = value; }
-            }
-
         public Curve AxisCurve 
         { 
             get { return _axisCurve; }
-            set { _axisCurve = value; }
-        }
-
-        public bool IsLinear 
-        { 
-            get { return _isLinear; }
-            set { _isLinear = value; }
         }
 
         public List<Mesh> Meshes 
@@ -197,10 +181,9 @@ namespace RobotComponents.BaseClasses.Definitions
             set { _meshes = value; }
         }
 
-        override public List<Mesh> PosedMeshes 
+        public override List<Mesh> PosedMeshes 
         { 
             get { return _posedMeshes; }
-            set { _posedMeshes = value; }
         }
         #endregion
     }

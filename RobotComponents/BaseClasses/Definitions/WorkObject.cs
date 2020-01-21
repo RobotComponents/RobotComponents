@@ -150,8 +150,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns the work object BASE code as a string. </returns>
         public string GetWorkObjData()
         {
-            string result = "";
-            result = CreateWorkObjString();
+            string result = CreateWorkObjString();
             return result;
         }
 

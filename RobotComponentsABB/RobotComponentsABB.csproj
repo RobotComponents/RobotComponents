@@ -136,7 +136,6 @@
     <Compile Include="Goos\ExternalLinearAxisGoo.cs" />
     <Compile Include="Goos\ExternalRotationalAxisGoo.cs" />
     <Compile Include="Goos\MovementGoo.cs" />
-    <Compile Include="Goos\PathGeneratorGoo.cs" />
     <Compile Include="Goos\RobotInfoGoo.cs" />
     <Compile Include="Goos\RobotToolGoo.cs" />
     <Compile Include="Goos\OverrideRobotToolGoo.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="Parameters\ExternalLinearAxisParam.cs" />
     <Compile Include="Parameters\ExternalRotationalAxisParam.cs" />
     <Compile Include="Parameters\MovementParam.cs" />
-    <Compile Include="Parameters\PathGeneratorParam.cs" />
     <Compile Include="Parameters\RobotInfoParam.cs" />
     <Compile Include="Parameters\RobotToolParam.cs" />
     <Compile Include="Parameters\OverrideRobotToolParam.cs" />

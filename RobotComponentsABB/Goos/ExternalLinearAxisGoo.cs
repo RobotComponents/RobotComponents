@@ -185,6 +185,30 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast to Plane.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.AttachmentPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Plane(Value.AttachmentPlane);
+                return true;
+            }
+
+            //Cast to Point.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.AttachmentPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin);
+                return true;
+            }
+
             //Cast to Curve.
             if (typeof(Q).IsAssignableFrom(typeof(GH_Curve)))
             {
@@ -194,6 +218,18 @@ namespace RobotComponentsABB.Goos
                     target = default(Q);
                 else
                     target = (Q)(object) new GH_Curve(Value.AxisCurve);
+                return true;
+            }
+
+            //Cast to Interval.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.AxisLimits == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Interval(Value.AxisLimits);
                 return true;
             }
 

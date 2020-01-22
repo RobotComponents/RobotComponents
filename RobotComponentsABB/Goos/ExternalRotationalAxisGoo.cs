@@ -171,12 +171,24 @@ namespace RobotComponentsABB.Goos
         public override bool CastTo<Q>(out Q target)
         {
             //Cast to Wait.
-            if (typeof(Q).IsAssignableFrom(typeof(Timer)))
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Interval
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.AxisLimits == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Interval(Value.AxisLimits);
                 return true;
             }
 

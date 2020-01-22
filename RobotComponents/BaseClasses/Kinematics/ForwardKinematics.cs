@@ -214,7 +214,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Update external axis data and set the external axis values
             _externalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
-            _externalAxisLimits = _robotInfo.ExternalAxisLimits; //TODO: update for multiple external axes
+            _externalAxisLimits = _robotInfo.ExternalAxisLimits;
             _externalAxisValues = externalAxisValues;
 
             // Check axis limits
@@ -326,7 +326,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 return _robotInfo; 
             }
             set 
-            { 
+            {
                 _robotInfo = value;
                 Update(_internalAxisValues, _externalAxisValues);
             }

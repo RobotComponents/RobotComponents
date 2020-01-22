@@ -10,6 +10,7 @@ namespace RobotComponents.BaseClasses.Definitions
     public class ExternalLinearAxis : ExternalAxis
     {
         #region fields
+        private string _name; // The name of the external axis
         private Plane _attachmentPlane; // The plane where the robot or the work object is attached
         private Plane _axisPlane; // Z-Axis of the _axisPlane is the linear axis
         private Interval _axisLimits; // The movement limits
@@ -26,8 +27,9 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         public ExternalLinearAxis()
         {
-            _linkMesh = new Mesh();
+            _name = "";
             _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
         }
 
@@ -41,6 +43,7 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             axis.Unitize();
 
+            _name = "";
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
@@ -64,6 +67,7 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             axis.Unitize();
 
+            _name = "";
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
@@ -85,6 +89,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
         public ExternalLinearAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
+            _name = "";
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
@@ -240,6 +245,15 @@ namespace RobotComponents.BaseClasses.Definitions
                 if (AxisLimits == null) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// The name of the external axis
+        /// </summary>
+        public override string Name
+        {
+            get { return _name; }
+            set { _name = value; }
         }
 
         /// <summary>

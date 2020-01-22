@@ -55,6 +55,11 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region properties
         /// <summary>
+        /// The name of the external axis
+        /// </summary>
+        public abstract string Name { get; set; }
+
+        /// <summary>
         /// Defines the axis limits as an interval
         /// </summary>
         public abstract Interval AxisLimits { get; set; }

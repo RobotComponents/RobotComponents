@@ -16,7 +16,7 @@ namespace RobotComponents.BaseClasses.Actions
         // Fixed fields
         private Target _target;
         private SpeedData _speedData;
-        private int _movementType;
+        private int _movementType;   // convert to enum
         private int _precision;
         private Plane _globalTargetPlane;
 

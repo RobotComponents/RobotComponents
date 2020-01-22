@@ -71,6 +71,7 @@
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\JointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Components\Utilities\PlaneOrientationToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
+    <Compile Include="Goos\JointMovementGoo.cs" />
     <Compile Include="Goos\WorkObjectGoo.cs" />
     <Compile Include="Goos\AutoAxisConfigGoo.cs" />
     <Compile Include="Goos\CodeLineGoo.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\JointMovementParam.cs" />
     <Compile Include="Parameters\WorkObjectParam.cs" />
     <Compile Include="Parameters\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\CodeLineParam.cs" />

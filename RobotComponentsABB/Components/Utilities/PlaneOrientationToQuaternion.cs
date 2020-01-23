@@ -15,7 +15,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// Initializes a new instance of the PlaneOrientation to Quarternion
         /// </summary>
         public PlaneOrientationToQuaternion()
-          : base("Plane Orientation to Quaternion", "Plane Orientation to Quaternion",
+          : base("Plane Orientation to Quaternion", "PtoQ",
               "Calculates the four coefficient values in a quarternion. "
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"

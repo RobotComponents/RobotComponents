@@ -11,13 +11,13 @@ namespace RobotComponentsABB.Parameters
     /// <summary>
     /// Speed Data parameter
     /// </summary>
-    class SpeedDataParameter : GH_PersistentGeometryParam<SpeedDataGoo>, IGH_PreviewObject
+    public class SpeedDataParameter : GH_PersistentGeometryParam<SpeedDataGoo>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<SpeedDataGoo> class
         /// </summary>
         public SpeedDataParameter()
-         : base(new GH_InstanceDescription("Speed Data", "SD", 
+          : base(new GH_InstanceDescription("Speed Data", "SD",
                 "Maintains the Speed Data data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -62,7 +62,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid(("91A79CD8-E232-490C-AF55-15B30B969506")); }
+            get { return new Guid("02454176-B166-4C99-8476-B3D5DB1504B0"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.

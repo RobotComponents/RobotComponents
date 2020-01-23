@@ -136,7 +136,6 @@
     <Compile Include="Goos\ExternalLinearAxisGoo.cs" />
     <Compile Include="Goos\ExternalRotationalAxisGoo.cs" />
     <Compile Include="Goos\MovementGoo.cs" />
-    <Compile Include="Goos\PathGeneratorGoo.cs" />
     <Compile Include="Goos\RobotInfoGoo.cs" />
     <Compile Include="Goos\RobotToolGoo.cs" />
     <Compile Include="Goos\OverrideRobotToolGoo.cs" />
@@ -144,6 +143,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\WorkObjectParam.cs" />
     <Compile Include="Parameters\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\CodeLineParam.cs" />
@@ -152,11 +152,9 @@
     <Compile Include="Parameters\ExternalLinearAxisParam.cs" />
     <Compile Include="Parameters\ExternalRotationalAxisParam.cs" />
     <Compile Include="Parameters\MovementParam.cs" />
-    <Compile Include="Parameters\PathGeneratorParam.cs" />
     <Compile Include="Parameters\RobotInfoParam.cs" />
     <Compile Include="Parameters\RobotToolParam.cs" />
     <Compile Include="Parameters\OverrideRobotToolParam.cs" />
-    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\TargetParam.cs" />
     <Compile Include="Parameters\TimerParam.cs" />
     <Compile Include="Parameters\WaitDIParam.cs" />

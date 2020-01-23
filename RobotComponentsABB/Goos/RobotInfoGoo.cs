@@ -177,6 +177,18 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast to RobotTool
+            if (typeof(Q).IsAssignableFrom(typeof(RobotToolGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Tool == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new RobotToolGoo(Value.Tool);
+                return true;
+            }
+
             //Cast to Mesh.
 
             // Casting is only possible from one to one (does not work with lists)

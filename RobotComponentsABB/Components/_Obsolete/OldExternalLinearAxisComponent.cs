@@ -12,14 +12,14 @@ namespace RobotComponentsABB.Components.Definitions
     /// <summary>
     /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ExternalLinearAxisComponent : GH_Component
+    public class OldExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ExternalLinearAxisComponent()
+        public OldExternalLinearAxisComponent()
           : base("External Linear Axis", "External Linear Axis",
               "Defines an External Linear Axis for any Robot."
                 + System.Environment.NewLine +
@@ -30,11 +30,19 @@ namespace RobotComponentsABB.Components.Definitions
 
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -42,15 +50,14 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Axis Name as a Text", GH_ParamAccess.item, "default_ela");
             pManager.AddPlaneParameter("Attachment plane", "AP", "Attachement plane of robot. Overrides robot position plane.", GH_ParamAccess.item);
             pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.list);
 
+            pManager[3].Optional = true;
             pManager[4].Optional = true;
-            pManager[5].Optional = true;
         }
 
         /// <summary>
@@ -68,20 +75,18 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string name = "";
             Plane attachmentPlane = Plane.WorldXY;
             Vector3d axis = new Vector3d(0,0,0);
             Interval limits = new Interval(0, 0);
             List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
-
+            
             // Catch the input data
-            if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref attachmentPlane)) { return; }
-            if (!DA.GetData(2, ref axis)) { return; }
-            if (!DA.GetData(3, ref limits)) { return; }
-            if (!DA.GetDataList(4, baseMeshes)) {  }
-            if (!DA.GetDataList(5, linkMeshes)) {  }
+            if (!DA.GetData(0, ref attachmentPlane)) { return; }
+            if (!DA.GetData(1, ref axis)) { return; }
+            if (!DA.GetData(2, ref limits)) { return; }
+            if (!DA.GetDataList(3, baseMeshes)) {  }
+            if (!DA.GetDataList(4, linkMeshes)) {  }
 
             // Make variables needed to join the base and link to one mesh
             Mesh baseMesh = new Mesh();
@@ -100,7 +105,7 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Create the external linear axis
-            ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(name, attachmentPlane, axis, limits, baseMesh, linkMesh);
+            ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(attachmentPlane, axis, limits, baseMesh, linkMesh);
 
             // Output
             DA.SetData(0, externalLinearAxis);
@@ -122,7 +127,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B438238D-FF4C-48BC-ADE5-1772C99BE599"); }
+            get { return new Guid("C9916C52-8351-4883-9CC8-790C313A942E"); }
         }
     }
 }

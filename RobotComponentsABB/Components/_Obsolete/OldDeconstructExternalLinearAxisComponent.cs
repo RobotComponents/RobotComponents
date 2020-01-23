@@ -10,18 +10,35 @@ namespace RobotComponentsABB.Components.Deconstruct
     /// <summary>
     /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructExternalLinearAxisComponent : GH_Component
+    public class OldDeconstructExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
-        public DeconstructExternalLinearAxisComponent()
+        public OldDeconstructExternalLinearAxisComponent()
           : base("Deconstruct External Linear Axis", "DeConELA",
               "Deconstructs an External Linear Axis into its parameters."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -37,7 +54,6 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Axis Name as a Text", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
@@ -58,12 +74,11 @@ namespace RobotComponentsABB.Components.Deconstruct
             if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
 
             // Output
-            DA.SetData(0, externalLinearAxisGoo.Value.Name);
-            DA.SetData(1, externalLinearAxisGoo.Value.AttachmentPlane);
-            DA.SetData(2, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
-            DA.SetData(3, externalLinearAxisGoo.Value.AxisLimits);
-            DA.SetData(4, externalLinearAxisGoo.Value.BaseMesh);
-            DA.SetData(5, externalLinearAxisGoo.Value.LinkMesh);
+            DA.SetData(0, externalLinearAxisGoo.Value.AttachmentPlane);
+            DA.SetData(1, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
+            DA.SetData(2, externalLinearAxisGoo.Value.AxisLimits);
+            DA.SetData(3, externalLinearAxisGoo.Value.BaseMesh);
+            DA.SetData(4, externalLinearAxisGoo.Value.LinkMesh);
         }
 
         /// <summary>
@@ -79,7 +94,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2CB287BA-4FD1-44E6-B540-8C423B6CC4B6"); }
+            get { return new Guid("4E61CB2C-A7FE-43F8-9C61-616830FF57A1"); }
         }
     }
 

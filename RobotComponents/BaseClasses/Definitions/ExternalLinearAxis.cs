@@ -82,7 +82,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// Defines an external linear axis with a mesh geometry.
         /// </summary>
-        /// <param name = "attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
         /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
         /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
@@ -102,12 +102,60 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Defines an external linear axis with a mesh geometry and a name.
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
+        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            axis.Unitize();
+
+            _name = name;
+            _attachmentPlane = attachmentPlane;
+            _axisPlane = new Plane(attachmentPlane.Origin, axis);
+            _axisLimits = axisLimits;
+            _axisNumber = null; //TODO
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines an external linear axis with a mesh geometry and a name. 
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
+        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _name = name;
+            _attachmentPlane = attachmentPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; //TODO
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
         /// A method to duplicate the ExternalLinearAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy for the ExternalLinearAxis object. </returns>
         public ExternalLinearAxis Duplicate()
         {
-            ExternalLinearAxis dup = new ExternalLinearAxis(AttachmentPlane, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
+            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
             return dup;
         }
         #endregion

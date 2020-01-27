@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Rhino.Geometry;
 
@@ -136,7 +137,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         private void Initialize()
         {
-            CalculateGlobalTargetPlane();
+            _globalTargetPlane = GetGlobalTargetPlane();
         }
 
         /// <summary>
@@ -148,16 +149,72 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Calculate the position and the orientation of the target in the global coordinate system. 
+        /// Calculates the position and the orientation of the target in the world coordinate system. 
+        /// If an external axis is attached to the work object this returns the pose of the 
+        /// target plane in the world coorinate system for axis values equal to zero.
         /// </summary>
-        private void CalculateGlobalTargetPlane()
+        /// <returns> The the target plane in the world coordinate system. </returns>
+        public Plane GetGlobalTargetPlane()
         {
             // Deep copy the target plane
-            _globalTargetPlane = new Plane(Target.Plane);
+            Plane plane = new Plane(Target.Plane);
 
             // Re-orient the target plane to the work object plane
             Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
-            _globalTargetPlane.Transform(orient);
+            plane.Transform(orient);
+
+            return plane;
+        }
+
+        /// <summary>
+        /// Calculates the tranformed global target plane for the defined Robot Info with attached external axes.
+        /// </summary>
+        /// <param name="robotInfo"> The robot info with the external axes that defined the axis logic. </param>
+        /// <param name="logic"> Retuns the axis logic number as an int. </param>
+        /// <returns> The posed target plane in the word coordinate system. </returns>
+        public Plane GetPosedGlobalTargetPlane(RobotInfo robotInfo, out int logic)
+        {
+            // Not transformed global target plane
+            Plane plane = new Plane(_globalTargetPlane);
+
+            // Initiate axis logic
+            int axisLogic = -1; // dummy value
+
+            // Re-orient the target plane if an external axis is attached to the work object
+            if (_workObject.ExternalAxis != null)
+            {
+                // Check if the axis is attached to the robot and get the axis logic number
+                axisLogic = robotInfo.ExternalAxis.IndexOf(_workObject.ExternalAxis);
+                ExternalAxis externalAxis = robotInfo.ExternalAxis[axisLogic];
+
+                // Get external axis value
+                double axisValue = _target.ExternalAxisValues[axisLogic];
+                if (axisValue == 9e9) { axisValue = 0; } // If the user does not define an axis value we set it to zero. 
+
+                // External rotatioanal axis
+                if (_workObject.ExternalAxis is ExternalRotationalAxis)
+                {
+                    // To radians
+                    axisValue = (axisValue / 180) * Math.PI;
+
+                    // Rotate
+                    Transform rotate = Transform.Rotation(axisValue, externalAxis.AxisPlane.ZAxis, externalAxis.AxisPlane.Origin);
+                    plane.Transform(rotate);
+                }
+
+                // External linear axis
+                if (_workObject.ExternalAxis is ExternalLinearAxis)
+                {
+                    // Translate
+                    Vector3d axis = new Vector3d(externalAxis.AxisPlane.ZAxis);
+                    axis.Unitize();
+                    Transform translate = Transform.Translation(axis * axisValue);
+                    plane.Transform(translate);
+                }
+            }
+
+            logic = axisLogic;
+            return plane;
         }
 
         /// <summary>
@@ -185,10 +242,10 @@ namespace RobotComponents.BaseClasses.Actions
 
             // Target with global plane (for ik)
             Target globalTarget = _target.Duplicate();
-            globalTarget.Plane = GlobalTargetPlane;
+            globalTarget.Plane = GetPosedGlobalTargetPlane(robotInfo, out int logic);
 
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
-            if (MovementType == 1 || MovementType == 2)
+            if (_movementType == 1 || _movementType == 2)
             {
                 // Only adds target code if target is not already defined
                 if (!RAPIDcode.Contains(robTargetVar))
@@ -244,7 +301,7 @@ namespace RobotComponents.BaseClasses.Actions
                     List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
 
                     // Creates Code Variable
-                    tempCode += "@" + "\t" + jointTargetVar + ":=[[";
+                    tempCode += "@" + "\t" + jointTargetVar + " := [[";
 
                     // Adds all Internal Axis Values
                     for (int i = 0; i < internalAxisValues.Count; i++)
@@ -289,7 +346,8 @@ namespace RobotComponents.BaseClasses.Actions
         {
             // Set tool name
             string toolName;
-            if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = robotToolName; }
+            if (_robotTool == null) { toolName = robotToolName; }
+            else if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = robotToolName; } //TODO: RobotTool.IsValid is maybe better?
             else { toolName = _robotTool.Name; }
 
             // Set zone data text (precision value)
@@ -377,6 +435,7 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 if (Target == null) { return false; }
                 if (SpeedData == null) { return false; }
+                if (WorkObject == null) { return false;  }
                 return true;
             }
         }
@@ -386,8 +445,15 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public Target Target
         {
-            get { return _target; }
-            set { _target = value; }
+            get 
+            { 
+                return _target; 
+            }
+            set 
+            { 
+                _target = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>
@@ -423,12 +489,13 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The position and the orientation of the used target in the global coordinate system. 
+        /// The position and the orientation of the used target in the global coordinate system.
+        /// In case an external axis is connected to the work object this the position of the 
+        /// target plane if the external axis values are zero. 
         /// </summary>
         public Plane GlobalTargetPlane
         {
             get { return _globalTargetPlane; }
-            set { _globalTargetPlane = value; }
         }
 
         /// <summary>
@@ -445,8 +512,15 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public WorkObject WorkObject
         {
-            get { return _workObject; }
-            set { _workObject = value; }
+            get 
+            { 
+                return _workObject; 
+            }
+            set 
+            { 
+                _workObject = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>

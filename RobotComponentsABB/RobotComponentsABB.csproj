@@ -74,6 +74,8 @@
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldWorkObjectComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\_Obsolete\OldExternalLinearAxisComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />

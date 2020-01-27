@@ -201,6 +201,18 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.GlobalTargetPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin);
+                return true;
+            }
+
             //Cast to SpeedData
             if (typeof(Q).IsAssignableFrom(typeof(SpeedDataGoo)))
             {

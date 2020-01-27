@@ -6,8 +6,8 @@ using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
 // This component is OBSOLETE!
-// It is OBSOLETE since version 0.06.000 (January 2020)
-// It is replaced with a new forward kinematics component. 
+// It is OBSOLETE since version 0.06.000 (February 2020)
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.Deconstruct
 {

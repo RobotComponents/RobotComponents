@@ -75,6 +75,7 @@
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
+    <Compile Include="Components\Utilities\QuaternionToPlane.cs" />
     <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
@@ -123,7 +124,7 @@
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\NamingComponent.cs" />
-    <Compile Include="Components\Utilities\PlaneOrientationToQuaternion.cs" />
+    <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\WorkObjectGoo.cs" />

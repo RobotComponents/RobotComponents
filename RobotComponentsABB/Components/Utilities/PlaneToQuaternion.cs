@@ -9,13 +9,13 @@ namespace RobotComponentsABB.Components.Utilities
     /// <summary>
     /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PlaneOrientationToQuaternion : GH_Component
+    public class PlaneToQuaternion : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the PlaneOrientation to Quarternion
+        /// Initializes a new instance of the Plane to Quarternion
         /// </summary>
-        public PlaneOrientationToQuaternion()
-          : base("Plane Orientation to Quaternion", "PtoQ",
+        public PlaneToQuaternion()
+          : base("Plane to Quaternion", "PtoQ",
               "Calculates the four coefficient values in a quarternion. "
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"

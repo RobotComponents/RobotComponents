@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 
+using Rhino.Geometry;
+
 using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponents.BaseClasses.Actions
@@ -89,17 +91,20 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID main code as a string. </returns>
         public string CreateRAPIDCode()
         {
+            // Set the tool data at the movement level
+            List<Action> actions = SetToolData(_actions);
+
             // Creates Main Module
             string RAPIDCode = "MODULE " + _ModuleName + "@";
 
             // Creates Tool Name
-            string toolName = _robotInfo.Tool.Name;
+            string toolName = "debug_line_can_be_removed"; //TODO: Remove....
 
             // Creates Vars
-            for (int i = 0; i != _actions.Count; i++)
+            for (int i = 0; i != actions.Count; i++)
             {
 
-                string tempCode = _actions[i].InitRAPIDVar(_robotInfo, RAPIDCode);
+                string tempCode = actions[i].InitRAPIDVar(_robotInfo, RAPIDCode);
 
                 // Checks if Var is already in Code
                 RAPIDCode += tempCode;
@@ -112,28 +117,22 @@ namespace RobotComponents.BaseClasses.Actions
             bool foundFirstMovement = false;
 
             // Creates Movement Instruction and other Functions
-            for (int i = 0; i != _actions.Count; i++)
+            for (int i = 0; i != actions.Count; i++)
             {
-                string rapidStr = _actions[i].ToRAPIDFunction(toolName);
+                string rapidStr = actions[i].ToRAPIDFunction(toolName); // Remove toolName from all methods, change to robot info argument
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
                 {
-                    if (_actions[i] is Movement)
+                    if (actions[i] is Movement)
                     {
-                        if (((Movement)_actions[i]).MovementType == 0)
+                        if (((Movement)actions[i]).MovementType == 0)
                         {
                             _firstMovementIsMoveAbs = true;
                         }
 
                         foundFirstMovement = true;
                     }
-                }
-
-                // Checks if action is of Type OverrideRobotTool
-                if (_actions[i] is OverrideRobotTool)
-                {
-                    toolName = ((OverrideRobotTool)_actions[i]).GetToolName();
                 }
 
                 RAPIDCode += rapidStr;
@@ -244,6 +243,79 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 result += robotTools[i].GetRSToolData();
                 result += System.Environment.NewLine + " ";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Sets the correct tool at the movement level before the actions
+        /// are passed to the code generation. 
+        /// </summary>
+        /// <param name="actions"> The list with actions to defined the robot tools for. </param>
+        /// <returns> The lists with actions wherein all movements have a set robot tool. </returns>
+        private List<Action> SetToolData(List<Action> actions)
+        {
+            // Initiate output
+            List<Action> result = new List<Action>();
+
+            // Iniate current tool (the tool attached to the robot)
+            RobotTool currentTool = _robotInfo.Tool.Duplicate();
+            currentTool.Mesh = new Mesh(); // save memory
+
+            // Loop over all the actions
+            for (int i = 0; i < actions.Count; i++)
+            {
+                #region  Check if the Override Robot Tool action is used
+                if (actions[i] is OverrideRobotTool)
+                {
+                    // Get the override robot tool object
+                    OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
+
+                    // Override the current tool
+                    currentTool = overrideRobotTool.RobotTool.Duplicate();
+                    currentTool.Mesh = new Mesh(); // save memory
+
+                    // Add to output list
+                    result.Add(actions[i]);
+                }
+                #endregion
+
+                #region Check if the action is a movement
+                else if (actions[i] is Movement)
+                {
+                    // Duplicate the movement since we might change properties
+                    Movement movement = ((Movement)actions[i]).Duplicate();
+
+                    // Set the current tool if no tool is set in the movement object
+                    if (movement.RobotTool == null)
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+
+                    // If a tool is set check the name (tool can be empty)
+                    else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+
+                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+                    else
+                    {
+                        movement.RobotTool.Mesh = new Mesh(); // save memory
+                    }
+
+                    // Add movement to list
+                    result.Add(movement);
+                }
+                #endregion
+
+                #region All other actions
+                else
+                {
+                    result.Add(actions[i]);
+                }
+                #endregion
             }
 
             return result;

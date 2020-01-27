@@ -11,7 +11,7 @@ namespace RobotComponentsABB.Parameters
     /// <summary>
     /// External Rotational Axis parameter
     /// </summary>
-    public class ExternalRotationalAxisParameter : GH_PersistentGeometryParam<ExternalLinearAxisGoo>, IGH_PreviewObject
+    public class ExternalRotationalAxisParameter : GH_PersistentGeometryParam<ExternalRotationalAxisGoo>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalRotanionalAxisGoo> class
@@ -56,7 +56,7 @@ namespace RobotComponentsABB.Parameters
             get
             {
                 // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.hidden; // make secondary
+                return GH_Exposure.secondary; 
             }
         }
 
@@ -71,12 +71,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<ExternalLinearAxisGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<ExternalRotationalAxisGoo> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref ExternalLinearAxisGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref ExternalRotationalAxisGoo value)
         {
             return GH_GetterResult.cancel;
         }

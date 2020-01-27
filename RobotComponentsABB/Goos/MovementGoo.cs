@@ -177,7 +177,19 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to plane
+            //Cast to Target
+            if (typeof(Q).IsAssignableFrom(typeof(TargetGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Target == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new TargetGoo(Value.Target);
+                return true;
+            }
+
+            //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null)
@@ -186,6 +198,66 @@ namespace RobotComponentsABB.Goos
                     target = default(Q);
                 else
                     target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane);
+                return true;
+            }
+
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.GlobalTargetPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin);
+                return true;
+            }
+
+            //Cast to SpeedData
+            if (typeof(Q).IsAssignableFrom(typeof(SpeedDataGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.SpeedData == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new SpeedDataGoo(Value.SpeedData);
+                return true;
+            }
+
+            //Cast to RobotTool
+            if (typeof(Q).IsAssignableFrom(typeof(RobotToolGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.RobotTool == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new RobotToolGoo(Value.RobotTool);
+                return true;
+            }
+
+            //Cast to WorkObject
+            if (typeof(Q).IsAssignableFrom(typeof(WorkObjectGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.WorkObject == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new WorkObjectGoo(Value.WorkObject);
+                return true;
+            }
+
+            //Cast to DigitalOutput
+            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutputGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.DigitalOutput == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new DigitalOutputGoo(Value.DigitalOutput);
                 return true;
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Rhino.Geometry;
 
@@ -77,7 +78,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Generates the internal and external axis values and the path the robot follows. 
         /// </summary>
-        public void GetAxisValues(List<Movement> movements, int interpolations)
+        public void GetAxisValues(List<Movement> movements, int interpolations) //TODO: Change method to input with actions (movements and absolute joint movements)
         {
             // Initialize the forward kinematics
             ForwardKinematics forwardKinematics = new ForwardKinematics(_robotInfo, true);
@@ -103,6 +104,9 @@ namespace RobotComponents.BaseClasses.Kinematics
             Target subTarget;
             Movement subMovement;
 
+            // Axis logic
+            int logic = -1; // dummy value
+
             // Make path if we have at least two movements with targets
             if (movements.Count > 1)
             {
@@ -124,7 +128,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     target2InternalAxisValues = inverseKinematics.InternalAxisValues;
                     target2ExternalAxisValues = inverseKinematics.ExternalAxisValues;
 
-                    #region Calculate interpolated external axis values (needed for both joint and linear movement)
+                    #region Calculate interpolated external axis values differences (needed for both joint and linear movement)
                     // Calculate axis value difference between both targets
                     externalAxisValueDifferences.Clear();
                     for (int j = 0; j < target1ExternalAxisValues.Count; j++)
@@ -204,7 +208,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                         }
 
                         // Add last point
-                        Point3d lastPoint = movements[i + 1].GlobalTargetPlane.Origin;
+                        Point3d lastPoint = movements[i + 1].GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
                         if (points[points.Count - 1] != lastPoint)
                         {
                             points.Add(lastPoint);
@@ -223,9 +227,48 @@ namespace RobotComponents.BaseClasses.Kinematics
                     else
                     {
                         #region calculate interpolated target plane
-                        // Movement / target planes
-                        Plane plane1 = movements[i].GlobalTargetPlane;
-                        Plane plane2 = movements[i+1].GlobalTargetPlane;
+                        // Target planes
+                        Plane plane1;
+                        Plane plane2;
+
+                        // If both movements are on the same work object
+                        if (movements[i].WorkObject == movements[i + 1].WorkObject)
+                        {
+                            plane1 = movements[i].Target.Plane;
+                            plane2 = movements[i + 1].Target.Plane;
+                        }
+
+                        // Else the movements are not on the same work object
+                        // We have to re-orient one target plane to the other work object
+                        else
+                        {
+                            // Get plane1 and plane2
+                            plane1 = new Plane(movements[i].GetPosedGlobalTargetPlane(_robotInfo, out logic)); // In world coordinate space
+                            plane2 = movements[i + 1].Target.Plane; // In work object coordinate space
+
+                            // Re-orient plane1 to the other work object coordinate space of the plane2
+                            Plane globalWorkObjectPlane = new Plane(movements[i + 1].WorkObject.GlobalWorkObjectPlane);
+                            Transform orient = Transform.ChangeBasis(Plane.WorldXY, globalWorkObjectPlane);
+                            plane1.Transform(orient);
+
+                            // Correct for the target plane position if we make a movement an a movable work object
+                            // This is only needed if move from a fixed work object to a movable work object.
+                            // Or if we switch between to movable workobjects with two different external axes
+                            if (movements[i].WorkObject.ExternalAxis == null 
+                                && movements[i + 1].WorkObject.ExternalAxis != null
+                                && movements[i + 1].WorkObject.ExternalAxis != movements[i].WorkObject.ExternalAxis)
+                            {
+                                // Get axis logic of the external axis of the movable work object we are using.
+                                movements[i + 1].GetPosedGlobalTargetPlane(_robotInfo, out logic);
+
+                                // Transform if the axis logic number is valid
+                                if (logic > -1)
+                                {
+                                    Transform rotate = Transform.Rotation(-1 * (target1ExternalAxisValues[logic] / 180) * Math.PI, new Vector3d(0, 0, 1), new Point3d(0, 0, 0));
+                                    plane1.Transform(rotate);
+                                }
+                            }
+                        }
 
                         // Main target plane position difference
                         Vector3d posDif = plane2.Origin - plane1.Origin;
@@ -273,13 +316,14 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 externalAxisValues.Add(valueAddition);
                             }
 
-                            // Create new plane
+                            // Create new plane: the local target plane (in work object coordinate space)
                             Plane plane = new Plane(planePoints[l], axisDirections[l][0], axisDirections[l][1]);
 
                             // Update sub target and sub movement
                             subTarget = new Target("subTarget", plane, movements[i + 1].Target.AxisConfig, externalAxisValues);
                             subMovement = new Movement(subTarget);
                             subMovement.RobotTool = movements[i + 1].RobotTool;
+                            subMovement.WorkObject = movements[i + 1].WorkObject;
 
                             // Calculate internal axis values
                             inverseKinematicsSub.Movement = subMovement;
@@ -289,15 +333,31 @@ namespace RobotComponents.BaseClasses.Kinematics
                             // Add te calculated axis values and plane to the class property
                             _internalAxisValues.Add(new List<double>(internalAxisValues));
                             _externalAxisValues.Add(new List<double>(externalAxisValues));
-                            _planes.Add(plane);
+                            Plane globalPlane = subMovement.GetPosedGlobalTargetPlane(_robotInfo, out logic);
+                            _planes.Add(globalPlane);
+
+                            // Always add the first point to list with paths
+                            if (l == 0)
+                            {
+                                points.Add(globalPlane.Origin);
+                            }
+
+                            // Only add the other point if this point is different
+                            else if (points[points.Count - 1] != globalPlane.Origin)
+                            {
+                                points.Add(globalPlane.Origin);
+                            }
                         }
 
-                        // Start and end point of straight line
-                        points.Add(plane1.Origin);
-                        points.Add(plane2.Origin);
+                        // Add last point
+                        Point3d lastPoint = movements[i + 1].GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
+                        if (points[points.Count - 1] != lastPoint)
+                        {
+                            points.Add(lastPoint);
+                        }
 
-                        // Add path curve to paths
-                        if (plane1.Origin != plane2.Origin)
+                        // Add path curve to paths if there are at least two points in the list
+                        if (points.Count > 1)
                         {
                             _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
                         }
@@ -311,7 +371,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             inverseKinematicsLast.Calculate();
             _internalAxisValues.Add(inverseKinematicsLast.InternalAxisValues);
             _externalAxisValues.Add(inverseKinematicsLast.ExternalAxisValues);
-            _planes.Add(movements[movements.Count - 1].GlobalTargetPlane);
+            _planes.Add(movements[movements.Count - 1].GetPosedGlobalTargetPlane(_robotInfo, out logic));
         }
 
         /// <summary>
@@ -320,7 +380,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         /// <param name="actions"> The list with robot actions </param>
         /// <param name="interpolations"> The interpolation number. Defines the amount of sub targets between two targets. </param>
-        public void Calculate(List<Action> actions, int interpolations)
+        public void Calculate(List<Actions.Action> actions, int interpolations)
         {
             // Clear all the lists with values
             Reset();
@@ -338,7 +398,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         /// <param name="actions"> The list with robot actions. </param>
         /// <returns> The list with robot movements and the correct tool for this movement. </returns>
-        private List<Movement> GetMovementsFromActions(List<Action> actions)
+        private List<Movement> GetMovementsFromActions(List<Actions.Action> actions)
         {
             // Initiate list
             List<Movement> movements = new List<Movement>();
@@ -371,7 +431,13 @@ namespace RobotComponents.BaseClasses.Kinematics
                     Movement movement = ((Movement)actions[i]).Duplicate();
 
                     // Set the current tool if no tool is set in the movement object
-                    if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null)
+                    if (movement.RobotTool == null)
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+
+                    // If a tool is set check the name (tool can be empty)
+                    else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
                     {
                         movement.RobotTool = currentTool.Duplicate();
                     }
@@ -389,6 +455,79 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Return list with movements
             return movements;
+        }
+
+        /// <summary>
+        /// Sets the correct tool at the movement level before the actions are passed to the code generation. 
+        /// </summary>
+        /// <param name="actions"> The list with actions to defined the robot tools for. </param>
+        /// <returns> The lists with actions wherein all movements have a set robot tool. 
+        /// All other action types are removed. </returns>
+        private List<Actions.Action> GetMovements(List<Actions.Action> actions)
+        {
+            // Initiate output
+            List<Actions.Action> result = new List<Actions.Action>();
+
+            // Iniate current tool (the tool attached to the robot)
+            RobotTool currentTool = _robotInfo.Tool.Duplicate();
+            currentTool.Mesh = new Mesh(); // save memory
+
+            // Loop over all the actions
+            for (int i = 0; i < actions.Count; i++)
+            {
+                #region  Check if the Override Robot Tool action is used
+                if (actions[i] is OverrideRobotTool)
+                {
+                    // Get the override robot tool object
+                    OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
+
+                    // Override the current tool
+                    currentTool = overrideRobotTool.RobotTool.Duplicate();
+                    currentTool.Mesh = new Mesh(); // save memory
+                }
+                #endregion
+
+                #region Check if the action is a movement
+                else if (actions[i] is Movement)
+                {
+                    // Duplicate the movement since we might change properties
+                    Movement movement = ((Movement)actions[i]).Duplicate();
+
+                    // Set the current tool if no tool is set in the movement object
+                    if (movement.RobotTool == null)
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+
+                    // If a tool is set check the name (tool can be empty)
+                    else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
+                    {
+                        movement.RobotTool = currentTool.Duplicate();
+                    }
+
+                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+                    else
+                    {
+                        movement.RobotTool.Mesh = new Mesh(); // save memory
+                    }
+
+                    // Add movement to list
+                    result.Add(movement);
+                }
+                #endregion
+
+                #region Check if the action is an absolute joint movement
+
+                //TODO:
+
+                #endregion
+
+                #region All other actions
+                // Do nothing. We only extact the movements. 
+                #endregion
+            }
+
+            return result;
         }
 
         /// <summary>

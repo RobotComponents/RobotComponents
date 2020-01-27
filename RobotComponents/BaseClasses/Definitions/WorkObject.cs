@@ -34,7 +34,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-            _fixedFrame = true;
+
             Initialize();
         }
 
@@ -50,7 +50,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-            _fixedFrame = true;
+
             Initialize();
         }
 
@@ -67,12 +67,6 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = externalAxis;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-
-            // Set to a movable frame if an exernal axes is coupled
-            if (_externalAxis != null)
-                _fixedFrame = false;
-            else
-                _fixedFrame = true;
 
             Initialize();
         }
@@ -120,8 +114,24 @@ namespace RobotComponents.BaseClasses.Definitions
             _globalPlane = new Plane(_plane);
 
             // Re-orient the plane
-            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
-            _globalPlane.Transform(orient);
+            Transform orient1 = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
+            _globalPlane.Transform(orient1);
+
+            // Re-orient again if an external axis is used
+            if (_externalAxis != null)
+            {
+                if (_externalAxis is ExternalRotationalAxis)
+                {
+                    // For a external rotational axis the coordinate system of the work object plane
+                    // is definied in the coordinate system of teh external rotational axis (the axis plane)
+                    Transform orient2 = Transform.PlaneToPlane(Plane.WorldXY, _externalAxis.AxisPlane);
+                    _globalPlane.Transform(orient2);
+                }
+                else if (_externalAxis is ExternalLinearAxis)
+                {
+                    //TODO...
+                }
+            }
 
             return _globalPlane;
         }
@@ -134,6 +144,12 @@ namespace RobotComponents.BaseClasses.Definitions
             GetOrientation();
             GetUserFrameOrientation();
             GetGlobalWorkObjectPlane();
+
+            // Set to a movable frame if an exernal axes is coupled
+            if (_externalAxis != null)
+                _fixedFrame = false;
+            else
+                _fixedFrame = true;
         }
 
         /// <summary>
@@ -188,11 +204,7 @@ namespace RobotComponents.BaseClasses.Definitions
                 result += "FALSE, ";
             }
 
-            // Add mechanical unit (an external axis or robot) < ufmec of string >
-            // TODO: Add mechanical unit
-            result += "\"\", "; // Redo this when mechanical unit is implemented
-
-            /**
+            // Add mechanical unit (an external axis or robot) < ufmec of string >            
             if (_externalAxis != null)
             {
                 result += $"{_externalAxis.Name}, ";
@@ -201,8 +213,7 @@ namespace RobotComponents.BaseClasses.Definitions
             {
                 result += "\"\", ";
             }
-            **/
-
+            
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X.ToString("0.####")}, {_userFrame.Origin.Y.ToString("0.####")}, {_userFrame.Origin.Z.ToString("0.####")}], ";
 
@@ -309,8 +320,15 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         public ExternalAxis ExternalAxis
         {
-            get { return _externalAxis; }
-            set { _externalAxis = value; } //TODO: Reinitilize the planes and the fixed frame if suddenly an external axis is set
+            get 
+            { 
+                return _externalAxis; 
+            }
+            set 
+            { 
+                _externalAxis = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>

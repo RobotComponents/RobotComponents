@@ -31,6 +31,7 @@ namespace RobotComponentsABB.Utils
         private List<string> _toolNames;
 
         // contains information on all work objects in file for code generation
+        private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
         private Dictionary<Guid, WorkObjectComponent> _workObjectsByGuid;
         private List<string> _workObjectNames;
         #endregion
@@ -52,6 +53,7 @@ namespace RobotComponentsABB.Utils
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
             _toolNames = new List<string>() { "tool0" };
 
+            _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
             _workObjectsByGuid = new Dictionary<Guid, WorkObjectComponent>();
             _workObjectNames = new List<string>() { "wobj0" };
         }
@@ -95,14 +97,24 @@ namespace RobotComponentsABB.Utils
             // Empty list
             List<WorkObject> workObjects = new List<WorkObject>();
 
-            // Add all the work objects
-            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
+            // Add all the work objects from old component
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _oldWorkObjectsByGuid)
             {
                 for (int i = 0; i < entry.Value.WorkObjects.Count; i++)
                 {
                     workObjects.Add(entry.Value.WorkObjects[i]);
                 }
               
+            }
+
+            // Add all work objects from new component
+            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
+            {
+                for (int i = 0; i < entry.Value.WorkObjects.Count; i++)
+                {
+                    workObjects.Add(entry.Value.WorkObjects[i]);
+                }
+
             }
 
             // Sort based on name
@@ -183,10 +195,18 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
+        /// OBSOLETE: Used for old Work Object component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldWorkObjectComponent> OldWorkObjectsByGuid 
+        {
+            get { return _oldWorkObjectsByGuid; }
+        }
+
+        /// <summary>
         /// Dictionary with all the Work Object components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
-        public Dictionary<Guid, WorkObjectComponent> WorkObjectsByGuid 
+        public Dictionary<Guid, WorkObjectComponent> WorkObjectsByGuid
         {
             get { return _workObjectsByGuid; }
         }

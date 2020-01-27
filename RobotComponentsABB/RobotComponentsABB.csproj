@@ -74,8 +74,15 @@
     <Compile Include="Components\Code Generation\JointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldWorkObjectComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructWorkObjectComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />
+    <Compile Include="Components\Definitions\ExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
+    <Compile Include="Components\Utilities\QuaternionToPlane.cs" />
     <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
@@ -124,7 +131,7 @@
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\NamingComponent.cs" />
-    <Compile Include="Components\Utilities\PlaneOrientationToQuaternion.cs" />
+    <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\JointMovementGoo.cs" />
@@ -138,7 +145,6 @@
     <Compile Include="Goos\ExternalLinearAxisGoo.cs" />
     <Compile Include="Goos\ExternalRotationalAxisGoo.cs" />
     <Compile Include="Goos\MovementGoo.cs" />
-    <Compile Include="Goos\PathGeneratorGoo.cs" />
     <Compile Include="Goos\RobotInfoGoo.cs" />
     <Compile Include="Goos\RobotToolGoo.cs" />
     <Compile Include="Goos\OverrideRobotToolGoo.cs" />
@@ -146,6 +152,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\JointMovementParam.cs" />
     <Compile Include="Parameters\WorkObjectParam.cs" />
     <Compile Include="Parameters\AutoAxisConfigParam.cs" />
@@ -155,11 +162,9 @@
     <Compile Include="Parameters\ExternalLinearAxisParam.cs" />
     <Compile Include="Parameters\ExternalRotationalAxisParam.cs" />
     <Compile Include="Parameters\MovementParam.cs" />
-    <Compile Include="Parameters\PathGeneratorParam.cs" />
     <Compile Include="Parameters\RobotInfoParam.cs" />
     <Compile Include="Parameters\RobotToolParam.cs" />
     <Compile Include="Parameters\OverrideRobotToolParam.cs" />
-    <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\TargetParam.cs" />
     <Compile Include="Parameters\TimerParam.cs" />
     <Compile Include="Parameters\WaitDIParam.cs" />

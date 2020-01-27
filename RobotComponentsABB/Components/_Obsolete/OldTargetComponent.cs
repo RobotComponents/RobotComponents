@@ -44,6 +44,14 @@ namespace RobotComponentsABB.Components.Obsolete
         }
 
         /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -254,14 +262,6 @@ namespace RobotComponentsABB.Components.Obsolete
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return true; }
         }
 
         /// <summary>

@@ -504,7 +504,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             // Read our own fields
             SetReferencePlane = reader.GetBoolean("Set Reference Plane");
-            OverrideExternalAxisValues= reader.GetBoolean("Override External Axis Values");
+            OverrideExternalAxisValues = reader.GetBoolean("Override External Axis Values");
 
             // Call the base class implementation.
             return base.Read(reader);
@@ -773,11 +773,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 {
                     return false;
                 }
+
                 // Makes it impossible to destroy the output parameters
                 else if (side == GH_ParameterSide.Output)
                 {
                     return false;
                 }
+
                 // Makes it possible to destroy all the other parameters
                 else
                 {
@@ -798,6 +800,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
+            // Maintain the check box of the menu item for overriding the external axis values
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
+            {
+                OverrideExternalAxisValues = true;
+            }
+            else
+            {
+                OverrideExternalAxisValues = false;
+            }
         }
         #endregion
 

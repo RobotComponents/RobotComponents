@@ -99,17 +99,28 @@ namespace RobotComponents.BaseClasses.Kinematics
                 _posedExternalAxisMeshes = new List<List<Mesh>>();
             }
 
+            // Count the number of external linear axes that is used: it is now limited to one
+            double count = 0;
+
             // Calculates external axes position
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 // Get the external axis
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
 
-                // Check if it is an external linear axis
-                if (externalAxis is ExternalLinearAxis)
+                // Check if it is an external linear axis: the first external linear axis
+                if (externalAxis is ExternalLinearAxis && count == 0)
                 {
                     ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
                     _basePlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
+                    count += 1;
+                }
+
+                // Check all other external linear axes 
+                else if (externalAxis is ExternalLinearAxis && count != 0)
+                {
+                    ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
+                    //TODO: ...
                 }
 
                 // Check if the axis is an external rotational axis
@@ -214,7 +225,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Update external axis data and set the external axis values
             _externalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
-            _externalAxisLimits = _robotInfo.ExternalAxisLimits; //TODO: update for multiple external axes
+            _externalAxisLimits = _robotInfo.ExternalAxisLimits;
             _externalAxisValues = externalAxisValues;
 
             // Check axis limits
@@ -326,7 +337,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 return _robotInfo; 
             }
             set 
-            { 
+            {
                 _robotInfo = value;
                 Update(_internalAxisValues, _externalAxisValues);
             }

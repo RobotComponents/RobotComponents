@@ -37,6 +37,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddTextParameter("Name", "N", "Axis Name as a Text", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
@@ -57,11 +58,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
 
             // Output
-            DA.SetData(0, externalLinearAxisGoo.Value.AttachmentPlane);
-            DA.SetData(1, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
-            DA.SetData(2, externalLinearAxisGoo.Value.AxisLimits);
-            DA.SetData(3, externalLinearAxisGoo.Value.BaseMesh);
-            DA.SetData(4, externalLinearAxisGoo.Value.LinkMesh);
+            DA.SetData(0, externalLinearAxisGoo.Value.Name);
+            DA.SetData(1, externalLinearAxisGoo.Value.AttachmentPlane);
+            DA.SetData(2, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
+            DA.SetData(3, externalLinearAxisGoo.Value.AxisLimits);
+            DA.SetData(4, externalLinearAxisGoo.Value.BaseMesh);
+            DA.SetData(5, externalLinearAxisGoo.Value.LinkMesh);
         }
 
         /// <summary>
@@ -77,7 +79,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4E61CB2C-A7FE-43F8-9C61-616830FF57A1"); }
+            get { return new Guid("2CB287BA-4FD1-44E6-B540-8C423B6CC4B6"); }
         }
     }
 

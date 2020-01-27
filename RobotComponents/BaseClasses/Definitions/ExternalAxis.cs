@@ -55,6 +55,11 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region properties
         /// <summary>
+        /// The name of the external axis
+        /// </summary>
+        public abstract string Name { get; set; }
+
+        /// <summary>
         /// Defines the axis limits as an interval
         /// </summary>
         public abstract Interval AxisLimits { get; set; }
@@ -80,6 +85,16 @@ namespace RobotComponents.BaseClasses.Definitions
         /// The axis logic as number (0, 1, 2, 3, 4 or 5)
         /// </summary>
         public abstract int? AxisNumber { get; set; } //TODO: changes int? to int after implementation
+
+        /// <summary>
+        /// The fixed base mesh of the external axis. 
+        /// </summary>
+        public abstract Mesh BaseMesh { get; set; }
+
+        /// <summary>
+        /// The movable link mesh of the external axis posed for external axis value 0. 
+        /// </summary>
+        public abstract Mesh LinkMesh { get; set; }
 
         /// <summary>
         /// The external axis mesh posed in a certain external axis value.

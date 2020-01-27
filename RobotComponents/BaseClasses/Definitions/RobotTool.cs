@@ -142,6 +142,17 @@ namespace RobotComponents.BaseClasses.Definitions
                 Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
             return dup;
         }
+
+        /// <summary>
+        /// A method to duplicate the RobotTool object without duplicating the mesh. It will set an empty mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the RobotTool object without a mesh. </returns>
+        public RobotTool DuplicateWithoutMesh()
+        {
+            RobotTool dup = new RobotTool(Name, new Mesh(), AttachmentPlane, ToolPlane, RobotHold,
+                Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
+            return dup;
+        }
         #endregion
 
         #region methods

@@ -113,10 +113,16 @@ namespace RobotComponents.BaseClasses.Kinematics
         private void Initialize()
         {
             // Check robot tool: override if the movement contains a robot tool
-            if (_movement.RobotTool.Name != "" && _movement.RobotTool.Name != null)
+            if (_movement.RobotTool == null)
+            {
+                _robotTool = _robotInfo.Tool;
+            }
+            // Check if the set tool is not empty
+            else if (_movement.RobotTool.Name != "" && _movement.RobotTool.Name != null) //TODO: RobotTool.IsValid is maybe better?
             {
                 _robotTool = _movement.RobotTool; 
             }
+            // Otherwise use the tool that is attached to the robot
             else
             {
                 _robotTool = _robotInfo.Tool;
@@ -124,7 +130,11 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Movement related fields
             _target = _movement.Target.Duplicate();
-            _targetPlane = new Plane(_movement.GlobalTargetPlane);
+
+            // Calculate the position and the orientation of the target plane in the word coordinate system
+            // If there is an external axes connected to work object of the movement the 
+            // target plane will be re-oriented according to the pose of the this external axes. 
+            _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
 
             // Update the base plane
             _basePlane = GetClosestBasePlane();

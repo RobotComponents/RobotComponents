@@ -14,7 +14,7 @@ using RobotComponentsABB.Parameters;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)
-// It is replaced with a new forward kinematics component. 
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.Obsolete
 {
@@ -44,6 +44,14 @@ namespace RobotComponentsABB.Components.Obsolete
         public override GH_Exposure Exposure
         {
             get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -161,14 +169,6 @@ namespace RobotComponentsABB.Components.Obsolete
 
             // Return the data tree stucture
             return meshes;
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return true; }
         }
 
         /// <summary>

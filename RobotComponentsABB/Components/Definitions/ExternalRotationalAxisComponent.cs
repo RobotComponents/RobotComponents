@@ -10,18 +10,18 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.
+    /// RobotComponents External Rotational Axis component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ExternalLinearAxisComponent : GH_Component
+    public class ExternalRotationalAxisComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ExternalLinearAxisComponent()
-          : base("External Linear Axis", "External Linear Axis",
-              "Defines an External Linear Axis for any Robot."
+        public ExternalRotationalAxisComponent()
+          : base("External Rotational Axis", "External Rotational Axis",
+              "Defines an External Rotational Axis."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
@@ -42,15 +42,14 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Axis Name as a Text", GH_ParamAccess.item, "default_ela");
-            pManager.AddPlaneParameter("Attachment plane", "AP", "Attachement plane of robot. Overrides robot position plane.", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Axis name as a Text", GH_ParamAccess.item, "default_era");
+            pManager.AddPlaneParameter("Axis Plane", "AP", "Axis Plane as a Plane", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.list);
 
+            pManager[3].Optional = true;
             pManager[4].Optional = true;
-            pManager[5].Optional = true;
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "Resulting External Linear Axis");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -69,19 +68,17 @@ namespace RobotComponentsABB.Components.Definitions
         {
             // Input variables
             string name = "";
-            Plane attachmentPlane = Plane.WorldXY;
-            Vector3d axis = new Vector3d(0,0,0);
+            Plane axisPlane= Plane.WorldXY;
             Interval limits = new Interval(0, 0);
             List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
-
+            
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref attachmentPlane)) { return; }
-            if (!DA.GetData(2, ref axis)) { return; }
-            if (!DA.GetData(3, ref limits)) { return; }
-            if (!DA.GetDataList(4, baseMeshes)) {  }
-            if (!DA.GetDataList(5, linkMeshes)) {  }
+            if (!DA.GetData(1, ref axisPlane)) { return; }
+            if (!DA.GetData(2, ref limits)) { return; }
+            if (!DA.GetDataList(3, baseMeshes)) {  }
+            if (!DA.GetDataList(4, linkMeshes)) {  }
 
             // Make variables needed to join the base and link to one mesh
             Mesh baseMesh = new Mesh();
@@ -100,10 +97,10 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Create the external linear axis
-            ExternalLinearAxis externalLinearAxis = new ExternalLinearAxis(name, attachmentPlane, axis, limits, baseMesh, linkMesh);
+            ExternalRotationalAxis externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMesh, linkMesh);
 
             // Output
-            DA.SetData(0, externalLinearAxis);
+            DA.SetData(0, externalRotationalAxis);
         }
 
         /// <summary>
@@ -112,7 +109,8 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ExternalLinearAxis_Icon; }
+            get { return null; }
+            // get { return Properties.Resources.ExternalRotationalAxis_Icon; } //TODO
         }
 
         /// <summary>
@@ -122,7 +120,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B438238D-FF4C-48BC-ADE5-1772C99BE599"); }
+            get { return new Guid("21E3D4EE-18F7-4DCB-AF08-C537A656078D"); }
         }
     }
 }

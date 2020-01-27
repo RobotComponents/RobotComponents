@@ -8,16 +8,16 @@ using RobotComponentsABB.Parameters;
 namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
-    /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct External Rotational Axis Component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructExternalLinearAxisComponent : GH_Component
+    public class DeconstructExternalRotationalAxisComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
-        public DeconstructExternalLinearAxisComponent()
-          : base("Deconstruct External Linear Axis", "DeConELA",
-              "Deconstructs an External Linear Axis into its parameters."
+        public DeconstructExternalRotationalAxisComponent()
+          : base("Deconstruct External Rotational Axis", "DeConELA",
+              "Deconstructs an External Rotational Axis into its parameters."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "External Linear Axis as External Linear Axis", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,8 +38,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Axis Name as a Text", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Attachment Plane", "AP", "Attachment Plane as Plane", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Axis", "A", "Axis as Vector", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Axis Plane", "AP", "Axis Plane as Plane", GH_ParamAccess.item);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
@@ -52,18 +51,17 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            ExternalLinearAxisGoo externalLinearAxisGoo = null;
+            ExternalRotationalAxisGoo externalRotationalAxisGoo = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
+            if (!DA.GetData(0, ref externalRotationalAxisGoo)) { return; }
 
             // Output
-            DA.SetData(0, externalLinearAxisGoo.Value.Name);
-            DA.SetData(1, externalLinearAxisGoo.Value.AttachmentPlane);
-            DA.SetData(2, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
-            DA.SetData(3, externalLinearAxisGoo.Value.AxisLimits);
-            DA.SetData(4, externalLinearAxisGoo.Value.BaseMesh);
-            DA.SetData(5, externalLinearAxisGoo.Value.LinkMesh);
+            DA.SetData(0, externalRotationalAxisGoo.Value.Name);
+            DA.SetData(1, externalRotationalAxisGoo.Value.AxisPlane);
+            DA.SetData(2, externalRotationalAxisGoo.Value.AxisLimits);
+            DA.SetData(3, externalRotationalAxisGoo.Value.BaseMesh);
+            DA.SetData(4, externalRotationalAxisGoo.Value.LinkMesh);
         }
 
         /// <summary>
@@ -71,7 +69,8 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructExternalLinearAxis_Icon; }
+            //get { return Properties.Resources.DeconstructExternalRotationalAxis_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2CB287BA-4FD1-44E6-B540-8C423B6CC4B6"); }
+            get { return new Guid("343ADC84-CD64-4F12-88FA-A0B6B3D98860"); }
         }
     }
 

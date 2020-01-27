@@ -44,7 +44,7 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
             // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddParameter(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
+            pManager.AddGenericParameter("External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -78,8 +78,18 @@ namespace RobotComponentsABB.Components.Definitions
             {
             }
 
-            // Check number of external linear axes
-            if (externalAxis.Count > 1)
+            // Check the axis input: A maximum of one external linear axis is allow
+            double count = 0;
+            for (int i = 0; i < externalAxis.Count; i++)
+            {
+                if (externalAxis[i] is ExternalLinearAxis)
+                {
+                    count += 1;
+                }
+            }
+
+            // Raise error if more than one external linear axis is used
+            if (count > 1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "At the moment RobotComponents supports one external linear axis.");
             }

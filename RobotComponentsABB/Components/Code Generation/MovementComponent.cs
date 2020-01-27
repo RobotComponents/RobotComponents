@@ -196,7 +196,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 DigitalOutputGoo digitalOutputGoo;
 
                 // Target counter
-                if (i < targetGoos.Count)
+                if (i < targetGoos.Count)//TODO: Calling the sizeValues[0] instead of Count (should be faster)?
                 {
                     targetGoo = targetGoos[i];
                     targetGooCounter++;

@@ -8,6 +8,7 @@ using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 
 using GH_IO.Serialization;
 
@@ -56,25 +57,20 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //DataTree<double> defaultInternalAxisValues = new DataTree<double>();
-            //defaultInternalAxisValues.AddRange(new List<double> { 0, 0, 0, 0, 0, 0 }, new GH_Path(0));
-            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.item, "default");
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
-            // To do: Something goes wrong with (de)serialization of the speed data parameter if it is used here. 
-            // The problem occurs since it is a IGH_VariableParameterComponent. Without the IGH_VariableParameterComponent it works smooth. 
-            // pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.item, 0);
-            pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, new List<string> { "default" });
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
 
         // Register the number of fixed input parameters
         private readonly int fixedParamNumInput = 6;
 
         // Create an array with the variable input parameters
-        readonly IGH_Param[] variableInputParameters = new IGH_Param[1]
+        readonly IGH_Param[] variableInputParameters = new IGH_Param[2]
         {
+            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true},
             new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
@@ -83,11 +79,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new JointMovementParameter(), "JointMovement", "JM", "Resulting Movement");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new JointMovementParameter(), "JointMovement", "JM", "Resulting Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields
         //private bool _expire = false;
+        private bool _overrideRobotTool = false;
         private bool _setDigitalOutput = false;
 
         /// <summary>
@@ -96,264 +93,214 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //// Creates the input value list and attachs it to the input parameter
-            //CreateValueList();
-
-            //// Expire solution of this component
-            //if (_expire == true)
-            //{
-            //    _expire = false;
-            //    this.ExpireSolution(true);
-            //}
 
             // Input variables
-            string name = "";
-            List<double> internalAxisValues = new List<double>();
-            List<double> externalAxisValues = new List<double>();
-            //List<TargetGoo> targetGoos = new List<TargetGoo>();
-            SpeedDataGoo speedDataGoo = new SpeedDataGoo();
-            int movementType = 1;
-            int precision = 0;
-            RobotToolGoo robotToolGoo = new RobotToolGoo();
-            WorkObjectGoo workObjectGoo = new WorkObjectGoo();
-            DigitalOutputGoo digitalOutputGoo = new DigitalOutputGoo();
+            List<string> names = new List<string> { "" };
+            GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
+            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
+            List<int> precisions = new List<int> { 0 };
+            List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
+            List<DigitalOutputGoo> digitalOutputGoos = new List<DigitalOutputGoo>();
 
             // Create an empty Robot Tool
             RobotTool emptyRobotTool = new RobotTool();
             emptyRobotTool.Clear();
 
             // Catch the input data from the fixed parameters
-            if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetDataList(1, internalAxisValues)) { return; }
-            if (!DA.GetDataList(2, externalAxisValues)) { return; }
-
-            if (!DA.GetData(3, ref speedDataGoo)) { return; }
-            if (!DA.GetData(4, ref movementType)) { return; }
-            if (!DA.GetData(5, ref precision)) { return; }
+            if (!DA.GetDataList(0, names)) { return; }
+            if (!DA.GetDataTree(1, out internalAxisValuesTree)) { return; }
+            if (!DA.GetDataTree(2, out externalAxisValuesTree)) { return; }
+            if (!DA.GetDataList(3, speedDataGoos)) { return; }
+            if (!DA.GetDataList(4, precisions)) { return; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetData(variableInputParameters[0].Name, ref digitalOutputGoo))
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos))
                 {
-                    digitalOutputGoo = new DigitalOutputGoo();
+                    robotToolGoos = new List<RobotToolGoo>() { new RobotToolGoo(emptyRobotTool) };
                 }
             }
 
-            // Movement constructor
-            JointMovement jointMovement = new JointMovement(
-                name, 
-                internalAxisValues, 
-                externalAxisValues,
-                speedDataGoo.Value,
-                precision,
-                digitalOutputGoo.Value
-                );
-
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
+            {
+                if (!DA.GetDataList(variableInputParameters[1].Name, digitalOutputGoos))
+                {
+                    digitalOutputGoos = new List<DigitalOutputGoo>() { new DigitalOutputGoo() };
+                }
+            }
 
             // Make sure variable input parameters have a default value
-            //if (robotToolGoos.Count == 0)
-            //{
-            //    robotToolGoos.Add(new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
-            //}
-            //if (digitalOutputGoos.Count == 0)
-            //{
-            //    digitalOutputGoos.Add(new DigitalOutputGoo()); // InValid / empty DO
-            //}
+            if (robotToolGoos.Count == 0)
+            {
+                robotToolGoos.Add(new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
+            }
+            if (digitalOutputGoos.Count == 0)
+            {
+                digitalOutputGoos.Add(new DigitalOutputGoo()); // InValid / empty DO
+            }
 
-            //// Get longest Input List
-            //int[] sizeValues = new int[7];
-            //sizeValues[0] = targetGoos.Count;
-            //sizeValues[1] = speedDataGoos.Count;
-            //sizeValues[2] = movementTypes.Count;
-            //sizeValues[3] = precisions.Count;
-            //sizeValues[4] = robotToolGoos.Count;
-            //sizeValues[5] = workObjectGoos.Count;
-            //sizeValues[6] = digitalOutputGoos.Count;
+            // Get longest Input List
+            int[] sizeValues = new int[7];
+            sizeValues[0] = names.Count;
+            sizeValues[1] = internalAxisValuesTree.PathCount;
+            sizeValues[2] = externalAxisValuesTree.PathCount;
+            sizeValues[3] = speedDataGoos.Count;
+            sizeValues[4] = precisions.Count;
+            sizeValues[5] = robotToolGoos.Count;
+            sizeValues[6] = digitalOutputGoos.Count;
 
-            //int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
-            //// Keeps track of used indicies
-            //int targetGooCounter = -1;
-            //int speedDataGooCounter = -1;
-            //int movementTypeCounter = -1;
-            //int precisionCounter = -1;
-            //int robotToolGooCounter = -1;
-            //int workObjectGooCounter = -1;
-            //int digitalOutputGooCounter = -1;
+            // Keeps track of used indicies
+            int namesCounter = -1;
+            int internalValueCounter = -1;
+            int externalValuesCounter = -1;
+            int speedDataGooCounter = -1;
+            int precisionCounter = -1;
+            int robotToolGooCounter = -1;
+            int digitalOutputGooCounter = -1;
 
             //// Creates movements
-            //List<Movement> movements = new List<Movement>();
+            List<JointMovement> jointMovements = new List<JointMovement>();
 
-            //for (int i = 0; i < biggestSize; i++)
-            //{
-            //    TargetGoo targetGoo;
-            //    SpeedDataGoo speedDataGoo;
-            //    int movementType;
-            //    int precision;
-            //    RobotToolGoo robotToolGoo;
-            //    WorkObjectGoo workObjectGoo;
-            //    DigitalOutputGoo digitalOutputGoo;
 
-            //    // Target counter
-            //    if (i < targetGoos.Count)
-            //    {
-            //        targetGoo = targetGoos[i];
-            //        targetGooCounter++;
-            //    }
-            //    else
-            //    {
-            //        targetGoo = targetGoos[targetGooCounter];
-            //    }
+            for (int i = 0; i < biggestSize; i++)
+            {
+                string name;
+                List<double> internalAxisValues = new List<double>();
+                List<double> externalAxisValues = new List<double>();
 
-            //    // Workobject counter
-            //    if (i < speedDataGoos.Count)
-            //    {
-            //        speedDataGoo = speedDataGoos[i];
-            //        speedDataGooCounter++;
-            //    }
-            //    else
-            //    {
-            //        speedDataGoo = speedDataGoos[speedDataGooCounter];
-            //    }
+                SpeedDataGoo speedDataGoo;
+                int precision;
+                RobotToolGoo robotToolGoo;
+                DigitalOutputGoo digitalOutputGoo;
 
-            //    // Movement type counter
-            //    if (i < movementTypes.Count)
-            //    {
-            //        movementType = movementTypes[i];
-            //        movementTypeCounter++;
-            //    }
-            //    else
-            //    {
-            //        movementType = movementTypes[movementTypeCounter];
-            //    }
+                // Target counter
+                if (i < sizeValues[0]) //instead of calling names.Coun again
+                {
+                    name = names[i];
+                    namesCounter++;
+                }
+                else
+                {
+                    name = names[namesCounter] + "_" + (i - namesCounter);
+                }
 
-            //    // Precision counter
-            //    if (i < precisions.Count)
-            //    {
-            //        precision = precisions[i];
-            //        precisionCounter++;
-            //    }
-            //    else
-            //    {
-            //        precision = precisions[precisionCounter];
-            //    }
+                // internal axis values counter
+                if (i < sizeValues[1]) //instead of calling names.Count again
+                {
+                    internalAxisValues = internalAxisValuesTree[i].ConvertAll(x => (double)x.Value);
+                    internalValueCounter++;
+                }
+                else
+                {
+                    internalAxisValues = internalAxisValuesTree[internalValueCounter].ConvertAll(x => (double)x.Value);
+                }
 
-            //    // Robot tool counter
-            //    if (i < robotToolGoos.Count)
-            //    {
-            //        robotToolGoo = robotToolGoos[i];
-            //        robotToolGooCounter++;
-            //    }
-            //    else
-            //    {
-            //        robotToolGoo = robotToolGoos[robotToolGooCounter];
-            //    }
+                // external axis values counter
+                if (i < sizeValues[1]) //instead of calling names.Count again
+                {
+                    internalAxisValues = externalAxisValuesTree[i].ConvertAll(x => (double)x.Value);
+                    internalValueCounter++;
+                }
+                else
+                {
+                    internalAxisValues = externalAxisValuesTree[externalValuesCounter].ConvertAll(x => (double)x.Value);
+                }
 
-            //    // Work Object counter
-            //    if (i < workObjectGoos.Count)
-            //    {
-            //        workObjectGoo = workObjectGoos[i];
-            //        workObjectGooCounter++;
-            //    }
-            //    else
-            //    {
-            //        workObjectGoo = workObjectGoos[workObjectGooCounter];
-            //    }
+                // Workobject counter
+                if (i < speedDataGoos.Count)
+                {
+                    speedDataGoo = speedDataGoos[i];
+                    speedDataGooCounter++;
+                }
+                else
+                {
+                    speedDataGoo = speedDataGoos[speedDataGooCounter];
+                }
 
-            //    // Digital Output counter
-            //    if (i < digitalOutputGoos.Count)
-            //    {
-            //        digitalOutputGoo = digitalOutputGoos[i];
-            //        digitalOutputGooCounter++;
-            //    }
-            //    else
-            //    {
-            //        digitalOutputGoo = digitalOutputGoos[digitalOutputGooCounter];
-            //    }
+                // Precision counter
+                if (i < precisions.Count)
+                {
+                    precision = precisions[i];
+                    precisionCounter++;
+                }
+                else
+                {
+                    precision = precisions[precisionCounter];
+                }
 
-            //    // Movement constructor
-            //    Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, robotToolGoo.Value, workObjectGoo.Value, digitalOutputGoo.Value);
-            //    movements.Add(movement);
-            //}
+                // Robot tool counter
+                if (i < robotToolGoos.Count)
+                {
+                    robotToolGoo = robotToolGoos[i];
+                    robotToolGooCounter++;
+                }
+                else
+                {
+                    robotToolGoo = robotToolGoos[robotToolGooCounter];
+                }
 
-            //// Check if a right value is used for the movement type
-            //    if (movementTypes[i] != 0 && movementTypes[i] != 1 && movementTypes[i] != 2)
-            //    {
-            //        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value <" + i + "> is invalid. " +
-            //            "In can only be set to 0, 1 and 2. Use 1 for MoveAbsJ, 2 for MoveL and 3 for MoveJ.");
-            //        break;
-            //    }
+                // Digital Output counter
+                if (i < digitalOutputGoos.Count)
+                {
+                    digitalOutputGoo = digitalOutputGoos[i];
+                    digitalOutputGooCounter++;
+                }
+                else
+                {
+                    digitalOutputGoo = digitalOutputGoos[digitalOutputGooCounter];
+                }
+
+                // JointMovement constructor
+                JointMovement jointMovement = new JointMovement(name, internalAxisValues, externalAxisValues, speedDataGoo.Value, precision, robotToolGoo.Value, digitalOutputGoo.Value);
+                jointMovements.Add(jointMovement);
+            }
 
             // Check if a right value is used for the input of the precision
-                if (HelperMethods.PrecisionValueIsValid(precision) == false)
+            for (int i = 0; i < precisions.Count; i++)
+            {
+                if (HelperMethods.PrecisionValueIsValid(precisions[i]) == false)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Precision value is invalid. " +
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Precision value <" + i + "> is invalid. " +
                         "In can only be set to -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
                         "A value of -1 will be interpreted as fine movement in RAPID Code.");
+                    break;
                 }
+            }
 
             // Check if a right predefined speeddata value is used
-                if (speedDataGoo.Value.PreDefinied == true)
+            for (int i = 0; i < speedDataGoos.Count; i++)
+            {
+                if (speedDataGoos[i].Value.PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoo.Value.V_TCP) == false)
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
                     {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
+                            "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
                             "Pre-defined speed data can be set to 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, " +
                             "400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000 or 7000.");
+                        break;
                     }
                 }
+            }
 
             // Output
-            DA.SetData(0, jointMovement);
+            DA.SetDataList(0, jointMovements);
         }
-
-        //// Method for creating the value list with movement types
-        //#region valuelist
-        ///// <summary>
-        ///// Creates the value list for the motion type and connects it the input parameter is other source is connected
-        ///// </summary>
-        //private void CreateValueList()
-        //{
-        //    if (this.Params.Input[2].SourceCount == 0)
-        //    {
-        //        // Gets the input parameter
-        //        var parameter = Params.Input[2];
-
-        //        // Creates the empty value list
-        //        GH_ValueList obj = new GH_ValueList();
-        //        obj.CreateAttributes();
-        //        obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-        //        obj.ListItems.Clear();
-
-        //        // Add the items to the value list
-        //        obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-        //        obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-        //        obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
-
-        //        // Make point where the valuelist should be created on the canvas
-        //        obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
-
-        //        // Add the value list to the active canvas
-        //        Instances.ActiveCanvas.Document.AddObject(obj, false);
-
-        //        // Connect the value list to the input parameter
-        //        parameter.AddSource(obj);
-
-        //        // Collect data
-        //        parameter.CollectData();
-
-        //        // Set bool for expire solution of this component
-        //        _expire = true;
-
-        //        // First expire the solution of the value list
-        //        obj.ExpireSolution(true);
-        //    }
-        //}
-        //#endregion
 
         // Methods and properties for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
+        /// <summary>
+        /// Boolean that indicates if the custom menu item for overriding the Robot Tool is checked
+        /// </summary>
+        public bool OverrideRobotTool
+        {
+            get { return _overrideRobotTool; }
+            set { _overrideRobotTool = value; }
+        }
 
         /// <summary>
         /// Boolean that indicates if the custom menu item for setting a Digital Output is is checked
@@ -372,6 +319,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         public override bool Write(GH_IWriter writer)
         {
             // Add our own fields
+            writer.SetBoolean("Override Robot Tool", OverrideRobotTool);
             writer.SetBoolean("Set Digital Output", SetDigitalOutput);
 
             // Call the base class implementation.
@@ -386,8 +334,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         public override bool Read(GH_IReader reader)
         {
             // Read our own fields
+            OverrideRobotTool = reader.GetBoolean("Override Robot Tool");
             SetDigitalOutput = reader.GetBoolean("Set Digital Output");
-            
+
             // Call the base class implementation.
             return base.Read(reader);
         }
@@ -402,7 +351,23 @@ namespace RobotComponentsABB.Components.CodeGeneration
             Menu_AppendSeparator(menu);
 
             // Add custom menu items
+            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
             Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, SetDigitalOutput);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Robot Tool" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickRobotTool(object sender, EventArgs e)
+        {
+            // Change bool
+            RecordUndoEvent("Override Robot Tool");
+            OverrideRobotTool = !OverrideRobotTool;
+
+            // Add or remove the robot tool input parameter
+            AddParameter(0);
         }
 
         /// <summary>
@@ -417,7 +382,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             SetDigitalOutput = !SetDigitalOutput;
 
             // Add or remove the digital output parameter
-            AddParameter(0);
+            AddParameter(1);
         }
 
         /// <summary>
@@ -458,9 +423,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 Params.RegisterInputParam(parameter, insertIndex);
             }
 
-        // Expire solution and refresh parameters since they changed
-        Params.OnParametersChanged();
-        ExpireSolution(true);
+            // Expire solution and refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
 
         }
         #endregion
@@ -525,7 +490,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            
+
         }
         #endregion
 

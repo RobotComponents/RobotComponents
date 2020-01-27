@@ -23,7 +23,7 @@ namespace RobotComponents.BaseClasses.Actions
         //private Plane _globalTargetPlane;
 
         // Variable fields
-        //RobotTool _robotTool;
+        RobotTool _robotTool;
         //WorkObject _workObject;
         DigitalOutput _digitalOutput;
         #endregion
@@ -50,8 +50,8 @@ namespace RobotComponents.BaseClasses.Actions
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always JoinMovement
             _precision = 0;
-            //_robotTool = new RobotTool(); // Default Robot Tool tool0
-            //_robotTool.Clear(); // Empty Robot Tool
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
             //_workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
 
@@ -73,8 +73,8 @@ namespace RobotComponents.BaseClasses.Actions
             _speedData = speedData;
             _movementType = 0; // The movementType is always JoinMovement
             _precision = precision;
-            //_robotTool = new RobotTool(); // Default Robot Tool tool0
-            //_robotTool.Clear(); // Empty Robot Tool
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
             //_workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
             
@@ -99,7 +99,33 @@ namespace RobotComponents.BaseClasses.Actions
             _speedData = speedData;
             _movementType = 0; // The movementType is always JoinMovement
             _precision = precision;
-            //_robotTool = robotTool;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            //_workObject = workObject;
+            _digitalOutput = digitalOutput;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Method to create a robot movement. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public JointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
+        {
+            _name = name;
+            _internalAxisValues = internalAxisValues;
+            _externalAxisValues = externalAxisValues;
+            _speedData = speedData;
+            _movementType = 0; // The movementType is always JoinMovement
+            _precision = precision;
+            _robotTool = robotTool;
             //_workObject = workObject;
             _digitalOutput = digitalOutput;
 
@@ -273,10 +299,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns>Returns the RAPID main code.</returns>
         public override string ToRAPIDFunction(string robotToolName)
         {
-            //// Set tool name
-            //string toolName;
-            //if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = robotToolName; }
-            //else { toolName = _robotTool.Name; }
+            // Set tool name
+            string toolName;
+            if (_robotTool.Name == "" || _robotTool.Name == null) 
+            { 
+                toolName = robotToolName; 
+            }
+            else 
+            { 
+                toolName = _robotTool.Name; 
+            }
 
             // Set zone data text (precision value)
             string zoneName;
@@ -293,7 +325,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
-                    return ("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "tool0" + "\\WObj:=" + "wobj0" + ";");
+                    return ("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "toolName" + "\\WObj:=" + "wobj0" + ";");
                 }
 
                 //// MoveL
@@ -325,7 +357,7 @@ namespace RobotComponents.BaseClasses.Actions
                     // Empty string
                     string tempCode = "";
                     // Add the code line for the absolute joint movement
-                    tempCode += "@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "tool0" + "\\WObj:=" + "wobj0" + ";";
+                    tempCode += "@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";";
                     // Add the code line for the digital output
                     tempCode += _digitalOutput.ToRAPIDFunction(robotToolName);
                     // Return code
@@ -444,14 +476,14 @@ namespace RobotComponents.BaseClasses.Actions
         //    set { _globalTargetPlane = value; }
         //}
 
-        ///// <summary>
-        ///// The tool in use when the robot moves. 
-        ///// </summary>
-        //public RobotTool RobotTool
-        //{
-        //    get { return _robotTool; }
-        //    set { _robotTool = value; }
-        //}
+        /// <summary>
+        /// The tool in use when the robot moves. 
+        /// </summary>
+        public RobotTool RobotTool
+        {
+            get { return _robotTool; }
+            set { _robotTool = value; }
+        }
 
         ///// <summary>
         ///// The work object (coordinate system) to which the robot position in the instruction is related.

@@ -143,7 +143,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 double v_reax = 0;
 
                 // Names counter
-                if (i < names.Count)
+                if (i < sizeValues[0])
                 {
                     name = names[i];
                     nameCounter++;
@@ -154,7 +154,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // TCP speed counter
-                if (i < v_tcps.Count)
+                if (i < sizeValues[1])
                 {
                     v_tcp = v_tcps[i];
                     v_tcpCounter++;
@@ -165,7 +165,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Re-orientation speed counter
-                if (i < v_oris.Count)
+                if (i < sizeValues[2])
                 {
                     v_ori = v_oris[i];
                     v_oriCounter++;
@@ -176,7 +176,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External linear axis speed counter
-                if (i < v_leaxs.Count)
+                if (i < sizeValues[3])
                 {
                     v_leax = v_leaxs[i];
                     v_leaxCounter++;
@@ -187,7 +187,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External revolving axis counter
-                if (i < v_reaxs.Count)
+                if (i < sizeValues[4])
                 {
                     v_reax = v_reaxs[i];
                     v_reaxCounter++;

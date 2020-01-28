@@ -260,7 +260,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 double[] axisValues = new double[6];
 
                 // Names counter
-                if (i < names.Count)
+                if (i < sizeValues[0])
                 {
                     name = names[i];
                     nameCounter++;
@@ -271,7 +271,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Target planes counter
-                if (i < planes.Count)
+                if (i < sizeValues[1])
                 {
                     plane = planes[i];
                     planesCounter++;
@@ -282,7 +282,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Reference plane counter
-                if (i < referencePlanes.Count)
+                if (i < sizeValues[2])
                 {
                     referencePlane = referencePlanes[i];
                     referencePlaneCounter++;
@@ -293,7 +293,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Axis configuration counter
-                if (i < axisConfigs.Count)
+                if (i < sizeValues[3])
                 {
                     axisConfig = axisConfigs[i];
                     axisConfigCounter++;
@@ -304,7 +304,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value A
-                if (i < externalAxisValueA.Count)
+                if (i < sizeValues[4])
                 {
                     axisValues[0] = externalAxisValueA[i];
                     externalAxisValueCounterA++;
@@ -315,7 +315,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value B
-                if (i < externalAxisValueB.Count)
+                if (i < sizeValues[5])
                 {
                     axisValues[1] = externalAxisValueB[i];
                     externalAxisValueCounterB++;
@@ -326,7 +326,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value C
-                if (i < externalAxisValueC.Count)
+                if (i < sizeValues[6])
                 {
                     axisValues[2] = externalAxisValueC[i];
                     externalAxisValueCounterC++;
@@ -337,7 +337,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value D
-                if (i < externalAxisValueD.Count)
+                if (i < sizeValues[7])
                 {
                     axisValues[3] = externalAxisValueD[i];
                     externalAxisValueCounterD++;
@@ -348,7 +348,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value E
-                if (i < externalAxisValueE.Count)
+                if (i < sizeValues[8])
                 {
                     axisValues[4] = externalAxisValueE[i];
                     externalAxisValueCounterE++;
@@ -359,7 +359,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value F
-                if (i < externalAxisValueF.Count)
+                if (i < sizeValues[9])
                 {
                     axisValues[5] = externalAxisValueF[i];
                     externalAxisValueCounterF++;

@@ -60,7 +60,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, new List<string> { "default" });
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
-            pManager.AddGenericParameter("Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
 
@@ -97,7 +97,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
             List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
-            List<int> precisions = new List<int> { 0 };
+            List<int> precisions = new List<int>();
             List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
 
             // Create an empty Robot Tool

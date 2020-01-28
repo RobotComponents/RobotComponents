@@ -124,6 +124,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
                 {
+                    // Absolute joint movement found in Action.Movement
                     if (actions[i] is Movement)
                     {
                         if (((Movement)actions[i]).MovementType == 0)
@@ -131,6 +132,13 @@ namespace RobotComponents.BaseClasses.Actions
                             _firstMovementIsMoveAbs = true;
                         }
 
+                        foundFirstMovement = true;
+                    }
+
+                    // Absolute joint movement found as Action.JointMovement
+                    else if (actions[i] is JointMovement)
+                    {
+                        _firstMovementIsMoveAbs = true;
                         foundFirstMovement = true;
                     }
                 }
@@ -291,7 +299,7 @@ namespace RobotComponents.BaseClasses.Actions
                         movement.RobotTool = currentTool.DuplicateWithoutMesh();
                     }
 
-                    // If a tool is set check the name (tool can be empty)
+                    // Check if a tool is set by checking the name (tool can be empty)
                     else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
                     {
                         movement.RobotTool = currentTool.DuplicateWithoutMesh();
@@ -305,6 +313,35 @@ namespace RobotComponents.BaseClasses.Actions
 
                     // Add movement to list
                     result.Add(movement);
+                }
+                #endregion
+
+                #region Check if action is a joint movement
+                else if (actions[i] is JointMovement)
+                {
+                    // Duplicate the movement since we might change properties
+                    JointMovement jointMovement = ((JointMovement)actions[i]).Duplicate();
+
+                    // Set the current tool if no tool is set in the movement object
+                    if (jointMovement.RobotTool == null)
+                    {
+                        jointMovement.RobotTool = currentTool.DuplicateWithoutMesh();
+                    }
+
+                    // Check if a tool is set by checking the name (tool can be empty)
+                    else if (jointMovement.RobotTool.Name == "" || jointMovement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
+                    {
+                        jointMovement.RobotTool = currentTool.DuplicateWithoutMesh();
+                    }
+
+                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+                    else
+                    {
+                        jointMovement.RobotTool.Mesh = new Mesh(); // save memory
+                    }
+
+                    // Add movement to list
+                    result.Add(jointMovement);
                 }
                 #endregion
 

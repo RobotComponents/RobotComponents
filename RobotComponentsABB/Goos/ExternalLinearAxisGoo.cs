@@ -268,7 +268,27 @@ namespace RobotComponentsABB.Goos
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            return null;
+            if (Value == null)
+            {
+                return null;
+            }
+
+            else if (Value.IsValid == false)
+            {
+                return null;
+            }
+
+            else
+            {
+                // Duplicate value
+                ExternalLinearAxis externalLinearAxis = Value.Duplicate();
+                // Transform
+                externalLinearAxis.Transfom(xform);
+                // Make new goo instance
+                ExternalLinearAxisGoo externalLinearAxisGoo = new ExternalLinearAxisGoo(externalLinearAxis);
+                // Return
+                return externalLinearAxisGoo;
+            }
         }
 
         /// <summary>

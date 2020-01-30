@@ -100,7 +100,10 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalRotationalAxis object. </returns>
         public ExternalRotationalAxis Duplicate()
         {
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
+            Mesh baseMesh = BaseMesh.DuplicateMesh();
+            Mesh linkMesh = LinkMesh.DuplicateMesh();
+
+            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, baseMesh, linkMesh);
             return dup;
         }
         #endregion
@@ -206,6 +209,23 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             Initialize();
             _posedMeshes.Clear();
+        }
+
+        /// <summary>
+        /// Transforms the external rotational axis spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public void Transfom(Transform xform)
+        {
+            _attachmentPlane.Transform(xform);
+            _axisPlane.Transform(xform);
+            _baseMesh.Transform(xform);
+            _linkMesh.Transform(xform);
+
+            for (int i = 0; i < _posedMeshes.Count; i++)
+            {
+                _posedMeshes[i].Transform(xform);
+            }
         }
         #endregion
 

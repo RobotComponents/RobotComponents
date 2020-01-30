@@ -155,7 +155,10 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalLinearAxis object. </returns>
         public ExternalLinearAxis Duplicate()
         {
-            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
+            Mesh baseMesh = BaseMesh.DuplicateMesh();
+            Mesh linkMesh = LinkMesh.DuplicateMesh();
+
+            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, baseMesh, linkMesh);
             return dup;
         }
         #endregion
@@ -276,6 +279,24 @@ namespace RobotComponents.BaseClasses.Definitions
             _posedMeshes.Clear();
         }
 
+        /// <summary>
+        /// Transforms the external linear axis spatial properties (planes and meshes. 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public void Transfom(Transform xform)
+        {
+            _attachmentPlane.Transform(xform);
+            _axisPlane.Transform(xform);
+            _baseMesh.Transform(xform);
+            _linkMesh.Transform(xform);
+
+            for (int i = 0; i < _posedMeshes.Count; i++)
+            {
+                _posedMeshes[i].Transform(xform);
+            }
+
+            GetAxisCurve(); // Set new axis curve
+        }
         #endregion
 
         #region properties

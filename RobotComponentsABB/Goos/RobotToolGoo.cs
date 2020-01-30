@@ -208,19 +208,27 @@ namespace RobotComponentsABB.Goos
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            //It's debatable whether you should maintain a RobotTool through transformations. 
-            //It might not be easy/make sense to apply scaling/rotations, shears etc.
-            //In this example, I'll convert the RobotTool to a mesh.
-            //Perhaps you will want to check for translations/rotations only, operations that make sense.
+            if (Value == null)
+            {
+                return null;
+            }
 
-            //if (Value == null) { return null; }
-            //if (Value.Mesh == null) { return null; }
+            else if (Value.IsValid == false)
+            {
+                return null;
+            }
 
-            //Mesh mesh = Value.Mesh.DuplicateMesh();
-            //mesh.Transform(xform);
-            //return new GH_Mesh(mesh);
-
-            return null;
+            else
+            {
+                // Duplicate value
+                RobotTool robotTool = Value.Duplicate();
+                // Transform
+                robotTool.Transform(xform);
+                // Make new goo instance
+                RobotToolGoo robotToolGoo = new RobotToolGoo(robotTool);
+                // Return
+                return robotToolGoo;
+            }
         }
 
         /// <summary>
@@ -233,13 +241,6 @@ namespace RobotComponentsABB.Goos
         /// type which can be deformed.</returns>
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
-            //if (Value == null) { return null; }
-            //if (Value.Shape == null) { return null; }
-
-            //Brep brep = Value.Shape.DuplicateBrep();
-            //xmorph.Morph(brep);
-            //return new GH_Brep(brep);
-
             return null;
         }
         #endregion

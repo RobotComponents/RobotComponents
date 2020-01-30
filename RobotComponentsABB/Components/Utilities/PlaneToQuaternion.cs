@@ -42,6 +42,7 @@ namespace RobotComponentsABB.Components.Utilities
             pManager.Register_DoubleParam("Quaternion B", "B", "The first imaginary coefficient of the quaternion.");
             pManager.Register_DoubleParam("Quaternion C", "C", "The second imaginary coefficient of the quaternion.");
             pManager.Register_DoubleParam("Quaternion D", "D", "The third imaginary coefficient of the quaternion.");
+            pManager.Register_PointParam("Origin", "O", "The plane origin as a Point");
             pManager.Register_StringParam("String", "STR", "The quaternion in string format that can be used in RAPID code.");
         }
 
@@ -62,6 +63,7 @@ namespace RobotComponentsABB.Components.Utilities
             List<double> quatB = new List<double>();
             List<double> quatC = new List<double>();
             List<double> quatD = new List<double>();
+            List<Point3d> points = new List<Point3d>();
             List<string> text = new List<string>();
 
             // Create variables for necessary for getting the quarternion
@@ -83,7 +85,10 @@ namespace RobotComponentsABB.Components.Utilities
                 quatC.Add(quat.C);
                 quatD.Add(quat.D);
 
-                // Writet the quarternion value in the string format that is used in the RAPID and BASE code
+                // Add points
+                points.Add(plane.Origin);
+
+                // Write the quarternion value in the string format that is used in the RAPID and BASE code
                 text.Add("[" 
                     + quat.A.ToString("0.######") + ", " 
                     + quat.B.ToString("0.######") + ", " 
@@ -96,7 +101,8 @@ namespace RobotComponentsABB.Components.Utilities
             DA.SetDataList(1, quatB);
             DA.SetDataList(2, quatC);
             DA.SetDataList(3, quatD);
-            DA.SetDataList(4, text);
+            DA.SetDataList(4, points);
+            DA.SetDataList(5, text);
         }
 
         /// <summary>

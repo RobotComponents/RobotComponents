@@ -161,10 +161,18 @@ namespace RobotComponents.BaseClasses.Definitions
             ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, baseMesh, linkMesh);
             return dup;
         }
+
+        /// <summary>
+        /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object. </returns>
+        public override ExternalAxis DuplicateAsExternalAxis()
+        {
+            return Duplicate() as ExternalAxis;
+        }
         #endregion
 
         #region methods
-
         /// <summary>
         /// Defines the axis curve based on the axis limits, the momvement direction and the attachment plane origin.
         /// </summary>
@@ -202,7 +210,7 @@ namespace RobotComponents.BaseClasses.Definitions
             }
 
             // Transform
-            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
@@ -237,7 +245,7 @@ namespace RobotComponents.BaseClasses.Definitions
             }
 
             // Transform
-            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * value);
+            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * value);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
@@ -258,7 +266,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
             // Transform the link mesh
-            Transform translateNow = Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
             _posedMeshes[1].Transform(translateNow);
         }
 
@@ -283,7 +291,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// Transforms the external linear axis spatial properties (planes and meshes. 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
-        public void Transfom(Transform xform)
+        public override void Transform(Transform xform)
         {
             _attachmentPlane.Transform(xform);
             _axisPlane.Transform(xform);

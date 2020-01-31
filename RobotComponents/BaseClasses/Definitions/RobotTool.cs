@@ -297,6 +297,8 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             get
             {
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 if (AttachmentPlane == null) { return false; }
                 if (AttachmentPlane == Plane.Unset) { return false; }
                 if (ToolPlane == null) { return false; }

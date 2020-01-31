@@ -106,6 +106,15 @@ namespace RobotComponents.BaseClasses.Definitions
             ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, baseMesh, linkMesh);
             return dup;
         }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object. </returns>
+        public override ExternalAxis DuplicateAsExternalAxis()
+        {
+            return Duplicate() as ExternalAxis;
+        }
         #endregion
 
         #region methods
@@ -137,7 +146,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -173,7 +182,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(value);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -188,7 +197,7 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             _posedMeshes.Clear();
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform rotateNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform rotateNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
             _posedMeshes[1].Transform(rotateNow);
@@ -215,7 +224,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// Transforms the external rotational axis spatial properties (planes and meshes). 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
-        public void Transfom(Transform xform)
+        public override void Transform(Transform xform)
         {
             _attachmentPlane.Transform(xform);
             _axisPlane.Transform(xform);

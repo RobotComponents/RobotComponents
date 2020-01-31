@@ -19,7 +19,11 @@ namespace RobotComponents.BaseClasses.Definitions
         #endregion
 
         #region constructors
-
+        /// <summary>
+        /// A method to duplicate the ExternalAxis object
+        /// </summary>
+        /// <returns> Returns a deep copy of the the ExternalAxis object. </returns>
+        public abstract ExternalAxis DuplicateAsExternalAxis();
         #endregion
 
         #region methods
@@ -51,6 +55,12 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         /// <param name="axisValue"> The external axis value to calculate the position of the meshes for. </param>
         public abstract void PoseMeshes(double axisValue);
+
+        /// <summary>
+        /// Transforms the linear axis spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public abstract void Transform(Transform xform);
         #endregion
 
         #region properties

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Parameters;
 
@@ -46,7 +47,8 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Tool Plane (TCP) as Frame", GH_ParamAccess.item);
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool");
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool", GH_ParamAccess.item);
+            pManager.RegisterParam(new ExternalAxisParameter(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -71,6 +73,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Output variables
             string name;
             List<Mesh> meshes = new List<Mesh>();
+            List<ExternalAxisGoo> externalAxisGoos = new List<ExternalAxisGoo>();
             List<Plane> axisPlanes;
             List<Interval> axisLimits;
             Plane basePlane;
@@ -169,6 +172,12 @@ namespace RobotComponentsABB.Components.Deconstruct
                 tool = null;
             }
 
+            // External Axes
+            for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
+            {
+                externalAxisGoos.Add(new ExternalAxisGoo(robotInfoGoo.Value.ExternalAxis[i]));
+            }
+           
             // Output
             DA.SetData(0, name);
             DA.SetDataList(1, meshes);
@@ -178,6 +187,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(5, mountingFrame);
             DA.SetData(6, toolPlane);
             DA.SetData(7, tool);
+            DA.SetDataList(8, externalAxisGoos);
         }
 
         /// <summary>

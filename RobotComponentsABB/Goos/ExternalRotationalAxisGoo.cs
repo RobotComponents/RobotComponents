@@ -114,7 +114,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a External Rotational Axis."); }
+            get { return ("Defines an External Rotational Axis."); }
         }
 
         /// <summary>
@@ -192,6 +192,18 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast to ExternalAxis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalAxisGoo(Value);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }
@@ -205,10 +217,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Wait
+            //Cast from ExternalRotationalAxis
             if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = (ExternalRotationalAxis)source;
+                return true;
+            }
+
+            //Cast from ExternalAxisGoo
+            if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
+                Value = externalAxisGoo.Value as ExternalRotationalAxis;
                 return true;
             }
 
@@ -242,7 +262,7 @@ namespace RobotComponentsABB.Goos
                 // Duplicate value
                 ExternalRotationalAxis externalRotationalAxis = Value.Duplicate();
                 // Transform
-                externalRotationalAxis.Transfom(xform);
+                externalRotationalAxis.Transform(xform);
                 // Make new goo instance
                 ExternalRotationalAxisGoo externalRotationalAxisGoo = new ExternalRotationalAxisGoo(externalRotationalAxis);
                 // Return

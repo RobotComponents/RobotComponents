@@ -7,57 +7,132 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsABB.Goos
 {
     /// <summary>
-    /// ExternalLinearAxis Goo wrapper class, makes sure ExternalLinearAxis can be used in Grasshopper.
+    /// ExternalAxis Goo wrapper class, makes sure ExternalAxis can be used in Grasshopper.
     /// </summary>
-    public class ExternalLinearAxisGoo : GH_GeometricGoo<ExternalLinearAxis>, IGH_PreviewData
+    public class ExternalAxisGoo : GH_GeometricGoo<ExternalAxis>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public ExternalLinearAxisGoo()
+        public ExternalAxisGoo()
         {
-            this.Value = new ExternalLinearAxis();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from from ExternalAxis
+        /// </summary>
+        /// <param name="externalAxis"> ExternalAxis Value to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalAxis externalAxis)
+        {
+            if (externalAxis == null)
+                externalAxis = null;
+            this.Value = externalAxis;
+        }
+
+        /// <summary>
+        /// Data constructor from from ExternalLinearAxis
         /// </summary>
         /// <param name="externalLinearAxis"> ExternalLinearAxis Value to store inside this Goo instance. </param>
-        public ExternalLinearAxisGoo(ExternalLinearAxis externalLinearAxis)
+        public ExternalAxisGoo(ExternalLinearAxis externalLinearAxis)
         {
+            ExternalAxis externalAxis;
+
             if (externalLinearAxis == null)
-                externalLinearAxis = new ExternalLinearAxis();
-            this.Value = externalLinearAxis;
+                externalAxis = null;
+            else
+                externalAxis = externalLinearAxis as ExternalAxis;
+
+            this.Value = externalAxis;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from ExternalRotationalAxis
         /// </summary>
-        /// <param name="externalLinearAxisGoo"> ExternalLinearAxisGooe to store inside this Goo instance. </param>
-        public ExternalLinearAxisGoo(ExternalLinearAxisGoo externalLinearAxisGoo)
+        /// <param name="externalRotationalAxis"> ExternalRotationalAxis Value to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalRotationalAxis externalRotationalAxis)
         {
+            ExternalAxis externalAxis;
+
+            if (externalRotationalAxis == null)
+                externalAxis = null;
+            else
+                externalAxis = externalRotationalAxis as ExternalAxis;
+
+            this.Value = externalAxis;
+        }
+
+        /// <summary>
+        /// Data constructor from ExternalAxisGoo
+        /// </summary>
+        /// <param name="externalAxisGoo"> ExternalAxisGoo to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalAxisGoo externalAxisGoo)
+        {
+            if (externalAxisGoo == null)
+                externalAxisGoo = new ExternalAxisGoo();
+            this.Value = externalAxisGoo.Value;
+        }
+
+        /// <summary>
+        /// Data constructor from ExternalLinearAxisGoo
+        /// </summary>
+        /// <param name="externalLinearAxisGoo"> ExternalLinearAxisGoo to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalLinearAxisGoo externalLinearAxisGoo)
+        {
+            ExternalAxis externalAxis;
+
             if (externalLinearAxisGoo == null)
-                externalLinearAxisGoo = new ExternalLinearAxisGoo();
-            this.Value = externalLinearAxisGoo.Value;
+                externalAxis = null;
+            else
+                externalAxis = externalLinearAxisGoo.Value as ExternalAxis;
+
+            this.Value = externalAxis;
+        }
+
+        /// <summary>
+        /// Data constructor from ExternalRotationalAxisGoo
+        /// </summary>
+        /// <param name="externalRotationalAxisGoo"> ExternalRotationalAxisGoo to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalRotationalAxisGoo externalRotationalAxisGoo)
+        {
+            ExternalAxis externalAxis;
+
+            if (externalRotationalAxisGoo == null)
+                externalAxis = null;
+            else
+                externalAxis = externalRotationalAxisGoo.Value as ExternalAxis;
+
+            this.Value = externalAxis;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalLinearAxisGoo. </returns>
+        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateExternalLinearAxisGoo();
+            return DuplicateExternalAxisGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalLinearAxisGoo. </returns>
-        public ExternalLinearAxisGoo DuplicateExternalLinearAxisGoo()
+        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
+        public ExternalAxisGoo DuplicateExternalAxisGoo()
         {
-            return new ExternalLinearAxisGoo(Value == null ? new ExternalLinearAxis() : Value.Duplicate());
+            if (Value == null)
+            {
+                return null;
+            }
+            else if (Value is ExternalAxis)
+            {
+                return new ExternalAxisGoo(Value.DuplicateAsExternalAxis());
+            }
+            else
+            {
+                return null;
+            }
         }
         #endregion
 
@@ -82,9 +157,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal ExternalLinearAxis instance"; }
+                if (Value == null) { return "No internal ExternalAxis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalLinearAxis instance: Did you define an interval, attachment plane and axis vector?"; //Todo: beef this up to be more informative.
+                return "Invalid ExternalAxis instance: Did you define an interval and axis plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +170,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null External Linear Axis";
+                return "Null External Axis";
             else
-                return "External Linear Axis";
+                return "External Axis";
         }
 
         /// <summary>
@@ -105,7 +180,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Linear Axis"); }
+            get { return ("External Axis"); }
         }
 
         /// <summary>
@@ -113,7 +188,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an External Linear Axis."); }
+            get { return ("Defines a External Axis."); }
         }
 
         /// <summary>
@@ -144,12 +219,6 @@ namespace RobotComponentsABB.Goos
                         MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
                     }
 
-                    // Axis curve
-                    if (Value.AxisCurve != null)
-                    {
-                        MeshBoundingBox.Union(Value.AxisCurve.GetBoundingBox(true));
-                    }
-
                     return MeshBoundingBox;
                 }
             }
@@ -175,6 +244,16 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
+            //Cast to ExternalAxis.
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
             //Cast to ExternalLinearAxis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
@@ -185,63 +264,13 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to Plane.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            //Cast to ExternalRotationalAxis.
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
                 if (Value == null)
                     target = default(Q);
-                else if (Value.AttachmentPlane == null)
-                    target = default(Q);
                 else
-                    target = (Q)(object)new GH_Plane(Value.AttachmentPlane);
-                return true;
-            }
-
-            //Cast to Point.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AttachmentPlane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin);
-                return true;
-            }
-
-            //Cast to Curve.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Curve)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AxisCurve == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object) new GH_Curve(Value.AxisCurve);
-                return true;
-            }
-
-            //Cast to Interval.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AxisLimits == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Interval(Value.AxisLimits);
-                return true;
-            }
-
-            //Cast to ExternalAxis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new ExternalAxisGoo(Value);
+                    target = (Q)(object)Value;
                 return true;
             }
 
@@ -258,18 +287,27 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from ExternalLinearAxis
-            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
-            {
-                Value = (ExternalLinearAxis)source;
-                return true;
-            }
-
             //Cast from ExternalAxisGoo
             if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
             {
                 ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
-                Value = externalAxisGoo.Value as ExternalLinearAxis;
+                Value = externalAxisGoo.Value as ExternalAxis;
+                return true;
+            }
+
+            //Cast from ExternalLinearAxisGoo
+            if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
+                Value = externalLinearAxisGoo.Value as ExternalAxis;
+                return true;
+            }
+
+            //Cast from ExternalRotationalAxisGoo
+            if (typeof(ExternalRotationalAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalRotationalAxisGoo externalRotationalAxisGoo = source as ExternalRotationalAxisGoo;
+                Value = externalRotationalAxisGoo.Value as ExternalAxis; 
                 return true;
             }
 
@@ -298,17 +336,19 @@ namespace RobotComponentsABB.Goos
                 return null;
             }
 
-            else
+            else if (Value is ExternalAxis)
             {
-                // Duplicate value
-                ExternalLinearAxis externalLinearAxis = Value.Duplicate();
+                // Get value and duplicate
+                ExternalAxis externalAxis = Value.DuplicateAsExternalAxis();
                 // Transform
-                externalLinearAxis.Transform(xform);
+                externalAxis.Transform(xform);
                 // Make new goo instance
-                ExternalLinearAxisGoo externalLinearAxisGoo = new ExternalLinearAxisGoo(externalLinearAxis);
+                ExternalAxisGoo externalAxisGoo = new ExternalAxisGoo(externalAxis);
                 // Return
-                return externalLinearAxisGoo;
+                return externalAxisGoo;
             }
+
+            return null;
         }
 
         /// <summary>

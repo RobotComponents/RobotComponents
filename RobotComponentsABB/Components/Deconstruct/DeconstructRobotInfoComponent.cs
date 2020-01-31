@@ -70,7 +70,7 @@ namespace RobotComponentsABB.Components.Deconstruct
 
             // Output variables
             string name;
-            List<Mesh> meshes;
+            List<Mesh> meshes = new List<Mesh>();
             List<Plane> axisPlanes;
             List<Interval> axisLimits;
             Plane basePlane;
@@ -92,7 +92,10 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Meshes
             if (robotInfoGoo.Value.Meshes != null)
             {
-                meshes = robotInfoGoo.Value.Meshes;
+                for (int i = 0; i < 7; i++)
+                {
+                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                }
             }
             else
             {

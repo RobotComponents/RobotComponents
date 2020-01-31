@@ -16,6 +16,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         private RobotInfo _robotInfo; // Robot info
 
         private Plane _basePlane; // Robot Base Plane
+        private Plane _positionPlane; // Robot Position Plane: needed for external linear axis
         private Plane[] _internalAxisPlanes; // Internal Axis Planes 
         private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
         private double[] _internalAxisRads; // Internal Axis Values in Radiants
@@ -112,7 +113,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 if (externalAxis is ExternalLinearAxis && count == 0)
                 {
                     ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
-                    _basePlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
+                    _positionPlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
                     count += 1;
                 }
 
@@ -141,7 +142,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Move relative to base
             Transform transNow;
-            transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
+            transNow = Transform.ChangeBasis(_positionPlane, _basePlane);
 
             // Calculates internal axes
             // First caculate all tansformations (rotations)
@@ -217,6 +218,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Update robot data and set the internal axis values
             _basePlane = _robotInfo.BasePlane;
+            _positionPlane = new Plane(_basePlane);
             _tcpPlane = _robotInfo.ToolPlane;
             _internalAxisPlanes = _robotInfo.InternalAxisPlanes.ToArray();
             _internalAxisLimits = _robotInfo.InternalAxisLimits;

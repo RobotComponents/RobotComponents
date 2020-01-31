@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using System.Collections.Generic;
+using System.Text;
 
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -14,13 +16,19 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private RobotInfo _robotInfo; // Robot info to construct the code for
-        private List<Action> _actions = new List<Action>(); // List with all the robot actions
+        private InverseKinematics _inverseKinematics; // IK used for calculating Axis in Movements
+        private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
+        private Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
+        private Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
+        private Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _RAPIDCode; // The rapid main code
         private string _BASECode; // The rapid base code
         private string _ModuleName; // The module name of the rapid main code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
+        private StringBuilder _stringBuilder;
+
         #endregion
 
         #region constructors
@@ -46,6 +54,7 @@ namespace RobotComponents.BaseClasses.Actions
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
         }
 
         /// <summary>
@@ -71,7 +80,16 @@ namespace RobotComponents.BaseClasses.Actions
             _RAPIDCode = rapidCode;
             _BASECode = baseCode;
             _firstMovementIsMoveAbs = firstMovementIsMoveAbs;
-    }
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
+        }
+
+        public RAPIDGenerator(Dictionary<string, SpeedData> speedDatas, Dictionary<string, Movement> movements)
+        {
+            _speedDatas = speedDatas;
+            _movements = movements;
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo); // Maybe not working
+        }
+
         /// <summary>
         /// Method to duplicate this RAPID generator object.
         /// </summary>
@@ -91,27 +109,28 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID main code as a string. </returns>
         public string CreateRAPIDCode()
         {
+            // Resets Dictionaries
+            _movements.Clear();
+            _speedDatas.Clear();
+            _targets.Clear();
+
+            // Creates String Builder
+            _stringBuilder = new StringBuilder();
+
             // Set the tool data at the movement level
             List<Action> actions = SetToolData(_actions);
 
             // Creates Main Module
-            string RAPIDCode = "MODULE " + _ModuleName + "@";
-
-            // Creates Tool Name
-            string toolName = "debug_line_can_be_removed"; //TODO: Remove....
+            _stringBuilder.Append("MODULE " + _ModuleName + "@");
 
             // Creates Vars
             for (int i = 0; i != actions.Count; i++)
             {
-
-                string tempCode = actions[i].InitRAPIDVar(_robotInfo, RAPIDCode);
-
-                // Checks if Var is already in Code
-                RAPIDCode += tempCode;
+                actions[i].InitRAPIDVar(this);
             }
 
             // Create Program
-            RAPIDCode += "@@" + "\t" + "PROC main()";
+            _stringBuilder.Append("@" + "@" + "\t" + "PROC main()");
 
             _firstMovementIsMoveAbs = false;
             bool foundFirstMovement = false;
@@ -119,7 +138,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != actions.Count; i++)
             {
-                string rapidStr = actions[i].ToRAPIDFunction(toolName); // Remove toolName from all methods, change to robot info argument
+                actions[i].ToRAPIDFunction(this); // Remove toolName from all methods, change to robot info argument
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
@@ -134,20 +153,18 @@ namespace RobotComponents.BaseClasses.Actions
                         foundFirstMovement = true;
                     }
                 }
-
-                RAPIDCode += rapidStr;
             }
 
             // Closes Program
-            RAPIDCode += "@" + "\t" + "ENDPROC";
+            _stringBuilder.Append("@" + "\t" + "ENDPROC");
             // Closes Module
-            RAPIDCode += "@@" + "ENDMODULE";
+            _stringBuilder.Append("@"  + "@" + "ENDMODULE");
 
             // Replaces@ with newLines
-            RAPIDCode = RAPIDCode.Replace("@", System.Environment.NewLine);
+            _stringBuilder.Replace("@", System.Environment.NewLine);
 
             // Update field
-            _RAPIDCode = RAPIDCode;
+            _RAPIDCode = _stringBuilder.ToString();
 
             // Write to file
             if (_saveToFile == true)
@@ -156,7 +173,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // Return
-            return RAPIDCode;
+            return _RAPIDCode;
         }
 
         /// <summary>
@@ -170,45 +187,45 @@ namespace RobotComponents.BaseClasses.Actions
         public string CreateBaseCode(List<RobotTool> robotTools, List<WorkObject> workObjects, List<string> customCode)
         {
             // Creates Main Module
-            string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)@@";
+            string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)" + "@" + "@";
 
             // Creates Comments
-            BASECode += " ! System module with basic predefined system data@";
-            BASECode += " !************************************************@@";
-            BASECode += " ! System data tool0, wobj0 and load0@";
-            BASECode += " ! Do not translate or delete tool0, wobj0, load0@";
+            BASECode += " ! System module with basic predefined system data" + "@";
+            BASECode += " !************************************************" + "@" + "@";
+            BASECode += " ! System data tool0, wobj0 and load0" + "@";
+            BASECode += " ! Do not translate or delete tool0, wobj0, load0" + "@";
 
             // Creates Predefined System Data
-            BASECode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];@";
-            BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];@";
-            BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];@@";
+            BASECode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];" + "@";
+            BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];" + "@";
+            BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];" + "@" + "@";
 
             // Adds Tools Base Code
             if (robotTools.Count != 0 && robotTools != null)
             {
-                BASECode += " ! User defined tooldata @";
+                BASECode += " ! User defined tooldata " + "@";
                 BASECode += CreateToolBaseCode(robotTools);
-                BASECode += "@ ";
+                BASECode += "@" + " ";
             }
 
             // Adds Work Objects Base Code
             if (workObjects.Count != 0 && workObjects != null)
             {
-                BASECode += " ! User defined wobjdata @";
+                BASECode += " ! User defined wobjdata " + "@";
                 BASECode += CreateWorkObjectBaseCode(workObjects);
-                BASECode += "@ ";
+                BASECode += "@" +" ";
             }
 
             // Adds Custom code line
             if (customCode.Count != 0 && customCode != null)
             {
-                BASECode += " ! User definied custom code lines @";
+                BASECode += " ! User definied custom code lines " + "@";
                 for (int i = 0; i != customCode.Count; i++)
                 {
                     BASECode += customCode[i];
-                    BASECode += "@ ";
+                    BASECode += "@" + " ";
                 }
-                BASECode += "@ ";
+                BASECode += "@" + " ";
             }
 
             // End Module
@@ -242,7 +259,7 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i != robotTools.Count; i++)
             {
                 result += robotTools[i].GetRSToolData();
-                result += System.Environment.NewLine + " ";
+                result += "@" + " ";
             }
 
             return result;
@@ -259,7 +276,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Initiate output
             List<Action> result = new List<Action>();
 
-            // Iniate current tool (the tool attached to the robot)
+            // Initiate current tool (the tool attached to the robot)
             RobotTool currentTool = _robotInfo.Tool.DuplicateWithoutMesh();
 
             // Loop over all the actions
@@ -331,7 +348,7 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i != workObjects.Count; i++)
             {
                 result += workObjects[i].GetWorkObjData();
-                result += System.Environment.NewLine + " ";
+                result += "@" + " ";
             }
 
             return result;
@@ -448,6 +465,28 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _firstMovementIsMoveAbs; }
         }
+
+        /// <summary>
+        /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, SpeedData> SpeedDatas { get => _speedDatas; }
+        /// <summary>
+        /// Dictionary that stores all Movements that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, Movement> Movements { get => _movements; }
+        /// <summary>
+        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, Target> Targets { get => _targets; }
+        /// <summary>
+        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// </summary>s
+        public InverseKinematics InverseKinematics { get => _inverseKinematics; }
+
+        /// <summary>
+        /// Stringbuilder used by the RAPID Generator. 
+        /// </summary>
+        public StringBuilder StringBuilder { get => _stringBuilder; }
         #endregion
     }
 

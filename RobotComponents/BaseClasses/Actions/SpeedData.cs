@@ -118,15 +118,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             if (_predefined == false) 
             {
-                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
-            }
-            else
-            {
-                return "";
+                RAPIDGenerator.StringBuilder.Append ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
             }
         }
 
@@ -135,9 +131,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
         }
         #endregion
 

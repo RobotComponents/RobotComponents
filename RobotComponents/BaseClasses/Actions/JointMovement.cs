@@ -179,22 +179,19 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
 
-            // Creates Speed Data Variable Code
-            string speedDataCode = _speedData.InitRAPIDVar(robotInfo, RAPIDcode);
-
             // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDcode.Contains(speedDataCode))
+            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
             {
-                tempCode += speedDataCode;
+                // Creates SpeedData Variable Code and adds it to the tempCoode
+                _speedData.InitRAPIDVar(RAPIDGenerator);
+                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
+                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
 
-            // Creates targetName variables to check if they already exist 
-            //string robTargetVar = "VAR robtarget " + _target.RobTargetName;
-            string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
             // Target with global plane (for ik)
             //Target globalTarget = _target.Duplicate();
@@ -246,13 +243,21 @@ namespace RobotComponents.BaseClasses.Actions
             else // Create a jointtarget if the movement type is MoveAbsJ (0)
             {
                 // Only adds target code if target is not already defined
-                if (!RAPIDcode.Contains(jointTargetVar))
+                if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
                 {
                     //// Calculates AxisValues
                     //InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
                     //inverseKinematics.Calculate();
                     //List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
                     //List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
+
+
+                    // Adds Target to RAPIDGenerator SpeedDatasDictionary
+                    RAPIDGenerator.Targets.Add(JointTargetName, new Target());
+
+                    // Creates targetName variables to check if they already exist 
+                    //string robTargetVar = "VAR robtarget " + _target.RobTargetName;
+                    string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
                     // Creates Code Variable
                     tempCode += "@" + "\t" + jointTargetVar + ":=[[";
@@ -287,9 +292,6 @@ namespace RobotComponents.BaseClasses.Actions
                     tempCode += "]];";
                 }
             }
-
-            // returns RAPID code
-            return tempCode;
         }
 
         /// <summary>
@@ -297,19 +299,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             // Set tool name
-            string toolName;
-            if (_robotTool.Name == "" || _robotTool.Name == null) 
-            { 
-                toolName = robotToolName; 
-            }
-            else 
-            { 
-                toolName = _robotTool.Name; 
-            }
-
+            string toolName = _robotTool.Name;
+      
             // Set zone data text (precision value)
             string zoneName;
             if (_precision < 0) { zoneName = @", fine, "; }
@@ -325,7 +319,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
-                    return ("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "toolName" + "\\WObj:=" + "wobj0" + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "toolName" + "\\WObj:=" + "wobj0" + ";");
                 }
 
                 //// MoveL
@@ -341,10 +335,7 @@ namespace RobotComponents.BaseClasses.Actions
                 //}
 
                 // Return nothing if a wrong movement type is used
-                else
-                {
-                    return "";
-                }
+
             }
 
             // A movement combined with a digital output
@@ -357,11 +348,9 @@ namespace RobotComponents.BaseClasses.Actions
                     // Empty string
                     string tempCode = "";
                     // Add the code line for the absolute joint movement
-                    tempCode += "@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";";
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";");
                     // Add the code line for the digital output
-                    tempCode += _digitalOutput.ToRAPIDFunction(robotToolName);
-                    // Return code
-                    return tempCode;
+                    _digitalOutput.ToRAPIDFunction(RAPIDGenerator);
                 }
 
                 //// MoveLDO
@@ -376,11 +365,7 @@ namespace RobotComponents.BaseClasses.Actions
                 //    return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
                 //}
 
-                // Return nothing if a wrong movement type is used
-                else
-                {
-                    return "";
-                }
+    
             }
         }
         #endregion

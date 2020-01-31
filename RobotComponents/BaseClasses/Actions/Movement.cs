@@ -236,7 +236,6 @@ namespace RobotComponents.BaseClasses.Actions
                 RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
 
-
             // Target with global plane (for ik) 
             Target globalTarget = _target.Duplicate();
             globalTarget.Plane = GetPosedGlobalTargetPlane(RAPIDGenerator.RobotInfo, out int logic);
@@ -262,9 +261,11 @@ namespace RobotComponents.BaseClasses.Actions
                         + "[0,0,0," + _target.AxisConfig);
 
                     // Adds all External Axis Values
-                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, RAPIDGenerator.RobotInfo);
-                    inverseKinematics.Calculate();
-                    List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
+                    //InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, RAPIDGenerator.RobotInfo); // bottln
+                    RAPIDGenerator.InverseKinematics.Movement.Target = globalTarget;
+                    RAPIDGenerator.InverseKinematics.ReInitialize();
+                    RAPIDGenerator.InverseKinematics.Calculate();
+                    List<double> externalAxisValues = RAPIDGenerator.InverseKinematics.ExternalAxisValues;
                     tempCode += "], [";
                     for (int i = 0; i < externalAxisValues.Count; i++)
                     {
@@ -300,10 +301,11 @@ namespace RobotComponents.BaseClasses.Actions
                     // Creates targetName variable
                     string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
                     // Calculates AxisValues
-                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, RAPIDGenerator.RobotInfo);
-                    inverseKinematics.Calculate();
-                    List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
-                    List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
+                    RAPIDGenerator.InverseKinematics.Movement.Target = globalTarget;
+                    RAPIDGenerator.InverseKinematics.ReInitialize();
+                    RAPIDGenerator.InverseKinematics.Calculate();
+                    List<double> internalAxisValues = RAPIDGenerator.InverseKinematics.InternalAxisValues;
+                    List<double> externalAxisValues = RAPIDGenerator.InverseKinematics.ExternalAxisValues;
 
                     // Creates Code Variable
                     tempCode += "@" + "\t" + jointTargetVar + " := [[";

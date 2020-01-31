@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -14,6 +15,7 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private RobotInfo _robotInfo; // Robot info to construct the code for
+        private InverseKinematics _inverseKinematics; // IK used for calculating Axis in Movements
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
@@ -50,6 +52,7 @@ namespace RobotComponents.BaseClasses.Actions
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
         }
 
         /// <summary>
@@ -75,12 +78,14 @@ namespace RobotComponents.BaseClasses.Actions
             _RAPIDCode = rapidCode;
             _BASECode = baseCode;
             _firstMovementIsMoveAbs = firstMovementIsMoveAbs;
-    }
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
+        }
 
         public RAPIDGenerator(Dictionary<string, SpeedData> speedDatas, Dictionary<string, Movement> movements)
         {
             _speedDatas = speedDatas;
             _movements = movements;
+            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo); // Maybe not working
         }
 
         /// <summary>
@@ -474,6 +479,10 @@ namespace RobotComponents.BaseClasses.Actions
         /// Dictionary that stores all Targets that are used by the RAPID Generator. 
         /// </summary>
         public Dictionary<string, Target> Targets { get => _targets; }
+        /// <summary>
+        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// </summary>
+        public InverseKinematics InverseKinematics { get => _inverseKinematics; }
         #endregion
     }
 

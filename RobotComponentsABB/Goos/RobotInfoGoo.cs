@@ -130,18 +130,32 @@ namespace RobotComponentsABB.Goos
                 if (Value.Meshes == null) { return BoundingBox.Empty; }
                 else
                 {
-                    // Make the bounding box at the base plane
+                    // Make an empty bounding box
                     BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Make the bounding box of the robot meshes
                     for (int i = 0; i != Value.Meshes.Count; i++)
                     {
                         MeshBoundingBox.Union(Value.Meshes[i].GetBoundingBox(true));
                     }
-                    
-                    // Orient the bounding box to the position plane
-                    Transform orientNow;
-                    orientNow = Rhino.Geometry.Transform.ChangeBasis(Value.BasePlane, Plane.WorldXY);
-                    MeshBoundingBox.Transform(orientNow);
 
+                    // Make the bounding box of the external axes
+                    for (int i = 0; i != Value.ExternalAxis.Count; i++)
+                    {
+                        if (Value.ExternalAxis[i].IsValid == true)
+                        {
+                            if (Value.ExternalAxis[i].BaseMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].BaseMesh.GetBoundingBox(true));
+                            }
+
+                            if (Value.ExternalAxis[i].LinkMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].LinkMesh.GetBoundingBox(true));
+                            }
+                        }
+                    }
+                    
                     return MeshBoundingBox;
                 }
             }
@@ -279,14 +293,17 @@ namespace RobotComponentsABB.Goos
             // External axis meshes
             for (int i = 0; i != Value.ExternalAxis.Count; i++)
             {
-                if (Value.ExternalAxis[i].BaseMesh != null)
+                if (Value.ExternalAxis[i].IsValid == true)
                 {
-                    args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
-                }
+                    if (Value.ExternalAxis[i].BaseMesh != null)
+                    {
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
 
-                if (Value.ExternalAxis[i].LinkMesh != null)
-                {
-                    args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    if (Value.ExternalAxis[i].LinkMesh != null)
+                    {
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
             }
         }

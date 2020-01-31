@@ -54,7 +54,7 @@ namespace RobotComponents.BaseClasses.Actions
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;
-            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), _robotInfo);
         }
 
         /// <summary>
@@ -80,14 +80,7 @@ namespace RobotComponents.BaseClasses.Actions
             _RAPIDCode = rapidCode;
             _BASECode = baseCode;
             _firstMovementIsMoveAbs = firstMovementIsMoveAbs;
-            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo);
-        }
-
-        public RAPIDGenerator(Dictionary<string, SpeedData> speedDatas, Dictionary<string, Movement> movements)
-        {
-            _speedDatas = speedDatas;
-            _movements = movements;
-            _inverseKinematics = new InverseKinematics(new Target(), _robotInfo); // Maybe not working
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), _robotInfo);
         }
 
         /// <summary>
@@ -96,7 +89,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns>Returns a deep copy of the RAPID generator object. </returns>
         public RAPIDGenerator Duplicate()
         {
-            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, Actions, FilePath, SaveToFile, RobotInfo, RAPIDCode, BASECode, FirstMovementIsMoveAbs);
+            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, Actions, FilePath, SaveToFile, RobotInfo, RAPIDCode, BASECode, FirstMovementIsMoveAbs); //TODO: Make a method that duplicates all fields
             return dup;
         }
         #endregion
@@ -444,8 +437,15 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public RobotInfo RobotInfo
         {
-            get { return _robotInfo; }
-            set { _robotInfo = value; }
+            get 
+            { 
+                return _robotInfo; 
+            }
+            set 
+            { 
+                _robotInfo = value;
+                _inverseKinematics.RobotInfo = _robotInfo;
+            }
         }
 
         /// <summary>

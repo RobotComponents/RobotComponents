@@ -264,7 +264,7 @@ namespace RobotComponentsABB.Goos
             if (Value == null) { return; }
             if (Value.Mesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.Mesh, args.Material);
+                args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
             }
         }
 

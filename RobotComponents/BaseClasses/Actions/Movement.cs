@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -220,7 +219,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="RAPIDGenerator">Defines the RAPIDGenerator.</param>
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         /// <returns>Return the RAPID variable code.</returns>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {

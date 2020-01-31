@@ -138,7 +138,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != actions.Count; i++)
             {
-                actions[i].ToRAPIDFunction(this); // Remove toolName from all methods, change to robot info argument
+                actions[i].ToRAPIDFunction(this);
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
@@ -469,24 +469,43 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
         /// </summary>
-        public Dictionary<string, SpeedData> SpeedDatas { get => _speedDatas; }
+        /// 
+        public Dictionary<string, SpeedData> SpeedDatas 
+        {
+            get { return _speedDatas; }
+        }
+
         /// <summary>
         /// Dictionary that stores all Movements that are used by the RAPID Generator. 
         /// </summary>
-        public Dictionary<string, Movement> Movements { get => _movements; }
+        public Dictionary<string, Movement> Movements 
+        {
+            get { return _movements; } 
+        }
+
         /// <summary>
         /// Dictionary that stores all Targets that are used by the RAPID Generator. 
         /// </summary>
-        public Dictionary<string, Target> Targets { get => _targets; }
+        public Dictionary<string, Target> Targets 
+        {
+            get { return _targets; } 
+        }
+
         /// <summary>
-        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// The inverse kinematics used by the RAPID Generator. 
         /// </summary>s
-        public InverseKinematics InverseKinematics { get => _inverseKinematics; }
+        public InverseKinematics InverseKinematics 
+        {
+            get { return _inverseKinematics; } 
+        }
 
         /// <summary>
         /// Stringbuilder used by the RAPID Generator. 
         /// </summary>
-        public StringBuilder StringBuilder { get => _stringBuilder; }
+        public StringBuilder StringBuilder 
+        {
+            get { return _stringBuilder; } 
+        }
         #endregion
     }
 

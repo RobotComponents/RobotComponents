@@ -56,7 +56,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override string ToRAPIDFunction()
         {
             return ("@" + "\t" + "WaitTime " + _duration + ";"); ;
         }

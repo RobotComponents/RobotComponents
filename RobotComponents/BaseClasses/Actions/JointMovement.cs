@@ -302,19 +302,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override string ToRAPIDFunction()
         {
             // Set tool name
-            string toolName;
-            if (_robotTool.Name == "" || _robotTool.Name == null) 
-            { 
-                toolName = robotToolName; 
-            }
-            else 
-            { 
-                toolName = _robotTool.Name; 
-            }
-
+            string toolName = _robotTool.Name;
+      
             // Set zone data text (precision value)
             string zoneName;
             if (_precision < 0) { zoneName = @", fine, "; }
@@ -364,7 +356,7 @@ namespace RobotComponents.BaseClasses.Actions
                     // Add the code line for the absolute joint movement
                     tempCode += "@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";";
                     // Add the code line for the digital output
-                    tempCode += _digitalOutput.ToRAPIDFunction(robotToolName);
+                    tempCode += _digitalOutput.ToRAPIDFunction();
                     // Return code
                     return tempCode;
                 }

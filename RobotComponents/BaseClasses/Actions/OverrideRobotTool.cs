@@ -56,7 +56,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code. For this action an empty string. </returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override string ToRAPIDFunction()
         {
             return "@" + "\t" + "! " + "Default Robot Tool changed to " + _robotTool.Name + ".";
         }

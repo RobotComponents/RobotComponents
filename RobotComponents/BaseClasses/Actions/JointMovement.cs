@@ -179,7 +179,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
 
@@ -187,7 +187,7 @@ namespace RobotComponents.BaseClasses.Actions
             if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
             {
                 // Creates SpeedData Variable Code and adds it to the tempCoode
-                tempCode += _speedData.InitRAPIDVar(RAPIDGenerator);
+                _speedData.InitRAPIDVar(RAPIDGenerator);
                 // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
                 RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
@@ -292,9 +292,6 @@ namespace RobotComponents.BaseClasses.Actions
                     tempCode += "]];";
                 }
             }
-
-            // returns RAPID code
-            return tempCode;
         }
 
         /// <summary>
@@ -302,7 +299,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction()
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             // Set tool name
             string toolName = _robotTool.Name;
@@ -322,7 +319,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
-                    return ("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "toolName" + "\\WObj:=" + "wobj0" + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + "toolName" + "\\WObj:=" + "wobj0" + ";");
                 }
 
                 //// MoveL
@@ -338,10 +335,7 @@ namespace RobotComponents.BaseClasses.Actions
                 //}
 
                 // Return nothing if a wrong movement type is used
-                else
-                {
-                    return "";
-                }
+
             }
 
             // A movement combined with a digital output
@@ -354,11 +348,9 @@ namespace RobotComponents.BaseClasses.Actions
                     // Empty string
                     string tempCode = "";
                     // Add the code line for the absolute joint movement
-                    tempCode += "@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";";
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + "wobj0" + ";");
                     // Add the code line for the digital output
-                    tempCode += _digitalOutput.ToRAPIDFunction();
-                    // Return code
-                    return tempCode;
+                    _digitalOutput.ToRAPIDFunction(RAPIDGenerator);
                 }
 
                 //// MoveLDO
@@ -373,11 +365,7 @@ namespace RobotComponents.BaseClasses.Actions
                 //    return ("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
                 //}
 
-                // Return nothing if a wrong movement type is used
-                else
-                {
-                    return "";
-                }
+    
             }
         }
         #endregion

@@ -50,9 +50,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction()
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             string value;
 
@@ -73,7 +72,7 @@ namespace RobotComponents.BaseClasses.Actions
                 value = "0";
             }
 
-            return ("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); ;
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); 
         }
         #endregion
 

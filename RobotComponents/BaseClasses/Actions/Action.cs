@@ -25,13 +25,13 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public abstract string InitRAPIDVar(RAPIDGenerator RAPIDGenerator);
+        public abstract void InitRAPIDVar(RAPIDGenerator RAPIDGenerator);
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <returns>Returns the RAPID main code.</returns>
-        public abstract string ToRAPIDFunction();
+        public abstract void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties

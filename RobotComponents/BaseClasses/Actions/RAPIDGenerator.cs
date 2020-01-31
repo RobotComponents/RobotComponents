@@ -126,8 +126,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Vars
             for (int i = 0; i != actions.Count; i++)
             {
-                string tempCode = actions[i].InitRAPIDVar(this);
-                _stringBuilder.Append(tempCode);
+                actions[i].InitRAPIDVar(this);
             }
 
             // Create Program
@@ -139,7 +138,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != actions.Count; i++)
             {
-                string rapidStr = actions[i].ToRAPIDFunction(); // Remove toolName from all methods, change to robot info argument
+                actions[i].ToRAPIDFunction(this); // Remove toolName from all methods, change to robot info argument
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
@@ -154,8 +153,6 @@ namespace RobotComponents.BaseClasses.Actions
                         foundFirstMovement = true;
                     }
                 }
-
-                _stringBuilder.Append(rapidStr);
             }
 
             // Closes Program

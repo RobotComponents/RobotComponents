@@ -46,9 +46,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code. For this action an empty string. </returns>
-        public override string InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
         }
 
         /// <summary>
@@ -56,9 +55,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code. For this action an empty string. </returns>
-        public override string ToRAPIDFunction()
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return "@" + "\t" + "! " + "Default Robot Tool changed to " + _robotTool.Name + ".";
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "! " + "Default Robot Tool changed to " + _robotTool.Name + ".");
         }
 
         /// <summary>

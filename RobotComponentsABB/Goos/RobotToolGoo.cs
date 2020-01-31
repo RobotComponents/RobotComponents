@@ -274,13 +274,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if (Value == null) { return; }
 
-            //Draw hull shape.
-            if (Value.Mesh != null)
-            {
-                args.Pipeline.DrawMeshWires(Value.Mesh, args.Color, -1);
-            }
         }
         #endregion
     }

@@ -14,13 +14,17 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private RobotInfo _robotInfo; // Robot info to construct the code for
-        private List<Action> _actions = new List<Action>(); // List with all the robot actions
+        private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
+        private Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
+        private Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
+        private Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _RAPIDCode; // The rapid main code
         private string _BASECode; // The rapid base code
         private string _ModuleName; // The module name of the rapid main code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
+
         #endregion
 
         #region constructors
@@ -72,6 +76,13 @@ namespace RobotComponents.BaseClasses.Actions
             _BASECode = baseCode;
             _firstMovementIsMoveAbs = firstMovementIsMoveAbs;
     }
+
+        public RAPIDGenerator(Dictionary<string, SpeedData> speedDatas, Dictionary<string, Movement> movements)
+        {
+            _speedDatas = speedDatas;
+            _movements = movements;
+        }
+
         /// <summary>
         /// Method to duplicate this RAPID generator object.
         /// </summary>
@@ -91,6 +102,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID main code as a string. </returns>
         public string CreateRAPIDCode()
         {
+            // Resets Dictionaries
+            _movements.Clear();
+            _speedDatas.Clear();
+            _targets.Clear();
+
             // Set the tool data at the movement level
             List<Action> actions = SetToolData(_actions);
 
@@ -103,10 +119,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Vars
             for (int i = 0; i != actions.Count; i++)
             {
-
-                string tempCode = actions[i].InitRAPIDVar(_robotInfo, RAPIDCode);
-
-                // Checks if Var is already in Code
+                string tempCode = actions[i].InitRAPIDVar(this);
                 RAPIDCode += tempCode;
             }
 
@@ -259,7 +272,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Initiate output
             List<Action> result = new List<Action>();
 
-            // Iniate current tool (the tool attached to the robot)
+            // Initiate current tool (the tool attached to the robot)
             RobotTool currentTool = _robotInfo.Tool.DuplicateWithoutMesh();
 
             // Loop over all the actions
@@ -448,6 +461,19 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _firstMovementIsMoveAbs; }
         }
+
+        /// <summary>
+        /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, SpeedData> SpeedDatas { get => _speedDatas; }
+        /// <summary>
+        /// Dictionary that stores all Movements that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, Movement> Movements { get => _movements; }
+        /// <summary>
+        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, Target> Targets { get => _targets; }
         #endregion
     }
 

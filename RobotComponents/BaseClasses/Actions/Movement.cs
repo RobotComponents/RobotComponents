@@ -223,33 +223,34 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override string InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
 
-            // Creates Speed Data Variable Code
-            string speedDataCode = _speedData.InitRAPIDVar(robotInfo, RAPIDcode);
-
             // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDcode.Contains(speedDataCode))
+            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
             {
-                tempCode += speedDataCode;
+                // Creates SpeedData Variable Code and adds it to the tempCoode
+                tempCode += _speedData.InitRAPIDVar(RAPIDGenerator);
+                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
+                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
 
-            // Creates targetName variables to check if they already exist 
-            string robTargetVar = "VAR robtarget " + _target.RobTargetName;
-            string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
 
-            // Target with global plane (for ik)
+            // Target with global plane (for ik) 
             Target globalTarget = _target.Duplicate();
-            globalTarget.Plane = GetPosedGlobalTargetPlane(robotInfo, out int logic);
+            globalTarget.Plane = GetPosedGlobalTargetPlane(RAPIDGenerator.RobotInfo, out int logic);
 
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
             {
                 // Only adds target code if target is not already defined
-                if (!RAPIDcode.Contains(robTargetVar))
+                if (!RAPIDGenerator.Targets.ContainsKey(_target.RobTargetName))
                 {
+                    // Adds target to RAPIDGenrator targets dictionary
+                    RAPIDGenerator.Targets.Add(_target.RobTargetName, _target);
+                    // Creates targetName variable
+                    string robTargetVar = "VAR robtarget " + _target.RobTargetName;
                     tempCode += ("@" + "\t" + robTargetVar + " := [[" 
                         + _target.Plane.Origin.X.ToString("0.##") + ", " 
                         + _target.Plane.Origin.Y.ToString("0.##") + ", " 
@@ -261,7 +262,7 @@ namespace RobotComponents.BaseClasses.Actions
                         + "[0,0,0," + _target.AxisConfig);
 
                     // Adds all External Axis Values
-                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
+                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, RAPIDGenerator.RobotInfo);
                     inverseKinematics.Calculate();
                     List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
                     tempCode += "], [";
@@ -292,10 +293,14 @@ namespace RobotComponents.BaseClasses.Actions
             else
             {
                 // Only adds target code if target is not already defined
-                if (!RAPIDcode.Contains(jointTargetVar))
+                if (!RAPIDGenerator.Targets.ContainsKey(_target.JointTargetName))
                 {
+                    // Adds target to RAPIDGenrator targets dictionary
+                    RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
+                    // Creates targetName variable
+                    string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
                     // Calculates AxisValues
-                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
+                    InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, RAPIDGenerator.RobotInfo);
                     inverseKinematics.Calculate();
                     List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
                     List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;

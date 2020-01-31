@@ -179,22 +179,19 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
         /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override string InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
 
-            // Creates Speed Data Variable Code
-            string speedDataCode = _speedData.InitRAPIDVar(robotInfo, RAPIDcode);
-
             // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDcode.Contains(speedDataCode))
+            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
             {
-                tempCode += speedDataCode;
+                // Creates SpeedData Variable Code and adds it to the tempCoode
+                tempCode += _speedData.InitRAPIDVar(RAPIDGenerator);
+                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
+                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
 
-            // Creates targetName variables to check if they already exist 
-            //string robTargetVar = "VAR robtarget " + _target.RobTargetName;
-            string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
             // Target with global plane (for ik)
             //Target globalTarget = _target.Duplicate();
@@ -246,13 +243,21 @@ namespace RobotComponents.BaseClasses.Actions
             else // Create a jointtarget if the movement type is MoveAbsJ (0)
             {
                 // Only adds target code if target is not already defined
-                if (!RAPIDcode.Contains(jointTargetVar))
+                if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
                 {
                     //// Calculates AxisValues
                     //InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
                     //inverseKinematics.Calculate();
                     //List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
                     //List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
+
+
+                    // Adds Target to RAPIDGenerator SpeedDatasDictionary
+                    RAPIDGenerator.Targets.Add(JointTargetName, new Target());
+
+                    // Creates targetName variables to check if they already exist 
+                    //string robTargetVar = "VAR robtarget " + _target.RobTargetName;
+                    string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
                     // Creates Code Variable
                     tempCode += "@" + "\t" + jointTargetVar + ":=[[";

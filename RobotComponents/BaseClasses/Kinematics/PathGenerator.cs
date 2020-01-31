@@ -404,7 +404,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             List<Movement> movements = new List<Movement>();
 
             // Iniate current tool (the tool attached to the robot)
-            RobotTool currentTool = _robotInfo.Tool.Duplicate();
+            RobotTool currentTool = _robotInfo.Tool.DuplicateWithoutMesh();
             currentTool.Mesh = new Mesh(); // save memory
 
             // Initiate override robot tool
@@ -420,7 +420,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     overrideRobotTool = (OverrideRobotTool)actions[i];
 
                     // Override the current tool
-                    currentTool = overrideRobotTool.RobotTool.Duplicate();
+                    currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
                     currentTool.Mesh = new Mesh(); // save memory
                 }
 
@@ -433,13 +433,13 @@ namespace RobotComponents.BaseClasses.Kinematics
                     // Set the current tool if no tool is set in the movement object
                     if (movement.RobotTool == null)
                     {
-                        movement.RobotTool = currentTool.Duplicate();
+                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
                     }
 
                     // If a tool is set check the name (tool can be empty)
                     else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
                     {
-                        movement.RobotTool = currentTool.Duplicate();
+                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
                     }
 
                     // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
@@ -469,7 +469,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             List<Actions.Action> result = new List<Actions.Action>();
 
             // Iniate current tool (the tool attached to the robot)
-            RobotTool currentTool = _robotInfo.Tool.Duplicate();
+            RobotTool currentTool = _robotInfo.Tool.DuplicateWithoutMesh();
             currentTool.Mesh = new Mesh(); // save memory
 
             // Loop over all the actions
@@ -482,7 +482,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
 
                     // Override the current tool
-                    currentTool = overrideRobotTool.RobotTool.Duplicate();
+                    currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
                     currentTool.Mesh = new Mesh(); // save memory
                 }
                 #endregion
@@ -496,13 +496,13 @@ namespace RobotComponents.BaseClasses.Kinematics
                     // Set the current tool if no tool is set in the movement object
                     if (movement.RobotTool == null)
                     {
-                        movement.RobotTool = currentTool.Duplicate();
+                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
                     }
 
                     // If a tool is set check the name (tool can be empty)
                     else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
                     {
-                        movement.RobotTool = currentTool.Duplicate();
+                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
                     }
 
                     // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.

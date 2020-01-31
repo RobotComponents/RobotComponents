@@ -37,11 +37,11 @@ namespace RobotComponents.BaseClasses.Definitions
         /// Defines a robot info without external axes. 
         /// </summary>
         /// <param name="name"> The robot name. </param>
-        /// <param name="meshes"> The robot base and links meshes as a list defined in the robot coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the robot coordinate space. </param>
+        /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the world coorindate space. </param>
         /// <param name="internalAxisLimits"> The internal axes limit as intervals. </param>
         /// <param name="basePlane"> The position of the robot in the world coordinate space as a plane. </param>
-        /// <param name="mountingFrame"> The tool mounting frame as plane in the robot coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
         /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
@@ -62,17 +62,21 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = new List<ExternalAxis>();
             _externalAxisPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
             _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
+
+            // Transform Robot Tool to Mounting Frame
+            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _tool.Transform(trans);
         }
 
         /// <summary>
         /// Defines a robot info with attached external axes.
         /// </summary>
         /// <param name="name"> The robot name. </param>
-        /// <param name="meshes"> The robot base and links meshes as a list defined in the robot coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the robot coordinate space. </param>
+        /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the world coorindate space. </param>
         /// <param name="internalAxisLimits"> The internal axes limit as intervals. </param>
         /// <param name="basePlane"> The position of the robot in the world coordinate space as a plane. </param>
-        /// <param name="mountingFrame"> The tool mounting frame as plane in the robot coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
         /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
         /// <param name="externalAxis"> The list with attached external axes. </param>
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis)
@@ -95,6 +99,10 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxisPlanes = new List<Plane>();
             _externalAxisLimits = new List<Interval>();
             UpdateExternalAxisFields();
+
+            // Transform Robot Tool to Mounting Frame
+            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _tool.Transform(trans);
         }
 
         /// <summary>
@@ -158,6 +166,33 @@ namespace RobotComponents.BaseClasses.Definitions
             Transform trans = Transform.PlaneToPlane(tool.AttachmentPlane, _mountingFrame);
             toolPlane.Transform(trans);
             return toolPlane;
+        }
+
+        /// <summary>
+        /// Transforms the robot info spatial properties (planes and meshes.
+        /// The attached external axes will not be transformed. 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public void Transfom(Transform xform)
+        {
+            _basePlane.Transform(xform);
+            _mountingFrame.Transform(xform);
+            _tool.Transform(xform);
+
+            for (int i = 0; i < _meshes.Count; i++)
+            {
+                _meshes[i].Transform(xform);
+            }
+
+            for (int i = 0; i < _internalAxisPlanes.Count; i++)
+            {
+                Plane transformedPlane = new Plane(_internalAxisPlanes[i]);
+                transformedPlane.Transform(xform);
+                _internalAxisPlanes[i] = new Plane(transformedPlane);
+            }
+
+            _toolPlane = GetAttachedToolPlane(_tool);
+
         }
         #endregion
 
@@ -225,7 +260,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Defines the mounting plane of the tool in the robot coordinate space. 
+        /// Defines the mounting plane of the tool in the world coordinate space. 
         /// </summary>
         public Plane MountingFrame
         {
@@ -241,7 +276,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Defines the TCP plane of the tool in the robot coordinate space. 
+        /// Defines the TCP plane of the tool in the world coordinate space. 
         /// </summary>
         public Plane ToolPlane
         {

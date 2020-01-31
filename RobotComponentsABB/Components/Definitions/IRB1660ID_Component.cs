@@ -178,12 +178,16 @@ namespace RobotComponentsABB.Components.Definitions
                         positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
                     }
                 }
-                robotInfo = new RobotInfo("IRB1600ID-X/1.55", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
+                robotInfo = new RobotInfo("IRB1600ID-X/1.55", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             else
             {
-                robotInfo = new RobotInfo("IRB1600ID-X/1.55", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                robotInfo = new RobotInfo("IRB1600ID-X/1.55", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             // Output

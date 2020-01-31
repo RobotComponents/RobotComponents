@@ -354,58 +354,10 @@
     <None Include="Resources\IRB1200_7_70_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\irb1200_base_link.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB1200_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\irb1200_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200_link_3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200_link_4.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200_link_5.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_base_link.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_4.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_5.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb1200-5_90_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB1600_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB1600_X_1_2_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB1600_X_1_2_link_1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1600_X_1_2_link_2.txt" />
@@ -421,12 +373,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1600_X_1_2_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB1600_x_1_45_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB1600_x_1_45_link_1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1600_x_1_45_link_2.txt" />
@@ -447,12 +393,6 @@
     <None Include="Resources\IRB1660ID_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IRB1660ID_X_1_55_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB1660ID_X_1_55_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB1660ID_X_1_55_link_2.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -466,15 +406,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1660ID_X_1_55_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600_12_1_85_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600_12_1_85_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600_12_1_85_link_2.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB2600_12_1_85_link_3.txt" />
@@ -492,12 +423,6 @@
     <None Include="Resources\IRB2600_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IRB2600_X_1_65_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600_X_1_65_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB2600_X_1_65_link_2.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -513,15 +438,6 @@
     <None Include="Resources\IRB2600_X_1_65_link_6.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IRB2600ID_8_2_0_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600ID_8_2_0_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600ID_8_2_0_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB2600ID_8_2_0_link_3.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -532,15 +448,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB2600ID_8_2_0_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600ID_15_1_85_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600ID_15_1_85_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB2600ID_15_1_85_link_2.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB2600ID_15_1_85_link_3.txt" />
@@ -558,18 +465,6 @@
     <None Include="Resources\IRB2600ID_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IRB4600_20_2_50_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB4600_20_2_50_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB4600_20_2_50_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB4600_20_2_50_link_3.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB4600_20_2_50_link_4.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -579,34 +474,7 @@
     <None Include="Resources\IRB4600_20_2_50_link_6.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_base_link.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_2.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_3.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_4.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_5.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\irb4600_40_2_55_link_6.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IRB4600_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB4600_X_2_05_link_0.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IRB4600_X_2_05_link_1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB4600_X_2_05_link_2.txt" />
@@ -748,6 +616,32 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructWorkObject_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_40_2_55_link_5.txt" />
+    <None Include="Resources\IRB4600_40_2_55_link_6.txt" />
+    <None Include="Resources\IRB4600_40_2_55_link_4.txt" />
+    <None Include="Resources\IRB1200_shared_link_1.txt" />
+    <None Include="Resources\IRB1200_shared_link_0.txt" />
+    <None Include="Resources\IRB1200_7_0_70_link_2.txt" />
+    <None Include="Resources\IRB1200_7_0_70_link_3.txt" />
+    <None Include="Resources\IRB1200_7_0_70_link_4.txt" />
+    <None Include="Resources\IRB1200_7_0_70_link_5.txt" />
+    <None Include="Resources\IRB1200_7_0_70_link_6.txt" />
+    <None Include="Resources\IRB1200_5_0_90_link_2.txt" />
+    <None Include="Resources\IRB1200_5_0_90_link_3.txt" />
+    <None Include="Resources\IRB1200_5_0_90_link_4.txt" />
+    <None Include="Resources\IRB1200_5_0_90_link_5.txt" />
+    <None Include="Resources\IRB1200_5_0_90_link_6.txt" />
+    <Content Include="Resources\IRB1600_shared_link_0.txt" />
+    <Content Include="Resources\IRB1600_shared_link_1.txt" />
+    <None Include="Resources\IRB4600_shared_link_3.txt" />
+    <None Include="Resources\IRB4600_shared_link_2.txt" />
+    <None Include="Resources\IRB4600_shared_link_1.txt" />
+    <None Include="Resources\IRB4600_shared_link_0.txt" />
+    <None Include="Resources\IRB2600_shared_link_2.txt" />
+    <None Include="Resources\IRB2600_shared_link_1.txt" />
+    <None Include="Resources\IRB2600_shared_link_0.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

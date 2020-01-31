@@ -97,10 +97,10 @@ namespace RobotComponentsABB.Components.Definitions
             // Robot mesh
             List<Mesh> meshes = new List<Mesh>();
             // Base
-            string linkString = RobotComponentsABB.Properties.Resources.IRB2600_X_1_65_link_0;
+            string linkString = RobotComponentsABB.Properties.Resources.IRB2600_shared_link_0;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = RobotComponentsABB.Properties.Resources.IRB2600_X_1_65_link_1;
+            linkString = RobotComponentsABB.Properties.Resources.IRB2600_shared_link_1;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 2
             linkString = RobotComponentsABB.Properties.Resources.IRB2600_X_1_65_link_2;

@@ -97,25 +97,25 @@ namespace RobotComponentsABB.Components.Definitions
             // Robot mesh
             List<Mesh> meshes = new List<Mesh>();
             // Base
-            string linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_base_link;
+            string linkString = RobotComponentsABB.Properties.Resources.IRB1200_shared_link_0;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_1;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_shared_link_1;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_2;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_5_0_90_link_2;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 3
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_3;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_5_0_90_link_3;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 4
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_4;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_5_0_90_link_4;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 5
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_5;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_5_0_90_link_5;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 6
-            linkString = RobotComponentsABB.Properties.Resources.irb1200_5_90_link_6;
+            linkString = RobotComponentsABB.Properties.Resources.IRB1200_5_0_90_link_6;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
 
             // Axis planes

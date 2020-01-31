@@ -97,16 +97,16 @@ namespace RobotComponentsABB.Components.Definitions
             // Robot mesh
             List<Mesh> meshes = new List<Mesh>();
             // Base 
-            string linkString = RobotComponentsABB.Properties.Resources.IRB4600_20_2_50_link_0;
+            string linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_0;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_20_2_50_link_1;
+            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_1;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_20_2_50_link_2;
+            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_2;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 3
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_20_2_50_link_3;
+            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_3;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 4
             linkString = RobotComponentsABB.Properties.Resources.IRB4600_20_2_50_link_4;

@@ -303,7 +303,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// A boolean that indicates if the External Linear Axis object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

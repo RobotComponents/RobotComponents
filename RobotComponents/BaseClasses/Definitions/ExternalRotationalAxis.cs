@@ -233,7 +233,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// A boolean that indicates if the External Rotational Axis object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

@@ -55,6 +55,11 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region properties
         /// <summary>
+        /// Boolearn that indicates if the External Axis instance is valid.
+        /// </summary>
+        public abstract bool IsValid { get; }
+
+        /// <summary>
         /// The name of the external axis
         /// </summary>
         public abstract string Name { get; set; }

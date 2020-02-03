@@ -22,7 +22,7 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from ExternalRotationalAxis
         /// </summary>
         /// <param name="externalRotationalAxis"> ExternalRotationalAxis Value to store inside this Goo instance. </param>
         public ExternalRotationalAxisGoo(ExternalRotationalAxis externalRotationalAxis)
@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from ExternalRotationalAxisGoo
         /// </summary>
         /// <param name="externalRotationalAxisGoo"> ExternalRotationalAxisGoo to store inside this Goo instance. </param>
         public ExternalRotationalAxisGoo(ExternalRotationalAxisGoo externalRotationalAxisGoo)
@@ -170,13 +170,27 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Wait.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
             {
                 if (Value == null)
                     target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    target = (Q)(object)new ExternalAxisGoo(Value);
+                return true;
+            }
+
+            //Cast to ExternalRotationalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalRotationalAxisGoo(Value);
                 return true;
             }
 
@@ -189,18 +203,6 @@ namespace RobotComponentsABB.Goos
                     target = default(Q);
                 else
                     target = (Q)(object)new GH_Interval(Value.AxisLimits);
-                return true;
-            }
-
-            //Cast to ExternalAxis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new ExternalAxisGoo(Value);
                 return true;
             }
 
@@ -220,16 +222,43 @@ namespace RobotComponentsABB.Goos
             //Cast from ExternalRotationalAxis
             if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = (ExternalRotationalAxis)source;
+                ExternalRotationalAxis externalRotationalAxis = source as ExternalRotationalAxis;
+                Value = externalRotationalAxis;
                 return true;
+            }
+
+            //Cast from ExternalRotationalAxisGoo
+            if (typeof(ExternalRotationalAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalRotationalAxisGoo externalRotationalAxisGoo = source as ExternalRotationalAxisGoo;
+                Value = externalRotationalAxisGoo.Value;
+                return true;
+            }
+
+            //Cast from ExternalAxis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                if (source is ExternalRotationalAxis)
+                {
+                    ExternalRotationalAxis externalRotationalAxis = source as ExternalRotationalAxis;
+                    Value = externalRotationalAxis;
+                    return true;
+                }
             }
 
             //Cast from ExternalAxisGoo
             if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
             {
-                ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
-                Value = externalAxisGoo.Value as ExternalRotationalAxis;
-                return true;
+                if (source is ExternalAxisGoo)
+                {
+                    ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
+                    
+                    if (externalAxisGoo.Value is ExternalRotationalAxis)
+                    {
+                        Value = externalAxisGoo.Value as ExternalRotationalAxis;
+                        return true;
+                    }
+                }
             }
 
             return false;

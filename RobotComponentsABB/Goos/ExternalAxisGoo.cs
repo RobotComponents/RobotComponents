@@ -27,38 +27,9 @@ namespace RobotComponentsABB.Goos
         public ExternalAxisGoo(ExternalAxis externalAxis)
         {
             if (externalAxis == null)
+            {
                 externalAxis = null;
-            this.Value = externalAxis;
-        }
-
-        /// <summary>
-        /// Data constructor from from ExternalLinearAxis
-        /// </summary>
-        /// <param name="externalLinearAxis"> ExternalLinearAxis Value to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalLinearAxis externalLinearAxis)
-        {
-            ExternalAxis externalAxis;
-
-            if (externalLinearAxis == null)
-                externalAxis = null;
-            else
-                externalAxis = externalLinearAxis as ExternalAxis;
-
-            this.Value = externalAxis;
-        }
-
-        /// <summary>
-        /// Data constructor from ExternalRotationalAxis
-        /// </summary>
-        /// <param name="externalRotationalAxis"> ExternalRotationalAxis Value to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalRotationalAxis externalRotationalAxis)
-        {
-            ExternalAxis externalAxis;
-
-            if (externalRotationalAxis == null)
-                externalAxis = null;
-            else
-                externalAxis = externalRotationalAxis as ExternalAxis;
+            }
 
             this.Value = externalAxis;
         }
@@ -70,40 +41,11 @@ namespace RobotComponentsABB.Goos
         public ExternalAxisGoo(ExternalAxisGoo externalAxisGoo)
         {
             if (externalAxisGoo == null)
+            {
                 externalAxisGoo = new ExternalAxisGoo();
+            }
+
             this.Value = externalAxisGoo.Value;
-        }
-
-        /// <summary>
-        /// Data constructor from ExternalLinearAxisGoo
-        /// </summary>
-        /// <param name="externalLinearAxisGoo"> ExternalLinearAxisGoo to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalLinearAxisGoo externalLinearAxisGoo)
-        {
-            ExternalAxis externalAxis;
-
-            if (externalLinearAxisGoo == null)
-                externalAxis = null;
-            else
-                externalAxis = externalLinearAxisGoo.Value as ExternalAxis;
-
-            this.Value = externalAxis;
-        }
-
-        /// <summary>
-        /// Data constructor from ExternalRotationalAxisGoo
-        /// </summary>
-        /// <param name="externalRotationalAxisGoo"> ExternalRotationalAxisGoo to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalRotationalAxisGoo externalRotationalAxisGoo)
-        {
-            ExternalAxis externalAxis;
-
-            if (externalRotationalAxisGoo == null)
-                externalAxis = null;
-            else
-                externalAxis = externalRotationalAxisGoo.Value as ExternalAxis;
-
-            this.Value = externalAxis;
         }
 
         /// <summary>
@@ -121,18 +63,14 @@ namespace RobotComponentsABB.Goos
         /// <returns> A duplicate of the ExternalAxisGoo. </returns>
         public ExternalAxisGoo DuplicateExternalAxisGoo()
         {
-            if (Value == null)
-            {
-                return null;
-            }
-            else if (Value is ExternalAxis)
-            {
-                return new ExternalAxisGoo(Value.DuplicateAsExternalAxis());
-            }
-            else
-            {
-                return null;
-            }
+            if (Value == null) 
+                return null; 
+
+            else if (Value is ExternalAxis) 
+                return new ExternalAxisGoo(Value.DuplicateAsExternalAxis()); 
+
+            else 
+                return null; 
         }
         #endregion
 
@@ -171,6 +109,10 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
                 return "Null External Axis";
+            else if (Value is ExternalLinearAxis)
+                return "External Linear Axis";
+            else if (Value is ExternalRotationalAxis)
+                return "External Rotational Axis";
             else
                 return "External Axis";
         }

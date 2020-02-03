@@ -175,13 +175,27 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalLinearAxis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
             {
                 if (Value == null)
                     target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    target = (Q)(object)new ExternalAxisGoo(Value);
+                return true;
+            }
+
+            //Cast to ExternalLinearAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalLinearAxisGoo(Value);
                 return true;
             }
 
@@ -233,18 +247,6 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to ExternalAxis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new ExternalAxisGoo(Value);
-                return true;
-            }
-
             target = default(Q);
             return false;
         }
@@ -261,16 +263,43 @@ namespace RobotComponentsABB.Goos
             //Cast from ExternalLinearAxis
             if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = (ExternalLinearAxis)source;
+                ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
+                Value = externalLinearAxis;
                 return true;
+            }
+
+            //Cast from ExternalLinearAxisGoo
+            if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
+                Value = externalLinearAxisGoo.Value;
+                return true;
+            }
+
+            //Cast from ExternalAxis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                if (source is ExternalLinearAxis)
+                {
+                    ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
+                    Value = externalLinearAxis;
+                    return true;
+                }
             }
 
             //Cast from ExternalAxisGoo
             if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
             {
-                ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
-                Value = externalAxisGoo.Value as ExternalLinearAxis;
-                return true;
+                if (source is ExternalAxisGoo)
+                {
+                    ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
+                    
+                    if (externalAxisGoo.Value is ExternalLinearAxis)
+                    {
+                        Value = externalAxisGoo.Value as ExternalLinearAxis;
+                        return true;
+                    }
+                }
             }
 
             return false;

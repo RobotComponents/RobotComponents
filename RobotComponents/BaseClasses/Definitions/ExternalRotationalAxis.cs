@@ -100,8 +100,20 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalRotationalAxis object. </returns>
         public ExternalRotationalAxis Duplicate()
         {
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
+            Mesh baseMesh = BaseMesh.DuplicateMesh();
+            Mesh linkMesh = LinkMesh.DuplicateMesh();
+
+            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, baseMesh, linkMesh);
             return dup;
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object. </returns>
+        public override ExternalAxis DuplicateAsExternalAxis()
+        {
+            return Duplicate() as ExternalAxis;
         }
         #endregion
 
@@ -134,7 +146,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -170,7 +182,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(value);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -185,7 +197,7 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             _posedMeshes.Clear();
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform rotateNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform rotateNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
             _posedMeshes[1].Transform(rotateNow);
@@ -207,13 +219,30 @@ namespace RobotComponents.BaseClasses.Definitions
             Initialize();
             _posedMeshes.Clear();
         }
+
+        /// <summary>
+        /// Transforms the external rotational axis spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public override void Transform(Transform xform)
+        {
+            _attachmentPlane.Transform(xform);
+            _axisPlane.Transform(xform);
+            _baseMesh.Transform(xform);
+            _linkMesh.Transform(xform);
+
+            for (int i = 0; i < _posedMeshes.Count; i++)
+            {
+                _posedMeshes[i].Transform(xform);
+            }
+        }
         #endregion
 
         #region properties
         /// <summary>
         /// A boolean that indicates if the External Rotational Axis object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

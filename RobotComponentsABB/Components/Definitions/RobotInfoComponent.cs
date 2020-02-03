@@ -44,9 +44,8 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddGenericParameter("External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
             pManager[7].Optional = true;

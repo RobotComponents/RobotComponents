@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a External Linear Axis."); }
+            get { return ("Defines an External Linear Axis."); }
         }
 
         /// <summary>
@@ -175,13 +175,27 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalLinearAxis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
             {
                 if (Value == null)
                     target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
                 else
-                    target = (Q)(object)Value;
+                    target = (Q)(object)new ExternalAxisGoo(Value);
+                return true;
+            }
+
+            //Cast to ExternalLinearAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalLinearAxisGoo(Value);
                 return true;
             }
 
@@ -246,11 +260,46 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Wait
+            //Cast from ExternalLinearAxis
             if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = (ExternalLinearAxis)source;
+                ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
+                Value = externalLinearAxis;
                 return true;
+            }
+
+            //Cast from ExternalLinearAxisGoo
+            if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
+                Value = externalLinearAxisGoo.Value;
+                return true;
+            }
+
+            //Cast from ExternalAxis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                if (source is ExternalLinearAxis)
+                {
+                    ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
+                    Value = externalLinearAxis;
+                    return true;
+                }
+            }
+
+            //Cast from ExternalAxisGoo
+            if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                if (source is ExternalAxisGoo)
+                {
+                    ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
+                    
+                    if (externalAxisGoo.Value is ExternalLinearAxis)
+                    {
+                        Value = externalAxisGoo.Value as ExternalLinearAxis;
+                        return true;
+                    }
+                }
             }
 
             return false;
@@ -268,7 +317,27 @@ namespace RobotComponentsABB.Goos
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            return null;
+            if (Value == null)
+            {
+                return null;
+            }
+
+            else if (Value.IsValid == false)
+            {
+                return null;
+            }
+
+            else
+            {
+                // Duplicate value
+                ExternalLinearAxis externalLinearAxis = Value.Duplicate();
+                // Transform
+                externalLinearAxis.Transform(xform);
+                // Make new goo instance
+                ExternalLinearAxisGoo externalLinearAxisGoo = new ExternalLinearAxisGoo(externalLinearAxis);
+                // Return
+                return externalLinearAxisGoo;
+            }
         }
 
         /// <summary>
@@ -320,22 +389,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if (Value == null) { return; }
 
-            if (Value.BaseMesh != null)
-            {
-                args.Pipeline.DrawMeshWires(Value.BaseMesh, args.Color, -1);
-            }
-
-            if (Value.LinkMesh != null)
-            {
-                args.Pipeline.DrawMeshWires(Value.LinkMesh, args.Color, -1);
-            }
-
-            if (Value.AxisCurve.IsValid == true && Value.BaseMesh.IsValid == false && Value.LinkMesh.IsValid == false)
-            {
-                args.Pipeline.DrawCurve(Value.AxisCurve, args.Color, 1);
-            }
         }
         #endregion
     }

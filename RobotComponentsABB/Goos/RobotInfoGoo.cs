@@ -130,18 +130,32 @@ namespace RobotComponentsABB.Goos
                 if (Value.Meshes == null) { return BoundingBox.Empty; }
                 else
                 {
-                    // Make the bounding box at the base plane
+                    // Make an empty bounding box
                     BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Make the bounding box of the robot meshes
                     for (int i = 0; i != Value.Meshes.Count; i++)
                     {
                         MeshBoundingBox.Union(Value.Meshes[i].GetBoundingBox(true));
                     }
-                    
-                    // Orient the bounding box to the position plane
-                    Transform orientNow;
-                    orientNow = Rhino.Geometry.Transform.ChangeBasis(Value.BasePlane, Plane.WorldXY);
-                    MeshBoundingBox.Transform(orientNow);
 
+                    // Make the bounding box of the external axes
+                    for (int i = 0; i != Value.ExternalAxis.Count; i++)
+                    {
+                        if (Value.ExternalAxis[i].IsValid == true)
+                        {
+                            if (Value.ExternalAxis[i].BaseMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].BaseMesh.GetBoundingBox(true));
+                            }
+
+                            if (Value.ExternalAxis[i].LinkMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].LinkMesh.GetBoundingBox(true));
+                            }
+                        }
+                    }
+                    
                     return MeshBoundingBox;
                 }
             }
@@ -266,19 +280,29 @@ namespace RobotComponentsABB.Goos
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
             if (Value == null) { return; }
+
+            // Robot meshes
             if (Value.Meshes != null)
             {
-                List<double> internalAxisValues = new List<double> { 0, 0, 0, 0, 0, 0 };
-                List<double> externalAxisValues = new List<double> { 0, 0, 0, 0, 0, 0 };
-
-                ForwardKinematics forwardKinematics = new ForwardKinematics(this.Value, internalAxisValues, externalAxisValues);
-                forwardKinematics.Calculate();
-
-                if (forwardKinematics.PosedInternalAxisMeshes != null)
+                for (int i = 0; i != Value.Meshes.Count; i++)
                 {
-                    for (int i = 0; i != forwardKinematics.PosedInternalAxisMeshes.Count; i++)
+                    args.Pipeline.DrawMeshShaded(Value.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
+            }
+
+            // External axis meshes
+            for (int i = 0; i != Value.ExternalAxis.Count; i++)
+            {
+                if (Value.ExternalAxis[i].IsValid == true)
+                {
+                    if (Value.ExternalAxis[i].BaseMesh != null)
                     {
-                        args.Pipeline.DrawMeshShaded(forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
+
+                    if (Value.ExternalAxis[i].LinkMesh != null)
+                    {
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
                 }
             }
@@ -290,25 +314,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if (Value == null) { return; }
 
-            //Draw hull shape.
-            if (Value.Meshes != null)
-            {
-                List<double> internalAxisValues = new List<double> { 0, 0, 0, 0, 0, 0 };
-                List<double> externalAxisValues = new List<double> { 0, 0, 0, 0, 0, 0 };
-
-                ForwardKinematics forwardKinematics = new ForwardKinematics(this.Value, internalAxisValues, externalAxisValues);
-                forwardKinematics.Calculate();
-
-                if (forwardKinematics.PosedInternalAxisMeshes != null)
-                {
-                    for (int i = 0; i != forwardKinematics.PosedInternalAxisMeshes.Count; i++)
-                    {
-                        args.Pipeline.DrawMeshWires(forwardKinematics.PosedInternalAxisMeshes[i], args.Color, -1);
-                    }
-                }
-            }
         }
         #endregion
     }

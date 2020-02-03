@@ -1,6 +1,4 @@
-﻿using RobotComponents.BaseClasses.Definitions;
-
-namespace RobotComponents.BaseClasses.Actions
+﻿namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 
@@ -47,20 +45,18 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>s
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             string value;
 
@@ -73,7 +69,7 @@ namespace RobotComponents.BaseClasses.Actions
                 value = "0";
             }
 
-            return ("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); ;
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); 
         }
         #endregion
 

@@ -7,57 +7,70 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsABB.Goos
 {
     /// <summary>
-    /// RobotTool Goo wrapper class, makes sure RobotTool can be used in Grasshopper.
+    /// ExternalAxis Goo wrapper class, makes sure ExternalAxis can be used in Grasshopper.
     /// </summary>
-    public class RobotToolGoo : GH_GeometricGoo<RobotTool>, IGH_PreviewData
+    public class ExternalAxisGoo : GH_GeometricGoo<ExternalAxis>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public RobotToolGoo()
+        public ExternalAxisGoo()
         {
-            this.Value = new RobotTool();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from from ExternalAxis
         /// </summary>
-        /// <param name="robotTool"> RobotTool Value to store inside this Goo instance. </param>
-        public RobotToolGoo(RobotTool robotTool)
+        /// <param name="externalAxis"> ExternalAxis Value to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalAxis externalAxis)
         {
-            if (robotTool == null)
-                robotTool = new RobotTool();
-            this.Value = robotTool;
+            if (externalAxis == null)
+            {
+                externalAxis = null;
+            }
+
+            this.Value = externalAxis;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from ExternalAxisGoo
         /// </summary>
-        /// <param name="robotToolGoo"> RobotToolGoo to store inside this Goo instance. </param>
-        public RobotToolGoo(RobotToolGoo robotToolGoo)
+        /// <param name="externalAxisGoo"> ExternalAxisGoo to store inside this Goo instance. </param>
+        public ExternalAxisGoo(ExternalAxisGoo externalAxisGoo)
         {
-            if (robotToolGoo == null)
-                robotToolGoo = new RobotToolGoo();
-            this.Value = robotToolGoo.Value;
+            if (externalAxisGoo == null)
+            {
+                externalAxisGoo = new ExternalAxisGoo();
+            }
+
+            this.Value = externalAxisGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotToolGoo. </returns>
+        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateRobotToolGoo();
+            return DuplicateExternalAxisGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotToolGoo. </returns>
-        public RobotToolGoo DuplicateRobotToolGoo()
+        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
+        public ExternalAxisGoo DuplicateExternalAxisGoo()
         {
-            return new RobotToolGoo(Value == null ? new RobotTool() : Value.Duplicate());
+            if (Value == null) 
+                return null; 
+
+            else if (Value is ExternalAxis) 
+                return new ExternalAxisGoo(Value.DuplicateAsExternalAxis()); 
+
+            else 
+                return null; 
         }
         #endregion
 
@@ -82,9 +95,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal RobotTool instance"; }
+                if (Value == null) { return "No internal ExternalAxis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotTool instance: Did you define the attachment plane and TCP plane?"; //Todo: beef this up to be more informative.
+                return "Invalid ExternalAxis instance: Did you define an interval and axis plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,11 +108,13 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null RobotTool";
-            if (Value.Name == "" || Value.Name == null)
-                return "Empty Robot Tool";
+                return "Null External Axis";
+            else if (Value is ExternalLinearAxis)
+                return "External Linear Axis";
+            else if (Value is ExternalRotationalAxis)
+                return "External Rotational Axis";
             else
-                return "Robot Tool";
+                return "External Axis";
         }
 
         /// <summary>
@@ -107,7 +122,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("RobotTool"); }
+            get { return ("External Axis"); }
         }
 
         /// <summary>
@@ -115,7 +130,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single RobotTool"); }
+            get { return ("Defines a External Axis."); }
         }
 
         /// <summary>
@@ -125,9 +140,29 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return BoundingBox.Empty; }
-                else if (Value.Mesh == null) { return BoundingBox.Empty; }
-                else { return Value.Mesh.GetBoundingBox(true); }
+                if (Value == null)
+                {
+                    return BoundingBox.Empty;
+                }
+
+                else
+                {
+                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Base mesh
+                    if (Value.BaseMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    // Link mesh
+                    if (Value.LinkMesh != null)
+                    {
+                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
+                    }
+
+                    return MeshBoundingBox;
+                }
             }
         }
 
@@ -151,8 +186,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to RobotTool.
-            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
+            //Cast to ExternalAxis.
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -161,15 +196,23 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to Mesh.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
+            //Cast to ExternalLinearAxis.
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
                 if (Value == null)
                     target = default(Q);
-                else if (Value.Mesh == null)
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ExternalRotationalAxis.
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
+            {
+                if (Value == null)
                     target = default(Q);
                 else
-                    target = (Q)(object) new GH_Mesh(Value.Mesh);
+                    target = (Q)(object)Value;
                 return true;
             }
 
@@ -186,10 +229,27 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from RobotTool
-            if (typeof(RobotTool).IsAssignableFrom(source.GetType()))
+            //Cast from ExternalAxisGoo
+            if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
             {
-                Value = (RobotTool)source;
+                ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
+                Value = externalAxisGoo.Value as ExternalAxis;
+                return true;
+            }
+
+            //Cast from ExternalLinearAxisGoo
+            if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
+                Value = externalLinearAxisGoo.Value as ExternalAxis;
+                return true;
+            }
+
+            //Cast from ExternalRotationalAxisGoo
+            if (typeof(ExternalRotationalAxisGoo).IsAssignableFrom(source.GetType()))
+            {
+                ExternalRotationalAxisGoo externalRotationalAxisGoo = source as ExternalRotationalAxisGoo;
+                Value = externalRotationalAxisGoo.Value as ExternalAxis; 
                 return true;
             }
 
@@ -218,17 +278,19 @@ namespace RobotComponentsABB.Goos
                 return null;
             }
 
-            else
+            else if (Value is ExternalAxis)
             {
-                // Duplicate value
-                RobotTool robotTool = Value.Duplicate();
+                // Get value and duplicate
+                ExternalAxis externalAxis = Value.DuplicateAsExternalAxis();
                 // Transform
-                robotTool.Transform(xform);
+                externalAxis.Transform(xform);
                 // Make new goo instance
-                RobotToolGoo robotToolGoo = new RobotToolGoo(robotTool);
+                ExternalAxisGoo externalAxisGoo = new ExternalAxisGoo(externalAxis);
                 // Return
-                return robotToolGoo;
+                return externalAxisGoo;
             }
+
+            return null;
         }
 
         /// <summary>
@@ -262,9 +324,15 @@ namespace RobotComponentsABB.Goos
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
             if (Value == null) { return; }
-            if (Value.Mesh != null)
+
+            if (Value.BaseMesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
+
+            if (Value.LinkMesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
             }
         }
 

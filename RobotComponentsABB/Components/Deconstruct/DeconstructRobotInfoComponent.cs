@@ -46,8 +46,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Tool Plane (TCP) as Frame", GH_ParamAccess.item);
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool");
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool", GH_ParamAccess.item);
+            pManager.RegisterParam(new ExternalAxisParameter(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
+
+        // Meshes
+        private List<Mesh> _meshes = new List<Mesh>() { };
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -70,13 +74,17 @@ namespace RobotComponentsABB.Components.Deconstruct
 
             // Output variables
             string name;
-            List<Mesh> meshes;
+            List<Mesh> meshes = new List<Mesh>();
+            List<ExternalAxisGoo> externalAxisGoos = new List<ExternalAxisGoo>();
             List<Plane> axisPlanes;
             List<Interval> axisLimits;
             Plane basePlane;
             Plane mountingFrame;
             Plane toolPlane;
             RobotToolGoo tool;
+
+            // Clear list with display meshes
+            _meshes.Clear();
 
             // Name
             if (robotInfoGoo.Value.Name != null)
@@ -92,12 +100,15 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Meshes
             if (robotInfoGoo.Value.Meshes != null)
             {
-                meshes = robotInfoGoo.Value.Meshes;
+                for (int i = 0; i < 7; i++)
+                {
+                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                    _meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                }
             }
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo Meshes is not Valid");
-                meshes = null;
             }
 
             // AxisPlanes
@@ -159,6 +170,9 @@ namespace RobotComponentsABB.Components.Deconstruct
             if (robotInfoGoo.Value.Tool.IsValid)
             {
                 tool = new RobotToolGoo(robotInfoGoo.Value.Tool);
+
+                // Add display mesh
+                _meshes.Add(robotInfoGoo.Value.Tool.Mesh);
             }
             else
             {
@@ -166,6 +180,16 @@ namespace RobotComponentsABB.Components.Deconstruct
                 tool = null;
             }
 
+            // External Axes
+            for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
+            {
+                externalAxisGoos.Add(new ExternalAxisGoo(robotInfoGoo.Value.ExternalAxis[i]));
+
+                // Add display meshes
+                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);
+                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].LinkMesh);
+            }
+           
             // Output
             DA.SetData(0, name);
             DA.SetDataList(1, meshes);
@@ -175,6 +199,23 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(5, mountingFrame);
             DA.SetData(6, toolPlane);
             DA.SetData(7, tool);
+            DA.SetDataList(8, externalAxisGoos);
+        }
+
+        /// <summary>
+        /// This method displays the meshes
+        /// </summary>
+        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            // Get the display properties set by the user in GH
+            Rhino.Display.DisplayMaterial material = args.ShadeMaterial;
+
+            // Display the meshes
+            for (int i = 0; i != _meshes.Count; i++)
+            {
+                args.Display.DrawMeshShaded(_meshes[i], material);
+            }
         }
 
         /// <summary>

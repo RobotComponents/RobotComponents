@@ -43,8 +43,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddGenericParameter("External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -179,12 +178,16 @@ namespace RobotComponentsABB.Components.Definitions
                         positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
                     }
                 }
-                robotInfo = new RobotInfo("IRB120-3/0.58", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
+                robotInfo = new RobotInfo("IRB120-3/0.58", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             else
             {
-                robotInfo = new RobotInfo("IRB120-3/0.58", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                robotInfo = new RobotInfo("IRB120-3/0.58", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             // Output

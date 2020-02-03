@@ -43,8 +43,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddGenericParameter("External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -97,13 +96,13 @@ namespace RobotComponentsABB.Components.Definitions
             // Robot mesh
             List<Mesh> meshes = new List<Mesh>();
             // Base
-            string linkString = RobotComponentsABB.Properties.Resources.IRB2600_12_1_85_link_0;
+            string linkString = RobotComponentsABB.Properties.Resources.IRB2600_shared_link_0;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = RobotComponentsABB.Properties.Resources.IRB2600_12_1_85_link_1;
+            linkString = RobotComponentsABB.Properties.Resources.IRB2600_shared_link_1;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = RobotComponentsABB.Properties.Resources.IRB2600_12_1_85_link_2;
+            linkString = RobotComponentsABB.Properties.Resources.IRB2600_shared_link_2;
             meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
             // Axis 3
             linkString = RobotComponentsABB.Properties.Resources.IRB2600_12_1_85_link_3;
@@ -180,12 +179,16 @@ namespace RobotComponentsABB.Components.Definitions
                     }
                 }
 
-                robotInfo = new RobotInfo("IRB2600-12/1.85", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
+                robotInfo = new RobotInfo("IRB2600-12/1.85", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             else
             {
-                robotInfo = new RobotInfo("IRB2600-12/1.85", meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                robotInfo = new RobotInfo("IRB2600-12/1.85", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
 
             // Output

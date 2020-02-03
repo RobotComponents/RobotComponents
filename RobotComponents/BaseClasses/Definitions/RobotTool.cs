@@ -89,9 +89,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _toolPlane = Plane.WorldXY;
 
             _toolPlane.Translate(new Vector3d(toolTransX, toolTransY, toolTransZ));
-            _toolPlane.Transform(Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), _toolPlane.Origin));
-            _toolPlane.Transform(Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), _toolPlane.Origin));
-            _toolPlane.Transform(Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), _toolPlane.Origin));
 
             _robotHold = true;
             _mass = 0.001;
@@ -138,7 +138,9 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the RobotTool object. </returns>
         public RobotTool Duplicate()
         {
-            RobotTool dup = new RobotTool(Name, Mesh, AttachmentPlane, ToolPlane, RobotHold, 
+            Mesh mesh = Mesh.DuplicateMesh();
+
+            RobotTool dup = new RobotTool(Name, mesh, AttachmentPlane, ToolPlane, RobotHold, 
                 Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
             return dup;
         }
@@ -272,6 +274,19 @@ namespace RobotComponents.BaseClasses.Definitions
             _centerOfGravityOrientation = Quaternion.Zero;
             _inertia = Vector3d.Unset;
         }
+
+        /// <summary>
+        /// Transforms the Robot Tool spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public void Transform(Transform xform)
+        {
+            _mesh.Transform(xform);
+            _attachmentPlane.Transform(xform);
+            _toolPlane.Transform(xform);
+
+            ReInitialize();
+        }
         #endregion
 
         #region properties
@@ -282,6 +297,8 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             get
             {
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 if (AttachmentPlane == null) { return false; }
                 if (AttachmentPlane == Plane.Unset) { return false; }
                 if (ToolPlane == null) { return false; }

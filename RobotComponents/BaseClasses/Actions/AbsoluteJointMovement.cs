@@ -10,7 +10,7 @@ namespace RobotComponents.BaseClasses.Actions
     /// <summary>
     /// Joint Movement class
     /// </summary>
-    public class JointMovement : Action
+    public class AbsoluteJointMovement : Action
     {
         #region fields
         // Fixed fields
@@ -29,17 +29,17 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// An empty movement constructor.
         /// </summary>
-        public JointMovement()
+        public AbsoluteJointMovement()
         {
         }
 
         /// <summary>
-        /// Method to create a joint movement with as only minimum arguments. 
+        /// Method to create a absolute joint movement with as only minimum arguments. 
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
-        public JointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues)
+        public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues)
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
@@ -52,14 +52,14 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a joint movement with an empty robot tool (no override).
+        /// Method to create a absolute joint movement with an empty robot tool (no override).
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
-        public JointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision)
+        public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision)
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
@@ -72,14 +72,14 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a joint movement. 
+        /// Method to create a absolute joint movement. 
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
-        public JointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, DigitalOutput digitalOutput)
+        public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, DigitalOutput digitalOutput)
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
@@ -92,7 +92,7 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a robot movement. 
+        /// Method to create a absolute joint movement. 
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
@@ -100,7 +100,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        public JointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, RobotTool robotTool)
+        public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, RobotTool robotTool)
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
@@ -115,9 +115,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// Duplicates a robot movement.
         /// </summary>
         /// <returns></returns>
-        public JointMovement Duplicate()
+        public AbsoluteJointMovement Duplicate()
         {
-            JointMovement dup = new JointMovement(Name, InternalAxisValues, ExternalAxisValues, SpeedData, Precision);
+            AbsoluteJointMovement dup = new AbsoluteJointMovement(Name, new List<double>(InternalAxisValues), new List<double>(ExternalAxisValues), SpeedData.Duplicate(), Precision);
             return dup;
         }
         #endregion

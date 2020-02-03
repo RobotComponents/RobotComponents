@@ -136,7 +136,7 @@ namespace RobotComponents.BaseClasses.Actions
                     }
 
                     // Absolute joint movement found as Action.JointMovement
-                    else if (actions[i] is JointMovement)
+                    else if (actions[i] is AbsoluteJointMovement)
                     {
                         _firstMovementIsMoveAbs = true;
                         foundFirstMovement = true;
@@ -317,10 +317,10 @@ namespace RobotComponents.BaseClasses.Actions
                 #endregion
 
                 #region Check if action is a joint movement
-                else if (actions[i] is JointMovement)
+                else if (actions[i] is AbsoluteJointMovement)
                 {
                     // Duplicate the movement since we might change properties
-                    JointMovement jointMovement = ((JointMovement)actions[i]).Duplicate();
+                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).Duplicate();
 
                     // Set the current tool if no tool is set in the movement object
                     if (jointMovement.RobotTool == null)

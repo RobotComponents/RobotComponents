@@ -22,18 +22,18 @@ using RobotComponentsABB.Utils;
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : AbsoluteJointMovement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class JointMovementComponent : GH_Component, IGH_VariableParameterComponent
+    public class AbsoluteJointMovementComponent : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public JointMovementComponent()
-          : base("Action: JointMovement", "JM",
-              "Defines a robot movement instruction for simulation and code generation."
+        public AbsoluteJointMovementComponent()
+          : base("Action: AbsoluteJointMovement", "AJM",
+              "Defines a absolute joint movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -59,7 +59,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, new List<string> { "default" });
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree, new List<double> { 0 });
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
         }
@@ -78,7 +78,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new JointMovementParameter(), "JointMovement", "JM", "Resulting Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "AbsoluteJointMovement", "AJM", "Resulting Absolute Joint Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields
@@ -144,11 +144,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             int speedDataGooCounter = -1;
             int precisionCounter = -1;
             int robotToolGooCounter = -1;
-            int digitalOutputGooCounter = -1;
 
             //// Creates movements
-            List<JointMovement> jointMovements = new List<JointMovement>();
-
+            List<AbsoluteJointMovement> jointMovements = new List<AbsoluteJointMovement>();
 
             for (int i = 0; i < biggestSize; i++)
             {
@@ -228,7 +226,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // JointMovement constructor
-                JointMovement jointMovement = new JointMovement(name, internalAxisValues, externalAxisValues, speedDataGoo.Value, precision, robotToolGoo.Value);
+                AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedDataGoo.Value, precision, robotToolGoo.Value);
                 jointMovements.Add(jointMovement);
             }
 
@@ -446,7 +444,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.Movement_Icon; }
+            get { return RobotComponentsABB.Properties.Resources.AbsoluteJointMovement_Icon; }
         }
 
         /// <summary>

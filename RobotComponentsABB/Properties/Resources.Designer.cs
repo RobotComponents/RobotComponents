@@ -63,6 +63,26 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AbsoluteJointMovement_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AbsoluteJointMovement_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Auto_Icon {
             get {
                 object obj = ResourceManager.GetObject("Auto_Icon", resourceCulture);
@@ -136,6 +156,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap Comment_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Comment_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructAbsoluteJointMovement_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructAbsoluteJointMovement_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1490,7 +1520,7 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Components.ControllerUtility;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1506,7 +1536,7 @@ namespace RobotComponentsABB.Properties {
         ///        public PickControllerForm(List&lt;string&gt; items)
         ///        {
         ///            InitializeComponent();
-        ///            for (int i = 0; i &lt; items.Count [rest of string was truncated]&quot;;.
+        ///            for (int i =  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm {
             get {
@@ -1567,7 +1597,7 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Components.ControllerUtility;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1583,9 +1613,7 @@ namespace RobotComponentsABB.Properties {
         ///        public PickDIForm(List&lt;string&gt; items)
         ///        {
         ///            InitializeComponent();
-        ///            for (int i = 0; i &lt; items.Count; i++)
-        ///            {
-        ///  [rest of string was truncated]&quot;;.
+        ///            for (int i = 0; i &lt; items.Count; i++) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm {
             get {
@@ -1647,7 +1675,7 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components;
+        ///using RobotComponentsABB.Components.ControllerUtility;
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -1663,9 +1691,7 @@ namespace RobotComponentsABB.Properties {
         ///        public PickDOForm(List&lt;string&gt; items)
         ///        {
         ///            InitializeComponent();
-        ///            for (int i = 0; i &lt; items.Count; i++)
-        ///            {
-        ///  [rest of string was truncated]&quot;;.
+        ///            for (int i = 0; i &lt; items.Count; i++) [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm {
             get {

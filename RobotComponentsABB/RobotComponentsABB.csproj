@@ -136,6 +136,7 @@
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\AbsoluteJointMovementGoo.cs" />
+    <Compile Include="Goos\ExternalAxisGoo.cs" />
     <Compile Include="Goos\WorkObjectGoo.cs" />
     <Compile Include="Goos\AutoAxisConfigGoo.cs" />
     <Compile Include="Goos\CodeLineGoo.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Goos\SpeedDataGoo.cs" />
     <Compile Include="Goos\TargetGoo.cs" />
     <Compile Include="Goos\TimerGoo.cs" />
+    <Compile Include="Parameters\ExternalAxisParam.cs" />
     <Compile Include="Parameters\SpeedDataParam.cs" />
     <Compile Include="Parameters\AbsoluteJointMovementParam.cs" />
     <Compile Include="Parameters\WorkObjectParam.cs" />

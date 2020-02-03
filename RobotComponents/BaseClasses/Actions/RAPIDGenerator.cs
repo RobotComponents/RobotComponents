@@ -4,6 +4,7 @@ using System.Text;
 
 using Rhino.Geometry;
 
+using RobotComponents.Utils;
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponents.BaseClasses.Kinematics;
 
@@ -16,11 +17,11 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private RobotInfo _robotInfo; // Robot info to construct the code for
-        private InverseKinematics _inverseKinematics; // IK used for calculating Axis in Movements
+        private readonly InverseKinematics _inverseKinematics; // IK used for calculating Axis in Movements
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
-        private Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
-        private Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
-        private Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
+        private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
+        private readonly Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
+        private readonly Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _RAPIDCode; // The rapid main code
@@ -28,7 +29,6 @@ namespace RobotComponents.BaseClasses.Actions
         private string _ModuleName; // The module name of the rapid main code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
-
         #endregion
 
         #region constructors
@@ -116,6 +116,11 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Main Module
             _stringBuilder.Append("MODULE " + _ModuleName + "@");
 
+            // Add comment lines for tracking which version of RC was used
+            Comment version = new Comment("This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
+            version.ToRAPIDFunction(this);
+            _stringBuilder.Append("@");
+
             // Creates Vars
             for (int i = 0; i != actions.Count; i++)
             {
@@ -182,6 +187,9 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Main Module
             string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)" + "@" + "@";
 
+            // Version number
+            BASECode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion + "@" + "@";
+
             // Creates Comments
             BASECode += " ! System module with basic predefined system data" + "@";
             BASECode += " !************************************************" + "@" + "@";
@@ -198,7 +206,7 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 BASECode += " ! User defined tooldata " + "@";
                 BASECode += CreateToolBaseCode(robotTools);
-                BASECode += "@" + " ";
+                BASECode += "@";
             }
 
             // Adds Work Objects Base Code
@@ -206,7 +214,7 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 BASECode += " ! User defined wobjdata " + "@";
                 BASECode += CreateWorkObjectBaseCode(workObjects);
-                BASECode += "@" +" ";
+                BASECode += "@";
             }
 
             // Adds Custom code line
@@ -216,9 +224,9 @@ namespace RobotComponents.BaseClasses.Actions
                 for (int i = 0; i != customCode.Count; i++)
                 {
                     BASECode += customCode[i];
-                    BASECode += "@" + " ";
+                    BASECode += "@";
                 }
-                BASECode += "@" + " ";
+                BASECode += "@";
             }
 
             // End Module
@@ -276,11 +284,8 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i < actions.Count; i++)
             {
                 #region  Check if the Override Robot Tool action is used
-                if (actions[i] is OverrideRobotTool)
+                if (actions[i] is OverrideRobotTool overrideRobotTool)
                 {
-                    // Get the override robot tool object
-                    OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
-
                     // Override the current tool
                     currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
 

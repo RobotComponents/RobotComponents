@@ -111,7 +111,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             else
             {
                 // Get the movement
-                movement = (Movement)movements[0];
+                movement = movements[0] as Movement;
 
                 // Calculate the axis values
                 inverseKinematics = new InverseKinematics(movement, _robotInfo);
@@ -534,7 +534,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             // Add the last movement / target plane and axis values
             if (movements[movements.Count - 1] is Movement) // Movement
             {
-                movement = movements[movements.Count - 1] as Movement; // Cast movement
+                movement = movements[movements.Count - 1] as Movement;
                 InverseKinematics inverseKinematicsLast = new InverseKinematics(movement, _robotInfo);
                 inverseKinematicsLast.Calculate();
                 _internalAxisValues.Add(inverseKinematicsLast.InternalAxisValues);
@@ -544,11 +544,11 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             else if (movements[movements.Count - 1] is AbsoluteJointMovement) // Joint movement
             {
-                AbsoluteJointMovement jointMovement2 = movements[movements.Count - 1] as AbsoluteJointMovement; // Cast joint movement
-                forwardKinematics.Update(jointMovement2.InternalAxisValues, jointMovement2.ExternalAxisValues);
+                jointMovement = movements[movements.Count - 1] as AbsoluteJointMovement;
+                forwardKinematics.Update(new List<double>(jointMovement.InternalAxisValues), new List<double>(jointMovement.ExternalAxisValues));
                 forwardKinematics.Calculate();
-                _internalAxisValues.Add(new List<double>(jointMovement2.InternalAxisValues));
-                _externalAxisValues.Add(new List<double>(jointMovement2.ExternalAxisValues));
+                _internalAxisValues.Add(new List<double>(jointMovement.InternalAxisValues));
+                _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues));
                 _planes.Add(new Plane(forwardKinematics.TCPPlane));
             }
         }
@@ -570,71 +570,6 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Get the internal and external axis values and the path curve
             GetAxisValues(movements, interpolations);
-        }
-
-        /// <summary>
-        /// Get the movements from the list with actions to generate the path.
-        /// The robot tool will be set at the movement object by checking if the override robot tool action is used.
-        /// </summary>
-        /// <param name="actions"> The list with robot actions. </param>
-        /// <returns> The list with robot movements and the correct tool for this movement. </returns>
-        private List<Movement> GetMovementsFromActions(List<Actions.Action> actions)
-        {
-            // Initiate list
-            List<Movement> movements = new List<Movement>();
-
-            // Iniate current tool (the tool attached to the robot)
-            RobotTool currentTool = _robotInfo.Tool.Duplicate();
-            currentTool.Mesh = new Mesh(); // save memory
-
-            // Initiate override robot tool, movement and joint movement
-            OverrideRobotTool overrideRobotTool;
-
-            // Loop over all the actions
-            for (int i = 0; i < actions.Count; i++)
-            {
-                // Check if the Override Robot Tool actions is used
-                if (actions[i] is OverrideRobotTool)
-                {
-                    // Get the override robot tool object
-                    overrideRobotTool = (OverrideRobotTool)actions[i];
-
-                    // Override the current tool
-                    currentTool = overrideRobotTool.RobotTool.Duplicate();
-                    currentTool.Mesh = new Mesh(); // save memory
-                }
-
-                // Check if the action is a movement
-                else if (actions[i] is Movement)
-                {
-                    // Duplicate the movement since we might change properties
-                    Movement movement = ((Movement)actions[i]).Duplicate();
-
-                    // Set the current tool if no tool is set in the movement object
-                    if (movement.RobotTool == null)
-                    {
-                        movement.RobotTool = currentTool.Duplicate();
-                    }
-
-                    // If a tool is set check the name (tool can be empty)
-                    else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
-                    {
-                        movement.RobotTool = currentTool.Duplicate();
-                    }
-
-                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-                    else
-                    {
-                        movement.RobotTool.Mesh = new Mesh(); // save memory
-                    }
-
-                    // Add movement to list
-                    movements.Add(movement);
-                }
-            }
-
-            // Return list with movements
-            return movements;
         }
 
         /// <summary>
@@ -743,6 +678,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 _internalAxisValues[i].Clear();
                 _externalAxisValues[i].Clear();
             }
+
             _internalAxisValues.Clear();
             _externalAxisValues.Clear();
 

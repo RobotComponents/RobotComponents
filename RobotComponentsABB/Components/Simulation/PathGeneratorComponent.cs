@@ -89,7 +89,7 @@ namespace RobotComponentsABB.Components.Simulation
             if (update == true || _lastInterpolations != interpolations)
             {
                 // Create the path generator
-                _pathGenerator = new PathGenerator(robotInfoGoo.Value);
+                _pathGenerator = new PathGenerator(robotInfoGoo.Value.Duplicate());
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);

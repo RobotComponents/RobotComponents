@@ -129,21 +129,30 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     SaveRapid(path, RAPID, BaseCode);
 
                     // Get file path / directory to save on the controller
-                    string localDirectory = Path.Combine(path, "RAPID");
-                    string str3 = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
-                    string filePath;
+                    string localDirectory = Path.Combine(path, "RAPID"); // Physical
+                    string str3 = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID"); // Virtual
+                    //string filePath;
+
+                    string systemPath;
+                    string programPath;
 
                     // Upload to the virtual controller
                     if (!_controller.IsVirtual)
                     {
                         _controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
                         _controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
-                        filePath = Path.Combine(str3, "RAPID_T_ROB1.pgf");
+                        //filePath = Path.Combine(str3, "RAPID_T_ROB1.pgf");
+
+                        systemPath = Path.Combine(str3, "BASE.sys"); // Change to RC_System?
+                        programPath = Path.Combine(str3, "MainModule.mod"); // Change to RC_Program?
                     }
                     // Upload to a physical controller
                     else
                     {
-                        filePath = Path.Combine(localDirectory, "RAPID_T_ROB1.pgf");
+                        //filePath = Path.Combine(localDirectory, "RAPID_T_ROB1.pgf");
+
+                        systemPath = Path.Combine(localDirectory, "BASE.sys"); // Change to RC_System?
+                        programPath = Path.Combine(localDirectory, "MainModule.mod"); // Change to RC_Program
                     }
 
                     // The real upload
@@ -153,20 +162,22 @@ namespace RobotComponentsABB.Components.ControllerUtility
                         Task task = _controller.Rapid.GetTasks().First<Task>();
 
                         // Delete current task
-                        task.DeleteProgram();
+                        //task.DeleteProgram();
 
                         // Reset current BASE code if no new base code is provided
-                        if (BaseCode == null)
-                        {
-                            Module Base = task.GetModule("BASE");
-                            Base.Delete();
-                        }
+                        //if (BaseCode == null)
+                        //{
+                        //    Module Base = task.GetModule("BASE");
+                        //    Base.Delete();
+                        //}
 
                         // Grant acces
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        task.LoadProgramFromFile(filePath, RapidLoadMode.Replace);
+                        //task.LoadProgramFromFile(filePath, RapidLoadMode.Replace);
+                        task.LoadModuleFromFile(systemPath, RapidLoadMode.Replace);
+                        task.LoadModuleFromFile(programPath, RapidLoadMode.Replace);
 
                         // Update action status message
                         _uStatus = "The RAPID code is succesfully uploaded.";
@@ -191,7 +202,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             DA.SetData(0, _msg);
         }
 
-        //  Addtional methods
+        // Additional methods
         #region additional methods
         /// <summary>
         /// Method to connect to the controller. 
@@ -304,7 +315,6 @@ namespace RobotComponentsABB.Components.ControllerUtility
             using (Mastership.Request(_controller.Rapid))
             {
                 _controller.Rapid.Stop(StopMode.Instruction);
-                
             }
 
             // Return status message
@@ -323,7 +333,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Method to save the RAPID code
+        /// Saves the RAPID code to a local folder on the used device. 
         /// </summary>
         /// <param name="_path"> The directory where to save the RAPID code. </param>
         /// <param name="RAPID"> The RAPID main code. </param>
@@ -344,21 +354,21 @@ namespace RobotComponentsABB.Components.ControllerUtility
             Directory.CreateDirectory(path);
 
             // Create an empty xml document for saving the program files
-            string saveProgram = Path.Combine(path, "RAPID_T_ROB1.xml");
-            XmlDocument xdoc = new XmlDocument();
+            //string saveProgram = Path.Combine(path, "RAPID_T_ROB1.xml");
+            //XmlDocument xdoc = new XmlDocument();
 
-            if (BaseCode != null)
-            {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module><Module>BASE.sys</Module></Program>");
-            }
-            else
-            {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module></Program>");
-            }
+            //if (BaseCode != null)
+            //{
+            //    xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module><Module>BASE.sys</Module></Program>");
+            //}
+            //else
+            //{
+            //    xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module></Program>");
+            //}
 
             // Save xml doc and change extension
-            xdoc.Save(saveProgram);
-            File.Move(saveProgram, Path.ChangeExtension(saveProgram, ".pgf"));
+            //xdoc.Save(saveProgram);
+            //File.Move(saveProgram, Path.ChangeExtension(saveProgram, ".pgf"));
 
             // Save the main code
             if (RAPID != null)

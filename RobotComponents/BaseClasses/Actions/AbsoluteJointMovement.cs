@@ -127,28 +127,30 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
 
-            // Creates Speed Data Variable Code
-            string speedDataCode = _speedData.InitRAPIDVar(robotInfo, RAPIDcode);
-
             // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDcode.Contains(speedDataCode))
+            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
             {
-                tempCode += speedDataCode;
+                // Creates SpeedData Variable Code and adds it to the tempCoode
+                _speedData.InitRAPIDVar(RAPIDGenerator);
+                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
+                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
             }
 
             // Creates targetName variables to check if they already exist 
             string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
             // Only adds target code if target is not already defined
-            if (!RAPIDcode.Contains(jointTargetVar))
+            if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
             {
+                // Adds Target to RAPIDGenerator SpeedDatasDictionary
+                RAPIDGenerator.Targets.Add(JointTargetName, new Target());
+
                 // Creates Code Variable
                 tempCode += "@" + "\t" + jointTargetVar + ":=[[";
 
@@ -172,11 +174,9 @@ namespace RobotComponents.BaseClasses.Actions
                 }
                 tempCode = tempCode.Remove(tempCode.Length - 2);
                 tempCode += "]];";
+
+                RAPIDGenerator.StringBuilder.Append(tempCode);
             }
-
-
-            // returns RAPID code
-            return tempCode;
         }
 
         /// <summary>
@@ -184,18 +184,10 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotToolName">Defines the robot rool name.</param>
         /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             // Set tool name
-            string toolName;
-            if (_robotTool.Name == "" || _robotTool.Name == null)
-            {
-                toolName = robotToolName;
-            }
-            else
-            {
-                toolName = _robotTool.Name;
-            }
+            string toolName = _robotTool.Name;
 
             // Set zone data text (precision value)
             string zoneName;
@@ -209,7 +201,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // MoveAbsJ
-            return ("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + ";");
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + ";");
 
         }
         #endregion

@@ -59,9 +59,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, new List<string> { "default" });
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree, new List<double> { 0 });
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
+
+            pManager[2].Optional = true;
         }
 
         // Register the number of fixed input parameters
@@ -182,14 +184,22 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // external axis values counter
-                if (i < sizeValues[2]) //instead of calling names.Count again
+                if (sizeValues[2] == 0)
                 {
-                    externalAxisValues = externalAxisValuesTree[i].ConvertAll(x => (double)x.Value);
-                    externalValueCounter++;
+                    externalAxisValues = new List<double>() { };
                 }
+
                 else
                 {
-                    externalAxisValues = externalAxisValuesTree[externalValueCounter].ConvertAll(x => (double)x.Value);
+                    if (i < sizeValues[2]) //instead of calling names.Count again
+                    {
+                        externalAxisValues = externalAxisValuesTree[i].ConvertAll(x => (double)x.Value);
+                        externalValueCounter++;
+                    }
+                    else
+                    {
+                        externalAxisValues = externalAxisValuesTree[externalValueCounter].ConvertAll(x => (double)x.Value);
+                    }
                 }
 
                 // Workobject counter

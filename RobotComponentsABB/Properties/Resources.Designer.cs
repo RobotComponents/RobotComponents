@@ -63,6 +63,26 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AbsoluteJointMovement_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AbsoluteJointMovement_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Auto_Icon {
             get {
                 object obj = ResourceManager.GetObject("Auto_Icon", resourceCulture);
@@ -136,6 +156,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap Comment_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Comment_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructAbsoluteJointMovement_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructAbsoluteJointMovement_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

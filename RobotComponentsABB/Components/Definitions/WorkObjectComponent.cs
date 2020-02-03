@@ -130,7 +130,7 @@ namespace RobotComponentsABB.Components.Definitions
                 ExternalRotationalAxis externalAxis = null;
 
                 // Names counter
-                if (i < names.Count)
+                if (i < sizeValues[0])
                 {
                     name = names[i];
                     nameCounter++;
@@ -141,7 +141,7 @@ namespace RobotComponentsABB.Components.Definitions
                 }
 
                 // Planes counter
-                if (i < planes.Count)
+                if (i < sizeValues[1])
                 {
                     plane = planes[i];
                     planesCounter++;
@@ -152,7 +152,7 @@ namespace RobotComponentsABB.Components.Definitions
                 }
 
                 // Axis counter
-                if (i < externalAxes.Count)
+                if (i < sizeValues[2])
                 {
                     externalAxis = externalAxes[i];
                     axisCounter++;

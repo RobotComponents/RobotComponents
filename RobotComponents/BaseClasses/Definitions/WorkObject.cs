@@ -217,7 +217,7 @@ namespace RobotComponents.BaseClasses.Definitions
             // Add mechanical unit (an external axis or robot) < ufmec of string >            
             if (_externalAxis != null)
             {
-                result += $"{_externalAxis.Name}, ";
+                result += $"\"{_externalAxis.Name}\", ";
             }
             else
             {

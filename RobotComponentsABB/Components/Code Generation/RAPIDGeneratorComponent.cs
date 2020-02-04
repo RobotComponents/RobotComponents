@@ -67,6 +67,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
+        private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs = true;
         private string _BASECode = "";
@@ -120,20 +121,39 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
-            // Initiaties the rapidGenerator
-            RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
-
+            // Saved file
+            bool updated = false; // Avoids saving the file two times in one run
+          
             // Updates the rapid BASE and MAIN code 
             if (update == true)
             {
+                // Initiaties the rapidGenerator
+                _rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo.Duplicate());
+
+                // Get tools data for system module
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
                 List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
                 List<string> customCode = new List<string>() { };
-                rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
-                rapidGenerator.CreateRAPIDCode();
-                _MAINCode = rapidGenerator.RAPIDCode;
-                _BASECode = rapidGenerator.BASECode;
-                _firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Generator code
+                _rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
+                _rapidGenerator.CreateRAPIDCode();
+                _MAINCode = _rapidGenerator.RAPIDCode;
+                _BASECode = _rapidGenerator.BASECode;
+
+                // Check if the first movement is an absolute joint movement. 
+                _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Saved file
+                updated = true; // Avoids saving the file two times in one run
+            }
+
+            // Save to file
+            if (saveToFile == true && updated == false) // Avoids saving the file two times in one run
+            {
+                _rapidGenerator.FilePath = filePath;
+                _rapidGenerator.WriteRAPIDCodeToFile();
+                _rapidGenerator.WriteBASECodeToFile();
             }
 
             // Checks if first Movement is MoveAbsJ

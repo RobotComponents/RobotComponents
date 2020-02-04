@@ -193,7 +193,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 DigitalOutputGoo digitalOutputGoo;
 
                 // Target counter
-                if (i < targetGoos.Count)//TODO: Calling the sizeValues[0] instead of Count (should be faster)?
+                if (i < sizeValues[0])
                 {
                     targetGoo = targetGoos[i];
                     targetGooCounter++;
@@ -204,7 +204,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Workobject counter
-                if (i < speedDataGoos.Count)
+                if (i < sizeValues[1])
                 {
                     speedDataGoo = speedDataGoos[i];
                     speedDataGooCounter++;
@@ -215,7 +215,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Movement type counter
-                if (i < movementTypes.Count)
+                if (i < sizeValues[2])
                 {
                     movementType = movementTypes[i];
                     movementTypeCounter++;
@@ -226,7 +226,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Precision counter
-                if (i < precisions.Count)
+                if (i < sizeValues[3])
                 {
                     precision = precisions[i];
                     precisionCounter++;
@@ -237,7 +237,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Robot tool counter
-                if (i < robotToolGoos.Count)
+                if (i < sizeValues[4])
                 {
                     robotToolGoo = robotToolGoos[i];
                     robotToolGooCounter++;
@@ -248,7 +248,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Work Object counter
-                if (i < workObjectGoos.Count)
+                if (i < sizeValues[5])
                 {
                     workObjectGoo = workObjectGoos[i];
                     workObjectGooCounter++;
@@ -259,7 +259,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Digital Output counter
-                if (i < digitalOutputGoos.Count)
+                if (i < sizeValues[6])
                 {
                     digitalOutputGoo = digitalOutputGoos[i];
                     digitalOutputGooCounter++;

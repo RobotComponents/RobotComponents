@@ -84,12 +84,13 @@ namespace RobotComponentsABB.Components.Simulation
             if (!DA.GetData(4, ref displayPath)) { return; }
             if (!DA.GetData(5, ref update)) { return; }
 
-            // Create the path generator
-            _pathGenerator = new PathGenerator(robotInfoGoo.Value);
 
             // Update the path
             if (update == true || _lastInterpolations != interpolations)
             {
+                // Create the path generator
+                _pathGenerator = new PathGenerator(robotInfoGoo.Value.Duplicate());
+
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
 

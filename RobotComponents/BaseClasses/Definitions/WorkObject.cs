@@ -77,7 +77,17 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the WorkObject object. </returns>
         public WorkObject Duplicate()
         {
-            WorkObject dup = new WorkObject(Name, Plane, ExternalAxis);
+            WorkObject dup;
+
+            if (ExternalAxis != null)
+            {
+                dup = new WorkObject(Name, Plane, ExternalAxis.DuplicateAsExternalAxis());
+            }
+            else
+            {
+                dup = new WorkObject(Name, Plane, ExternalAxis);
+            }
+
             return dup;
         }
         #endregion
@@ -207,7 +217,7 @@ namespace RobotComponents.BaseClasses.Definitions
             // Add mechanical unit (an external axis or robot) < ufmec of string >            
             if (_externalAxis != null)
             {
-                result += $"{_externalAxis.Name}, ";
+                result += $"\"{_externalAxis.Name}\", ";
             }
             else
             {

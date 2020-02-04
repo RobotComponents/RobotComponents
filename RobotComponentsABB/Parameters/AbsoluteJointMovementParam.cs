@@ -9,16 +9,16 @@ using RobotComponentsABB.Goos;
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
-    /// Movement parameter
+    /// Absolute Joint Movement parameter
     /// </summary>
-    public class JointMovementParameter : GH_PersistentParam<JointMovementGoo>, IGH_PreviewObject
+    public class AbsoluteJointMovementParameter : GH_PersistentParam<AbsoluteJointMovementGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
         /// </summary>
-        public JointMovementParameter()
-          : base(new GH_InstanceDescription("JointMovement", "JM", 
-                "Maintains the JointMovement data."
+        public AbsoluteJointMovementParameter()
+          : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
+                "Maintains the Absolute Joint Movement data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "JointMovement";
+            return "Absolute Joint Movement";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "JointMovement"; set => base.Name = value; }
+        public override string Name { get => "AbsoluteJointMovement"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Movement_Parameter_Icon; }//TODO: make a new Icon for JointMovement
+            get { return Properties.Resources.AbsoluteJointMovement_Parameter_Icon; }
         }
 
         /// <summary>
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<JointMovementGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<AbsoluteJointMovementGoo> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref JointMovementGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref AbsoluteJointMovementGoo value)
         {
             return GH_GetterResult.cancel;
         }
@@ -122,7 +122,6 @@ namespace RobotComponentsABB.Parameters
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(IGH_PreviewArgs args)
         {
-            //Use a standard method to draw wires, you don't have to specifically implement this.
             Preview_DrawWires(args);
         }
 

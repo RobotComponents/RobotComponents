@@ -138,10 +138,8 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the RobotTool object. </returns>
         public RobotTool Duplicate()
         {
-            Mesh mesh = Mesh.DuplicateMesh();
-
-            RobotTool dup = new RobotTool(Name, mesh, AttachmentPlane, ToolPlane, RobotHold, 
-                Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
+            RobotTool dup = new RobotTool(Name, Mesh.DuplicateMesh(), AttachmentPlane, ToolPlane, 
+                RobotHold, Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
             return dup;
         }
 

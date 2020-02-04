@@ -7,39 +7,39 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsABB.Goos
 {
     /// <summary>
-    /// Movement Goo wrapper class, makes sure the Movement can be used in Grasshopper.
+    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
     /// </summary>
-    public class JointMovementGoo : GH_GeometricGoo<JointMovement>, IGH_PreviewData
+    public class AbsoluteJointMovementGoo : GH_GeometricGoo<AbsoluteJointMovement>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public JointMovementGoo()
+        public AbsoluteJointMovementGoo()
         {
-            this.Value = new JointMovement();
+            this.Value = new AbsoluteJointMovement();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="movement"> Movement Value to store inside this Goo instance. </param>
-        public JointMovementGoo(JointMovement movement)
+        /// <param name="absoluteJointMovement"> AbsoluteJointMovement Value to store inside this Goo instance. </param>
+        public AbsoluteJointMovementGoo(AbsoluteJointMovement absoluteJointMovement)
         {
-            if (movement == null)
-                movement = new JointMovement();
-            this.Value = movement;
+            if (absoluteJointMovement == null)
+                absoluteJointMovement = new AbsoluteJointMovement();
+            this.Value = absoluteJointMovement;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="jointMovementGoo"> MovementGoo to store inside this Goo instance. </param>
-        public JointMovementGoo(JointMovementGoo jointMovementGoo)
+        /// <param name="absoluteJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
+        public AbsoluteJointMovementGoo(AbsoluteJointMovementGoo absoluteJointMovementGoo)
         {
-            if (jointMovementGoo == null)
-                jointMovementGoo = new JointMovementGoo();
-            this.Value = jointMovementGoo.Value;
+            if (absoluteJointMovementGoo == null)
+                absoluteJointMovementGoo = new AbsoluteJointMovementGoo();
+            this.Value = absoluteJointMovementGoo.Value;
         }
 
         /// <summary>
@@ -48,16 +48,16 @@ namespace RobotComponentsABB.Goos
         /// <returns> A duplicate of the MovementGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateJointMovementGoo();
+            return DuplicateAbsoluteJointMovementGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the MovementGoo. </returns>
-        public JointMovementGoo DuplicateJointMovementGoo()
+        public AbsoluteJointMovementGoo DuplicateAbsoluteJointMovementGoo()
         {
-            return new JointMovementGoo(Value == null ? new JointMovement() : Value.Duplicate());
+            return new AbsoluteJointMovementGoo(Value == null ? new AbsoluteJointMovement() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal JointMovement instance"; }
+                if (Value == null) { return "No internal Absolute Joint Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid JointMovement instance: ?"; //Todo: beef this up to be more informative.
+                return "Invalid Absolute Joint Movement instance: ?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -96,7 +96,7 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
             {
-                return "Null JointMovement";
+                return "Null Absolute Joint Movement";
             }
 
             else if (Value.MovementType == 0)
@@ -106,7 +106,7 @@ namespace RobotComponentsABB.Goos
 
             else
             {
-                return "JointMovement";
+                return "Absolute Joint Movement";
             }
         }
 
@@ -115,7 +115,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("JointMovement"); }
+            get { return ("Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single JointMovement"); }
+            get { return ("Defines a single Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -157,13 +157,23 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to SpeedData.
-            if (typeof(Q).IsAssignableFrom(typeof(JointMovement)))
+            //Cast to Absolute Joint Movement
+            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Absolute Joint Movement Goo
+            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovementGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new AbsoluteJointMovementGoo(Value);
                 return true;
             }
 
@@ -180,10 +190,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from SpeedData: Custom SpeedData
-            if (typeof(JointMovement).IsAssignableFrom(source.GetType()))
+            //Cast from Aboslute Joint Movement
+            if (typeof(AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
-                Value = (JointMovement)source;
+                Value = (AbsoluteJointMovement)source;
+                return true;
+            }
+
+            //Cast from Aboslute Joint Movement Goo
+            if (typeof(AbsoluteJointMovementGoo).IsAssignableFrom(source.GetType()))
+            {
+                AbsoluteJointMovementGoo absoluteJointMovementGoo = (AbsoluteJointMovementGoo)source;
+                Value = absoluteJointMovementGoo.Value;
                 return true;
             }
 

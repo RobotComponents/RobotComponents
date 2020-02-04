@@ -238,7 +238,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns>Returns a deep copy of the Target object.</returns>
         public Target Duplicate()
         {
-            Target dup = new Target(Name, Plane, AxisConfig, ExternalAxisValues);
+            Target dup = new Target(Name, Plane, AxisConfig, new List<double>(ExternalAxisValues));
             return dup;
         }
         #endregion
@@ -328,7 +328,6 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Return the RAPID variable code.</returns>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -337,7 +336,6 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Returns the RAPID main code.</returns>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
         }

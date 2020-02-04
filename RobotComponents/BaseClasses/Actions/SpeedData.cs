@@ -29,6 +29,20 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Construct a Speeddata from another SpeedData Class. Used to Dublicate.
+        /// </summary>
+        /// <param name="speedData">SpeedData to Construct a new SpeedData from.</param>
+        public SpeedData(SpeedData speedData)
+        {
+            _name = speedData.Name;
+            _v_tcp = speedData.V_TCP;
+            _v_ori = speedData.V_ORI;
+            _v_leax = speedData.V_LEAX;
+            _v_reax = speedData.V_REAX;
+            _predefined = speedData.PreDefinied;
+        }
+
+        /// <summary>
         /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
         /// </summary>
         /// <param name="v_tcp">  The velocity of the tool center point (TCP) in mm/s. </param>
@@ -114,10 +128,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Return the RAPID variable code.</returns>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false) 
+            if (_predefined == false)
             {
                 RAPIDGenerator.StringBuilder.Append ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
             }
@@ -127,7 +140,6 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Returns the RAPID main code.</returns>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
         }

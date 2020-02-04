@@ -99,7 +99,7 @@ namespace RobotComponentsABB.Components.Utilities
                 double D;
 
                 // Points
-                if (i < points.Count)
+                if (i < sizeValues[0])
                 {
                     point = points[i];
                     pointCounter++;
@@ -110,7 +110,7 @@ namespace RobotComponentsABB.Components.Utilities
                 }
 
                 // Quat A
-                if (i < quatA.Count)
+                if (i < sizeValues[1])
                 {
                     A = quatA[i];
                     aCounter++;
@@ -121,7 +121,7 @@ namespace RobotComponentsABB.Components.Utilities
                 }
 
                 // Quat B
-                if (i < quatB.Count)
+                if (i < sizeValues[2])
                 {
                     B = quatB[i];
                     bCounter++;
@@ -132,7 +132,7 @@ namespace RobotComponentsABB.Components.Utilities
                 }
 
                 // Quat C
-                if (i < quatC.Count)
+                if (i < sizeValues[3])
                 {
                     C = quatC[i];
                     cCounter++;
@@ -143,7 +143,7 @@ namespace RobotComponentsABB.Components.Utilities
                 }
 
                 // Quat D
-                if (i < quatD.Count)
+                if (i < sizeValues[4])
                 {
                     D = quatD[i];
                     dCounter++;

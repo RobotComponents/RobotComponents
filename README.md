@@ -25,4 +25,4 @@ The Plugin is a development from the [Department of Digital and Experimental Des
 RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project here: http://developercenter.robotstudio.com/landing
 
 ## References
-DID WE PUBLISH SOMETHING ABOUT RC?
+Dawod M. et al. (2020) Continuous Timber Fibre Placement. In: Gengnagel C., Baverel O., Burry J., Ramsgaard Thomsen M., Weinzierl S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham

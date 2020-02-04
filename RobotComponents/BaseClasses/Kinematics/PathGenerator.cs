@@ -274,7 +274,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     else if (movements[i + 1] is Movement)
                     {
                         // Get the movement
-                        movement = (Movement)movements[i + 1];
+                        movement = movements[i + 1] as Movement;
 
                         // Points for path curve of this movement between two targets
                         List<Point3d> points = new List<Point3d>();

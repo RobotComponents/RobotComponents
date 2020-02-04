@@ -46,7 +46,6 @@
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Return the RAPID variable code.</returns>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -55,7 +54,6 @@
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>s
-        /// <returns>Returns the RAPID main code.</returns>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             string value;

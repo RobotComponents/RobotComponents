@@ -17,6 +17,7 @@ namespace RobotComponentsABB.Utils
     {
         #region fields
         // contains information on all targets in file to notify user about duplicates
+        private Dictionary<Guid, AbsoluteJointMovementComponent> _jointTargetsByGuid;
         private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, TargetComponent> _targetsByGuid;
         private List<string> _targetNames;
@@ -42,6 +43,7 @@ namespace RobotComponentsABB.Utils
         /// </summary>
         public ObjectManager()
         {
+            _jointTargetsByGuid = new Dictionary<Guid, AbsoluteJointMovementComponent>();
             _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _targetsByGuid = new Dictionary<Guid, TargetComponent>();
             _targetNames = new List<string>();
@@ -126,6 +128,15 @@ namespace RobotComponentsABB.Utils
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Dictionary with all the Target components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, AbsoluteJointMovementComponent> JointTargetsByGuid
+        {
+            get { return _jointTargetsByGuid; }
+        }
+
         /// <summary>
         /// OBSOLETE: Used for old Target component. Will be removed in the future.
         /// </summary>

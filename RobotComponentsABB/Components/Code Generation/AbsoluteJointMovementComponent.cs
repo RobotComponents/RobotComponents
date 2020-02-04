@@ -77,11 +77,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "AbsoluteJointMovement", "AJM", "Resulting Absolute Joint Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields
         private bool _overrideRobotTool = false;
+        private List<string> _targetNames = new List<string>();
+        private string _lastName = "";
+        private bool _namesUnique;
+        private ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -89,6 +93,40 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Gets Document ID
+            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
+
+            // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
+            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
+            {
+                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
+            }
+
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.ObjectManagers[documentGUID];
+
+            // Clears targetNames
+            for (int i = 0; i < _targetNames.Count; i++)
+            {
+                _objectManager.TargetNames.Remove(_targetNames[i]);
+            }
+            _targetNames.Clear();
+
+            // Adds Component to JointTargetByGuid Dictionary
+            if (!_objectManager.JointTargetsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.JointTargetsByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Removes lastName from targetNameList
+            if (_objectManager.TargetNames.Contains(_lastName))
+            {
+                _objectManager.TargetNames.Remove(_lastName);
+            }
+
+            // This instance GUID
+            Guid instanceGUID = this.InstanceGuid;
+
             // Input variables
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
@@ -262,10 +300,91 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
             }
 
+            // Checks if target name is already in use and counts duplicates
+            #region NameCheck
+            _namesUnique = true;
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (_objectManager.TargetNames.Contains(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
+                    _namesUnique = false;
+                    _lastName = "";
+                    break;
+                }
+                else
+                {
+                    // Adds Target Name to list
+                    _targetNames.Add(names[i]);
+                    _objectManager.TargetNames.Add(names[i]);
+
+                    // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
+                    {
+                        if (entry.Value._lastName == "")
+                        {
+                            entry.Value.ExpireSolution(true);
+                        }
+                    }
+
+                    _lastName = names[i];
+                }
+
+                // Checks if variable name exceeds max character limit for RAPID Code
+                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
+                    break;
+                }
+
+                // Checks if variable name starts with a number
+                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
+                    break;
+                }
+            }
+            #endregion
             // Output
             DA.SetDataList(0, jointMovements);
+
+            // Recognizes if Component is Deleted and removes it from Object Managers target and name list
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
         }
 
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                if (_namesUnique == true)
+                {
+                    for (int i = 0; i < _targetNames.Count; i++)
+                    {
+                        _objectManager.TargetNames.Remove(_targetNames[i]);
+                    }
+                }
+                _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
+
+                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
+                {
+                    if (entry.Value._lastName == "")
+                    {
+                        entry.Value.ExpireSolution(true);
+                    }
+                }
+            }
+        }
         // Methods and properties for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
         /// <summary>

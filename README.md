@@ -3,6 +3,12 @@ Robot Components is a Plugin for intuitive Robot Programming for ABB robots insi
 
 PLUGIN DESCRIPTION...
 
+## Getting Started
+You can download the latest release directly from this repository's [Releases page](https://github.com/EDEK-UniKassel/RobotComponentsSource/releases). Unzip the donwloaded archive and copy all files in the Grasshopper Components folder (in GH, File > SPecial Folders > Components Folder). Right click on all files to make sure they are not blocked. Restart Rhino and you are ready to go!
+
+You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/ExampleFiles).
+A release on Food4Rhino is planned in the next months.
+
 ## Credits
 ![EDEK_logo](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/Utility/181101_EDEK-LOGO-01.png)
 The Plugin is a development from the [Department of Digital and Experimental Design and Construction of the University of Kassel](https://edek.uni-kassel.de/). Supervised by the head of the department Prof. Eversmann. The technical development is executed by student assistant Gabriel Rumpf and research associates Benedikt Wannemacher, Arjen Deetman, Mohamed Dawod, Zuardin Akbar and Andrea Rossi.

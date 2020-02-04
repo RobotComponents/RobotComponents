@@ -35,7 +35,7 @@
         /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
         public DigitalOutput Duplicate()
         {
-            DigitalOutput dup = new DigitalOutput(Name,IsActive);
+            DigitalOutput dup = new DigitalOutput(Name, IsActive);
             return dup;
         }
         #endregion

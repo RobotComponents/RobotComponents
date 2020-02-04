@@ -100,10 +100,8 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalRotationalAxis object. </returns>
         public ExternalRotationalAxis Duplicate()
         {
-            Mesh baseMesh = BaseMesh.DuplicateMesh();
-            Mesh linkMesh = LinkMesh.DuplicateMesh();
-
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, baseMesh, linkMesh);
+            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, 
+                BaseMesh.DuplicateMesh(), LinkMesh.DuplicateMesh());
             return dup;
         }
 

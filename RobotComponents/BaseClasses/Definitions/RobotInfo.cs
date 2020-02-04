@@ -111,7 +111,9 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the RobotInfo object. </returns>
         public RobotInfo Duplicate()
         {
-            RobotInfo dup = new RobotInfo(Name, Meshes, InternalAxisPlanes, InternalAxisLimits, BasePlane, MountingFrame, Tool.Duplicate(), ExternalAxis);
+            RobotInfo dup = new RobotInfo(Name, new List<Mesh>(Meshes), new List<Plane>(InternalAxisPlanes), 
+                new List<Interval>(InternalAxisLimits), BasePlane, MountingFrame, Tool.Duplicate(), 
+                new List<ExternalAxis>(ExternalAxis));
             return dup;
         }
         #endregion

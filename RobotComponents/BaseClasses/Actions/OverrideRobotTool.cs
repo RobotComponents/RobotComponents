@@ -34,7 +34,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the Override Robot Tool object.</returns>
         public OverrideRobotTool Duplicate()
         {
-            OverrideRobotTool dup = new OverrideRobotTool(RobotTool);
+            OverrideRobotTool dup = new OverrideRobotTool(RobotTool.Duplicate());
             return dup;
         }
         #endregion

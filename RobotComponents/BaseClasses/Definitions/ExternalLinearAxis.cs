@@ -155,10 +155,8 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalLinearAxis object. </returns>
         public ExternalLinearAxis Duplicate()
         {
-            Mesh baseMesh = BaseMesh.DuplicateMesh();
-            Mesh linkMesh = LinkMesh.DuplicateMesh();
-
-            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, baseMesh, linkMesh);
+            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, 
+                BaseMesh.DuplicateMesh(), LinkMesh.DuplicateMesh());
             return dup;
         }
 

@@ -125,7 +125,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns></returns>
         public Movement Duplicate()
         {
-            Movement dup = new Movement(Target, SpeedData, MovementType, Precision, RobotTool, WorkObject, DigitalOutput);
+            Movement dup = new Movement(Target.Duplicate(), SpeedData.Duplicate(), MovementType, Precision, 
+                RobotTool.Duplicate(), WorkObject.Duplicate(), DigitalOutput.Duplicate());
             return dup;
         }
         #endregion

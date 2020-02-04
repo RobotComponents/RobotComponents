@@ -77,7 +77,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the WorkObject object. </returns>
         public WorkObject Duplicate()
         {
-            WorkObject dup = new WorkObject(Name, Plane, ExternalAxis);
+            WorkObject dup = new WorkObject(Name, Plane, ExternalAxis.DuplicateAsExternalAxis());
             return dup;
         }
         #endregion

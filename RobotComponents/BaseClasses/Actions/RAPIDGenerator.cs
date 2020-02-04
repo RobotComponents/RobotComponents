@@ -89,7 +89,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns>Returns a deep copy of the RAPID generator object. </returns>
         public RAPIDGenerator Duplicate()
         {
-            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, Actions, FilePath, SaveToFile, RobotInfo, RAPIDCode, BASECode, FirstMovementIsMoveAbs); //TODO: Make a method that duplicates all fields
+            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, new List<Action>(Actions), FilePath, 
+                SaveToFile, RobotInfo.Duplicate(), RAPIDCode, BASECode, FirstMovementIsMoveAbs); 
             return dup;
         }
         #endregion

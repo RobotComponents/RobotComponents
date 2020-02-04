@@ -102,7 +102,8 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <returns> Returns a deep copy of the Inverse Kinematics object. </returns>
         public InverseKinematics Duplicate()
         {
-            InverseKinematics dup = new InverseKinematics(Movement, RobotInfo, InternalAxisValues, ExternalAxisValues);
+            InverseKinematics dup = new InverseKinematics(Movement.Duplicate(), RobotInfo.Duplicate(), 
+                new List<double>(InternalAxisValues), new List<double>(ExternalAxisValues));
             return dup;
         }
         #endregion

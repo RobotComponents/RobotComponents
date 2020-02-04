@@ -77,7 +77,8 @@ namespace RobotComponents.BaseClasses.Kinematics
         public ForwardKinematics Duplicate()
         {
             //TODO: make a method that duplicates all the used properties
-            ForwardKinematics dup = new ForwardKinematics(RobotInfo, InternalAxisValues, ExternalAxisValues, HideMesh);
+            ForwardKinematics dup = new ForwardKinematics(RobotInfo.Duplicate(), new List<double>(InternalAxisValues), 
+                new List<double>(ExternalAxisValues), HideMesh);
             return dup;
         }
         #endregion

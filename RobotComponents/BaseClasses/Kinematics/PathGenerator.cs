@@ -69,7 +69,24 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <returns> Returns a deep copy for the Path Generator object. </returns>
         public PathGenerator Duplicate()
         {
-            PathGenerator dup = new PathGenerator(Planes, Paths, InternalAxisValues, ExternalAxisValues, RobotInfo);
+            // Duplicate internal axis values
+            List<List<double>> internalAxisValues = new List<List<double>>();
+            for (int i = 0; i < InternalAxisValues.Count; i++)
+            {
+                internalAxisValues.Add(new List<double>(InternalAxisValues[i]));
+            }
+
+            // Duplicate external axis values
+            List<List<double>> externalAxisValues = new List<List<double>>();
+            for (int i = 0; i < ExternalAxisValues.Count; i++)
+            {
+                externalAxisValues.Add(new List<double>(ExternalAxisValues[i]));
+            }
+
+            // Make new path generator wiht duplicated fields
+            PathGenerator dup = new PathGenerator(new List<Plane>(Planes), new List<Curve>(Paths), 
+                internalAxisValues, externalAxisValues, RobotInfo.Duplicate());
+
             return dup;
         }
         #endregion

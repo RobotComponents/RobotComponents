@@ -238,7 +238,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns>Returns a deep copy of the Target object.</returns>
         public Target Duplicate()
         {
-            Target dup = new Target(Name, Plane, AxisConfig, ExternalAxisValues);
+            Target dup = new Target(Name, Plane, AxisConfig, new List<double>(ExternalAxisValues));
             return dup;
         }
         #endregion

@@ -9,16 +9,16 @@ using RobotComponentsABB.Goos;
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
-    /// Movement parameter
+    /// Absolute Joint Movement parameter
     /// </summary>
     public class AbsoluteJointMovementParameter : GH_PersistentParam<AbsoluteJointMovementGoo>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
         /// </summary>
         public AbsoluteJointMovementParameter()
-          : base(new GH_InstanceDescription("AbsoluteJointMovement", "AJM",
-                "Maintains the AbsoluteJointMovement data."
+          : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
+                "Maintains the Absolute Joint Movement data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "AbsoluteJointMovement";
+            return "Absolute Joint Movement";
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.AbsoluteJointMovement_Parameter_Icon; }//TODO: make a new Icon for JointMovement
+            get { return Properties.Resources.AbsoluteJointMovement_Parameter_Icon; }
         }
 
         /// <summary>
@@ -122,7 +122,6 @@ namespace RobotComponentsABB.Parameters
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(IGH_PreviewArgs args)
         {
-            //Use a standard method to draw wires, you don't have to specifically implement this.
             Preview_DrawWires(args);
         }
 

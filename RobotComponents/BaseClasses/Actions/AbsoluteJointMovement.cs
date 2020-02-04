@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 
-using Rhino.Geometry;
-
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Joint Movement class
+    /// Absolute Joint Movement class
     /// </summary>
     public class AbsoluteJointMovement : Action
     {
@@ -22,30 +19,47 @@ namespace RobotComponents.BaseClasses.Actions
         private int _precision;
 
         // Variable fields
-        RobotTool _robotTool;
+        private RobotTool _robotTool;
         #endregion
 
         #region constructors
         /// <summary>
-        /// An empty movement constructor.
+        /// An empty absolute joint movement constructor.
         /// </summary>
         public AbsoluteJointMovement()
         {
         }
 
         /// <summary>
-        /// Method to create a absolute joint movement with as only minimum arguments. 
+        /// Method to create an absolute joint movement with a minimum number of arguments. 
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
-        /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
+        public AbsoluteJointMovement(string name, List<double> internalAxisValues)
+        {
+            _name = name;
+            _internalAxisValues = internalAxisValues;
+            _externalAxisValues = new List<double>() { };
+            _speedData = new SpeedData(5); // Slowest predefined tcp speed
+            _movementType = 0; // The movementType is always an Absolute Joint Movement
+            _precision = 0;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+        }
+
+        /// <summary>
+        /// Method to create an absolute joint movement with internal and external axis values.
+        /// </summary>
+        /// <param name="name">Name of joint target, must be unique.</param>
+        /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
+        /// <param name="externalAxisValues">List of external axis values. </param>
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues)
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
-            _movementType = 0; // The movementType is always JoinMovement
+            _movementType = 0; // The movementType is always an Absolute Joint Movement
             _precision = 0;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -56,7 +70,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
-        /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
+        /// <param name="externalAxisValues">List of external axis values. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision)
@@ -65,34 +79,14 @@ namespace RobotComponents.BaseClasses.Actions
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
-            _movementType = 0; // The movementType is always JoinMovement
+            _movementType = 0; // The movementType is always an Absolute Joint Movement
             _precision = precision;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
         }
 
         /// <summary>
-        /// Method to create a absolute joint movement. 
-        /// </summary>
-        /// <param name="name">Name of joint target, must be unique.</param>
-        /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
-        /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
-        public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, DigitalOutput digitalOutput)
-        {
-            _name = name;
-            _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
-            _speedData = speedData;
-            _movementType = 0; // The movementType is always JoinMovement
-            _precision = precision;
-            _robotTool = new RobotTool(); // Default Robot Tool tool0
-            _robotTool.Clear(); // Empty Robot Tool
-        }
-
-        /// <summary>
-        /// Method to create a absolute joint movement. 
+        /// Method to create an absolute joint movement. 
         /// </summary>
         /// <param name="name">Name of joint target, must be unique.</param>
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
@@ -106,7 +100,7 @@ namespace RobotComponents.BaseClasses.Actions
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
-            _movementType = 0; // The movementType is always JoinMovement
+            _movementType = 0; // The movementType is always an Absolute Joint Movement
             _precision = precision;
             _robotTool = robotTool;
         }
@@ -128,7 +122,6 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        /// <returns>Return the RAPID variable code.</returns>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
             string tempCode = "";
@@ -182,8 +175,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             // Set tool name
@@ -208,7 +200,7 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Movement object is valid.
+        /// A boolean that indicates if the Absolute Joint Movement object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -233,7 +225,7 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The robot target name when it is used as a joint target.
+        /// The target name when it is used as a joint target.
         /// </summary>
         public string JointTargetName
         {
@@ -241,7 +233,7 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// 
+        /// Defines the pose of the internal axis values in degree. 
         /// </summary>
         public List<double> InternalAxisValues
         {
@@ -250,7 +242,7 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// 
+        /// Defines the pose of the external axis values in degrees or in meters.
         /// </summary>
         public List<double> ExternalAxisValues
         {
@@ -271,7 +263,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// The movement type.
         /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
-        /// For the JointMovement Class the MovementType can not be set.
+        /// For the Absolute Joint Movement Class the MovementType can not be set.
         /// </summary>
         public int MovementType
         {

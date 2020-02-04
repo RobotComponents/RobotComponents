@@ -7,7 +7,7 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsABB.Goos
 {
     /// <summary>
-    /// Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
+    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
     /// </summary>
     public class AbsoluteJointMovementGoo : GH_GeometricGoo<AbsoluteJointMovement>, IGH_PreviewData
     {
@@ -23,23 +23,23 @@ namespace RobotComponentsABB.Goos
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="absolutJointMovementGoo"> absolutJointMovementGoo Value to store inside this Goo instance. </param>
-        public AbsoluteJointMovementGoo(AbsoluteJointMovement absolutJointMovementGoo)
+        /// <param name="absoluteJointMovement"> AbsoluteJointMovement Value to store inside this Goo instance. </param>
+        public AbsoluteJointMovementGoo(AbsoluteJointMovement absoluteJointMovement)
         {
-            if (absolutJointMovementGoo == null)
-                absolutJointMovementGoo = new AbsoluteJointMovement();
-            this.Value = absolutJointMovementGoo;
+            if (absoluteJointMovement == null)
+                absoluteJointMovement = new AbsoluteJointMovement();
+            this.Value = absoluteJointMovement;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="absolutJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
-        public AbsoluteJointMovementGoo(AbsoluteJointMovementGoo absolutJointMovementGoo)
+        /// <param name="absoluteJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
+        public AbsoluteJointMovementGoo(AbsoluteJointMovementGoo absoluteJointMovementGoo)
         {
-            if (absolutJointMovementGoo == null)
-                absolutJointMovementGoo = new AbsoluteJointMovementGoo();
-            this.Value = absolutJointMovementGoo.Value;
+            if (absoluteJointMovementGoo == null)
+                absoluteJointMovementGoo = new AbsoluteJointMovementGoo();
+            this.Value = absoluteJointMovementGoo.Value;
         }
 
         /// <summary>
@@ -48,14 +48,14 @@ namespace RobotComponentsABB.Goos
         /// <returns> A duplicate of the MovementGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateJointMovementGoo();
+            return DuplicateAbsoluteJointMovementGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the MovementGoo. </returns>
-        public AbsoluteJointMovementGoo DuplicateJointMovementGoo()
+        public AbsoluteJointMovementGoo DuplicateAbsoluteJointMovementGoo()
         {
             return new AbsoluteJointMovementGoo(Value == null ? new AbsoluteJointMovement() : Value.Duplicate());
         }
@@ -115,7 +115,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("AbsoluteJointMovement"); }
+            get { return ("Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single AbsoluteJointMovement"); }
+            get { return ("Defines a single Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -157,13 +157,23 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to SpeedData.
+            //Cast to Absolute Joint Movement
             if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Absolute Joint Movement Goo
+            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovementGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new AbsoluteJointMovementGoo(Value);
                 return true;
             }
 
@@ -180,10 +190,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from SpeedData: Custom SpeedData
+            //Cast from Aboslute Joint Movement
             if (typeof(AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
                 Value = (AbsoluteJointMovement)source;
+                return true;
+            }
+
+            //Cast from Aboslute Joint Movement Goo
+            if (typeof(AbsoluteJointMovementGoo).IsAssignableFrom(source.GetType()))
+            {
+                AbsoluteJointMovementGoo absoluteJointMovementGoo = (AbsoluteJointMovementGoo)source;
+                Value = absoluteJointMovementGoo.Value;
                 return true;
             }
 

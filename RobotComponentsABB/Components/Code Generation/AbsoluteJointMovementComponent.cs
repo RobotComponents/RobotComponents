@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Special;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 
@@ -22,7 +19,7 @@ using RobotComponentsABB.Utils;
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : AbsoluteJointMovement component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Absolute Joint Movement component. An inherent from the GH_Component Class.
     /// </summary>
     public class AbsoluteJointMovementComponent : GH_Component, IGH_VariableParameterComponent
     {
@@ -32,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public AbsoluteJointMovementComponent()
-          : base("Action: AbsoluteJointMovement", "AJM",
+          : base("Action: Absolute Joint Movement", "AJM",
               "Defines a absolute joint movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -67,7 +64,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Register the number of fixed input parameters
-        private readonly int fixedParamNumInput = 6;
+        private readonly int fixedParamNumInput = 5;
 
         // Create an array with the variable input parameters
         readonly IGH_Param[] variableInputParameters = new IGH_Param[1]
@@ -84,7 +81,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
-        //private bool _expire = false;
         private bool _overrideRobotTool = false;
 
         /// <summary>
@@ -93,7 +89,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // Input variables
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
@@ -159,7 +154,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 SpeedDataGoo speedDataGoo;
                 int precision;
                 RobotToolGoo robotToolGoo;
-                DigitalOutputGoo digitalOutputGoo;
 
                 // Target counter
                 if (i < sizeValues[0])
@@ -183,15 +177,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     internalAxisValues = internalAxisValuesTree[internalValueCounter].ConvertAll(x => (double)x.Value);
                 }
 
-                // external axis values counter
-                if (sizeValues[2] == 0)
+                // External axis values counter
+                if (sizeValues[2] == 0) // In case no external axis values are defined.
                 {
                     externalAxisValues = new List<double>() { };
                 }
 
                 else
                 {
-                    if (i < sizeValues[2]) //instead of calling names.Count again
+                    if (i < sizeValues[2])
                     {
                         externalAxisValues = externalAxisValuesTree[i].ConvertAll(x => (double)x.Value);
                         externalValueCounter++;
@@ -202,7 +196,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     }
                 }
 
-                // Workobject counter
+                // SpeedData counter
                 if (i < sizeValues[3])
                 {
                     speedDataGoo = speedDataGoos[i];

@@ -29,7 +29,7 @@ Planned developments:
 
 **Feature requests**: Feature request can be proposed on our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). Please include how this feature should work by explaining it in detail and if possible by adding relevant documentation from e.g. ABB. 
 
-**Code contributions**: We accept code contributions through pull requests. For this you have to fork or clone this repository. To compile the code all necesarry references are placed in [this repository](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/DLLs). For questions you can aks one the [developers](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md). 
+**Code contributions**: We accept code contributions through pull requests. For this you have to fork or clone this repository. To compile the code all necesarry references are placed in [this repository](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/DLLs). For questions you can contact one of the [developers](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md). 
 
 ## References
 Dawod M. et al. (2020) Continuous Timber Fibre Placement. In: Gengnagel C., Baverel O., Burry J., Ramsgaard Thomsen M., Weinzierl S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham

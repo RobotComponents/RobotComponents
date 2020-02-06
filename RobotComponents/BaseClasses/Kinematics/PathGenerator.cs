@@ -144,7 +144,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                         target2InternalAxisValues = new List<double>(jointMovement.InternalAxisValues);
                         target2ExternalAxisValues = new List<double>(jointMovement.ExternalAxisValues); // TODO: match list length with external axis list length of robot info
 
-                        #region Calculate interpolated external axis values differences
                         // Calculate axis value difference and change between both targets
                         externalAxisValueChange.Clear();
                         for (int j = 0; j < target1ExternalAxisValues.Count; j++)
@@ -153,7 +152,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                             double valueChange = difference / interpolations;
                             externalAxisValueChange.Add(valueChange);
                         }
-                        #endregion
 
                         // Calculate axis value difference and change between both targets
                         internalAxisValueChange.Clear();
@@ -328,7 +326,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                                 forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                                 forwardKinematics.Calculate();
-                                movement1.Target.Plane = forwardKinematics.TCPPlane;
+                                movement1 = new Movement(new Target("joinTarget", forwardKinematics.TCPPlane));
                             }
 
                             // If both movements are on the same work object
@@ -405,6 +403,11 @@ namespace RobotComponents.BaseClasses.Kinematics
                             }
                             #endregion
 
+                            // Correct axis configuration, tool and work object
+                            subTarget.AxisConfig = movement2.Target.AxisConfig;
+                            subMovement.RobotTool = movement2.RobotTool;
+                            subMovement.WorkObject = movement2.WorkObject;
+
                             // Create the sub target planes, internal axis values and external axis values for every interpolation step
                             for (int l = 0; l < interpolations; l++)
                             {
@@ -419,15 +422,18 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 // Create new plane: the local target plane (in work object coordinate space)
                                 Plane plane = new Plane(planePoints[l], axisDirections[l][0], axisDirections[l][1]);
 
+                                // Update sub target and sub movement
+                                //subTarget = new Target("subTarget", plane, movement2.Target.AxisConfig, externalAxisValues);
+                                //subMovement = new Movement(subTarget);
+                                //subMovement.RobotTool = movement2.RobotTool;
+                                //subMovement.WorkObject = movement2.WorkObject;
+
                                 // Update the target
                                 subTarget.Plane = plane;
-                                subTarget.AxisConfig = movement2.Target.AxisConfig;
                                 subTarget.ExternalAxisValues = externalAxisValues;
 
                                 // Update the movement
                                 subMovement.Target = subTarget;
-                                subMovement.RobotTool = movement2.RobotTool;
-                                subMovement.WorkObject = movement2.WorkObject;
                                 subMovement.ReInitialize();
 
                                 // Calculate internal axis values
@@ -436,7 +442,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                                 // Add te calculated axis values and plane to the class property
                                 _internalAxisValues.Add(new List<double>(inverseKinematics.InternalAxisValues));
-                                _externalAxisValues.Add(new List<double>(inverseKinematics.ExternalAxisValues));
+                                _externalAxisValues.Add(new List<double>(externalAxisValues));
 
                                 // Add the plane
                                 Plane globalPlane = subMovement.GetPosedGlobalTargetPlane(_robotInfo, out logic);
@@ -546,7 +552,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 else if (actions[i] is Movement)
                 {
                     // Duplicate the movement since we might change properties
-                    Movement movement = ((Movement)actions[i]).Duplicate();
+                    Movement movement = ((Movement)actions[i]); // .Duplicate(); // TODO: causes a bug
 
                     // Set the current tool if no tool is set in the movement object
                     if (movement.RobotTool == null)

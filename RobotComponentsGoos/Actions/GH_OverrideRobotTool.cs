@@ -148,13 +148,43 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to OverrideRobotTool.
+            //Cast to OverrideRobotTool
             if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to OverrideRobotToolGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_OverrideRobotTool)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_OverrideRobotTool(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
                 return true;
             }
 
@@ -186,16 +216,37 @@ namespace RobotComponentsGoos.Actions
             //Cast from OverrideRobotTool.
             if (typeof(OverrideRobotTool).IsAssignableFrom(source.GetType()))
             {
-                Value = (OverrideRobotTool)source;
+                Value = source as OverrideRobotTool;
                 return true;
             }
 
             //Cast from RobotToolGoo
             if (typeof(GH_RobotTool).IsAssignableFrom(source.GetType()))
             {
-                GH_RobotTool robotToolGoo = (GH_RobotTool)source;
+                GH_RobotTool robotToolGoo = source as GH_RobotTool;
                 Value = new OverrideRobotTool(robotToolGoo.Value);
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is OverrideRobotTool action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is OverrideRobotTool action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;

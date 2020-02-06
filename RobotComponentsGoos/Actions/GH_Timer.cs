@@ -147,13 +147,43 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Wait.
+            //Cast to Timer
             if (typeof(Q).IsAssignableFrom(typeof(Timer)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to TimerGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Timer)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Timer(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
                 return true;
             }
 
@@ -183,8 +213,29 @@ namespace RobotComponentsGoos.Actions
             //Cast from Timer
             if (typeof(Timer).IsAssignableFrom(source.GetType()))
             {
-                Value = (Timer)source;
+                Value = source as Timer;
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is Timer action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is Timer action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             // Cast from number

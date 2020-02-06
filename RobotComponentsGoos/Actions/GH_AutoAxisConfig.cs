@@ -157,6 +157,36 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to AutoAxisConfigGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_AutoAxisConfig)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_AutoAxisConfig(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
+                return true;
+            }
+
             //Cast to Boolean
             if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
@@ -183,16 +213,37 @@ namespace RobotComponentsGoos.Actions
             //Cast from AutoAxisConfig
             if (typeof(AutoAxisConfig).IsAssignableFrom(source.GetType()))
             {
-                Value = (AutoAxisConfig)source;
+                Value = source as AutoAxisConfig;
                 return true;
             }
 
             //Cast from Boolean
             if (typeof(GH_Boolean).IsAssignableFrom(source.GetType()))
             {
-                GH_Boolean ghBoolean = (GH_Boolean)source;
+                GH_Boolean ghBoolean = source as GH_Boolean;
                 Value = new AutoAxisConfig(ghBoolean.Value);
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is AutoAxisConfig action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is AutoAxisConfig action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;

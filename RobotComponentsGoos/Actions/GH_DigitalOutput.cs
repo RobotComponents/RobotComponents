@@ -149,7 +149,7 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to DigitalOutput.
+            //Cast to DigitalOutput
             if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
             {
                 if (Value == null)
@@ -159,6 +159,36 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to DigitalOutputGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_DigitalOutput(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
+                return true;
+
+            }
             target = default(Q);
             return false;
         }
@@ -172,11 +202,32 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from JointMovement
+            //Cast from DigitalOutput
             if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
             {
-                Value = (DigitalOutput)source;
+                Value = source as DigitalOutput;
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is DigitalOutput action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is DigitalOutput action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;

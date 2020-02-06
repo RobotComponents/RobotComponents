@@ -60,6 +60,7 @@
     <Compile Include="Actions\GH_Comment.cs" />
     <Compile Include="Actions\GH_DigitalOutput.cs" />
     <Compile Include="Actions\GH_WaitDI.cs" />
+    <Compile Include="Actions\GH_Action.cs" />
     <Compile Include="Definitions\GH_ExternalAxis.cs" />
     <Compile Include="Definitions\GH_ExternalLinearAxis.cs" />
     <Compile Include="Definitions\GH_ExternalRotationalAxis.cs" />

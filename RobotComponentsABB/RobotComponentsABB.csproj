@@ -137,6 +137,7 @@
     <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\GH_Controller.cs" />
     <Compile Include="Goos\GH_Signal.cs" />
+    <Compile Include="Parameters\Actions\ActionParam.cs" />
     <Compile Include="Parameters\Definitions\ExternalAxisParam.cs" />
     <Compile Include="Parameters\Actions\SpeedDataParam.cs" />
     <Compile Include="Parameters\Actions\AbsoluteJointMovementParam.cs" />

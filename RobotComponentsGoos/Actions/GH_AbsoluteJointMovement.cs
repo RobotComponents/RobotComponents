@@ -157,7 +157,7 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Absolute Joint Movement
+            //Cast to AbsoluteJointMovement
             if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
             {
                 if (Value == null)
@@ -167,13 +167,33 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast to Absolute Joint Movement Goo
+            //Cast to AbsoluteJointMovementGoo
             if (typeof(Q).IsAssignableFrom(typeof(GH_AbsoluteJointMovement)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)new GH_AbsoluteJointMovement(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
                 return true;
             }
 
@@ -193,16 +213,37 @@ namespace RobotComponentsGoos.Actions
             //Cast from Aboslute Joint Movement
             if (typeof(AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
-                Value = (AbsoluteJointMovement)source;
+                Value = source as AbsoluteJointMovement;
                 return true;
             }
 
             //Cast from Aboslute Joint Movement Goo
             if (typeof(GH_AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
-                GH_AbsoluteJointMovement absoluteJointMovementGoo = (GH_AbsoluteJointMovement)source;
+                GH_AbsoluteJointMovement absoluteJointMovementGoo = source as GH_AbsoluteJointMovement;
                 Value = absoluteJointMovementGoo.Value;
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is AbsoluteJointMovement action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is AbsoluteJointMovement action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;

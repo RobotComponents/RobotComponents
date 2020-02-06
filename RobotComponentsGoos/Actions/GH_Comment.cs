@@ -157,6 +157,36 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to CommentGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Comment)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Comment(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }
@@ -173,8 +203,29 @@ namespace RobotComponentsGoos.Actions
             //Cast from Comment
             if (typeof(Comment).IsAssignableFrom(source.GetType()))
             {
-                Value = (Comment)source;
+                Value = source as Comment;
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is Comment action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is Comment action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             // Cast from string

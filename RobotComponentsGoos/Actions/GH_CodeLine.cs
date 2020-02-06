@@ -157,6 +157,36 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to CodeLineGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_CodeLine)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_CodeLine(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }
@@ -173,8 +203,29 @@ namespace RobotComponentsGoos.Actions
             //Cast from CodeLine
             if (typeof(CodeLine).IsAssignableFrom(source.GetType()))
             {
-                Value = (CodeLine)source;
+                Value = source as CodeLine;
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is CodeLine action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is CodeLine action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             // Cast from string

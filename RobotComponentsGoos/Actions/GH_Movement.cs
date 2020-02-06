@@ -178,6 +178,36 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to Movement.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Movement)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Movement(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
+                return true;
+            }
+
             //Cast to Target
             if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
             {
@@ -278,14 +308,14 @@ namespace RobotComponentsGoos.Actions
             //Cast from Movement
             if (typeof(Movement).IsAssignableFrom(source.GetType()))
             {
-                Value = (Movement)source;
+                Value = source as Movement;
                 return true;
             }
 
             //Cast from TargetGoo
             if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
             {
-                GH_Target targetGoo = (GH_Target)source;
+                GH_Target targetGoo = source as GH_Target;
                 Value = new Movement(targetGoo.Value);
                 return true;
             }
@@ -296,6 +326,27 @@ namespace RobotComponentsGoos.Actions
                 Target target = (Target)source;
                 Value = new Movement(target);
                 return true;
+            }
+
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is Movement action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is Movement action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;

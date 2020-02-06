@@ -7,6 +7,7 @@ using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -45,7 +46,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Actions", "A", "Actions as Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");
             pManager.AddBooleanParameter("Save To File", "S", "Saves RAPID Code to File", GH_ParamAccess.item, false);

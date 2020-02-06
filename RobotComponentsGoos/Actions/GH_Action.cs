@@ -7,65 +7,78 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Wait Digital Input wrapper class, makes sure the WaitDI can be used in Grasshopper.
+    /// Action Goo wrapper class, makes sure Actions can be used in Grasshopper.
     /// </summary>
-    public class GH_WaitDI : GH_GeometricGoo<WaitDI>, IGH_PreviewData
+    public class GH_Action : GH_GeometricGoo<Action>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_WaitDI()
+        public GH_Action()
         {
-            this.Value = new WaitDI();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from from an Action
         /// </summary>
-        /// <param name="waitDI"> WaitDI Value to store inside this Goo instance. </param>
-        public GH_WaitDI(WaitDI waitDI)
+        /// <param name="action"> Action Value to store inside this Goo instance. </param>
+        public GH_Action(Action action)
         {
-            if (waitDI == null)
-                waitDI = new WaitDI();
-            this.Value = waitDI;
+            if (action == null)
+            {
+                action = null;
+            }
+
+            this.Value = action;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from ActionGoo
         /// </summary>
-        /// <param name="waitDIGoo"> WaitDIGoo to store inside this Goo instance. </param>
-        public GH_WaitDI(GH_WaitDI waitDIGoo)
+        /// <param name="actionGoo"> ActionGoo to store inside this Goo instance. </param>
+        public GH_Action(GH_Action actionGoo)
         {
-            if (waitDIGoo == null)
-                waitDIGoo = new GH_WaitDI();
-            this.Value = waitDIGoo.Value;
+            if (actionGoo == null)
+            {
+                actionGoo = new GH_Action();
+            }
+
+            this.Value = actionGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WaitDIGoo. </returns>
+        /// <returns> A duplicate of the ActionGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateWaitDIGoo();
+            return DuplicateActionGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WaitDIGoo. </returns>
-        public GH_WaitDI DuplicateWaitDIGoo()
+        /// <returns> A duplicate of the ActionGoo. </returns>
+        public GH_Action DuplicateActionGoo()
         {
-            return new GH_WaitDI(Value == null ? new WaitDI() : Value.Duplicate());
+            if (Value == null) 
+                return null; 
+
+            else if (Value is Action) 
+                return new GH_Action(Value.DuplicateAction()); 
+
+            else 
+                return null; 
         }
         #endregion
 
         #region properties
-        public override bool IsValid
         /// <summary>
         /// Gets a value indicating whether or not the current value is valid.
         /// </summary>
+        public override bool IsValid
         {
             get
             {
@@ -82,9 +95,9 @@ namespace RobotComponentsGoos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal WaitDI instance"; }
+                if (Value == null) { return "No inter Action instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitDI instance: Did you define the digital input name and value?"; //Todo: beef this up to be more informative.
+                return "Invalid Action instance: ?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +108,31 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-                return "Null WaitDI";
+                return "Null Action";
+            else if (Value is AbsoluteJointMovement)
+                return "Absolute Joint Movement";
+            else if (Value is AutoAxisConfig)
+                return "Auto Axis Configuration";
+            else if (Value is CodeLine)
+                return "Code Line";
+            else if (Value is Comment)
+                return "Comment";
+            else if (Value is DigitalOutput)
+                return "Digital Output";
+            else if (Value is Movement)
+                return "Movement";
+            else if (Value is OverrideRobotTool)
+                return "Override Robot Tool";
+            else if (Value is SpeedData)
+                return "Speed Data";
+            else if (Value is Target)
+                return "Target";
+            else if (Value is Timer)
+                return "Timer";
+            else if (Value is WaitDI)
+                return "Wait for Digital Input";
             else
-                return "Digital Input";
+                return "Action";
         }
 
         /// <summary>
@@ -105,7 +140,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Wait for Digital Input"); }
+            get { return ("Action"); }
         }
 
         /// <summary>
@@ -113,7 +148,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Wait for Digital Input data."); }
+            get { return ("Defines an Action."); }
         }
 
         /// <summary>
@@ -121,10 +156,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
+            get { return BoundingBox.Empty; }
         }
 
         /// <summary>
@@ -134,7 +166,7 @@ namespace RobotComponentsGoos.Actions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return Boundingbox;
         }
         #endregion
 
@@ -142,32 +174,12 @@ namespace RobotComponentsGoos.Actions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            // Cast to WaitDI
-            if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
-                return true;
-            }
-
-            // Cast to WaitDIGoo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_WaitDI)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_WaitDI(Value);
-                return true;
-            }
-
-            //Cast to Action
+            //Cast to Action.
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
                 if (Value == null)
@@ -200,32 +212,19 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            // Cast from WaitDI
-            if (typeof(WaitDI).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as WaitDI;
-                return true;
-            }
-
             //Cast from Action
             if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is WaitDI action)
-                {
-                    Value = action;
-                    return true;
-                }
+                Value = source as Action;
+                return true;
             }
 
             //Cast from ActionGoo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is WaitDI action)
-                {
-                    Value = action;
-                    return true;
-                }
+                Value = actionGoo.Value as Action;
+                return true;
             }
 
             return false;
@@ -276,6 +275,7 @@ namespace RobotComponentsGoos.Actions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+
         }
 
         /// <summary>
@@ -284,6 +284,7 @@ namespace RobotComponentsGoos.Actions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+
         }
         #endregion
     }

@@ -215,13 +215,43 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to SpeedData.
+            //Cast to SpeedData
             if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to SpeedDataGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_SpeedData(Value);
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.BaseClasses.Actions.Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to ActionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Action(Value);
                 return true;
             }
 
@@ -252,6 +282,26 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast from Action
+            if (typeof(RobotComponents.BaseClasses.Actions.Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is SpeedData action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from ActionGoo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is SpeedData action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
             return false;
         }
         #endregion

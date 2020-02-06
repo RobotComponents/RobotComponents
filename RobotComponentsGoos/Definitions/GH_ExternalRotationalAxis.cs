@@ -260,13 +260,11 @@ namespace RobotComponentsGoos.Definitions
             //Cast from ExternalAxisGoo
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                if (source is GH_ExternalAxis externalAxisGoo)
-                {                    
-                    if (externalAxisGoo.Value is ExternalRotationalAxis externalRotationalAxis)
-                    {
-                        Value = externalRotationalAxis;
-                        return true;
-                    }
+                GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;                  
+                if (externalAxisGoo.Value is ExternalRotationalAxis externalRotationalAxis)
+                {
+                    Value = externalRotationalAxis;
+                    return true;
                 }
             }
 

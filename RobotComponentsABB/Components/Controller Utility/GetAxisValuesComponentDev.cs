@@ -60,7 +60,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            ControllerGoo controllerGoo = null;
+            GH_Controller controllerGoo = null;
 
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }

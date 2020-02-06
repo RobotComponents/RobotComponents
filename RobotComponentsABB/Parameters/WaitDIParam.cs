@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Wait for Digital Input parameter
     /// </summary>
-    public class WaitDIParameter : GH_PersistentGeometryParam<WaitDIGoo>, IGH_PreviewObject
+    public class WaitDIParameter : GH_PersistentGeometryParam<GH_WaitDI>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<WaitDIGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<WaitDIGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitDI> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref WaitDIGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WaitDI value)
         {
             return GH_GetterResult.cancel;
         }

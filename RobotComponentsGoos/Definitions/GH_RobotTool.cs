@@ -2,62 +2,62 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// Code line wrapper class, makes sure the code line can be used in Grasshopper.
+    /// RobotTool Goo wrapper class, makes sure RobotTool can be used in Grasshopper.
     /// </summary>
-    public class CodeLineGoo : GH_GeometricGoo<CodeLine>, IGH_PreviewData
+    public class GH_RobotTool : GH_GeometricGoo<RobotTool>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public CodeLineGoo()
+        public GH_RobotTool()
         {
-            this.Value = new CodeLine();
+            this.Value = new RobotTool();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="codeLine"> CodeLine Value to store inside this Goo instance. </param>
-        public CodeLineGoo(CodeLine codeLine)
+        /// <param name="robotTool"> RobotTool Value to store inside this Goo instance. </param>
+        public GH_RobotTool(RobotTool robotTool)
         {
-            if (codeLine == null)
-                codeLine = new CodeLine();
-            this.Value = codeLine;
+            if (robotTool == null)
+                robotTool = new RobotTool();
+            this.Value = robotTool;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="codeLineGoo"> CodeLineGoo to store inside this Goo instance. </param>
-        public CodeLineGoo(CodeLineGoo codeLineGoo)
+        /// <param name="robotToolGoo"> RobotToolGoo to store inside this Goo instance. </param>
+        public GH_RobotTool(GH_RobotTool robotToolGoo)
         {
-            if (codeLineGoo == null)
-                codeLineGoo = new CodeLineGoo();
-            this.Value = codeLineGoo.Value;
+            if (robotToolGoo == null)
+                robotToolGoo = new GH_RobotTool();
+            this.Value = robotToolGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CodeLineGoo. </returns>
+        /// <returns> A duplicate of the RobotToolGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateCodeLine();
+            return DuplicateRobotToolGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CodeLineGoo. </returns>
-        public CodeLineGoo DuplicateCodeLine()
+        /// <returns> A duplicate of the RobotToolGoo. </returns>
+        public GH_RobotTool DuplicateRobotToolGoo()
         {
-            return new CodeLineGoo(Value == null ? new CodeLine() : Value.Duplicate());
+            return new GH_RobotTool(Value == null ? new RobotTool() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal CodeLine instance"; }
+                if (Value == null) { return "No internal RobotTool instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid CodeLine instance: Did you define a String?"; //Todo: beef this up to be more informative.
+                return "Invalid RobotTool instance: Did you define the attachment plane and TCP plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +95,11 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null CodeLine";
+                return "Null RobotTool";
+            if (Value.Name == "" || Value.Name == null)
+                return "Empty Robot Tool";
             else
-                return "Code Line";
+                return "Robot Tool";
         }
 
         /// <summary>
@@ -105,7 +107,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("CodeLine"); }
+            get { return ("RobotTool"); }
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single CodeLine."); }
+            get { return ("Defines a single RobotTool"); }
         }
 
         /// <summary>
@@ -123,7 +125,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                return BoundingBox.Empty; //Note: beef this up if needed
+                if (Value == null) { return BoundingBox.Empty; }
+                else if (Value.Mesh == null) { return BoundingBox.Empty; }
+                else { return Value.Mesh.GetBoundingBox(true); }
             }
         }
 
@@ -134,7 +138,7 @@ namespace RobotComponentsABB.Goos
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return Boundingbox;
         }
         #endregion
 
@@ -147,13 +151,25 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to CodeLine.
-            if (typeof(Q).IsAssignableFrom(typeof(CodeLine)))
+            //Cast to RobotTool.
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Mesh.
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Mesh == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object) new GH_Mesh(Value.Mesh);
                 return true;
             }
 
@@ -170,18 +186,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from CodeLine
-            if (typeof(CodeLine).IsAssignableFrom(source.GetType()))
+            //Cast from RobotTool
+            if (typeof(RobotTool).IsAssignableFrom(source.GetType()))
             {
-                Value = (CodeLine)source;
-                return true;
-            }
-
-            // Cast from string
-            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
-            {
-                GH_String ghString = (GH_String)source;
-                Value = new CodeLine(ghString.Value);
+                Value = (RobotTool)source;
                 return true;
             }
 
@@ -200,7 +208,27 @@ namespace RobotComponentsABB.Goos
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            return null;
+            if (Value == null)
+            {
+                return null;
+            }
+
+            else if (Value.IsValid == false)
+            {
+                return null;
+            }
+
+            else
+            {
+                // Duplicate value
+                RobotTool robotTool = Value.Duplicate();
+                // Transform
+                robotTool.Transform(xform);
+                // Make new goo instance
+                GH_RobotTool robotToolGoo = new GH_RobotTool(robotTool);
+                // Return
+                return robotToolGoo;
+            }
         }
 
         /// <summary>
@@ -233,6 +261,11 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            if (Value == null) { return; }
+            if (Value.Mesh != null)
+            {
+                args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+            }
         }
 
         /// <summary>
@@ -241,8 +274,8 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-        }
 
+        }
         #endregion
     }
 }

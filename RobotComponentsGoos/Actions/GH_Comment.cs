@@ -4,60 +4,60 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Target Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Comment wrapper class, makes sure the comment can be used in Grasshopper.
     /// </summary>
-    public class TargetGoo : GH_GeometricGoo<Target>, IGH_PreviewData
+    public class GH_Comment : GH_GeometricGoo<Comment>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public TargetGoo() 
+        public GH_Comment()
         {
-            this.Value = new Target();
+            this.Value = new Comment();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="target"> Target Value to store inside this Goo instance. </param>
-        public TargetGoo(Target target)
+        /// <param name="comment"> Comment Value to store inside this Goo instance. </param>
+        public GH_Comment(Comment comment)
         {
-            if (target == null)
-                target = new Target();
-            this.Value = target;
+            if (comment == null)
+                comment = new Comment();
+            this.Value = comment;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="targetGoo"> TargetGoo to store inside this Goo instance. </param>
-        public TargetGoo(TargetGoo targetGoo)
+        /// <param name="commentGoo"> CommentGoo to store inside this Goo instance. </param>
+        public GH_Comment(GH_Comment commentGoo)
         {
-            if (targetGoo == null)
-                targetGoo = new TargetGoo();
-            this.Value = targetGoo.Value;
+            if (commentGoo == null)
+                commentGoo = new GH_Comment();
+            this.Value = commentGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TargetGoo. </returns>
+        /// <returns> A duplicate of the CommentGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateTargetGoo();
+            return DuplicateCommentGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TargetGoo. </returns>
-        public TargetGoo DuplicateTargetGoo()
+        /// <returns> A duplicate of the CommentGoo. </returns>
+        public GH_Comment DuplicateCommentGoo()
         {
-            return new TargetGoo(Value == null ? new Target() : Value.Duplicate());
+            return new GH_Comment(Value == null ? new Comment() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Target instance"; }
+                if (Value == null) { return "No internal Comment instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Target instance: Did you define a plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Comment instance: Did you define a String?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Target";
+                return "Null Comment";
             else
-                return "Target";
+                return "Comment";
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Target"); }
+            get { return ("Comment"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Target"); }
+            get { return ("Defines a single Comment."); }
         }
 
         /// <summary>
@@ -143,41 +143,17 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="target"> Pointer to target of cast. </param>
+        /// <param name="comment"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Target.
-            if (typeof(Q).IsAssignableFrom(typeof(Target)))
+            //Cast to Comment.
+            if (typeof(Q).IsAssignableFrom(typeof(Comment)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
-                return true;
-            }
-
-            //Cast to plane
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.Plane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Plane(Value.Plane);
-                return true;
-            }
-
-            //Cast to point
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.Plane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.Plane.Origin);
                 return true;
             }
 
@@ -194,10 +170,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Target
-            if (typeof(Target).IsAssignableFrom(source.GetType()))
+            //Cast from Comment
+            if (typeof(Comment).IsAssignableFrom(source.GetType()))
             {
-                Value = (Target)source;
+                Value = (Comment)source;
+                return true;
+            }
+
+            // Cast from string
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                GH_String ghString = (GH_String)source;
+                Value = new Comment(ghString.Value);
                 return true;
             }
 
@@ -258,7 +242,7 @@ namespace RobotComponentsABB.Goos
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
         }
-        #endregion
 
+        #endregion
     }
 }

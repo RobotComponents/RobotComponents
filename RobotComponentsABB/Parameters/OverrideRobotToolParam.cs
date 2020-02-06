@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Override Robot Tool parameter
     /// </summary>
-    public class OverrideRobotToolParameter : GH_PersistentGeometryParam<OverrideRobotToolGoo>, IGH_PreviewObject
+    public class OverrideRobotToolParameter : GH_PersistentGeometryParam<GH_OverrideRobotTool>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<OverrideRobotToolGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<OverrideRobotToolGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_OverrideRobotTool> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref OverrideRobotToolGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_OverrideRobotTool value)
         {
             return GH_GetterResult.cancel;
         }

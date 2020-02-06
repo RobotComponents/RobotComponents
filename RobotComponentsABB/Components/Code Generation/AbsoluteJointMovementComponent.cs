@@ -12,7 +12,8 @@ using GH_IO.Serialization;
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters;
 using RobotComponentsABB.Utils;
 
@@ -97,9 +98,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
-            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
+            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> precisions = new List<int>();
-            List<RobotToolGoo> robotToolGoos = new List<RobotToolGoo>();
+            List<GH_RobotTool> robotToolGoos = new List<GH_RobotTool>();
 
             // Create an empty Robot Tool
             RobotTool emptyRobotTool = new RobotTool();
@@ -117,14 +118,14 @@ namespace RobotComponentsABB.Components.CodeGeneration
             {
                 if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos))
                 {
-                    robotToolGoos = new List<RobotToolGoo>() { new RobotToolGoo(emptyRobotTool) };
+                    robotToolGoos = new List<GH_RobotTool>() { new GH_RobotTool(emptyRobotTool) };
                 }
             }
 
             // Make sure variable input parameters have a default value
             if (robotToolGoos.Count == 0)
             {
-                robotToolGoos.Add(new RobotToolGoo(emptyRobotTool)); // Empty Robot Tool
+                robotToolGoos.Add(new GH_RobotTool(emptyRobotTool)); // Empty Robot Tool
             }
 
             // Get longest Input List
@@ -155,9 +156,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 List<double> internalAxisValues = new List<double>();
                 List<double> externalAxisValues = new List<double>();
 
-                SpeedDataGoo speedDataGoo;
+                GH_SpeedData speedDataGoo;
                 int precision;
-                RobotToolGoo robotToolGoo;
+                GH_RobotTool robotToolGoo;
 
                 // Target counter
                 if (i < sizeValues[0])

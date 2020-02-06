@@ -2,62 +2,62 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// Movement Goo wrapper class, makes sure Target can be used in Grasshopper.
+    /// Work object wrapper class, makes sure the work object can be used in Grasshopper.
     /// </summary>
-    public class OverrideRobotToolGoo : GH_GeometricGoo<OverrideRobotTool>, IGH_PreviewData
+    public class GH_WorkObject : GH_GeometricGoo<WorkObject>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public OverrideRobotToolGoo()
+        public GH_WorkObject()
         {
-            this.Value = new OverrideRobotTool();
+            this.Value = new WorkObject();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="overrideRobotTool"> OverrideRobotTool Value to store inside this Goo instance. </param>
-        public OverrideRobotToolGoo(OverrideRobotTool overrideRobotTool)
+        /// <param name="workObject"> WorkObject Value to store inside this Goo instance. </param>
+        public GH_WorkObject(WorkObject workObject)
         {
-            if (overrideRobotTool == null)
-                overrideRobotTool = new OverrideRobotTool();
-            this.Value = overrideRobotTool;
+            if (workObject == null)
+                workObject = new WorkObject();
+            this.Value = workObject;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="overrideRobotToolGoo"> OverrideRobotToolGoo to store inside this Goo instance. </param>
-        public OverrideRobotToolGoo(OverrideRobotToolGoo overrideRobotToolGoo)
+        /// <param name="workObjectGoo"> WorkObjectGoo to store inside this Goo instance. </param>
+        public GH_WorkObject(GH_WorkObject workObjectGoo)
         {
-            if (overrideRobotToolGoo == null)
-                overrideRobotToolGoo = new OverrideRobotToolGoo();
-            this.Value = overrideRobotToolGoo.Value;
+            if (workObjectGoo == null)
+                workObjectGoo = new GH_WorkObject();
+            this.Value = workObjectGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the OverrideRobotToolGoo. </returns>
+        /// <returns> A duplicate of the WorkObjectGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateOverrideRobotToolGoo();
+            return DuplicateWorkObjectGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the OverrideRobotToolGoo. </returns>
-        public OverrideRobotToolGoo DuplicateOverrideRobotToolGoo()
+        /// <returns> A duplicate of the WorkObjectGoo. </returns>
+        public GH_WorkObject DuplicateWorkObjectGoo()
         {
-            return new OverrideRobotToolGoo(Value == null ? new OverrideRobotTool() : Value.Duplicate());
+            return new GH_WorkObject(Value == null ? new WorkObject() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Set Robot Tool instance"; }
+                if (Value == null) { return "No internal Work Object instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid OverrideRobotTool instance: Did you define a robot tool?"; //Todo: beef this up to be more informative.
+                return "Invalid Work Object instance: Did you set a plane and name?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Set Robot Tool";
+                return "Null Work Object";
             else
-                return "Set Robot Tool";
+                return "Work Object";
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("ChangeTool"); }
+            get { return ("Work Object"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single ChangeTool"); }
+            get { return ("Defines a Work Object."); }
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to OverrideRobotTool.
-            if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
+            //Cast to Work Object
+            if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -157,15 +157,23 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to RobotToolGoo
-            if (typeof(Q).IsAssignableFrom(typeof(RobotToolGoo)))
+            //Cast to plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null)
                     target = default(Q);
-                else if (Value.RobotTool == null)
+                else
+                    target = (Q)(object) new GH_Plane(Value.GlobalWorkObjectPlane);
+                return true;
+            }
+
+            //Cast to point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
                     target = default(Q);
                 else
-                    target = (Q)(object) new RobotToolGoo(Value.RobotTool);
+                    target = (Q)(object)new GH_Point(Value.GlobalWorkObjectPlane.Origin);
                 return true;
             }
 
@@ -182,18 +190,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from OverrideRobotTool.
-            if (typeof(OverrideRobotTool).IsAssignableFrom(source.GetType()))
+            //Cast from WorkObject
+            if (typeof(WorkObject).IsAssignableFrom(source.GetType()))
             {
-                Value = (OverrideRobotTool)source;
-                return true;
-            }
-
-            //Cast from RobotToolGoo
-            if (typeof(RobotToolGoo).IsAssignableFrom(source.GetType()))
-            {
-                RobotToolGoo robotToolGoo = (RobotToolGoo)source;
-                Value = new OverrideRobotTool(robotToolGoo.Value);
+                Value = (WorkObject)source;
                 return true;
             }
 
@@ -256,5 +256,4 @@ namespace RobotComponentsABB.Goos
         }
         #endregion
     }
-
 }

@@ -9,7 +9,7 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters;
 
 // This component is OBSOLETE!
@@ -85,7 +85,7 @@ namespace RobotComponentsABB.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 

@@ -1,63 +1,123 @@
-﻿using Grasshopper.Kernel;
+﻿using System;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Axis configuration wrapper class, makes sure the auto axis configuration can be used in Grasshopper.
+    /// SpeedData wrapper class, makes sure SpeedData can be used in Grasshopper.
     /// </summary>
-    public class AutoAxisConfigGoo : GH_GeometricGoo<AutoAxisConfig>, IGH_PreviewData
+    public class GH_SpeedData : GH_GeometricGoo<SpeedData>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public AutoAxisConfigGoo()
+        public GH_SpeedData()
         {
-            this.Value = new AutoAxisConfig();
+            this.Value = new SpeedData();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="config"> AutoAxisConfig Value to store inside this Goo instance. </param>
-        public AutoAxisConfigGoo(AutoAxisConfig config)
+        /// <param name="speedData"> SpeedData Value to store inside this Goo instance. </param>
+        public GH_SpeedData(SpeedData speedData)
         {
-            if (config == null)
-                config = new AutoAxisConfig();
-            this.Value = config;
+            if (speedData == null)
+                speedData = new SpeedData();
+            this.Value = speedData;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="config"> AutoAxisConfigGoo to store inside this Goo instance. </param>
-        public AutoAxisConfigGoo(AutoAxisConfigGoo configGoo)
+        /// <param name="speedDataGoo"> SpeedDataGoo to store inside this Goo instance. </param>
+        public GH_SpeedData(GH_SpeedData speedDataGoo)
         {
-            if (configGoo == null)
-                configGoo = new AutoAxisConfigGoo();
-            this.Value = configGoo.Value;
+            if (speedDataGoo == null)
+                speedDataGoo = new GH_SpeedData();
+            this.Value = speedDataGoo.Value;
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public GH_SpeedData(GH_Number tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed.Value);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public GH_SpeedData(GH_Integer tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed.Value);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public GH_SpeedData(GH_String tcpSpeed)
+        {
+            if (tcpSpeed == null)
+            {
+                this.Value = new SpeedData();
+            }
+            else
+            {
+                string text = tcpSpeed.Value;
+                double speed = Convert.ToDouble(text);
+                this.Value = new SpeedData(speed);
+            }
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public GH_SpeedData(double tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed);
+        }
+
+        /// <summary>
+        /// Data constructor, m_value will be set to internal_data.
+        /// </summary>
+        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
+        /// the the SpeedData value stored inside this Goo instance. </param>
+        public GH_SpeedData(int tcpSpeed)
+        {
+            this.Value = new SpeedData(tcpSpeed);
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the AutoAxisConfigGoo. </returns>
+        /// <returns> A duplicate of the SpeedDataGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateAutoAxisConfigGoo();
+            return DuplicateSpeedDataGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the AutoAxisConfigGoo. </returns>
-        public AutoAxisConfigGoo DuplicateAutoAxisConfigGoo()
+        /// <returns> A duplicate of the SpeedDataGoo. </returns>
+        public GH_SpeedData DuplicateSpeedDataGoo()
         {
-            return new AutoAxisConfigGoo(Value == null ? new AutoAxisConfig() : Value.Duplicate());
+            return new GH_SpeedData(Value == null ? new SpeedData() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +142,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Auto Axis Configuration instance"; }
+                if (Value == null) { return "No internal SpeedData instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Auto Axis Configuration instance: Did you set a bool?"; //Todo: beef this up to be more informative.
+                return "Invalid SpeedData instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
             }
         }
 
@@ -95,9 +155,17 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Auto Axis Configuration";
+            {
+                return "Null SpeedData";
+            }
+            else if (Value.PreDefinied == true)
+            {
+                return "Predefined Speed Data";
+            }
             else
-                return "Auto Axis Configuration";
+            {
+                return "Custom Speed Data";
+            }
         }
 
         /// <summary>
@@ -105,7 +173,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Auto Axis Configuration"); }
+            get { return ("SpeedData"); }
         }
 
         /// <summary>
@@ -113,7 +181,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an Auto Axis Configuration."); }
+            get { return ("Defines a single SpeedData"); }
         }
 
         /// <summary>
@@ -142,28 +210,18 @@ namespace RobotComponentsABB.Goos
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to AutoAxisConfig
-            if (typeof(Q).IsAssignableFrom(typeof(AutoAxisConfig)))
+            //Cast to SpeedData.
+            if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
-                return true;
-            }
-
-            //Cast to Boolean
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object) new GH_Boolean(Value.IsActive);
                 return true;
             }
 
@@ -180,18 +238,17 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from AutoAxisConfig
-            if (typeof(AutoAxisConfig).IsAssignableFrom(source.GetType()))
+            //Cast from SpeedData: Custom SpeedData
+            if (typeof(SpeedData).IsAssignableFrom(source.GetType()))
             {
-                Value = (AutoAxisConfig)source;
+                Value = (SpeedData)source;
                 return true;
             }
 
-            //Cast from Boolean
-            if (typeof(GH_Boolean).IsAssignableFrom(source.GetType()))
+            //Cast from number: Predefined SpeedData
+            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
-                GH_Boolean ghBoolean = (GH_Boolean)source;
-                Value = new AutoAxisConfig(ghBoolean.Value);
+                Value = new SpeedData((source as GH_Number).Value);
                 return true;
             }
 

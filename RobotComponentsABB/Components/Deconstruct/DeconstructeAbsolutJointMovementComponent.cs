@@ -2,8 +2,8 @@
 
 using Grasshopper.Kernel;
 
+using RobotComponentsGoos.Actions;
 using RobotComponentsABB.Parameters;
-using RobotComponentsABB.Goos;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            AbsoluteJointMovementGoo absolutJointMovementGoo = null;
+            GH_AbsoluteJointMovement absolutJointMovementGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref absolutJointMovementGoo)) { return; }

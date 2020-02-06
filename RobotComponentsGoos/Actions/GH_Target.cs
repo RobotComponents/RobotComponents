@@ -4,60 +4,60 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Timer Goo wrapper class, makes sure Timer can be used in Grasshopper.
+    /// Target Goo wrapper class, makes sure Target can be used in Grasshopper.
     /// </summary>
-    public class TimerGoo : GH_GeometricGoo<Timer>, IGH_PreviewData
+    public class GH_Target : GH_GeometricGoo<Target>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public TimerGoo()
+        public GH_Target() 
         {
-            this.Value = new Timer();
+            this.Value = new Target();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="timer"> Timer Value to store inside this Goo instance. </param>
-        public TimerGoo(Timer timer)
+        /// <param name="target"> Target Value to store inside this Goo instance. </param>
+        public GH_Target(Target target)
         {
-            if (timer == null)
-                timer = new Timer();
-            this.Value = timer;
+            if (target == null)
+                target = new Target();
+            this.Value = target;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="timerGoo"> TimerGoo to store inside this Goo instance. </param>
-        public TimerGoo(TimerGoo timerGoo)
+        /// <param name="targetGoo"> TargetGoo to store inside this Goo instance. </param>
+        public GH_Target(GH_Target targetGoo)
         {
-            if (timerGoo == null)
-                timerGoo = new TimerGoo();
-            this.Value = timerGoo.Value;
+            if (targetGoo == null)
+                targetGoo = new GH_Target();
+            this.Value = targetGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TimerGoo. </returns>
+        /// <returns> A duplicate of the TargetGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateTimerGoo();
+            return DuplicateTargetGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TimerGoo. </returns>
-        public TimerGoo DuplicateTimerGoo()
+        /// <returns> A duplicate of the TargetGoo. </returns>
+        public GH_Target DuplicateTargetGoo()
         {
-            return new TimerGoo(Value == null ? new Timer() : Value.Duplicate());
+            return new GH_Target(Value == null ? new Target() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Timer instance"; }
+                if (Value == null) { return "No internal Target instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Timer instance: Did you define a duration?"; //Todo: beef this up to be more informative.
+                return "Invalid Target instance: Did you define a plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Timer";
+                return "Null Target";
             else
-                return "Timer";
+                return "Target";
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Timer"); }
+            get { return ("Target"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Timer."); }
+            get { return ("Defines a single Target"); }
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Wait.
-            if (typeof(Q).IsAssignableFrom(typeof(Timer)))
+            //Cast to Target.
+            if (typeof(Q).IsAssignableFrom(typeof(Target)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -157,13 +157,27 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to Number
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            //Cast to plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null)
                     target = default(Q);
+                else if (Value.Plane == null)
+                    target = default(Q);
                 else
-                    target = (Q)(object)new GH_Number(Value.Duration);
+                    target = (Q)(object)new GH_Plane(Value.Plane);
+                return true;
+            }
+
+            //Cast to point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Plane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Point(Value.Plane.Origin);
                 return true;
             }
 
@@ -180,20 +194,13 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Timer
-            if (typeof(Timer).IsAssignableFrom(source.GetType()))
+            //Cast from Target
+            if (typeof(Target).IsAssignableFrom(source.GetType()))
             {
-                Value = (Timer)source;
+                Value = (Target)source;
                 return true;
             }
 
-            // Cast from number
-            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
-            {
-                GH_Number ghNumber = (GH_Number)source;
-                Value = new Timer(ghNumber.Value);
-                return true;
-            }
             return false;
         }
         #endregion
@@ -252,5 +259,6 @@ namespace RobotComponentsABB.Goos
         {
         }
         #endregion
+
     }
 }

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Definitions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// External Axis parameter
     /// </summary>
-    public class ExternalAxisParameter : GH_PersistentGeometryParam<ExternalAxisGoo>, IGH_PreviewObject
+    public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalAxisGoo> class
@@ -68,12 +68,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<ExternalAxisGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalAxis> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref ExternalAxisGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalAxis value)
         {
             return GH_GetterResult.cancel;
         }

@@ -53,9 +53,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
         // Fields
         private int _pickedIndex = 0; 
-        private static List<SignalGoo> _signalGooList = new List<SignalGoo>();
+        private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
         private ABB.Robotics.Controllers.Controller _controller = null;
-        private SignalGoo _signalGoo;
+        private GH_Signal _signalGoo;
         private string _currentSignalName = "";
         private string _currentSystemName = "";
         private string _currentCtrName = "";
@@ -67,7 +67,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables      
-            ControllerGoo controllerGoo = null;
+            GH_Controller controllerGoo = null;
             string nameIO = "";
             bool signalValue = false;
             bool update = false;
@@ -127,7 +127,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Pick a signal
         /// </summary>
         /// <returns> The picked signal </returns>
-        private SignalGoo PickSignal()
+        private GH_Signal PickSignal()
         {
             // Clear the list with signals
             _signalGooList.Clear();
@@ -146,7 +146,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
-                    _signalGooList.Add(new SignalGoo(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
+                    _signalGooList.Add(new GH_Signal(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
                 }
             }
 
@@ -179,7 +179,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <returns> The ABB Robotics signal. </returns>
-        private SignalGoo GetSignal(string name)
+        private GH_Signal GetSignal(string name)
         {
             // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
             if (name != _currentSignalName || _controller.SystemName != _currentSystemName || _controller.Name != _currentCtrName)
@@ -209,7 +209,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 }
 
                 // Return the selected signal
-                return new SignalGoo(signal as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal);
+                return new GH_Signal(signal as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal);
             }
             // If the signal is null: return nothing and reaise a message. 
             else

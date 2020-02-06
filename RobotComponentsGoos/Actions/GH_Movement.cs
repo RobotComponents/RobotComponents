@@ -3,69 +3,70 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
+using RobotComponentsGoos.Definitions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Wait Digital Input wrapper class, makes sure the WaitDI can be used in Grasshopper.
+    /// Movement Goo wrapper class, makes sure the Movement can be used in Grasshopper.
     /// </summary>
-    public class WaitDIGoo : GH_GeometricGoo<WaitDI>, IGH_PreviewData
+    public class GH_Movement : GH_GeometricGoo<Movement>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public WaitDIGoo()
+        public GH_Movement()
         {
-            this.Value = new WaitDI();
+            this.Value = new Movement();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="waitDI"> WaitDI Value to store inside this Goo instance. </param>
-        public WaitDIGoo(WaitDI waitDI)
+        /// <param name="movement"> Movement Value to store inside this Goo instance. </param>
+        public GH_Movement(Movement movement)
         {
-            if (waitDI == null)
-                waitDI = new WaitDI();
-            this.Value = waitDI;
+            if (movement == null)
+                movement = new Movement();
+            this.Value = movement;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="waitDIGoo"> WaitDIGoo to store inside this Goo instance. </param>
-        public WaitDIGoo(WaitDIGoo waitDIGoo)
+        /// <param name="movementGoo"> MovementGoo to store inside this Goo instance. </param>
+        public GH_Movement(GH_Movement movementGoo)
         {
-            if (waitDIGoo == null)
-                waitDIGoo = new WaitDIGoo();
-            this.Value = waitDIGoo.Value;
+            if (movementGoo == null)
+                movementGoo = new GH_Movement();
+            this.Value = movementGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WaitDIGoo. </returns>
+        /// <returns> A duplicate of the MovementGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateWaitDIGoo();
+            return DuplicateMovementGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WaitDIGoo. </returns>
-        public WaitDIGoo DuplicateWaitDIGoo()
+        /// <returns> A duplicate of the MovementGoo. </returns>
+        public GH_Movement DuplicateMovementGoo()
         {
-            return new WaitDIGoo(Value == null ? new WaitDI() : Value.Duplicate());
+            return new GH_Movement(Value == null ? new Movement() : Value.Duplicate());
         }
         #endregion
 
         #region properties
-        public override bool IsValid
         /// <summary>
         /// Gets a value indicating whether or not the current value is valid.
         /// </summary>
+        public override bool IsValid
         {
             get
             {
@@ -82,9 +83,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal WaitDI instance"; }
+                if (Value == null) { return "No internal Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitDI instance: Did you define the digital input name and value?"; //Todo: beef this up to be more informative.
+                return "Invalid Movement instance: Did you define a target?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +96,29 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null WaitDI";
+            {
+                return "Null Movement";
+            }
+
+            else if (Value.MovementType == 0)
+            {
+                return "Absolute Joint Movement";
+            }
+
+            else if (Value.MovementType == 1)
+            {
+                return "Linear Movement";
+            }
+
+            else if (Value.MovementType == 2)
+            {
+                return "Joint Movement";
+            }
+
             else
-                return "Digital Input";
+            {
+                return "Movement";
+            }
         }
 
         /// <summary>
@@ -105,7 +126,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Wait for Digital Input"); }
+            get { return ("Movement"); }
         }
 
         /// <summary>
@@ -113,7 +134,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Wait for Digital Input data."); }
+            get { return ("Defines a single Movement"); }
         }
 
         /// <summary>
@@ -147,13 +168,97 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            // Cast to WaitDI
-            if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
+            //Cast to Movement.
+            if (typeof(Q).IsAssignableFrom(typeof(Movement)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Target
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.Target == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Target(Value.Target);
+                return true;
+            }
+
+            //Cast to Plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.GlobalTargetPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane);
+                return true;
+            }
+
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.GlobalTargetPlane == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin);
+                return true;
+            }
+
+            //Cast to SpeedData
+            if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.SpeedData == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_SpeedData(Value.SpeedData);
+                return true;
+            }
+
+            //Cast to RobotTool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.RobotTool == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_RobotTool(Value.RobotTool);
+                return true;
+            }
+
+            //Cast to WorkObject
+            if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.WorkObject == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_WorkObject(Value.WorkObject);
+                return true;
+            }
+
+            //Cast to DigitalOutput
+            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.DigitalOutput == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput);
                 return true;
             }
 
@@ -170,10 +275,26 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            // Cast from WaitDI
-            if (typeof(WaitDI).IsAssignableFrom(source.GetType()))
+            //Cast from Movement
+            if (typeof(Movement).IsAssignableFrom(source.GetType()))
             {
-                Value = (WaitDI)source;
+                Value = (Movement)source;
+                return true;
+            }
+
+            //Cast from TargetGoo
+            if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
+            {
+                GH_Target targetGoo = (GH_Target)source;
+                Value = new Movement(targetGoo.Value);
+                return true;
+            }
+
+            //Cast from Target
+            if (typeof(Target).IsAssignableFrom(source.GetType()))
+            {
+                Target target = (Target)source;
+                Value = new Movement(target);
                 return true;
             }
 
@@ -225,6 +346,10 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            Plane plane = Value.GlobalTargetPlane;
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
         }
 
         /// <summary>
@@ -233,6 +358,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+            // GH_Plane.DrawPlane(args.Pipeline, Value.GlobalTargetPlane);
         }
         #endregion
     }

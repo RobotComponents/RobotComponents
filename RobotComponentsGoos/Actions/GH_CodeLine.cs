@@ -4,60 +4,60 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Comment wrapper class, makes sure the comment can be used in Grasshopper.
+    /// Code line wrapper class, makes sure the code line can be used in Grasshopper.
     /// </summary>
-    public class CommentGoo : GH_GeometricGoo<Comment>, IGH_PreviewData
+    public class GH_CodeLine : GH_GeometricGoo<CodeLine>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public CommentGoo()
+        public GH_CodeLine()
         {
-            this.Value = new Comment();
+            this.Value = new CodeLine();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="comment"> Comment Value to store inside this Goo instance. </param>
-        public CommentGoo(Comment comment)
+        /// <param name="codeLine"> CodeLine Value to store inside this Goo instance. </param>
+        public GH_CodeLine(CodeLine codeLine)
         {
-            if (comment == null)
-                comment = new Comment();
-            this.Value = comment;
+            if (codeLine == null)
+                codeLine = new CodeLine();
+            this.Value = codeLine;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="commentGoo"> CommentGoo to store inside this Goo instance. </param>
-        public CommentGoo(CommentGoo commentGoo)
+        /// <param name="codeLineGoo"> CodeLineGoo to store inside this Goo instance. </param>
+        public GH_CodeLine(GH_CodeLine codeLineGoo)
         {
-            if (commentGoo == null)
-                commentGoo = new CommentGoo();
-            this.Value = commentGoo.Value;
+            if (codeLineGoo == null)
+                codeLineGoo = new GH_CodeLine();
+            this.Value = codeLineGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CommentGoo. </returns>
+        /// <returns> A duplicate of the CodeLineGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateCommentGoo();
+            return DuplicateCodeLine();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CommentGoo. </returns>
-        public CommentGoo DuplicateCommentGoo()
+        /// <returns> A duplicate of the CodeLineGoo. </returns>
+        public GH_CodeLine DuplicateCodeLine()
         {
-            return new CommentGoo(Value == null ? new Comment() : Value.Duplicate());
+            return new GH_CodeLine(Value == null ? new CodeLine() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Comment instance"; }
+                if (Value == null) { return "No internal CodeLine instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Comment instance: Did you define a String?"; //Todo: beef this up to be more informative.
+                return "Invalid CodeLine instance: Did you define a String?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Comment";
+                return "Null CodeLine";
             else
-                return "Comment";
+                return "Code Line";
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Comment"); }
+            get { return ("CodeLine"); }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Comment."); }
+            get { return ("Defines a single CodeLine."); }
         }
 
         /// <summary>
@@ -143,12 +143,12 @@ namespace RobotComponentsABB.Goos
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="comment"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Comment.
-            if (typeof(Q).IsAssignableFrom(typeof(Comment)))
+            //Cast to CodeLine.
+            if (typeof(Q).IsAssignableFrom(typeof(CodeLine)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -170,10 +170,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Comment
-            if (typeof(Comment).IsAssignableFrom(source.GetType()))
+            //Cast from CodeLine
+            if (typeof(CodeLine).IsAssignableFrom(source.GetType()))
             {
-                Value = (Comment)source;
+                Value = (CodeLine)source;
                 return true;
             }
 
@@ -181,7 +181,7 @@ namespace RobotComponentsABB.Goos
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 GH_String ghString = (GH_String)source;
-                Value = new Comment(ghString.Value);
+                Value = new CodeLine(ghString.Value);
                 return true;
             }
 

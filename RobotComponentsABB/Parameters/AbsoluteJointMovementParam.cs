@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Absolute Joint Movement parameter
     /// </summary>
-    public class AbsoluteJointMovementParameter : GH_PersistentParam<AbsoluteJointMovementGoo>, IGH_PreviewObject
+    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<AbsoluteJointMovementGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_AbsoluteJointMovement> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref AbsoluteJointMovementGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_AbsoluteJointMovement value)
         {
             return GH_GetterResult.cancel;
         }

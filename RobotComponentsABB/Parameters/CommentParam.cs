@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Comment parameter
     /// </summary>
-    public class CommentParameter : GH_PersistentGeometryParam<CommentGoo>, IGH_PreviewObject
+    public class CommentParameter : GH_PersistentGeometryParam<GH_Comment>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
@@ -70,12 +70,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<CommentGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref CommentGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
         {
             return GH_GetterResult.cancel;
         }

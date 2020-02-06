@@ -4,60 +4,60 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
+    /// Digital Output wrapper class, makes sure the Digital Output can be used in Grasshopper.
     /// </summary>
-    public class AbsoluteJointMovementGoo : GH_GeometricGoo<AbsoluteJointMovement>, IGH_PreviewData
+    public class GH_DigitalOutput : GH_GeometricGoo<DigitalOutput>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public AbsoluteJointMovementGoo()
+        public GH_DigitalOutput()
         {
-            this.Value = new AbsoluteJointMovement();
+            this.Value = new DigitalOutput();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="absoluteJointMovement"> AbsoluteJointMovement Value to store inside this Goo instance. </param>
-        public AbsoluteJointMovementGoo(AbsoluteJointMovement absoluteJointMovement)
+        /// <param name="digitalOutput"> DigitalOutput Value to store inside this Goo instance. </param>
+        public GH_DigitalOutput(DigitalOutput digitalOutput)
         {
-            if (absoluteJointMovement == null)
-                absoluteJointMovement = new AbsoluteJointMovement();
-            this.Value = absoluteJointMovement;
+            if (digitalOutput == null)
+                digitalOutput = new DigitalOutput();
+            this.Value = digitalOutput;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="absoluteJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
-        public AbsoluteJointMovementGoo(AbsoluteJointMovementGoo absoluteJointMovementGoo)
+        /// <param name="digitalOutputGoo"> DigitalOutputGoo to store inside this Goo instance. </param>
+        public GH_DigitalOutput(GH_DigitalOutput digitalOutputGoo)
         {
-            if (absoluteJointMovementGoo == null)
-                absoluteJointMovementGoo = new AbsoluteJointMovementGoo();
-            this.Value = absoluteJointMovementGoo.Value;
+            if (digitalOutputGoo == null)
+                digitalOutputGoo = new GH_DigitalOutput();
+            this.Value = digitalOutputGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
+        /// <returns> A duplicate of the DigitalOutputGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateAbsoluteJointMovementGoo();
+            return DuplicateDigitalOutputGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
-        public AbsoluteJointMovementGoo DuplicateAbsoluteJointMovementGoo()
+        /// <returns> A duplicate of the DigitalOutputGoo. </returns>
+        public GH_DigitalOutput DuplicateDigitalOutputGoo()
         {
-            return new AbsoluteJointMovementGoo(Value == null ? new AbsoluteJointMovement() : Value.Duplicate());
+            return new GH_DigitalOutput(Value == null ? new DigitalOutput() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Absolute Joint Movement instance"; }
+                if (Value == null) { return "No internal DigitalOutput instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Absolute Joint Movement instance: ?"; //Todo: beef this up to be more informative.
+                return "Invalid DigitalOutput instance: Did you define the digital output name and value?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,19 +95,11 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-            {
-                return "Null Absolute Joint Movement";
-            }
-
-            else if (Value.MovementType == 0)
-            {
-                return "Absolute Joint Movement";
-            }
-
+                return "Null Digital Output";
+            else if (Value.Name == null)
+                return "Empty Digital Output";
             else
-            {
-                return "Absolute Joint Movement";
-            }
+                return "Digital Output";
         }
 
         /// <summary>
@@ -115,7 +107,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Absolute Joint Movement"); }
+            get { return ("Digital Output"); }
         }
 
         /// <summary>
@@ -123,7 +115,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Absolute Joint Movement"); }
+            get { return ("Defines a Digital Output"); }
         }
 
         /// <summary>
@@ -152,28 +144,18 @@ namespace RobotComponentsABB.Goos
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to. </typeparam>
+        /// <typeparam name="Q"> Type to cast to.  </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Absolute Joint Movement
-            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
+            //Cast to DigitalOutput.
+            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
-                return true;
-            }
-
-            //Cast to Absolute Joint Movement Goo
-            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovementGoo)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new AbsoluteJointMovementGoo(Value);
                 return true;
             }
 
@@ -190,18 +172,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from Aboslute Joint Movement
-            if (typeof(AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
+            //Cast from JointMovement
+            if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
             {
-                Value = (AbsoluteJointMovement)source;
-                return true;
-            }
-
-            //Cast from Aboslute Joint Movement Goo
-            if (typeof(AbsoluteJointMovementGoo).IsAssignableFrom(source.GetType()))
-            {
-                AbsoluteJointMovementGoo absoluteJointMovementGoo = (AbsoluteJointMovementGoo)source;
-                Value = absoluteJointMovementGoo.Value;
+                Value = (DigitalOutput)source;
                 return true;
             }
 

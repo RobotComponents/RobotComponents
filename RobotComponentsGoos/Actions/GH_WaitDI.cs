@@ -4,68 +4,68 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Digital Output wrapper class, makes sure the Digital Output can be used in Grasshopper.
+    /// Wait Digital Input wrapper class, makes sure the WaitDI can be used in Grasshopper.
     /// </summary>
-    public class DigitalOutputGoo : GH_GeometricGoo<DigitalOutput>, IGH_PreviewData
+    public class GH_WaitDI : GH_GeometricGoo<WaitDI>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public DigitalOutputGoo()
+        public GH_WaitDI()
         {
-            this.Value = new DigitalOutput();
+            this.Value = new WaitDI();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="digitalOutput"> DigitalOutput Value to store inside this Goo instance. </param>
-        public DigitalOutputGoo(DigitalOutput digitalOutput)
+        /// <param name="waitDI"> WaitDI Value to store inside this Goo instance. </param>
+        public GH_WaitDI(WaitDI waitDI)
         {
-            if (digitalOutput == null)
-                digitalOutput = new DigitalOutput();
-            this.Value = digitalOutput;
+            if (waitDI == null)
+                waitDI = new WaitDI();
+            this.Value = waitDI;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="digitalOutputGoo"> DigitalOutputGoo to store inside this Goo instance. </param>
-        public DigitalOutputGoo(DigitalOutputGoo digitalOutputGoo)
+        /// <param name="waitDIGoo"> WaitDIGoo to store inside this Goo instance. </param>
+        public GH_WaitDI(GH_WaitDI waitDIGoo)
         {
-            if (digitalOutputGoo == null)
-                digitalOutputGoo = new DigitalOutputGoo();
-            this.Value = digitalOutputGoo.Value;
+            if (waitDIGoo == null)
+                waitDIGoo = new GH_WaitDI();
+            this.Value = waitDIGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the DigitalOutputGoo. </returns>
+        /// <returns> A duplicate of the WaitDIGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateDigitalOutputGoo();
+            return DuplicateWaitDIGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the DigitalOutputGoo. </returns>
-        public DigitalOutputGoo DuplicateDigitalOutputGoo()
+        /// <returns> A duplicate of the WaitDIGoo. </returns>
+        public GH_WaitDI DuplicateWaitDIGoo()
         {
-            return new DigitalOutputGoo(Value == null ? new DigitalOutput() : Value.Duplicate());
+            return new GH_WaitDI(Value == null ? new WaitDI() : Value.Duplicate());
         }
         #endregion
 
         #region properties
+        public override bool IsValid
         /// <summary>
         /// Gets a value indicating whether or not the current value is valid.
         /// </summary>
-        public override bool IsValid
         {
             get
             {
@@ -82,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal DigitalOutput instance"; }
+                if (Value == null) { return "No internal WaitDI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid DigitalOutput instance: Did you define the digital output name and value?"; //Todo: beef this up to be more informative.
+                return "Invalid WaitDI instance: Did you define the digital input name and value?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,11 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Digital Output";
-            else if (Value.Name == null)
-                return "Empty Digital Output";
+                return "Null WaitDI";
             else
-                return "Digital Output";
+                return "Digital Input";
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Digital Output"); }
+            get { return ("Wait for Digital Input"); }
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Digital Output"); }
+            get { return ("Defines a single Wait for Digital Input data."); }
         }
 
         /// <summary>
@@ -149,8 +147,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to DigitalOutput.
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
+            // Cast to WaitDI
+            if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -172,10 +170,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from JointMovement
-            if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
+            // Cast from WaitDI
+            if (typeof(WaitDI).IsAssignableFrom(source.GetType()))
             {
-                Value = (DigitalOutput)source;
+                Value = (WaitDI)source;
                 return true;
             }
 

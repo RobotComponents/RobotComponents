@@ -2,7 +2,8 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
+
 using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components.Deconstruct
@@ -50,7 +51,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            TargetGoo targetGoo = null;
+            GH_Target targetGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref targetGoo)) { return; }

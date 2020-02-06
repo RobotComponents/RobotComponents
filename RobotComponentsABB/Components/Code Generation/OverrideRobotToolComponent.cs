@@ -3,8 +3,7 @@
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters;
 
 namespace RobotComponentsABB.Components.CodeGeneration
@@ -65,7 +64,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             Guid documentGUID = this.OnPingDocument().DocumentID;
 
             // Input variables
-            RobotToolGoo _toolGoo = new RobotToolGoo();
+            GH_RobotTool _toolGoo = new GH_RobotTool();
 
             // Catch input data
             if (!DA.GetData(0, ref _toolGoo)) { _toolGoo.Value.Name = "tool0"; ; }

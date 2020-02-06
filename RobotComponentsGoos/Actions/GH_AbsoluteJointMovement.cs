@@ -1,123 +1,63 @@
-﻿using System;
-using Grasshopper.Kernel;
+﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// SpeedData wrapper class, makes sure SpeedData can be used in Grasshopper.
+    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
     /// </summary>
-    public class SpeedDataGoo : GH_GeometricGoo<SpeedData>, IGH_PreviewData
+    public class GH_AbsoluteJointMovement : GH_GeometricGoo<AbsoluteJointMovement>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public SpeedDataGoo()
+        public GH_AbsoluteJointMovement()
         {
-            this.Value = new SpeedData();
+            this.Value = new AbsoluteJointMovement();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="speedData"> SpeedData Value to store inside this Goo instance. </param>
-        public SpeedDataGoo(SpeedData speedData)
+        /// <param name="absoluteJointMovement"> AbsoluteJointMovement Value to store inside this Goo instance. </param>
+        public GH_AbsoluteJointMovement(AbsoluteJointMovement absoluteJointMovement)
         {
-            if (speedData == null)
-                speedData = new SpeedData();
-            this.Value = speedData;
+            if (absoluteJointMovement == null)
+                absoluteJointMovement = new AbsoluteJointMovement();
+            this.Value = absoluteJointMovement;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="speedDataGoo"> SpeedDataGoo to store inside this Goo instance. </param>
-        public SpeedDataGoo(SpeedDataGoo speedDataGoo)
+        /// <param name="absoluteJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
+        public GH_AbsoluteJointMovement(GH_AbsoluteJointMovement absoluteJointMovementGoo)
         {
-            if (speedDataGoo == null)
-                speedDataGoo = new SpeedDataGoo();
-            this.Value = speedDataGoo.Value;
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public SpeedDataGoo(GH_Number tcpSpeed)
-        {
-            this.Value = new SpeedData(tcpSpeed.Value);
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public SpeedDataGoo(GH_Integer tcpSpeed)
-        {
-            this.Value = new SpeedData(tcpSpeed.Value);
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public SpeedDataGoo(GH_String tcpSpeed)
-        {
-            if (tcpSpeed == null)
-            {
-                this.Value = new SpeedData();
-            }
-            else
-            {
-                string text = tcpSpeed.Value;
-                double speed = Convert.ToDouble(text);
-                this.Value = new SpeedData(speed);
-            }
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public SpeedDataGoo(double tcpSpeed)
-        {
-            this.Value = new SpeedData(tcpSpeed);
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public SpeedDataGoo(int tcpSpeed)
-        {
-            this.Value = new SpeedData(tcpSpeed);
+            if (absoluteJointMovementGoo == null)
+                absoluteJointMovementGoo = new GH_AbsoluteJointMovement();
+            this.Value = absoluteJointMovementGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the SpeedDataGoo. </returns>
+        /// <returns> A duplicate of the MovementGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateSpeedDataGoo();
+            return DuplicateAbsoluteJointMovementGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the SpeedDataGoo. </returns>
-        public SpeedDataGoo DuplicateSpeedDataGoo()
+        /// <returns> A duplicate of the MovementGoo. </returns>
+        public GH_AbsoluteJointMovement DuplicateAbsoluteJointMovementGoo()
         {
-            return new SpeedDataGoo(Value == null ? new SpeedData() : Value.Duplicate());
+            return new GH_AbsoluteJointMovement(Value == null ? new AbsoluteJointMovement() : Value.Duplicate());
         }
         #endregion
 
@@ -142,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal SpeedData instance"; }
+                if (Value == null) { return "No internal Absolute Joint Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid SpeedData instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
+                return "Invalid Absolute Joint Movement instance: ?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -156,15 +96,17 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
             {
-                return "Null SpeedData";
+                return "Null Absolute Joint Movement";
             }
-            else if (Value.PreDefinied == true)
+
+            else if (Value.MovementType == 0)
             {
-                return "Predefined Speed Data";
+                return "Absolute Joint Movement";
             }
+
             else
             {
-                return "Custom Speed Data";
+                return "Absolute Joint Movement";
             }
         }
 
@@ -173,7 +115,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("SpeedData"); }
+            get { return ("Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -181,7 +123,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single SpeedData"); }
+            get { return ("Defines a single Absolute Joint Movement"); }
         }
 
         /// <summary>
@@ -215,13 +157,23 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to SpeedData.
-            if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
+            //Cast to Absolute Joint Movement
+            if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
                     target = (Q)(object)Value;
+                return true;
+            }
+
+            //Cast to Absolute Joint Movement Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_AbsoluteJointMovement)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_AbsoluteJointMovement(Value);
                 return true;
             }
 
@@ -238,17 +190,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from SpeedData: Custom SpeedData
-            if (typeof(SpeedData).IsAssignableFrom(source.GetType()))
+            //Cast from Aboslute Joint Movement
+            if (typeof(AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
-                Value = (SpeedData)source;
+                Value = (AbsoluteJointMovement)source;
                 return true;
             }
 
-            //Cast from number: Predefined SpeedData
-            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
+            //Cast from Aboslute Joint Movement Goo
+            if (typeof(GH_AbsoluteJointMovement).IsAssignableFrom(source.GetType()))
             {
-                Value = new SpeedData((source as GH_Number).Value);
+                GH_AbsoluteJointMovement absoluteJointMovementGoo = (GH_AbsoluteJointMovement)source;
+                Value = absoluteJointMovementGoo.Value;
                 return true;
             }
 

@@ -1,63 +1,66 @@
-﻿using Grasshopper.Kernel;
+﻿using System.Collections.Generic;
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.BaseClasses.Kinematics;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// Work object wrapper class, makes sure the work object can be used in Grasshopper.
+    /// RobotInfo Goo wrapper class, makes sure RobotInfo can be used in Grasshopper.
     /// </summary>
-    public class WorkObjectGoo : GH_GeometricGoo<WorkObject>, IGH_PreviewData
+    public class GH_RobotInfo : GH_GeometricGoo<RobotInfo>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public WorkObjectGoo()
+        public GH_RobotInfo()
         {
-            this.Value = new WorkObject();
+            this.Value = new RobotInfo();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="workObject"> WorkObject Value to store inside this Goo instance. </param>
-        public WorkObjectGoo(WorkObject workObject)
+        /// <param name="robotInfo"> RobotInfo Value to store inside this Goo instance. </param>
+        public GH_RobotInfo(RobotInfo robotInfo)
         {
-            if (workObject == null)
-                workObject = new WorkObject();
-            this.Value = workObject;
+            if (robotInfo == null)
+                robotInfo = new RobotInfo();
+            this.Value = robotInfo;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="workObjectGoo"> WorkObjectGoo to store inside this Goo instance. </param>
-        public WorkObjectGoo(WorkObjectGoo workObjectGoo)
+        /// <param name="robotInfoGoo"> RobotInfoGoo to store inside this Goo instance. </param>
+        public GH_RobotInfo(GH_RobotInfo robotInfoGoo)
         {
-            if (workObjectGoo == null)
-                workObjectGoo = new WorkObjectGoo();
-            this.Value = workObjectGoo.Value;
+            if (robotInfoGoo == null)
+                robotInfoGoo = new GH_RobotInfo();
+            this.Value = robotInfoGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WorkObjectGoo. </returns>
+        /// <returns> A duplicate of the RobotInfoGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateWorkObjectGoo();
+            return DuplicateRobotInfoGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WorkObjectGoo. </returns>
-        public WorkObjectGoo DuplicateWorkObjectGoo()
+        /// <returns> A duplicate of the RobotInfoGoo. </returns>
+        public GH_RobotInfo DuplicateRobotInfoGoo()
         {
-            return new WorkObjectGoo(Value == null ? new WorkObject() : Value.Duplicate());
+            return new GH_RobotInfo(Value == null ? new RobotInfo() : Value.Duplicate());
         }
         #endregion
 
@@ -82,9 +85,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal Work Object instance"; }
+                if (Value == null) { return "No internal RobotInfo instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Work Object instance: Did you set a plane and name?"; //Todo: beef this up to be more informative.
+                return "Invalid RobotInfo instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -95,9 +98,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null Work Object";
+                return "Null RobotInfo";
             else
-                return "Work Object";
+                return "Robot Info";
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Work Object"); }
+            get { return ("RobotInfo"); }
         }
 
         /// <summary>
@@ -113,7 +116,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Work Object."); }
+            get { return ("Defines a single RobotInfo"); }
         }
 
         /// <summary>
@@ -123,7 +126,38 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                return BoundingBox.Empty; //Note: beef this up if needed
+                if (Value == null) { return BoundingBox.Empty; }
+                if (Value.Meshes == null) { return BoundingBox.Empty; }
+                else
+                {
+                    // Make an empty bounding box
+                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
+
+                    // Make the bounding box of the robot meshes
+                    for (int i = 0; i != Value.Meshes.Count; i++)
+                    {
+                        MeshBoundingBox.Union(Value.Meshes[i].GetBoundingBox(true));
+                    }
+
+                    // Make the bounding box of the external axes
+                    for (int i = 0; i != Value.ExternalAxis.Count; i++)
+                    {
+                        if (Value.ExternalAxis[i].IsValid == true)
+                        {
+                            if (Value.ExternalAxis[i].BaseMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].BaseMesh.GetBoundingBox(true));
+                            }
+
+                            if (Value.ExternalAxis[i].LinkMesh != null)
+                            {
+                                MeshBoundingBox.Union(Value.ExternalAxis[i].LinkMesh.GetBoundingBox(true));
+                            }
+                        }
+                    }
+                    
+                    return MeshBoundingBox;
+                }
             }
         }
 
@@ -134,7 +168,7 @@ namespace RobotComponentsABB.Goos
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return Boundingbox;
         }
         #endregion
 
@@ -147,8 +181,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Work Object
-            if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
+            //Cast to RobotInfo.
+            if (typeof(Q).IsAssignableFrom(typeof(RobotInfo)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -157,25 +191,25 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to plane
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            //Cast to RobotTool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
                 if (Value == null)
                     target = default(Q);
+                else if (Value.Tool == null)
+                    target = default(Q);
                 else
-                    target = (Q)(object) new GH_Plane(Value.GlobalWorkObjectPlane);
+                    target = (Q)(object)new GH_RobotTool(Value.Tool);
                 return true;
             }
 
-            //Cast to point
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.GlobalWorkObjectPlane.Origin);
-                return true;
-            }
+            //Cast to Mesh.
+
+            // Casting is only possible from one to one (does not work with lists)
+            // The Robot Info mesh is stored in a list.
+            // It can only be returned as one single mesh and not as list with a mesh for the separate links. 
+            // Therefore, casting to a mesh is not implemented. 
+            // If the users wants to get the robot mesh they can use the Deconstuct Robot Info Component. 
 
             target = default(Q);
             return false;
@@ -190,10 +224,10 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from WorkObject
-            if (typeof(WorkObject).IsAssignableFrom(source.GetType()))
+            //Cast from RobotInfo
+            if (typeof(RobotInfo).IsAssignableFrom(source.GetType()))
             {
-                Value = (WorkObject)source;
+                Value = (RobotInfo)source;
                 return true;
             }
 
@@ -245,6 +279,33 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            if (Value == null) { return; }
+
+            // Robot meshes
+            if (Value.Meshes != null)
+            {
+                for (int i = 0; i != Value.Meshes.Count; i++)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
+            }
+
+            // External axis meshes
+            for (int i = 0; i != Value.ExternalAxis.Count; i++)
+            {
+                if (Value.ExternalAxis[i].IsValid == true)
+                {
+                    if (Value.ExternalAxis[i].BaseMesh != null)
+                    {
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
+
+                    if (Value.ExternalAxis[i].LinkMesh != null)
+                    {
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -253,6 +314,7 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
+
         }
         #endregion
     }

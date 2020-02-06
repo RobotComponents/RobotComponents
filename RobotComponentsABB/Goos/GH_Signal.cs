@@ -1,62 +1,58 @@
 ﻿// Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // ABB Robotic Libs
-using ABB.Robotics.Controllers;
+using ABB.Robotics.Controllers.IOSystemDomain;
 
 namespace RobotComponentsABB.Goos
 {
     /// <summary>
-    /// Controller wrapper class, makes sure the controller can be used in Grasshopper.
+    /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.
     /// </summary>
-    public class ControllerGoo : GH_Goo<Controller>, IGH_Goo
+    public class GH_Signal : GH_Goo<DigitalSignal>
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public ControllerGoo()
+        public GH_Signal()
         {
-            this.Value = new Controller();
+            this.Value = null;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="controller"> Controller Value to store inside this Goo instance. </param>
-        public ControllerGoo(Controller controller)
+        /// <param name="signal"> Signal Value to store inside this Goo instance. </param>
+        public GH_Signal(DigitalSignal signal)
         {
-            if (controller == null)
-                controller = new Controller();
-            this.Value = controller;
+            this.Value = signal;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="controllerGoo"> Controller Value to store inside this Goo instance. </param>
-        public ControllerGoo(ControllerGoo controllerGoo)
+        /// <param name="signalGoo"> SignalGoo to store inside this Goo instance. </param>
+        public GH_Signal(GH_Signal signalGoo)
         {
-            if (controllerGoo == null)
-                controllerGoo = new ControllerGoo();
-            this.Value = controllerGoo.Value;
+            this.Value = signalGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ControllerGoo. </returns>
+        /// <returns> A duplicate of the SignalGoo. </returns>
         public override IGH_Goo Duplicate()
         {
-            return DuplicateController();
+            return DuplicateSignalGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CommentGoo. </returns>
-        public ControllerGoo DuplicateController()
+        /// <returns> A duplicate of the SignalGoo. </returns>
+        public GH_Signal DuplicateSignalGoo()
         {
-            return new ControllerGoo(Value == null ? new Controller() : Value);
+            return new GH_Signal(Value);
         }
         #endregion
 
@@ -81,11 +77,11 @@ namespace RobotComponentsABB.Goos
         {
             if (Value == null)
             {
-                return "Null Controller";
+                return "Null Signal";
             }
             else
             {
-                return "Name : " + Value.Name + "\nSystem Name : " + Value.SystemName + "\nIsVirtual : " + Value.IsVirtual.ToString();
+                return "SignalName : " + Value.Name + "\nValue : " + Value.Value;
             }
         }
 
@@ -94,7 +90,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Controller"); }
+            get { return ("Signal"); }
         }
 
         /// <summary>
@@ -104,9 +100,10 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                return "Defines a ABB Controller";
+                return "Defines a ABB Signal";
             }
         }
+
         #endregion
     }
 }

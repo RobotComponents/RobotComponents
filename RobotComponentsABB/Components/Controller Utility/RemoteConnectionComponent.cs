@@ -67,7 +67,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            ControllerGoo controllerGoo = null;
+            GH_Controller controllerGoo = null;
             bool connect = false;
             bool upload = false;
             bool run = false;

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Auto Axis Configuration parameter
     /// </summary>
-    public class AutoAxisConfigParameter : GH_PersistentGeometryParam<AutoAxisConfigGoo>, IGH_PreviewObject
+    public class AutoAxisConfigParameter : GH_PersistentGeometryParam<GH_AutoAxisConfig>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<AutoAxisConfigGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_AutoAxisConfig> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref AutoAxisConfigGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_AutoAxisConfig value)
         {
             return GH_GetterResult.cancel;
         }

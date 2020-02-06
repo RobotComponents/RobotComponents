@@ -2,7 +2,7 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters;
 
 // This component is OBSOLETE!
@@ -70,7 +70,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            WorkObjectGoo workObjectGoo = null;
+            GH_WorkObject workObjectGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref workObjectGoo)) { return; }

@@ -2,75 +2,62 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.BaseClasses.Actions;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// ExternalAxis Goo wrapper class, makes sure ExternalAxis can be used in Grasshopper.
+    /// Axis configuration wrapper class, makes sure the auto axis configuration can be used in Grasshopper.
     /// </summary>
-    public class ExternalAxisGoo : GH_GeometricGoo<ExternalAxis>, IGH_PreviewData
+    public class GH_AutoAxisConfig : GH_GeometricGoo<AutoAxisConfig>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public ExternalAxisGoo()
+        public GH_AutoAxisConfig()
         {
-            this.Value = null;
+            this.Value = new AutoAxisConfig();
         }
 
         /// <summary>
-        /// Data constructor from from ExternalAxis
+        /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="externalAxis"> ExternalAxis Value to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalAxis externalAxis)
+        /// <param name="config"> AutoAxisConfig Value to store inside this Goo instance. </param>
+        public GH_AutoAxisConfig(AutoAxisConfig config)
         {
-            if (externalAxis == null)
-            {
-                externalAxis = null;
-            }
-
-            this.Value = externalAxis;
+            if (config == null)
+                config = new AutoAxisConfig();
+            this.Value = config;
         }
 
         /// <summary>
-        /// Data constructor from ExternalAxisGoo
+        /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="externalAxisGoo"> ExternalAxisGoo to store inside this Goo instance. </param>
-        public ExternalAxisGoo(ExternalAxisGoo externalAxisGoo)
+        /// <param name="config"> AutoAxisConfigGoo to store inside this Goo instance. </param>
+        public GH_AutoAxisConfig(GH_AutoAxisConfig configGoo)
         {
-            if (externalAxisGoo == null)
-            {
-                externalAxisGoo = new ExternalAxisGoo();
-            }
-
-            this.Value = externalAxisGoo.Value;
+            if (configGoo == null)
+                configGoo = new GH_AutoAxisConfig();
+            this.Value = configGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
+        /// <returns> A duplicate of the AutoAxisConfigGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateExternalAxisGoo();
+            return DuplicateAutoAxisConfigGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
-        public ExternalAxisGoo DuplicateExternalAxisGoo()
+        /// <returns> A duplicate of the AutoAxisConfigGoo. </returns>
+        public GH_AutoAxisConfig DuplicateAutoAxisConfigGoo()
         {
-            if (Value == null) 
-                return null; 
-
-            else if (Value is ExternalAxis) 
-                return new ExternalAxisGoo(Value.DuplicateExternalAxis()); 
-
-            else 
-                return null; 
+            return new GH_AutoAxisConfig(Value == null ? new AutoAxisConfig() : Value.Duplicate());
         }
         #endregion
 
@@ -95,9 +82,9 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null) { return "No internal ExternalAxis instance"; }
+                if (Value == null) { return "No internal Auto Axis Configuration instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalAxis instance: Did you define an interval and axis plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Auto Axis Configuration instance: Did you set a bool?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -108,13 +95,9 @@ namespace RobotComponentsABB.Goos
         public override string ToString()
         {
             if (Value == null)
-                return "Null External Axis";
-            else if (Value is ExternalLinearAxis)
-                return "External Linear Axis";
-            else if (Value is ExternalRotationalAxis)
-                return "External Rotational Axis";
+                return "Null Auto Axis Configuration";
             else
-                return "External Axis";
+                return "Auto Axis Configuration";
         }
 
         /// <summary>
@@ -122,7 +105,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Axis"); }
+            get { return ("Auto Axis Configuration"); }
         }
 
         /// <summary>
@@ -130,7 +113,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a External Axis."); }
+            get { return ("Defines an Auto Axis Configuration."); }
         }
 
         /// <summary>
@@ -140,29 +123,7 @@ namespace RobotComponentsABB.Goos
         {
             get
             {
-                if (Value == null)
-                {
-                    return BoundingBox.Empty;
-                }
-
-                else
-                {
-                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
-
-                    // Base mesh
-                    if (Value.BaseMesh != null)
-                    {
-                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                    }
-
-                    // Link mesh
-                    if (Value.LinkMesh != null)
-                    {
-                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                    }
-
-                    return MeshBoundingBox;
-                }
+                return BoundingBox.Empty; //Note: beef this up if needed
             }
         }
 
@@ -173,7 +134,7 @@ namespace RobotComponentsABB.Goos
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return Boundingbox;
+            return BoundingBox.Empty; //Note: beef this up if needed
         }
         #endregion
 
@@ -186,8 +147,8 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalAxis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            //Cast to AutoAxisConfig
+            if (typeof(Q).IsAssignableFrom(typeof(AutoAxisConfig)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -196,23 +157,13 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
-            //Cast to ExternalLinearAxis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
+            //Cast to Boolean
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
-                    target = (Q)(object)Value;
-                return true;
-            }
-
-            //Cast to ExternalRotationalAxis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                    target = (Q)(object) new GH_Boolean(Value.IsActive);
                 return true;
             }
 
@@ -229,48 +180,18 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
-            //Cast from ExternalAxis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from AutoAxisConfig
+            if (typeof(AutoAxisConfig).IsAssignableFrom(source.GetType()))
             {
-                Value = source as ExternalAxis;
+                Value = (AutoAxisConfig)source;
                 return true;
             }
 
-            //Cast from ExternalAxisGoo
-            if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
+            //Cast from Boolean
+            if (typeof(GH_Boolean).IsAssignableFrom(source.GetType()))
             {
-                ExternalAxisGoo externalAxisGoo = source as ExternalAxisGoo;
-                Value = externalAxisGoo.Value as ExternalAxis;
-                return true;
-            }
-
-            //Cast from ExternalLinearAxis
-            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as ExternalAxis;
-                return true;
-            }
-
-            //Cast from ExternalLinearAxisGoo
-            if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
-            {
-                ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
-                Value = externalLinearAxisGoo.Value as ExternalAxis;
-                return true;
-            }
-
-            //Cast from ExternalRotatioanlAxis
-            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as ExternalAxis;
-                return true;
-            }
-
-            //Cast from ExternalRotationalAxisGoo
-            if (typeof(ExternalRotationalAxisGoo).IsAssignableFrom(source.GetType()))
-            {
-                ExternalRotationalAxisGoo externalRotationalAxisGoo = source as ExternalRotationalAxisGoo;
-                Value = externalRotationalAxisGoo.Value as ExternalAxis; 
+                GH_Boolean ghBoolean = (GH_Boolean)source;
+                Value = new AutoAxisConfig(ghBoolean.Value);
                 return true;
             }
 
@@ -289,28 +210,6 @@ namespace RobotComponentsABB.Goos
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            if (Value == null)
-            {
-                return null;
-            }
-
-            else if (Value.IsValid == false)
-            {
-                return null;
-            }
-
-            else if (Value is ExternalAxis)
-            {
-                // Get value and duplicate
-                ExternalAxis externalAxis = Value.DuplicateExternalAxis();
-                // Transform
-                externalAxis.Transform(xform);
-                // Make new goo instance
-                ExternalAxisGoo externalAxisGoo = new ExternalAxisGoo(externalAxis);
-                // Return
-                return externalAxisGoo;
-            }
-
             return null;
         }
 
@@ -344,17 +243,6 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) { return; }
-
-            if (Value.BaseMesh != null)
-            {
-                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
-            }
-
-            if (Value.LinkMesh != null)
-            {
-                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
-            }
         }
 
         /// <summary>
@@ -363,7 +251,6 @@ namespace RobotComponentsABB.Goos
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-
         }
         #endregion
     }

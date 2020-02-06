@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// CodeLine parameter
     /// </summary>
-    public class CodeLineParameter : GH_PersistentGeometryParam<CodeLineGoo>, IGH_PreviewObject
+    public class CodeLineParameter : GH_PersistentGeometryParam<GH_CodeLine>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<CodeLineGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<CodeLineGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_CodeLine> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref CodeLineGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_CodeLine value)
         {
             return GH_GetterResult.cancel;
         }

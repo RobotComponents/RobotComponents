@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Parameters
 {
     /// <summary>
     /// Timer parameter
     /// </summary>
-    public class TimerParameter : GH_PersistentGeometryParam<TimerGoo>, IGH_PreviewObject
+    public class TimerParameter : GH_PersistentGeometryParam<GH_Timer>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<TimerGoo> class
@@ -67,12 +67,12 @@ namespace RobotComponentsABB.Parameters
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<TimerGoo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Timer> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref TimerGoo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Timer value)
         {
             return GH_GetterResult.cancel;
         }

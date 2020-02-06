@@ -17,12 +17,12 @@ The Plugin is a development from the [Department of Experimental and Digital Des
 RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project here: http://developercenter.robotstudio.com/landing
 
 ## Known Issues
-Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). If you find a bug, please help us solve it by filing a report.
+Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues/new).
 
 ## Roadmap
 Planned developments:
 - Adding the ABB IRB 6620, 6640, 6650S, 6700, 6790 and 7600 series as Robot Info presets. 
-- Adding support for MultiMove
+- Adding support for MultiMove.
 
 ## Contribute
 **Bug reports**: Please report bug at our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). 

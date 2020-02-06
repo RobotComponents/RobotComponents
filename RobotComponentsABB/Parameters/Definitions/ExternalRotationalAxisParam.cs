@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Definitions
 {
     /// <summary>
-    /// Auto Axis Configuration parameter
+    /// External Rotational Axis parameter
     /// </summary>
-    public class AutoAxisConfigParameter : GH_PersistentGeometryParam<GH_AutoAxisConfig>, IGH_PreviewObject
+    public class ExternalRotationalAxisParameter : GH_PersistentGeometryParam<GH_ExternalRotationalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalRotanionalAxisGoo> class
         /// </summary>
-        public AutoAxisConfigParameter()
-          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", 
-                "Maintains the Auto Axis Configuration data."
+        public ExternalRotationalAxisParameter()
+          : base(new GH_InstanceDescription("External Rotational Axis", "ERA", 
+                "Maintains the External Rotational Axis data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Auto Axis Configurator";
+            return "External Rotational Axis";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Auto Axis Configurator"; set => base.Name = value; }
+        public override string Name { get => "External Rotational Axis"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Auto_Parameter_Icon; }
+            get { return null; } //Todo, provide an icon.
         }
 
         /// <summary>
@@ -53,7 +53,11 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get
+            {
+                // If you want to provide this parameter on the toolbars, use something other than hidden.
+                return GH_Exposure.secondary; 
+            }
         }
 
         /// <summary>
@@ -62,17 +66,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F413CBF2-C0C8-4FA4-A8A2-CC60D1F10343"); }
+            get { return new Guid("1D0F0BA2-92F7-428D-9F8D-20D93945157C"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_AutoAxisConfig> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalRotationalAxis> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_AutoAxisConfig value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalRotationalAxis value)
         {
             return GH_GetterResult.cancel;
         }
@@ -146,6 +150,4 @@ namespace RobotComponentsABB.Parameters
         }
         #endregion
     }
-
-
 }

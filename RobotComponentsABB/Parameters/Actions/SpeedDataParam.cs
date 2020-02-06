@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Definitions;
+using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// External Axis parameter
+    /// Speed Data parameter
     /// </summary>
-    public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
+    public class SpeedDataParameter : GH_PersistentGeometryParam<GH_SpeedData>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalAxisGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<SpeedDataGoo> class
         /// </summary>
-        public ExternalAxisParameter()
-          : base(new GH_InstanceDescription("External Axis", "EA", 
-                "Maintains the External Axis data."
+        public SpeedDataParameter()
+          : base(new GH_InstanceDescription("Speed Data", "SD",
+                "Maintains the Speed Data data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "External Axis";
+            return "Speed Data";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "External Axis"; set => base.Name = value; }
+        public override string Name { get => "Speed Data"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,8 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            //get { return Properties.Resources.ExternalAxis_Parameter_Icon; }
-            get { return null; }
+            get { return Properties.Resources.SpeedData_Parameter_Icon; }
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -63,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1FD9D403-B0BC-4A16-AE53-ACB477A1645C"); }
+            get { return new Guid("02454176-B166-4C99-8476-B3D5DB1504B0"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalAxis> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SpeedData> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalAxis value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SpeedData value)
         {
             return GH_GetterResult.cancel;
         }

@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Definitions;
+using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// External Rotational Axis parameter
+    /// Comment parameter
     /// </summary>
-    public class ExternalRotationalAxisParameter : GH_PersistentGeometryParam<GH_ExternalRotationalAxis>, IGH_PreviewObject
+    public class CommentParameter : GH_PersistentGeometryParam<GH_Comment>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalRotanionalAxisGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
         /// </summary>
-        public ExternalRotationalAxisParameter()
-          : base(new GH_InstanceDescription("External Rotational Axis", "ERA", 
-                "Maintains the External Rotational Axis data."
+        public CommentParameter()
+          : base(new GH_InstanceDescription("Comment", "C", 
+                "Maintains the Comment data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "External Rotational Axis";
+            return "Comment";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "External Rotational Axis"; set => base.Name = value; }
+        public override string Name { get => "Comment"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,10 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; } //Todo, provide an icon.
+            get
+            {
+                return Properties.Resources.Comment_Parameter_Icon; 
+            }
         }
 
         /// <summary>
@@ -53,11 +56,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get
-            {
-                // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.secondary; 
-            }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -66,17 +65,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1D0F0BA2-92F7-428D-9F8D-20D93945157C"); }
+            get { return new Guid("2154A09B-BC1F-40B5-BD5B-59ABEC37B2E3"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalRotationalAxis> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalRotationalAxis value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
         {
             return GH_GetterResult.cancel;
         }

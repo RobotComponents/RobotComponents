@@ -6,19 +6,19 @@ using Grasshopper.Kernel;
 
 using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Speed Data parameter
+    /// Timer parameter
     /// </summary>
-    public class SpeedDataParameter : GH_PersistentGeometryParam<GH_SpeedData>, IGH_PreviewObject
+    public class TimerParameter : GH_PersistentGeometryParam<GH_Timer>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<SpeedDataGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<TimerGoo> class
         /// </summary>
-        public SpeedDataParameter()
-          : base(new GH_InstanceDescription("Speed Data", "SD",
-                "Maintains the Speed Data data."
+        public TimerParameter()
+          : base(new GH_InstanceDescription("Wait", "W", 
+                "Maintains the Timer data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Speed Data";
+            return "Timer";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Speed Data"; set => base.Name = value; }
+        public override string Name { get => "Timer"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SpeedData_Parameter_Icon; }
+            get { return Properties.Resources.Timer_Parameter_Icon; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("02454176-B166-4C99-8476-B3D5DB1504B0"); }
+            get { return new Guid("F685DD4F-74E2-428B-B7DA-EB6DF19489E6"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_SpeedData> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Timer> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_SpeedData value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Timer value)
         {
             return GH_GetterResult.cancel;
         }

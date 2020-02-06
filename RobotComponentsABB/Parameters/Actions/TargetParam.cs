@@ -6,19 +6,19 @@ using Grasshopper.Kernel;
 
 using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Wait for Digital Input parameter
+    /// Target parameter
     /// </summary>
-    public class WaitDIParameter : GH_PersistentGeometryParam<GH_WaitDI>, IGH_PreviewObject
+    public class TargetParameter : GH_PersistentGeometryParam<GH_Target>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<WaitDIGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<TargetGoo> class
         /// </summary>
-        public WaitDIParameter()
-          : base(new GH_InstanceDescription("Wait for Digital Input", "WDI", 
-                "Maintains the Wait for Digital Input data."
+        public TargetParameter()
+          : base(new GH_InstanceDescription("Target", "T", 
+                "Maintains the Target data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Wait for Digital Input";
+            return "Target";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Wait for Digital Input"; set => base.Name = value; }
+        public override string Name { get => "Target"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.WaitDI_Parameter_Icon; }
+            get { return Properties.Resources.Target_Parameter_Icon; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6A8D1013-52BF-4373-8CEB-9EFA8B96A9F0"); }
+            get { return new Guid("7032DC09-06E9-4D53-A06C-E2842E5EFFFE"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitDI> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Target> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_WaitDI value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Target value)
         {
             return GH_GetterResult.cancel;
         }
@@ -147,4 +147,5 @@ namespace RobotComponentsABB.Parameters
         #endregion
 
     }
+
 }

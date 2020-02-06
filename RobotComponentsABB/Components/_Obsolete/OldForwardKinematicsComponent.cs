@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)

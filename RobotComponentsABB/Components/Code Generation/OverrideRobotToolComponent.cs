@@ -4,7 +4,8 @@ using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Actions;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {

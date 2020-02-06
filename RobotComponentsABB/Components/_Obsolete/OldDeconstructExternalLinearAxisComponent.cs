@@ -3,7 +3,7 @@
 using Grasshopper.Kernel;
 
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (February 2020)

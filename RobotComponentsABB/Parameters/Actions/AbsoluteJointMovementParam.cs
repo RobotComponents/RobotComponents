@@ -6,19 +6,19 @@ using Grasshopper.Kernel;
 
 using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Override Robot Tool parameter
+    /// Absolute Joint Movement parameter
     /// </summary>
-    public class OverrideRobotToolParameter : GH_PersistentGeometryParam<GH_OverrideRobotTool>, IGH_PreviewObject
+    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<OverrideRobotToolGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
         /// </summary>
-        public OverrideRobotToolParameter()
-          : base(new GH_InstanceDescription("Override Robot Tool", "RT", 
-                "Maintains the Override Robot Tool data."
+        public AbsoluteJointMovementParameter()
+          : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
+                "Maintains the Absolute Joint Movement data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Override Robot Tool";
+            return "Absolute Joint Movement";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Override Robot Tool"; set => base.Name = value; }
+        public override string Name { get => "AbsoluteJointMovement"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ChangeTool_Parameter_Icon; }
+            get { return Properties.Resources.AbsoluteJointMovement_Parameter_Icon; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0F58F521-09B0-442C-A7A4-65795B0A2D6E"); }
+            get { return new Guid("FD4840BA-3029-41FC-A5C5-6BC5FD6893D2"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_OverrideRobotTool> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_AbsoluteJointMovement> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_OverrideRobotTool value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_AbsoluteJointMovement value)
         {
             return GH_GetterResult.cancel;
         }
@@ -122,7 +122,6 @@ namespace RobotComponentsABB.Parameters
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(IGH_PreviewArgs args)
         {
-            //Use a standard method to draw wires, you don't have to specifically implement this.
             Preview_DrawWires(args);
         }
 
@@ -146,5 +145,4 @@ namespace RobotComponentsABB.Parameters
         }
         #endregion
     }
-
 }

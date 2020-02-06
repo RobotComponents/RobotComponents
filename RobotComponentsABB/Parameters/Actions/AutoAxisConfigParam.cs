@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
+using Rhino.Geometry;
 
 using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Timer parameter
+    /// Auto Axis Configuration parameter
     /// </summary>
-    public class TimerParameter : GH_PersistentGeometryParam<GH_Timer>, IGH_PreviewObject
+    public class AutoAxisConfigParameter : GH_PersistentGeometryParam<GH_AutoAxisConfig>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<TimerGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
         /// </summary>
-        public TimerParameter()
-          : base(new GH_InstanceDescription("Wait", "W", 
-                "Maintains the Timer data."
+        public AutoAxisConfigParameter()
+          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", 
+                "Maintains the Auto Axis Configuration data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Timer";
+            return "Auto Axis Configurator";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Timer"; set => base.Name = value; }
+        public override string Name { get => "Auto Axis Configurator"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Timer_Parameter_Icon; }
+            get { return Properties.Resources.Auto_Parameter_Icon; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F685DD4F-74E2-428B-B7DA-EB6DF19489E6"); }
+            get { return new Guid("F413CBF2-C0C8-4FA4-A8A2-CC60D1F10343"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Timer> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_AutoAxisConfig> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Timer value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_AutoAxisConfig value)
         {
             return GH_GetterResult.cancel;
         }
@@ -146,4 +146,6 @@ namespace RobotComponentsABB.Parameters
         }
         #endregion
     }
+
+
 }

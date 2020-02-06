@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Definitions
 {
     /// <summary>
-    /// CodeLine parameter
+    /// External Axis parameter
     /// </summary>
-    public class CodeLineParameter : GH_PersistentGeometryParam<GH_CodeLine>, IGH_PreviewObject
+    public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<CodeLineGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalAxisGoo> class
         /// </summary>
-        public CodeLineParameter()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", 
-                "Maintains the Code Line data."
+        public ExternalAxisParameter()
+          : base(new GH_InstanceDescription("External Axis", "EA", 
+                "Maintains the External Axis data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Code Line";
+            return "External Axis";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Code Line"; set => base.Name = value; }
+        public override string Name { get => "External Axis"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,8 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.CodeLine_Parameter_Icon; }
+            //get { return Properties.Resources.ExternalAxis_Parameter_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -62,17 +63,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2154A09B-BC1F-40B5-BD5B-58ABEC37B2E2"); }
+            get { return new Guid("1FD9D403-B0BC-4A16-AE53-ACB477A1645C"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_CodeLine> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalAxis> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_CodeLine value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalAxis value)
         {
             return GH_GetterResult.cancel;
         }
@@ -144,7 +145,6 @@ namespace RobotComponentsABB.Parameters
         {
             get { return true; }
         }
-
         #endregion
     }
 }

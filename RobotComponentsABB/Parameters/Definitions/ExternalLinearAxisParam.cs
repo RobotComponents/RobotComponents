@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Definitions
 {
     /// <summary>
-    /// Digital Output parameter
+    /// External Linear Axis parameter
     /// </summary>
-    public class DigitalOutputParameter : GH_PersistentGeometryParam<GH_DigitalOutput>, IGH_PreviewObject
+    public class ExternalLinearAxisParameter : GH_PersistentGeometryParam<GH_ExternalLinearAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<DigitalOutputGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalLinearAxisGoo> class
         /// </summary>
-        public DigitalOutputParameter()
-          : base(new GH_InstanceDescription("Digital Output", "DO", 
-                "Maintains the Digital Output data."
+        public ExternalLinearAxisParameter()
+          : base(new GH_InstanceDescription("External Linear Axis", "ELA", 
+                "Maintains the External Linear Axis data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Digital Output";
+            return "External Linear Axis";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Digital Output"; set => base.Name = value; }
+        public override string Name { get => "External Linear Axis"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DigitalOutput_Parameter_Icon; }
+            get { return Properties.Resources.ExternalLinearAxis_Parameter_Icon; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("C137C7B6-C6C0-482F-8192-732D9B1EA651"); }
+            get { return new Guid("457ABC02-600E-4823-BA50-E30655CE61E4"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalLinearAxis> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalLinearAxis value)
         {
             return GH_GetterResult.cancel;
         }

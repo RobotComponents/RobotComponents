@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {

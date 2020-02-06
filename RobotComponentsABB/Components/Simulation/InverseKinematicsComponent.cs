@@ -5,7 +5,8 @@ using System;
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Actions;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.Simulation
 {

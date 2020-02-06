@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
+using Rhino.Geometry;
 
 using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Absolute Joint Movement parameter
+    /// Digital Output parameter
     /// </summary>
-    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>, IGH_PreviewObject
+    public class DigitalOutputParameter : GH_PersistentGeometryParam<GH_DigitalOutput>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<DigitalOutputGoo> class
         /// </summary>
-        public AbsoluteJointMovementParameter()
-          : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
-                "Maintains the Absolute Joint Movement data."
+        public DigitalOutputParameter()
+          : base(new GH_InstanceDescription("Digital Output", "DO", 
+                "Maintains the Digital Output data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Absolute Joint Movement";
+            return "Digital Output";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "AbsoluteJointMovement"; set => base.Name = value; }
+        public override string Name { get => "Digital Output"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.AbsoluteJointMovement_Parameter_Icon; }
+            get { return Properties.Resources.DigitalOutput_Parameter_Icon; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get {return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("FD4840BA-3029-41FC-A5C5-6BC5FD6893D2"); }
+            get { return new Guid("C137C7B6-C6C0-482F-8192-732D9B1EA651"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_AbsoluteJointMovement> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_AbsoluteJointMovement value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
         {
             return GH_GetterResult.cancel;
         }
@@ -122,6 +122,7 @@ namespace RobotComponentsABB.Parameters
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportWires(IGH_PreviewArgs args)
         {
+            //Use a standard method to draw wires, you don't have to specifically implement this.
             Preview_DrawWires(args);
         }
 

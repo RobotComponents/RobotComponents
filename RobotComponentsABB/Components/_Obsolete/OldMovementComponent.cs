@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Special;
 
 using RobotComponents.BaseClasses.Actions;
 using RobotComponentsGoos.Actions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!

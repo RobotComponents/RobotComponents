@@ -3,8 +3,7 @@
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponents.Components.CodeGeneration

@@ -5,8 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!

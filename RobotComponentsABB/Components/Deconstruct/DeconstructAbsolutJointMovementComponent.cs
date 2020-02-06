@@ -3,7 +3,8 @@
 using Grasshopper.Kernel;
 
 using RobotComponentsGoos.Actions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {

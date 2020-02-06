@@ -6,7 +6,7 @@ using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Simulation
 {

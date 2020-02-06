@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsGoos.Definitions;
+using RobotComponentsGoos.Actions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Robot Info parameter
+    /// Override Robot Tool parameter
     /// </summary>
-    public class RobotInfoParameter : GH_PersistentGeometryParam<GH_RobotInfo>, IGH_PreviewObject
+    public class OverrideRobotToolParameter : GH_PersistentGeometryParam<GH_OverrideRobotTool>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<RobotInfoGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<OverrideRobotToolGoo> class
         /// </summary>
-        public RobotInfoParameter()
-          : base(new GH_InstanceDescription("Robot Info", "RI", 
-                "Maintains the Robot Info data."
+        public OverrideRobotToolParameter()
+          : base(new GH_InstanceDescription("Override Robot Tool", "RT", 
+                "Maintains the Override Robot Tool data."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Robot Info";
+            return "Override Robot Tool";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Robot Info"; set => base.Name = value; }
+        public override string Name { get => "Override Robot Tool"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.RobotInfo_Parameter_Icon; }
+            get { return Properties.Resources.ChangeTool_Parameter_Icon; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("DCCF6CCB-7463-4845-96C3-EB494170337C"); }
+            get { return new Guid("0F58F521-09B0-442C-A7A4-65795B0A2D6E"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotInfo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_OverrideRobotTool> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotInfo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_OverrideRobotTool value)
         {
             return GH_GetterResult.cancel;
         }
@@ -146,4 +146,5 @@ namespace RobotComponentsABB.Parameters
         }
         #endregion
     }
+
 }

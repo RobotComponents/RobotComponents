@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Rhino.Geometry;
 using Grasshopper.Kernel;
+using Rhino.Geometry;
 
-using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
 
-namespace RobotComponentsABB.Parameters
+namespace RobotComponentsABB.Parameters.Definitions
 {
     /// <summary>
-    /// Comment parameter
+    /// Work Object parameter
     /// </summary>
-    public class CommentParameter : GH_PersistentGeometryParam<GH_Comment>, IGH_PreviewObject
+    public class WorkObjectParameter : GH_PersistentGeometryParam<GH_WorkObject>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<WorkObjectGoo> class
         /// </summary>
-        public CommentParameter()
-          : base(new GH_InstanceDescription("Comment", "C", 
-                "Maintains the Comment data."
+        public WorkObjectParameter()
+          : base(new GH_InstanceDescription("Work Object Parameter", "WO", 
+                "Maintains the Work Object data"
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -31,13 +31,13 @@ namespace RobotComponentsABB.Parameters
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Comment";
+            return "Work Object";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Comment"; set => base.Name = value; }
+        public override string Name { get => "Work Object"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -45,10 +45,8 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.Comment_Parameter_Icon; 
-            }
+            // To do: get { return Properties.Resources.Work_Object_Paramter_Icon; }
+            get { return Properties.Resources.WorkObject_Parameter_Icon;  }
         }
 
         /// <summary>
@@ -56,7 +54,7 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -65,17 +63,17 @@ namespace RobotComponentsABB.Parameters
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2154A09B-BC1F-40B5-BD5B-59ABEC37B2E3"); }
+            get { return new Guid("93B62157-9384-4053-B95E-1A6F12CE1030"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WorkObject> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WorkObject value)
         {
             return GH_GetterResult.cancel;
         }
@@ -149,4 +147,6 @@ namespace RobotComponentsABB.Parameters
         }
         #endregion
     }
+
+
 }

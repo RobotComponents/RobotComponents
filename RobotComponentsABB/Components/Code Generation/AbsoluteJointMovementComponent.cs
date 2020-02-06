@@ -14,7 +14,8 @@ using RobotComponents.BaseClasses.Definitions;
 
 using RobotComponentsGoos.Actions;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
+using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.CodeGeneration

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponentsABB.Components.Definitions

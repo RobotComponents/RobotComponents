@@ -6,7 +6,7 @@ using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Definitions
 {

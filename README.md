@@ -25,7 +25,7 @@ Planned developments:
 - Adding support for MultiMove.
 
 ## Contribute
-**Bug reports**: Please report bug at our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). 
+**Bug reports**: Please report bugs at our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). 
 
 **Feature requests**: Feature request can be proposed on our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). Please include how this feature should work by explaining it in detail and if possible by adding relevant documentation from e.g. ABB. 
 

@@ -6,7 +6,8 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
-using RobotComponentsABB.Goos;
+
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Components.Utilities
 {
@@ -52,7 +53,7 @@ namespace RobotComponentsABB.Components.Utilities
         }
 
         // Fields
-        private GH_Structure<TargetGoo> _targetGoos = new GH_Structure<TargetGoo>();
+        private GH_Structure<GH_Target> _targetGoos = new GH_Structure<GH_Target>();
         private System.Drawing.Color _color = new System.Drawing.Color();
         private bool _displayNames = true;
         private bool _displayPoints = true;
@@ -94,16 +95,16 @@ namespace RobotComponentsABB.Components.Utilities
                 for (int j = 0; j < branches.Count; j++)
                 {
                     // Get the target from the movement instance if the input data is a movement
-                    if (actions.Branches[i][j] is MovementGoo)
+                    if (actions.Branches[i][j] is GH_Movement)
                     {
-                        MovementGoo movementGoo = actions.Branches[i][j] as MovementGoo;
-                        TargetGoo targetGoo = new TargetGoo(movementGoo.Value.Target);
+                        GH_Movement movementGoo = actions.Branches[i][j] as GH_Movement;
+                        GH_Target targetGoo = new GH_Target(movementGoo.Value.Target);
                         _targetGoos.Append(targetGoo, iPath);
                     }
                     // Get the target data directly if the input data is a target
-                    else if (actions.Branches[i][j] is TargetGoo)
+                    else if (actions.Branches[i][j] is GH_Target)
                     {
-                        TargetGoo targetGoo = actions.Branches[i][j] as TargetGoo;
+                        GH_Target targetGoo = actions.Branches[i][j] as GH_Target;
                         _targetGoos.Append(targetGoo, iPath);
                     }
                     // Make a target from the input plane if the input data is a plane
@@ -121,7 +122,7 @@ namespace RobotComponentsABB.Components.Utilities
 
                         GH_Plane planeGoo = actions.Branches[i][j] as GH_Plane;
                         Target target = new Target(targetName, planeGoo.Value);
-                        TargetGoo targetGoo = new TargetGoo(target);
+                        GH_Target targetGoo = new GH_Target(target);
                         _targetGoos.Append(targetGoo, iPath);
                     }
                     // Let all other data pass (raise no warning or error)

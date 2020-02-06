@@ -5,8 +5,8 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Simulation
 {
@@ -69,7 +69,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = new RobotInfoGoo();
+            GH_RobotInfo robotInfoGoo = new GH_RobotInfo();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;

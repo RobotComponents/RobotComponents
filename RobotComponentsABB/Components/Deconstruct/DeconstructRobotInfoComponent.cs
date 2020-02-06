@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -60,7 +60,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }
@@ -75,13 +75,13 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Output variables
             string name;
             List<Mesh> meshes = new List<Mesh>();
-            List<ExternalAxisGoo> externalAxisGoos = new List<ExternalAxisGoo>();
+            List<GH_ExternalAxis> externalAxisGoos = new List<GH_ExternalAxis>();
             List<Plane> axisPlanes;
             List<Interval> axisLimits;
             Plane basePlane;
             Plane mountingFrame;
             Plane toolPlane;
-            RobotToolGoo tool;
+            GH_RobotTool tool;
 
             // Clear list with display meshes
             _meshes.Clear();
@@ -169,7 +169,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Robot Tool
             if (robotInfoGoo.Value.Tool.IsValid)
             {
-                tool = new RobotToolGoo(robotInfoGoo.Value.Tool);
+                tool = new GH_RobotTool(robotInfoGoo.Value.Tool);
 
                 // Add display mesh
                 _meshes.Add(robotInfoGoo.Value.Tool.Mesh);
@@ -183,7 +183,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             // External Axes
             for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
             {
-                externalAxisGoos.Add(new ExternalAxisGoo(robotInfoGoo.Value.ExternalAxis[i]));
+                externalAxisGoos.Add(new GH_ExternalAxis(robotInfoGoo.Value.ExternalAxis[i]));
 
                 // Add display meshes
                 _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);

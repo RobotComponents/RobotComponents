@@ -6,14 +6,12 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using GH_IO.Serialization;
-
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Simulation
 {
@@ -68,7 +66,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 

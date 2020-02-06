@@ -2,8 +2,8 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            ExternalRotationalAxisGoo externalRotationalAxisGoo = null;
+            GH_ExternalRotationalAxis externalRotationalAxisGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref externalRotationalAxisGoo)) { return; }

@@ -5,8 +5,8 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Definitions
 {
@@ -73,7 +73,7 @@ namespace RobotComponentsABB.Components.Definitions
             List<Interval> axisLimits = new List<Interval>();
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
-            RobotToolGoo toolGoo = null;
+            GH_RobotTool toolGoo = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
             // Catch the input data
@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(3, axisLimits)) { return; }
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
-            if (!DA.GetData(6, ref toolGoo)) { toolGoo = new RobotToolGoo(); }
+            if (!DA.GetData(6, ref toolGoo)) { toolGoo = new GH_RobotTool(); }
             if (!DA.GetDataList(7, externalAxis))
             {
             }

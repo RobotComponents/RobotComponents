@@ -2,8 +2,8 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (February 2020)
@@ -72,7 +72,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            ExternalLinearAxisGoo externalLinearAxisGoo = null;
+            GH_ExternalLinearAxis externalLinearAxisGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }

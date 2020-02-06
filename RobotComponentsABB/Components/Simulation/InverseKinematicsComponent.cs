@@ -3,8 +3,10 @@
 using System;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Actions;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.Simulation
 {
@@ -53,8 +55,8 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
-            MovementGoo MovementGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
+            GH_Movement MovementGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }

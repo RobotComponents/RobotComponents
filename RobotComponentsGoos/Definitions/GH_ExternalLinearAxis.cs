@@ -300,9 +300,8 @@ namespace RobotComponentsGoos.Definitions
             //Cast from ExternalAxis
             if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                if (source is ExternalLinearAxis)
+                if (source is ExternalLinearAxis externalLinearAxis)
                 {
-                    ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
                     Value = externalLinearAxis;
                     return true;
                 }
@@ -311,13 +310,11 @@ namespace RobotComponentsGoos.Definitions
             //Cast from ExternalAxisGoo
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                if (source is GH_ExternalAxis)
-                {
-                    GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;
-                    
-                    if (externalAxisGoo.Value is ExternalLinearAxis)
+                if (source is GH_ExternalAxis externalAxisGoo)
+                {                    
+                    if (externalAxisGoo.Value is ExternalLinearAxis externalLinearAxis)
                     {
-                        Value = externalAxisGoo.Value as ExternalLinearAxis;
+                        Value = externalLinearAxis;
                         return true;
                     }
                 }

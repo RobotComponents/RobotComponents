@@ -80,18 +80,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
             // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentGUID];
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();

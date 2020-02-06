@@ -70,39 +70,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Clears speedDataNames
-            for (int i = 0; i < _speedDataNames.Count; i++)
-            {
-                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-            }
-            _speedDataNames.Clear();
-
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
-
-            // Adds Component to SpeedDataByGuid Dictionary
-            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Removes lastName from speedDataNameList
-            if (_objectManager.SpeedDataNames.Contains(_lastName))
-            {
-                _objectManager.SpeedDataNames.Remove(_lastName);
-            }
-
             // Sets inputs and creates target
-            Guid instanceGUID = this.InstanceGuid;
             List<string> names = new List<string>();
             List<double> v_tcps = new List<double>();
             List<double> v_oris = new List<double>();
@@ -202,11 +170,37 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 speedDatas.Add(speedData);
             }
 
+            // Sets Output
+            DA.SetDataList(0, speedDatas);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears speedDataNames
+            for (int i = 0; i < _speedDataNames.Count; i++)
+            {
+                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
+            }
+            _speedDataNames.Clear();
+
+            // Removes lastName from speedDataNameList
+            if (_objectManager.SpeedDataNames.Contains(_lastName))
+            {
+                _objectManager.SpeedDataNames.Remove(_lastName);
+            }
+
+            // Adds Component to SpeedDataByGuid Dictionary
+            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Checks if speed Data name is already in use and counts duplicates
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
-                // Checks if speed Data name is already in use and counts duplicates
-                #region NameCheck
                 if (_objectManager.SpeedDataNames.Contains(names[i]))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
@@ -244,15 +238,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
             #endregion
 
-            // Sets Output
-            DA.SetDataList(0, speedDatas);
-
             // Recognizes if Component is Deleted and removes it from Object Managers speed Data and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

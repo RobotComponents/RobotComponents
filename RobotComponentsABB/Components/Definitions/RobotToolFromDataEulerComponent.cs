@@ -75,27 +75,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
-
-            // Clears toolNames
-            _objectManager.ToolNames.Remove(_robotTool.Name);
-
-            // Removes lastName from toolNameList
-            if (_objectManager.ToolNames.Contains(_lastName))
-            {
-                _objectManager.ToolNames.Remove(_lastName);
-            }
-
             // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
@@ -128,8 +107,31 @@ namespace RobotComponentsABB.Components.Definitions
             // Create the robot tool
             _robotTool = new RobotTool(name, mesh, toolTransX, toolTransY, toolTransZ, toolRotX, toolRotY, toolRotZ);
 
+            // Outputs
+            DA.SetData(0, _robotTool);
+            DA.SetData(1, _robotTool.GetRSToolData());
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears toolNames
+            _objectManager.ToolNames.Remove(_robotTool.Name);
+
+            // Removes lastName from toolNameList
+            if (_objectManager.ToolNames.Contains(_lastName))
+            {
+                _objectManager.ToolNames.Remove(_lastName);
+            }
+
+            // Adds Component to ToolsByGuid Dictionary
+            if (!_objectManager.ToolsEulerByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.ToolsEulerByGuid.Add(this.InstanceGuid, this);
+            }
+
             // Checks if tool name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             if (_objectManager.ToolNames.Contains(_robotTool.Name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tool Name already in use.");
@@ -174,22 +176,13 @@ namespace RobotComponentsABB.Components.Definitions
             }
             #endregion
 
-            // Outputs
-            DA.SetData(0, _robotTool);
-            DA.SetData(1, _robotTool.GetRSToolData());
-
-            // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsEulerByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.ToolsEulerByGuid.Add(this.InstanceGuid, this);
-            }
-
             // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

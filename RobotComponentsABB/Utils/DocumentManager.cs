@@ -14,10 +14,33 @@ namespace RobotComponentsABB.Utils
         public static Dictionary<string, ObjectManager> ObjectManagers = new Dictionary<string, ObjectManager>();
 
         /// <summary>
+        /// Gets the document object manager
+        /// </summary>
+        /// <param name="document"> The Grasshopper docuement as GH_Document. </param>
+        /// <returns> Returns the object manager of the passed document. </returns>
+        public static ObjectManager GetDocumentObjectManager(GH_Document document)
+        {
+            // Gets Document ID
+            string documentID = DocumentManager.GetRobotComponentsDocumentID(document);
+
+            // Checks if ObjectManager for this document already exists. If not it creates a new one. 
+            if (!ObjectManagers.ContainsKey(documentID))
+            {
+                ObjectManagers.Add(documentID, new ObjectManager());
+            }
+
+            // Gets ObjectManager of this document
+            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
+
+            // Return the object manager of this document
+            return objectManager;
+        }
+
+        /// <summary>
         /// Method to get the document identifier for RobotComponents.
         /// The identifier is created based on the Grasshopper document ID and the file path. 
         /// </summary>
-        /// <param name="document"></param>
+        /// <param name="document"> The Grasshopper docuement as GH_Document. </param>
         /// <returns>The RobotComponents document identifier</returns>
         public static string GetRobotComponentsDocumentID(GH_Document document)
         {
@@ -41,7 +64,6 @@ namespace RobotComponentsABB.Utils
 
             // Return
             return GrasshopperDocID + "-" + FilePathHash;
-
         }
     }
 

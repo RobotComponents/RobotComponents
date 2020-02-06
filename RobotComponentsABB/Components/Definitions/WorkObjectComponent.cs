@@ -68,33 +68,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
-
-            // Clears Work Object Name
-            for (int i = 0; i < _woNames.Count; i++)
-            {
-                _objectManager.WorkObjectNames.Remove(_woNames[i]);
-            }
-            _woNames.Clear();
-
-            // Removes lastName from WorkObjectNameList
-            if (_objectManager.WorkObjectNames.Contains(_lastName))
-            {
-                _objectManager.WorkObjectNames.Remove(_lastName);
-            }
-
-            // Clears Work Objects Local List
+            // Clears Work Objects List
             _workObjects.Clear();
 
             // Input variables
@@ -167,8 +141,35 @@ namespace RobotComponentsABB.Components.Definitions
                 workObjects.Add(workObject);
             }
 
+            // Output
+            _workObjects = workObjects;
+            DA.SetDataList(0, workObjects);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears Work Object Name
+            for (int i = 0; i < _woNames.Count; i++)
+            {
+                _objectManager.WorkObjectNames.Remove(_woNames[i]);
+            }
+            _woNames.Clear();
+
+            // Removes lastName from WorkObjectNameList
+            if (_objectManager.WorkObjectNames.Contains(_lastName))
+            {
+                _objectManager.WorkObjectNames.Remove(_lastName);
+            }
+
+            // Adds Component to WorkObjectsByGuid Dictionary
+            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
+            }
+
             // Checks if the work object name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
@@ -213,23 +214,13 @@ namespace RobotComponentsABB.Components.Definitions
             }
             #endregion
 
-            // Output
-            _workObjects = workObjects;
-            DA.SetDataList(0, workObjects);
-
-
-            // Adds Component to WorkObjectsByGuid Dictionary
-            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
-            }
-
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

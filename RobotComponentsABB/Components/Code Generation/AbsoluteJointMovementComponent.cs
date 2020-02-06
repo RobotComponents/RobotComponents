@@ -93,40 +93,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentGUID];
-
-            // Clears targetNames
-            for (int i = 0; i < _targetNames.Count; i++)
-            {
-                _objectManager.TargetNames.Remove(_targetNames[i]);
-            }
-            _targetNames.Clear();
-
-            // Adds Component to JointTargetByGuid Dictionary
-            if (!_objectManager.JointTargetsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.JointTargetsByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Removes lastName from targetNameList
-            if (_objectManager.TargetNames.Contains(_lastName))
-            {
-                _objectManager.TargetNames.Remove(_lastName);
-            }
-
-            // This instance GUID
-            Guid instanceGUID = this.InstanceGuid;
-
             // Input variables
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
@@ -300,8 +266,34 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
             }
 
+            // Output
+            DA.SetDataList(0, jointMovements);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears targetNames
+            for (int i = 0; i < _targetNames.Count; i++)
+            {
+                _objectManager.TargetNames.Remove(_targetNames[i]);
+            }
+            _targetNames.Clear();
+
+            // Removes lastName from targetNameList
+            if (_objectManager.TargetNames.Contains(_lastName))
+            {
+                _objectManager.TargetNames.Remove(_lastName);
+            }
+
+            // Adds Component to JointTargetsByGuid Dictionary
+            if (!_objectManager.JointTargetsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.JointTargetsByGuid.Add(this.InstanceGuid, this);
+            }
+
             // Checks if target name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
@@ -345,8 +337,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
             }
             #endregion
-            // Output
-            DA.SetDataList(0, jointMovements);
 
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
@@ -354,6 +344,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

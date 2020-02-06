@@ -78,7 +78,7 @@
         /// <summary>
         /// A boolean that indicates if the CodeLine object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get 
             { 

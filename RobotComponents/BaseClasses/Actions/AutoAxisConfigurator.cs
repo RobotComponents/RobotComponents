@@ -85,7 +85,7 @@
         /// <summary>
         /// A boolean that indicates if the AutoAxisConfiguration object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get { return true; }
         }

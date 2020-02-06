@@ -94,7 +94,7 @@
         /// <summary>
         /// A boolean that indicates if the WaitDI object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

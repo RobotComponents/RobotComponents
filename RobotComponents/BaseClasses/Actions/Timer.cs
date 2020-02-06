@@ -78,7 +78,7 @@
         /// <summary>
         /// A boolean that indicates if the Timer object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

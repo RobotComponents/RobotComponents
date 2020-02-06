@@ -226,7 +226,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the Absolute Joint Movement object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

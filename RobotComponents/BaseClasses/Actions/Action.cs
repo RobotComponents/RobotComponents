@@ -39,7 +39,10 @@
         #endregion
 
         #region properties
-
+        /// <summary>
+        /// A boolean that indicates if the Action object is valid. 
+        /// </summary>
+        public abstract bool IsValid { get; }
         #endregion
     }
 }

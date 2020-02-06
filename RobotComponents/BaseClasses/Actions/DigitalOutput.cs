@@ -89,7 +89,7 @@
         /// <summary>
         /// A boolean that indicates if the DigitalOutput object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

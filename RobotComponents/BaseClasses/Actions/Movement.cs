@@ -433,7 +433,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicuate if the Movement object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

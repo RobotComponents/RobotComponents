@@ -27,7 +27,17 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="comment">The comment as a text string.</param>
         public Comment(string comment)
         {
-            this._comment = comment;
+            _comment = comment;
+        }
+
+        /// <summary>
+        /// Creates a new comment by duplicating an existing comment. 
+        /// This creates a deep copy of the existing comment. 
+        /// </summary>
+        /// <param name="comment"> The comment that should be duplicated. </param>
+        public Comment(Comment comment)
+        {
+            _comment = comment.Com;
         }
 
         /// <summary>
@@ -36,8 +46,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the Comment object. </returns>
         public Comment Duplicate()
         {
-            Comment dup = new Comment(Com);
-            return dup;
+            return new Comment(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Comment object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Comment object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Comment(this) as Action;
         }
         #endregion
 

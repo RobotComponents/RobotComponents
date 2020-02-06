@@ -29,13 +29,31 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new override robot tool by duplicating an existing override robot tool. 
+        /// This creates a deep copy of the existing override robot tool. 
+        /// </summary>
+        /// <param name="overrideRobotTool"> The override robot tool that should be duplicated. </param>
+        public OverrideRobotTool(OverrideRobotTool overrideRobotTool)
+        {
+            _robotTool = overrideRobotTool.RobotTool.Duplicate();
+        }
+
+        /// <summary>
         /// Method to duplicate the Override Robot Tool object.
         /// </summary>
         /// <returns> Returns a deep copy of the Override Robot Tool object.</returns>
         public OverrideRobotTool Duplicate()
         {
-            OverrideRobotTool dup = new OverrideRobotTool(RobotTool.Duplicate());
-            return dup;
+            return new OverrideRobotTool(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the OverrideRobotTool object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the OverrideRobotTool object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new OverrideRobotTool(this) as Action;
         }
         #endregion
 

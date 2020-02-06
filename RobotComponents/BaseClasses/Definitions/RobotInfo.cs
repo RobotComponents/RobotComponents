@@ -20,8 +20,8 @@ namespace RobotComponents.BaseClasses.Definitions
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
-        private List<Plane> _externalAxisPlanes; // The external axis planes
-        private List<Interval> _externalAxisLimits; // The external axis limit
+        private readonly List<Plane> _externalAxisPlanes; // The external axis planes
+        private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion
 
         #region constructors
@@ -54,7 +54,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _mountingFrame = mountingFrame;
 
             // Update tool related fields
-            _tool = tool;
+            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
             _meshes.Add(GetAttachedToolMesh(_tool));
             _toolPlane = GetAttachedToolPlane(_tool);
 
@@ -90,7 +90,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _mountingFrame = mountingFrame;
 
             // Tool related fields
-            _tool = tool;
+            _tool = tool.Duplicate(); // Make a deep copy since we transform it later
             _meshes.Add(GetAttachedToolMesh(_tool));
             _toolPlane = GetAttachedToolPlane(_tool);
 
@@ -106,15 +106,38 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Creates a new robot info by duplicating an existing robot info.
+        /// This creates a deep copy of the existing robot info.
+        /// </summary>
+        /// <param name="robotInfo"> The robot info that should be duplicated. </param>
+        public RobotInfo(RobotInfo robotInfo)
+        {
+            // Robot related fields
+            _name = robotInfo.Name;
+            _meshes = robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
+
+           _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
+            _internalAxisLimits = new List<Interval>(robotInfo.InternalAxisLimits);
+            _basePlane = new Plane(robotInfo.BasePlane);
+            _mountingFrame = new Plane(robotInfo.MountingFrame);
+
+            // Tool related fields
+            _tool = robotInfo.Tool.Duplicate();
+            _toolPlane = new Plane(robotInfo.ToolPlane);
+
+            // External axis related fields
+            _externalAxis = new List<ExternalAxis>(robotInfo.ExternalAxis); //TODO: make deep copy
+            _externalAxisPlanes = new List<Plane>(robotInfo.ExternalAxisPlanes);
+            _externalAxisLimits = new List<Interval>(robotInfo.ExternalAxisLimits);
+        }
+
+        /// <summary>
         /// A method to duplicate the RobotInfo object. 
         /// </summary>
         /// <returns> Returns a deep copy for the RobotInfo object. </returns>
         public RobotInfo Duplicate()
         {
-            RobotInfo dup = new RobotInfo(Name, new List<Mesh>(Meshes), new List<Plane>(InternalAxisPlanes), 
-                new List<Interval>(InternalAxisLimits), BasePlane, MountingFrame, Tool.Duplicate(), 
-                new List<ExternalAxis>(ExternalAxis));
-            return dup;
+            return new RobotInfo(this);
         }
         #endregion
 

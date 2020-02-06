@@ -23,7 +23,17 @@
         /// <param name="isActive">Bool that enables (true) or disables (false) the auto axis configuration.</param>
         public AutoAxisConfig(bool isActive)
         {
-            this._isActive = isActive;
+            _isActive = isActive;
+        }
+
+        /// <summary>
+        /// Creates a new auto axis configuration by duplicating an existing auto axis configuration. 
+        /// This creates a deep copy of the existing auto axis configuration 
+        /// </summary>
+        /// <param name="config"> The auto axis configuration that should be duplicated. </param>
+        public AutoAxisConfig(AutoAxisConfig config)
+        {
+            _isActive = config.IsActive;
         }
 
         /// <summary>
@@ -32,8 +42,16 @@
         /// <returns> Returns a deep copy of the AutoAxisConfiguration object. </returns>
         public AutoAxisConfig Duplicate()
         {
-            AutoAxisConfig dup = new AutoAxisConfig(IsActive);
-            return dup;
+            return new AutoAxisConfig(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the AutoAxisConfiguration object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the AutoAxisConfiguration object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new AutoAxisConfig(this) as Action;
         }
         #endregion
 

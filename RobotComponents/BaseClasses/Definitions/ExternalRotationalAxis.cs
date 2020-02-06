@@ -95,23 +95,40 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Creates a new external rotational axis by duplicating an existing axis.
+        /// This creates a deep copy of the existing axis.
+        /// </summary>
+        /// <param name="externalRotationalAxis"> The external rotational axis that should be duplicated. </param>
+        public ExternalRotationalAxis(ExternalRotationalAxis externalRotationalAxis)
+        {
+            _name = externalRotationalAxis.Name;
+            _axisPlane = new Plane(externalRotationalAxis.AxisPlane);
+            _attachmentPlane = new Plane(externalRotationalAxis.AttachmentPlane);
+            _axisLimits = new Interval(externalRotationalAxis.AxisLimits);
+            _axisNumber = externalRotationalAxis.AxisNumber;
+            _baseMesh = externalRotationalAxis.BaseMesh.DuplicateMesh();
+            _linkMesh = externalRotationalAxis.LinkMesh.DuplicateMesh();
+            _posedMeshes = new List<Mesh>(externalRotationalAxis.PosedMeshes);
+
+            Initialize();
+        }
+
+        /// <summary>
         /// A method to duplicate the ExternalRotationalAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy for the ExternalRotationalAxis object. </returns>
         public ExternalRotationalAxis Duplicate()
         {
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(Name, AxisPlane, AxisLimits, 
-                BaseMesh.DuplicateMesh(), LinkMesh.DuplicateMesh());
-            return dup;
+            return new ExternalRotationalAxis(this);
         }
 
         /// <summary>
         /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object. </returns>
-        public override ExternalAxis DuplicateAsExternalAxis()
+        public override ExternalAxis DuplicateExternalAxis()
         {
-            return Duplicate() as ExternalAxis;
+            return new ExternalRotationalAxis(this) as ExternalAxis;
         }
         #endregion
 

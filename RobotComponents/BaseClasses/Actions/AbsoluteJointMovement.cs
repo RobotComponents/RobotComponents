@@ -106,13 +106,37 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new absolute joint movement by duplicating an existing absolute joint movement. 
+        /// This creates a deep copy of the existing absolute joint movement. 
+        /// </summary>
+        /// <param name="jointMovement"> The absolute joint movement that should be duplicated. </param>
+        public AbsoluteJointMovement(AbsoluteJointMovement jointMovement)
+        {
+            _name = jointMovement.Name;
+            _internalAxisValues = new List<double>(jointMovement.InternalAxisValues);
+            _externalAxisValues = new List<double>(jointMovement.ExternalAxisValues);
+            _speedData = jointMovement.SpeedData.Duplicate();
+            _movementType = jointMovement.MovementType;
+            _precision = jointMovement.Precision;
+            _robotTool = jointMovement.RobotTool.Duplicate();
+        }
+
+        /// <summary>
         /// Duplicates a robot movement.
         /// </summary>
         /// <returns></returns>
         public AbsoluteJointMovement Duplicate()
         {
-            AbsoluteJointMovement dup = new AbsoluteJointMovement(Name, new List<double>(InternalAxisValues), new List<double>(ExternalAxisValues), SpeedData.Duplicate(), Precision);
-            return dup;
+            return new AbsoluteJointMovement(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the AbsoluteJointMovement object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the AbsoluteJointMovement object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new AbsoluteJointMovement(this) as Action;
         }
         #endregion
 

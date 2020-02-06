@@ -29,20 +29,6 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Construct a Speeddata from another SpeedData Class. Used to Dublicate.
-        /// </summary>
-        /// <param name="speedData">SpeedData to Construct a new SpeedData from.</param>
-        public SpeedData(SpeedData speedData)
-        {
-            _name = speedData.Name;
-            _v_tcp = speedData.V_TCP;
-            _v_ori = speedData.V_ORI;
-            _v_leax = speedData.V_LEAX;
-            _v_reax = speedData.V_REAX;
-            _predefined = speedData.PreDefinied;
-        }
-
-        /// <summary>
         /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
         /// </summary>
         /// <param name="v_tcp">  The velocity of the tool center point (TCP) in mm/s. </param>
@@ -94,22 +80,18 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Constructor used to duplicate the current SpeedData object. 
+        /// Creates a new speeddata by duplicating an existing speeddata. 
+        /// This creates a deep copy of the existing speeddata. 
         /// </summary>
-        /// <param name="name"> The SpeedData variable name. </param>
-        /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
-        /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
-        /// <param name="v_leax"> The velocity of linear external axes in mm/s. </param>
-        /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
-        /// <param name="predefined"> A boolean that indicates if the speeddata is predefined by ABB. </param>
-        private SpeedData(string name, double v_tcp, double v_ori, double v_leax, double v_reax, bool predefined)
+        /// <param name="speeddata"> The speeddata that should be duplicated. </param>
+        public SpeedData(SpeedData speeddata)
         {
-            _name = name;
-            _v_tcp = v_tcp;
-            _v_ori = v_ori;
-            _v_leax = v_leax;
-            _v_reax = v_reax;
-            _predefined = predefined;
+            _name = speeddata.Name;
+            _v_tcp = speeddata.V_TCP;
+            _v_ori = speeddata.V_ORI;
+            _v_leax = speeddata.V_LEAX;
+            _v_reax = speeddata.V_REAX;
+            _predefined = speeddata.PreDefinied;
         }
 
         /// <summary>
@@ -118,8 +100,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the SpeedData object. </returns>
         public SpeedData Duplicate()
         {
-            SpeedData dup = new SpeedData(Name, V_TCP, V_ORI, V_LEAX, V_REAX, PreDefinied);
-            return dup;
+            return new SpeedData(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the SpeedData object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the SpeedData object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new SpeedData(this) as Action;
         }
         #endregion
 

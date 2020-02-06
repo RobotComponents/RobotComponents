@@ -150,23 +150,40 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Creates a new external linear axis by duplicating an existing axis.
+        /// This creates a deep copy of the existing axis.
+        /// </summary>
+        /// <param name="externalLinearAxis"> The external linear axis that should be duplicated. </param>
+        public ExternalLinearAxis(ExternalLinearAxis externalLinearAxis)
+        {
+            _name = externalLinearAxis.Name;
+            _axisPlane = new Plane(externalLinearAxis.AxisPlane);
+            _attachmentPlane = new Plane(externalLinearAxis.AttachmentPlane);
+            _axisLimits = new Interval(externalLinearAxis.AxisLimits);
+            _axisNumber = externalLinearAxis.AxisNumber;
+            _baseMesh = externalLinearAxis.BaseMesh.DuplicateMesh();
+            _linkMesh = externalLinearAxis.LinkMesh.DuplicateMesh();
+            _posedMeshes = new List<Mesh>(externalLinearAxis.PosedMeshes);
+
+            Initialize();
+        }
+
+        /// <summary>
         /// A method to duplicate the ExternalLinearAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy for the ExternalLinearAxis object. </returns>
         public ExternalLinearAxis Duplicate()
         {
-            ExternalLinearAxis dup = new ExternalLinearAxis(Name, AttachmentPlane, AxisPlane, AxisLimits, 
-                BaseMesh.DuplicateMesh(), LinkMesh.DuplicateMesh());
-            return dup;
+            return new ExternalLinearAxis(this);
         }
 
         /// <summary>
         /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object. </returns>
-        public override ExternalAxis DuplicateAsExternalAxis()
+        public override ExternalAxis DuplicateExternalAxis()
         {
-            return Duplicate() as ExternalAxis;
+            return new ExternalLinearAxis(this) as ExternalAxis;
         }
         #endregion
 

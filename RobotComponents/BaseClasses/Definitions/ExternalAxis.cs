@@ -20,10 +20,10 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region constructors
         /// <summary>
-        /// A method to duplicate the ExternalAxis object
+        /// A method to duplicate the object as an ExternalAxis type
         /// </summary>
-        /// <returns> Returns a deep copy of the the ExternalAxis object. </returns>
-        public abstract ExternalAxis DuplicateAsExternalAxis();
+        /// <returns> Returns a deep copy of the ExternalAxis object. </returns>
+        public abstract ExternalAxis DuplicateExternalAxis();
         #endregion
 
         #region methods

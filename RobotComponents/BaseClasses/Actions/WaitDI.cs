@@ -26,8 +26,19 @@
         /// <param name="value"> The desired state / value of the digtal input signal. </param>
         public WaitDI(string DIName, bool value)
         {
-            this._DIName = DIName;
-            this.Value = value;
+            _DIName = DIName;
+            Value = value;
+        }
+
+        /// <summary>
+        /// Creates a new WaitDI by duplicating an existing WaitDI. 
+        /// This creates a deep copy of the existing WaitDI. 
+        /// </summary>
+        /// <param name="waitDI"> The wait for digital input that should be duplicated. </param>
+        public WaitDI(WaitDI waitDI)
+        {
+            _DIName = waitDI.DIName;
+            _value = waitDI.Value;
         }
 
         /// <summary>
@@ -36,8 +47,16 @@
         /// <returns> Returns a deep copy of the WaitDI object. </returns>
         public WaitDI Duplicate()
         {
-            WaitDI dup = new WaitDI(DIName, Value);
-            return dup;
+            return new WaitDI(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the WaitDI object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the WaitDI object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new WaitDI(this) as Action;
         }
         #endregion
 

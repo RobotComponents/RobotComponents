@@ -47,47 +47,27 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Private path generator with all the class fields. Only used for the Duplicate method. 
+        /// Creates a new path generator by duplicating an existing path generator. 
+        /// This creates a deep copy of the existing path generator. 
         /// </summary>
-        /// <param name="planes"> The list with planes the robot follows. </param>
-        /// <param name="paths"> An approximation of the path the TCP of the robot will follow. </param>
-        /// <param name="internalAxisValues"> The internal axis values set to follow the path. </param>
-        /// <param name="externalAxisValues"> The external axis values set to follow the path. </param>
-        /// <param name="robotInfo"> The robot info to construct the path for. </param>
-        private PathGenerator(List<Plane> planes, List<Curve> paths, List<List<double>> internalAxisValues, List<List<double>> externalAxisValues, RobotInfo robotInfo)
+        /// <param name="generator"> The path generator that should be duplicated. </param>
+        public PathGenerator(PathGenerator generator)
         {
-            _planes = planes;
-            _paths = paths;
-            _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
-            _robotInfo = robotInfo;
+            // Set fields
+            _planes = new List<Plane>(generator.Planes);
+            _paths = generator.Paths.ConvertAll(curve => curve.DuplicateCurve());
+            _internalAxisValues = generator.InternalAxisValues.ConvertAll(axisValues => new List<double>(axisValues));
+            _externalAxisValues = generator.ExternalAxisValues.ConvertAll(axisValues => new List<double>(axisValues));
+            _robotInfo = generator.RobotInfo.Duplicate();
         }
 
         /// <summary>
         /// A method to duplicate the Path Generator object. 
         /// </summary>
-        /// <returns> Returns a deep copy for the Path Generator object. </returns>
+        /// <returns> Returns a deep copy of the Path Generator object. </returns>
         public PathGenerator Duplicate()
         {
-            // Duplicate internal axis values
-            List<List<double>> internalAxisValues = new List<List<double>>();
-            for (int i = 0; i < InternalAxisValues.Count; i++)
-            {
-                internalAxisValues.Add(new List<double>(InternalAxisValues[i]));
-            }
-
-            // Duplicate external axis values
-            List<List<double>> externalAxisValues = new List<List<double>>();
-            for (int i = 0; i < ExternalAxisValues.Count; i++)
-            {
-                externalAxisValues.Add(new List<double>(ExternalAxisValues[i]));
-            }
-
-            // Make new path generator wiht duplicated fields
-            PathGenerator dup = new PathGenerator(new List<Plane>(Planes), new List<Curve>(Paths), 
-                internalAxisValues, externalAxisValues, RobotInfo.Duplicate());
-
-            return dup;
+            return new PathGenerator(this);
         }
         #endregion
 
@@ -95,61 +75,52 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Generates the internal and external axis values and the path the robot follows. 
         /// </summary>
-        public void GetAxisValues(List<Actions.Action> movements, int interpolations) //TODO: Change method to input with actions (movements and absolute joint movements)
+        public void GetAxisValues(List<Actions.Action> movements, int interpolations)
         {
             // Initialize the forward kinematics
             ForwardKinematics forwardKinematics = new ForwardKinematics(_robotInfo, true);
 
             // Initiate movement
-            Movement movement = new Movement(new Target("init", Plane.WorldXY)); ; // Used for movement[i+1]: to movement we are carrying out
-            Movement startMovement = new Movement(new Target("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
+            Movement movement1 = new Movement(new Target("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
+            Movement movement2 = new Movement(new Target("init", Plane.WorldXY)); ; // Used for movement[i+1]: to movement we are carrying out
             AbsoluteJointMovement jointMovement;
 
             // Initialize the internal and external axis values of the first and second target
-            List<double> target2InternalAxisValues = new List<double>() { };
-            List<double> target2ExternalAxisValues = new List<double>() { };
-            List<double> target1InternalAxisValues = new List<double>() { };
-            List<double> target1ExternalAxisValues = new List<double>() { };
+            List<double> target2InternalAxisValues = new List<double>();
+            List<double> target2ExternalAxisValues = new List<double>();
+            List<double> target1InternalAxisValues;
+            List<double> target1ExternalAxisValues;
 
             // Initiate inverse kinematics
-            InverseKinematics inverseKinematics = new InverseKinematics(movement, _robotInfo);
+            InverseKinematics inverseKinematics = new InverseKinematics(movement2, _robotInfo);
 
             // Initialize the internal and external axis values of the second target
-            if (movements[0] is AbsoluteJointMovement)
+            if (movements[0] is AbsoluteJointMovement castedJointMovement)
             {
-                // Get the movement
-                jointMovement = movements[0] as AbsoluteJointMovement;
-
-                // Get the axis values
-                target2InternalAxisValues = new List<double>(jointMovement.InternalAxisValues);
-                target2ExternalAxisValues = new List<double>(jointMovement.ExternalAxisValues);
+                target2InternalAxisValues = new List<double>(castedJointMovement.InternalAxisValues);
+                target2ExternalAxisValues = new List<double>(castedJointMovement.ExternalAxisValues);
             }
-
-            else
+            else if (movements[0] is Movement castedMovement)
             {
-                // Get the movement
-                movement = movements[0] as Movement;
-
-                // Calculate the axis values
-                inverseKinematics = new InverseKinematics(movement, _robotInfo);
+                inverseKinematics = new InverseKinematics(castedMovement, _robotInfo);
                 inverseKinematics.Calculate();
-
-                // Get the axis values
                 target2InternalAxisValues = new List<double>(inverseKinematics.InternalAxisValues);
                 target2ExternalAxisValues = new List<double>(inverseKinematics.ExternalAxisValues);
             }
 
             // Initialize other variables
-            List<double> externalAxisValueDifferences = new List<double>();
+            List<double> internalAxisValueChange = new List<double>();
             List<double> externalAxisValueChange = new List<double>();
 
-            // Initiate sub inverse kinematics and variables
+            // Initiate target and movement for linear movement interpolation
             Target subTarget = new Target("subTarget", Plane.WorldXY);
             Movement subMovement = new Movement(subTarget);
-            InverseKinematics inverseKinematicsSub = new InverseKinematics(subMovement, _robotInfo);
+
+            // Initiate list with points between two targets
+            List<Point3d> points = new List<Point3d>();
 
             // Axis logic
-            int logic = -1; // dummy value
+            int logic;
 
             // Make path if we have at least two movements with targets
             if (movements.Count > 1)
@@ -161,9 +132,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                     {
                         // Get the movement
                         jointMovement = movements[i + 1] as AbsoluteJointMovement;
-
-                        // Points for path curve of this movement between two targets
-                        List<Point3d> points = new List<Point3d>();
 
                         // Update tool of forward kinematics
                         forwardKinematics.RobotInfo.Tool = jointMovement.RobotTool;
@@ -177,40 +145,25 @@ namespace RobotComponents.BaseClasses.Kinematics
                         target2ExternalAxisValues = new List<double>(jointMovement.ExternalAxisValues); // TODO: match list length with external axis list length of robot info
 
                         #region Calculate interpolated external axis values differences
-                        // Calculate axis value difference between both targets
-                        externalAxisValueDifferences.Clear();
-                        for (int j = 0; j < target1ExternalAxisValues.Count; j++)
-                        {
-                            double difference = target2ExternalAxisValues[j] - target1ExternalAxisValues[j];
-                            externalAxisValueDifferences.Add(difference);
-                        }
-
-                        // Calculates axis value change per interpolation step
+                        // Calculate axis value difference and change between both targets
                         externalAxisValueChange.Clear();
                         for (int j = 0; j < target1ExternalAxisValues.Count; j++)
                         {
-                            double valueChange = externalAxisValueDifferences[j] / interpolations;
+                            double difference = target2ExternalAxisValues[j] - target1ExternalAxisValues[j];
+                            double valueChange = difference / interpolations;
                             externalAxisValueChange.Add(valueChange);
                         }
                         #endregion
 
-                       // Calculate axis value difference between both targets
-                        List<double> internalAxisValueDifferences = new List<double>();
+                        // Calculate axis value difference and change between both targets
+                        internalAxisValueChange.Clear();
                         for (int j = 0; j < target1InternalAxisValues.Count; j++)
                         {
                             double difference = target2InternalAxisValues[j] - target1InternalAxisValues[j];
-                            internalAxisValueDifferences.Add(difference);
-                        }
-
-                        // Calculate axis value change per interpolation step
-                        List<double> internalAxisValueChange = new List<double>();
-                        for (int j = 0; j < target1InternalAxisValues.Count; j++)
-                        {
-                            double valueChange = internalAxisValueDifferences[j] / interpolations;
+                            double valueChange = difference / interpolations;
                             internalAxisValueChange.Add(valueChange);
                         }
 
-                        Rhino.RhinoApp.WriteLine("Debug || GetAxisValues 6");
                         // Calculates intermediate internal and external axis values and tcp point 
                         for (int j = 0; j < interpolations; j++)
                         {
@@ -254,18 +207,12 @@ namespace RobotComponents.BaseClasses.Kinematics
                         }
 
                         // Add last point
-                        forwardKinematics.Update(new List<double>(jointMovement.InternalAxisValues), new List<double>(jointMovement.ExternalAxisValues));
+                        forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                         forwardKinematics.Calculate();
                         Point3d lastPoint = forwardKinematics.TCPPlane.Origin;
                         if (points[points.Count - 1] != lastPoint)
                         {
                             points.Add(lastPoint);
-                        }
-
-                        // Add path curve to paths if there are at least two points in the list
-                        if (points.Count > 1)
-                        {
-                            _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
                         }
                     }
                     #endregion
@@ -274,58 +221,39 @@ namespace RobotComponents.BaseClasses.Kinematics
                     else if (movements[i + 1] is Movement)
                     {
                         // Get the movement
-                        movement = movements[i + 1] as Movement;
-
-                        // Points for path curve of this movement between two targets
-                        List<Point3d> points = new List<Point3d>();
+                        movement2 = movements[i + 1] as Movement;
 
                         // Update tool of forward kinematics
-                        forwardKinematics.RobotInfo.Tool = movement.RobotTool;
+                        forwardKinematics.RobotInfo.Tool = movement2.RobotTool;
 
                         // Our first target is the second target of the last movement
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
                         target1ExternalAxisValues = new List<double>(target2ExternalAxisValues);
 
                         // Calculate the axis values for the second target
-                        inverseKinematics.Movement = movement;
+                        inverseKinematics.Movement = movement2;
                         inverseKinematics.Calculate();
                         target2InternalAxisValues = new List<double>(inverseKinematics.InternalAxisValues);
                         target2ExternalAxisValues = new List<double>(inverseKinematics.ExternalAxisValues);
 
-                        #region Calculate interpolated external axis values differences (needed for both joint and linear movement)
-                        // Calculate axis value difference between both targets
-                        externalAxisValueDifferences.Clear();
-                        for (int j = 0; j < target1ExternalAxisValues.Count; j++)
-                        {
-                            double difference = target2ExternalAxisValues[j] - target1ExternalAxisValues[j];
-                            externalAxisValueDifferences.Add(difference);
-                        }
-
-                        // Calculates axis value change per interpolation step
+                        // Calculate axis value difference between both targets: needed for all movement types
                         externalAxisValueChange.Clear();
                         for (int j = 0; j < target1ExternalAxisValues.Count; j++)
                         {
-                            double valueChange = externalAxisValueDifferences[j] / interpolations;
+                            double difference = target2ExternalAxisValues[j] - target1ExternalAxisValues[j];
+                            double valueChange = difference / interpolations;
                             externalAxisValueChange.Add(valueChange);
                         }
-                        #endregion
 
                         #region create path for joint movement
-                        if (movement.MovementType == 0 || movement.MovementType == 2)
+                        if (movement2.MovementType == 0 || movement2.MovementType == 2)
                         {
-                            // Calculate axis value difference between both targets
-                            List<double> internalAxisValueDifferences = new List<double>();
+                            // Calculate axis value difference and change between both targets
+                            internalAxisValueChange.Clear();
                             for (int j = 0; j < target1InternalAxisValues.Count; j++)
                             {
                                 double difference = target2InternalAxisValues[j] - target1InternalAxisValues[j];
-                                internalAxisValueDifferences.Add(difference);
-                            }
-
-                            // Calculate axis value change per interpolation step
-                            List<double> internalAxisValueChange = new List<double>();
-                            for (int j = 0; j < target1InternalAxisValues.Count; j++)
-                            {
-                                double valueChange = internalAxisValueDifferences[j] / interpolations;
+                                double valueChange = difference / interpolations;
                                 internalAxisValueChange.Add(valueChange);
                             }
 
@@ -372,16 +300,10 @@ namespace RobotComponents.BaseClasses.Kinematics
                             }
 
                             // Add last point
-                            Point3d lastPoint = movement.GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
+                            Point3d lastPoint = movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
                             if (points[points.Count - 1] != lastPoint)
                             {
                                 points.Add(lastPoint);
-                            }
-
-                            // Add path curve to paths if there are at least two points in the list
-                            if (points.Count > 1)
-                            {
-                                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
                             }
                         }
                         #endregion
@@ -398,23 +320,22 @@ namespace RobotComponents.BaseClasses.Kinematics
                             // Get movement before (especially the target plane)
                             if (movements[i] is Movement)
                             {
-                                startMovement = movements[i] as Movement;
+                                movement1 = movements[i] as Movement;
                             }
                             else if (movements[i] is AbsoluteJointMovement)
                             {
                                 jointMovement = movements[i] as AbsoluteJointMovement;
 
-                                forwardKinematics.Update(new List<double>(jointMovement.InternalAxisValues), new List<double>(jointMovement.ExternalAxisValues));
+                                forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                                 forwardKinematics.Calculate();
-                                Plane targetPlane = forwardKinematics.TCPPlane;
-                                startMovement = new Movement(new Target("jointMovement", targetPlane));
+                                movement1.Target.Plane = forwardKinematics.TCPPlane;
                             }
 
                             // If both movements are on the same work object
-                            if (startMovement.WorkObject == movement.WorkObject)
+                            if (movement1.WorkObject == movement2.WorkObject)
                             {
-                                plane1 = startMovement.Target.Plane;
-                                plane2 = movement.Target.Plane;
+                                plane1 = movement1.Target.Plane;
+                                plane2 = movement2.Target.Plane;
                             }
 
                             // Else the movements are not on the same work object
@@ -422,23 +343,23 @@ namespace RobotComponents.BaseClasses.Kinematics
                             else
                             {
                                 // Get plane1 and plane2
-                                plane1 = new Plane(startMovement.GetPosedGlobalTargetPlane(_robotInfo, out logic)); // In world coordinate space
-                                plane2 = movement.Target.Plane; // In work object coordinate space
+                                plane1 = new Plane(movement1.GetPosedGlobalTargetPlane(_robotInfo, out logic)); // In world coordinate space
+                                plane2 = movement2.Target.Plane; // In work object coordinate space
 
                                 // Re-orient plane1 to the other work object coordinate space of the plane2
-                                Plane globalWorkObjectPlane = new Plane(movement.WorkObject.GlobalWorkObjectPlane);
+                                Plane globalWorkObjectPlane = new Plane(movement2.WorkObject.GlobalWorkObjectPlane);
                                 Transform orient = Transform.ChangeBasis(Plane.WorldXY, globalWorkObjectPlane);
                                 plane1.Transform(orient);
 
                                 // Correct for the target plane position if we make a movement an a movable work object
                                 // This is only needed if move from a fixed work object to a movable work object.
                                 // Or if we switch between to movable workobjects with two different external axes
-                                if (startMovement.WorkObject.ExternalAxis == null
-                                    && movement.WorkObject.ExternalAxis != null
-                                    && movement.WorkObject.ExternalAxis != startMovement.WorkObject.ExternalAxis)
+                                if (movement1.WorkObject.ExternalAxis == null
+                                    && movement2.WorkObject.ExternalAxis != null
+                                    && movement2.WorkObject.ExternalAxis != movement1.WorkObject.ExternalAxis)
                                 {
                                     // Get axis logic of the external axis of the movable work object we are using.
-                                    movement.GetPosedGlobalTargetPlane(_robotInfo, out logic);
+                                    movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic);
 
                                     // Transform if the axis logic number is valid
                                     if (logic > -1)
@@ -498,20 +419,26 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 // Create new plane: the local target plane (in work object coordinate space)
                                 Plane plane = new Plane(planePoints[l], axisDirections[l][0], axisDirections[l][1]);
 
-                                // Update sub target and sub movement
-                                subTarget = new Target("subTarget", plane, movement.Target.AxisConfig, externalAxisValues);
-                                subMovement = new Movement(subTarget);
-                                subMovement.RobotTool = movement.RobotTool;
-                                subMovement.WorkObject = movement.WorkObject;
+                                // Update the target
+                                subTarget.Plane = plane;
+                                subTarget.AxisConfig = movement2.Target.AxisConfig;
+                                subTarget.ExternalAxisValues = externalAxisValues;
+
+                                // Update the movement
+                                subMovement.Target = subTarget;
+                                subMovement.RobotTool = movement2.RobotTool;
+                                subMovement.WorkObject = movement2.WorkObject;
+                                subMovement.ReInitialize();
 
                                 // Calculate internal axis values
-                                inverseKinematicsSub.Movement = subMovement;
-                                inverseKinematicsSub.Calculate();
-                                List<double> internalAxisValues = inverseKinematicsSub.InternalAxisValues;
+                                inverseKinematics.Movement = subMovement;
+                                inverseKinematics.Calculate();
 
                                 // Add te calculated axis values and plane to the class property
-                                _internalAxisValues.Add(new List<double>(internalAxisValues));
-                                _externalAxisValues.Add(new List<double>(externalAxisValues));
+                                _internalAxisValues.Add(new List<double>(inverseKinematics.InternalAxisValues));
+                                _externalAxisValues.Add(new List<double>(inverseKinematics.ExternalAxisValues));
+
+                                // Add the plane
                                 Plane globalPlane = subMovement.GetPosedGlobalTargetPlane(_robotInfo, out logic);
                                 _planes.Add(globalPlane);
 
@@ -526,43 +453,45 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 {
                                     points.Add(globalPlane.Origin);
                                 }
+                            }
 
-                                // Add last point
-                                Point3d lastPoint = movement.GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
-                                if (points[points.Count - 1] != lastPoint)
-                                {
-                                    points.Add(lastPoint);
-                                }
-
-                                // Add path curve to paths if there are at least two points in the list
-                                if (points.Count > 1)
-                                {
-                                    _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
-                                }
+                            // Add last point
+                            Point3d lastPoint = movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic).Origin;
+                            if (points[points.Count - 1] != lastPoint)
+                            {
+                                points.Add(lastPoint);
                             }
                         }
                     }
                     #endregion
 
+                    // Add path curve to paths if there are at least two points in the list
+                    if (points.Count > 1)
+                    {
+                        _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+                    }
+
+                    // Clear the list with points for the new iteration
+                    points.Clear();
+
                     #endregion
                 }
             }
 
-            // Add the last movement / target plane and axis values
-            if (movements[movements.Count - 1] is Movement) // Movement
+            // Add the axis values and the plane of the last movement
+            if (movements[movements.Count - 1] is Movement)
             {
-                movement = movements[movements.Count - 1] as Movement;
-                InverseKinematics inverseKinematicsLast = new InverseKinematics(movement, _robotInfo);
-                inverseKinematicsLast.Calculate();
-                _internalAxisValues.Add(inverseKinematicsLast.InternalAxisValues);
-                _externalAxisValues.Add(inverseKinematicsLast.ExternalAxisValues);
-                _planes.Add(movement.GetPosedGlobalTargetPlane(_robotInfo, out logic));
+                movement2 = movements[movements.Count - 1] as Movement;
+                inverseKinematics.Movement = movement2;
+                inverseKinematics.Calculate();
+                _internalAxisValues.Add(new List<double>(inverseKinematics.InternalAxisValues));
+                _externalAxisValues.Add(new List<double>(inverseKinematics.ExternalAxisValues));
+                _planes.Add(movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic));
             }
-
-            else if (movements[movements.Count - 1] is AbsoluteJointMovement) // Joint movement
+            else if (movements[movements.Count - 1] is AbsoluteJointMovement)
             {
                 jointMovement = movements[movements.Count - 1] as AbsoluteJointMovement;
-                forwardKinematics.Update(new List<double>(jointMovement.InternalAxisValues), new List<double>(jointMovement.ExternalAxisValues));
+                forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                 forwardKinematics.Calculate();
                 _internalAxisValues.Add(new List<double>(jointMovement.InternalAxisValues));
                 _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues));
@@ -582,7 +511,6 @@ namespace RobotComponents.BaseClasses.Kinematics
             Reset();
 
             // Get the movements from the list with actions
-            //List<Movement> movements = GetMovementsFromActions(actions);
             List<Actions.Action> movements = GetMovements(actions);
 
             // Get the internal and external axis values and the path curve
@@ -607,11 +535,8 @@ namespace RobotComponents.BaseClasses.Kinematics
             for (int i = 0; i < actions.Count; i++)
             {
                 #region  Check if the Override Robot Tool action is used
-                if (actions[i] is OverrideRobotTool)
+                if (actions[i] is OverrideRobotTool overrideRobotTool)
                 {
-                    // Get the override robot tool object
-                    OverrideRobotTool overrideRobotTool = (OverrideRobotTool)actions[i];
-
                     // Override the current tool
                     currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
                 }

@@ -97,14 +97,28 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
+        /// Creates a new inverse kinematics by duplicating an existing inverse kinematics.
+        /// This creates a deep copy of the existing inverse kinematics.
+        /// </summary>
+        /// <param name="inverseKinematics"> The inverse kinematics that should be duplicated. </param>
+        public InverseKinematics(InverseKinematics inverseKinematics)
+        {
+            _robotInfo = inverseKinematics.RobotInfo.Duplicate();
+            _movement = inverseKinematics.Movement.Duplicate();
+
+            Initialize();
+
+            _internalAxisValues = new List<double>(inverseKinematics.InternalAxisValues);
+            _externalAxisValues = new List<double>(inverseKinematics.ExternalAxisValues);
+        }
+
+        /// <summary>
         /// A method to duplicate the Inverse Kinematics object.
         /// </summary>
         /// <returns> Returns a deep copy of the Inverse Kinematics object. </returns>
         public InverseKinematics Duplicate()
         {
-            InverseKinematics dup = new InverseKinematics(Movement.Duplicate(), RobotInfo.Duplicate(), 
-                new List<double>(InternalAxisValues), new List<double>(ExternalAxisValues));
-            return dup;
+            return new InverseKinematics(this);
         }
         #endregion
 

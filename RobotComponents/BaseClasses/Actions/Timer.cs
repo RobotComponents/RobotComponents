@@ -27,13 +27,31 @@
         }
 
         /// <summary>
+        /// Creates a new timer by duplicating an existing timer. 
+        /// This creates a deep copy of the existing timer. 
+        /// </summary>
+        /// <param name="timer"> The timer that should be duplicated. </param>
+        public Timer(Timer timer)
+        {
+            _duration = timer.Duration;
+        }
+
+        /// <summary>
         /// Method to duplicate the Timer object.
         /// </summary>
         /// <returns> Returns a deep copy of the Timer object.</returns>
         public Timer Duplicate()
         {
-            Timer dup = new Timer(Duration);
-            return dup;
+            return new Timer(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Timer object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Timer object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Timer(this) as Action;
         }
         #endregion
 

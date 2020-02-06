@@ -71,15 +71,26 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
+        /// Creates a new forward kinematics by duplicating an existing forward kinematics.
+        /// This creates a deep copy of the existing forward kinematics.
+        /// </summary>
+        /// <param name="forwardKinematics"> The forward kinematics that should be duplicated. </param>
+        public ForwardKinematics(ForwardKinematics forwardKinematics)
+        {
+            _robotInfo = forwardKinematics.RobotInfo.Duplicate();
+            _hideMesh = forwardKinematics.HideMesh;
+            _internalAxisValues = new List<double>(InternalAxisValues);
+            _externalAxisValues = new List<double>(ExternalAxisValues);
+            Update(_internalAxisValues, _externalAxisValues);
+        }
+
+        /// <summary>
         /// A method to duplicate the Forward Kinematics object.
         /// </summary>
         /// <returns> Returns a deep copy of the Forward Kinematics object. </returns>
         public ForwardKinematics Duplicate()
         {
-            //TODO: make a method that duplicates all the used properties
-            ForwardKinematics dup = new ForwardKinematics(RobotInfo.Duplicate(), new List<double>(InternalAxisValues), 
-                new List<double>(ExternalAxisValues), HideMesh);
-            return dup;
+            return new ForwardKinematics(this);
         }
         #endregion
 
@@ -211,12 +222,10 @@ namespace RobotComponents.BaseClasses.Kinematics
         public void Update(List<double> internalAxisValues, List<double> externalAxisValues)
         {
             // Clear: remove data of possible old solution
-            _internalAxisValues.Clear();
             _internalAxisInLimit.Clear();
-            _externalAxisValues.Clear();
             _externalAxisInLimit.Clear();
             _errorText.Clear();
-
+            
             // Update robot data and set the internal axis values
             _basePlane = _robotInfo.BasePlane;
             _positionPlane = new Plane(_basePlane);

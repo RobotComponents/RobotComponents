@@ -84,14 +84,31 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new RAPID generator by duplicating an existing RAPID generator. 
+        /// This creates a deep copy of the existing RAPID generator. 
+        /// </summary>
+        /// <param name="generator"> The RAPID generator that should be duplicated. </param>
+        public RAPIDGenerator(RAPIDGenerator generator)
+        {
+            _ModuleName = generator.ModuleName;
+            _robotInfo = generator.RobotInfo.Duplicate();
+            _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
+            _filePath = generator.FilePath;
+            _saveToFile = generator.SaveToFile;
+            _RAPIDCode = generator.RAPIDCode;
+            _BASECode = generator.BASECode;
+            _firstMovementIsMoveAbs = generator.FirstMovementIsMoveAbs;
+            _inverseKinematics = generator.InverseKinematics.Duplicate();
+        }
+
+
+        /// <summary>
         /// Method to duplicate this RAPID generator object.
         /// </summary>
         /// <returns>Returns a deep copy of the RAPID generator object. </returns>
         public RAPIDGenerator Duplicate()
         {
-            RAPIDGenerator dup = new RAPIDGenerator(ModuleName, new List<Action>(Actions), FilePath, 
-                SaveToFile, RobotInfo.Duplicate(), RAPIDCode, BASECode, FirstMovementIsMoveAbs); 
-            return dup;
+            return new RAPIDGenerator(this);
         }
         #endregion
 

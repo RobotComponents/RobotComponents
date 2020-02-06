@@ -133,14 +133,34 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Creates a new robot tool by duplicating an existing robot tool.
+        /// This creates a deep copy of the existing robot tool.
+        /// </summary>
+        /// <param name="robotTool"> The robot tool that should be duplicated. </param>
+        public RobotTool(RobotTool robotTool)
+        {
+            _name = robotTool.Name;
+            _mesh = robotTool.Mesh.DuplicateMesh();
+            _attachmentPlane = new Plane(robotTool.AttachmentPlane);
+            _toolPlane = new Plane(robotTool.ToolPlane);
+
+            _robotHold = robotTool.RobotHold;
+            _mass = robotTool.Mass;
+            _centerOfGravity = new Vector3d(robotTool.CenterOfGravity);
+            _centerOfGravityOrientation = robotTool.CenterOfGravityOrientation;
+            _inertia = new Vector3d(robotTool.Inertia);
+
+            _position = new Vector3d(robotTool.Position);
+            _orientation = robotTool.Orientation;
+        }
+
+        /// <summary>
         /// A method to duplicate the RobotTool object. 
         /// </summary>
         /// <returns> Returns a deep copy for the RobotTool object. </returns>
         public RobotTool Duplicate()
         {
-            RobotTool dup = new RobotTool(Name, Mesh.DuplicateMesh(), AttachmentPlane, ToolPlane, 
-                RobotHold, Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
-            return dup;
+            return new RobotTool(this);
         }
 
         /// <summary>

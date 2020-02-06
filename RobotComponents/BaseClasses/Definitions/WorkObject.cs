@@ -72,23 +72,36 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// A method to duplicate the WorkObject object. 
+        /// Creates a new work object by duplicating an existing movement.
+        /// This creates a deep copy of the existing work object.
         /// </summary>
-        /// <returns> Returns a deep copy for the WorkObject object. </returns>
-        public WorkObject Duplicate()
+        /// <param name="workObject"> The movement that should be duplicated. </param>
+        public WorkObject(WorkObject workObject)
         {
-            WorkObject dup;
+            _name = workObject.Name;
+            _plane = new Plane(workObject.Plane);
+            _robotHold = workObject.RobotHold;
+            _userFrame = new Plane(workObject.UserFrame);
 
-            if (ExternalAxis != null)
+            if (workObject.ExternalAxis == null)
             {
-                dup = new WorkObject(Name, Plane, ExternalAxis.DuplicateAsExternalAxis());
+                _externalAxis = null;
             }
             else
             {
-                dup = new WorkObject(Name, Plane, ExternalAxis);
+                _externalAxis = workObject.ExternalAxis; // TODO: .DuplicateExternalAxis() is causing an error in the RAPID and path generator
             }
 
-            return dup;
+            Initialize();
+        }
+
+        /// <summary>
+        /// A method to duplicate the WorkObject object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the WorkObject object. </returns>
+        public WorkObject Duplicate()
+        {
+            return new WorkObject(this);
         }
         #endregion
 

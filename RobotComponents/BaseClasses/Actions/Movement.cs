@@ -120,14 +120,38 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new movement by duplicating an existing movement. 
+        /// This creates a deep copy of the existing movement. 
+        /// </summary>
+        /// <param name="movement"> The movement that should be duplicated. </param>
+        public Movement(Movement movement)
+        {
+            _target = movement.Target.Duplicate();
+            _speedData = movement.SpeedData.Duplicate();
+            _movementType = movement.MovementType;
+            _precision = movement.Precision;
+            _robotTool = movement.RobotTool.Duplicate();
+            _workObject = movement.WorkObject.Duplicate();
+            _digitalOutput = movement.DigitalOutput.Duplicate();
+            _globalTargetPlane = new Plane(movement.GlobalTargetPlane);
+        }
+
+        /// <summary>
         /// Duplicates a robot movement.
         /// </summary>
         /// <returns></returns>
         public Movement Duplicate()
         {
-            Movement dup = new Movement(Target.Duplicate(), SpeedData.Duplicate(), MovementType, Precision, 
-                RobotTool.Duplicate(), WorkObject.Duplicate(), DigitalOutput.Duplicate());
-            return dup;
+            return new Movement(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Movement object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Movement object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Movement(this) as Action;
         }
         #endregion
 

@@ -25,8 +25,19 @@
         /// <param name="IsActive">The desired value / stage of the digital output signal 0 (false) or 1 (true).</param>
         public DigitalOutput(string Name, bool IsActive)
         {
-            this._name = Name;
-            this._isActive = IsActive;
+            _name = Name;
+            _isActive = IsActive;
+        }
+
+        /// <summary>
+        /// Creates a new digital output by duplicating an existing digital output. 
+        /// This creates a deep copy of the existing digital output. 
+        /// </summary>
+        /// <param name="digitalOutput"> The digital output that should be duplicated. </param>
+        public DigitalOutput(DigitalOutput digitalOutput)
+        {
+            _name = digitalOutput.Name;
+            _isActive = digitalOutput.IsActive;
         }
 
         /// <summary>
@@ -35,8 +46,16 @@
         /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
         public DigitalOutput Duplicate()
         {
-            DigitalOutput dup = new DigitalOutput(Name, IsActive);
-            return dup;
+            return new DigitalOutput(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the DigitalOutput object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the DigitalOutput object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new DigitalOutput(this) as Action;
         }
         #endregion
 

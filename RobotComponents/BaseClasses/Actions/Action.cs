@@ -10,10 +10,18 @@
         #endregion
 
         #region constructors
+        /// <summary>
+        /// Empty constructor
+        /// </summary>
         public Action()
         {
-
         }
+
+        /// <summary>
+        /// A method to duplicate the object as an Action type
+        /// </summary>
+        /// <returns> Returns a deep copy of the Action object. </returns>
+        public abstract Action DuplicateAction();
         #endregion
 
         #region methods

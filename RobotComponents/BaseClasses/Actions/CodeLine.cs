@@ -23,7 +23,17 @@
         /// <param name="code">The code line as a text string.</param>
         public CodeLine(string code)
         {
-            this._code = code;
+            _code = code;
+        }
+
+        /// <summary>
+        /// Creates a new code line by duplicating an existing code line. 
+        /// This creates a deep copy of the existing code line. 
+        /// </summary>
+        /// <param name="codeLine"> The code line that should be duplicated. </param>
+        public CodeLine(CodeLine codeLine)
+        {
+            _code = codeLine.Code;
         }
 
         /// <summary>
@@ -32,8 +42,16 @@
         /// <returns> Returns a deep copy of the CodeLine object. </returns>
         public CodeLine Duplicate()
         {
-            CodeLine dup = new CodeLine(Code);
-            return dup;
+            return new CodeLine(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the CodeLine object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the CodeLine object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new CodeLine(this) as Action;
         }
         #endregion
 

@@ -170,15 +170,15 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalAxisGoo
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
+            //Cast to ExternalRotationalAxis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
                 if (Value == null)
                     target = default(Q);
                 else if (Value.IsValid == false)
                     target = default(Q);
                 else
-                    target = (Q)(object)new ExternalAxisGoo(Value);
+                    target = (Q)(object)Value;
                 return true;
             }
 
@@ -191,6 +191,18 @@ namespace RobotComponentsABB.Goos
                     target = default(Q);
                 else
                     target = (Q)(object)new ExternalRotationalAxisGoo(Value);
+                return true;
+            }
+
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalAxisGoo(Value);
                 return true;
             }
 

@@ -67,7 +67,7 @@ namespace RobotComponentsABB.Goos
                 return null; 
 
             else if (Value is ExternalAxis) 
-                return new ExternalAxisGoo(Value.DuplicateAsExternalAxis()); 
+                return new ExternalAxisGoo(Value.DuplicateExternalAxis()); 
 
             else 
                 return null; 
@@ -229,6 +229,13 @@ namespace RobotComponentsABB.Goos
         {
             if (source == null) { return false; }
 
+            //Cast from ExternalAxis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ExternalAxis;
+                return true;
+            }
+
             //Cast from ExternalAxisGoo
             if (typeof(ExternalAxisGoo).IsAssignableFrom(source.GetType()))
             {
@@ -237,11 +244,25 @@ namespace RobotComponentsABB.Goos
                 return true;
             }
 
+            //Cast from ExternalLinearAxis
+            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ExternalAxis;
+                return true;
+            }
+
             //Cast from ExternalLinearAxisGoo
             if (typeof(ExternalLinearAxisGoo).IsAssignableFrom(source.GetType()))
             {
                 ExternalLinearAxisGoo externalLinearAxisGoo = source as ExternalLinearAxisGoo;
                 Value = externalLinearAxisGoo.Value as ExternalAxis;
+                return true;
+            }
+
+            //Cast from ExternalRotatioanlAxis
+            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ExternalAxis;
                 return true;
             }
 
@@ -281,7 +302,7 @@ namespace RobotComponentsABB.Goos
             else if (Value is ExternalAxis)
             {
                 // Get value and duplicate
-                ExternalAxis externalAxis = Value.DuplicateAsExternalAxis();
+                ExternalAxis externalAxis = Value.DuplicateExternalAxis();
                 // Transform
                 externalAxis.Transform(xform);
                 // Make new goo instance

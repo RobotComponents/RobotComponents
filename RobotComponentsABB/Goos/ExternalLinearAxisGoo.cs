@@ -175,15 +175,15 @@ namespace RobotComponentsABB.Goos
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalAxisGoo
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
+            //Cast to ExternalLinearAxis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
                 if (Value == null)
                     target = default(Q);
                 else if (Value.IsValid == false)
                     target = default(Q);
                 else
-                    target = (Q)(object)new ExternalAxisGoo(Value);
+                    target = (Q)(object)Value;
                 return true;
             }
 
@@ -196,6 +196,18 @@ namespace RobotComponentsABB.Goos
                     target = default(Q);
                 else
                     target = (Q)(object)new ExternalLinearAxisGoo(Value);
+                return true;
+            }
+
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxisGoo)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new ExternalAxisGoo(Value);
                 return true;
             }
 
@@ -227,11 +239,20 @@ namespace RobotComponentsABB.Goos
             if (typeof(Q).IsAssignableFrom(typeof(GH_Curve)))
             {
                 if (Value == null)
+                {
                     target = default(Q);
+                }
                 else if (Value.AxisCurve == null)
+                {
                     target = default(Q);
+                }
                 else
-                    target = (Q)(object) new GH_Curve(Value.AxisCurve);
+                {
+                    // Cast to a curve with a domain equal to the axis limits.
+                    Curve curve = Value.AxisCurve.DuplicateCurve();
+                    curve.Domain = Value.AxisLimits;
+                    target = (Q)(object)new GH_Curve(curve);
+                }
                 return true;
             }
 

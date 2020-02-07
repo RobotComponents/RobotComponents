@@ -154,7 +154,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Move relative to base
             Transform transNow;
-            transNow = Transform.ChangeBasis(_positionPlane, _basePlane);
+            transNow = Transform.PlaneToPlane(_basePlane, _positionPlane);
 
             // Calculates internal axes
             // First caculate all tansformations (rotations)

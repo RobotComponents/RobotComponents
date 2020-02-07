@@ -20,12 +20,11 @@ namespace RobotComponents.BaseClasses.Kinematics
         private RobotTool _robotTool;
         private Movement _movement;
         private Target _target;
-        private Plane _basePlane; // Position of the robot if external axis values are 0
-        private Plane _positionPlane; // The real position of the robot if an external axis is used       
+        private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
         private Plane _targetPlane;
         private Plane _endPlane;
 
-        private Plane[] _axisPlanes;
+        private List<Plane> _axisPlanes;
 
         private Point3d _wrist;
         private double _wristOffset;
@@ -75,25 +74,6 @@ namespace RobotComponents.BaseClasses.Kinematics
             _robotInfo = robotInfo;
             _movement = new Movement(target);
             Initialize();
-        }
-
-        /// <summary>
-        /// Initiatize an inverse kinematics from a robot movement, robot info and pre-defined axis values.
-        /// This method is only use to duplicate the current inverse kinematics. 
-        /// </summary>
-        /// <param name="movement"> The robot momvement to calculated the axis values for. </param>
-        /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        /// <param name="internalAxisValues"> The list with pre-defined internal axis values. </param>
-        /// <param name="externalAxisValues"> The list with pre-defined external axis values. </param>
-        private InverseKinematics(Movement movement, RobotInfo robotInfo, List<double> internalAxisValues, List<double> externalAxisValues)
-        {
-            _robotInfo = robotInfo;
-            _movement = movement;
-
-            Initialize();
-
-            _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
         }
 
         /// <summary>
@@ -153,17 +133,27 @@ namespace RobotComponents.BaseClasses.Kinematics
             _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
 
             // Update the base plane / position plane
-            _basePlane = _robotInfo.BasePlane;
             _positionPlane = GetClosestBasePlane();
-            Transform trans = Transform.PlaneToPlane(_positionPlane, _basePlane);
+            Transform trans = Transform.PlaneToPlane(_positionPlane, Plane.WorldXY);
+
+            // Needed for transformation from the robot world coordinate system to the local robot coordinate system
+            Transform orient = Transform.PlaneToPlane(_robotInfo.BasePlane, Plane.WorldXY);
 
             // Orient the target plane to the robot coordinate system 
             _targetPlane = ToolTransformation(_targetPlane, _robotTool.AttachmentPlane, _robotTool.ToolPlane);
             _endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips plane for TCP Offset moving in the right direction
             _endPlane.Transform(trans);
 
-            // Robot info related fields
-            _axisPlanes = _robotInfo.InternalAxisPlanes.ToArray();
+            // Deep copy and orient to internal axis planes of the robot. 
+            _axisPlanes = new List<Plane>();
+            for (int i = 0; i < _robotInfo.InternalAxisPlanes.Count; i++)
+            {
+                Plane plane = new Plane(_robotInfo.InternalAxisPlanes[i]);
+                plane.Transform(orient);
+                _axisPlanes.Add(plane);
+            } 
+
+            // Other robot info related fields
             _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
             _lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
             _upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
@@ -192,9 +182,8 @@ namespace RobotComponents.BaseClasses.Kinematics
             #region wrist center relative to axis 1
             // Note that this is reversed because the clockwise direction when looking 
             // down at the XY plane is typically taken as the positive direction for robot axis1
-
             // Caculate internal axis value 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
-            double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y - _basePlane.OriginY, _wrist.X - _basePlane.OriginX);
+            double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
             if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
             _internalAxisValue1.AddRange(Enumerable.Repeat(internalAxisValue1, 4).ToList());
 
@@ -218,7 +207,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 Point3d internalAxisPoint4 = new Point3d(_axisPlanes[4].Origin);
 
                 // Rotate the points to the correction position
-                Transform rot1 = Transform.Rotation(-1 * internalAxisValue1, _basePlane.Origin);
+                Transform rot1 = Transform.Rotation(-1 * internalAxisValue1, Point3d.Origin);
                 internalAxisPoint1.Transform(rot1);
                 internalAxisPoint2.Transform(rot1);
                 internalAxisPoint4.Transform(rot1);
@@ -226,7 +215,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 // Create the elbow projection plane
                 Vector3d elbowDir = new Vector3d(1, 0, 0);
                 elbowDir.Transform(rot1);
-                Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, _basePlane.ZAxis);
+                Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, Vector3d.ZAxis);
 
                 Sphere sphere1 = new Sphere(internalAxisPoint1, _lowerArmLength);
                 Sphere sphere2 = new Sphere(_wrist, _upperArmLength);
@@ -248,8 +237,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                     elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
                     elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
-
-                    double internalAxisValue2 = Math.Atan2(elbowY, elbowX);
+                    double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
                     double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
 
                     // Calculates the internal axis value 2 and 3 (the elbow position angles)
@@ -355,17 +343,17 @@ namespace RobotComponents.BaseClasses.Kinematics
                     ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
 
                     // Checks if external linear axis value needs to be negative or positive
-                    externalLinearAxis.AxisCurve.ClosestPoint(_basePlane.Origin, out double robotBasePlaneParam);
+                    externalLinearAxis.AxisCurve.ClosestPoint(_robotInfo.BasePlane.Origin, out double robotBasePlaneParam);
                     externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
 
                     if (basePlaneParam >= robotBasePlaneParam)
                     {
-                        _externalAxisValues.Add(_positionPlane.Origin.DistanceTo(_basePlane.Origin));
+                        _externalAxisValues.Add(_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin));
                     }
 
                     else
                     {
-                        _externalAxisValues.Add(-_positionPlane.Origin.DistanceTo(_basePlane.Origin));
+                        _externalAxisValues.Add(-_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin));
                     }
 
                     count += 1;

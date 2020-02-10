@@ -100,6 +100,6 @@
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 </Project>

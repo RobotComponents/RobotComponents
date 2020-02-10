@@ -52,6 +52,7 @@ namespace RobotComponentsABB.Components.Deconstruct
 
         // Meshes
         private List<Mesh> _meshes = new List<Mesh>() { };
+        private GH_Document _doc;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -59,6 +60,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Get the Grasshopper document
+            _doc = this.OnPingDocument();
+
             // Input variables
             GH_RobotInfo robotInfoGoo = null;
 
@@ -208,8 +212,21 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Get the display properties set by the user in GH
-            Rhino.Display.DisplayMaterial material = args.ShadeMaterial;
+            // Initiate material
+            Rhino.Display.DisplayMaterial material;
+
+            // Selected document objects
+            List<IGH_DocumentObject> selectedObjects = _doc.SelectedObjects();
+
+            // Check if component is selected
+            if (selectedObjects.Contains(this))
+            {
+                material = args.ShadeMaterial_Selected;
+            }
+            else
+            {
+                material = args.ShadeMaterial;
+            }
 
             // Display the meshes
             for (int i = 0; i != _meshes.Count; i++)

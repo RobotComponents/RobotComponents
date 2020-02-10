@@ -15,7 +15,7 @@ namespace RobotComponents.BaseClasses.Actions
         private List<double> _internalAxisValues;
         private List<double> _externalAxisValues;
         private SpeedData _speedData;
-        private int _movementType;
+        private readonly int _movementType;
         private int _precision;
 
         // Variable fields

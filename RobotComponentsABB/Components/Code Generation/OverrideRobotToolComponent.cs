@@ -61,9 +61,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            Guid documentGUID = this.OnPingDocument().DocumentID;
-
             // Input variables
             GH_RobotTool _toolGoo = new GH_RobotTool();
 

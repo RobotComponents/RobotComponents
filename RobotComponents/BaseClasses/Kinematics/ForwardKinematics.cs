@@ -21,12 +21,12 @@ namespace RobotComponents.BaseClasses.Kinematics
         private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
         private double[] _internalAxisRads; // Internal Axis Values in Radiants
         private List<Interval> _internalAxisLimits; // Internal Axis Value Limits
-        private List<bool> _internalAxisInLimit = new List<bool>(); // Internal Axis in Limit?: Bool List
+        private readonly List<bool> _internalAxisInLimit = new List<bool>(); // Internal Axis in Limit?: Bool List
 
         private Plane[] _externalAxisPlanes; // External Axis Planes 
         private List<double> _externalAxisValues = new List<double>(); // External Axis Values in degrees or meters
         private List<Interval> _externalAxisLimits; // External Axis Value Limits
-        private List<bool> _externalAxisInLimit = new List<bool>(); // External Axis in Limit?: Bool List
+        private readonly List<bool> _externalAxisInLimit = new List<bool>(); // External Axis in Limit?: Bool List
 
         private readonly List<string> _errorText = new List<string>(); // Error text
 

@@ -127,7 +127,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             {
                 for (int i = 0; i < movements.Count - 1; i++)
                 {
-                    #region Absolut Joint Movement (from Action.AbsolutJointMovement)
+                    #region Absolute Joint Movement (from Action.AbsolutJointMovement)
                     if (movements[i + 1] is AbsoluteJointMovement)
                     {
                         // Get the movement
@@ -421,12 +421,6 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                                 // Create new plane: the local target plane (in work object coordinate space)
                                 Plane plane = new Plane(planePoints[l], axisDirections[l][0], axisDirections[l][1]);
-
-                                // Update sub target and sub movement
-                                //subTarget = new Target("subTarget", plane, movement2.Target.AxisConfig, externalAxisValues);
-                                //subMovement = new Movement(subTarget);
-                                //subMovement.RobotTool = movement2.RobotTool;
-                                //subMovement.WorkObject = movement2.WorkObject;
 
                                 // Update the target
                                 subTarget.Plane = plane;

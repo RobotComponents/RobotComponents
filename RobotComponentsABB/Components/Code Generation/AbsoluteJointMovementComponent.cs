@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
         // Fields
         private bool _overrideRobotTool = false;
-        private List<string> _targetNames = new List<string>();
+        private readonly List<string> _targetNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;

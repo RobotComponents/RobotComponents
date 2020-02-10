@@ -58,7 +58,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
-        private List<string> _speedDataNames = new List<string>();
+        private readonly List<string> _speedDataNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;

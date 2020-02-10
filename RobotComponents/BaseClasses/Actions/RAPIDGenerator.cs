@@ -58,32 +58,6 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Private constructor with as arguments all the fields of this class. 
-        /// This constructor is only used to create duplicates. 
-        /// </summary>
-        /// <param name="moduleName"> The name of module / program. </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        /// <param name="filePath"> The path where the code files should be saved. </param>
-        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
-        /// <param name="robotInfo"> The robot info wherefore the code should be created. </param>
-        /// <param name="rapidCode"> The RAPID main code. </param>
-        /// <param name="baseCode"> The BASE code. </param>
-        /// <param name="firstMovementIsMoveAbs"> A boolean that indicates if the first movememtn is an absolute joint movement. </param>
-        private RAPIDGenerator(string moduleName, List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo,
-            string rapidCode, string baseCode, bool firstMovementIsMoveAbs)
-        {
-            _ModuleName = moduleName;
-            _robotInfo = robotInfo;
-            _actions = actions;
-            _filePath = filePath;
-            _saveToFile = saveToFile;
-            _RAPIDCode = rapidCode;
-            _BASECode = baseCode;
-            _firstMovementIsMoveAbs = firstMovementIsMoveAbs;
-            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), _robotInfo);
-        }
-
-        /// <summary>
         /// Creates a new RAPID generator by duplicating an existing RAPID generator. 
         /// This creates a deep copy of the existing RAPID generator. 
         /// </summary>

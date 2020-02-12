@@ -60,7 +60,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
+            pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
 
             pManager[2].Optional = true;
         }

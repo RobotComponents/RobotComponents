@@ -59,7 +59,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
-            pManager.AddIntegerParameter("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.", GH_ParamAccess.list, 0);
+            pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
         }
 
         // Register the number of fixed input parameters

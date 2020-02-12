@@ -1,20 +1,28 @@
 # Robot Components
-Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper.
+Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper. RobotComponents has the following possibilities and advantages: 
 
-PLUGIN DESCRIPTION...
+- Predefined ABB robots
+- Possibility to define your own robot
+- Support for external axes
+- Possibility to override all the external axis values
+- Support for work objects including the support for movable work objects
+- An inverse kinematics and forward kinematics component
+- Possibility to add your own custom code lines
+- Support for setting up a real-time connection with the IRC5 controller
 
 ## Getting Started
-You can download the latest release directly from this repository's [releases page](https://github.com/EDEK-UniKassel/RobotComponentsSource/releases). Unzip the donwloaded archive and copy all files in the Grasshopper Components folder (in GH, File > SPecial Folders > Components Folder). Right click on all files to make sure they are not blocked. Restart Rhino and you are ready to go!
+You can download the latest release directly from this repository's [releases page](https://github.com/EDEK-UniKassel/RobotComponentsSource/releases). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > SPecial Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
 
-You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/ExampleFiles).
+You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/ExampleFiles). 
+
 A release on Food4Rhino is planned in the next months.
 
 ## Credits
 ![EDEK_logo](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/Utility/181101_EDEK-LOGO-01.png)
 
-The project is a development from the [Department of Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/). Supervised by the head of the department Prof. Eversmann. The technical development is initiated and executed by the research associate and student assistants which are listed [here](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md).
+The project is a development from the [Department of Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/). Supervised by the head of the department Prof. Eversmann. The technical development is initiated and executed by the research associates and student assistants which are listed [here](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md).
 
-RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project here: http://developercenter.robotstudio.com/landing
+RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project [here](http://developercenter.robotstudio.com/landing).
 
 ## Known Issues
 Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues/new).
@@ -27,11 +35,11 @@ Planned developments:
 ## Contribute
 **Bug reports**: Please report bugs at our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). 
 
-**Feature requests**: Feature request can be proposed on our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). Please include how this feature should work by explaining it in detail and if possible by adding relevant documentation from e.g. ABB. 
+**Feature requests**: Feature request can be proposed on our [issue page](https://github.com/EDEK-UniKassel/RobotComponentsSource/issues). Please include how this feature should work by explaining it in detail and if possible by adding relevant documentation (from e.g. ABB). 
 
 **Code contributions**: We accept code contributions through [pull requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests). For this you have to [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) or [clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) this repository. To compile the code all necesarry references are placed in the folder [DLLs](https://github.com/EDEK-UniKassel/RobotComponentsSource/tree/master/DLLs). For questions you can contact one of the [developers](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md). 
 
-**Adding support for other brands**: To a certain extent RobotComponents is prepared to implemented the support of other robot brands (e.g. Fanuc and KUKA). RobotComponent is splitted in multiple parts: RobotComponents.dll which contains all the base classes, RobotComponentsGoos.dll which contains the Grasshopper wrapper classses and RobotComponentsABB.gha which contains all the components and parameters. Since we splitted RobotComponents in multiple parts the support for other robot brands can be implemented in a few different ways. For that reason and that we want to keep RobotComponents as intiviute as possible we kindly ask you to contact one of the [developers](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md) if you want to implement other robot brands. We are happy to contribute to and support this development.
+**Adding support for other brands**: To a certain extent RobotComponents is prepared to implemented the support of other robot brands (e.g. Fanuc and KUKA). RobotComponent is splitted in multiple parts: RobotComponents.dll which contains all the base classes, RobotComponentsGoos.dll which contains the Grasshopper wrapper classses and RobotComponentsABB.gha which contains all the components and parameters. Since we splitted RobotComponents in multiple parts the support for other robot brands can be implemented in a few different ways. For that reason and that we want to keep RobotComponents as intuitive as possible we kindly ask you to contact one of the [developers](https://github.com/EDEK-UniKassel/RobotComponentsSource/blob/master/AUTHORS.md) if you want to implement other robot brands. We are happy to contribute to and support this development.
 
 ## Cite RobotComponents
 RobotComponents is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating RobotComponents, and we would appreciate if you would cite if you used. To cite RobotComponents in publications use:

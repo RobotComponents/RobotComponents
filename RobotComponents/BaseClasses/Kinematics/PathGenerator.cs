@@ -326,11 +326,11 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                                 forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                                 forwardKinematics.Calculate();
-                                movement1 = new Movement(new Target("joinTarget", forwardKinematics.TCPPlane));
+                                movement1 = new Movement(new Target("jointTarget", forwardKinematics.TCPPlane));
                             }
 
                             // If both movements are on the same work object
-                            if (movement1.WorkObject == movement2.WorkObject)
+                            if (movement1.WorkObject.Name == movement2.WorkObject.Name)
                             {
                                 plane1 = movement1.Target.Plane;
                                 plane2 = movement2.Target.Plane;
@@ -354,7 +354,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 // Or if we switch between to movable workobjects with two different external axes
                                 if (movement1.WorkObject.ExternalAxis == null
                                     && movement2.WorkObject.ExternalAxis != null
-                                    && movement2.WorkObject.ExternalAxis != movement1.WorkObject.ExternalAxis)
+                                    && movement2.WorkObject.ExternalAxis.Name != movement1.WorkObject.ExternalAxis.Name)
                                 {
                                     // Get axis logic of the external axis of the movable work object we are using.
                                     movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic);
@@ -546,7 +546,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 else if (actions[i] is Movement)
                 {
                     // Duplicate the movement since we might change properties
-                    Movement movement = ((Movement)actions[i]); // .Duplicate(); // TODO: causes a bug
+                    Movement movement = ((Movement)actions[i]).DuplicateWithoutMesh();
 
                     // Set the current tool if no tool is set in the movement object
                     if (movement.RobotTool == null)
@@ -576,7 +576,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 else if (actions[i] is AbsoluteJointMovement)
                 {
                     // Duplicate the movement since we might change properties
-                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).Duplicate();
+                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).DuplicateWithoutMesh();
 
                     // Set the current tool if no tool is set in the movement object
                     if (jointMovement.RobotTool == null)

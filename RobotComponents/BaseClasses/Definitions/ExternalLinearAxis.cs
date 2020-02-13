@@ -154,18 +154,28 @@ namespace RobotComponents.BaseClasses.Definitions
         /// This creates a deep copy of the existing axis.
         /// </summary>
         /// <param name="externalLinearAxis"> The external linear axis that should be duplicated. </param>
-        public ExternalLinearAxis(ExternalLinearAxis externalLinearAxis)
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public ExternalLinearAxis(ExternalLinearAxis externalLinearAxis, bool duplicateMesh = true)
         {
             _name = externalLinearAxis.Name;
             _axisPlane = new Plane(externalLinearAxis.AxisPlane);
             _attachmentPlane = new Plane(externalLinearAxis.AttachmentPlane);
             _axisLimits = new Interval(externalLinearAxis.AxisLimits);
             _axisNumber = externalLinearAxis.AxisNumber;
-            _baseMesh = externalLinearAxis.BaseMesh.DuplicateMesh();
-            _linkMesh = externalLinearAxis.LinkMesh.DuplicateMesh();
-            _posedMeshes = externalLinearAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            _axisCurve = externalLinearAxis.AxisCurve;
 
-            Initialize();
+            if (duplicateMesh == true)
+            {
+                _baseMesh = externalLinearAxis.BaseMesh.DuplicateMesh();
+                _linkMesh = externalLinearAxis.LinkMesh.DuplicateMesh();
+                _posedMeshes = externalLinearAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            }
+            else
+            {
+                _baseMesh = new Mesh();
+                _linkMesh = new Mesh();
+                _posedMeshes = new List<Mesh>();
+            }
         }
 
         /// <summary>
@@ -178,12 +188,30 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// A method to duplicate the ExternalLinearAxis object without duplicating the mesh. It will set an empty mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the ExternalLinearAxis object without a mesh. </returns>
+        public ExternalLinearAxis DuplicateWithoutMesh()
+        {
+            return new ExternalLinearAxis(this, false);
+        }
+
+        /// <summary>
         /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object. </returns>
         public override ExternalAxis DuplicateExternalAxis()
         {
             return new ExternalLinearAxis(this) as ExternalAxis;
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object without the mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object with empty meshes. </returns>
+        public override ExternalAxis DuplicateExternalAxisWithoutMesh()
+        {
+            return new ExternalLinearAxis(this, false) as ExternalAxis;
         }
         #endregion
 

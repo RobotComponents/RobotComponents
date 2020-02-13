@@ -137,10 +137,10 @@ namespace RobotComponents.BaseClasses.Definitions
         /// This creates a deep copy of the existing robot tool.
         /// </summary>
         /// <param name="robotTool"> The robot tool that should be duplicated. </param>
-        public RobotTool(RobotTool robotTool)
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public RobotTool(RobotTool robotTool, bool duplicateMesh = true)
         {
             _name = robotTool.Name;
-            _mesh = robotTool.Mesh.DuplicateMesh();
             _attachmentPlane = new Plane(robotTool.AttachmentPlane);
             _toolPlane = new Plane(robotTool.ToolPlane);
 
@@ -152,6 +152,10 @@ namespace RobotComponents.BaseClasses.Definitions
 
             _position = new Vector3d(robotTool.Position);
             _orientation = robotTool.Orientation;
+
+            if (duplicateMesh == true) { _mesh = robotTool.Mesh.DuplicateMesh(); }
+            else { }//_mesh = new Mesh(); }
+
         }
 
         /// <summary>
@@ -169,9 +173,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the RobotTool object without a mesh. </returns>
         public RobotTool DuplicateWithoutMesh()
         {
-            RobotTool dup = new RobotTool(Name, new Mesh(), AttachmentPlane, ToolPlane, RobotHold,
-                Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
-            return dup;
+            return new RobotTool(this, false);
         }
         #endregion
 

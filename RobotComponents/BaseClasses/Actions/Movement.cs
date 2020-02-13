@@ -124,25 +124,45 @@ namespace RobotComponents.BaseClasses.Actions
         /// This creates a deep copy of the existing movement. 
         /// </summary>
         /// <param name="movement"> The movement that should be duplicated. </param>
-        public Movement(Movement movement)
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public Movement(Movement movement, bool duplicateMesh = true)
         {
             _target = movement.Target.Duplicate();
             _speedData = movement.SpeedData.Duplicate();
             _movementType = movement.MovementType;
             _precision = movement.Precision;
-            _robotTool = movement.RobotTool.Duplicate();
-            _workObject = movement.WorkObject.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
             _globalTargetPlane = new Plane(movement.GlobalTargetPlane);
+
+            if (duplicateMesh == true)
+            {
+                _robotTool = movement.RobotTool.Duplicate();
+                _workObject = movement.WorkObject.Duplicate();
+            }
+            else
+            {
+                _robotTool = movement.RobotTool.DuplicateWithoutMesh();
+                _workObject = movement.WorkObject.DuplicateWithoutMesh();
+            }
         }
 
         /// <summary>
         /// Duplicates a robot movement.
         /// </summary>
-        /// <returns></returns>
+        /// <returns> Returns a deep copy of the Movement object. </returns>
         public Movement Duplicate()
         {
             return new Movement(this);
+        }
+
+        /// <summary>
+        /// Duplicates a robot movement without meshes that are part of the properties.
+        /// Such as the robot tool meshes and the meshes of the external axis that can be attached to the work object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Movement object. </returns>
+        public Movement DuplicateWithoutMesh()
+        {
+            return new Movement(this, false);
         }
 
         /// <summary>
@@ -208,7 +228,7 @@ namespace RobotComponents.BaseClasses.Actions
             if (_workObject.ExternalAxis != null)
             {
                 // Check if the axis is attached to the robot and get the axis logic number
-                axisLogic = robotInfo.ExternalAxis.IndexOf(_workObject.ExternalAxis);
+                axisLogic = robotInfo.ExternalAxis.FindIndex(p => p.Name == _workObject.ExternalAxis.Name);
                 ExternalAxis externalAxis = robotInfo.ExternalAxis[axisLogic];
 
                 // Get external axis value

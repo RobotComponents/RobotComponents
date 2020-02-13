@@ -99,18 +99,27 @@ namespace RobotComponents.BaseClasses.Definitions
         /// This creates a deep copy of the existing axis.
         /// </summary>
         /// <param name="externalRotationalAxis"> The external rotational axis that should be duplicated. </param>
-        public ExternalRotationalAxis(ExternalRotationalAxis externalRotationalAxis)
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public ExternalRotationalAxis(ExternalRotationalAxis externalRotationalAxis, bool duplicateMesh = true)
         {
             _name = externalRotationalAxis.Name;
             _axisPlane = new Plane(externalRotationalAxis.AxisPlane);
             _attachmentPlane = new Plane(externalRotationalAxis.AttachmentPlane);
             _axisLimits = new Interval(externalRotationalAxis.AxisLimits);
             _axisNumber = externalRotationalAxis.AxisNumber;
-            _baseMesh = externalRotationalAxis.BaseMesh.DuplicateMesh();
-            _linkMesh = externalRotationalAxis.LinkMesh.DuplicateMesh();
-            _posedMeshes = externalRotationalAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
 
-            Initialize();
+            if (duplicateMesh == true)
+            {
+                _baseMesh = externalRotationalAxis.BaseMesh.DuplicateMesh();
+                _linkMesh = externalRotationalAxis.LinkMesh.DuplicateMesh();
+                _posedMeshes = externalRotationalAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            }
+            else
+            {
+                _baseMesh = new Mesh();
+                _linkMesh = new Mesh();
+                _posedMeshes = new List<Mesh>();
+            }
         }
 
         /// <summary>
@@ -123,12 +132,30 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object without duplicating the mesh. It will set an empty mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the ExternalRotationalObject without a mesh. </returns>
+        public ExternalRotationalAxis DuplicateWithoutMesh()
+        {
+            return new ExternalRotationalAxis(this, false);
+        }
+
+        /// <summary>
         /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object. 
         /// </summary>
         /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object. </returns>
         public override ExternalAxis DuplicateExternalAxis()
         {
             return new ExternalRotationalAxis(this) as ExternalAxis;
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object without the mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object with empty meshes. </returns>
+        public override ExternalAxis DuplicateExternalAxisWithoutMesh()
+        {
+            return new ExternalRotationalAxis(this, false) as ExternalAxis;
         }
         #endregion
 

@@ -75,24 +75,22 @@ namespace RobotComponents.BaseClasses.Definitions
         /// Creates a new work object by duplicating an existing movement.
         /// This creates a deep copy of the existing work object.
         /// </summary>
-        /// <param name="workObject"> The movement that should be duplicated. </param>
-        public WorkObject(WorkObject workObject)
+        /// <param name="workObject"> The work object that should be duplicated. </param>
+        /// <param name="duplicateMesh"> A boolean that indicates if the meshes should be duplicated. </param>
+        public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
-            _robotHold = workObject.RobotHold;
             _userFrame = new Plane(workObject.UserFrame);
+            _globalPlane = new Plane(workObject.GlobalWorkObjectPlane);
+            _userFrameOrientation = workObject.UserFrameOrientation;
+            _orientation = workObject.Orientation;
+            _robotHold = workObject.RobotHold;
+            _fixedFrame = workObject.FixedFrame;
 
-            if (workObject.ExternalAxis == null)
-            {
-                _externalAxis = null;
-            }
-            else
-            {
-                _externalAxis = workObject.ExternalAxis; // TODO: .DuplicateExternalAxis() is causing an error in the RAPID and path generator
-            }
-
-            Initialize();
+            if (workObject.ExternalAxis == null) { _externalAxis = null; }
+            else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); } // TODO: This is making the path and RAPID generator slow!
+            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); } // TODO: This is making the path and RAPID generator slow!            
         }
 
         /// <summary>
@@ -102,6 +100,15 @@ namespace RobotComponents.BaseClasses.Definitions
         public WorkObject Duplicate()
         {
             return new WorkObject(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the WorkObject object without meshes. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the WorkObject object with an external axis with empty meshes. </returns>
+        public WorkObject DuplicateWithoutMesh()
+        {
+            return new WorkObject(this, false);
         }
         #endregion
 

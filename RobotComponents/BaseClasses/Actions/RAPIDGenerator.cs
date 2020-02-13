@@ -298,7 +298,7 @@ namespace RobotComponents.BaseClasses.Actions
                 else if (actions[i] is Movement)
                 {
                     // Duplicate the movement since we might change properties
-                    Movement movement = ((Movement)actions[i]).Duplicate();
+                    Movement movement = ((Movement)actions[i]).DuplicateWithoutMesh();
 
                     // Set the current tool if no tool is set in the movement object
                     if (movement.RobotTool == null)
@@ -327,7 +327,7 @@ namespace RobotComponents.BaseClasses.Actions
                 else if (actions[i] is AbsoluteJointMovement)
                 {
                     // Duplicate the movement since we might change properties
-                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).Duplicate();
+                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).DuplicateWithoutMesh();
 
                     // Set the current tool if no tool is set in the movement object
                     if (jointMovement.RobotTool == null)

@@ -110,7 +110,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// This creates a deep copy of the existing absolute joint movement. 
         /// </summary>
         /// <param name="jointMovement"> The absolute joint movement that should be duplicated. </param>
-        public AbsoluteJointMovement(AbsoluteJointMovement jointMovement)
+        /// <param name="duplicateMesh"> A boolean that indicates if the meshes should be duplicated. </param>
+        public AbsoluteJointMovement(AbsoluteJointMovement jointMovement, bool duplicateMesh = true)
         {
             _name = jointMovement.Name;
             _internalAxisValues = new List<double>(jointMovement.InternalAxisValues);
@@ -118,7 +119,9 @@ namespace RobotComponents.BaseClasses.Actions
             _speedData = jointMovement.SpeedData.Duplicate();
             _movementType = jointMovement.MovementType;
             _precision = jointMovement.Precision;
-            _robotTool = jointMovement.RobotTool.Duplicate();
+
+            if (duplicateMesh == true) { _robotTool = jointMovement.RobotTool.Duplicate(); }
+            else { _robotTool = jointMovement.RobotTool.DuplicateWithoutMesh(); }
         }
 
         /// <summary>
@@ -128,6 +131,15 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement Duplicate()
         {
             return new AbsoluteJointMovement(this);
+        }
+
+        /// <summary>
+        /// Duplicates a robot movement without attached robot tool meshes.
+        /// </summary>
+        /// <returns> Returns a deep copy of the AbsoluteJointMovement object without attached RobotTool meshes. </returns>/returns>
+        public AbsoluteJointMovement DuplicateWithoutMesh()
+        {
+            return new AbsoluteJointMovement(this, false);
         }
 
         /// <summary>

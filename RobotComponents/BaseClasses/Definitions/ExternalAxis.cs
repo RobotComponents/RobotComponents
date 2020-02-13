@@ -24,6 +24,12 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         /// <returns> Returns a deep copy of the ExternalAxis object. </returns>
         public abstract ExternalAxis DuplicateExternalAxis();
+
+        /// <summary>
+        /// A method to duplicate the object as an ExternalAxis type with an empty mesh.
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalAxis object with empty meshes. </returns>
+        public abstract ExternalAxis DuplicateExternalAxisWithoutMesh();
         #endregion
 
         #region methods

@@ -45,7 +45,7 @@ Planned developments:
 RobotComponents is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating RobotComponents, and we would appreciate if you would cite if you used. To cite RobotComponents in publications use:
 
 ```
-NAME?, NAME?, NAME? OR NAME OF DEPARTMENT? (2020).  
+EDEK Uni Kassel (2020).  
 RobotComponents v0.06.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/EDEK-UniKassel/RobotComponents
 ```
@@ -58,7 +58,7 @@ Note that there are two reasons for citing the software used. One is giving reco
 ## License
 Robot Components
 
-Copyright (c) 2020, WHO HAS THE COPYRIGHT???
+Copyright (c) 2020, EDEK Uni Kassel
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 

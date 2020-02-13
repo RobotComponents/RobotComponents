@@ -561,10 +561,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                     }
 
                     // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-                    else
-                    {
-                        movement.RobotTool.Mesh = new Mesh(); // save memory
-                    }
 
                     // Add movement to list
                     result.Add(movement);
@@ -591,10 +587,6 @@ namespace RobotComponents.BaseClasses.Kinematics
                     }
 
                     // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-                    else
-                    {
-                        jointMovement.RobotTool.Mesh = new Mesh(); // save memory
-                    }
 
                     // Add movement to list
                     result.Add(jointMovement);

@@ -389,6 +389,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
+            // Set tool name
+            string toolName;
+
+            // Check first if a tool is set
+            if (_robotTool == null) { toolName = RAPIDGenerator.CurrentTool; }
+            // Check if a tool is set by checking the name (tool can be empty)
+            else if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = RAPIDGenerator.CurrentTool; } //TODO: RobotTool.IsValid is maybe better?
+            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+            else { toolName = _robotTool.Name; }
+
             // Set zone data text (precision value)
             string zoneName;
             if (_precision < 0) { zoneName = @", fine, "; }
@@ -404,19 +414,19 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
                 }
 
                 // MoveL
                 else if (_movementType == 1)
                 {
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveL " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
                 }
 
                 // MoveJ
                 else if (_movementType == 2)
                 {
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveJ " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
                 }
             }
 
@@ -428,7 +438,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (_movementType == 0)
                 {
                     // Add the code line for the absolute joint movement
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + _target.JointTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
                     // Add the code line for the digital output
                     _digitalOutput.ToRAPIDFunction(RAPIDGenerator);
                 }
@@ -436,13 +446,13 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveLDO
                 else if (_movementType == 1)
                 {
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveLDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
                 }
 
                 // MoveJDO
                 else if (_movementType == 2)
                 {
-                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + _robotTool.Name + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveJDO " + _target.RobTargetName + @", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + @", " + _digitalOutput.Name + @", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
                 }
 
             }

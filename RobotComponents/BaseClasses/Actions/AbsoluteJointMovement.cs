@@ -215,7 +215,14 @@ namespace RobotComponents.BaseClasses.Actions
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             // Set tool name
-            string toolName = _robotTool.Name;
+            string toolName;
+
+            // Check first if a tool is set
+            if (_robotTool == null) { toolName = RAPIDGenerator.CurrentTool; }
+            // Check if a tool is set by checking the name (tool can be empty)
+            else if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = RAPIDGenerator.CurrentTool; } //TODO: RobotTool.IsValid is maybe better?
+            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+            else { toolName = _robotTool.Name; }
 
             // Set zone data text (precision value)
             string zoneName;

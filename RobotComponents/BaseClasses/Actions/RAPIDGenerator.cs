@@ -29,6 +29,7 @@ namespace RobotComponents.BaseClasses.Actions
         private string _ModuleName; // The module name of the rapid main code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
+        private string _currentTool; // The current tool that should be used
         #endregion
 
         #region constructors
@@ -99,11 +100,11 @@ namespace RobotComponents.BaseClasses.Actions
             _speedDatas.Clear();
             _targets.Clear();
 
+            // Set current tool
+            _currentTool = _robotInfo.Tool.Name;
+
             // Creates String Builder
             _stringBuilder = new StringBuilder();
-
-            // Set the tool data at the movement level
-            List<Action> actions = SetToolData(_actions);
 
             // Creates Main Module
             _stringBuilder.Append("MODULE " + _ModuleName + "@");
@@ -114,9 +115,9 @@ namespace RobotComponents.BaseClasses.Actions
             _stringBuilder.Append("@");
 
             // Creates Vars
-            for (int i = 0; i != actions.Count; i++)
+            for (int i = 0; i != _actions.Count; i++)
             {
-                actions[i].InitRAPIDVar(this);
+                _actions[i].InitRAPIDVar(this);
             }
 
             // Create Program
@@ -126,17 +127,24 @@ namespace RobotComponents.BaseClasses.Actions
             bool foundFirstMovement = false;
 
             // Creates Movement Instruction and other Functions
-            for (int i = 0; i != actions.Count; i++)
+            for (int i = 0; i != _actions.Count; i++)
             {
-                actions[i].ToRAPIDFunction(this);
+                _actions[i].ToRAPIDFunction(this);
+
+                // Check if the action is an override robot tool: if so, set new current tool
+                if (_actions[i] is OverrideRobotTool overrideRobotTool)
+                {
+                    // Override the current tool
+                    _currentTool = overrideRobotTool.RobotTool.Name;
+                }
 
                 // Checks if first movement is MoveAbsJ
                 if (foundFirstMovement == false)
                 {
                     // Absolute joint movement found in Action.Movement
-                    if (actions[i] is Movement)
+                    if (_actions[i] is Movement)
                     {
-                        if (((Movement)actions[i]).MovementType == 0)
+                        if (((Movement)_actions[i]).MovementType == 0)
                         {
                             _firstMovementIsMoveAbs = true;
                         }
@@ -145,7 +153,7 @@ namespace RobotComponents.BaseClasses.Actions
                     }
 
                     // Absolute joint movement found as Action.JointMovement
-                    else if (actions[i] is AbsoluteJointMovement)
+                    else if (_actions[i] is AbsoluteJointMovement)
                     {
                         _firstMovementIsMoveAbs = true;
                         foundFirstMovement = true;
@@ -156,7 +164,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Closes Program
             _stringBuilder.Append("@" + "\t" + "ENDPROC");
             // Closes Module
-            _stringBuilder.Append("@"  + "@" + "ENDMODULE");
+            _stringBuilder.Append("@" + "@" + "ENDMODULE");
 
             // Replaces@ with newLines
             _stringBuilder.Replace("@", System.Environment.NewLine);
@@ -261,103 +269,6 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 result += robotTools[i].GetRSToolData();
                 result += "@" + " ";
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Sets the correct tool at the movement level before the actions
-        /// are passed to the code generation. 
-        /// </summary>
-        /// <param name="actions"> The list with actions to defined the robot tools for. </param>
-        /// <returns> The lists with actions wherein all movements have a set robot tool. </returns>
-        private List<Action> SetToolData(List<Action> actions)
-        {
-            // Initiate output
-            List<Action> result = new List<Action>();
-
-            // Initiate current tool (the tool attached to the robot)
-            RobotTool currentTool = _robotInfo.Tool.DuplicateWithoutMesh();
-
-            // Loop over all the actions
-            for (int i = 0; i < actions.Count; i++)
-            {
-                #region  Check if the Override Robot Tool action is used
-                if (actions[i] is OverrideRobotTool overrideRobotTool)
-                {
-                    // Override the current tool
-                    currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
-
-                    // Add to output list
-                    result.Add(actions[i]);
-                }
-                #endregion
-
-                #region Check if the action is a movement
-                else if (actions[i] is Movement)
-                {
-                    // Duplicate the movement since we might change properties
-                    Movement movement = ((Movement)actions[i]).DuplicateWithoutMesh();
-
-                    // Set the current tool if no tool is set in the movement object
-                    if (movement.RobotTool == null)
-                    {
-                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
-                    }
-
-                    // Check if a tool is set by checking the name (tool can be empty)
-                    else if (movement.RobotTool.Name == "" || movement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
-                    {
-                        movement.RobotTool = currentTool.DuplicateWithoutMesh();
-                    }
-
-                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-                    else
-                    {
-                        movement.RobotTool.Mesh = new Mesh(); // save memory
-                    }
-
-                    // Add movement to list
-                    result.Add(movement);
-                }
-                #endregion
-
-                #region Check if action is a joint movement
-                else if (actions[i] is AbsoluteJointMovement)
-                {
-                    // Duplicate the movement since we might change properties
-                    AbsoluteJointMovement jointMovement = ((AbsoluteJointMovement)actions[i]).DuplicateWithoutMesh();
-
-                    // Set the current tool if no tool is set in the movement object
-                    if (jointMovement.RobotTool == null)
-                    {
-                        jointMovement.RobotTool = currentTool.DuplicateWithoutMesh();
-                    }
-
-                    // Check if a tool is set by checking the name (tool can be empty)
-                    else if (jointMovement.RobotTool.Name == "" || jointMovement.RobotTool.Name == null) //TODO: RobotTool.IsValid is maybe better?
-                    {
-                        jointMovement.RobotTool = currentTool.DuplicateWithoutMesh();
-                    }
-
-                    // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-                    else
-                    {
-                        jointMovement.RobotTool.Mesh = new Mesh(); // save memory
-                    }
-
-                    // Add movement to list
-                    result.Add(jointMovement);
-                }
-                #endregion
-
-                #region All other actions
-                else
-                {
-                    result.Add(actions[i]);
-                }
-                #endregion
             }
 
             return result;
@@ -471,12 +382,12 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public RobotInfo RobotInfo
         {
-            get 
-            { 
-                return _robotInfo; 
+            get
+            {
+                return _robotInfo;
             }
-            set 
-            { 
+            set
+            {
                 _robotInfo = value;
                 _inverseKinematics.RobotInfo = _robotInfo;
             }
@@ -504,7 +415,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
         /// </summary>
         /// 
-        public Dictionary<string, SpeedData> SpeedDatas 
+        public Dictionary<string, SpeedData> SpeedDatas
         {
             get { return _speedDatas; }
         }
@@ -512,33 +423,39 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Dictionary that stores all Movements that are used by the RAPID Generator. 
         /// </summary>
-        public Dictionary<string, Movement> Movements 
+        public Dictionary<string, Movement> Movements
         {
-            get { return _movements; } 
+            get { return _movements; }
         }
 
         /// <summary>
         /// Dictionary that stores all Targets that are used by the RAPID Generator. 
         /// </summary>
-        public Dictionary<string, Target> Targets 
+        public Dictionary<string, Target> Targets
         {
-            get { return _targets; } 
+            get { return _targets; }
         }
 
         /// <summary>
         /// The inverse kinematics used by the RAPID Generator. 
         /// </summary>s
-        public InverseKinematics InverseKinematics 
+        public InverseKinematics InverseKinematics
         {
-            get { return _inverseKinematics; } 
+            get { return _inverseKinematics; }
         }
 
         /// <summary>
         /// Stringbuilder used by the RAPID Generator. 
         /// </summary>
-        public StringBuilder StringBuilder 
+        public StringBuilder StringBuilder
         {
-            get { return _stringBuilder; } 
+            get { return _stringBuilder; }
+        }
+
+        public string CurrentTool
+        {
+            get { return _currentTool; }
+            set { _currentTool = value; }
         }
         #endregion
     }

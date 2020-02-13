@@ -108,7 +108,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _axisNumber = externalRotationalAxis.AxisNumber;
             _baseMesh = externalRotationalAxis.BaseMesh.DuplicateMesh();
             _linkMesh = externalRotationalAxis.LinkMesh.DuplicateMesh();
-            _posedMeshes = new List<Mesh>(externalRotationalAxis.PosedMeshes);
+            _posedMeshes = externalRotationalAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
 
             Initialize();
         }

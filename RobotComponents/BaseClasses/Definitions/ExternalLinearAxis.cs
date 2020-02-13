@@ -163,7 +163,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _axisNumber = externalLinearAxis.AxisNumber;
             _baseMesh = externalLinearAxis.BaseMesh.DuplicateMesh();
             _linkMesh = externalLinearAxis.LinkMesh.DuplicateMesh();
-            _posedMeshes = new List<Mesh>(externalLinearAxis.PosedMeshes);
+            _posedMeshes = externalLinearAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
 
             Initialize();
         }

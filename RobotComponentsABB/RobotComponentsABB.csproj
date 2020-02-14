@@ -627,6 +627,11 @@
     <None Include="Resources\DeconstructAbsoluteJointMovement_Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ExternalRotationalAxis_Parameter_Icon.png" />
+    <None Include="Resources\DeconstructExternalRotationalAxis_Icon.png" />
+    <None Include="Resources\ExternalRotationalAxis_Icon.png" />
+    <None Include="Resources\Action_Parameter_Icon.png" />
+    <None Include="Resources\ExternalAxis_Parameter_Icon.png" />
     <Content Include="Resources\IRB1200_5_0_90_link_2.txt" />
     <Content Include="Resources\IRB1200_5_0_90_link_3.txt" />
     <Content Include="Resources\IRB1200_5_0_90_link_4.txt" />
@@ -648,6 +653,7 @@
     <Content Include="Resources\IRB4600_shared_link_1.txt" />
     <Content Include="Resources\IRB4600_shared_link_2.txt" />
     <Content Include="Resources\IRB4600_shared_link_3.txt" />
+    <None Include="Resources\QuatToPlane_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

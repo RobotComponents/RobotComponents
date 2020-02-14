@@ -45,8 +45,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            //get { return Properties.Resources.Action_Parameter_Icon; }
-            get { return null; }
+            get { return Properties.Resources.Action_Parameter_Icon; }
         }
 
         /// <summary>

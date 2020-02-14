@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; } //Todo, provide an icon.
+            get { return Properties.Resources.ExternalRotationalAxis_Parameter_Icon; }
         }
 
         /// <summary>

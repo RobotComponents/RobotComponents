@@ -123,6 +123,12 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <summary>
         /// Provides an Icon for the component
         /// </summary>
+        /// 
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
         protected override System.Drawing.Bitmap Icon
         {
             get { return Properties.Resources.DeconstructRobotTool_Icon; }

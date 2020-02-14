@@ -124,6 +124,9 @@
   <data name="AbsoluteJointMovement_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AbsoluteJointMovement_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Action_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Action_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Auto_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Auto_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -154,6 +157,9 @@
   <data name="DeconstructExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructExternalRotationalAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructExternalRotationalAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeconstructMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -178,11 +184,20 @@
   <data name="DigitalOutput_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DigitalOutput_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ExternalAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExternalLinearAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalLinearAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalRotationalAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalRotationalAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalRotationalAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalRotationalAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FlipPlaneX_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FlipPlaneX_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -558,6 +573,9 @@
   </data>
   <data name="Plane_Visualizer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Plane_Visualizer_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuatToPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuatToPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RAPID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RAPID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

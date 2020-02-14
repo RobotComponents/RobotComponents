@@ -60,6 +60,11 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(2, workObjectGoo.Value.ExternalAxis);
         }
 
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
         /// <summary>
         /// Provides an Icon for the component
         /// </summary>

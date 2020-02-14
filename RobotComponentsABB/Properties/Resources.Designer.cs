@@ -83,6 +83,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Action_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Action_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Auto_Icon {
             get {
                 object obj = ResourceManager.GetObject("Auto_Icon", resourceCulture);
@@ -183,6 +193,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructExternalRotationalAxis_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructExternalRotationalAxis_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructMovement_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructMovement_Icon", resourceCulture);
@@ -263,6 +283,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ExternalAxis_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ExternalAxis_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ExternalLinearAxis_Icon {
             get {
                 object obj = ResourceManager.GetObject("ExternalLinearAxis_Icon", resourceCulture);
@@ -276,6 +306,26 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap ExternalLinearAxis_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ExternalLinearAxis_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ExternalRotationalAxis_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ExternalRotationalAxis_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ExternalRotationalAxis_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ExternalRotationalAxis_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1584,6 +1634,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap PlaneToQuat_Icon {
             get {
                 object obj = ResourceManager.GetObject("PlaneToQuat_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap QuatToPlane_Icon {
+            get {
+                object obj = ResourceManager.GetObject("QuatToPlane_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -171,8 +171,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            // get { return Properties.Resources.QuatToPlane_Icon; } //TODO
-            get { return null; }
+            get { return Properties.Resources.QuatToPlane_Icon; }
         }
 
         /// <summary>

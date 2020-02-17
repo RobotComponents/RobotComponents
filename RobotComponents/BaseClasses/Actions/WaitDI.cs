@@ -1,6 +1,4 @@
-﻿using RobotComponents.BaseClasses.Definitions;
-
-namespace RobotComponents.BaseClasses.Actions
+﻿namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 
@@ -28,8 +26,19 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="value"> The desired state / value of the digtal input signal. </param>
         public WaitDI(string DIName, bool value)
         {
-            this._DIName = DIName;
-            this.Value = value;
+            _DIName = DIName;
+            Value = value;
+        }
+
+        /// <summary>
+        /// Creates a new WaitDI by duplicating an existing WaitDI. 
+        /// This creates a deep copy of the existing WaitDI. 
+        /// </summary>
+        /// <param name="waitDI"> The wait for digital input that should be duplicated. </param>
+        public WaitDI(WaitDI waitDI)
+        {
+            _DIName = waitDI.DIName;
+            _value = waitDI.Value;
         }
 
         /// <summary>
@@ -38,8 +47,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the WaitDI object. </returns>
         public WaitDI Duplicate()
         {
-            WaitDI dup = new WaitDI(DIName, Value);
-            return dup;
+            return new WaitDI(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the WaitDI object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the WaitDI object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new WaitDI(this) as Action;
         }
         #endregion
 
@@ -47,20 +64,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>s
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             string value;
 
@@ -73,7 +86,7 @@ namespace RobotComponents.BaseClasses.Actions
                 value = "0";
             }
 
-            return ("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); ;
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "WaitDI " + _DIName +", " + value + ";"); 
         }
         #endregion
 
@@ -81,7 +94,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the WaitDI object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

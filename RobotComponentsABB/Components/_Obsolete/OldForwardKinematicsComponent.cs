@@ -5,16 +5,15 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)
-// It is replaced with a new forward kinematics component. 
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.Obsolete
 {
@@ -44,6 +43,14 @@ namespace RobotComponentsABB.Components.Obsolete
         public override GH_Exposure Exposure
         {
             get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -77,7 +84,7 @@ namespace RobotComponentsABB.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 
@@ -161,14 +168,6 @@ namespace RobotComponentsABB.Components.Obsolete
 
             // Return the data tree stucture
             return meshes;
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return true; }
         }
 
         /// <summary>

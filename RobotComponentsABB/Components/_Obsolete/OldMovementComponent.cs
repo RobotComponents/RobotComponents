@@ -7,8 +7,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 
 using RobotComponents.BaseClasses.Actions;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Actions;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!
@@ -43,6 +43,14 @@ namespace RobotComponentsABB.Components.Obsolete
         public override GH_Exposure Exposure
         {
             get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -115,8 +123,8 @@ namespace RobotComponentsABB.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            List<TargetGoo> targetGoos = new List<TargetGoo>();
-            List<SpeedDataGoo> speedDataGoos = new List<SpeedDataGoo>();
+            List<GH_Target> targetGoos = new List<GH_Target>();
+            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
 
@@ -155,8 +163,8 @@ namespace RobotComponentsABB.Components.Obsolete
 
             for (int i = 0; i < biggestSize; i++)
             {
-                TargetGoo targetGoo;
-                SpeedDataGoo speedDataGoo;
+                GH_Target targetGoo;
+                GH_SpeedData speedDataGoo;
                 int movementType;
                 int precision; ;
 
@@ -245,14 +253,6 @@ namespace RobotComponentsABB.Components.Obsolete
 
             // Output
             DA.SetDataList(0, movements);
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return true; }
         }
 
         /// <summary>

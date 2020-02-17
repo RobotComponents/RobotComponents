@@ -3,8 +3,8 @@
 using Rhino.Geometry;
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotToolGoo robotToolGoo = null;
+            GH_RobotTool robotToolGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotToolGoo)) { return; }
@@ -123,6 +123,12 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <summary>
         /// Provides an Icon for the component
         /// </summary>
+        /// 
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
         protected override System.Drawing.Bitmap Icon
         {
             get { return Properties.Resources.DeconstructRobotTool_Icon; }

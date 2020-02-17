@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -46,8 +46,13 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Tool Plane (TCP) as Frame", GH_ParamAccess.item);
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool");
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool", GH_ParamAccess.item);
+            pManager.RegisterParam(new ExternalAxisParameter(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
+
+        // Meshes
+        private List<Mesh> _meshes = new List<Mesh>() { };
+        private GH_Document _doc;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -55,8 +60,11 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Get the Grasshopper document
+            _doc = this.OnPingDocument();
+
             // Input variables
-            RobotInfoGoo robotInfoGoo = null;
+            GH_RobotInfo robotInfoGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotInfoGoo)) { return; }
@@ -70,13 +78,17 @@ namespace RobotComponentsABB.Components.Deconstruct
 
             // Output variables
             string name;
-            List<Mesh> meshes;
+            List<Mesh> meshes = new List<Mesh>();
+            List<GH_ExternalAxis> externalAxisGoos = new List<GH_ExternalAxis>();
             List<Plane> axisPlanes;
             List<Interval> axisLimits;
             Plane basePlane;
             Plane mountingFrame;
             Plane toolPlane;
-            RobotToolGoo tool;
+            GH_RobotTool tool;
+
+            // Clear list with display meshes
+            _meshes.Clear();
 
             // Name
             if (robotInfoGoo.Value.Name != null)
@@ -92,12 +104,15 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Meshes
             if (robotInfoGoo.Value.Meshes != null)
             {
-                meshes = robotInfoGoo.Value.Meshes;
+                for (int i = 0; i < 7; i++)
+                {
+                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                    _meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                }
             }
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo Meshes is not Valid");
-                meshes = null;
             }
 
             // AxisPlanes
@@ -158,7 +173,10 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Robot Tool
             if (robotInfoGoo.Value.Tool.IsValid)
             {
-                tool = new RobotToolGoo(robotInfoGoo.Value.Tool);
+                tool = new GH_RobotTool(robotInfoGoo.Value.Tool);
+
+                // Add display mesh
+                _meshes.Add(robotInfoGoo.Value.Tool.Mesh);
             }
             else
             {
@@ -166,6 +184,16 @@ namespace RobotComponentsABB.Components.Deconstruct
                 tool = null;
             }
 
+            // External Axes
+            for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
+            {
+                externalAxisGoos.Add(new GH_ExternalAxis(robotInfoGoo.Value.ExternalAxis[i]));
+
+                // Add display meshes
+                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);
+                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].LinkMesh);
+            }
+           
             // Output
             DA.SetData(0, name);
             DA.SetDataList(1, meshes);
@@ -175,7 +203,47 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(5, mountingFrame);
             DA.SetData(6, toolPlane);
             DA.SetData(7, tool);
+            DA.SetDataList(8, externalAxisGoos);
         }
+
+        /// <summary>
+        /// This method displays the meshes
+        /// </summary>
+        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            // Initiate material
+            Rhino.Display.DisplayMaterial material;
+
+            // Selected document objects
+            List<IGH_DocumentObject> selectedObjects = _doc.SelectedObjects();
+
+            // Check if component is selected
+            if (selectedObjects.Contains(this))
+            {
+                material = args.ShadeMaterial_Selected;
+            }
+            else
+            {
+                material = args.ShadeMaterial;
+            }
+
+            // Display the meshes
+            for (int i = 0; i != _meshes.Count; i++)
+            {
+                args.Display.DrawMeshShaded(_meshes[i], material);
+            }
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
 
         /// <summary>
         /// Provides an Icon for the component.

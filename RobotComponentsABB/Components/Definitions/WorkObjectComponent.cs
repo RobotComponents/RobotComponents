@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Definitions
@@ -39,9 +39,11 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Work Object Name as String", GH_ParamAccess.list, "default_wo");
-            pManager.AddPlaneParameter("Plane", "P", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
+            pManager.AddPlaneParameter("Plane", "WP", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
+            pManager.AddParameter(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -66,18 +68,86 @@ namespace RobotComponentsABB.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
+            // Clears Work Objects List
+            _workObjects.Clear();
 
+            // Input variables
+            List<string> names = new List<string>();
+            List<Plane> planes = new List<Plane>();
+            List<ExternalRotationalAxis> externalAxes = new List<ExternalRotationalAxis>();
 
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
+            // Catch the input data
+            if (!DA.GetDataList(0, names)) { return; }
+            if (!DA.GetDataList(1, planes)) { return; }
+            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalRotationalAxis>() { null }; }
+
+            // Get longest Input List
+            int[] sizeValues = new int[3];
+            sizeValues[0] = names.Count;
+            sizeValues[1] = planes.Count;
+            sizeValues[2] = externalAxes.Count;
+            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+
+            // Keeps track of used indicies
+            int nameCounter = -1;
+            int planesCounter = -1;
+            int axisCounter = -1;
+
+            // Creates work objects
+            WorkObject workObject;
+            List<WorkObject> workObjects = new List<WorkObject>();
+
+            for (int i = 0; i < biggestSize; i++)
             {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
+                string name = "";
+                Plane plane = new Plane();
+                ExternalRotationalAxis externalAxis = null;
+
+                // Names counter
+                if (i < sizeValues[0])
+                {
+                    name = names[i];
+                    nameCounter++;
+                }
+                else
+                {
+                    name = names[nameCounter] + "_" + (i - nameCounter);
+                }
+
+                // Planes counter
+                if (i < sizeValues[1])
+                {
+                    plane = planes[i];
+                    planesCounter++;
+                }
+                else
+                {
+                    plane = planes[planesCounter];
+                }
+
+                // Axis counter
+                if (i < sizeValues[2])
+                {
+                    externalAxis = externalAxes[i];
+                    axisCounter++;
+                }
+                else
+                {
+                    externalAxis = externalAxes[axisCounter];
+                }
+
+                // Make work object
+                workObject = new WorkObject(name, plane, externalAxis);
+                workObjects.Add(workObject);
             }
 
+            // Output
+            _workObjects = workObjects;
+            DA.SetDataList(0, workObjects);
+
+            #region Object manager
             // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Clears Work Object Name
             for (int i = 0; i < _woNames.Count; i++)
@@ -92,63 +162,14 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.WorkObjectNames.Remove(_lastName);
             }
 
-            // Clears Work Objects Local List
-            _workObjects.Clear();
-
-            // Input variables
-            List<string> names = new List<string>();
-            List<Plane> planes = new List<Plane>();
-
-            // Catch the input data
-            if (!DA.GetDataList(0, names)) { return; }
-            if (!DA.GetDataList(1, planes)) { return; }
-
-            // Get longest Input List
-            int[] sizeValues = new int[10];
-            sizeValues[0] = names.Count;
-            sizeValues[1] = planes.Count;
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
-
-            // Keeps track of used indicies
-            int nameCounter = -1;
-            int planesCounter = -1;
-
-            // Creates targets
-            List<WorkObject> workObjects = new List<WorkObject>();
-            for (int i = 0; i < biggestSize; i++)
+            // Adds Component to WorkObjectsByGuid Dictionary
+            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
             {
-                string name = "";
-                Plane plane = new Plane();
-
-                // Names counter
-                if (i < names.Count)
-                {
-                    name = names[i];
-                    nameCounter++;
-                }
-                else
-                {
-                    name = names[nameCounter] + "_" + (i - nameCounter);
-                }
-
-                // Target planes counter
-                if (i < planes.Count)
-                {
-                    plane = planes[i];
-                    planesCounter++;
-                }
-                else
-                {
-                    plane = planes[planesCounter];
-                }
-
-              
-                WorkObject workObject = new WorkObject(name, plane);
-                workObjects.Add(workObject);
+                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
             }
 
             // Checks if the work object name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
@@ -193,23 +214,13 @@ namespace RobotComponentsABB.Components.Definitions
             }
             #endregion
 
-            // Output
-            _workObjects = workObjects;
-            DA.SetDataList(0, workObjects);
-
-
-            // Adds Component to WorkObjectsByGuid Dictionary
-            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
-            }
-
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>
@@ -249,6 +260,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             get { return _workObjects; }
         }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -265,7 +277,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("60F2B882-E88B-4928-8517-AA5666F8137F"); }
+            get { return new Guid("E76C475E-0C31-484D-A45D-690F45BD154C"); }
         }
     }
 }

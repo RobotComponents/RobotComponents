@@ -7,6 +7,7 @@ namespace RobotComponents.BaseClasses.Definitions
     public class ExternalRotationalAxis : ExternalAxis
     {
         #region fields
+        private string _name; // The name of the external axis
         private Plane _attachmentPlane; // The plane where the robot or the work object is attached
         private Plane _axisPlane; // Todo: now only the attachment plane is copied
         private Interval _axisLimits; // The movement limits
@@ -22,26 +23,28 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         public ExternalRotationalAxis()
         {
-            _linkMesh = new Mesh();
+            _name = "";
             _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
         }
 
         /// <summary>
         /// Defines an external rotational axis with empty meshes. 
         /// </summary>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector.  </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
         /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits)
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits)
         {
-            _attachmentPlane = attachmentPlane;
+            _name = "";
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = null; // Todo
-            _linkMesh = new Mesh();
             _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
+
+            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
 
             Initialize();
         }
@@ -49,22 +52,74 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// Defines an external rotational axis with a mesh geometry. 
         /// </summary>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector.  </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
         /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
         /// <param name="baseMesh"> The base mesh of the external rotational axis. </param>
         /// <param name="linkMesh"> The link mesh of the external rotational axis posed for external axis value 0. </param>
-        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
-            _attachmentPlane = attachmentPlane;
+            _name = "";
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = null; // Todo
-            _linkMesh = baseMesh;
-            _baseMesh = linkMesh;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
 
+            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
+
             Initialize();
+        }
+
+        /// <summary>
+        /// Defines an external rotational axis with a mesh geometry. 
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMesh"> The base mesh of the external rotational axis. </param>
+        /// <param name="linkMesh"> The link mesh of the external rotational axis posed for external axis value 0. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _name = name;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; // Todo
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Creates a new external rotational axis by duplicating an existing axis.
+        /// This creates a deep copy of the existing axis.
+        /// </summary>
+        /// <param name="externalRotationalAxis"> The external rotational axis that should be duplicated. </param>
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public ExternalRotationalAxis(ExternalRotationalAxis externalRotationalAxis, bool duplicateMesh = true)
+        {
+            _name = externalRotationalAxis.Name;
+            _axisPlane = new Plane(externalRotationalAxis.AxisPlane);
+            _attachmentPlane = new Plane(externalRotationalAxis.AttachmentPlane);
+            _axisLimits = new Interval(externalRotationalAxis.AxisLimits);
+            _axisNumber = externalRotationalAxis.AxisNumber;
+
+            if (duplicateMesh == true)
+            {
+                _baseMesh = externalRotationalAxis.BaseMesh.DuplicateMesh();
+                _linkMesh = externalRotationalAxis.LinkMesh.DuplicateMesh();
+                _posedMeshes = externalRotationalAxis.PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            }
+            else
+            {
+                _baseMesh = new Mesh();
+                _linkMesh = new Mesh();
+                _posedMeshes = new List<Mesh>();
+            }
         }
 
         /// <summary>
@@ -73,8 +128,34 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> Returns a deep copy for the ExternalRotationalAxis object. </returns>
         public ExternalRotationalAxis Duplicate()
         {
-            ExternalRotationalAxis dup = new ExternalRotationalAxis(AttachmentPlane, AxisPlane, AxisLimits, BaseMesh, LinkMesh);
-            return dup;
+            return new ExternalRotationalAxis(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object without duplicating the mesh. It will set an empty mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the ExternalRotationalObject without a mesh. </returns>
+        public ExternalRotationalAxis DuplicateWithoutMesh()
+        {
+            return new ExternalRotationalAxis(this, false);
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object. </returns>
+        public override ExternalAxis DuplicateExternalAxis()
+        {
+            return new ExternalRotationalAxis(this) as ExternalAxis;
+        }
+
+        /// <summary>
+        /// A method to duplicate the ExternalRotationalAxis object to an ExternalAxis object without the mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the ExternalRotationalAxis object as an ExternalAxis object with empty meshes. </returns>
+        public override ExternalAxis DuplicateExternalAxisWithoutMesh()
+        {
+            return new ExternalRotationalAxis(this, false) as ExternalAxis;
         }
         #endregion
 
@@ -107,7 +188,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -143,7 +224,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
             // Transform
             double radians = Rhino.RhinoMath.ToRadians(value);
-            Transform orientNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -158,7 +239,7 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             _posedMeshes.Clear();
             double radians = Rhino.RhinoMath.ToRadians(axisValue);
-            Transform rotateNow = Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            Transform rotateNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
             _posedMeshes[1].Transform(rotateNow);
@@ -180,13 +261,30 @@ namespace RobotComponents.BaseClasses.Definitions
             Initialize();
             _posedMeshes.Clear();
         }
+
+        /// <summary>
+        /// Transforms the external rotational axis spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public override void Transform(Transform xform)
+        {
+            _attachmentPlane.Transform(xform);
+            _axisPlane.Transform(xform);
+            _baseMesh.Transform(xform);
+            _linkMesh.Transform(xform);
+
+            for (int i = 0; i < _posedMeshes.Count; i++)
+            {
+                _posedMeshes[i].Transform(xform);
+            }
+        }
         #endregion
 
         #region properties
         /// <summary>
         /// A boolean that indicates if the External Rotational Axis object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {
@@ -197,6 +295,15 @@ namespace RobotComponents.BaseClasses.Definitions
                 if (AxisLimits == null) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// The name of the external axis
+        /// </summary>
+        public override string Name
+        {
+            get { return _name; }
+            set { _name = value; }
         }
 
         /// <summary>
@@ -211,6 +318,7 @@ namespace RobotComponents.BaseClasses.Definitions
             set 
             { 
                 _attachmentPlane = value;
+                _axisPlane = new Plane(_attachmentPlane); //TODO: for now they are always equal
                 ReInitialize();
             }
         }
@@ -227,6 +335,7 @@ namespace RobotComponents.BaseClasses.Definitions
             set 
             { 
                 _axisPlane = value;
+                _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
                 ReInitialize();
             }
         }

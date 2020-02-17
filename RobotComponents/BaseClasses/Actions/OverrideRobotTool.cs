@@ -29,13 +29,31 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new override robot tool by duplicating an existing override robot tool. 
+        /// This creates a deep copy of the existing override robot tool. 
+        /// </summary>
+        /// <param name="overrideRobotTool"> The override robot tool that should be duplicated. </param>
+        public OverrideRobotTool(OverrideRobotTool overrideRobotTool)
+        {
+            _robotTool = overrideRobotTool.RobotTool.Duplicate();
+        }
+
+        /// <summary>
         /// Method to duplicate the Override Robot Tool object.
         /// </summary>
         /// <returns> Returns a deep copy of the Override Robot Tool object.</returns>
         public OverrideRobotTool Duplicate()
         {
-            OverrideRobotTool dup = new OverrideRobotTool(RobotTool);
-            return dup;
+            return new OverrideRobotTool(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the OverrideRobotTool object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the OverrideRobotTool object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new OverrideRobotTool(this) as Action;
         }
         #endregion
 
@@ -43,22 +61,18 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code. For this action an empty string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code. For this action an empty string. </returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "! " + "Default Robot Tool changed to " + _robotTool.Name + ".");
         }
 
         /// <summary>
@@ -76,7 +90,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the Override Robot Tool object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

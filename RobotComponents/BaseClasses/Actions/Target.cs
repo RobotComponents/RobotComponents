@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using Rhino.Geometry;
 
-using RobotComponents.BaseClasses.Definitions;
-
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
@@ -235,13 +233,42 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new target by duplicating an existing target. 
+        /// This creates a deep copy of the existing target. 
+        /// </summary>
+        /// <param name="target"> The target that should be duplicated. </param>
+        public Target(Target target)
+        {
+            _name = target.Name;
+            _plane = new Plane(target.Plane);
+            _axisConfig = target.AxisConfig;
+            _quat = target.Quat;
+
+            // External axis values
+            _Eax_a = target.ExternalAxisValueA;
+            _Eax_b = target.ExternalAxisValueB;
+            _Eax_c = target.ExternalAxisValueC;
+            _Eax_d = target.ExternalAxisValueD;
+            _Eax_e = target.ExternalAxisValueE;
+            _Eax_f = target.ExternalAxisValueF;
+        }
+
+        /// <summary>
         /// Method to duplicate the Target object.
         /// </summary>
         /// <returns>Returns a deep copy of the Target object.</returns>
         public Target Duplicate()
         {
-            Target dup = new Target(Name, Plane, AxisConfig, ExternalAxisValues);
-            return dup;
+            return new Target(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Target object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Target object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Target(this) as Action;
         }
         #endregion
 
@@ -329,22 +356,17 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
         #endregion
 
@@ -352,7 +374,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicuate if the Target object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {
@@ -434,6 +456,19 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 List<double> ExternalAxisValues = new List<double> { _Eax_a, _Eax_b, _Eax_c, _Eax_d, _Eax_e, _Eax_f };
                 return ExternalAxisValues;
+            }
+            set 
+            {
+                // Check the length of the araay with external axis values
+                List<double> Eax = CheckExternalAxisValues(value);
+
+                // External axis values
+                _Eax_a = Eax[0];
+                _Eax_b = Eax[1];
+                _Eax_c = Eax[2];
+                _Eax_d = Eax[3];
+                _Eax_e = Eax[4];
+                _Eax_f = Eax[5];
             }
         }
 

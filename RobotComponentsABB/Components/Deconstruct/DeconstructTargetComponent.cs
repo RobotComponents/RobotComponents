@@ -2,8 +2,8 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Actions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -42,7 +42,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.");
             pManager.Register_DoubleParam("External Axis Values", "EAV", "The user definied override external axis values.");
         }
-
+   
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -50,7 +50,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            TargetGoo targetGoo = null;
+            GH_Target targetGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref targetGoo)) { return; }

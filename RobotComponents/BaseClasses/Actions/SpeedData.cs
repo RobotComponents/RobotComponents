@@ -1,7 +1,5 @@
 ﻿using System;
 
-using RobotComponents.BaseClasses.Definitions;
-
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
@@ -82,22 +80,18 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Constructor used to duplicate the current SpeedData object. 
+        /// Creates a new speeddata by duplicating an existing speeddata. 
+        /// This creates a deep copy of the existing speeddata. 
         /// </summary>
-        /// <param name="name"> The SpeedData variable name. </param>
-        /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
-        /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
-        /// <param name="v_leax"> The velocity of linear external axes in mm/s. </param>
-        /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
-        /// <param name="predefined"> A boolean that indicates if the speeddata is predefined by ABB. </param>
-        private SpeedData(string name, double v_tcp, double v_ori, double v_leax, double v_reax, bool predefined)
+        /// <param name="speeddata"> The speeddata that should be duplicated. </param>
+        public SpeedData(SpeedData speeddata)
         {
-            _name = name;
-            _v_tcp = v_tcp;
-            _v_ori = v_ori;
-            _v_leax = v_leax;
-            _v_reax = v_reax;
-            _predefined = predefined;
+            _name = speeddata.Name;
+            _v_tcp = speeddata.V_TCP;
+            _v_ori = speeddata.V_ORI;
+            _v_leax = speeddata.V_LEAX;
+            _v_reax = speeddata.V_REAX;
+            _predefined = speeddata.PreDefinied;
         }
 
         /// <summary>
@@ -106,8 +100,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the SpeedData object. </returns>
         public SpeedData Duplicate()
         {
-            SpeedData dup = new SpeedData(Name, V_TCP, V_ORI, V_LEAX, V_REAX, PreDefinied);
-            return dup;
+            return new SpeedData(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the SpeedData object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the SpeedData object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new SpeedData(this) as Action;
         }
         #endregion
 
@@ -115,29 +117,21 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false) 
+            if (_predefined == false)
             {
-                return ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
-            }
-            else
-            {
-                return "";
+                RAPIDGenerator.StringBuilder.Append ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
             }
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return "";
         }
         #endregion
 
@@ -145,7 +139,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the SpeedData is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

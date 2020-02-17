@@ -89,9 +89,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _toolPlane = Plane.WorldXY;
 
             _toolPlane.Translate(new Vector3d(toolTransX, toolTransY, toolTransZ));
-            _toolPlane.Transform(Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), _toolPlane.Origin));
-            _toolPlane.Transform(Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), _toolPlane.Origin));
-            _toolPlane.Transform(Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), _toolPlane.Origin));
 
             _robotHold = true;
             _mass = 0.001;
@@ -133,14 +133,47 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Creates a new robot tool by duplicating an existing robot tool.
+        /// This creates a deep copy of the existing robot tool.
+        /// </summary>
+        /// <param name="robotTool"> The robot tool that should be duplicated. </param>
+        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        public RobotTool(RobotTool robotTool, bool duplicateMesh = true)
+        {
+            _name = robotTool.Name;
+            _attachmentPlane = new Plane(robotTool.AttachmentPlane);
+            _toolPlane = new Plane(robotTool.ToolPlane);
+
+            _robotHold = robotTool.RobotHold;
+            _mass = robotTool.Mass;
+            _centerOfGravity = new Vector3d(robotTool.CenterOfGravity);
+            _centerOfGravityOrientation = robotTool.CenterOfGravityOrientation;
+            _inertia = new Vector3d(robotTool.Inertia);
+
+            _position = new Vector3d(robotTool.Position);
+            _orientation = robotTool.Orientation;
+
+            if (duplicateMesh == true) { _mesh = robotTool.Mesh.DuplicateMesh(); }
+            else { }//_mesh = new Mesh(); }
+
+        }
+
+        /// <summary>
         /// A method to duplicate the RobotTool object. 
         /// </summary>
         /// <returns> Returns a deep copy for the RobotTool object. </returns>
         public RobotTool Duplicate()
         {
-            RobotTool dup = new RobotTool(Name, Mesh, AttachmentPlane, ToolPlane, RobotHold, 
-                Mass, CenterOfGravity, CenterOfGravityOrientation, Inertia);
-            return dup;
+            return new RobotTool(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the RobotTool object without duplicating the mesh. It will set an empty mesh. 
+        /// </summary>
+        /// <returns> Returns a deep copy for the RobotTool object without a mesh. </returns>
+        public RobotTool DuplicateWithoutMesh()
+        {
+            return new RobotTool(this, false);
         }
         #endregion
 
@@ -261,6 +294,19 @@ namespace RobotComponents.BaseClasses.Definitions
             _centerOfGravityOrientation = Quaternion.Zero;
             _inertia = Vector3d.Unset;
         }
+
+        /// <summary>
+        /// Transforms the Robot Tool spatial properties (planes and meshes). 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        public void Transform(Transform xform)
+        {
+            _mesh.Transform(xform);
+            _attachmentPlane.Transform(xform);
+            _toolPlane.Transform(xform);
+
+            ReInitialize();
+        }
         #endregion
 
         #region properties
@@ -271,6 +317,8 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             get
             {
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 if (AttachmentPlane == null) { return false; }
                 if (AttachmentPlane == Plane.Unset) { return false; }
                 if (ToolPlane == null) { return false; }

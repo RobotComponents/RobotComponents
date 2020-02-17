@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Definitions
@@ -71,27 +71,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
-
-            // Clears tool name
-            _objectManager.ToolNames.Remove(_robotTool.Name);
-
-            // Removes lastName from toolNameList
-            if (_objectManager.ToolNames.Contains(_lastName))
-            {
-                _objectManager.ToolNames.Remove(_lastName);
-            }
-
             // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
@@ -116,8 +95,31 @@ namespace RobotComponentsABB.Components.Definitions
             // Create the Robot Tool
             _robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
 
+            // Outputs
+            DA.SetData(0, _robotTool);
+            DA.SetData(1, _robotTool.GetRSToolData());
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears tool name
+            _objectManager.ToolNames.Remove(_robotTool.Name);
+
+            // Removes lastName from toolNameList
+            if (_objectManager.ToolNames.Contains(_lastName))
+            {
+                _objectManager.ToolNames.Remove(_lastName);
+            }
+
+            // Adds Component to ToolsByGuid Dictionary
+            if (!_objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
+            }
+
             // Checks if the tool name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             if (_objectManager.ToolNames.Contains(_robotTool.Name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tool Name already in use.");
@@ -162,23 +164,13 @@ namespace RobotComponentsABB.Components.Definitions
             }
             #endregion
 
-            // Outputs
-            DA.SetData(0, _robotTool);
-            DA.SetData(1, _robotTool.GetRSToolData());
-
-            // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
-            }
-
             // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
-
+            #endregion
         }
 
         /// <summary>

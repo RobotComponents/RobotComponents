@@ -1,7 +1,5 @@
 ﻿using System;
 
-using RobotComponents.BaseClasses.Definitions;
-
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
@@ -29,7 +27,17 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="comment">The comment as a text string.</param>
         public Comment(string comment)
         {
-            this._comment = comment;
+            _comment = comment;
+        }
+
+        /// <summary>
+        /// Creates a new comment by duplicating an existing comment. 
+        /// This creates a deep copy of the existing comment. 
+        /// </summary>
+        /// <param name="comment"> The comment that should be duplicated. </param>
+        public Comment(Comment comment)
+        {
+            _comment = comment.Com;
         }
 
         /// <summary>
@@ -38,8 +46,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the Comment object. </returns>
         public Comment Duplicate()
         {
-            Comment dup = new Comment(Com);
-            return dup;
+            return new Comment(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Comment object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Comment object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Comment(this) as Action;
         }
         #endregion
 
@@ -47,31 +63,23 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            string tempCode = "";
-
             string[] lines = _comment.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 
             for (int i = 0; i < lines.Length; i++)
             {
-                tempCode += "@" + "\t" + "! " + lines[i];
+                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "! " + lines[i]);
             }
-
-            return tempCode;
         }
         #endregion
 
@@ -79,7 +87,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the Comment object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get 
             {

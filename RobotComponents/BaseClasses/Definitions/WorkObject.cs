@@ -34,7 +34,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-            _fixedFrame = true;
+
             Initialize();
         }
 
@@ -50,7 +50,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
-            _fixedFrame = true;
+
             Initialize();
         }
 
@@ -68,23 +68,47 @@ namespace RobotComponents.BaseClasses.Definitions
             _robotHold = false;
             _userFrame = Plane.WorldXY;
 
-            // Set to a movable frame if an exernal axes is coupled
-            if (_externalAxis != null)
-                _fixedFrame = false;
-            else
-                _fixedFrame = true;
-
             Initialize();
+        }
+
+        /// <summary>
+        /// Creates a new work object by duplicating an existing movement.
+        /// This creates a deep copy of the existing work object.
+        /// </summary>
+        /// <param name="workObject"> The work object that should be duplicated. </param>
+        /// <param name="duplicateMesh"> A boolean that indicates if the meshes should be duplicated. </param>
+        public WorkObject(WorkObject workObject, bool duplicateMesh = true)
+        {
+            _name = workObject.Name;
+            _plane = new Plane(workObject.Plane);
+            _userFrame = new Plane(workObject.UserFrame);
+            _globalPlane = new Plane(workObject.GlobalWorkObjectPlane);
+            _userFrameOrientation = workObject.UserFrameOrientation;
+            _orientation = workObject.Orientation;
+            _robotHold = workObject.RobotHold;
+            _fixedFrame = workObject.FixedFrame;
+
+            if (workObject.ExternalAxis == null) { _externalAxis = null; }
+            else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); } // TODO: This is making the path and RAPID generator slow!
+            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); } // TODO: This is making the path and RAPID generator slow!            
         }
 
         /// <summary>
         /// A method to duplicate the WorkObject object. 
         /// </summary>
-        /// <returns> Returns a deep copy for the WorkObject object. </returns>
+        /// <returns> Returns a deep copy of the WorkObject object. </returns>
         public WorkObject Duplicate()
         {
-            WorkObject dup = new WorkObject(Name, Plane, ExternalAxis);
-            return dup;
+            return new WorkObject(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the WorkObject object without meshes. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the WorkObject object with an external axis with empty meshes. </returns>
+        public WorkObject DuplicateWithoutMesh()
+        {
+            return new WorkObject(this, false);
         }
         #endregion
 
@@ -120,8 +144,24 @@ namespace RobotComponents.BaseClasses.Definitions
             _globalPlane = new Plane(_plane);
 
             // Re-orient the plane
-            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
-            _globalPlane.Transform(orient);
+            Transform orient1 = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
+            _globalPlane.Transform(orient1);
+
+            // Re-orient again if an external axis is used
+            if (_externalAxis != null)
+            {
+                if (_externalAxis is ExternalRotationalAxis)
+                {
+                    // For a external rotational axis the coordinate system of the work object plane
+                    // is definied in the coordinate system of teh external rotational axis (the axis plane)
+                    Transform orient2 = Transform.PlaneToPlane(Plane.WorldXY, _externalAxis.AxisPlane);
+                    _globalPlane.Transform(orient2);
+                }
+                else if (_externalAxis is ExternalLinearAxis)
+                {
+                    //TODO...
+                }
+            }
 
             return _globalPlane;
         }
@@ -134,6 +174,12 @@ namespace RobotComponents.BaseClasses.Definitions
             GetOrientation();
             GetUserFrameOrientation();
             GetGlobalWorkObjectPlane();
+
+            // Set to a movable frame if an exernal axes is coupled
+            if (_externalAxis != null)
+                _fixedFrame = false;
+            else
+                _fixedFrame = true;
         }
 
         /// <summary>
@@ -188,21 +234,16 @@ namespace RobotComponents.BaseClasses.Definitions
                 result += "FALSE, ";
             }
 
-            // Add mechanical unit (an external axis or robot) < ufmec of string >
-            // TODO: Add mechanical unit
-            result += "\"\", "; // Redo this when mechanical unit is implemented
-
-            /**
+            // Add mechanical unit (an external axis or robot) < ufmec of string >            
             if (_externalAxis != null)
             {
-                result += $"{_externalAxis.Name}, ";
+                result += $"\"{_externalAxis.Name}\", ";
             }
             else
             {
                 result += "\"\", ";
             }
-            **/
-
+            
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X.ToString("0.####")}, {_userFrame.Origin.Y.ToString("0.####")}, {_userFrame.Origin.Z.ToString("0.####")}], ";
 
@@ -309,8 +350,15 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         public ExternalAxis ExternalAxis
         {
-            get { return _externalAxis; }
-            set { _externalAxis = value; } //TODO: Reinitilize the planes and the fixed frame if suddenly an external axis is set
+            get 
+            { 
+                return _externalAxis; 
+            }
+            set 
+            { 
+                _externalAxis = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using RobotComponents.BaseClasses.Definitions;
-
-namespace RobotComponents.BaseClasses.Actions
+﻿namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Timer class, defines waiting time between two actions. This command is used to wait a given amount of time.
@@ -29,13 +27,31 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Creates a new timer by duplicating an existing timer. 
+        /// This creates a deep copy of the existing timer. 
+        /// </summary>
+        /// <param name="timer"> The timer that should be duplicated. </param>
+        public Timer(Timer timer)
+        {
+            _duration = timer.Duration;
+        }
+
+        /// <summary>
         /// Method to duplicate the Timer object.
         /// </summary>
         /// <returns> Returns a deep copy of the Timer object.</returns>
         public Timer Duplicate()
         {
-            Timer dup = new Timer(Duration);
-            return dup;
+            return new Timer(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Timer object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Timer object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new Timer(this) as Action;
         }
         #endregion
 
@@ -43,22 +59,18 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            return ("@" + "\t" + "WaitTime " + _duration + ";"); ;
+            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "WaitTime " + _duration + ";"); 
         }
         #endregion
 
@@ -66,7 +78,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the Timer object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

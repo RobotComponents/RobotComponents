@@ -5,8 +5,8 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Definitions
 {
@@ -44,9 +44,8 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            // To do: Make ExternalAxisGoo and ExternalAxisParameter and replace the generic parameter
-            pManager.AddParameter(new ExternalLinearAxisParameter(), "External Linear Axis", "ELA", "External Linear Axis as External Linear Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[6].Optional = true;
             pManager[7].Optional = true;
@@ -74,7 +73,7 @@ namespace RobotComponentsABB.Components.Definitions
             List<Interval> axisLimits = new List<Interval>();
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
-            RobotToolGoo toolGoo = null;
+            GH_RobotTool toolGoo = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
             // Catch the input data
@@ -88,13 +87,23 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(3, axisLimits)) { return; }
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
-            if (!DA.GetData(6, ref toolGoo)) { toolGoo = new RobotToolGoo(); }
+            if (!DA.GetData(6, ref toolGoo)) { toolGoo = new GH_RobotTool(); }
             if (!DA.GetDataList(7, externalAxis))
             {
             }
 
-            // Check number of external linear axes
-            if (externalAxis.Count > 1)
+            // Check the axis input: A maximum of one external linear axis is allow
+            double count = 0;
+            for (int i = 0; i < externalAxis.Count; i++)
+            {
+                if (externalAxis[i] is ExternalLinearAxis)
+                {
+                    count += 1;
+                }
+            }
+
+            // Raise error if more than one external linear axis is used
+            if (count > 1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "At the moment RobotComponents supports one external linear axis.");
             }

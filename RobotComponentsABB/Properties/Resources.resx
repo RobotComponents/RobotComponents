@@ -118,6 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AbsoluteJointMovement_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AbsoluteJointMovement_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Action_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Action_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Auto_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Auto_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,8 +151,14 @@
   <data name="Comment_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Comment_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructAbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructAbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeconstructExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeconstructExternalRotationalAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructExternalRotationalAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,11 +184,20 @@
   <data name="DigitalOutput_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DigitalOutput_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ExternalAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExternalLinearAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalLinearAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalRotationalAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalRotationalAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalRotationalAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalRotationalAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="FlipPlaneX_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FlipPlaneX_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,56 +229,50 @@
   <data name="InverseKinematics_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\InverseKinematics_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="irb1200_5_90_base_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_base_link.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_5_0_90_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_5_0_90_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB1200_5_0_90_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_5_0_90_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB1200_5_0_90_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_5_0_90_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB1200_5_0_90_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_5_0_90_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB1200_5_0_90_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_5_0_90_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB1200_5_90_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1200_5_90_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="irb1200_5_90_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_7_0_70_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_7_0_70_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb1200_5_90_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_7_0_70_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_7_0_70_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb1200_5_90_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_7_0_70_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_7_0_70_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb1200_5_90_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_7_0_70_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_7_0_70_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb1200_5_90_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb1200_5_90_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200-5_90_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_7_0_70_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_7_0_70_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB1200_7_70_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1200_7_70_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="irb1200_base_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_base_link.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="IRB1200_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1200_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="irb1200_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_shared_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_shared_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb1200_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb1200_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb1200_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb1200_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb1200_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb1200_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1200_shared_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1200_shared_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB120_3_0_58_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB120_3_0_58_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -307,11 +325,11 @@
   <data name="IRB1600_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1600_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IRB1600_X_1_2_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1600_X_1_2_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1600_shared_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1600_shared_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="IRB1600_X_1_2_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1600_X_1_2_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB1600_shared_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1600_shared_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB1600_X_1_2_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1600_X_1_2_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -327,12 +345,6 @@
   </data>
   <data name="IRB1600_X_1_2_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1600_X_1_2_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB1600_x_1_45_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1600_x_1_45_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB1600_x_1_45_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1600_x_1_45_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB1600_x_1_45_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1600_x_1_45_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -355,12 +367,6 @@
   <data name="IRB1660ID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1660ID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IRB1660ID_X_1_55_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1660ID_X_1_55_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB1660ID_X_1_55_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB1660ID_X_1_55_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="IRB1660ID_X_1_55_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1660ID_X_1_55_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -376,15 +382,6 @@
   <data name="IRB1660ID_X_1_55_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1660ID_X_1_55_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="IRB2600ID_15_1_85_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_15_1_85_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600ID_15_1_85_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_15_1_85_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600ID_15_1_85_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_15_1_85_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="IRB2600ID_15_1_85_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600ID_15_1_85_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -396,15 +393,6 @@
   </data>
   <data name="IRB2600ID_15_1_85_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600ID_15_1_85_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600ID_8_2_0_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_8_2_0_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600ID_8_2_0_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_8_2_0_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600ID_8_2_0_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600ID_8_2_0_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB2600ID_8_2_0_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600ID_8_2_0_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -421,15 +409,6 @@
   <data name="IRB2600ID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600ID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IRB2600_12_1_85_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600_12_1_85_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600_12_1_85_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600_12_1_85_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB2600_12_1_85_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600_12_1_85_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="IRB2600_12_1_85_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600_12_1_85_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -445,11 +424,14 @@
   <data name="IRB2600_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IRB2600_X_1_65_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600_X_1_65_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB2600_shared_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_shared_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="IRB2600_X_1_65_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB2600_X_1_65_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB2600_shared_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_shared_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB2600_shared_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB2600_shared_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB2600_X_1_65_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600_X_1_65_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -466,18 +448,6 @@
   <data name="IRB2600_X_1_65_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB2600_X_1_65_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="IRB4600_20_2_50_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_20_2_50_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB4600_20_2_50_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_20_2_50_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB4600_20_2_50_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_20_2_50_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IRB4600_20_2_50_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_20_2_50_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="IRB4600_20_2_50_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB4600_20_2_50_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
@@ -487,35 +457,29 @@
   <data name="IRB4600_20_2_50_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB4600_20_2_50_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb4600_40_2_55_base_link" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_base_link.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB4600_40_2_55_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_40_2_55_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb4600_40_2_55_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB4600_40_2_55_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_40_2_55_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="irb4600_40_2_55_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb4600_40_2_55_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb4600_40_2_55_link_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_4.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb4600_40_2_55_link_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_5.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="irb4600_40_2_55_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\irb4600_40_2_55_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB4600_40_2_55_link_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_40_2_55_link_6.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB4600_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB4600_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IRB4600_X_2_05_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_X_2_05_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB4600_shared_link_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_shared_link_0.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="IRB4600_X_2_05_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IRB4600_X_2_05_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="IRB4600_shared_link_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_shared_link_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB4600_shared_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_shared_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="IRB4600_shared_link_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB4600_shared_link_3.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="IRB4600_X_2_05_link_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB4600_X_2_05_link_2.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
@@ -609,6 +573,9 @@
   </data>
   <data name="Plane_Visualizer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Plane_Visualizer_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuatToPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\QuatToPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RAPID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RAPID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

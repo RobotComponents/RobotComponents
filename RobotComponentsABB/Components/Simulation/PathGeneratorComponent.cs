@@ -5,8 +5,9 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.Simulation
 {
@@ -35,7 +36,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Actions", "A", "Actions as Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "IS", "Animation Slider as double (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
             pManager.AddBooleanParameter("Display Path", "CP", "Display Path Path if set to true.", GH_ParamAccess.item, false);
@@ -69,7 +70,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfoGoo robotInfoGoo = new RobotInfoGoo();
+            GH_RobotInfo robotInfoGoo = new GH_RobotInfo();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
@@ -84,12 +85,13 @@ namespace RobotComponentsABB.Components.Simulation
             if (!DA.GetData(4, ref displayPath)) { return; }
             if (!DA.GetData(5, ref update)) { return; }
 
-            // Create the path generator
-            _pathGenerator = new PathGenerator(robotInfoGoo.Value);
 
             // Update the path
             if (update == true || _lastInterpolations != interpolations)
             {
+                // Create the path generator
+                _pathGenerator = new PathGenerator(robotInfoGoo.Value.Duplicate());
+
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
 

@@ -1,6 +1,4 @@
-﻿using RobotComponents.BaseClasses.Definitions;
-
-namespace RobotComponents.BaseClasses.Actions
+﻿namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Auto Axis Configurator Class, sets Auto Axis Configuration to True or False.
@@ -25,7 +23,17 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="isActive">Bool that enables (true) or disables (false) the auto axis configuration.</param>
         public AutoAxisConfig(bool isActive)
         {
-            this._isActive = isActive;
+            _isActive = isActive;
+        }
+
+        /// <summary>
+        /// Creates a new auto axis configuration by duplicating an existing auto axis configuration. 
+        /// This creates a deep copy of the existing auto axis configuration 
+        /// </summary>
+        /// <param name="config"> The auto axis configuration that should be duplicated. </param>
+        public AutoAxisConfig(AutoAxisConfig config)
+        {
+            _isActive = config.IsActive;
         }
 
         /// <summary>
@@ -34,8 +42,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the AutoAxisConfiguration object. </returns>
         public AutoAxisConfig Duplicate()
         {
-            AutoAxisConfig dup = new AutoAxisConfig(IsActive);
-            return dup;
+            return new AutoAxisConfig(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the AutoAxisConfiguration object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the AutoAxisConfiguration object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new AutoAxisConfig(this) as Action;
         }
         #endregion
 
@@ -43,28 +59,24 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             if (_isActive == true)
             {
-                return ("@" + "\t" + "ConfJ\\off;" + "@" + "\t" + "ConfL\\off;"); ;
+                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "ConfJ\\off;" + "@" + "\t" + "ConfL\\off;"); ;
             }
             else
             {
-                return ("@" + "\t" + "ConfJ\\on;" + "@" + "\t" + "ConfL\\on;"); ;
+                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "ConfJ\\on;" + "@" + "\t" + "ConfL\\on;"); ;
             }
         }
         #endregion
@@ -73,7 +85,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the AutoAxisConfiguration object is valid.
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get { return true; }
         }

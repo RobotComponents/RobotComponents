@@ -5,9 +5,9 @@ using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
-
 using RobotComponentsABB.Utils;
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Actions", "A", "Actions as Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");
             pManager.AddBooleanParameter("Save To File", "S", "Saves RAPID Code to File", GH_ParamAccess.item, false);
@@ -67,6 +67,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
+        private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs = true;
         private string _BASECode = "";
@@ -79,18 +80,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets Document ID
-            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID))
-            {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
             // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentGUID];
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Input variables
             RobotInfo robInfo = new RobotInfo();
@@ -120,20 +111,39 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
 
-            // Initiaties the rapidGenerator
-            RAPIDGenerator rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo);
-
+            // Saved file
+            bool updated = false; // Avoids saving the file two times in one run
+          
             // Updates the rapid BASE and MAIN code 
             if (update == true)
             {
+                // Initiaties the rapidGenerator
+                _rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo.Duplicate());
+
+                // Get tools data for system module
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
                 List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
                 List<string> customCode = new List<string>() { };
-                rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
-                rapidGenerator.CreateRAPIDCode();
-                _MAINCode = rapidGenerator.RAPIDCode;
-                _BASECode = rapidGenerator.BASECode;
-                _firstMovementIsMoveAbs = rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Generator code
+                _rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
+                _rapidGenerator.CreateRAPIDCode();
+                _MAINCode = _rapidGenerator.RAPIDCode;
+                _BASECode = _rapidGenerator.BASECode;
+
+                // Check if the first movement is an absolute joint movement. 
+                _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Saved file
+                updated = true; // Avoids saving the file two times in one run
+            }
+
+            // Save to file
+            if (saveToFile == true && updated == false) // Avoids saving the file two times in one run
+            {
+                _rapidGenerator.FilePath = filePath;
+                _rapidGenerator.WriteRAPIDCodeToFile();
+                _rapidGenerator.WriteBASECodeToFile();
             }
 
             // Checks if first Movement is MoveAbsJ

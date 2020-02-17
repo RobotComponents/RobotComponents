@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.CodeGeneration
@@ -59,7 +58,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
-        private List<string> _speedDataNames = new List<string>();
+        private readonly List<string> _speedDataNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
@@ -70,39 +69,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Clears speedDataNames
-            for (int i = 0; i < _speedDataNames.Count; i++)
-            {
-                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-            }
-            _speedDataNames.Clear();
-
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
-
-            // Adds Component to SpeedDataByGuid Dictionary
-            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Removes lastName from speedDataNameList
-            if (_objectManager.SpeedDataNames.Contains(_lastName))
-            {
-                _objectManager.SpeedDataNames.Remove(_lastName);
-            }
-
             // Sets inputs and creates target
-            Guid instanceGUID = this.InstanceGuid;
             List<string> names = new List<string>();
             List<double> v_tcps = new List<double>();
             List<double> v_oris = new List<double>();
@@ -143,7 +110,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 double v_reax = 0;
 
                 // Names counter
-                if (i < names.Count)
+                if (i < sizeValues[0])
                 {
                     name = names[i];
                     nameCounter++;
@@ -154,7 +121,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // TCP speed counter
-                if (i < v_tcps.Count)
+                if (i < sizeValues[1])
                 {
                     v_tcp = v_tcps[i];
                     v_tcpCounter++;
@@ -165,7 +132,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Re-orientation speed counter
-                if (i < v_oris.Count)
+                if (i < sizeValues[2])
                 {
                     v_ori = v_oris[i];
                     v_oriCounter++;
@@ -176,7 +143,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External linear axis speed counter
-                if (i < v_leaxs.Count)
+                if (i < sizeValues[3])
                 {
                     v_leax = v_leaxs[i];
                     v_leaxCounter++;
@@ -187,7 +154,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External revolving axis counter
-                if (i < v_reaxs.Count)
+                if (i < sizeValues[4])
                 {
                     v_reax = v_reaxs[i];
                     v_reaxCounter++;
@@ -202,11 +169,37 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 speedDatas.Add(speedData);
             }
 
+            // Sets Output
+            DA.SetDataList(0, speedDatas);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears speedDataNames
+            for (int i = 0; i < _speedDataNames.Count; i++)
+            {
+                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
+            }
+            _speedDataNames.Clear();
+
+            // Removes lastName from speedDataNameList
+            if (_objectManager.SpeedDataNames.Contains(_lastName))
+            {
+                _objectManager.SpeedDataNames.Remove(_lastName);
+            }
+
+            // Adds Component to SpeedDataByGuid Dictionary
+            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Checks if speed Data name is already in use and counts duplicates
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
-                // Checks if speed Data name is already in use and counts duplicates
-                #region NameCheck
                 if (_objectManager.SpeedDataNames.Contains(names[i]))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
@@ -244,15 +237,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
             #endregion
 
-            // Sets Output
-            DA.SetDataList(0, speedDatas);
-
             // Recognizes if Component is Deleted and removes it from Object Managers speed Data and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

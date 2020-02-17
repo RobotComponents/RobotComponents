@@ -1,6 +1,4 @@
-﻿using RobotComponents.BaseClasses.Definitions;
-
-namespace RobotComponents.BaseClasses.Actions
+﻿namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Digital Output class. Is used to change the value of a digital output signal.
@@ -27,8 +25,19 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="IsActive">The desired value / stage of the digital output signal 0 (false) or 1 (true).</param>
         public DigitalOutput(string Name, bool IsActive)
         {
-            this._name = Name;
-            this._isActive = IsActive;
+            _name = Name;
+            _isActive = IsActive;
+        }
+
+        /// <summary>
+        /// Creates a new digital output by duplicating an existing digital output. 
+        /// This creates a deep copy of the existing digital output. 
+        /// </summary>
+        /// <param name="digitalOutput"> The digital output that should be duplicated. </param>
+        public DigitalOutput(DigitalOutput digitalOutput)
+        {
+            _name = digitalOutput.Name;
+            _isActive = digitalOutput.IsActive;
         }
 
         /// <summary>
@@ -37,8 +46,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
         public DigitalOutput Duplicate()
         {
-            DigitalOutput dup = new DigitalOutput(Name,IsActive);
-            return dup;
+            return new DigitalOutput(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the DigitalOutput object to an Action object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the DigitalOutput object as an Action object. </returns>
+        public override Action DuplicateAction()
+        {
+            return new DigitalOutput(this) as Action;
         }
         #endregion
 
@@ -46,28 +63,24 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotInfo">Defines the RobotInfo for the action.</param>
-        /// <param name="RAPIDcode">Defines the RAPID Code the variable entries are added to.</param>
-        /// <returns>Return the RAPID variable code.</returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo, string RAPIDcode)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            return ("");
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
-        /// <param name="robotToolName">Defines the robot rool name.</param>
-        /// <returns>Returns the RAPID main code.</returns>
-        public override string ToRAPIDFunction(string robotToolName)
+        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
             if (_isActive == true)
             {
-                return ("@" + "\t" + "SetDO " + _name + ",  1;");
+                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "SetDO " + _name + ",  1;");
             }
             else
             {
-                return ("@" + "\t" + "SetDO " + _name + ",  0;"); ;
+                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "SetDO " + _name + ",  0;"); ;
             }
         }
         #endregion
@@ -76,7 +89,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// A boolean that indicates if the DigitalOutput object is valid. 
         /// </summary>
-        public bool IsValid
+        public override bool IsValid
         {
             get
             {

@@ -5,14 +5,11 @@ using System.Windows.Forms;
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
-
 using GH_IO.Serialization;
-
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.CodeGeneration
@@ -80,7 +77,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
-        private List<string> _targetNames = new List<string>();
+        private readonly List<string> _targetNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
@@ -93,39 +90,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
-        {           
-            // Gets Document ID
-            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID)) {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentGUID];
-
-            // Clears targetNames
-            for (int i = 0; i < _targetNames.Count; i++)
-            {
-                _objectManager.TargetNames.Remove(_targetNames[i]);
-            }
-            _targetNames.Clear();
-
-            // Adds Component to TargetByGuid Dictionary
-            if (!_objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.TargetsByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Removes lastName from targetNameList
-            if (_objectManager.TargetNames.Contains(_lastName))
-            {
-                _objectManager.TargetNames.Remove(_lastName);
-            }
-
+        {
             // Sets inputs and creates target
-            Guid instanceGUID = this.InstanceGuid;
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
             List<Plane> referencePlanes = new List<Plane>();
@@ -260,7 +226,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 double[] axisValues = new double[6];
 
                 // Names counter
-                if (i < names.Count)
+                if (i < sizeValues[0])
                 {
                     name = names[i];
                     nameCounter++;
@@ -271,7 +237,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Target planes counter
-                if (i < planes.Count)
+                if (i < sizeValues[1])
                 {
                     plane = planes[i];
                     planesCounter++;
@@ -282,7 +248,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Reference plane counter
-                if (i < referencePlanes.Count)
+                if (i < sizeValues[2])
                 {
                     referencePlane = referencePlanes[i];
                     referencePlaneCounter++;
@@ -293,7 +259,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Axis configuration counter
-                if (i < axisConfigs.Count)
+                if (i < sizeValues[3])
                 {
                     axisConfig = axisConfigs[i];
                     axisConfigCounter++;
@@ -304,7 +270,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value A
-                if (i < externalAxisValueA.Count)
+                if (i < sizeValues[4])
                 {
                     axisValues[0] = externalAxisValueA[i];
                     externalAxisValueCounterA++;
@@ -315,7 +281,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value B
-                if (i < externalAxisValueB.Count)
+                if (i < sizeValues[5])
                 {
                     axisValues[1] = externalAxisValueB[i];
                     externalAxisValueCounterB++;
@@ -326,7 +292,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value C
-                if (i < externalAxisValueC.Count)
+                if (i < sizeValues[6])
                 {
                     axisValues[2] = externalAxisValueC[i];
                     externalAxisValueCounterC++;
@@ -337,7 +303,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value D
-                if (i < externalAxisValueD.Count)
+                if (i < sizeValues[7])
                 {
                     axisValues[3] = externalAxisValueD[i];
                     externalAxisValueCounterD++;
@@ -348,7 +314,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value E
-                if (i < externalAxisValueE.Count)
+                if (i < sizeValues[8])
                 {
                     axisValues[4] = externalAxisValueE[i];
                     externalAxisValueCounterE++;
@@ -359,7 +325,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // External Axis Value F
-                if (i < externalAxisValueF.Count)
+                if (i < sizeValues[9])
                 {
                     axisValues[5] = externalAxisValueF[i];
                     externalAxisValueCounterF++;
@@ -373,8 +339,34 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 targets.Add(target);
             }
 
+            // Sets Output
+            DA.SetDataList(0, targets);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears targetNames
+            for (int i = 0; i < _targetNames.Count; i++)
+            {
+                _objectManager.TargetNames.Remove(_targetNames[i]);
+            }
+            _targetNames.Clear();
+
+            // Removes lastName from targetNameList
+            if (_objectManager.TargetNames.Contains(_lastName))
+            {
+                _objectManager.TargetNames.Remove(_lastName);
+            }
+
+            // Adds Component to TargetByGuid Dictionary
+            if (!_objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.TargetsByGuid.Add(this.InstanceGuid, this);
+            }
+
             // Checks if target name is already in use and counts duplicates
-            #region NameCheck
+            #region Check name in object manager
             _namesUnique = true;
             for (int i = 0; i < names.Count; i++)
             {
@@ -419,15 +411,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
             #endregion
 
-            // Sets Output
-            DA.SetDataList(0, targets);
-
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
             if (doc != null)
             {
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         /// <summary>

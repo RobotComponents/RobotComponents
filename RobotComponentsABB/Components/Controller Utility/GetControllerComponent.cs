@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         // Fields
         private int _pickedIndex = 0;
         private static List<ABB.Robotics.Controllers.Controller> _controllerInstance = new List<ABB.Robotics.Controllers.Controller>();
-        private ControllerGoo _controllerGoo;
+        private GH_Controller _controllerGoo;
         private bool _fromMenu = false;
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 var controllerNow = GetController();
                 if (controllerNow != null)
                 {
-                    _controllerGoo = new ControllerGoo(controllerNow as ABB.Robotics.Controllers.Controller);
+                    _controllerGoo = new GH_Controller(controllerNow as ABB.Robotics.Controllers.Controller);
                     Rhino.RhinoApp.WriteLine("Controller");
                 }
                 else

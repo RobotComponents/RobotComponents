@@ -2,8 +2,8 @@
 
 using Grasshopper.Kernel;
 
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Parameters;
+using RobotComponentsGoos.Definitions;
+using RobotComponentsABB.Parameters.Definitions;
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
@@ -38,8 +38,8 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
-            pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
-            
+            pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
+            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis");
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            WorkObjectGoo workObjectGoo = null;
+            GH_WorkObject workObjectGoo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref workObjectGoo)) { return; }
@@ -57,6 +57,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Output
             DA.SetData(0, workObjectGoo.Value.Name);
             DA.SetData(1, workObjectGoo.Value.Plane);
+            DA.SetData(2, workObjectGoo.Value.ExternalAxis);
+        }
+
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -72,7 +78,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("FB54CCD8-FA21-4804-A43D-C9B53084C30B"); }
+            get { return new Guid("2EF73719-3E07-431E-8729-AB0C99848D0A"); }
         }
     }
 }

@@ -5,8 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 using RobotComponents.BaseClasses.Actions;
-
-using RobotComponentsABB.Parameters;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!
@@ -41,6 +40,14 @@ namespace RobotComponentsABB.Components.Obsolete
         public override GH_Exposure Exposure
         {
             get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -254,14 +261,6 @@ namespace RobotComponentsABB.Components.Obsolete
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return true; }
         }
 
         /// <summary>

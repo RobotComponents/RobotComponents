@@ -16,16 +16,17 @@ namespace RobotComponents.BaseClasses.Kinematics
         private RobotInfo _robotInfo; // Robot info
 
         private Plane _basePlane; // Robot Base Plane
+        private Plane _positionPlane; // Robot Position Plane: needed for external linear axis
         private Plane[] _internalAxisPlanes; // Internal Axis Planes 
         private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
         private double[] _internalAxisRads; // Internal Axis Values in Radiants
         private List<Interval> _internalAxisLimits; // Internal Axis Value Limits
-        private List<bool> _internalAxisInLimit = new List<bool>(); // Internal Axis in Limit?: Bool List
+        private readonly List<bool> _internalAxisInLimit = new List<bool>(); // Internal Axis in Limit?: Bool List
 
         private Plane[] _externalAxisPlanes; // External Axis Planes 
         private List<double> _externalAxisValues = new List<double>(); // External Axis Values in degrees or meters
         private List<Interval> _externalAxisLimits; // External Axis Value Limits
-        private List<bool> _externalAxisInLimit = new List<bool>(); // External Axis in Limit?: Bool List
+        private readonly List<bool> _externalAxisInLimit = new List<bool>(); // External Axis in Limit?: Bool List
 
         private readonly List<string> _errorText = new List<string>(); // Error text
 
@@ -70,14 +71,26 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
+        /// Creates a new forward kinematics by duplicating an existing forward kinematics.
+        /// This creates a deep copy of the existing forward kinematics.
+        /// </summary>
+        /// <param name="forwardKinematics"> The forward kinematics that should be duplicated. </param>
+        public ForwardKinematics(ForwardKinematics forwardKinematics)
+        {
+            _robotInfo = forwardKinematics.RobotInfo.Duplicate();
+            _hideMesh = forwardKinematics.HideMesh;
+            _internalAxisValues = new List<double>(InternalAxisValues);
+            _externalAxisValues = new List<double>(ExternalAxisValues);
+            Update(_internalAxisValues, _externalAxisValues);
+        }
+
+        /// <summary>
         /// A method to duplicate the Forward Kinematics object.
         /// </summary>
         /// <returns> Returns a deep copy of the Forward Kinematics object. </returns>
         public ForwardKinematics Duplicate()
         {
-            //TODO: make a method that duplicates all the used properties
-            ForwardKinematics dup = new ForwardKinematics(RobotInfo, InternalAxisValues, ExternalAxisValues, HideMesh);
-            return dup;
+            return new ForwardKinematics(this);
         }
         #endregion
 
@@ -99,17 +112,28 @@ namespace RobotComponents.BaseClasses.Kinematics
                 _posedExternalAxisMeshes = new List<List<Mesh>>();
             }
 
+            // Count the number of external linear axes that is used: it is now limited to one
+            double count = 0;
+
             // Calculates external axes position
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 // Get the external axis
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
 
-                // Check if it is an external linear axis
-                if (externalAxis is ExternalLinearAxis)
+                // Check if it is an external linear axis: the first external linear axis
+                if (externalAxis is ExternalLinearAxis && count == 0)
                 {
                     ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
-                    _basePlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
+                    _positionPlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
+                    count += 1;
+                }
+
+                // Check all other external linear axes 
+                else if (externalAxis is ExternalLinearAxis && count != 0)
+                {
+                    ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
+                    //TODO: ...
                 }
 
                 // Check if the axis is an external rotational axis
@@ -130,7 +154,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Move relative to base
             Transform transNow;
-            transNow = Transform.ChangeBasis(_basePlane, Plane.WorldXY);
+            transNow = Transform.PlaneToPlane(_basePlane, _positionPlane);
 
             // Calculates internal axes
             // First caculate all tansformations (rotations)
@@ -198,14 +222,13 @@ namespace RobotComponents.BaseClasses.Kinematics
         public void Update(List<double> internalAxisValues, List<double> externalAxisValues)
         {
             // Clear: remove data of possible old solution
-            _internalAxisValues.Clear();
             _internalAxisInLimit.Clear();
-            _externalAxisValues.Clear();
             _externalAxisInLimit.Clear();
             _errorText.Clear();
-
+            
             // Update robot data and set the internal axis values
             _basePlane = _robotInfo.BasePlane;
+            _positionPlane = new Plane(_basePlane);
             _tcpPlane = _robotInfo.ToolPlane;
             _internalAxisPlanes = _robotInfo.InternalAxisPlanes.ToArray();
             _internalAxisLimits = _robotInfo.InternalAxisLimits;

@@ -289,7 +289,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             for (int i = 0; i < _internalAxisValues.Count; i++)
             {
-                if (_internalAxisLimits[i].IncludesParameter(_internalAxisValues[i]))
+                if (_internalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false))
                 {
                     _internalAxisInLimit.Add(true);
                 }
@@ -312,7 +312,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             for (int i = 0; i < _externalAxisValues.Count; i++)
             {
-                if (_externalAxisLimits[i].IncludesParameter(_externalAxisValues[i]))
+                if (_externalAxisLimits[i].IncludesParameter(_externalAxisValues[i], false))
                 {
                     _externalAxisInLimit.Add(true);
                 }

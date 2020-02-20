@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -10,21 +9,25 @@ using RobotComponentsABB.Utils;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.06.001 (March 2020)
+// It is replaced with a new movement component. 
+
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RAPIDGeneratorComponent : GH_Component
+    public class OldRAPIDGeneratorComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RAPIDGeneratorComponent()
+        public OldRAPIDGeneratorComponent()
           : base("RAPID Generator", "RG",
-              "Generates the RAPID program and system code for the ABB IRC5 robot controller from a list of Actions."
+              "OBSOLETE: Generates the RAPID main and base code for the ABB IRC5 robot controller from a list of Actions."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -37,8 +40,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            // Always place the rapid generator in the last sub category
-            get { return GH_Exposure.septenary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -48,11 +58,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
-            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a string", GH_ParamAccess.item, "MainModule");
-            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a string", GH_ParamAccess.item, "BASE");
-            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list with strings", GH_ParamAccess.list);
+            pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
+            pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");
+            pManager.AddBooleanParameter("Save To File", "S", "Saves RAPID Code to File", GH_ParamAccess.item, false);
             pManager.AddBooleanParameter("Update", "U", "Updates RAPID Code", GH_ParamAccess.item, true);
 
+            pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
         }
@@ -62,16 +73,16 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module"); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module"); 
+            pManager.Register_StringParam("Main Code", "Main", "Robot Instructions in RAPID Code");  //Todo: beef this up to be more informative.
+            pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code");  //Todo: beef this up to be more informative.
         }
 
         // Fields
         private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs = true;
-        private string _programCode = "";
-        private string _systemCode = "";
+        private string _BASECode = "";
+        private string _MAINCode = "";
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -86,57 +97,64 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Input variables
             RobotInfo robInfo = new RobotInfo();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
-            string programName = "";
-            string systemName = "";
-            List<string> customCodeLines = new List<string>() { };
+            string moduleName = "";
+            string filePath = "";
+            bool saveToFile = false;
             bool update = true;
 
             // Catch the input data
             if (!DA.GetData(0, ref robInfo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
-            if (!DA.GetData(2, ref programName)) { programName = "MainModule"; }
-            if (!DA.GetData(3, ref systemName)) { systemName = "BASE"; }
-            if (!DA.GetDataList(4, customCodeLines)) { customCodeLines = new List<string>() { }; }
+            if (!DA.GetData(2, ref moduleName)) { moduleName = "MainModule"; }
+            if (!DA.GetData(3, ref filePath)) { return; }
+            if (!DA.GetData(4, ref saveToFile)) { return; }
             if (!DA.GetData(5, ref update)) { return; }
 
             // Checks if module name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(programName))
+            if (HelperMethods.VariableExeedsCharacterLimit32(moduleName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program Module Name exceeds character limit of 32 characters.");
-            }
-            if (HelperMethods.VariableExeedsCharacterLimit32(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System Module Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name exceeds character limit of 32 characters.");
             }
 
             // Checks if module name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(programName))
+            if (HelperMethods.VariableStartsWithNumber(moduleName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program Module Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Module Name starts with a number which is not allowed in RAPID Code.");
             }
-            if (HelperMethods.VariableStartsWithNumber(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System Module Name starts with a number which is not allowed in RAPID Code.");
-            }
+
+            // Saved file
+            bool updated = false; // Avoids saving the file two times in one run
           
-            // Updates the rapid Progam and System code
+            // Updates the rapid BASE and MAIN code 
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo.Duplicate());
+                _rapidGenerator = new RAPIDGenerator(moduleName, "BASE", actions, filePath, saveToFile, robInfo.Duplicate());
 
                 // Get tools data for system module
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
                 List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
+                List<string> customCode = new List<string>() { };
 
                 // Generator code
-                _rapidGenerator.CreateSystemCode(robotTools, workObjects, customCodeLines);
+                _rapidGenerator.CreateSystemCode(robotTools, workObjects, customCode);
                 _rapidGenerator.CreateProgramCode();
-                _programCode = _rapidGenerator.ProgramCode;
-                _systemCode = _rapidGenerator.SystemCode;
+                _MAINCode = _rapidGenerator.ProgramCode;
+                _BASECode = _rapidGenerator.SystemCode;
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Saved file
+                updated = true; // Avoids saving the file two times in one run
+            }
+
+            // Save to file
+            if (saveToFile == true && updated == false) // Avoids saving the file two times in one run
+            {
+                _rapidGenerator.FilePath = filePath;
+                _rapidGenerator.WriteProgramCodeToFile();
+                _rapidGenerator.WriteSystemCodeToFile();
             }
 
             // Checks if first Movement is MoveAbsJ
@@ -146,52 +164,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Output
-            DA.SetData(0, _programCode);
-            DA.SetData(1, _systemCode);
-        }
-
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            // Add menu separator
-            Menu_AppendSeparator(menu);
-
-            // Add custom menu items
-            Menu_AppendItem(menu, "Save RAPID Modules to folder", MenuItemClickSaveToFolder);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Save to folder" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void MenuItemClickSaveToFolder(object sender, EventArgs e)
-        {
-            SaveRapidCodeToFolder();
-        }
-
-        /// <summary>
-        /// Save RAPID code to selected folder
-        /// </summary>
-        private void SaveRapidCodeToFolder()
-        {
-            FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                // Get select file path
-                _rapidGenerator.FilePath = folderBrowserDialog.SelectedPath;
-
-                // Save RAPID Code to folder
-                _rapidGenerator.WriteProgramCodeToFile();
-                _rapidGenerator.WriteSystemCodeToFile();
-
-                // Reset file path
-                _rapidGenerator.FilePath = null;
-            }
+            DA.SetData(0, _MAINCode);
+            DA.SetData(1, _BASECode);
         }
 
         /// <summary>
@@ -210,7 +184,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("00E6B125-6B7F-4FAA-91B3-F01A45EC7B58"); }
+            get { return new Guid("71E8E409-A998-4714-8145-FE2A81973970"); }
         }
     }
 }

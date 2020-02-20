@@ -250,6 +250,7 @@ namespace RobotComponents.BaseClasses.Actions
                 systemCode += " ! User definied custom code lines " + "@";
                 for (int i = 0; i != customCode.Count; i++)
                 {
+                    systemCode += " ";
                     systemCode += customCode[i];
                     systemCode += "@";
                 }

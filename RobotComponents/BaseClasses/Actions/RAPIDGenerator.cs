@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using System.Text;
-
+// Rhino Libs
 using Rhino.Geometry;
-
+// RobotComponents Libs
 using RobotComponents.Utils;
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponents.BaseClasses.Kinematics;
@@ -24,12 +24,13 @@ namespace RobotComponents.BaseClasses.Actions
         private readonly Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
-        private string _RAPIDCode; // The rapid main code
-        private string _BASECode; // The rapid base code
-        private string _ModuleName; // The module name of the rapid main code
+        private string _programCode; // The rapid program code
+        private string _systemCode; // The rapid system code
+        private string _programName; // The module name of the rapid program code
+        private string _systemName; // The module name of the rapod system code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
-        private string _currentTool; // The current tool that should be used
+        private string _currentTool; // The current tool that is used
         #endregion
 
         #region constructors
@@ -43,14 +44,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Initiates an RAPID generator. This constructor does not call the methods that create and write the code. 
         /// </summary>
-        /// <param name="moduleName"> The name of module / program. </param>
+        /// <param name="programName"> The name of the program module </param>
+        /// <param name="systemName"> The name of the system module </param>
         /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
         /// <param name="filePath"> The path where the code files should be saved. </param>
         /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
         /// <param name="robotInfo"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string moduleName, List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
+        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
         {
-            _ModuleName = moduleName;
+            _programName = programName;
+            _systemName = systemName;
             _robotInfo = robotInfo;
             _actions = actions;
             _filePath = filePath;
@@ -65,13 +68,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="generator"> The RAPID generator that should be duplicated. </param>
         public RAPIDGenerator(RAPIDGenerator generator)
         {
-            _ModuleName = generator.ModuleName;
+            _programName = generator.ProgramName;
+            _systemName = generator.SystemName;
             _robotInfo = generator.RobotInfo.Duplicate();
             _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _filePath = generator.FilePath;
             _saveToFile = generator.SaveToFile;
-            _RAPIDCode = generator.RAPIDCode;
-            _BASECode = generator.BASECode;
+            _programCode = generator.ProgramCode;
+            _systemCode = generator.SystemCode;
             _firstMovementIsMoveAbs = generator.FirstMovementIsMoveAbs;
             _inverseKinematics = generator.InverseKinematics.Duplicate();
         }
@@ -89,11 +93,11 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
-        /// Creates the RAPID main codes.
+        /// Creates the RAPID program code.
         /// This method also overwrites or creates a file if saved to file is set eqaul to true.
         /// </summary>
-        /// <returns> Returns the RAPID main code as a string. </returns>
-        public string CreateRAPIDCode()
+        /// <returns> Returns the RAPID program code as a string. </returns>
+        public string CreateProgramCode()
         {
             // Resets Dictionaries
             _movements.Clear();
@@ -107,7 +111,7 @@ namespace RobotComponents.BaseClasses.Actions
             _stringBuilder = new StringBuilder();
 
             // Creates Main Module
-            _stringBuilder.Append("MODULE " + _ModuleName + "@");
+            _stringBuilder.Append("MODULE " + _programName + "@");
 
             // Add comment lines for tracking which version of RC was used
             Comment version = new Comment("This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
@@ -166,102 +170,117 @@ namespace RobotComponents.BaseClasses.Actions
             // Closes Module
             _stringBuilder.Append("@" + "@" + "ENDMODULE");
 
-            // Replaces@ with newLines
+            // Replaces @ with newLines
             _stringBuilder.Replace("@", System.Environment.NewLine);
 
             // Update field
-            _RAPIDCode = _stringBuilder.ToString();
+            _programCode = _stringBuilder.ToString();
 
             // Write to file
             if (_saveToFile == true)
             {
-                WriteRAPIDCodeToFile();
+                WriteProgramCodeToFile();
             }
 
             // Return
-            return _RAPIDCode;
+            return _programCode;
         }
 
         /// <summary>
-        /// Creates the RAPID base code with as default tool0, wobj0 and load0. 
+        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE
         /// This method also overwrites or creates a file if saved to file is set equal to true.
         /// </summary>
         /// <param name="robotTools"> The robot tools that should be added to the BASE code as a list. </param>
         /// <param name="workObjects"> The work objects that should be added to the BASE code as a list. </param>
         /// <param name="customCode"> Custom user definied base code as list with strings. </param>
-        /// <returns> Returns the RAPID base code as a string. </returns>
-        public string CreateBaseCode(List<RobotTool> robotTools, List<WorkObject> workObjects, List<string> customCode)
+        /// <returns> Returns the RAPID system code as a string. </returns>
+        public string CreateSystemCode(List<RobotTool> robotTools, List<WorkObject> workObjects, List<string> customCode)
         {
-            // Creates Main Module
-            string BASECode = "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)" + "@" + "@";
+            // Initialize
+            string systemCode = "";
+
+            // First line
+            if (_systemName == "BASE")
+            {
+                systemCode += "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)" + "@" + "@";
+            }
+            else
+            {
+                systemCode += "MODULE " + _systemName + " (SYSMODULE)" + "@" + "@";
+            }
 
             // Version number
-            BASECode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion + "@" + "@";
+            systemCode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion + "@" + "@";
 
             // Creates Comments
-            BASECode += " ! System module with basic predefined system data" + "@";
-            BASECode += " !************************************************" + "@" + "@";
-            BASECode += " ! System data tool0, wobj0 and load0" + "@";
-            BASECode += " ! Do not translate or delete tool0, wobj0, load0" + "@";
+            systemCode += " ! System module with basic predefined system data" + "@";
+            systemCode += " !************************************************" + "@" + "@";
 
-            // Creates Predefined System Data
-            BASECode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];" + "@";
-            BASECode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];" + "@";
-            BASECode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];" + "@" + "@";
+            // Creates Predefined System Data: only if it is the BASE module
+            if (_systemName == "BASE")
+            {
+                systemCode += " ! System data tool0, wobj0 and load0" + "@";
+                systemCode += " ! Do not translate or delete tool0, wobj0, load0" + "@";
+
+                // Creates Predefined System Data
+                systemCode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];" + "@";
+                systemCode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];" + "@";
+                systemCode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];" + "@" + "@";
+            }
 
             // Adds Tools Base Code
             if (robotTools.Count != 0 && robotTools != null)
             {
-                BASECode += " ! User defined tooldata " + "@";
-                BASECode += CreateToolBaseCode(robotTools);
-                BASECode += "@";
+                systemCode += " ! User defined tooldata " + "@";
+                systemCode += CreateToolSystemCode(robotTools);
+                systemCode += "@";
             }
 
             // Adds Work Objects Base Code
             if (workObjects.Count != 0 && workObjects != null)
             {
-                BASECode += " ! User defined wobjdata " + "@";
-                BASECode += CreateWorkObjectBaseCode(workObjects);
-                BASECode += "@";
+                systemCode += " ! User defined wobjdata " + "@";
+                systemCode += CreateWorkObjectSystemCode(workObjects);
+                systemCode += "@";
             }
 
             // Adds Custom code line
             if (customCode.Count != 0 && customCode != null)
             {
-                BASECode += " ! User definied custom code lines " + "@";
+                systemCode += " ! User definied custom code lines " + "@";
                 for (int i = 0; i != customCode.Count; i++)
                 {
-                    BASECode += customCode[i];
-                    BASECode += "@";
+                    systemCode += customCode[i];
+                    systemCode += "@";
                 }
-                BASECode += "@";
+                systemCode += "@";
             }
 
             // End Module
-            BASECode += "ENDMODULE";
+            systemCode += "ENDMODULE";
 
-            // Replaces @ with newLines
-            BASECode = BASECode.Replace("@", System.Environment.NewLine);
+            // Replaces @ with new lines
+            systemCode = systemCode.Replace("@", System.Environment.NewLine);
 
             // Update field
-            _BASECode = BASECode;
+            _systemCode = systemCode;
 
             // Write to file
             if (_saveToFile == true)
             {
-                WriteBASECodeToFile();
+                WriteSystemCodeToFile();
             }
 
             // Return
-            return BASECode;
+            return systemCode;
         }
 
         /// <summary>
-        /// Gets the Base Code for all Robot Tools in the list.
+        /// Gets the System Code for all Robot Tools in the list.
         /// </summary>
         /// <param name="robotTools"> The list with Robot Tools. </param>
-        /// <returns> Returns the robot tool base code as a string. </returns>
-        private string CreateToolBaseCode(List<RobotTool> robotTools)
+        /// <returns> Returns the robot tool system code as a string. </returns>
+        private string CreateToolSystemCode(List<RobotTool> robotTools)
         {
             string result = " ";
 
@@ -275,11 +294,11 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Gets the Base Code for all Robot Tools in the list.
+        /// Gets the System Code for all Robot Tools in the list.
         /// </summary>
         /// <param name="workObjects"> The list with Robot Tools. </param>
-        /// <returns> Returns the robot tool base code as a string. </returns>
-        private string CreateWorkObjectBaseCode(List<WorkObject> workObjects)
+        /// <returns> Returns the robot tool system code as a string. </returns>
+        private string CreateWorkObjectSystemCode(List<WorkObject> workObjects)
         {
             string result = " ";
 
@@ -293,29 +312,29 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Writes the RAPID main code to a file if a file path is set
+        /// Writes the RAPID program code to a file if a file path is set
         /// </summary>
-        public void WriteRAPIDCodeToFile()
+        public void WriteProgramCodeToFile()
         {
             if (_filePath != null && _filePath != "" && _filePath != "null")
             {
-                using (StreamWriter writer = new StreamWriter(_filePath + "\\main_T.mod", false))
+                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _programName + ".mod", false))
                 {
-                    writer.WriteLine(_RAPIDCode);
+                    writer.WriteLine(_programCode);
                 }
             }
         }
 
         /// <summary>
-        /// Writes the BASE Code to a file if a file path is set
+        /// Writes the RAPID system code to a file if a file path is set
         /// </summary>
-        public void WriteBASECodeToFile()
+        public void WriteSystemCodeToFile()
         {
             if (_filePath != null && _filePath != "" && _filePath != "null")
             {
-                using (StreamWriter writer = new StreamWriter(_filePath + "\\BASE.sys", false))
+                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _systemName + ".sys", false))
                 {
-                    writer.WriteLine(_BASECode);
+                    writer.WriteLine(_systemCode);
                 }
             }
         }
@@ -362,19 +381,19 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The main RAPID code
+        /// The RAPID Program code
         /// </summary>
-        public string RAPIDCode
+        public string ProgramCode
         {
-            get { return _RAPIDCode; }
+            get { return _programCode; }
         }
 
         /// <summary>
-        /// The RAPID Base code
+        /// The RAPID System code
         /// </summary>
-        public string BASECode
+        public string SystemCode
         {
-            get { return _BASECode; }
+            get { return _systemCode; }
         }
 
         /// <summary>
@@ -394,12 +413,21 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The module name of the RAPID main code
+        /// The module name of the RAPID program code
         /// </summary>
-        public string ModuleName
+        public string ProgramName
         {
-            get { return _ModuleName; }
-            set { _ModuleName = value; }
+            get { return _programName; }
+            set { _programName = value; }
+        }
+
+        /// <summary>
+        /// The module name of the RAPID system code
+        /// </summary>
+        public string SystemName
+        {
+            get { return _systemName; }
+            set { _systemName = value; }
         }
 
         /// <summary>
@@ -452,6 +480,9 @@ namespace RobotComponents.BaseClasses.Actions
             get { return _stringBuilder; }
         }
 
+        /// <summary>
+        /// The current tool that is used. 
+        /// </summary>
         public string CurrentTool
         {
             get { return _currentTool; }

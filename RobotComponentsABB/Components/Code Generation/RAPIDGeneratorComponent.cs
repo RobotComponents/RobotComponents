@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
+// Grasshopper Libs
 using Grasshopper.Kernel;
-
+// RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Utils;
@@ -118,7 +118,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(moduleName, actions, filePath, saveToFile, robInfo.Duplicate());
+                _rapidGenerator = new RAPIDGenerator(moduleName, "BASE", actions, filePath, saveToFile, robInfo.Duplicate());
 
                 // Get tools data for system module
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
@@ -126,10 +126,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 List<string> customCode = new List<string>() { };
 
                 // Generator code
-                _rapidGenerator.CreateBaseCode(robotTools, workObjects, customCode);
-                _rapidGenerator.CreateRAPIDCode();
-                _MAINCode = _rapidGenerator.RAPIDCode;
-                _BASECode = _rapidGenerator.BASECode;
+                _rapidGenerator.CreateSystemCode(robotTools, workObjects, customCode);
+                _rapidGenerator.CreateProgramCode();
+                _MAINCode = _rapidGenerator.ProgramCode;
+                _BASECode = _rapidGenerator.SystemCode;
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
@@ -142,8 +142,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (saveToFile == true && updated == false) // Avoids saving the file two times in one run
             {
                 _rapidGenerator.FilePath = filePath;
-                _rapidGenerator.WriteRAPIDCodeToFile();
-                _rapidGenerator.WriteBASECodeToFile();
+                _rapidGenerator.WriteProgramCodeToFile();
+                _rapidGenerator.WriteSystemCodeToFile();
             }
 
             // Checks if first Movement is MoveAbsJ

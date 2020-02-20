@@ -73,6 +73,7 @@
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructAbsolutJointMovementComponent.cs" />
@@ -632,6 +633,7 @@
     <None Include="Resources\ExternalRotationalAxis_Icon.png" />
     <None Include="Resources\Action_Parameter_Icon.png" />
     <None Include="Resources\ExternalAxis_Parameter_Icon.png" />
+    <None Include="Resources\GetPlane_Icon.png" />
     <Content Include="Resources\IRB1200_5_0_90_link_2.txt" />
     <Content Include="Resources\IRB1200_5_0_90_link_3.txt" />
     <Content Include="Resources\IRB1200_5_0_90_link_4.txt" />

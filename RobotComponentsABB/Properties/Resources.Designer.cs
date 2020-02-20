@@ -413,6 +413,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetPlane_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetPlane_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Info_Icon {
             get {
                 object obj = ResourceManager.GetObject("Info_Icon", resourceCulture);

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
+// ABB Libs
+using ABB.Robotics.Controllers.RapidDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -25,12 +27,21 @@ namespace RobotComponentsABB.Components.ControllerUtility
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract Axis values from", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract the axis values from", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -82,7 +93,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        public List<double> GetInternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        public List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -113,7 +124,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        public List<double> GetExternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        public List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };

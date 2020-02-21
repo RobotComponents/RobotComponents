@@ -8,6 +8,7 @@ using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
+using ABB.Robotics.Controllers.IOSystemDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -66,8 +67,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private ABB.Robotics.Controllers.Controller _controller = null;
         private GH_Signal _signalGoo;
         private string _currentSignalName = "";
-        private string _currentSystemName = "";
-        private string _currentCtrName = "";
+        private Guid _currentGuid = Guid.Empty;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -97,7 +97,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Initiate signal values
             _signalGoo = null;
-            ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal signal; ;
+            DigitalSignal signal; ;
 
             // Check for null returns
             if (nameIO == null || nameIO == "")
@@ -142,8 +142,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             _signalGooList.Clear();
 
             // Get the signal ins the robot controller
-            ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Input);
+            SignalCollection signalCollection;
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
 
             // Initate the list with signal names
             List<string> signalNames = new List<string>();
@@ -155,7 +155,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
-                    _signalGooList.Add(new GH_Signal(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
+                    _signalGooList.Add(new GH_Signal(signalCollection[i] as DigitalSignal));
                 }
             }
 
@@ -191,7 +191,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private GH_Signal GetSignal(string name)
         {
             // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
-            if (name != _currentSignalName || _controller.SystemName != _currentSystemName || _controller.Name != _currentCtrName)
+            if (name != _currentSignalName || _controller.SystemId != _currentGuid)
             {
                 if (!ValidSignal(name))
                 {
@@ -201,12 +201,11 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
                 // Update the current names
                 _currentSignalName = (string)name.Clone();
-                _currentSystemName = (string)_controller.SystemName.Clone();
-                _currentCtrName = (string)_controller.Name.Clone();
+                _currentGuid = new Guid(_controller.SystemId.ToString());
             }
 
             // Get the signal from the defined controller
-            ABB.Robotics.Controllers.IOSystemDomain.Signal signal = _controller.IOSystem.GetSignal(name) as ABB.Robotics.Controllers.IOSystemDomain.Signal;
+            DigitalSignal signal = _controller.IOSystem.GetSignal(name) as DigitalSignal;
 
             // Check for null return
             if (signal != null)
@@ -218,7 +217,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 }
 
                 // Return the selected signal
-                return new GH_Signal(signal as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal);
+                return new GH_Signal(signal);
             }
 
             // If the signal is null: return nothing and reaise a message. 
@@ -270,8 +269,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private bool ValidSignal(string signalName)
         {
             // Get the signals that are defined in the controller
-            ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Input);
+            SignalCollection signalCollection;
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
 
             // Initiate the list with signal names
             List<string> signalNames = new List<string>();

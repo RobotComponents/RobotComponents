@@ -20,7 +20,7 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from controller object
         /// </summary>
         /// <param name="controller"> Controller Value to store inside this Goo instance. </param>
         public GH_Controller(Controller controller)
@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Goos
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor from other controllerGoo instance. This creates a shallow copy. 
         /// </summary>
         /// <param name="controllerGoo"> Controller Value to store inside this Goo instance. </param>
         public GH_Controller(GH_Controller controllerGoo)
@@ -94,7 +94,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeName
         {
-            get { return ("Controller"); }
+            get { return "Controller"; }
         }
 
         /// <summary>
@@ -102,10 +102,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public override string TypeDescription
         {
-            get
-            {
-                return "Defines a ABB Controller";
-            }
+            get { return "Defines an ABB Controller"; }       
         }
         #endregion
     }

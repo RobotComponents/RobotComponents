@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -150,6 +151,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             DA.SetData(1, _systemCode);
         }
 
+        #region custom menu items: save RAPID modules to file
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -159,40 +161,88 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Add menu separator
             Menu_AppendSeparator(menu);
 
-            // Add custom menu items
-            Menu_AppendItem(menu, "Save RAPID Modules to folder", MenuItemClickSaveToFolder);
+            // Add custom menu items to save RAPID modules to a user defined file
+            Menu_AppendItem(menu, "Save Program module to file", MenuItemClickSaveProgramModule);
+            Menu_AppendItem(menu, "Save System module to file", MenuItemClickSaveSystemModule);
+
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Save to folder" is clicked. 
+        /// Handles the event when the custom menu item "Save to Program module to file" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickSaveToFolder(object sender, EventArgs e)
+        private void MenuItemClickSaveProgramModule(object sender, EventArgs e)
         {
-            SaveRapidCodeToFolder();
+            SaveProgramModule();
         }
 
         /// <summary>
-        /// Save RAPID code to selected folder
+        /// Handles the event when the custom menu item "Save to System module to file" is clicked. 
         /// </summary>
-        private void SaveRapidCodeToFolder()
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickSaveSystemModule(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            SaveSystemModule();
+        }
 
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+        /// <summary>
+        /// Save Program module to file
+        /// </summary>
+        private void SaveProgramModule()
+        {
+            // Create save file dialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.CheckFileExists = false;
+            saveFileDialog.CheckPathExists = true;
+            saveFileDialog.DefaultExt = "mod";
+            saveFileDialog.Filter = "RAPID Program Module|*.mod";
+            saveFileDialog.Title = "Save a RAPID Program Module";
+
+            // If result of dialog is OK the file can be saved
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                // Get select file path
-                _rapidGenerator.FilePath = folderBrowserDialog.SelectedPath;
-
-                // Save RAPID Code to folder
-                _rapidGenerator.WriteProgramCodeToFile();
-                _rapidGenerator.WriteSystemCodeToFile();
-
-                // Reset file path
-                _rapidGenerator.FilePath = null;
+                // Check the file name
+                if (saveFileDialog.FileName != "")
+                {
+                    // Write RAPID code to file
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
+                    {
+                        writer.WriteLine(_programCode);
+                    }
+                }
             }
         }
+
+        /// <summary>
+        /// Save System module to file
+        /// </summary>
+        private void SaveSystemModule()
+        {
+            // Create save file dialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.CheckFileExists = false;
+            saveFileDialog.CheckPathExists = true;
+            saveFileDialog.DefaultExt = "sys";
+            saveFileDialog.Filter = "RAPID System Module|*.sys";
+            saveFileDialog.Title = "Save a RAPID System Module";
+
+            // If result of dialog is OK the file can be saved
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Check the file name
+                if (saveFileDialog.FileName != "")
+                {
+                    // Write RAPID code to file
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
+                    {
+                        writer.WriteLine(_systemCode);
+                    }
+                }
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

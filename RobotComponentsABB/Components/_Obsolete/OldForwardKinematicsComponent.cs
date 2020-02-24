@@ -1,12 +1,19 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Drawing;
 using System.Collections.Generic;
-
+// Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
+// Rhino Libs
 using Rhino.Geometry;
-
+// RobotComponents Libs
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
@@ -83,6 +90,11 @@ namespace RobotComponentsABB.Components.Obsolete
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             GH_RobotInfo robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();

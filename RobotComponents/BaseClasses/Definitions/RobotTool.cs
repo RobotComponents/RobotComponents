@@ -22,7 +22,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
         // Fields specific needed for defining the robot tool code
         private bool _robotHold;
-        private Vector3d _position;
+        private Point3d _position;
         private Quaternion _orientation;
         private double _mass;
         private Vector3d _centerOfGravity;
@@ -109,6 +109,68 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
+        /// With load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
+        /// <param name="x"> The x coordinate of the TCP point. </param>
+        /// <param name="y"> The y coordinate of the TCP point. </param>
+        /// <param name="z"> The z coordinate of the TCP point.</param>
+        /// <param name="q1"> The real part of the quaternion. </param>
+        /// <param name="q2"> The first imaginary coefficient of the quaternion. </param>
+        /// <param name="q3"> The second imaginary coefficient of the quaternion. </param>
+        /// <param name="q4"> The third imaginary coefficient of the quaternion. </param>
+        public RobotTool(string name, Mesh mesh, double x, double y,
+            double z, double q1, double q2, double q3, double q4)
+        {
+            _name = name;
+            _mesh = mesh;
+            _attachmentPlane = Plane.WorldXY;
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            // Get tool plane from quaternion and coordinates
+            Quaternion quat = new Quaternion(q1, q2, q3, q4);
+            Point3d point = new Point3d(x, y, z);
+            quat.GetRotation(out Plane plane);
+            _toolPlane = new Plane(point, plane.XAxis, plane.YAxis);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot tool from the TCP point and the TCP orientation defined as a quatertion.
+        /// With load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
+        /// <param name="point"> The point of the tool center as point </param>
+        /// <param name="quat"> The orientation of the tool center point as quarternion </param>
+        public RobotTool(string name, Mesh mesh, Point3d point, Quaternion quat)
+        {
+            _name = name;
+            _mesh = mesh;
+            _attachmentPlane = Plane.WorldXY;
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            // Get tool plane from point and quarternion
+            quat.GetRotation(out Plane plane);
+            _toolPlane = new Plane(point, plane.XAxis, plane.YAxis);
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Defines a robot tool with user defined load data. 
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
@@ -156,7 +218,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _centerOfGravityOrientation = robotTool.CenterOfGravityOrientation;
             _inertia = new Vector3d(robotTool.Inertia);
 
-            _position = new Vector3d(robotTool.Position);
+            _position = new Point3d(robotTool.Position);
             _orientation = robotTool.Orientation;
 
             if (duplicateMesh == true) { _mesh = robotTool.Mesh.DuplicateMesh(); }
@@ -205,9 +267,9 @@ namespace RobotComponents.BaseClasses.Definitions
         /// Calculates the local tool center point relative to the defined attachment plane. 
         /// </summary>
         /// <returns> Returns the local tool center point coordinates. </returns>
-        public Vector3d GetToolPosition()
+        public Point3d GetToolPosition()
         {
-            _position = new Vector3d(_toolPlane.Origin - _attachmentPlane.Origin);
+            _position = new Point3d(_toolPlane.Origin - _attachmentPlane.Origin);
             return _position;
         }
 
@@ -293,7 +355,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = Plane.Unset;
             _toolPlane = Plane.Unset;
             _robotHold = false;
-            _position = Vector3d.Unset;
+            _position = Point3d.Unset;
             _orientation = Quaternion.Zero;
             _mass = 0; 
             _centerOfGravity = Vector3d.Unset;
@@ -398,13 +460,13 @@ namespace RobotComponents.BaseClasses.Definitions
         /// The position of the the tool center point which is the offset between
         /// the tool center plane and the attachment plane
         /// </summary>
-        public Vector3d Position
+        public Point3d Position
         {
             get { return _position; }
         }
 
         /// <summary>
-        /// The orientation of the tool center point
+        /// The orientation of the tool center point as a Quaternion
         /// </summary>
         public Quaternion Orientation
         {

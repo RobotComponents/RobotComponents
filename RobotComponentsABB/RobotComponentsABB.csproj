@@ -73,6 +73,8 @@
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldGetDigitalOutputComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldGetDigitalInputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />
     <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />

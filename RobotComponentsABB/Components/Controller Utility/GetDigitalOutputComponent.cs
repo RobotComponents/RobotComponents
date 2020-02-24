@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -43,7 +49,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
+            //TODO: Replace generic parameter with a RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
             pManager.AddTextParameter("DO Name", "N", "Digital Output Name as string", GH_ParamAccess.item);
             pManager[1].Optional = true;
@@ -56,7 +62,6 @@ namespace RobotComponentsABB.Components.ControllerUtility
         {
             // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Signal", "S", "The Digital Output Signal", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "The Digital Output State", GH_ParamAccess.item);
         }
 
         // Fields
@@ -86,11 +91,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Get controller and logon
             _controller = controllerGoo.Value;
-            _controller.Logon(UserInfo.DefaultUser);
+            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
             // Ouput variables
             GH_Signal signalGoo;
-            bool signalValue;
 
             // Check for null returns
             if (nameIO == null || nameIO == "")
@@ -103,22 +107,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 signalGoo = GetSignal(nameIO);
             }
 
-            // Declair Signal
-            DigitalSignal signal = signalGoo.Value;
-
-            // Convert Signal to a bool 
-            if (signal.Value == 1)
-            {
-                signalValue = true;
-            }
-            else
-            {
-                signalValue = false;
-            }
-
             // Output
             DA.SetData(0, signalGoo);
-            DA.SetData(1, signalValue);
         }
 
         // Additional methods
@@ -347,7 +337,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5104b915-0b75-40bc-b901-8fddeb8edcd3"); }
+            get { return new Guid("15E9EB1D-3EC5-44FB-9694-0DAC7C37AD97"); }
         }
     }
 }

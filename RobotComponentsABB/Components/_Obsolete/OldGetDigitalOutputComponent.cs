@@ -16,19 +16,23 @@ using RobotComponentsABB.Goos;
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.IOSystemDomain;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.07.000 (March 2020)
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and read the Digital Inputs from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetDigitalInputComponent : GH_Component
+    public class OldGetDigitalOutputComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GetDigitalInput class.
+        /// Initializes a new instance of the GetDigitalOutput class.
         /// </summary>
-        public GetDigitalInputComponent()
-          : base("Get Digital Input", "GetDI",
-              "Gets a digital input from a defined ABB robot controller."
+        public OldGetDigitalOutputComponent()
+          : base("Get Digital Output", "GetDO",
+              "OBSOLETE: Gets the signal of a digital output from a defined ABB robot controller."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
@@ -41,7 +45,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -51,7 +63,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         {
             // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddTextParameter("DI Name", "N", "Digital Input Name as string", GH_ParamAccess.item);
+            pManager.AddTextParameter("DO Name", "N", "Digital Output Name as string", GH_ParamAccess.item);
             pManager[1].Optional = true;
         }
 
@@ -60,14 +72,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            //TODO: Replace generic parameter with a RobotComponents Parameter
-            pManager.AddGenericParameter("Signal", "S", "The Digital Input Signal", GH_ParamAccess.item);
+            // To do: replace generic parameter with an RobotComponents Parameter
+            pManager.AddGenericParameter("Signal", "S", "The Digital Output Signal", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "The Digital Output State", GH_ParamAccess.item);
         }
 
         // Fields
         private int _pickedIndex = 0;
         private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
-        private ABB.Robotics.Controllers.Controller _controller = null;
+        private ABB.Robotics.Controllers.Controller _controller = null; 
         private string _currentSignalName = "";
         private Guid _currentGuid = Guid.Empty;
 
@@ -77,6 +90,11 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             GH_Controller controllerGoo = null;
             string nameIO = "";
@@ -93,8 +111,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
             _controller = controllerGoo.Value;
             _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
-            // Output variables
+            // Ouput variables
             GH_Signal signalGoo;
+            bool signalValue;
 
             // Check for null returns
             if (nameIO == null || nameIO == "")
@@ -107,8 +126,22 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 signalGoo = GetSignal(nameIO);
             }
 
+            // Declair Signal
+            DigitalSignal signal = signalGoo.Value;
+
+            // Convert Signal to a bool 
+            if (signal.Value == 1)
+            {
+                signalValue = true;
+            }
+            else
+            {
+                signalValue = false;
+            }
+
             // Output
             DA.SetData(0, signalGoo);
+            DA.SetData(1, signalValue);
         }
 
         // Additional methods
@@ -124,7 +157,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Get the signal ins the robot controller
             SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Output);
 
             // Initate the list with signal names
             List<string> signalNames = new List<string>();
@@ -164,6 +197,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
         }
 
+
         /// <summary>
         /// Get the signal
         /// </summary>
@@ -180,7 +214,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     return null;
                 }
 
-                // Update the current names
+                // Update the current values
                 _currentSignalName = (string)name.Clone();
                 _currentGuid = new Guid(_controller.SystemId.ToString());
             }
@@ -244,7 +278,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         {
             // Get the signals that are defined in the controller
             SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Input);
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Output);
 
             // Initiate the list with signal names
             List<string> signalNames = new List<string>();
@@ -267,21 +301,21 @@ namespace RobotComponentsABB.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Displays the form with the names of the digital inputs and returns the index of the picked one. 
+        /// Displays the form with the names of the digital outputs and returns the index of the picked one. 
         /// </summary>
-        /// <param name="IONames"> The list with names of the digital inputs. </param>
+        /// <param name="IONames"> The list with names of the digital outputs. </param>
         /// <returns></returns>
         private int DisplayForm(List<string> IONames)
         {
             // Create the form
-            PickDIForm frm = new PickDIForm(IONames);
+            PickDOForm frm = new PickDOForm(IONames);
 
             // Displays the form
             Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
             frm.ShowDialog();
 
             // Returns the index of the picked item
-            return PickDIForm.stationIndex;
+            return PickDOForm.stationIndex;
         }
 
         /// <summary>
@@ -316,7 +350,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// The list with all the digital input signals
+        /// The list with all the digital output signals
         /// </summary>
         public static List<GH_Signal> SignalGooList
         {
@@ -328,7 +362,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetDigitalInput_Icon; }
+            get { return RobotComponentsABB.Properties.Resources.GetDigitalOutput_Icon; }
         }
 
         /// <summary>
@@ -336,7 +370,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4AB97528-5BB6-4AE9-857C-1AEE0E8E9DCE"); }
+            get { return new Guid("5104b915-0b75-40bc-b901-8fddeb8edcd3"); }
         }
     }
 }

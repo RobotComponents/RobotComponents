@@ -1,7 +1,11 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.IO;
-using System.Linq;
-using System.Xml;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -43,14 +47,14 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
+            //TODO: Replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Connect", "C", "Create an online conncetion with the Robot", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Upload", "U", "Upload your RAPID code to the Robot", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Run", "R", "Run", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
-            pManager.AddTextParameter("Main Code", "M", "Insert here the MainCode", GH_ParamAccess.item);
-            pManager.AddTextParameter("Base Code", "B", "Insert here the BaseCode", GH_ParamAccess.item);
+            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a string", GH_ParamAccess.item);
+            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a string", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             bool upload = false;
             bool run = false;
             bool stop = false;
-            string RAPID= null;
+            string RAPID = null;
             string BaseCode= null;
 
             // Catch input data
@@ -109,76 +113,93 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     Run();
                 }
 
-                // Stop the program
+                // Stop the program when toggled
                 if (stop)
                 {
                     Stop();
                 }
 
-                // Upload the code
+                // Upload the code when toggled
                 if (upload)
                 {
                     // First stop the current program
                     Stop();
 
-                    // Get path
-                    string path = Path.Combine(Util.LibraryPath(), "temp");
+                    // Get path for temporary saving of the module files on the local harddrive of the user
+                    // NOTE: This is not a path on the controller, but on the pc of the user
+                    string localDirectory = Path.Combine(DocumentsFolderPath(), "RobotComponents", "temp");
 
-                    // Check if the parh already exists
-                    if (Directory.Exists(path))
+                    // Check if the directory already exists
+                    if (Directory.Exists(localDirectory))
                     {
                         // Delete if it already exists
-                        Directory.Delete(path, true);
+                        Directory.Delete(localDirectory, true);
                     }
 
-                    // Create new path / folder
-                    Directory.CreateDirectory(path);
+                    // Create new directory
+                    Directory.CreateDirectory(localDirectory);
 
-                    // Save the RAPID code
-                    SaveRapid(path, RAPID, BaseCode);
+                    // Save the RAPID code to the created directory / local folder
+                    SaveModulesToFile(localDirectory, RAPID, BaseCode);
 
-                    // Get file path / directory to save on the controller
-                    string localDirectory = Path.Combine(path, "RAPID");
-                    string str3 = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
-                    string filePath;
+                    // Directory to save the modules on the controller
+                    string controllerDirectory = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
 
-                    // Upload to the virtual controller
-                    if (!_controller.IsVirtual)
+                    // Module file paths
+                    string filePathProgram;
+                    string filePathSystem;
+
+                    // Upload to the real physical controller
+                    if (_controller.IsVirtual == false)
                     {
                         _controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
                         _controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
-                        filePath = Path.Combine(str3, "RAPID_T_ROB1.pgf");
+                        filePathProgram = Path.Combine(controllerDirectory, "ProgramModule.mod");
+                        filePathSystem = Path.Combine(controllerDirectory, "SystemModule.sys");
                     }
-                    // Upload to a physical controller
+                    // Upload to a virtual controller
                     else
                     {
-                        filePath = Path.Combine(localDirectory, "RAPID_T_ROB1.pgf");
+                        filePathProgram = Path.Combine(localDirectory, "ProgramModule.mod");
+                        filePathSystem = Path.Combine(localDirectory, "SystemModule.sys");
                     }
 
                     // The real upload
-                    using (Mastership.Request(_controller.Rapid))
+                    using (Mastership master = Mastership.Request(_controller.Rapid))
                     {
-                        // Get current task
-                        Task task = _controller.Rapid.GetTasks().First<Task>();
+                        // Get task
+                        Task[] tasks = _controller.Rapid.GetTasks();
+                        Task task = tasks[0];
 
-                        // Delete current task
-                        task.DeleteProgram();
-
-                        // Reset current BASE code if no new base code is provided
-                        if (BaseCode == null)
-                        {
-                            Module Base = task.GetModule("BASE");
-                            Base.Delete();
-                        }
+                        // TODO: Make a pick task form? As for pick controller? 
+                        // TODO: This can be a solution for multi move with multiple tasks
+                        // Task task = controller.Rapid.GetTask(tasks[0].Name) // Get task with specified name
 
                         // Grant acces
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        task.LoadProgramFromFile(filePath, RapidLoadMode.Replace);
+                        task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
+                        task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+
+                        // Resets the program pointer of this task to the main entry point.
+                        if (_controller.OperatingMode == ControllerOperatingMode.Auto)
+                        {
+                            _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
+                            task.ResetProgramPointer(); // Requires auto mode and execute rapid
+                        }
 
                         // Update action status message
                         _uStatus = "The RAPID code is succesfully uploaded.";
+
+                        // Give back the mastership
+                        master.Release();
+                    }
+
+                    // Delete the temporary files
+                    if (Directory.Exists(localDirectory))
+                    {
+                        Directory.Delete(localDirectory, true);
                     }
                 }
             }
@@ -186,7 +207,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
             // Disconnect
             else
             {
+                // Disconnect
                 Disconnect();
+
+                // Update the satus message when a command wants to be executed without having a connection.
                 if (run || stop || upload)
                 {
                     _uStatus = "Please connect first.";
@@ -205,10 +229,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <summary>
         /// Method to connect to the controller. 
         /// </summary>
-        public void Connect()
+        private void Connect()
         {
             // Log on 
-            _controller.Logon(UserInfo.DefaultUser);
+            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
             // Update controller status message
             _cStatus = "You are connected.";
@@ -227,7 +251,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <summary>
         /// Method to disconnect the current controller
         /// </summary>
-        public void Disconnect()
+        private void Disconnect()
         {
             // Only disconnect when there is a connection
             if (_controller != null)
@@ -256,7 +280,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <summary>
         /// Method to start the program.
         /// </summary>
-        public void Run()
+        private void Run()
         {
             _uStatus = StartCommand();
         }
@@ -265,7 +289,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Method to run the program and returns the action message. 
         /// </summary>
         /// <returns> The action message / status. </returns>
-        public string StartCommand()
+        private string StartCommand()
         {
             // Check the mode of the controller
             if (_controller.OperatingMode != ControllerOperatingMode.Auto)
@@ -280,9 +304,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Execute the program
-            using (Mastership.Request(_controller.Rapid))
+            using (Mastership master = Mastership.Request(_controller.Rapid))
             {
                 _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
+
+                // Give back the mastership
+                master.Release();
             }
 
             // Return status message
@@ -292,7 +319,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <summary>
         /// Method to stop the program.
         /// </summary>
-        public void Stop()
+        private void Stop()
         {
             _uStatus = StopCommand();
         }
@@ -310,10 +337,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Stop the program
-            using (Mastership.Request(_controller.Rapid))
+            using (Mastership master = Mastership.Request(_controller.Rapid))
             {
                 _controller.Rapid.Stop(StopMode.Instruction);
-                
+
+                // Give back the mastership
+                master.Release();
             }
 
             // Return status message
@@ -321,90 +350,39 @@ namespace RobotComponentsABB.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Method to get the library path of the user
+        /// Gets the local documents folder of the user
         /// </summary>
-        public static class Util
+        private static string DocumentsFolderPath()
         {
-            public static string LibraryPath()
-            {
-                return (Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "RobotComponents"));
-            }
+            return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         }
 
         /// <summary>
-        /// Method to save the RAPID code
+        /// Save to the RAPID program and sytem modules to the given file path.
         /// </summary>
-        /// <param name="_path"> The directory where to save the RAPID code. </param>
-        /// <param name="RAPID"> The RAPID main code. </param>
-        /// <param name="BaseCode"> The RAPID base code. </param>
-        public void SaveRapid(string _path, string RAPID, string BaseCode)
+        /// <param name="path"> The directory where to save the RAPID modules. </param>
+        /// <param name="programModule"> The RAPID program module as a string. </param>
+        /// <param name="systemModule"> The RAPID system module as a string. </param>
+        private void SaveModulesToFile(string path, string programModule, string systemModule)
         {
-            // Create the path: sub folder
-            string path = Path.Combine(_path, "RAPID");
-
-            // Check if the directory / folder already exists
-            if (Directory.Exists(path))
+            // Save the program module
+            if (programModule != null)
             {
-                // Delete if it already exists
-                Directory.Delete(path, true);
+                string programFilePath = Path.Combine(path, "ProgramModule.mod");
+                using (StreamWriter writer = new StreamWriter(programFilePath, false))
+                {
+                    writer.WriteLine(programModule);
+                }
             }
 
-            // Create new folder
-            Directory.CreateDirectory(path);
-
-            // Create an empty xml document for saving the program files
-            string saveProgram = Path.Combine(path, "RAPID_T_ROB1.xml");
-            XmlDocument xdoc = new XmlDocument();
-
-            if (BaseCode != null)
+            // Save the system module
+            if (systemModule != null)
             {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module><Module>BASE.sys</Module></Program>");
-            }
-            else
-            {
-                xdoc.LoadXml(@"<?xml version='1.0' encoding='ISO-8859-1' ?><Program><Module>MainModule.mod</Module></Program>");
-            }
-
-            // Save xml doc and change extension
-            xdoc.Save(saveProgram);
-            File.Move(saveProgram, Path.ChangeExtension(saveProgram, ".pgf"));
-
-            // Save the main code
-            if (RAPID != null)
-            {
-                // Make an empy txt file for the main code
-                string savePathRapid = Path.Combine(path, "MainModule.txt");
-
-                // Save the txt file
-                StreamWriter fileRapid = new StreamWriter(savePathRapid);
-
-                // Write the main code to the file
-                fileRapid.WriteLine(RAPID);
-
-                // Close the file
-                fileRapid.Close();
-
-                // Save the file at the right location with the correct extension
-                File.Move(savePathRapid, Path.ChangeExtension(savePathRapid, ".mod"));
-            }
-
-            // Save the base code
-            if (BaseCode != null)
-            {
-                // Make an empy txt file for the base code
-                string savePathBase = Path.Combine(path, "BASE.txt");
-
-                // Save the txt file
-                StreamWriter fileBase = new StreamWriter(savePathBase);
-
-                // Write the base code to the file
-                fileBase.WriteLine(BaseCode);
-
-                // Close the file
-                fileBase.Close();
-
-                // Save the file at the right location with the correct extension
-                File.Move(savePathBase, Path.ChangeExtension(savePathBase, ".sys"));
+                string systemFilePath = Path.Combine(path, "SystemModule.sys");
+                using (StreamWriter writer = new StreamWriter(systemFilePath, false))
+                {
+                    writer.WriteLine(systemModule);
+                }
             }
         }
         #endregion

@@ -52,6 +52,14 @@ URL https://github.com/EDEK-UniKassel/RobotComponents
 
 Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of RobotComponents used. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
 
+## Version numbering
+RobotComponents uses the following version numbering scheme: 
+```
+0.xx.xxx ---> major release  
+x.00.xxx ---> minor release (e.g. new functions, new components etc. )  
+x.xx.000 ---> bug fixes and small improvements
+```
+
 ## References
 [Dawod M. et al. (2020) Continuous Timber Fibre Placement. In: Gengnagel C., Baverel O., Burry J., Ramsgaard Thomsen M., Weinzierl S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
 

@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -43,7 +49,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
+            //TODO: Replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
             pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input", GH_ParamAccess.item);
             pManager.AddBooleanParameter("State", "S", "State of the Digital Input", GH_ParamAccess.item, false);
@@ -93,7 +99,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Get controller and logon
             _controller = controllerGoo.Value;
-            _controller.Logon(UserInfo.DefaultUser);
+            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
             // Initiate signal values
             _signalGoo = null;

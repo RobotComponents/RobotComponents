@@ -1,17 +1,21 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+// Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-
 using GH_IO.Serialization;
-
+// Robot Components Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
-
 using RobotComponentsGoos.Actions;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Actions;

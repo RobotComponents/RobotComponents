@@ -1,4 +1,10 @@
 # Robot Components
+[![Release version](https://img.shields.io/github/v/release/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+[![Release date](https://img.shields.io/github/release-date/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+[![Downloads](https://img.shields.io/github/downloads/EDEK-UniKassel/RobotComponents/total?style=flat-square)]()
+[![License](https://img.shields.io/github/license/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+[![Open Issues](https://img.shields.io/github/issues/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+
 Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper. RobotComponents has the following possibilities and advantages: 
 
 - Predefined ABB robots

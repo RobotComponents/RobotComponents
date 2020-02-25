@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -6,6 +12,9 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
+// ABB Libs
+using ABB.Robotics.Controllers.RapidDomain;
+using ABB.Robotics.Controllers.MotionDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -41,7 +50,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract Axis values from", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract the axis values from", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -50,7 +59,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddNumberParameter("Axis Values", "AV", "All the axis values in a datatree structure", GH_ParamAccess.tree);
-            pManager.AddTextParameter("Mechanical Units", "MU", "The names of the mechanical units", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "The names of the mechanical units", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -70,17 +79,17 @@ namespace RobotComponentsABB.Components.ControllerUtility
             List<string> mechanicalUnitnames = new List<string>() { };
 
             // Data needed for making the datatree with axis values
-            ABB.Robotics.Controllers.MotionDomain.MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
             List<double> values;
 
             // Make the output datatree with names with a branch for each mechanical unit
             for (int i = 0; i < mechanicalUnits.Count; i++)
             {
                 // Get the ABB joint target of the mechanical unit
-                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnits[i].GetPosition();
+                JointTarget jointTarget = mechanicalUnits[i].GetPosition();
 
                 // For internal axis values
-                if (mechanicalUnits[i].Type.ToString() ==  "TcpRobot")
+                if (mechanicalUnits[i].Type == MechanicalUnitType.TcpRobot) 
                 {
                     values = GetInternalAxisValuesAsList(jointTarget);
                 }
@@ -116,7 +125,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        public List<double> GetInternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        public List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -147,7 +156,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        public List<double> GetExternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        public List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };

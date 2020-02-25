@@ -1,9 +1,16 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
-
+// Grasshopper Libs
 using Grasshopper.Kernel;
+// Rhino Libs
 using Rhino.Geometry;
-
+// RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
@@ -78,6 +85,11 @@ namespace RobotComponentsABB.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Gets Document ID
             string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
 

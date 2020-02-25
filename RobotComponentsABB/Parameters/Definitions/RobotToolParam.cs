@@ -1,9 +1,16 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
-
+// Rhino Libs
 using Rhino.Geometry;
+// Grasshopper Libs
 using Grasshopper.Kernel;
-
+// RobotComponnents Libs
 using RobotComponentsGoos.Definitions;
 
 namespace RobotComponentsABB.Parameters.Definitions

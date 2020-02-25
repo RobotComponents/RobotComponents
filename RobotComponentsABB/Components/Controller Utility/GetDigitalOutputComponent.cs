@@ -1,4 +1,10 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -8,6 +14,7 @@ using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
+using ABB.Robotics.Controllers.IOSystemDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -29,11 +36,20 @@ namespace RobotComponentsABB.Components.ControllerUtility
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.tertiary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
+            //TODO: Replace generic parameter with a RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
             pManager.AddTextParameter("DO Name", "N", "Digital Output Name as string", GH_ParamAccess.item);
             pManager[1].Optional = true;
@@ -46,7 +62,6 @@ namespace RobotComponentsABB.Components.ControllerUtility
         {
             // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Signal", "S", "The Digital Output Signal", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "The Digital Output State", GH_ParamAccess.item);
         }
 
         // Fields
@@ -54,8 +69,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
         private ABB.Robotics.Controllers.Controller _controller = null; 
         private string _currentSignalName = "";
-        private string _currentSystemName = "";
-        private string _currentCtrName = "";
+        private Guid _currentGuid = Guid.Empty;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -77,11 +91,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Get controller and logon
             _controller = controllerGoo.Value;
-            _controller.Logon(UserInfo.DefaultUser);
+            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
 
             // Ouput variables
             GH_Signal signalGoo;
-            bool signalValue;
 
             // Check for null returns
             if (nameIO == null || nameIO == "")
@@ -94,22 +107,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 signalGoo = GetSignal(nameIO);
             }
 
-            // Declair Signal
-            ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal signal = signalGoo.Value;
-
-            // Convert Signal to a bool 
-            if (signal.Value == 1)
-            {
-                signalValue = true;
-            }
-            else
-            {
-                signalValue = false;
-            }
-
             // Output
             DA.SetData(0, signalGoo);
-            DA.SetData(1, signalValue);
         }
 
         // Additional methods
@@ -124,8 +123,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             _signalGooList.Clear();
 
             // Get the signal ins the robot controller
-            ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
+            SignalCollection signalCollection;
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Output);
 
             // Initate the list with signal names
             List<string> signalNames = new List<string>();
@@ -137,7 +136,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signalCollection[i].Name, "Access") != "ReadOnly")
                 {
                     signalNames.Add(signalCollection[i].Name);
-                    _signalGooList.Add(new GH_Signal(signalCollection[i] as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal));
+                    _signalGooList.Add(new GH_Signal(signalCollection[i] as DigitalSignal));
                 }
             }
 
@@ -165,6 +164,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
         }
 
+
         /// <summary>
         /// Get the signal
         /// </summary>
@@ -173,7 +173,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private GH_Signal GetSignal(string name)
         {
             // Check if the signal name is valid. Only check if the name is valid if the controller or the signal name changed.
-            if (name != _currentSignalName || _controller.SystemName != _currentSystemName || _controller.Name != _currentCtrName)
+            if (name != _currentSignalName || _controller.SystemId != _currentGuid)
             {
                 if (!ValidSignal(name))
                 {
@@ -181,19 +181,18 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     return null;
                 }
 
-                // Update the current names
+                // Update the current values
                 _currentSignalName = (string)name.Clone();
-                _currentSystemName = (string)_controller.SystemName.Clone();
-                _currentCtrName = (string)_controller.Name.Clone();
+                _currentGuid = new Guid(_controller.SystemId.ToString());
             }
 
             // Get the signal from the defined controller
-            ABB.Robotics.Controllers.IOSystemDomain.Signal signal = _controller.IOSystem.GetSignal(name) as ABB.Robotics.Controllers.IOSystemDomain.Signal;
+            DigitalSignal signal = _controller.IOSystem.GetSignal(name) as DigitalSignal;
 
             // Check for null return
             if (signal != null)
             {
-                return new GH_Signal(signal as ABB.Robotics.Controllers.IOSystemDomain.DigitalSignal);
+                return new GH_Signal(signal);
             }
 
             // If the signal is null: return nothing and raise a message. 
@@ -245,8 +244,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private bool ValidSignal(string signalName)
         {
             // Get the signals that are defined in the controller
-            ABB.Robotics.Controllers.IOSystemDomain.SignalCollection signalCollection;
-            signalCollection = _controller.IOSystem.GetSignals(ABB.Robotics.Controllers.IOSystemDomain.IOFilterTypes.Output);
+            SignalCollection signalCollection;
+            signalCollection = _controller.IOSystem.GetSignals(IOFilterTypes.Output);
 
             // Initiate the list with signal names
             List<string> signalNames = new List<string>();
@@ -338,7 +337,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5104b915-0b75-40bc-b901-8fddeb8edcd3"); }
+            get { return new Guid("15E9EB1D-3EC5-44FB-9694-0DAC7C37AD97"); }
         }
     }
 }

@@ -1,14 +1,21 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+
+// System Libs
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+// Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using GH_IO.Serialization;
+// Rhino Libs
 using Rhino.Geometry;
-
+// RobotComponents Libs
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
@@ -50,7 +57,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");  //Todo: beef this up to be more informative.
-            pManager.Register_PlaneParam("End Plane", "EP", "Robot EndEffector Plane placed on Target");
+            pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
 

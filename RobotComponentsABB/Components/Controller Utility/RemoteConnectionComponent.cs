@@ -55,6 +55,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
             pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a string", GH_ParamAccess.item);
             pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a string", GH_ParamAccess.item);
+
+            pManager[5].Optional = true;
+            pManager[6].Optional = true;
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         private string _cStatus = "Not connected.";
         private string _uStatus = "No actions.";
         private int _count = 0;
+        private bool _programPointerWarning = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -85,8 +89,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             bool upload = false;
             bool run = false;
             bool stop = false;
-            string RAPID = null;
-            string BaseCode= null;
+            string programCode = null;
+            string systemCode= null;
 
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }
@@ -94,13 +98,13 @@ namespace RobotComponentsABB.Components.ControllerUtility
             if (!DA.GetData(2, ref upload)) { return; }
             if (!DA.GetData(3, ref run)) { return; }
             if (!DA.GetData(4, ref stop)) { return; }
-            if (!DA.GetData(5, ref RAPID)) { return; }
-            if (!DA.GetData(6, ref BaseCode)) { return; }
+            if (!DA.GetData(5, ref programCode)) { programCode = null; }
+            if (!DA.GetData(6, ref systemCode)) { systemCode = null; }
             base.DestroyIconCache();
 
             // Get controller value
             _controller = controllerGoo.Value;
-            
+
             // Connect
             if (connect)
             {
@@ -122,6 +126,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 // Upload the code when toggled
                 if (upload)
                 {
+
+                    // Reset program pointer warning
+                    _programPointerWarning = false;
+
                     // First stop the current program
                     Stop();
 
@@ -140,7 +148,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     Directory.CreateDirectory(localDirectory);
 
                     // Save the RAPID code to the created directory / local folder
-                    SaveModulesToFile(localDirectory, RAPID, BaseCode);
+                    SaveModulesToFile(localDirectory, programCode, systemCode);
 
                     // Directory to save the modules on the controller
                     string controllerDirectory = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
@@ -179,18 +187,40 @@ namespace RobotComponentsABB.Components.ControllerUtility
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
-                        task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+                        if (programCode != null)
+                        {
+                            task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
+                        }
+                        if (systemCode != null)
+                        {
+                            task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+                        }
 
                         // Resets the program pointer of this task to the main entry point.
                         if (_controller.OperatingMode == ControllerOperatingMode.Auto)
                         {
                             _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
-                            task.ResetProgramPointer(); // Requires auto mode and execute rapid
+
+                            try
+                            {
+                                task.ResetProgramPointer(); // Requires auto mode and execute rapid
+                                _programPointerWarning = false;
+                            }
+                            catch
+                            {
+                                _programPointerWarning = true;
+                            }
                         }
 
                         // Update action status message
-                        _uStatus = "The RAPID code is succesfully uploaded.";
+                        if (programCode != null || systemCode != null)
+                        {
+                            _uStatus = "The RAPID code is succesfully uploaded.";
+                        }
+                        else
+                        {
+                            _uStatus = "The RAPID is not uploaded since there is no code defined.";
+                        }
 
                         // Give back the mastership
                         master.Release();
@@ -219,6 +249,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Output message
             _msg = $"The remote connection status:\n\nController: {_cStatus}\nActions: {_uStatus}";
+
+            if (_programPointerWarning == true)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The program pointer could not be reset. Check the program modules that are defined" +
+                    " in your controller. Probably you defined two main functions.");
+            }
 
             // Output
             DA.SetData(0, _msg);

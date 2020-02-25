@@ -55,11 +55,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
-            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a string", GH_ParamAccess.item, "MainModule");
-            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a string", GH_ParamAccess.item, "BASE");
+            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a string. The default name is MainModule.", GH_ParamAccess.item, "MainModule");
+            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a string. The default name is BASE.", GH_ParamAccess.item, "BASE");
             pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list with strings", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Update", "U", "Updates RAPID Code", GH_ParamAccess.item, true);
 
+            pManager[2].Optional = true;
+            pManager[3].Optional = true;
             pManager[4].Optional = true;
             pManager[5].Optional = true;
         }
@@ -104,7 +106,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetData(2, ref programName)) { programName = "MainModule"; }
             if (!DA.GetData(3, ref systemName)) { systemName = "BASE"; }
             if (!DA.GetDataList(4, customCodeLines)) { customCodeLines = new List<string>() { }; }
-            if (!DA.GetData(5, ref update)) { return; }
+            if (!DA.GetData(5, ref update)) { update = true; }
 
             // Checks if module name exceeds max character limit for RAPID Code
             if (HelperMethods.VariableExeedsCharacterLimit32(programName))

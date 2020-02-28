@@ -102,7 +102,7 @@ namespace RobotComponentsGoos.Actions
         {
             get
             {
-                if (Value == null) { return "No inter Action instance"; }
+                if (Value == null) { return "No internal Action instance"; }
                 if (Value.IsValid) { return string.Empty; }
                 return "Invalid Action instance: ?"; //Todo: beef this up to be more informative.
             }

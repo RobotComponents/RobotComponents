@@ -128,7 +128,15 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_predefined == false)
             {
-                RAPIDGenerator.StringBuilder.Append ("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
+                // Only adds speedData Variable if not already in RAPID Code
+                if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
+                {
+                    // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
+                    RAPIDGenerator.SpeedDatas.Add(this.Name, this);
+
+                    // Creates and adds RAPID variable code
+                    RAPIDGenerator.StringBuilder.Append("@" + "\t" + "VAR speeddata " + _name + ":= [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];");
+                }
             }
         }
 

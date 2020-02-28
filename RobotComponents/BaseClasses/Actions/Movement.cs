@@ -273,15 +273,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-
-            // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
-            {
-                // Creates SpeedData Variable Code and adds it to the tempCoode
-                _speedData.InitRAPIDVar(RAPIDGenerator);
-                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
-                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
-            }
+            // Creates SpeedData Variable Code 
+            _speedData.InitRAPIDVar(RAPIDGenerator);
 
             // Target with global plane (for ik) 
             Target globalTarget = _target.Duplicate();

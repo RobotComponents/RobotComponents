@@ -168,14 +168,8 @@ namespace RobotComponents.BaseClasses.Actions
         {
             string tempCode = "";
 
-            // Only adds speedData Variable if not already in RAPID Code
-            if (!RAPIDGenerator.SpeedDatas.ContainsKey(_speedData.Name))
-            {
-                // Creates SpeedData Variable Code and adds it to the tempCoode
-                _speedData.InitRAPIDVar(RAPIDGenerator);
-                // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
-                RAPIDGenerator.SpeedDatas.Add(_speedData.Name, _speedData);
-            }
+            // Creates SpeedData Variable Code
+            _speedData.InitRAPIDVar(RAPIDGenerator);
 
             // Creates targetName variables to check if they already exist 
             string jointTargetVar = "CONST jointtarget " + JointTargetName;

@@ -71,6 +71,7 @@ namespace RobotComponentsABB.Components.Definitions
         }
 
         // Fields
+        private string _toolName = String.Empty;
         private string _lastName = "";
         private bool _nameUnique;
         private RobotTool _robotTool = new RobotTool();
@@ -125,7 +126,9 @@ namespace RobotComponentsABB.Components.Definitions
             _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Clears toolNames
-            _objectManager.ToolNames.Remove(_robotTool.Name);
+            _objectManager.ToolNames.Remove(_toolName);
+            _toolName = String.Empty;
+
 
             // Removes lastName from toolNameList
             if (_objectManager.ToolNames.Contains(_lastName))
@@ -150,6 +153,7 @@ namespace RobotComponentsABB.Components.Definitions
             else
             {
                 // Adds Robot Tool Name to list
+                _toolName = _robotTool.Name;
                 _objectManager.ToolNames.Add(_robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
@@ -212,7 +216,7 @@ namespace RobotComponentsABB.Components.Definitions
             {
                 if (_nameUnique == true)
                 {
-                    _objectManager.ToolNames.Remove(_lastName);
+                    _objectManager.ToolNames.Remove(_toolName);
                 }
                 _objectManager.ToolsQuaternionByGuid.Remove(this.InstanceGuid);
 

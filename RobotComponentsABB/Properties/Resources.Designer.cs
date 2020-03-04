@@ -1425,21 +1425,19 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
+        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
+        ///// under the terms of GNU General Public License as published by the 
+        ///// Free Software Foundation. For more information and the LICENSE file, 
+        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickControllerForm
         ///    {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = null;
-        ///
-        ///        /// &lt;summary&gt;
-        ///        /// Clean up any resources being used.
-        ///        /// &lt;/summary&gt;
-        ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
-        ///        protected override void Dispose(bool disposing)
-        ///     [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer componen [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm_designer {
             get {
@@ -1502,22 +1500,19 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
+        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
+        ///// under the terms of GNU General Public License as published by the 
+        ///// Free Software Foundation. For more information and the LICENSE file, 
+        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickDIForm
         ///    {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = null;
-        ///
-        ///        /// &lt;summary&gt;
-        ///        /// Clean up any resources being used.
-        ///        /// &lt;/summary&gt;
-        ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
-        ///        protected override void Dispose(bool disposing)
-        ///        {
-        ///  [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer components = nul [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm_designer {
             get {
@@ -1580,22 +1575,19 @@ namespace RobotComponentsABB.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to namespace RobotComponentsABB.Resources
+        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
+        ///// under the terms of GNU General Public License as published by the 
+        ///// Free Software Foundation. For more information and the LICENSE file, 
+        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///
+        ///namespace RobotComponentsABB.Resources
         ///{
         ///    partial class PickDOForm
         ///    {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = null;
-        ///
-        ///        /// &lt;summary&gt;
-        ///        /// Clean up any resources being used.
-        ///        /// &lt;/summary&gt;
-        ///        /// &lt;param name=&quot;disposing&quot;&gt;true if managed resources should be disposed; otherwise, false.&lt;/param&gt;
-        ///        protected override void Dispose(bool disposing)
-        ///        {
-        ///  [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer components = nul [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm_designer {
             get {
@@ -1844,6 +1836,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap ToolPlane_Icon {
             get {
                 object obj = ResourceManager.GetObject("ToolPlane_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToolQuaternion_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ToolQuaternion_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -73,6 +73,7 @@
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\Definitions\RobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldGetDigitalOutputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldGetDigitalInputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />
@@ -631,6 +632,7 @@
     <None Include="Resources\DeconstructAbsoluteJointMovement_Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ToolQuaternion_Icon.png" />
     <None Include="Resources\ExternalRotationalAxis_Parameter_Icon.png" />
     <None Include="Resources\DeconstructExternalRotationalAxis_Icon.png" />
     <None Include="Resources\ExternalRotationalAxis_Icon.png" />

@@ -35,6 +35,7 @@ namespace RobotComponentsABB.Utils
         // contains information on all robot tools in file for code generation
         private Dictionary<Guid, RobotToolFromDataEulerComponent> _toolsEulerByGuid;
         private Dictionary<Guid, RobotToolFromPlanesComponent> _toolsPlanesByGuid;
+        private Dictionary<Guid, RobotToolFromQuaternionComponent> _toolsQuaternionByGuid;
         private List<string> _toolNames;
 
         // contains information on all work objects in file for code generation
@@ -59,6 +60,7 @@ namespace RobotComponentsABB.Utils
 
             _toolsEulerByGuid = new Dictionary<Guid, RobotToolFromDataEulerComponent>();
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
+            _toolsQuaternionByGuid = new Dictionary<Guid, RobotToolFromQuaternionComponent>();
             _toolNames = new List<string>() { "tool0" };
 
             _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
@@ -85,6 +87,12 @@ namespace RobotComponentsABB.Utils
 
             // Add robot tools that are created from Planes
             foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _toolsPlanesByGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+
+            // Add robot tools that are created from Quaternion data
+            foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _toolsQuaternionByGuid)
             {
                 robotTools.Add(entry.Value.RobotTool);
             }
@@ -201,6 +209,15 @@ namespace RobotComponentsABB.Utils
         public Dictionary<Guid, RobotToolFromPlanesComponent> ToolsPlanesByGuid
         {
             get { return _toolsPlanesByGuid; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the Robot Tools created from Quaternion data components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, RobotToolFromQuaternionComponent> ToolsQuaternionByGuid
+        {
+            get { return _toolsQuaternionByGuid; }
         }
 
         /// <summary>

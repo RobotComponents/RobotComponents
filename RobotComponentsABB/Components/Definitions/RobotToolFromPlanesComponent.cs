@@ -52,8 +52,8 @@ namespace RobotComponentsABB.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Robot Tool Name as String", GH_ParamAccess.item, "default_tool");
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
         }
 
         /// <summary>
@@ -153,6 +153,13 @@ namespace RobotComponentsABB.Components.Definitions
                         entry.Value.ExpireSolution(true);
                     }
                 }
+                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
+                {
+                    if (entry.Value.LastName == "")
+                    {
+                        entry.Value.ExpireSolution(true);
+                    }
+                }
 
                 _lastName = _robotTool.Name;
                 _nameUnique = true;
@@ -189,21 +196,25 @@ namespace RobotComponentsABB.Components.Definitions
         {
             if (e.Objects.Contains(this))
             {
-                    if (_nameUnique == true)
-                    {
-                        _objectManager.ToolNames.Remove(_lastName);
-                    }
-                    _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
+                if (_nameUnique == true)
+                {
+                    _objectManager.ToolNames.Remove(_lastName);
+                }
+                _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
 
-                    // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                    foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
+                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
+                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
         }
 

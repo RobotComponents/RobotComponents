@@ -79,23 +79,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
             // Pick a new controller when the input is toggled or the user selects one sfrom the menu
             if (update || _fromMenu)
             {
-                Rhino.RhinoApp.WriteLine("GetController call component");
-
                 var controllerNow = GetController();
                 if (controllerNow != null)
                 {
                     _controllerGoo = new GH_Controller(controllerNow as ABB.Robotics.Controllers.Controller);
-                    Rhino.RhinoApp.WriteLine("Controller");
                 }
                 else
                 {
-                    Rhino.RhinoApp.WriteLine("No controller");
                     return;
                 }
-            }
-            else
-            {
-                Rhino.RhinoApp.WriteLine("Get Controller not call component in menu mode");
             }
 
             // Output
@@ -127,7 +119,6 @@ namespace RobotComponentsABB.Components.ControllerUtility
             // Else return no controllers
             catch (Exception)
             {
-                Rhino.RhinoApp.WriteLine("Null Controller");
                 controllers = null;
             }
             

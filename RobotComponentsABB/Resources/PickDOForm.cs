@@ -40,7 +40,6 @@ namespace RobotComponentsABB.Resources
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Rhino.RhinoApp.WriteLine("Debug button1 Click : " + comboBox1.SelectedIndex.ToString());
             stationIndex = comboBox1.SelectedIndex;
             this.Close();
         }

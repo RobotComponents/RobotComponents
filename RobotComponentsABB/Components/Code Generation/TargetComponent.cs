@@ -391,6 +391,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
+                    {
+                        if (entry.Value.LastName == "")
+                        {
+                            entry.Value.ExpireSolution(true);
+                        }
+                    }
                     foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
                     {
                         if (entry.Value._lastName == "")
@@ -449,12 +456,27 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Run SolveInstance on other Targets with no unique Name to check if their name is now available
                 foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
                 {
-                    if (entry.Value._lastName == "")
+                    if (entry.Value.LastName == "")
+                    {
+                        entry.Value.ExpireSolution(true);
+                    }
+                }
+                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
+                {
+                    if (entry.Value.LastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
         }
 
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked

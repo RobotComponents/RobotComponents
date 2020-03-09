@@ -146,6 +146,8 @@ namespace RobotComponents.BaseClasses.Actions
                 {
                     // Override the current tool
                     _currentTool = overrideRobotTool.RobotTool.Name;
+                    _robotInfo.Tool = overrideRobotTool.RobotTool;
+                    _inverseKinematics.RobotInfo.Tool = overrideRobotTool.RobotTool;
                 }
 
                 // Checks if first movement is MoveAbsJ

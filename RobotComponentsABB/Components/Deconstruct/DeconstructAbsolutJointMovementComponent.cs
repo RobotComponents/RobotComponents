@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new AbsoluteJointMovementParameter(), "AbsoluteJointMovement", "AJM", "Movement as Absolute Joint Movement", GH_ParamAccess.item);
+            pManager.AddParameter(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Movement as Absolute Joint Movement", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("MovementName", "MN", "Name as a string.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("InternalAxisValues", "IAV", "", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ExternalAxisValues", "EAV", "", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name as a string.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "", GH_ParamAccess.list);
+            pManager.AddNumberParameter("External Axis Values", "EAV", "", GH_ParamAccess.list);
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");

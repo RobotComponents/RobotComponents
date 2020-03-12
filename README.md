@@ -3,8 +3,8 @@
 [![Release date](https://img.shields.io/github/release-date-pre/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 [![Downloads](https://img.shields.io/github/downloads/EDEK-UniKassel/RobotComponents/total?style=flat-square)]()
 [![License](https://img.shields.io/github/license/EDEK-UniKassel/RobotComponents?style=flat-square)]()
-[![Open Issues](https://img.shields.io/github/issues-closed-raw/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 [![Closed Issues](https://img.shields.io/github/issues-raw/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+[![Open Issues](https://img.shields.io/github/issues-closed-raw/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 
 Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper. RobotComponents has the following possibilities and advantages: 
 
@@ -38,6 +38,7 @@ Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponents
 Planned developments:
 - Adding the ABB IRB 6620, 6640, 6650S, 6700, 6790 and 7600 series as Robot Info presets. 
 - Adding support for MultiMove.
+- Improve inverse kinematics.
 
 ## Contribute
 **Bug reports**: Please report bugs at our [issue page](https://github.com/EDEK-UniKassel/RobotComponents/issues). 

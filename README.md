@@ -1,6 +1,6 @@
 # Robot Components
-[![Release version](https://img.shields.io/github/v/release/EDEK-UniKassel/RobotComponents?style=flat-square)]()
-[![Release date](https://img.shields.io/github/release-date/EDEK-UniKassel/RobotComponents?style=flat-square)]()
+[![Release version](https://img.shields.io/github/v/release/EDEK-UniKassel/RobotComponents?include_prereleases)]()
+[![Release date](https://img.shields.io/github/release-date-pre/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 [![Downloads](https://img.shields.io/github/downloads/EDEK-UniKassel/RobotComponents/total?style=flat-square)]()
 [![License](https://img.shields.io/github/license/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 [![Open Issues](https://img.shields.io/github/issues/EDEK-UniKassel/RobotComponents?style=flat-square)]()

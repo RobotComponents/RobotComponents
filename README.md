@@ -1,5 +1,5 @@
 # Robot Components
-[![Release version](https://img.shields.io/github/v/release/EDEK-UniKassel/RobotComponents?include_prereleases)]()
+[![Release version](https://img.shields.io/github/v/release/EDEK-UniKassel/RobotComponents?include_prereleases&style=flat-square)]()
 [![Release date](https://img.shields.io/github/release-date-pre/EDEK-UniKassel/RobotComponents?style=flat-square)]()
 [![Downloads](https://img.shields.io/github/downloads/EDEK-UniKassel/RobotComponents/total?style=flat-square)]()
 [![License](https://img.shields.io/github/license/EDEK-UniKassel/RobotComponents?style=flat-square)]()
@@ -38,7 +38,7 @@ Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponents
 Planned developments:
 - Adding the ABB IRB 6620, 6640, 6650S, 6700, 6790 and 7600 series as Robot Info presets. 
 - Adding support for MultiMove.
-- Improve inverse kinematics.
+- Improve inverse kinematics performance.
 
 ## Contribute
 **Bug reports**: Please report bugs at our [issue page](https://github.com/EDEK-UniKassel/RobotComponents/issues). 

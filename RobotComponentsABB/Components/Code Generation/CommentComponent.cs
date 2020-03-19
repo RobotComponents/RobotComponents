@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -69,11 +70,18 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Catch the inut data
             if (!DA.GetData(0, ref text)) { return; }
 
-            // Create the action
-            Comment comment = new Comment(text);
+            // Split input if enter is used
+            string[] lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+
+            // Create output
+            List<Comment> comments = new List<Comment>();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                comments.Add(new Comment(lines[i]));
+            }
 
             // Sets Output
-            DA.SetData(0, comment);
+            DA.SetDataList(0, comments);
         }
 
         /// <summary>

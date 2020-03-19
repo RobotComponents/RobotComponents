@@ -4,6 +4,7 @@
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // System Libs
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,6 @@ namespace RobotComponents.BaseClasses.Actions
         private string _systemName; // The module name of the rapod system code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
-        private string _currentTool; // The current tool that is used
         #endregion
 
         #region constructors
@@ -110,19 +110,16 @@ namespace RobotComponents.BaseClasses.Actions
             _speedDatas.Clear();
             _targets.Clear();
 
-            // Set current tool
-            _currentTool = _robotInfo.Tool.Name;
-
             // Creates String Builder
             _stringBuilder = new StringBuilder();
 
             // Creates Main Module
-            _stringBuilder.Append("MODULE " + _programName + "@");
+            _stringBuilder.Append("MODULE " + _programName);
+            _stringBuilder.Append(Environment.NewLine);
 
             // Add comment lines for tracking which version of RC was used
-            Comment version = new Comment("This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
-            version.ToRAPIDFunction(this);
-            _stringBuilder.Append("@");
+            _stringBuilder.Append("\t" + "This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
+            _stringBuilder.Append(Environment.NewLine);
 
             // Creates Vars
             for (int i = 0; i != _actions.Count; i++)
@@ -131,7 +128,9 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // Create Program
-            _stringBuilder.Append("@" + "@" + "\t" + "PROC main()");
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append("\t" + "PROC main()");
 
             _firstMovementIsMoveAbs = false;
             bool foundFirstMovement = false;
@@ -145,7 +144,6 @@ namespace RobotComponents.BaseClasses.Actions
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)
                 {
                     // Override the current tool
-                    _currentTool = overrideRobotTool.RobotTool.Name;
                     _robotInfo.Tool = overrideRobotTool.RobotTool;
                     _inverseKinematics.RobotInfo.Tool = overrideRobotTool.RobotTool;
                 }
@@ -174,12 +172,12 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // Closes Program
-            _stringBuilder.Append("@" + "\t" + "ENDPROC");
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append("\t" + "ENDPROC");
             // Closes Module
-            _stringBuilder.Append("@" + "@" + "ENDMODULE");
-
-            // Replaces @ with newLines
-            _stringBuilder.Replace("@", System.Environment.NewLine);
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append("ENDMODULE");
 
             // Update field
             _programCode = _stringBuilder.ToString();
@@ -210,66 +208,83 @@ namespace RobotComponents.BaseClasses.Actions
             // First line
             if (_systemName == "BASE")
             {
-                systemCode += "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)" + "@" + "@";
+                systemCode += "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)";
+                systemCode += Environment.NewLine;
+                systemCode += Environment.NewLine;
             }
             else
             {
-                systemCode += "MODULE " + _systemName + " (SYSMODULE)" + "@" + "@";
+                systemCode += "MODULE " + _systemName + " (SYSMODULE)";
+                systemCode += Environment.NewLine;
+                systemCode += Environment.NewLine;
             }
 
             // Version number
-            systemCode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion + "@" + "@";
+            systemCode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion;
+            systemCode += Environment.NewLine;
+            systemCode += Environment.NewLine;
 
             // Creates Comments
-            systemCode += " ! System module with basic predefined system data" + "@";
-            systemCode += " !************************************************" + "@" + "@";
+            systemCode += " ! System module with basic predefined system data";
+            systemCode += Environment.NewLine;
+            systemCode += " !************************************************";
+            systemCode += Environment.NewLine;
+            systemCode += Environment.NewLine;
 
             // Creates Predefined System Data: only if it is the BASE module
             if (_systemName == "BASE")
             {
-                systemCode += " ! System data tool0, wobj0 and load0" + "@";
-                systemCode += " ! Do not translate or delete tool0, wobj0, load0" + "@";
+                systemCode += " ! System data tool0, wobj0 and load0";
+                systemCode += Environment.NewLine;
+                systemCode += " ! Do not translate or delete tool0, wobj0, load0";
+                systemCode += Environment.NewLine;
 
                 // Creates Predefined System Data
-                systemCode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];" + "@";
-                systemCode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];" + "@";
-                systemCode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];" + "@" + "@";
+                systemCode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];";
+                systemCode += Environment.NewLine;
+                systemCode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];";
+                systemCode += Environment.NewLine;
+                systemCode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];";
+                systemCode += Environment.NewLine;
+                systemCode += Environment.NewLine;
             }
 
             // Adds Tools Base Code
             if (robotTools.Count != 0 && robotTools != null)
             {
-                systemCode += " ! User defined tooldata " + "@";
+                systemCode += " ! User defined tooldata ";
+                systemCode += Environment.NewLine;
                 systemCode += CreateToolSystemCode(robotTools);
-                systemCode += "@";
+                systemCode += Environment.NewLine;
             }
 
             // Adds Work Objects Base Code
             if (workObjects.Count != 0 && workObjects != null)
             {
-                systemCode += " ! User defined wobjdata " + "@";
+                systemCode += " ! User defined wobjdata ";
+                systemCode += Environment.NewLine;
                 systemCode += CreateWorkObjectSystemCode(workObjects);
-                systemCode += "@";
+                systemCode += Environment.NewLine;
             }
 
             // Adds Custom code line
             if (customCode.Count != 0 && customCode != null)
             {
-                systemCode += " ! User definied custom code lines " + "@";
+                systemCode += " ! User definied custom code lines";
+                systemCode += Environment.NewLine;
+
                 for (int i = 0; i != customCode.Count; i++)
                 {
                     systemCode += " ";
                     systemCode += customCode[i];
-                    systemCode += "@";
+                    systemCode += Environment.NewLine;
                 }
-                systemCode += "@";
+
+                systemCode += Environment.NewLine;
             }
 
             // End Module
             systemCode += "ENDMODULE";
-
-            // Replaces @ with new lines
-            systemCode = systemCode.Replace("@", System.Environment.NewLine);
 
             // Update field
             _systemCode = systemCode;
@@ -296,7 +311,7 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i != robotTools.Count; i++)
             {
                 result += robotTools[i].GetRSToolData();
-                result += "@" + " ";
+                result += Environment.NewLine + " ";
             }
 
             return result;
@@ -314,7 +329,7 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i != workObjects.Count; i++)
             {
                 result += workObjects[i].GetWorkObjData();
-                result += "@" + " ";
+                result += Environment.NewLine + " ";
             }
 
             return result;
@@ -487,15 +502,6 @@ namespace RobotComponents.BaseClasses.Actions
         public StringBuilder StringBuilder
         {
             get { return _stringBuilder; }
-        }
-
-        /// <summary>
-        /// The current tool that is used. 
-        /// </summary>
-        public string CurrentTool
-        {
-            get { return _currentTool; }
-            set { _currentTool = value; }
         }
         #endregion
     }

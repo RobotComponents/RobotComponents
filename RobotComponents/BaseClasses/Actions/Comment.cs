@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+// RobotComponents Libs
+using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -67,6 +69,26 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Used to create variable definition code of this action. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string InitRAPIDVar(RobotInfo robotInfo)
+        {
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Used to create action instruction code line. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        {
+            return "! " + _comment;
+        }
+
+        /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
@@ -80,12 +102,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            string[] lines = _comment.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                RAPIDGenerator.StringBuilder.Append("@" + "\t" + "! " + lines[i]);
-            }
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

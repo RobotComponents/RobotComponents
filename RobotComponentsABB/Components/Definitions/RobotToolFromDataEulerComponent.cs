@@ -55,10 +55,11 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddNumberParameter("Translation X", "TX", "Translation in X direction", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Translation Y", "TY", "Translation in Y direction", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Translation Z", "TZ", "Translation in Z direction", GH_ParamAccess.item, 0.0);
-
             pManager.AddNumberParameter("Rotation X", "RX", "Rotation around the X Axis in radians", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Rotation Y", "RY", "Rotation around the Y Axis in radians", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Rotation Z", "RZ", "Rotation around the Z Axis in radians", GH_ParamAccess.item, 0.0);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetDataList(1,  meshes)) { return; }
+            if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
             if (!DA.GetData(2, ref toolTransX)) { return; }
             if (!DA.GetData(3, ref toolTransY)) { return; }
             if (!DA.GetData(4, ref toolTransZ)) { return; }

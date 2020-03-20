@@ -54,6 +54,8 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetDataList(1,  meshes)) { return; }
+            if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
             if (!DA.GetData(2, ref attachmentPlane)) { return; }
             if (!DA.GetData(3, ref toolPlane)) { return; };
 

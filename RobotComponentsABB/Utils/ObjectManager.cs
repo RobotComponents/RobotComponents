@@ -57,6 +57,10 @@ namespace RobotComponentsABB.Utils
 
             _speedDatasByGuid = new Dictionary<Guid, SpeedDataComponent>();
             _speedDataNames = new List<string>();
+            for (int i = 0; i < HelperMethods.ValidPredefiniedSpeedValues.Length; i++)
+            {
+                _speedDataNames.Add("v" + HelperMethods.ValidPredefiniedSpeedValues[i].ToString());
+            }
 
             _toolsEulerByGuid = new Dictionary<Guid, RobotToolFromDataEulerComponent>();
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();

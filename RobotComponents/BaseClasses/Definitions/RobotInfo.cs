@@ -30,6 +30,7 @@ namespace RobotComponents.BaseClasses.Definitions
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
         private InverseKinematics _inverseKinematics; // Robot Info inverse kinematics
+        private ForwardKinematics _forwardKinematics; // Robot Info forward kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion
@@ -77,8 +78,9 @@ namespace RobotComponents.BaseClasses.Definitions
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
 
-            // Set inverse kinematics
+            // Set kinematics
             _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
@@ -117,13 +119,15 @@ namespace RobotComponents.BaseClasses.Definitions
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
 
-            // Set inverse kinematics
+            // Set kinematics
             _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
         /// Creates a new robot info by duplicating an existing robot info.
-        /// This creates a deep copy of the existing robot info.
+        /// This creates a deep copy of the existing robot info. 
+        /// It clears the solution of the inverse and forward kinematics. 
         /// </summary>
         /// <param name="robotInfo"> The robot info that should be duplicated. </param>
         public RobotInfo(RobotInfo robotInfo)
@@ -146,8 +150,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxisPlanes = new List<Plane>(robotInfo.ExternalAxisPlanes);
             _externalAxisLimits = new List<Interval>(robotInfo.ExternalAxisLimits);
 
-            // Inverse Kinematics
+            // Kinematics
             _inverseKinematics = new InverseKinematics(robotInfo.InverseKinematics.Movement.Duplicate(), this);
+            _forwardKinematics = new ForwardKinematics(this, robotInfo.ForwardKinematics.HideMesh);
         }
 
         /// <summary>
@@ -365,6 +370,14 @@ namespace RobotComponents.BaseClasses.Definitions
         public InverseKinematics InverseKinematics
         {
             get { return _inverseKinematics; }
+        }
+
+        /// <summary>
+        /// The forward kinematics of this robot info. 
+        /// </summary>
+        public ForwardKinematics ForwardKinematics
+        {
+            get { return _forwardKinematics; }
         }
 
         /// <summary>

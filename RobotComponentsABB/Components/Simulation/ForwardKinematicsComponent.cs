@@ -95,13 +95,14 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues, _hideMesh);
-            forwardKinematics.Calculate();
+            robotInfoGoo.Value.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
+            robotInfoGoo.Value.ForwardKinematics.HideMesh = _hideMesh;
+            robotInfoGoo.Value.ForwardKinematics.Calculate();
 
             // Check the values
-            for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
+            for (int i = 0; i < robotInfoGoo.Value.ForwardKinematics.ErrorText.Count; i++)
             {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, robotInfoGoo.Value.ForwardKinematics.ErrorText[i]);
             }
 
             // Create data tree for output of all posed meshes
@@ -110,14 +111,14 @@ namespace RobotComponentsABB.Components.Simulation
             // Fill data tree with meshes
             if (_hideMesh == false)
             {
-                meshes = GetPosedMeshesDataTree(forwardKinematics);
+                meshes = GetPosedMeshesDataTree(robotInfoGoo.Value.ForwardKinematics);
             }
 
             // Output
-            _fk = forwardKinematics;
+            _fk = robotInfoGoo.Value.ForwardKinematics;
             DA.SetDataTree(0, meshes); 
-            DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
-            DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+            DA.SetData(1, robotInfoGoo.Value.ForwardKinematics.TCPPlane); // Outputs the TCP as a plane
+            DA.SetDataList(2, robotInfoGoo.Value.ForwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>

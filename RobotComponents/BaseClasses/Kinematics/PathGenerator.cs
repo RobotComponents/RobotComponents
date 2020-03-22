@@ -83,8 +83,8 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         public void GetAxisValues(List<Actions.Action> movements, int interpolations)
         {
-            // Initialize the forward kinematics
-            ForwardKinematics forwardKinematics = new ForwardKinematics(_robotInfo, true);
+            // Hide the mesh when calculating the forward kinematics
+            _robotInfo.ForwardKinematics.HideMesh = true;
 
             // Initiate movement
             Movement movement1 = new Movement(new Target("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
@@ -137,7 +137,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                         jointMovement = movements[i + 1] as AbsoluteJointMovement;
 
                         // Update tool of forward kinematics
-                        forwardKinematics.RobotInfo.Tool = jointMovement.RobotTool;
+                        _robotInfo.ForwardKinematics.RobotInfo.Tool = jointMovement.RobotTool;
 
                         // Our first target is the second target of the last movement
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
@@ -185,14 +185,14 @@ namespace RobotComponents.BaseClasses.Kinematics
                             }
 
                             // Calculate point to be able to draw the path curve
-                            forwardKinematics.Update(internalAxisValues, externalAxisValues);
-                            forwardKinematics.Calculate();
-                            Point3d point = forwardKinematics.TCPPlane.Origin;
+                            _robotInfo.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
+                            _robotInfo.ForwardKinematics.Calculate();
+                            Point3d point = _robotInfo.ForwardKinematics.TCPPlane.Origin;
 
                             // Add te calculated axis values and plane to the class property
                             _internalAxisValues.Add(new List<double>(internalAxisValues));
                             _externalAxisValues.Add(new List<double>(externalAxisValues));
-                            _planes.Add(new Plane(forwardKinematics.TCPPlane)); // deep copy needed?
+                            _planes.Add(new Plane(_robotInfo.ForwardKinematics.TCPPlane));
 
                             // Always add the first point to list with paths
                             if (j == 0)
@@ -208,9 +208,9 @@ namespace RobotComponents.BaseClasses.Kinematics
                         }
 
                         // Add last point
-                        forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                        forwardKinematics.Calculate();
-                        Point3d lastPoint = forwardKinematics.TCPPlane.Origin;
+                        _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                        _robotInfo.ForwardKinematics.Calculate();
+                        Point3d lastPoint = _robotInfo.ForwardKinematics.TCPPlane.Origin;
                         if (points[points.Count - 1] != lastPoint)
                         {
                             points.Add(lastPoint);
@@ -225,7 +225,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                         movement2 = movements[i + 1] as Movement;
 
                         // Update tool of forward kinematics
-                        forwardKinematics.RobotInfo.Tool = movement2.RobotTool;
+                        _robotInfo.ForwardKinematics.RobotInfo.Tool = movement2.RobotTool;
 
                         // Our first target is the second target of the last movement
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
@@ -278,14 +278,14 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 }
 
                                 // Calculate point to be able to draw the path curve
-                                forwardKinematics.Update(internalAxisValues, externalAxisValues);
-                                forwardKinematics.Calculate();
-                                Point3d point = forwardKinematics.TCPPlane.Origin;
+                                _robotInfo.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
+                                _robotInfo.ForwardKinematics.Calculate();
+                                Point3d point = _robotInfo.ForwardKinematics.TCPPlane.Origin;
 
                                 // Add te calculated axis values and plane to the class property
                                 _internalAxisValues.Add(new List<double>(internalAxisValues));
                                 _externalAxisValues.Add(new List<double>(externalAxisValues));
-                                _planes.Add(forwardKinematics.TCPPlane);
+                                _planes.Add(_robotInfo.ForwardKinematics.TCPPlane);
 
                                 // Always add the first point to list with paths
                                 if (j == 0)
@@ -327,9 +327,9 @@ namespace RobotComponents.BaseClasses.Kinematics
                             {
                                 jointMovement = movements[i] as AbsoluteJointMovement;
 
-                                forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                                forwardKinematics.Calculate();
-                                movement1 = new Movement(new Target("jointTarget", forwardKinematics.TCPPlane));
+                                _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                                _robotInfo.ForwardKinematics.Calculate();
+                                movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                             }
 
                             // If both movements are on the same work object
@@ -494,11 +494,11 @@ namespace RobotComponents.BaseClasses.Kinematics
             else if (movements[movements.Count - 1] is AbsoluteJointMovement)
             {
                 jointMovement = movements[movements.Count - 1] as AbsoluteJointMovement;
-                forwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                forwardKinematics.Calculate();
+                _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                _robotInfo.ForwardKinematics.Calculate();
                 _internalAxisValues.Add(new List<double>(jointMovement.InternalAxisValues));
                 _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues));
-                _planes.Add(new Plane(forwardKinematics.TCPPlane));
+                _planes.Add(new Plane(_robotInfo.ForwardKinematics.TCPPlane));
             }
         }
 

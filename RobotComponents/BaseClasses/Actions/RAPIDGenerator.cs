@@ -8,12 +8,9 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Utils;
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -24,7 +21,6 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private RobotInfo _robotInfo; // Robot info to construct the code for
-        private readonly InverseKinematics _inverseKinematics; // IK used for calculating Axis in Movements
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
@@ -64,7 +60,6 @@ namespace RobotComponents.BaseClasses.Actions
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;
-            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), _robotInfo);
         }
 
         /// <summary>
@@ -83,7 +78,6 @@ namespace RobotComponents.BaseClasses.Actions
             _programCode = generator.ProgramCode;
             _systemCode = generator.SystemCode;
             _firstMovementIsMoveAbs = generator.FirstMovementIsMoveAbs;
-            _inverseKinematics = generator.InverseKinematics.Duplicate();
         }
 
 
@@ -118,7 +112,9 @@ namespace RobotComponents.BaseClasses.Actions
             _stringBuilder.Append(Environment.NewLine);
 
             // Add comment lines for tracking which version of RC was used
-            _stringBuilder.Append("\t" + "This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
+            _stringBuilder.Append("\t" + "! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
+            _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append("\t" + "! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information");
             _stringBuilder.Append(Environment.NewLine);
 
             // Creates Vars
@@ -145,7 +141,6 @@ namespace RobotComponents.BaseClasses.Actions
                 {
                     // Override the current tool
                     _robotInfo.Tool = overrideRobotTool.RobotTool;
-                    _inverseKinematics.RobotInfo.Tool = overrideRobotTool.RobotTool;
                 }
 
                 // Checks if first movement is MoveAbsJ
@@ -221,6 +216,8 @@ namespace RobotComponents.BaseClasses.Actions
 
             // Version number
             systemCode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion;
+            systemCode += Environment.NewLine;
+            systemCode += " ! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information";
             systemCode += Environment.NewLine;
             systemCode += Environment.NewLine;
 
@@ -425,15 +422,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public RobotInfo RobotInfo
         {
-            get
-            {
-                return _robotInfo;
-            }
-            set
-            {
-                _robotInfo = value;
-                _inverseKinematics.RobotInfo = _robotInfo;
-            }
+            get { return _robotInfo; }
+            set { _robotInfo = value; }
         }
 
         /// <summary>
@@ -486,14 +476,6 @@ namespace RobotComponents.BaseClasses.Actions
         public Dictionary<string, Target> Targets
         {
             get { return _targets; }
-        }
-
-        /// <summary>
-        /// The inverse kinematics used by the RAPID Generator. 
-        /// </summary>s
-        public InverseKinematics InverseKinematics
-        {
-            get { return _inverseKinematics; }
         }
 
         /// <summary>

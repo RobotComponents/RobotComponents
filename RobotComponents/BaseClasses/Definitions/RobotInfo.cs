@@ -8,6 +8,9 @@ using System.Linq;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.BaseClasses.Kinematics;
+using RobotComponents.BaseClasses.Actions;
 
 namespace RobotComponents.BaseClasses.Definitions
 {
@@ -26,6 +29,7 @@ namespace RobotComponents.BaseClasses.Definitions
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
+        private InverseKinematics _inverseKinematics; // Robot Info inverse kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion
@@ -72,6 +76,9 @@ namespace RobotComponents.BaseClasses.Definitions
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
+
+            // Set inverse kinematics
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
         }
 
         /// <summary>
@@ -109,6 +116,9 @@ namespace RobotComponents.BaseClasses.Definitions
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
+
+            // Set inverse kinematics
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
         }
 
         /// <summary>
@@ -122,7 +132,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _name = robotInfo.Name;
             _meshes = robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
 
-           _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
+            _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
             _internalAxisLimits = new List<Interval>(robotInfo.InternalAxisLimits);
             _basePlane = new Plane(robotInfo.BasePlane);
             _mountingFrame = new Plane(robotInfo.MountingFrame);
@@ -135,6 +145,9 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = new List<ExternalAxis>(robotInfo.ExternalAxis); //TODO: make deep copy
             _externalAxisPlanes = new List<Plane>(robotInfo.ExternalAxisPlanes);
             _externalAxisLimits = new List<Interval>(robotInfo.ExternalAxisLimits);
+
+            // Inverse Kinematics
+            _inverseKinematics = new InverseKinematics(robotInfo.InverseKinematics.Movement.Duplicate(), this);
         }
 
         /// <summary>
@@ -344,6 +357,14 @@ namespace RobotComponents.BaseClasses.Definitions
                 _externalAxis = value;
                 UpdateExternalAxisFields();
             }
+        }
+
+        /// <summary>
+        /// The inverse kinematics of this robot info. 
+        /// </summary>
+        public InverseKinematics InverseKinematics
+        {
+            get { return _inverseKinematics; }
         }
 
         /// <summary>

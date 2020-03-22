@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponents.BaseClasses.Kinematics;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -277,10 +276,12 @@ namespace RobotComponents.BaseClasses.Actions
         {
             // Initialize code line
             string code = "";
-            
-            // Target with global plane (for ik) 
-            Target globalTarget = _target.Duplicate();
-            globalTarget.Plane = GetPosedGlobalTargetPlane(robotInfo, out int logic);
+
+            // Calculates AxisValues
+            robotInfo.InverseKinematics.Movement = this;
+            robotInfo.InverseKinematics.Calculate();
+            List<double> internalAxisValues = robotInfo.InverseKinematics.InternalAxisValues;
+            List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
 
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
@@ -299,9 +300,6 @@ namespace RobotComponents.BaseClasses.Actions
                     + "[0,0,0," + _target.AxisConfig;
 
                 // Adds all External Axis Values
-                InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
-                inverseKinematics.Calculate();
-                List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
                 code += "], [";
                 for (int i = 0; i < externalAxisValues.Count; i++)
                 {
@@ -330,13 +328,6 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 // Creates targetName variable
                 string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
-                // Calculates AxisValues
-                InverseKinematics inverseKinematics = new InverseKinematics(globalTarget, robotInfo);
-                inverseKinematics.Calculate();
-                List<double> internalAxisValues = inverseKinematics.InternalAxisValues;
-                List<double> externalAxisValues = inverseKinematics.ExternalAxisValues;
-
-                // Creates Code Variable
                 code += jointTargetVar + " := [[";
 
                 // Adds all Internal Axis Values
@@ -476,56 +467,17 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates SpeedData Variable Code 
             _speedData.InitRAPIDVar(RAPIDGenerator);
 
-            // Target with global plane (for ik) 
-            Target globalTarget = _target.Duplicate();
-            globalTarget.Plane = GetPosedGlobalTargetPlane(RAPIDGenerator.RobotInfo, out int logic);
-
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
             {
                 // Only adds target code if target is not already defined
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.RobTargetName))
                 {
-                    // Adds target to RAPIDGenrator targets dictionary
+                    // Adds target to RAPIDGenerator targets dictionary
                     RAPIDGenerator.Targets.Add(_target.RobTargetName, _target);
-                    // Creates targetName variable
-                    string robTargetVar = "VAR robtarget " + _target.RobTargetName;
-                    RAPIDGenerator.StringBuilder.Append((Environment.NewLine + "\t" + robTargetVar + " := [["
-                        + _target.Plane.Origin.X.ToString("0.##") + ", "
-                        + _target.Plane.Origin.Y.ToString("0.##") + ", "
-                        + _target.Plane.Origin.Z.ToString("0.##") + "], ["
-                        + _target.Quat.A.ToString("0.######") + ", "
-                        + _target.Quat.B.ToString("0.######") + ", "
-                        + _target.Quat.C.ToString("0.######") + ", "
-                        + _target.Quat.D.ToString("0.######") + "],"
-                        + "[0,0,0," + _target.AxisConfig));
 
-                    // Adds all External Axis Values
-                    RAPIDGenerator.InverseKinematics.Movement.Target = globalTarget;
-                    RAPIDGenerator.InverseKinematics.ReInitialize();
-                    RAPIDGenerator.InverseKinematics.Calculate();
-                    List<double> externalAxisValues = RAPIDGenerator.InverseKinematics.ExternalAxisValues;
-                    RAPIDGenerator.StringBuilder.Append("], [");
-                    for (int i = 0; i < externalAxisValues.Count; i++)
-                    {
-                        RAPIDGenerator.StringBuilder.Append(externalAxisValues[i].ToString("0.##") + ", ");
-                    }
-
-                    // Adds 9E9 for all missing external Axis Values
-                    for (int i = externalAxisValues.Count; i < 6; i++)
-                    {
-                        if (Target.ExternalAxisValues[i] == 9e9)
-                        {
-                            RAPIDGenerator.StringBuilder.Append("9E9" + ", ");
-                        }
-                        else
-                        {
-                            RAPIDGenerator.StringBuilder.Append(Target.ExternalAxisValues[i].ToString("0.##") + ", ");
-                        }
-
-                    }
-                    RAPIDGenerator.StringBuilder.Remove(RAPIDGenerator.StringBuilder.Length - 2, 2);
-                    RAPIDGenerator.StringBuilder.Append("]];");
+                    // Creates and adds RAPID variable code
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
                 }
             }
 
@@ -535,47 +487,11 @@ namespace RobotComponents.BaseClasses.Actions
                 // Only adds target code if target is not already defined
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.JointTargetName))
                 {
-                    // Adds target to RAPIDGenrator targets dictionary
+                    // Adds target to RAPIDGenerator targets dictionary
                     RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
-                    // Creates targetName variable
-                    string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
-                    // Calculates AxisValues
-                    RAPIDGenerator.InverseKinematics.Movement.Target = globalTarget;
-                    RAPIDGenerator.InverseKinematics.ReInitialize();
-                    RAPIDGenerator.InverseKinematics.Calculate();
-                    List<double> internalAxisValues = RAPIDGenerator.InverseKinematics.InternalAxisValues;
-                    List<double> externalAxisValues = RAPIDGenerator.InverseKinematics.ExternalAxisValues;
 
-                    // Creates Code Variable
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + jointTargetVar + " := [[");
-
-                    // Adds all Internal Axis Values
-                    for (int i = 0; i < internalAxisValues.Count; i++)
-                    {
-                        RAPIDGenerator.StringBuilder.Append(internalAxisValues[i].ToString("0.##") + ", ");
-                    }
-                    RAPIDGenerator.StringBuilder.Remove(RAPIDGenerator.StringBuilder.Length - 2, 2);
-
-                    // Adds all External Axis Values
-                    RAPIDGenerator.StringBuilder.Append("], [");
-                    for (int i = 0; i < externalAxisValues.Count; i++)
-                    {
-                        RAPIDGenerator.StringBuilder.Append(externalAxisValues[i].ToString("0.##") + ", ");
-                    }
-                    // Adds 9E9 for all missing external Axis Values
-                    for (int i = externalAxisValues.Count; i < 6; i++)
-                    {
-                        if (Target.ExternalAxisValues[i] == 9e9)
-                        {
-                            RAPIDGenerator.StringBuilder.Append("9E9" + ", ");
-                        }
-                        else
-                        {
-                            RAPIDGenerator.StringBuilder.Append(Target.ExternalAxisValues[i].ToString("0.##") + ", ");
-                        }
-                    }
-                    RAPIDGenerator.StringBuilder.Remove(RAPIDGenerator.StringBuilder.Length - 2, 2);
-                    RAPIDGenerator.StringBuilder.Append("]];");
+                    // Creates and adds RAPID variable code
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
                 }
             }
         }
@@ -586,73 +502,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            // Set tool name
-            string toolName;
-
-            // Check first if a tool is set
-            if (_robotTool == null) { toolName = RAPIDGenerator.RobotInfo.Tool.Name; }
-            // Check if a tool is set by checking the name (tool can be empty)
-            else if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = RAPIDGenerator.RobotInfo.Tool.Name; }
-            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-            else { toolName = _robotTool.Name; }
-
-            // Set zone data text (precision value)
-            string zoneName;
-            if (_precision < 0) { zoneName = ", fine, "; }
-            else { zoneName = ", z" + _precision.ToString() + ", "; }
-
-            // Digital output bool
-            bool moveDO = false;
-            if (_digitalOutput.IsValid == true) { moveDO = true; }
-
-            // A movement not combined with a digital output
-            if (moveDO == false)
-            {
-                // MoveAbsJ
-                if (_movementType == 0)
-                {
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveAbsJ " + _target.JointTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-                }
-
-                // MoveL
-                else if (_movementType == 1)
-                {
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveL " + _target.RobTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-                }
-
-                // MoveJ
-                else if (_movementType == 2)
-                {
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveJ " + _target.RobTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-                }
-            }
-
-            // A movement combined with a digital output
-            else
-            {
-                // MoveAbsJ + SetDO: There is no RAPDID function that combines the an absolute joint movement and a DO.
-                // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
-                if (_movementType == 0)
-                {
-                    // Add the code line for the absolute joint movement
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveAbsJ " + _target.JointTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ";");
-                    // Add the code line for the digital output
-                    _digitalOutput.ToRAPIDFunction(RAPIDGenerator);
-                }
-
-                // MoveLDO
-                else if (_movementType == 1)
-                {
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveLDO " + _target.RobTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ", " + _digitalOutput.Name + ", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
-                }
-
-                // MoveJDO
-                else if (_movementType == 2)
-                {
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "MoveJDO " + _target.RobTargetName + ", " + _speedData.Name + zoneName + toolName + "\\WObj:=" + _workObject.Name + ", " + _digitalOutput.Name + ", " + (_digitalOutput.IsActive ? 1 : 0) + ";");
-                }
-
-            }
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

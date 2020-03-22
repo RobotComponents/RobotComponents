@@ -89,11 +89,11 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_isActive == true)
             {
-                return "SetDO " + _name + ",  1;";
+                return "SetDO " + _name + ", 1;";
             }
             else
             {
-                return "SetDO " + _name + ",  0;";
+                return "SetDO " + _name + ", 0;";
             }
         }
 

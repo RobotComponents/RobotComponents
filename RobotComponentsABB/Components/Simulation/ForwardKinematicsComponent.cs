@@ -62,7 +62,7 @@ namespace RobotComponentsABB.Components.Simulation
         }
 
         // Fields
-        private ForwardKinematics _fk = new ForwardKinematics();
+        private ForwardKinematics _fk;
         private bool _hideMesh = false;
 
         /// <summary>

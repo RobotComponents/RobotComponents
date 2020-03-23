@@ -59,6 +59,8 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddNumberParameter("Quaternion B", "B", "The first imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Quaternion C", "C", "The second imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Quaternion D", "D", "The third imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetDataList(1,  meshes)) { return; }
+            if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
             if (!DA.GetData(2, ref x)) { return; }
             if (!DA.GetData(3, ref y)) { return; }
             if (!DA.GetData(4, ref z)) { return; }

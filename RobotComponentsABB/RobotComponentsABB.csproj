@@ -74,6 +74,8 @@
     <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromQuaternionComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion.cs" />
+    <Compile Include="Components\_Obsolete\OldQuaternionToPlane.cs" />
     <Compile Include="Components\_Obsolete\OldGetDigitalOutputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldGetDigitalInputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />

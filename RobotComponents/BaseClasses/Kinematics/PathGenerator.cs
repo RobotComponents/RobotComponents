@@ -136,8 +136,8 @@ namespace RobotComponents.BaseClasses.Kinematics
                         // Get the movement
                         jointMovement = movements[i + 1] as AbsoluteJointMovement;
 
-                        // Update tool of forward kinematics
-                        _robotInfo.ForwardKinematics.RobotInfo.Tool = jointMovement.RobotTool;
+                        // Update tool
+                        _robotInfo.Tool = jointMovement.RobotTool;
 
                         // Our first target is the second target of the last movement
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
@@ -224,8 +224,8 @@ namespace RobotComponents.BaseClasses.Kinematics
                         // Get the movement
                         movement2 = movements[i + 1] as Movement;
 
-                        // Update tool of forward kinematics
-                        _robotInfo.ForwardKinematics.RobotInfo.Tool = movement2.RobotTool;
+                        // Update tool 
+                        _robotInfo.Tool = movement2.RobotTool;
 
                         // Our first target is the second target of the last movement
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
@@ -318,7 +318,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                             Plane plane1;
                             Plane plane2;
 
-                            // Get movement before (especially the target plane)
+                            // Get movement before (especially the target plane): the start point of the current movement
                             if (movements[i] is Movement)
                             {
                                 movement1 = movements[i] as Movement;
@@ -326,25 +326,26 @@ namespace RobotComponents.BaseClasses.Kinematics
                             else if (movements[i] is AbsoluteJointMovement)
                             {
                                 jointMovement = movements[i] as AbsoluteJointMovement;
-
                                 _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                                 _robotInfo.ForwardKinematics.Calculate();
                                 movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                             }
 
-                            // If both movements are on the same work object
-                            if (movement1.WorkObject.Name == movement2.WorkObject.Name)
+                            // If both movements are on the same work object and with the same tool
+                            if (movement1.WorkObject.Name == movement2.WorkObject.Name && movement1.RobotTool.Name == movement2.RobotTool.Name)
                             {
                                 plane1 = movement1.Target.Plane;
                                 plane2 = movement2.Target.Plane;
                             }
 
-                            // Else the movements are not on the same work object
+                            // Else the movements are not on the same work object and / or the tools are differnt
                             // We have to re-orient one target plane to the other work object
                             else
                             {
                                 // Get plane1 and plane2
-                                plane1 = new Plane(movement1.GetPosedGlobalTargetPlane(_robotInfo, out logic)); // In world coordinate space
+                                _robotInfo.ForwardKinematics.Update(target1InternalAxisValues, target1ExternalAxisValues);
+                                _robotInfo.ForwardKinematics.Calculate();
+                                plane1 = new Plane(_robotInfo.ForwardKinematics.TCPPlane); // In world coordinate space
                                 plane2 = movement2.Target.Plane; // In work object coordinate space
 
                                 // Re-orient plane1 to the other work object coordinate space of the plane2
@@ -355,9 +356,9 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 // Correct for the target plane position if we make a movement an a movable work object
                                 // This is only needed if move from a fixed work object to a movable work object.
                                 // Or if we switch between to movable workobjects with two different external axes
-                                if (movement1.WorkObject.ExternalAxis == null
-                                    && movement2.WorkObject.ExternalAxis != null
-                                    && movement2.WorkObject.ExternalAxis.Name != movement1.WorkObject.ExternalAxis.Name)
+                                if (movement1.WorkObject.ExternalAxis == null && 
+                                    movement2.WorkObject.ExternalAxis != null && 
+                                    movement2.WorkObject.ExternalAxis.Name != movement1.WorkObject.ExternalAxis.Name)
                                 {
                                     // Get axis logic of the external axis of the movable work object we are using.
                                     movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic);

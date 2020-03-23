@@ -49,7 +49,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             _paths = new List<Curve>();
             _internalAxisValues = new List<List<double>>();
             _externalAxisValues = new List<List<double>>();
-            _robotInfo = robotInfo;
+            _robotInfo = robotInfo.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
         }
 
         /// <summary>

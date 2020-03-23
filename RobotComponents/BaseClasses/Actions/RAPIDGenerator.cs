@@ -56,7 +56,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _programName = programName;
             _systemName = systemName;
-            _robotInfo = robotInfo;
+            _robotInfo = robotInfo.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;

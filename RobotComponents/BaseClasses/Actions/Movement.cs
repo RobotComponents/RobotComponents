@@ -41,8 +41,8 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a robot movement with as only argument an robot target. 
-        /// This construct is made to automatically cast a robot target to a robot movement. 
+        /// Constructs robot movement with as only argument a robot target. 
+        /// This constructor is typically used to cast a robot target to a robot movement. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         public Movement(Target target)
@@ -60,7 +60,7 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
+        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
@@ -81,7 +81,72 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a robot movement with an empty digital output.
+        /// Constructs a robot movement with an empty digital output, a default work object (wobj0) and a empty robot tool (no override).
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = robotTool;
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty digital output, an empty robot tool (no override) and a user definied work object. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, WorkObject workObject)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = workObject;
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and user definied digital output. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, DigitalOutput digitalOutput)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = digitalOutput;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty digital output.
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
@@ -103,7 +168,52 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Method to create a robot movement. 
+        /// Constructs a robot movement with a default work object (wobj0). 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = robotTool;
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = digitalOutput;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty robot tool (no override).
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, int precision, WorkObject workObject, DigitalOutput digitalOutput)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _precision = precision;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = workObject;
+            _digitalOutput = digitalOutput;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>

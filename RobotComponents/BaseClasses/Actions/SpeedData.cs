@@ -39,7 +39,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
         /// </summary>
-        /// <param name="v_tcp">  The velocity of the tool center point (TCP) in mm/s. </param>
+        /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(double v_tcp)
         {
             double tcp = Math.Round(v_tcp, 0);
@@ -55,7 +55,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
         /// </summary>
-        /// <param name="v_tcp">  The velocity of the tool center point (TCP) in mm/s. </param>
+        /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(int v_tcp)
         {
             double tcp = Convert.ToDouble(v_tcp);
@@ -70,14 +70,14 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Constructor for creating an custom SpeedData. 
+        /// Constructor for creating a custom SpeedData. 
         /// </summary>
         /// <param name="name"> The SpeedData variable name. </param>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
         /// <param name="v_leax"> The velocity of linear external axes in mm/s. </param>
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
-        public SpeedData(string name, double v_tcp, double v_ori, double v_leax, double v_reax)
+        public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
             _name = name;
             _v_tcp = v_tcp;

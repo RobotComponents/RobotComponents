@@ -83,7 +83,6 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDFunction(RobotInfo robotInfo)
         {
-            robotInfo.Tool = this.RobotTool;
             return "! " + "Default Robot Tool changed to " + robotInfo.Tool.Name + ".";
         }
 

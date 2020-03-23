@@ -104,6 +104,9 @@ namespace RobotComponents.BaseClasses.Actions
             _speedDatas.Clear();
             _targets.Clear();
 
+            // Save initial tool
+            RobotTool initTool = _robotInfo.Tool.Duplicate();
+
             // Creates String Builder
             _stringBuilder = new StringBuilder();
 
@@ -121,6 +124,13 @@ namespace RobotComponents.BaseClasses.Actions
             for (int i = 0; i != _actions.Count; i++)
             {
                 _actions[i].InitRAPIDVar(this);
+
+                // Check if the action is an override robot tool: if so, set new current tool
+                if (_actions[i] is OverrideRobotTool overrideRobotTool)
+                {
+                    // Override the current tool
+                    _robotInfo.Tool = overrideRobotTool.RobotTool;
+                }
             }
 
             // Create Program
@@ -130,6 +140,9 @@ namespace RobotComponents.BaseClasses.Actions
 
             _firstMovementIsMoveAbs = false;
             bool foundFirstMovement = false;
+
+            // Set back initial tool
+            _robotInfo.Tool = initTool;
 
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)

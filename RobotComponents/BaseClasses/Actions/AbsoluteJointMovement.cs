@@ -4,6 +4,7 @@
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
@@ -85,7 +86,7 @@ namespace RobotComponents.BaseClasses.Actions
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
-            _movementType = 0; // The movementType is always an Absolute Joint Movement
+            _movementType = 0; // The movement type is always an Absolute Joint Movement
             _precision = precision;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -106,7 +107,7 @@ namespace RobotComponents.BaseClasses.Actions
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
-            _movementType = 0; // The movementType is always an Absolute Joint Movement
+            _movementType = 0; // The movement type is always an Absolute Joint Movement
             _precision = precision;
             _robotTool = robotTool;
         }
@@ -159,6 +160,83 @@ namespace RobotComponents.BaseClasses.Actions
         #endregion
 
         #region method
+        /// <summary>
+        /// Used to create variable definition code of this action. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string InitRAPIDVar(RobotInfo robotInfo)
+        {
+            // Creates Code Variable
+            string code = "CONST jointtarget " + JointTargetName + " := [[";
+
+            // Adds all Internal Axis Values
+            for (int i = 0; i < this._internalAxisValues.Count; i++)
+            {
+                code += this._internalAxisValues[i].ToString("0.##") + ", ";
+            }
+            code = code.Remove(code.Length - 2);
+
+            // Adds all External Axis Values
+            code += "], [";
+            for (int i = 0; i < this._externalAxisValues.Count; i++)
+            {
+                code += this._externalAxisValues[i].ToString("0.##") + ", ";
+            }
+
+            // Adds 9E9 for all missing external Axis Values
+            for (int i = this._externalAxisValues.Count; i < 6; i++)
+            {
+                code += "9E9" + ", ";
+            }
+            code = code.Remove(code.Length - 2);
+            code += "]];";
+
+            return code;
+        }
+
+        /// <summary>
+        /// Used to create action instruction code line. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        {
+            // Set tool name
+            string toolName;
+
+            // Check first if a tool is set
+            if (_robotTool == null) 
+            { 
+                toolName = robotInfo.Tool.Name; 
+            }
+            // Check if a tool is set by checking the name (tool can be empty)
+            else if (_robotTool.Name == "" || _robotTool.Name == null)
+            { 
+                toolName = robotInfo.Tool.Name; 
+            } 
+            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+            else 
+            { 
+                toolName = _robotTool.Name; 
+            }
+
+            // Set zone data text (precision value)
+            string zoneName;
+            if (_precision < 0)
+            {
+                zoneName = ", fine, ";
+            }
+            else
+            {
+                zoneName = ", z" + _precision.ToString() + ", ";
+            }
+
+            // MoveAbsJ
+            string code = "MoveAbsJ " + JointTargetName + ", " + _speedData.Name + zoneName + toolName + ";";
+
+            return code;
+        }
 
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
@@ -166,13 +244,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
         {
-            string tempCode = "";
-
             // Creates SpeedData Variable Code
             _speedData.InitRAPIDVar(RAPIDGenerator);
-
-            // Creates targetName variables to check if they already exist 
-            string jointTargetVar = "CONST jointtarget " + JointTargetName;
 
             // Only adds target code if target is not already defined
             if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
@@ -180,31 +253,8 @@ namespace RobotComponents.BaseClasses.Actions
                 // Adds Target to RAPIDGenerator SpeedDatasDictionary
                 RAPIDGenerator.Targets.Add(JointTargetName, new Target());
 
-                // Creates Code Variable
-                tempCode += "@" + "\t" + jointTargetVar + ":=[[";
-
-                // Adds all Internal Axis Values
-                for (int i = 0; i < this._internalAxisValues.Count; i++)
-                {
-                    tempCode += this._internalAxisValues[i].ToString("0.##") + ", ";
-                }
-                tempCode = tempCode.Remove(tempCode.Length - 2);
-
-                // Adds all External Axis Values
-                tempCode += "], [";
-                for (int i = 0; i < this._externalAxisValues.Count; i++)
-                {
-                    tempCode += this._externalAxisValues[i].ToString("0.##") + ", ";
-                }
-                // Adds 9E9 for all missing external Axis Values
-                for (int i = this._externalAxisValues.Count; i < 6; i++)
-                {
-                    tempCode += "9E9" + ", ";
-                }
-                tempCode = tempCode.Remove(tempCode.Length - 2);
-                tempCode += "]];";
-
-                RAPIDGenerator.StringBuilder.Append(tempCode);
+                // Add variable code line to the RAPID generator string builder
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
             }
         }
 
@@ -214,30 +264,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
         {
-            // Set tool name
-            string toolName;
-
-            // Check first if a tool is set
-            if (_robotTool == null) { toolName = RAPIDGenerator.CurrentTool; }
-            // Check if a tool is set by checking the name (tool can be empty)
-            else if (_robotTool.Name == "" || _robotTool.Name == null) { toolName = RAPIDGenerator.CurrentTool; } //TODO: RobotTool.IsValid is maybe better?
-            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-            else { toolName = _robotTool.Name; }
-
-            // Set zone data text (precision value)
-            string zoneName;
-            if (_precision < 0) 
-            { 
-                zoneName = @", fine, "; 
-            }
-            else 
-            { 
-                zoneName = @", z" + _precision.ToString() + @", "; 
-            }
-
-            // MoveAbsJ
-            RAPIDGenerator.StringBuilder.Append("@" + "\t" + "MoveAbsJ " + JointTargetName + @", " + _speedData.Name + zoneName + toolName + ";");
-
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

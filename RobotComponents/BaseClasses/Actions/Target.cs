@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponents.BaseClasses.Actions
 {
@@ -357,6 +359,26 @@ namespace RobotComponents.BaseClasses.Actions
             Plane refPlane = new Plane(Plane.WorldXY);
             Quaternion quat = Quaternion.Rotation(refPlane, _plane);
             return quat;
+        }
+
+        /// <summary>
+        /// Used to create variable definition code of this action. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string InitRAPIDVar(RobotInfo robotInfo)
+        {
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Used to create action instruction code line. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        {
+            return string.Empty;
         }
 
         /// <summary>

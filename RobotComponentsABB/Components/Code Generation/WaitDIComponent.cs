@@ -10,6 +10,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
+using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -65,15 +66,27 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string _DIName = "";
-            bool _DIValue = false;
+            string DIName = "";
+            bool DIValue = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref _DIName)) { return; }
-            if (!DA.GetData(1, ref _DIValue)) { return; }
+            if (!DA.GetData(0, ref DIName)) { return; }
+            if (!DA.GetData(1, ref DIValue)) { return; }
+
+            // Checks if Digital Output Name exceeds max character limit for RAPID Code
+            if (HelperMethods.VariableExeedsCharacterLimit32(DIName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Input Name exceeds character limit of 32 characters.");
+            }
+
+            // Checks if variable name starts with a number
+            if (HelperMethods.VariableStartsWithNumber(DIName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Input Name starts with a number which is not allowed in RAPID Code.");
+            }
 
             // Create the action
-            WaitDI waitDI = new WaitDI(_DIName, _DIValue);
+            WaitDI waitDI = new WaitDI(DIName, DIValue);
 
             // Sets Output
             DA.SetData(0, waitDI);

@@ -3,6 +3,9 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
+// RobotComponents Libs
+using RobotComponents.BaseClasses.Definitions;
+
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
@@ -30,6 +33,20 @@ namespace RobotComponents.BaseClasses.Actions
         #endregion
 
         #region methods
+        /// <summary>
+        /// Used to create variable definition code of this action. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public abstract string InitRAPIDVar(RobotInfo robotInfo);
+
+        /// <summary>
+        /// Used to create action instruction code line. 
+        /// </summary>
+        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <returns> Returns the RAPID code line as a string. </returns>
+        public abstract string ToRAPIDFunction(RobotInfo robotInfo);
+
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>

@@ -132,7 +132,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo.Duplicate());
+                _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo);
 
                 // Get tools data for system module
                 List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager

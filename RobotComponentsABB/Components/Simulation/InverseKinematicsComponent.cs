@@ -69,12 +69,12 @@ namespace RobotComponentsABB.Components.Simulation
             if (!DA.GetData(1, ref MovementGoo)) { return; }
 
             // Calculate the robot pose
-            InverseKinematics inverseKinematics = new InverseKinematics(MovementGoo.Value, robotInfoGoo.Value);
-            inverseKinematics.Calculate();
+            robotInfoGoo.Value.InverseKinematics.Movement = MovementGoo.Value;
+            robotInfoGoo.Value.InverseKinematics.Calculate();
 
             // Output
-            DA.SetDataList(0, inverseKinematics.InternalAxisValues);
-            DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
+            DA.SetDataList(0, robotInfoGoo.Value.InverseKinematics.InternalAxisValues);
+            DA.SetDataList(1, robotInfoGoo.Value.InverseKinematics.ExternalAxisValues);
         }
 
         /// <summary>

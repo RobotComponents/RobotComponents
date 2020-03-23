@@ -8,6 +8,9 @@ using System.Linq;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.BaseClasses.Kinematics;
+using RobotComponents.BaseClasses.Actions;
 
 namespace RobotComponents.BaseClasses.Definitions
 {
@@ -26,6 +29,8 @@ namespace RobotComponents.BaseClasses.Definitions
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
+        private InverseKinematics _inverseKinematics; // Robot Info inverse kinematics
+        private ForwardKinematics _forwardKinematics; // Robot Info forward kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion
@@ -72,6 +77,10 @@ namespace RobotComponents.BaseClasses.Definitions
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
+
+            // Set kinematics
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
@@ -109,11 +118,16 @@ namespace RobotComponents.BaseClasses.Definitions
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
+
+            // Set kinematics
+            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _forwardKinematics = new ForwardKinematics(this);
         }
 
         /// <summary>
         /// Creates a new robot info by duplicating an existing robot info.
-        /// This creates a deep copy of the existing robot info.
+        /// This creates a deep copy of the existing robot info. 
+        /// It clears the solution of the inverse and forward kinematics. 
         /// </summary>
         /// <param name="robotInfo"> The robot info that should be duplicated. </param>
         public RobotInfo(RobotInfo robotInfo)
@@ -122,7 +136,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _name = robotInfo.Name;
             _meshes = robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
 
-           _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
+            _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
             _internalAxisLimits = new List<Interval>(robotInfo.InternalAxisLimits);
             _basePlane = new Plane(robotInfo.BasePlane);
             _mountingFrame = new Plane(robotInfo.MountingFrame);
@@ -135,6 +149,10 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxis = new List<ExternalAxis>(robotInfo.ExternalAxis); //TODO: make deep copy
             _externalAxisPlanes = new List<Plane>(robotInfo.ExternalAxisPlanes);
             _externalAxisLimits = new List<Interval>(robotInfo.ExternalAxisLimits);
+
+            // Kinematics
+            _inverseKinematics = new InverseKinematics(robotInfo.InverseKinematics.Movement.Duplicate(), this);
+            _forwardKinematics = new ForwardKinematics(this, robotInfo.ForwardKinematics.HideMesh);
         }
 
         /// <summary>
@@ -344,6 +362,22 @@ namespace RobotComponents.BaseClasses.Definitions
                 _externalAxis = value;
                 UpdateExternalAxisFields();
             }
+        }
+
+        /// <summary>
+        /// The inverse kinematics of this robot info. 
+        /// </summary>
+        public InverseKinematics InverseKinematics
+        {
+            get { return _inverseKinematics; }
+        }
+
+        /// <summary>
+        /// The forward kinematics of this robot info. 
+        /// </summary>
+        public ForwardKinematics ForwardKinematics
+        {
+            get { return _forwardKinematics; }
         }
 
         /// <summary>

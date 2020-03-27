@@ -7,6 +7,7 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper;
 using Grasshopper.Kernel;
@@ -15,6 +16,7 @@ using Grasshopper.Kernel.Special;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
+using RobotComponentsABB.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.RapidDomain;
 using ABB.Robotics.Controllers.MotionDomain;
@@ -197,6 +199,32 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 // First expire the solution of the value list
                 obj.ExpireSolution(true);
             }
+        }
+        #endregion
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
         }
         #endregion
 

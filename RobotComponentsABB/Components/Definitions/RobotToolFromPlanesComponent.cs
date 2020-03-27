@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -222,6 +223,32 @@ namespace RobotComponentsABB.Components.Definitions
                 }
             }
         }
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
+        }
+        #endregion
 
         /// <summary>
         /// The robot tool created by this component

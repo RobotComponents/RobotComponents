@@ -1873,6 +1873,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap WikiPage_MenuItem_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WikiPage_MenuItem_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Work_Object_Icon {
             get {
                 object obj = ResourceManager.GetObject("Work_Object_Icon", resourceCulture);

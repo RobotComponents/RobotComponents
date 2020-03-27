@@ -19,6 +19,7 @@ using Rhino.Geometry;
 using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
+using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Simulation
 {
@@ -283,6 +284,23 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Add custom menu items
             Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
+
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
         }
 
         /// <summary>

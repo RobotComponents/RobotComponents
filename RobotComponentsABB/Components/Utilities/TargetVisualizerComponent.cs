@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -14,6 +15,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponentsGoos.Actions;
+using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Utilities
 {
@@ -188,6 +190,32 @@ namespace RobotComponentsABB.Components.Utilities
                 }
             }
         }
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
+        }
+        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

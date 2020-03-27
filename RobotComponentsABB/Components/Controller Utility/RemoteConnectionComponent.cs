@@ -6,10 +6,12 @@
 // System Libs
 using System;
 using System.IO;
+using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
+using RobotComponentsABB.Utils;
 // ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
@@ -19,12 +21,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
     /// <summary>
     /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.
     /// </summary>
-    public class RemoteConnection : GH_Component
+    public class RemoteConnectionComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the RemoteConnection class.
         /// </summary>
-        public RemoteConnection()
+        public RemoteConnectionComponent()
           : base("Remote Connection", "Remote Connection",
               "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB robot controller."
               + System.Environment.NewLine +
@@ -420,6 +422,32 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     writer.WriteLine(systemModule);
                 }
             }
+        }
+        #endregion
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
         }
         #endregion
 

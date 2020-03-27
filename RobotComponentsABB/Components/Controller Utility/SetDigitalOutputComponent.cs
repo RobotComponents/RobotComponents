@@ -12,6 +12,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
+using RobotComponentsABB.Utils;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.IOSystemDomain;
@@ -329,6 +330,23 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Add the menu item
             base.AppendAdditionalMenuItems(menu);
+
+            // Add menu separator
+            Menu_AppendSeparator(menu);
+
+            // Add custom menu items
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            System.Diagnostics.Process.Start(url);
         }
 
         /// <summary>

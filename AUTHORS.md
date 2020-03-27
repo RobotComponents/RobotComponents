@@ -15,4 +15,4 @@
 
 - Andrea Rossi <<rossi@uni-kassel.de>> [@ar0551](https://github.com/ar0551)
 - Mohamed Dawod [@dawodx](https://github.com/dawodx)
-- Zuardin Akbar <<akbar@uni-kassel.de>> [@zuardinakbar](https://github.com/@zuardinakbar)
+- Zuardin Akbar <<akbar@uni-kassel.de>> [@zuardinakbar](https://github.com/zuardinakbar)

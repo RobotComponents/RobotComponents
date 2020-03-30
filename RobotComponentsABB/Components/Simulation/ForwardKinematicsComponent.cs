@@ -63,8 +63,9 @@ namespace RobotComponentsABB.Components.Simulation
         }
 
         // Fields
-        private ForwardKinematics _fk;
+        private ForwardKinematics _fk = new ForwardKinematics();
         private bool _hideMesh = false;
+        private GH_Structure<GH_Mesh> _meshes = new GH_Structure<GH_Mesh>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -96,30 +97,25 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Calcuate the robot pose
-            robotInfoGoo.Value.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
-            robotInfoGoo.Value.ForwardKinematics.HideMesh = _hideMesh;
-            robotInfoGoo.Value.ForwardKinematics.Calculate();
+            _fk = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues, _hideMesh);
+            _fk.Calculate();
 
             // Check the values
-            for (int i = 0; i < robotInfoGoo.Value.ForwardKinematics.ErrorText.Count; i++)
+            for (int i = 0; i < _fk.ErrorText.Count; i++)
             {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, robotInfoGoo.Value.ForwardKinematics.ErrorText[i]);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _fk.ErrorText[i]);
             }
-
-            // Create data tree for output of all posed meshes
-            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
             // Fill data tree with meshes
             if (_hideMesh == false)
             {
-                meshes = GetPosedMeshesDataTree(robotInfoGoo.Value.ForwardKinematics);
+                _meshes = GetPosedMeshesDataTree(_fk);
             }
 
             // Output
-            _fk = robotInfoGoo.Value.ForwardKinematics;
-            DA.SetDataTree(0, meshes); 
-            DA.SetData(1, robotInfoGoo.Value.ForwardKinematics.TCPPlane); // Outputs the TCP as a plane
-            DA.SetDataList(2, robotInfoGoo.Value.ForwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+            DA.SetDataTree(0, _meshes); 
+            DA.SetData(1, _fk.TCPPlane); // Outputs the TCP as a plane
+            DA.SetDataList(2, _fk.ExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>
@@ -297,7 +293,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);
@@ -308,7 +304,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickHideMesh(object sender, EventArgs e)
+        private void MenuItemClickHideMesh(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Hide Mesh");
             _hideMesh = !_hideMesh;

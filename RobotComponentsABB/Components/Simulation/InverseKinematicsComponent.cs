@@ -13,6 +13,7 @@ using RobotComponentsGoos.Actions;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
+using RobotComponents.BaseClasses.Kinematics;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Simulation
@@ -70,12 +71,12 @@ namespace RobotComponentsABB.Components.Simulation
             if (!DA.GetData(1, ref MovementGoo)) { return; }
 
             // Calculate the robot pose
-            robotInfoGoo.Value.InverseKinematics.Movement = MovementGoo.Value;
-            robotInfoGoo.Value.InverseKinematics.Calculate();
+            InverseKinematics inverseKinematics = new InverseKinematics(MovementGoo.Value, robotInfoGoo.Value);
+            inverseKinematics.Calculate();
 
             // Output
-            DA.SetDataList(0, robotInfoGoo.Value.InverseKinematics.InternalAxisValues);
-            DA.SetDataList(1, robotInfoGoo.Value.InverseKinematics.ExternalAxisValues);
+            DA.SetDataList(0, inverseKinematics.InternalAxisValues);
+            DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
         }
 
         #region menu item
@@ -97,7 +98,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);

@@ -234,7 +234,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);

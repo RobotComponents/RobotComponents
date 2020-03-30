@@ -469,7 +469,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);
@@ -480,7 +480,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickRobotTool(object sender, EventArgs e)
+        private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Override Robot Tool");
@@ -494,7 +494,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// Adds or destroys the input parameter to the component.
         /// </summary>
         /// <param name="index"> The index number of the parameter that needs to be added. </param>
-        public void AddParameter(int index)
+        private void AddParameter(int index)
         {
             // Pick the parameter
             IGH_Param parameter = variableInputParameters[index];

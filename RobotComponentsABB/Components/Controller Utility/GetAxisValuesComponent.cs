@@ -101,7 +101,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        public List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
+        private List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -132,7 +132,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        public List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
+        private List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };
@@ -178,7 +178,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);

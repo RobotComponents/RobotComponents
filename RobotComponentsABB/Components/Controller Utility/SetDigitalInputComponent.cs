@@ -344,7 +344,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);
@@ -355,7 +355,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClick(object sender, EventArgs e)
+        private void MenuItemClick(object sender, EventArgs e)
         {
             // Remove all the input source when the menu item is clicked. 
             this.Params.Input[1].RemoveAllSources();

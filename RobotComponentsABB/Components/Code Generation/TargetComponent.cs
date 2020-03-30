@@ -554,7 +554,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);
@@ -565,7 +565,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickReferencePlane(object sender, EventArgs e)
+        private void MenuItemClickReferencePlane(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Set Reference Plane");
@@ -611,7 +611,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickExternalAxisValue(object sender, EventArgs e)
+        private void MenuItemClickExternalAxisValue(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Override External Axis Values");

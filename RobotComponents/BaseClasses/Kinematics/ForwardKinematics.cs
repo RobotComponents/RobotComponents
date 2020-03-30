@@ -288,7 +288,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Checks if the interal axis values are outside its limits.
         /// </summary>
-        public void CheckForInternalAxisLimits()
+        private void CheckForInternalAxisLimits()
         {
             _errorText.Clear();
             _internalAxisInLimit.Clear();
@@ -311,7 +311,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Checks if the external axis values are outside its limits.
         /// </summary>
-        public void CheckForExternalAxisLimits()
+        private void CheckForExternalAxisLimits()
         {
             _errorText.Clear();
             _externalAxisInLimit.Clear();

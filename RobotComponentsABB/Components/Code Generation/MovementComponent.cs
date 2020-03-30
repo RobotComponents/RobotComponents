@@ -454,7 +454,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickComponentDoc(object sender, EventArgs e)
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             System.Diagnostics.Process.Start(url);
@@ -465,7 +465,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickRobotTool(object sender, EventArgs e)
+        private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Override Robot Tool");
@@ -480,7 +480,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickWorkObject(object sender, EventArgs e)
+        private void MenuItemClickWorkObject(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Override Work Object");
@@ -495,7 +495,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        public void MenuItemClickDigitalOutput(object sender, EventArgs e)
+        private void MenuItemClickDigitalOutput(object sender, EventArgs e)
         {
             // Change bool
             RecordUndoEvent("Set Digital Output");
@@ -509,7 +509,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// Adds or destroys the input parameter to the component.
         /// </summary>
         /// <param name="index"> The index number of the parameter that needs to be added. </param>
-        public void AddParameter(int index)
+        private void AddParameter(int index)
         {
             // Pick the parameter
             IGH_Param parameter = variableInputParameters[index];
@@ -543,10 +543,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 Params.RegisterInputParam(parameter, insertIndex);
             }
 
-        // Expire solution and refresh parameters since they changed
-        Params.OnParametersChanged();
-        ExpireSolution(true);
-
+            // Expire solution and refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
         }
         #endregion
 

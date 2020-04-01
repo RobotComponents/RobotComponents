@@ -185,8 +185,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                             }
 
                             // Calculate point to be able to draw the path curve
-                            _robotInfo.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
-                            _robotInfo.ForwardKinematics.Calculate();
+                            _robotInfo.ForwardKinematics.Calculate(internalAxisValues, externalAxisValues);
                             Point3d point = _robotInfo.ForwardKinematics.TCPPlane.Origin;
 
                             // Add te calculated axis values and plane to the class property
@@ -208,8 +207,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                         }
 
                         // Add last point
-                        _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                        _robotInfo.ForwardKinematics.Calculate();
+                        _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                         Point3d lastPoint = _robotInfo.ForwardKinematics.TCPPlane.Origin;
                         if (points[points.Count - 1] != lastPoint)
                         {
@@ -278,8 +276,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 }
 
                                 // Calculate point to be able to draw the path curve
-                                _robotInfo.ForwardKinematics.Update(internalAxisValues, externalAxisValues);
-                                _robotInfo.ForwardKinematics.Calculate();
+                                _robotInfo.ForwardKinematics.Calculate(internalAxisValues, externalAxisValues);
                                 Point3d point = _robotInfo.ForwardKinematics.TCPPlane.Origin;
 
                                 // Add te calculated axis values and plane to the class property
@@ -326,8 +323,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                             else if (movements[i] is AbsoluteJointMovement)
                             {
                                 jointMovement = movements[i] as AbsoluteJointMovement;
-                                _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                                _robotInfo.ForwardKinematics.Calculate();
+                                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                                 movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                             }
 
@@ -343,8 +339,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                             else
                             {
                                 // Get plane1 and plane2
-                                _robotInfo.ForwardKinematics.Update(target1InternalAxisValues, target1ExternalAxisValues);
-                                _robotInfo.ForwardKinematics.Calculate();
+                                _robotInfo.ForwardKinematics.Calculate(target1InternalAxisValues, target1ExternalAxisValues);
                                 plane1 = new Plane(_robotInfo.ForwardKinematics.TCPPlane); // In world coordinate space
                                 plane2 = movement2.Target.Plane; // In work object coordinate space
 
@@ -495,8 +490,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             else if (movements[movements.Count - 1] is AbsoluteJointMovement)
             {
                 jointMovement = movements[movements.Count - 1] as AbsoluteJointMovement;
-                _robotInfo.ForwardKinematics.Update(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
-                _robotInfo.ForwardKinematics.Calculate();
+                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
                 _internalAxisValues.Add(new List<double>(jointMovement.InternalAxisValues));
                 _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues));
                 _planes.Add(new Plane(_robotInfo.ForwardKinematics.TCPPlane));

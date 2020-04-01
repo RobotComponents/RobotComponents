@@ -135,7 +135,7 @@ namespace RobotComponentsABB.Components.Obsolete
             _fk = forwardKinematics;
             DA.SetDataTree(0, meshes);
             DA.SetData(1, forwardKinematics.TCPPlane); // Outputs the TCP as a plane
-            DA.SetDataList(2, forwardKinematics.ExternalAxisPlanes); // Outputs the External Axis Planes
+            DA.SetDataList(2, forwardKinematics.PosedExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>

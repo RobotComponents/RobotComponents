@@ -115,7 +115,7 @@ namespace RobotComponentsABB.Components.Simulation
             // Output
             DA.SetDataTree(0, _meshes); 
             DA.SetData(1, _fk.TCPPlane); // Outputs the TCP as a plane
-            DA.SetDataList(2, _fk.ExternalAxisPlanes); // Outputs the External Axis Planes
+            DA.SetDataList(2, _fk.PosedExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>

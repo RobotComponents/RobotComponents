@@ -87,7 +87,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             _posedExternalAxisMeshes = new List<List<Mesh>>(forwardKinematics.PosedExternalAxisMeshes);
             for (int i = 0; i < forwardKinematics.PosedExternalAxisMeshes.Count; i++)
             {
-                for (int j = 0; j < forwardKinematics.PosedExternalAxisMeshes[i].Count; i++)
+                for (int j = 0; j < forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
                 {
                     forwardKinematics.PosedExternalAxisMeshes[i][j] = forwardKinematics.PosedExternalAxisMeshes[i][j].DuplicateMesh();
                 }

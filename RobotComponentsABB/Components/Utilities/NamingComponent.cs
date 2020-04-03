@@ -62,27 +62,8 @@ namespace RobotComponentsABB.Components.Utilities
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataTree(1, out data)) return;
 
-            // Get tthe paths of the datatree
-            var paths = data.Paths;
-
             // Output variable
-            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
-
-            // Make the output datatree with names
-            for (int i = 0; i < data.Branches.Count; i++)
-            {
-                var branches = data.Branches[i];
-                GH_Path iPath = paths[i];
-                string pathString = iPath.ToString();
-                string newPath = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
-
-                for (int j = 0; j < branches.Count; j++)
-                {
-                    string myName = name + "_" + newPath + "_" + j;
-                    GH_String converted = new GH_String(myName);
-                    names.Append(converted, iPath);
-                }
-            }
+            GH_Structure<GH_String> names = HelperMethods.DataTreeNaming(name, data);
 
             // Output
             DA.SetDataTree(0, names);

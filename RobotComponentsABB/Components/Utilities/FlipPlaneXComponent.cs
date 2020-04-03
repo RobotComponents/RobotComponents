@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public FlipPlaneXComponent()
           : base("Flip Plane X", "Flip Plane X",
-              "Flips the plane to the oposite direction by setting it's x-Axis negativ." 
+              "Flips the plane to the oposite direction by setting it's x-Axis negative." 
                 + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Utilities
             // Flips the planes
             for(int i = 0; i < planes.Count; i++)
             {
-                planes[i] = new Plane(planes[i].Origin, -planes[i].XAxis, planes[i].YAxis); 
+                planes[i] = RobotComponents.Utils.HelperMethods.FlipPlaneX(planes[i]);
             }
 
             // Output

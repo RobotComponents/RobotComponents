@@ -80,13 +80,8 @@ namespace RobotComponentsABB.Components.Utilities
             if (!DA.GetData(5, ref C)) { return; }
             if (!DA.GetData(6, ref D)) { return; }
 
-            // Create quaternion
-            Quaternion quat = new Quaternion(A, B, C, D);
-            quat.GetRotation(out Plane plane);
-
-            // Create plane with correct origin
-            Point3d point = new Point3d(x, y, z);
-            plane = new Plane(point, plane.XAxis, plane.YAxis);
+            // Get plane
+            Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(x, y, z, A, B, C, D);
 
             // Output
             DA.SetData(0, plane);

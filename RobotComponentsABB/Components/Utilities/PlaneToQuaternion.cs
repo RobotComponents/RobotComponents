@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -40,7 +39,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -65,62 +64,27 @@ namespace RobotComponentsABB.Components.Utilities
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            List<Plane> planes = new List<Plane>();
+            Plane plane = Plane.WorldXY;
 
             // Catch the input data
-            if (!DA.GetDataList(0, planes)) { return; }
+            if (!DA.GetData(0, ref plane)) { return; }
 
-            // Output variables
-            List<double> x = new List<double>();
-            List<double> y = new List<double>();
-            List<double> z = new List<double>();
-            List<double> quatA = new List<double>();
-            List<double> quatB = new List<double>();
-            List<double> quatC = new List<double>();
-            List<double> quatD = new List<double>();
-            List<string> text = new List<string>();
+            // Get the quarternion
+            Quaternion quat = RobotComponents.Utils.HelperMethods.PlaneToQuaternion(plane);
 
-            // Create variables for necessary for getting the quarternion
-            Quaternion quat;
-            Plane refPlane = Plane.WorldXY;
-
-            // Loop over all the input planes and get the quarternion of the plane
-            for (int i = 0; i < planes.Count; i++)
-            {
-                // Get the individual plane
-                Plane plane = planes[i];
-
-                // Get the quarternion
-                quat = Quaternion.Rotation(refPlane, plane);
-
-                // Save the four quarternion values
-                quatA.Add(quat.A);
-                quatB.Add(quat.B);
-                quatC.Add(quat.C);
-                quatD.Add(quat.D);
-
-                // Coords
-                x.Add(plane.Origin.X);
-                y.Add(plane.Origin.Y);
-                z.Add(plane.Origin.Z);
-
-                // Write the quarternion value in the string format that is used in the RAPID and BASE code
-                text.Add("[" 
-                    + quat.A.ToString("0.######") + ", " 
-                    + quat.B.ToString("0.######") + ", " 
-                    + quat.C.ToString("0.######") + ", " 
-                    + quat.D.ToString("0.######") + "]");
-            }
+            // Write the quarternion value in the string format that is used in the RAPID and BASE code
+            string text = "[" + quat.A.ToString("0.######") + ", "  + quat.B.ToString("0.######") + ", " 
+                + quat.C.ToString("0.######") + ", " + quat.D.ToString("0.######") + "]";
 
             // Output
-            DA.SetDataList(0, x);
-            DA.SetDataList(1, y);
-            DA.SetDataList(2, z);
-            DA.SetDataList(3, quatA);
-            DA.SetDataList(4, quatB);
-            DA.SetDataList(5, quatC);
-            DA.SetDataList(6, quatD);
-            DA.SetDataList(7, text);
+            DA.SetData(0, plane.Origin.X);
+            DA.SetData(1, plane.Origin.Y);
+            DA.SetData(2, plane.Origin.Z);
+            DA.SetData(3, quat.A);
+            DA.SetData(4, quat.B);
+            DA.SetData(5, quat.C);
+            DA.SetData(6, quat.D);
+            DA.SetData(7, text);
         }
 
         #region menu item

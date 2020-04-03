@@ -133,6 +133,34 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Defines an external linear axis with a mesh geometry and a name.
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMeshes"> The base mesh of the external linear axis as a list with Meshes </param>
+        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as a list with Meshes. </param>
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        {
+            axis.Unitize();
+
+            _name = name;
+            _attachmentPlane = attachmentPlane;
+            _axisPlane = new Plane(attachmentPlane.Origin, axis);
+            _axisLimits = axisLimits;
+            _axisNumber = null; //TODO
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Defines an external linear axis with a mesh geometry and a name. 
         /// </summary>
         /// <param name="name"> The axis name as a string. </param>
@@ -151,6 +179,32 @@ namespace RobotComponents.BaseClasses.Definitions
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines an external linear axis with a mesh geometry and a name. 
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMeshes"> The base mesh of the external linear axis as list with meshes </param>
+        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as a list with meshes. </param>
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        {
+            _name = name;
+            _attachmentPlane = attachmentPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; //TODO
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
 
             Initialize();
         }

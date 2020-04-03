@@ -86,27 +86,11 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref axisPlane)) { return; }
             if (!DA.GetData(2, ref limits)) { return; }
-            if (!DA.GetDataList(3, baseMeshes)) {  }
-            if (!DA.GetDataList(4, linkMeshes)) {  }
-
-            // Make variables needed to join the base and link to one mesh
-            Mesh baseMesh = new Mesh();
-            Mesh linkMesh = new Mesh();
-
-            // Join the base meshes to one mesh
-            for (int i = 0; i < baseMeshes.Count; i++)
-            {
-                baseMesh.Append(baseMeshes[i]);
-            }
-
-            // Join the link meshes to one mesh
-            for (int i = 0; i < linkMeshes.Count; i++)
-            {
-                linkMesh.Append(linkMeshes[i]);
-            }
+            if (!DA.GetDataList(3, baseMeshes)) { baseMeshes = new List<Mesh>() { new Mesh() }; }
+            if (!DA.GetDataList(4, linkMeshes)) { linkMeshes = new List<Mesh>() { new Mesh() }; }
 
             // Create the external linear axis
-            ExternalRotationalAxis externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMesh, linkMesh);
+            ExternalRotationalAxis externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMeshes, linkMeshes);
 
             // Output
             DA.SetData(0, externalRotationalAxis);

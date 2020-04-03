@@ -101,6 +101,32 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Defines an external rotational axis with a mesh geometry. 
+        /// </summary>
+        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="baseMeshes"> The base mesh of the external rotational axis as list with Meshes. </param>
+        /// <param name="linkMeshes"> The link mesh of the external rotational axis posed for external axis value 0 as list with Meshes. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        {
+            _name = name;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = null; // Todo
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
+
+            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Creates a new external rotational axis by duplicating an existing axis.
         /// This creates a deep copy of the existing axis.
         /// </summary>

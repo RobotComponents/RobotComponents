@@ -3,8 +3,12 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
+// System Libs
+using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.Utils;
 
 namespace RobotComponents.BaseClasses.Definitions
 {
@@ -76,6 +80,30 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
+        /// Defines a robot tool from planes with load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="attachmentPlane"> The attachement plane. </param>
+        /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
+        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
+        {
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
@@ -91,6 +119,40 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             _name = name;
             _mesh = mesh;
+            _attachmentPlane = Plane.WorldXY;
+            _toolPlane = Plane.WorldXY;
+
+            _toolPlane.Translate(new Vector3d(toolTransX, toolTransY, toolTransZ));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotX, new Vector3d(1, 0, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotY, new Vector3d(0, 1, 0), _toolPlane.Origin));
+            _toolPlane.Transform(Rhino.Geometry.Transform.Rotation(toolRotZ, new Vector3d(0, 0, 1), _toolPlane.Origin));
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="toolTransX"> The tool center point translation in x-direction. </param>
+        /// <param name="toolTransY"> The tool center point translation in y-direction. </param>
+        /// <param name="toolTransZ"> The tool center point translation in z-direction. </param>
+        /// <param name="toolRotX"> The orientation around the x-axis in radians. </param>
+        /// <param name="toolRotY"> The orientation around the y-axis in radians. </param>
+        /// <param name="toolRotZ"> The orientation around the y-axis in radians. </param>
+        public RobotTool(string name, List<Mesh> meshes, double toolTransX, double toolTransY,
+            double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
+        {
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
             _attachmentPlane = Plane.WorldXY;
             _toolPlane = Plane.WorldXY;
 
@@ -134,11 +196,39 @@ namespace RobotComponents.BaseClasses.Definitions
             _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
             _inertia = new Vector3d(0, 0, 0);
 
-            // Get tool plane from quaternion and coordinates
-            Quaternion quat = new Quaternion(q1, q2, q3, q4);
-            Point3d point = new Point3d(x, y, z);
-            quat.GetRotation(out Plane plane);
-            _toolPlane = new Plane(point, plane.XAxis, plane.YAxis);
+            _toolPlane = HelperMethods.QuaternionToPlane(x, y, z, q1, q2, q3, q4);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
+        /// With load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh defined in the tool coordinate space as a list with meshes </param>
+        /// <param name="x"> The x coordinate of the TCP point. </param>
+        /// <param name="y"> The y coordinate of the TCP point. </param>
+        /// <param name="z"> The z coordinate of the TCP point.</param>
+        /// <param name="q1"> The real part of the quaternion. </param>
+        /// <param name="q2"> The first imaginary coefficient of the quaternion. </param>
+        /// <param name="q3"> The second imaginary coefficient of the quaternion. </param>
+        /// <param name="q4"> The third imaginary coefficient of the quaternion. </param>
+        public RobotTool(string name, List<Mesh> meshes, double x, double y,
+            double z, double q1, double q2, double q3, double q4)
+        {
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
+            _attachmentPlane = Plane.WorldXY;
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            _toolPlane = HelperMethods.QuaternionToPlane(x, y, z, q1, q2, q3, q4);
 
             Initialize();
         }

@@ -108,17 +108,8 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(7, ref quat3)) { return; }
             if (!DA.GetData(7, ref quat4)) { return; }
 
-            // Tool mesh
-            Mesh mesh = new Mesh();
-
-            // Join the tool mesh to one single mesh
-            for (int i = 0; i < meshes.Count; i++)
-            {
-                mesh.Append(meshes[i]);
-            }
-
             // Create the robot tool
-            _robotTool = new RobotTool(name, mesh, x, y, z, quat1, quat2, quat3, quat4);
+            _robotTool = new RobotTool(name, meshes, x, y, z, quat1, quat2, quat3, quat4);
 
             // Outputs
             DA.SetData(0, _robotTool);

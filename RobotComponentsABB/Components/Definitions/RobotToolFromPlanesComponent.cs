@@ -94,17 +94,8 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(2, ref attachmentPlane)) { return; }
             if (!DA.GetData(3, ref toolPlane)) { return; };
 
-            // Robot Tool mesh
-            Mesh mesh = new Mesh();
-
-            // Join the Robot Tool mesh to one single mesh
-            for (int i = 0; i < meshes.Count; i++)
-            {
-                mesh.Append(meshes[i]);
-            }
-
             // Create the Robot Tool
-            _robotTool = new RobotTool(name, mesh, attachmentPlane, toolPlane);
+            _robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane);
 
             // Outputs
             DA.SetData(0, _robotTool);

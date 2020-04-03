@@ -105,17 +105,8 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(6, ref toolRotY)) { return; }
             if (!DA.GetData(7, ref toolRotZ)) { return; }
 
-            // Tool mesh
-            Mesh mesh = new Mesh();
-
-            // Join the tool mesh to one single mesh
-            for (int i = 0; i < meshes.Count; i++)
-            {
-                mesh.Append(meshes[i]);
-            }
-
             // Create the robot tool
-            _robotTool = new RobotTool(name, mesh, toolTransX, toolTransY, toolTransZ, toolRotX, toolRotY, toolRotZ);
+            _robotTool = new RobotTool(name, meshes, toolTransX, toolTransY, toolTransZ, toolRotX, toolRotY, toolRotZ);
 
             // Outputs
             DA.SetData(0, _robotTool);

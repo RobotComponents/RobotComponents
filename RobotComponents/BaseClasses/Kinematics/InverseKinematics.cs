@@ -139,7 +139,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
 
             // Update the base plane / position plane
-            _positionPlane = GetClosestBasePlane();
+            _positionPlane = GetPositionPlane();
             Transform trans = Transform.PlaneToPlane(_positionPlane, Plane.WorldXY);
 
             // Needed for transformation from the robot world coordinate system to the local robot coordinate system
@@ -178,12 +178,27 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Calculates the solution for all the eight axis configurations
+        /// Calculates both internal and external axis values. 
         /// </summary>
         public void Calculate()
         {
+            CalculateInternalAxisValues();
+            CalculateExternalAxisValues();
+        }
+
+        /// <summary>
+        /// Calculates the internal axis values. 
+        /// </summary>
+        public void CalculateInternalAxisValues()
+        {
             // Clear the current solutions before calculating a new ones. 
-            ClearCurrentSolutions();
+            _internalAxisValues.Clear();
+            _internalAxisValue1.Clear();
+            _internalAxisValue2.Clear();
+            _internalAxisValue3.Clear();
+            _internalAxisValue4.Clear();
+            _internalAxisValue5.Clear();
+            _internalAxisValue6.Clear();
 
             #region wrist center relative to axis 1
             // Note that this is reversed because the clockwise direction when looking 
@@ -319,19 +334,19 @@ namespace RobotComponents.BaseClasses.Kinematics
             _internalAxisValues.Add(_internalAxisValue5[_target.AxisConfig]);
             _internalAxisValues.Add(_internalAxisValue6[_target.AxisConfig]);
 
-            // Calculate the external axis values
-            CalculateExternalAxisValues();
-
             // Correction for what? 
             _internalAxisValues[1] = _internalAxisValues[1] + 90; // + 0.5 * Math.PI
             _internalAxisValues[2] = _internalAxisValues[2] - 90; // - 0.5 * Math.PI
         }
 
         /// <summary>
-        /// Calculates the external axis values
+        /// Calculates the external axis values.
         /// </summary>
-        private void CalculateExternalAxisValues()
+        public void CalculateExternalAxisValues()
         {
+            // Clear current solution
+            _externalAxisValues.Clear();
+
             // Get user defined external axis values
             List<double> userDefinedExternalAxisValues = _target.ExternalAxisValues;
             double count = 0;
@@ -414,11 +429,12 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// Calculates the lane that is closest to target plane along the external axis.
+        /// Gets the position of the robot in world coordinate space.
+        /// This is closest plane to target plane along the external axis if no external axis value is set. 
         /// If no external axis is used it will return the fixed position (base plane) of the robot. 
         /// </summary>
         /// <returns> The position of the robot as a plane. </returns>
-        public Plane GetClosestBasePlane()
+        private Plane GetPositionPlane()
         {
             // NOTE: Only works for a robot info with an maximum of one external linear axis
 

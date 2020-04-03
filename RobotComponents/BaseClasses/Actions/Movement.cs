@@ -387,15 +387,16 @@ namespace RobotComponents.BaseClasses.Actions
             // Initialize code line
             string code = "";
 
-            // Calculates AxisValues
+            // Set movement
             robotInfo.InverseKinematics.Movement = this;
-            robotInfo.InverseKinematics.Calculate();
-            List<double> internalAxisValues = robotInfo.InverseKinematics.InternalAxisValues;
-            List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
 
             // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
             {
+                // Calculate inverse kinematics
+                robotInfo.InverseKinematics.CalculateExternalAxisValues();
+                List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
+
                 // Creates targetName variable
                 string robTargetVar = "VAR robtarget " + _target.RobTargetName;
 
@@ -436,6 +437,11 @@ namespace RobotComponents.BaseClasses.Actions
             // Create a jointtarget if the movement type is MoveAbsJ (0)
             else
             {
+                // Calculate inverse kinematics
+                robotInfo.InverseKinematics.Calculate();
+                List<double> internalAxisValues = robotInfo.InverseKinematics.InternalAxisValues;
+                List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
+
                 // Creates targetName variable
                 string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
                 code += jointTargetVar + " := [[";

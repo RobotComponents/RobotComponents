@@ -20,7 +20,7 @@ Robot Components is a Plugin for intuitive Robot Programming for ABB robots insi
 ## Getting Started
 You can download the latest release directly from this repository's [releases page](https://github.com/EDEK-UniKassel/RobotComponents/releases). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
 
-You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/EDEK-UniKassel/RobotComponents/tree/master/ExampleFiles). 
+You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/EDEK-UniKassel/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://edek-unikassel.github.io/RobotComponents-Documentation/). Note: The documentation website is currently in development and not complete yet. 
 
 A release on Food4Rhino is planned in the next months.
 

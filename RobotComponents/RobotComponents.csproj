@@ -112,6 +112,7 @@
     <Compile Include="BaseClasses\Actions\Target.cs" />
     <Compile Include="BaseClasses\Actions\Timer.cs" />
     <Compile Include="BaseClasses\Actions\OverrideRobotTool.cs" />
+    <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\VersionNumbering.cs" />
   </ItemGroup>
   <ItemGroup>

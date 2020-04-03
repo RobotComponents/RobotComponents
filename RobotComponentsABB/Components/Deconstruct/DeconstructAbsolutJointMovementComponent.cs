@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddNumberParameter("External Axis Values", "EAV", "", GH_ParamAccess.list);
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
-            pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");
+            pManager.Register_IntegerParam("Zone Data", "Z", "Precision as int. If value is smaller than 0, precision will be set to fine.");
             pManager.RegisterParam(new RobotToolParameter(), "Override Robot Tool", "RT", "Override Robot Tool");
         }
 

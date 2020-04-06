@@ -113,7 +113,6 @@ namespace RobotComponents.BaseClasses.Actions
         }
         #endregion
 
-
         #region properties
         /// <summary>
         /// A boolean that indicates if the Override Robot Tool object is valid.
@@ -124,6 +123,8 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 if (ToolName == null) { return false; }
                 if (ToolName == "") { return false; }
+                if (RobotTool == null) { return false; }
+                if (RobotTool.IsValid == false) { return false; }
                 return true;
             }
         }

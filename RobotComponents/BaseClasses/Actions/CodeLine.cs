@@ -113,6 +113,7 @@ namespace RobotComponents.BaseClasses.Actions
             get 
             { 
                 if (Code == null) { return false; }
+                if (Code == "") { return false; }
                 return true; 
             }
         }

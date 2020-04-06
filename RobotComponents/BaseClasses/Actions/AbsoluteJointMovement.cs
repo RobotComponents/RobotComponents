@@ -281,6 +281,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (InternalAxisValues == null) { return false; }
                 if (ExternalAxisValues == null) { return false; }
                 if (SpeedData == null) { return false; }
+                if (SpeedData.IsValid == false) { return false; }
                 return true;
             }
         }

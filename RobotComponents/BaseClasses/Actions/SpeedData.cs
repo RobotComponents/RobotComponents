@@ -187,6 +187,7 @@ namespace RobotComponents.BaseClasses.Actions
             get
             {
                 if (Name == "") { return false; }
+                if (Name == null) { return false; }
                 if (V_TCP <= 0) { return false; }
                 if (V_ORI <= 0) { return false; }
                 if (V_LEAX <= 0) { return false; }

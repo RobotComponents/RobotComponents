@@ -123,8 +123,8 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get
             {
-                if (Name == null) { return false; }; 
-                if (Name == "") { return false; };
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 return true;
             }
         }

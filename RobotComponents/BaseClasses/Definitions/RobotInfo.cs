@@ -259,6 +259,10 @@ namespace RobotComponents.BaseClasses.Definitions
                 if (BasePlane == Plane.Unset) { return false; }
                 if (MountingFrame == null) { return false; }
                 if (MountingFrame == Plane.Unset) { return false; }
+                if (InternalAxisPlanes.Count != 6) { return false; }
+                if (Meshes.Count != 8) { return false; }
+                if (Tool == null) { return false; }
+                if (Tool.IsValid == false) { return false; }
                 return true;
             }
         }

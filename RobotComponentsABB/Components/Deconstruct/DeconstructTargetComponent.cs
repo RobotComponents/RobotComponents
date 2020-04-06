@@ -63,6 +63,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref targetGoo)) { return; }
 
+            // Check if the object is valid
+            if (!targetGoo.IsValid || !targetGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Target is not valid");
+            }
+
             // Output
             DA.SetData(0, targetGoo.Value.Name);
             DA.SetData(1, targetGoo.Value.Plane);

@@ -67,6 +67,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref absolutJointMovementGoo)) { return; }
 
+            // Check if the object is valid
+            if (!absolutJointMovementGoo.IsValid || !absolutJointMovementGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Absolute Joint Movement is not valid");
+            }
+
             // Output
             DA.SetData(0, absolutJointMovementGoo.Value.Name);
             DA.SetDataList(1, absolutJointMovementGoo.Value.InternalAxisValues);

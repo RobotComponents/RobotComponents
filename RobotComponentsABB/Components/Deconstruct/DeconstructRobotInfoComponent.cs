@@ -81,138 +81,55 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Check if the input is valid
             if (!robotInfoGoo.IsValid || !robotInfoGoo.Value.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo is not Valid");
-                return;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Info is not Valid");
             }
 
-            // Output variables
-            string name;
+            // Output meshes (only link meshes, no robot tool)
             List<Mesh> meshes = new List<Mesh>();
-            List<GH_ExternalAxis> externalAxisGoos = new List<GH_ExternalAxis>();
-            List<Plane> axisPlanes;
-            List<Interval> axisLimits;
-            Plane basePlane;
-            Plane mountingFrame;
-            Plane toolPlane;
-            GH_RobotTool tool;
 
-            // Clear list with display meshes
+            // Add display meshes
             _meshes.Clear();
-
-            // Name
-            if (robotInfoGoo.Value.Name != null)
-            {
-                name = robotInfoGoo.Value.Name;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo Name is not Valid");
-                name = null;
-            }
-
-            // Meshes
             if (robotInfoGoo.Value.Meshes != null)
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
                     _meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
                 }
             }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo Meshes is not Valid");
-            }
 
-            // AxisPlanes
-            if (robotInfoGoo.Value.InternalAxisPlanes != null)
-            {
-                axisPlanes = robotInfoGoo.Value.InternalAxisPlanes;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo AxisPlanes is not Valid");
-                axisPlanes = null;
-            }
-
-            // AxisLimits
-            if (robotInfoGoo.Value.InternalAxisLimits != null)
-            {
-                axisLimits = robotInfoGoo.Value.InternalAxisLimits;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo AxisLimits is not Valid");
-                axisLimits = null;
-            }
-
-            // BasePlane
-            if (robotInfoGoo.Value.BasePlane.IsValid)
-            {
-                basePlane = robotInfoGoo.Value.BasePlane;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo BasePlane is not Valid");
-                basePlane = Plane.Unset;
-            }
-
-            // Mounting Frame / Attachment Plane
-            if (robotInfoGoo.Value.MountingFrame.IsValid)
-            {
-                mountingFrame = robotInfoGoo.Value.MountingFrame;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo MountingFrame is not Valid");
-                mountingFrame = Plane.Unset;
-            }
-
-            // Tool Plane
-            if (robotInfoGoo.Value.ToolPlane.IsValid)
-            {
-                toolPlane = robotInfoGoo.Value.ToolPlane;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo ToolPlane is not Valid");
-                toolPlane = Plane.Unset;
-            }
-
-            // Robot Tool
             if (robotInfoGoo.Value.Tool.IsValid)
             {
-                tool = new GH_RobotTool(robotInfoGoo.Value.Tool);
-
-                // Add display mesh
                 _meshes.Add(robotInfoGoo.Value.Tool.Mesh);
             }
             else
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotInfo Tool is not Valid");
-                tool = null;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
             }
 
-            // External Axes
             for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
             {
-                externalAxisGoos.Add(new GH_ExternalAxis(robotInfoGoo.Value.ExternalAxis[i]));
-
-                // Add display meshes
-                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);
-                _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].LinkMesh);
+                if (robotInfoGoo.Value.ExternalAxis[i].IsValid)
+                {
+                    _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);
+                    _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].LinkMesh);
+                }
+                else
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                }
             }
            
             // Output
-            DA.SetData(0, name);
+            DA.SetData(0, robotInfoGoo.Value.Name);
             DA.SetDataList(1, meshes);
-            DA.SetDataList(2, axisPlanes);
-            DA.SetDataList(3, axisLimits);
-            DA.SetData(4, basePlane);
-            DA.SetData(5, mountingFrame);
-            DA.SetData(6, toolPlane);
-            DA.SetData(7, tool);
-            DA.SetDataList(8, externalAxisGoos);
+            DA.SetDataList(2, robotInfoGoo.Value.InternalAxisPlanes);
+            DA.SetDataList(3, robotInfoGoo.Value.InternalAxisLimits);
+            DA.SetData(4, robotInfoGoo.Value.BasePlane);
+            DA.SetData(5, robotInfoGoo.Value.MountingFrame);
+            DA.SetData(6, robotInfoGoo.Value.ToolPlane);
+            DA.SetData(7, robotInfoGoo.Value.Tool);
+            DA.SetDataList(8, robotInfoGoo.Value.ExternalAxis);
         }
 
         #region menu item

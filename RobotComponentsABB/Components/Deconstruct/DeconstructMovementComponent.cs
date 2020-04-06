@@ -67,6 +67,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref movementGoo)) { return; }
 
+            // Check if the object is valid
+            if (!movementGoo.IsValid || !movementGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
+            }
+
             // Output
             DA.SetData(0, movementGoo.Value.Target);
             DA.SetData(1, movementGoo.Value.SpeedData);

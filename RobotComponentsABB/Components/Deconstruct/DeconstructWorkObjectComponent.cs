@@ -62,6 +62,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref workObjectGoo)) { return; }
 
+            // Check if the object is valid
+            if (!workObjectGoo.IsValid || !workObjectGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is not valid");
+            }
+
             // Output
             DA.SetData(0, workObjectGoo.Value.Name);
             DA.SetData(1, workObjectGoo.Value.Plane);

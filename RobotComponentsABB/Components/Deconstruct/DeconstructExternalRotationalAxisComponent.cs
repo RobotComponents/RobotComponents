@@ -64,6 +64,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref externalRotationalAxisGoo)) { return; }
 
+            // Check if the object is valid
+            if (!externalRotationalAxisGoo.IsValid || !externalRotationalAxisGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is not valid");
+            }
+
             // Output
             DA.SetData(0, externalRotationalAxisGoo.Value.Name);
             DA.SetData(1, externalRotationalAxisGoo.Value.AxisPlane);

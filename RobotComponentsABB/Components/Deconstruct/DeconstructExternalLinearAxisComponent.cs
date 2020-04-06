@@ -65,6 +65,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
 
+            // Check if the object is valid
+            if (!externalLinearAxisGoo.IsValid || !externalLinearAxisGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is not valid");
+            }
+
             // Output
             DA.SetData(0, externalLinearAxisGoo.Value.Name);
             DA.SetData(1, externalLinearAxisGoo.Value.AttachmentPlane);

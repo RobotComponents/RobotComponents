@@ -64,6 +64,12 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref speedDataGoo)) { return; }
 
+            // Check if the object is valid
+            if (!speedDataGoo.IsValid || !speedDataGoo.Value.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Speed Data is not valid");
+            }
+
             // Output
             DA.SetData(0, speedDataGoo.Value.Name);
             DA.SetData(1, speedDataGoo.Value.V_TCP);

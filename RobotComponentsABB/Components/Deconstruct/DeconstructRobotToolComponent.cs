@@ -65,68 +65,17 @@ namespace RobotComponentsABB.Components.Deconstruct
             // Catch the input data
             if (!DA.GetData(0, ref robotToolGoo)) { return; }
 
-            // Check input
+            // Check if the object is valid
             if (!robotToolGoo.IsValid || !robotToolGoo.Value.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool is not Valid");
-                return;
-            }
-
-            // Output variables
-            string name;
-            Mesh mesh;
-            Plane attachmentPlane;
-            Plane toolPlane;
-
-            // Name
-            if (robotToolGoo.Value.Name != null)
-            {
-                name = robotToolGoo.Value.Name;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool Name is not Valid");
-                name = null;
-            }
-
-            // Meshes
-            if (robotToolGoo.Value.Mesh != null)
-            {
-                mesh = robotToolGoo.Value.Mesh;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool Meshes is not Valid");
-                mesh = null;
-            }
-
-            // Attachment Plane
-            if (robotToolGoo.Value.AttachmentPlane.IsValid)
-            {
-                attachmentPlane = robotToolGoo.Value.AttachmentPlane;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool AttachmentPlane is not Valid");
-                attachmentPlane = Plane.Unset;
-            }
-
-            // Tool Plane
-            if (robotToolGoo.Value.ToolPlane.IsValid)
-            {
-                toolPlane = robotToolGoo.Value.ToolPlane;
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The RobotTool ToolPlane is not Valid");
-                toolPlane = Plane.Unset;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
             }
 
             // Output
-            DA.SetData(0, name);
-            DA.SetData(1, mesh);
-            DA.SetData(2, attachmentPlane);
-            DA.SetData(3, toolPlane);
+            DA.SetData(0, robotToolGoo.Value.Name);
+            DA.SetData(1, robotToolGoo.Value.Mesh);
+            DA.SetData(2, robotToolGoo.Value.AttachmentPlane);
+            DA.SetData(3, robotToolGoo.Value.ToolPlane);
         }
 
         #region menu item

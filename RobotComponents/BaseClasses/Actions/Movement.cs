@@ -430,7 +430,7 @@ namespace RobotComponents.BaseClasses.Actions
                     }
 
                 }
-                code.Remove(code.Length - 2, 2);
+                code = code.Remove(code.Length - 2, 2);
                 code += "]];";
             }
 
@@ -451,7 +451,7 @@ namespace RobotComponents.BaseClasses.Actions
                 {
                     code += internalAxisValues[i].ToString("0.##") + ", ";
                 }
-                code.Remove(code.Length - 2, 2);
+                code = code.Remove(code.Length - 2, 2);
 
                 // Adds all External Axis Values
                 code += "], [";
@@ -471,7 +471,7 @@ namespace RobotComponents.BaseClasses.Actions
                         code += Target.ExternalAxisValues[i].ToString("0.##") + ", ";
                     }
                 }
-                code.Remove(code.Length - 2, 2);
+                code = code.Remove(code.Length - 2, 2);
                 code += "]];";
             }
 
@@ -631,8 +631,13 @@ namespace RobotComponents.BaseClasses.Actions
             get
             {
                 if (Target == null) { return false; }
+                if (Target.IsValid == false) { return false; }
                 if (SpeedData == null) { return false; }
+                if (SpeedData.IsValid == false) { return false; }
                 if (WorkObject == null) { return false;  }
+                if (WorkObject.IsValid == false) { return false; }
+                if (MovementType < 0) { return false; }
+                if (MovementType > 2) { return false; }
                 return true;
             }
         }

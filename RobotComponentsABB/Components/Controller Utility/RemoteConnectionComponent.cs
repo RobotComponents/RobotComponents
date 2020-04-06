@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -55,8 +56,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             pManager.AddBooleanParameter("Upload", "U", "Upload your RAPID code to the Robot", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Run", "R", "Run", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
-            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a string", GH_ParamAccess.item);
-            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a string", GH_ParamAccess.item);
+            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a string.", GH_ParamAccess.list);
+            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a string", GH_ParamAccess.list);
 
             pManager[5].Optional = true;
             pManager[6].Optional = true;
@@ -91,8 +92,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             bool upload = false;
             bool run = false;
             bool stop = false;
-            string programCode = null;
-            string systemCode= null;
+            List<string> programCode = new List<string>();
+            List<string> systemCode= new List<string>();
 
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }
@@ -100,8 +101,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             if (!DA.GetData(2, ref upload)) { return; }
             if (!DA.GetData(3, ref run)) { return; }
             if (!DA.GetData(4, ref stop)) { return; }
-            if (!DA.GetData(5, ref programCode)) { programCode = null; }
-            if (!DA.GetData(6, ref systemCode)) { systemCode = null; }
+            if (!DA.GetDataList(5, programCode)) { programCode = new List<string>() { }; }
+            if (!DA.GetDataList(6, systemCode)) { systemCode = new List<string>() { }; }
             base.DestroyIconCache();
 
             // Get controller value
@@ -158,20 +159,19 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     // Module file paths
                     string filePathProgram;
                     string filePathSystem;
+                    string directory;
 
                     // Upload to the real physical controller
                     if (_controller.IsVirtual == false)
                     {
                         _controller.AuthenticationSystem.DemandGrant(Grant.WriteFtp);
                         _controller.FileSystem.PutDirectory(localDirectory, "RAPID", true);
-                        filePathProgram = Path.Combine(controllerDirectory, "ProgramModule.mod");
-                        filePathSystem = Path.Combine(controllerDirectory, "SystemModule.sys");
+                        directory = controllerDirectory;
                     }
                     // Upload to a virtual controller
                     else
                     {
-                        filePathProgram = Path.Combine(localDirectory, "ProgramModule.mod");
-                        filePathSystem = Path.Combine(localDirectory, "SystemModule.sys");
+                        directory = localDirectory;
                     }
 
                     // The real upload
@@ -189,12 +189,14 @@ namespace RobotComponentsABB.Components.ControllerUtility
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        if (programCode != null)
+                        for (int i = 0; i < programCode.Count; i++)
                         {
+                            filePathProgram = Path.Combine(directory, "ProgramModule_" + i.ToString() + ".mod");
                             task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
                         }
-                        if (systemCode != null)
+                        for (int i = 0; i < systemCode.Count; i++)
                         {
+                            filePathSystem = Path.Combine(directory, "SystemModule_" + i.ToString() + ".sys");
                             task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
                         }
 
@@ -255,7 +257,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             if (_programPointerWarning == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The program pointer could not be reset. Check the program modules that are defined" +
-                    " in your controller. Probably you defined two main functions.");
+                    " in your controller. Probably you defined two main functions or there are other erros in your RAPID code.");
             }
 
             // Output
@@ -399,27 +401,27 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Save to the RAPID program and sytem modules to the given file path.
         /// </summary>
         /// <param name="path"> The directory where to save the RAPID modules. </param>
-        /// <param name="programModule"> The RAPID program module as a string. </param>
-        /// <param name="systemModule"> The RAPID system module as a string. </param>
-        private void SaveModulesToFile(string path, string programModule, string systemModule)
+        /// <param name="programModules"> The RAPID program module as a list with strings (each complete module is one list item). </param>
+        /// <param name="systemModules"> The RAPID system module as a string (each complete module is one list item). </param>
+        private void SaveModulesToFile(string path, List<string> programModules, List<string> systemModules)
         {
-            // Save the program module
-            if (programModule != null)
+            // Save the program modules
+            for (int i = 0; i < programModules.Count; i++)
             {
-                string programFilePath = Path.Combine(path, "ProgramModule.mod");
+                string programFilePath = Path.Combine(path, "ProgramModule_" + i.ToString() + ".mod");
                 using (StreamWriter writer = new StreamWriter(programFilePath, false))
                 {
-                    writer.WriteLine(programModule);
+                    writer.WriteLine(programModules[i]);
                 }
             }
 
             // Save the system module
-            if (systemModule != null)
+            for (int i = 0; i < systemModules.Count; i++)
             {
-                string systemFilePath = Path.Combine(path, "SystemModule.sys");
+                string systemFilePath = Path.Combine(path, "SystemModule_" + i.ToString() +".sys");
                 using (StreamWriter writer = new StreamWriter(systemFilePath, false))
                 {
-                    writer.WriteLine(systemModule);
+                    writer.WriteLine(systemModules[i]);
                 }
             }
         }

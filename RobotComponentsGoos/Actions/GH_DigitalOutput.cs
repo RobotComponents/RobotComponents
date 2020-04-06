@@ -194,8 +194,18 @@ namespace RobotComponentsGoos.Actions
                 else
                     target = (Q)(object)new GH_Action(Value);
                 return true;
-
             }
+
+            //Cast to Boolean
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_Boolean(Value.IsActive);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }

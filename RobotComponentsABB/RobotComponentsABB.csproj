@@ -80,7 +80,6 @@
     <Compile Include="Components\_Obsolete\OldGetDigitalInputComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />
     <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
-    <Compile Include="Components\Controller Utility\GetAxisValuesComponentDev.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructAbsolutJointMovementComponent.cs" />
     <Compile Include="Components\_Obsolete\OldWorkObjectComponent.cs" />

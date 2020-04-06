@@ -9,11 +9,14 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.RapidDomain;
+using ABB.Robotics.Controllers.MotionDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -57,9 +60,13 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.list);
-            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
         }
+
+        // Fields
+        private readonly GH_Structure<GH_Number> _internalAxisValues = new GH_Structure<GH_Number>();
+        private readonly GH_Structure<GH_Number> _externalAxisValues = new GH_Structure<GH_Number>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -69,29 +76,50 @@ namespace RobotComponentsABB.Components.ControllerUtility
         {
             // Input variables
             GH_Controller controllerGoo = null;
-            List<double> internalAxisValues;
-            List<double> externalAxisValues;
 
             // Catch input data
             if (!DA.GetData(0, ref controllerGoo)) { return; }
 
-            // Internal axis values
-            internalAxisValues = GetInternalAxisValuesAsList(controllerGoo.Value.MotionSystem.MechanicalUnits[0].GetPosition());
+            // Clear output variables 
+            _internalAxisValues.Clear();
+            _externalAxisValues.Clear();
 
-            // Try to get the external axis values: if there is no external axis connected the mechanical unit does not exist
-            if (controllerGoo.Value.MotionSystem.MechanicalUnits.Count > 1)
+            // Data needed for making the datatree with axis values
+            MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            int internalAxisValuesPath = 0;
+            int externalAxisValuesPath = 0;
+            List<double> values;
+            GH_Path path;
+
+            // Make the output datatree with names with a branch for each mechanical unit
+            for (int i = 0; i < mechanicalUnits.Count; i++)
             {
-                externalAxisValues = GetExternalAxisValuesAsList(controllerGoo.Value.MotionSystem.MechanicalUnits[1].GetPosition());
-            }
-            // If there is not external axis connected set all the axis values equal to zero. 
-            else
-            {
-                externalAxisValues = new List<double> {0, 0, 0, 0, 0, 0};
+                // Get the ABB joint target of the mechanical unit
+                MechanicalUnit mechanicalUnit = mechanicalUnits[i];
+                JointTarget jointTarget = mechanicalUnit.GetPosition();
+
+                // For internal axis values
+                if (mechanicalUnit.Type == MechanicalUnitType.TcpRobot)
+                {
+                    values = GetInternalAxisValuesAsList(jointTarget);
+                    path = new GH_Path(internalAxisValuesPath);
+                    _internalAxisValues.AppendRange(values.ConvertAll(val => new GH_Number(val)), path);
+                    internalAxisValuesPath += 1;
+                }
+
+                // For external axis values
+                else
+                {
+                    values = GetExternalAxisValuesAsList(jointTarget);
+                    path = new GH_Path(externalAxisValuesPath);
+                    _externalAxisValues.AppendRange(values.GetRange(0, mechanicalUnit.NumberOfAxes).ConvertAll(val => new GH_Number(val)), path);
+                    externalAxisValuesPath += 1;
+                }
             }
 
             // Output
-            DA.SetDataList(0, internalAxisValues);
-            DA.SetDataList(1, externalAxisValues);
+            DA.SetDataTree(0, _internalAxisValues);
+            DA.SetDataTree(1, _externalAxisValues);
         }
 
         // Additional methods
@@ -148,7 +176,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             // Replace large numbers (the not connected axes) with an axis value equal to zero 
             for (int i = 0; i < result.Count; i++)
             {
-                if(result[i] > 9.0e+8)
+                if (result[i] > 9.0e+8)
                 {
                     result[i] = 0;
                 }

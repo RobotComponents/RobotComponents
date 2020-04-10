@@ -13,7 +13,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions.Presets;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -74,128 +74,27 @@ namespace RobotComponentsABB.Components.Definitions
         {
             // Input variables
             Plane positionPlane = Plane.WorldXY;
-            GH_RobotTool toolGoo = null;
+            RobotTool tool = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
             if (!DA.GetData(0, ref positionPlane)) { return; }
-            if (!DA.GetData(1, ref toolGoo))
+            if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
+            if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
+
+            // Set name
+            string name = "IRB4600-40/2.55";
+
+            // Construct an empty robot info
+            RobotInfo robotInfo = new RobotInfo();
+
+            // Construct the robot info
+            try
             {
-                toolGoo = new GH_RobotTool();
+                robotInfo = IRB4600_40_255.GetRobotInfo(name, positionPlane, tool, externalAxis);
             }
-            if (!DA.GetDataList(2, externalAxis))
+            catch (Exception ex)
             {
-            }
-
-            // Check the axis input: A maximum of one external linear axis is allow
-            double count = 0;
-            for (int i = 0; i < externalAxis.Count; i++)
-            {
-                if (externalAxis[i] is ExternalLinearAxis)
-                {
-                    count += 1;
-                }
-            }
-
-            // Raise error if more than one external linear axis is used
-            if (count > 1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "At the moment RobotComponents supports one external linear axis.");
-            }
-
-            // Robot mesh
-            List<Mesh> meshes = new List<Mesh>();
-            // Base
-            string linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_0;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 1
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_1;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 2
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_2;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 3
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_shared_link_3;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 4
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_40_2_55_link_4;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 5
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_40_2_55_link_5;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-            // Axis 6
-            linkString = RobotComponentsABB.Properties.Resources.IRB4600_40_2_55_link_6;
-            meshes.Add((Mesh)GH_Convert.ByteArrayToCommonObject<GeometryBase>(System.Convert.FromBase64String(linkString)));
-
-            // Axis planes
-            List<Plane> axisPlanes = new List<Plane>() { };
-            // Axis 1
-            axisPlanes.Add(new Plane(
-                new Point3d(0.00, 0.00, 0.00),
-                new Vector3d(0.00, 0.00, 1.00)));
-            // Axis 2
-            axisPlanes.Add(new Plane(
-                new Point3d(175.00, 0.00, 495),
-                new Vector3d(0.00, 1.00, 0.00)));
-            // Axis 3
-            axisPlanes.Add(new Plane(
-                new Point3d(175.00, 0.00, 1590.00),
-                new Vector3d(0.00, 1.00, 0.00)));
-            // Axis 4
-            axisPlanes.Add(new Plane(
-                new Point3d(505.60, 0.00, 1765.00),
-                new Vector3d(1.00, 0.00, 0.00)));
-            // Axis 5
-            axisPlanes.Add(new Plane(
-                new Point3d(1445.00, 0.00, 1765.00),
-                new Vector3d(0.00, 1.00, 0.00)));
-            // Axis 6
-            axisPlanes.Add(new Plane(
-                new Point3d(1580.00, 0.00, 1765.00),
-                new Vector3d(1.00, 0.00, 0.00)));
-
-            // Robot axis limits
-            List<Interval> axisLimits = new List<Interval>{
-                new Interval(-180, 180),
-                new Interval(-90, 150),
-                new Interval(-180, 75),
-                new Interval(-400, 400),
-                new Interval(-120, 125),
-                new Interval(-400, 400),};
-
-            // External axis limits
-            for (int i = 0; i < externalAxis.Count; i++)
-            {
-                axisLimits.Add(externalAxis[i].AxisLimits);
-            }
-
-            // Tool mounting frame
-            Plane mountingFrame = new Plane(
-                new Point3d(1580.00, 0.00, 1765.00),
-                new Vector3d(1.00, 0.00, 0.00));
-            mountingFrame.Rotate(Math.PI * -0.5, mountingFrame.Normal);
-
-            RobotInfo robotInfo;
-
-            // Override position plane when an external axis is coupled
-            if (externalAxis.Count != 0)
-            {
-                for (int i = 0; i < externalAxis.Count; i++)
-                {
-                    if (externalAxis[i] is ExternalLinearAxis)
-                    {
-                        positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
-                    }
-                }
-                robotInfo = new RobotInfo("IRB4600-40/2.55", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
-                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-                robotInfo.Transfom(trans);
-            }
-
-            else
-            {
-                robotInfo = new RobotInfo("IRB4600-40/2.55", meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value);
-                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-                robotInfo.Transfom(trans);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
             }
 
             // Output

@@ -88,58 +88,35 @@ namespace RobotComponentsABB.Components.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { return; }
-            if (!DA.GetDataList(2, axisPlanes))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "No Axis Points !!!!");
-                return;
-            }
+            if (!DA.GetDataList(2, axisPlanes)) { return; }
             if (!DA.GetDataList(3, axisLimits)) { return; }
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref toolGoo)) { toolGoo = new GH_RobotTool(); }
-            if (!DA.GetDataList(7, externalAxis))
-            {
-            }
+            if (!DA.GetDataList(7, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
-            // Check the axis input: A maximum of one external linear axis is allow
-            double count = 0;
+            // Construct empty robot info
+            RobotInfo robotInfo = new RobotInfo();
+
+            // Override position plane when an external axis is coupled
             for (int i = 0; i < externalAxis.Count; i++)
             {
                 if (externalAxis[i] is ExternalLinearAxis)
                 {
-                    count += 1;
+                    positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
                 }
             }
 
-            // Raise error if more than one external linear axis is used
-            if (count > 1)
+            // Construct the robot info
+            try
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "At the moment RobotComponents supports one external linear axis.");
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
+                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
+                robotInfo.Transfom(trans);
             }
-
-            // External axis limits
-            for (int i = 0; i < externalAxis.Count; i++)
+            catch (Exception ex)
             {
-                axisLimits.Add(externalAxis[i].AxisLimits);
-            }
-
-            RobotInfo robotInfo;
-
-            // Override position plane when an external axis is coupled
-            if (externalAxis.Count != 0)
-            {
-                for (int i = 0; i < externalAxis.Count; i++)
-                {
-                    if (externalAxis[i] is ExternalLinearAxis)
-                    {
-                        positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
-                    }
-                }
-                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value, externalAxis);
-            }
-            else
-            {
-                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, toolGoo.Value);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
             }
 
             // Output

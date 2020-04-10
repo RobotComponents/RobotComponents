@@ -3,6 +3,10 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
+// System Libs
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 // Rhino Libs
 using Rhino.Geometry;
 
@@ -13,6 +17,41 @@ namespace RobotComponents.Utils
     /// </summary>
     public static class HelperMethods
     {
+        /// <summary>
+        /// Serializes a common object to a byte array. 
+        /// Typically used for serializing robot meshes. 
+        /// </summary>
+        /// <param name="obj"> The common object. </param>
+        /// <returns> Returns the byte array. </returns>
+        public static byte[] ObjectToByteArray(Object obj)
+        {
+            if (obj == null) { return null; }
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, obj);
+                return stream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Deserializes a byte array to a common object. 
+        /// Typically used for deserializing robot meshes. 
+        /// </summary>
+        /// <param name="data"> The byte array. </param>
+        /// <returns> Returns the common object. </returns>
+        public static Object ByteArrayToObject(byte[] data)
+        {
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                stream.Write(data, 0, data.Length);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (Object)formatter.Deserialize(stream);
+            }
+        }
+
         /// <summary>
         /// Flips the plane to the oposite direction by setting it's x-axis negative.
         /// </summary>

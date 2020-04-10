@@ -13,7 +13,7 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
@@ -79,7 +79,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_RobotInfo robotInfoGoo = new GH_RobotInfo();
+            RobotInfo robotInfo = new RobotInfo();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
@@ -87,7 +87,7 @@ namespace RobotComponentsABB.Components.Simulation
             bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(0, ref robotInfo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
@@ -99,7 +99,7 @@ namespace RobotComponentsABB.Components.Simulation
             if (update == true || _lastInterpolations != interpolations)
             {
                 // Create the path generator
-                _pathGenerator = new PathGenerator(robotInfoGoo.Value);
+                _pathGenerator = new PathGenerator(robotInfo);
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);

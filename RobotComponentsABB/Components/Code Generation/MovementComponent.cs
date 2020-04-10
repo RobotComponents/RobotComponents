@@ -17,8 +17,6 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsGoos.Actions;
-using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
@@ -109,70 +107,70 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Input variables
-            List<GH_Target> targetGoos = new List<GH_Target>();
-            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
+            List<Target> targets = new List<Target>();
+            List<SpeedData> speedDatas = new List<SpeedData>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
-            List<GH_RobotTool> robotToolGoos = new List<GH_RobotTool>();
-            List<GH_WorkObject> workObjectGoos = new List<GH_WorkObject>();
-            List<GH_DigitalOutput> digitalOutputGoos = new List<GH_DigitalOutput>();
+            List<RobotTool> robotTools = new List<RobotTool>();
+            List<WorkObject> workObjects = new List<WorkObject>();
+            List<DigitalOutput> digitalOutputs = new List<DigitalOutput>();
 
             // Create an empty Robot Tool
             RobotTool emptyRobotTool = new RobotTool();
             emptyRobotTool.Clear();
 
             // Catch the input data from the fixed parameters
-            if (!DA.GetDataList(0, targetGoos)) { return; }
-            if (!DA.GetDataList(1, speedDataGoos)) { return; }
+            if (!DA.GetDataList(0, targets)) { return; }
+            if (!DA.GetDataList(1, speedDatas)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos))
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotTools))
                 {
-                    robotToolGoos = new List<GH_RobotTool>() { new GH_RobotTool(emptyRobotTool) };
+                    robotTools = new List<RobotTool>() { new RobotTool(emptyRobotTool) };
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[1].Name, workObjectGoos))
+                if (!DA.GetDataList(variableInputParameters[1].Name, workObjects))
                 {
-                    workObjectGoos = new List<GH_WorkObject>() { new GH_WorkObject() };
+                    workObjects = new List<WorkObject>() { new WorkObject() };
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputGoos))
+                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputs))
                 {
-                    digitalOutputGoos = new List<GH_DigitalOutput>() { new GH_DigitalOutput() };
+                    digitalOutputs = new List<DigitalOutput>() { new DigitalOutput() };
                 }
             }
 
             // Make sure variable input parameters have a default value
-            if (robotToolGoos.Count == 0)
+            if (robotTools.Count == 0)
             {
-                robotToolGoos.Add(new GH_RobotTool(emptyRobotTool)); // Empty Robot Tool
+                robotTools.Add(new RobotTool(emptyRobotTool)); // Empty Robot Tool
             }
-            if (workObjectGoos.Count == 0)
+            if (workObjects.Count == 0)
             {
-                workObjectGoos.Add(new GH_WorkObject()); // Makes a default WorkObject (wobj0)
+                workObjects.Add(new WorkObject()); // Makes a default WorkObject (wobj0)
             }
-            if (digitalOutputGoos.Count == 0)
+            if (digitalOutputs.Count == 0)
             {
-                digitalOutputGoos.Add(new GH_DigitalOutput()); // InValid / empty DO
+                digitalOutputs.Add(new DigitalOutput()); // InValid / empty DO
             }
 
             // Get longest Input List
             int[] sizeValues = new int[7];
-            sizeValues[0] = targetGoos.Count;
-            sizeValues[1] = speedDataGoos.Count;
+            sizeValues[0] = targets.Count;
+            sizeValues[1] = speedDatas.Count;
             sizeValues[2] = movementTypes.Count;
             sizeValues[3] = precisions.Count;
-            sizeValues[4] = robotToolGoos.Count;
-            sizeValues[5] = workObjectGoos.Count;
-            sizeValues[6] = digitalOutputGoos.Count;
+            sizeValues[4] = robotTools.Count;
+            sizeValues[5] = workObjects.Count;
+            sizeValues[6] = digitalOutputs.Count;
 
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
@@ -190,34 +188,34 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             for (int i = 0; i < biggestSize; i++)
             {
-                GH_Target targetGoo;
-                GH_SpeedData speedDataGoo;
+                Target target;
+                SpeedData speedData;
                 int movementType;
                 int precision;
-                GH_RobotTool robotToolGoo;
-                GH_WorkObject workObjectGoo;
-                GH_DigitalOutput digitalOutputGoo;
+                RobotTool robotTool;
+                WorkObject workObject;
+                DigitalOutput digitalOutput;
 
                 // Target counter
                 if (i < sizeValues[0])
                 {
-                    targetGoo = targetGoos[i];
+                    target = targets[i];
                     targetGooCounter++;
                 }
                 else
                 {
-                    targetGoo = targetGoos[targetGooCounter];
+                    target = targets[targetGooCounter];
                 }
 
                 // Workobject counter
                 if (i < sizeValues[1])
                 {
-                    speedDataGoo = speedDataGoos[i];
+                    speedData = speedDatas[i];
                     speedDataGooCounter++;
                 }
                 else
                 {
-                    speedDataGoo = speedDataGoos[speedDataGooCounter];
+                    speedData = speedDatas[speedDataGooCounter];
                 }
 
                 // Movement type counter
@@ -245,38 +243,38 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Robot tool counter
                 if (i < sizeValues[4])
                 {
-                    robotToolGoo = robotToolGoos[i];
+                    robotTool = robotTools[i];
                     robotToolGooCounter++;
                 }
                 else
                 {
-                    robotToolGoo = robotToolGoos[robotToolGooCounter];
+                    robotTool = robotTools[robotToolGooCounter];
                 }
 
                 // Work Object counter
                 if (i < sizeValues[5])
                 {
-                    workObjectGoo = workObjectGoos[i];
+                    workObject = workObjects[i];
                     workObjectGooCounter++;
                 }
                 else
                 {
-                    workObjectGoo = workObjectGoos[workObjectGooCounter];
+                    workObject = workObjects[workObjectGooCounter];
                 }
 
                 // Digital Output counter
                 if (i < sizeValues[6])
                 {
-                    digitalOutputGoo = digitalOutputGoos[i];
+                    digitalOutput = digitalOutputs[i];
                     digitalOutputGooCounter++;
                 }
                 else
                 {
-                    digitalOutputGoo = digitalOutputGoos[digitalOutputGooCounter];
+                    digitalOutput = digitalOutputs[digitalOutputGooCounter];
                 }
 
                 // Movement constructor
-                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision, robotToolGoo.Value, workObjectGoo.Value, digitalOutputGoo.Value);
+                Movement movement = new Movement(target, speedData, movementType, precision, robotTool, workObject, digitalOutput);
                 movements.Add(movement);
             }
 
@@ -304,11 +302,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Check if a right predefined speeddata value is used
-            for (int i = 0; i < speedDataGoos.Count; i++)
+            for (int i = 0; i < speedDatas.Count; i++)
             {
-                if (speedDataGoos[i].Value.PreDefinied == true)
+                if (speedDatas[i].PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDatas[i].V_TCP) == false)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
                             "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +

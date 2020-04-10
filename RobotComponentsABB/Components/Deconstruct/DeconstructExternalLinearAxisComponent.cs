@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -60,24 +60,24 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_ExternalLinearAxis externalLinearAxisGoo = null;
+            ExternalLinearAxis externalLinearAxis = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref externalLinearAxisGoo)) { return; }
+            if (!DA.GetData(0, ref externalLinearAxis)) { return; }
 
             // Check if the object is valid
-            if (!externalLinearAxisGoo.IsValid || !externalLinearAxisGoo.Value.IsValid)
+            if (!externalLinearAxis.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is not valid");
             }
 
             // Output
-            DA.SetData(0, externalLinearAxisGoo.Value.Name);
-            DA.SetData(1, externalLinearAxisGoo.Value.AttachmentPlane);
-            DA.SetData(2, externalLinearAxisGoo.Value.AxisPlane.ZAxis);
-            DA.SetData(3, externalLinearAxisGoo.Value.AxisLimits);
-            DA.SetData(4, externalLinearAxisGoo.Value.BaseMesh);
-            DA.SetData(5, externalLinearAxisGoo.Value.LinkMesh);
+            DA.SetData(0, externalLinearAxis.Name);
+            DA.SetData(1, externalLinearAxis.AttachmentPlane);
+            DA.SetData(2, externalLinearAxis.AxisPlane.ZAxis);
+            DA.SetData(3, externalLinearAxis.AxisLimits);
+            DA.SetData(4, externalLinearAxis.BaseMesh);
+            DA.SetData(5, externalLinearAxis.LinkMesh);
         }
 
         #region menu item

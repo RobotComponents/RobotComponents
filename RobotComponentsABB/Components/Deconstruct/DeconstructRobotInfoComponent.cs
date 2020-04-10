@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -73,13 +73,13 @@ namespace RobotComponentsABB.Components.Deconstruct
             _doc = this.OnPingDocument();
 
             // Input variables
-            GH_RobotInfo robotInfoGoo = null;
+            RobotInfo robotInfo = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(0, ref robotInfo)) { return; }
 
             // Check if the input is valid
-            if (!robotInfoGoo.IsValid || !robotInfoGoo.Value.IsValid)
+            if (!robotInfo.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Info is not Valid");
             }
@@ -89,30 +89,30 @@ namespace RobotComponentsABB.Components.Deconstruct
 
             // Add display meshes
             _meshes.Clear();
-            if (robotInfoGoo.Value.Meshes != null)
+            if (robotInfo.Meshes != null)
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    _meshes.Add(robotInfoGoo.Value.Meshes[i]);
-                    meshes.Add(robotInfoGoo.Value.Meshes[i]);
+                    _meshes.Add(robotInfo.Meshes[i]);
+                    meshes.Add(robotInfo.Meshes[i]);
                 }
             }
 
-            if (robotInfoGoo.Value.Tool.IsValid)
+            if (robotInfo.Tool.IsValid)
             {
-                _meshes.Add(robotInfoGoo.Value.Tool.Mesh);
+                _meshes.Add(robotInfo.Tool.Mesh);
             }
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
             }
 
-            for (int i = 0; i < robotInfoGoo.Value.ExternalAxis.Count; i++)
+            for (int i = 0; i < robotInfo.ExternalAxis.Count; i++)
             {
-                if (robotInfoGoo.Value.ExternalAxis[i].IsValid)
+                if (robotInfo.ExternalAxis[i].IsValid)
                 {
-                    _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].BaseMesh);
-                    _meshes.Add(robotInfoGoo.Value.ExternalAxis[i].LinkMesh);
+                    _meshes.Add(robotInfo.ExternalAxis[i].BaseMesh);
+                    _meshes.Add(robotInfo.ExternalAxis[i].LinkMesh);
                 }
                 else
                 {
@@ -121,15 +121,15 @@ namespace RobotComponentsABB.Components.Deconstruct
             }
            
             // Output
-            DA.SetData(0, robotInfoGoo.Value.Name);
+            DA.SetData(0, robotInfo.Name);
             DA.SetDataList(1, meshes);
-            DA.SetDataList(2, robotInfoGoo.Value.InternalAxisPlanes);
-            DA.SetDataList(3, robotInfoGoo.Value.InternalAxisLimits);
-            DA.SetData(4, robotInfoGoo.Value.BasePlane);
-            DA.SetData(5, robotInfoGoo.Value.MountingFrame);
-            DA.SetData(6, robotInfoGoo.Value.ToolPlane);
-            DA.SetData(7, robotInfoGoo.Value.Tool);
-            DA.SetDataList(8, robotInfoGoo.Value.ExternalAxis);
+            DA.SetDataList(2, robotInfo.InternalAxisPlanes);
+            DA.SetDataList(3, robotInfo.InternalAxisLimits);
+            DA.SetData(4, robotInfo.BasePlane);
+            DA.SetData(5, robotInfo.MountingFrame);
+            DA.SetData(6, robotInfo.ToolPlane);
+            DA.SetData(7, robotInfo.Tool);
+            DA.SetDataList(8, robotInfo.ExternalAxis);
         }
 
         #region menu item

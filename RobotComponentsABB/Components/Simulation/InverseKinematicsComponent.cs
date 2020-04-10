@@ -9,8 +9,8 @@ using System.Windows.Forms;
 //Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Actions;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Actions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponents.BaseClasses.Kinematics;
@@ -63,15 +63,15 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_RobotInfo robotInfoGoo = null;
-            GH_Movement MovementGoo = null;
+            RobotInfo robotInfo = null;
+            Movement Movement = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
-            if (!DA.GetData(1, ref MovementGoo)) { return; }
+            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(1, ref Movement)) { return; }
 
             // Calculate the robot pose
-            InverseKinematics inverseKinematics = new InverseKinematics(MovementGoo.Value, robotInfoGoo.Value);
+            InverseKinematics inverseKinematics = new InverseKinematics(Movement, robotInfo);
             inverseKinematics.Calculate();
 
             // Output

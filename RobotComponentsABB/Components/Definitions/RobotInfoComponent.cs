@@ -13,7 +13,6 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -82,7 +81,7 @@ namespace RobotComponentsABB.Components.Definitions
             List<Interval> axisLimits = new List<Interval>();
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
-            GH_RobotTool toolGoo = null;
+            RobotTool tool = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
 
             // Catch the input data
@@ -92,7 +91,7 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(3, axisLimits)) { return; }
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
-            if (!DA.GetData(6, ref toolGoo)) { toolGoo = new GH_RobotTool(); }
+            if (!DA.GetData(6, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(7, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
             // Construct empty robot info
@@ -110,7 +109,7 @@ namespace RobotComponentsABB.Components.Definitions
             // Construct the robot info
             try
             {
-                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, toolGoo.Value, externalAxis);
+                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
                 Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
                 robotInfo.Transfom(trans);
             }

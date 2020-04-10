@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -59,23 +59,23 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_ExternalRotationalAxis externalRotationalAxisGoo = null;
+            ExternalRotationalAxis externalRotationalAxis = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref externalRotationalAxisGoo)) { return; }
+            if (!DA.GetData(0, ref externalRotationalAxis)) { return; }
 
             // Check if the object is valid
-            if (!externalRotationalAxisGoo.IsValid || !externalRotationalAxisGoo.Value.IsValid)
+            if (!externalRotationalAxis.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is not valid");
             }
 
             // Output
-            DA.SetData(0, externalRotationalAxisGoo.Value.Name);
-            DA.SetData(1, externalRotationalAxisGoo.Value.AxisPlane);
-            DA.SetData(2, externalRotationalAxisGoo.Value.AxisLimits);
-            DA.SetData(3, externalRotationalAxisGoo.Value.BaseMesh);
-            DA.SetData(4, externalRotationalAxisGoo.Value.LinkMesh);
+            DA.SetData(0, externalRotationalAxis.Name);
+            DA.SetData(1, externalRotationalAxis.AxisPlane);
+            DA.SetData(2, externalRotationalAxis.AxisLimits);
+            DA.SetData(3, externalRotationalAxis.BaseMesh);
+            DA.SetData(4, externalRotationalAxis.LinkMesh);
         }
 
         #region menu item

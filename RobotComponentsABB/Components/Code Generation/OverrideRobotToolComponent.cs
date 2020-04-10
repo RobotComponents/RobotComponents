@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
@@ -70,13 +70,13 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_RobotTool _toolGoo = new GH_RobotTool();
+            RobotTool tool = new RobotTool();
 
             // Catch input data
-            if (!DA.GetData(0, ref _toolGoo)) { _toolGoo.Value.Name = "tool0"; ; }
+            if (!DA.GetData(0, ref tool)) { tool.Name = "tool0"; ; }
 
             // Create action
-            OverrideRobotTool OverrideRobotTool = new OverrideRobotTool(_toolGoo.Value);
+            OverrideRobotTool OverrideRobotTool = new OverrideRobotTool(tool);
 
             // Output
             DA.SetData(0, OverrideRobotTool);

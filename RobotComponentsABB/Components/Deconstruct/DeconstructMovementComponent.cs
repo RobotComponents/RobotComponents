@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Actions;
+using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
@@ -62,25 +62,25 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_Movement movementGoo = null;
+            Movement movement = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref movementGoo)) { return; }
+            if (!DA.GetData(0, ref movement)) { return; }
 
             // Check if the object is valid
-            if (!movementGoo.IsValid || !movementGoo.Value.IsValid)
+            if (!movement.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
             }
 
             // Output
-            DA.SetData(0, movementGoo.Value.Target);
-            DA.SetData(1, movementGoo.Value.SpeedData);
-            DA.SetData(2, movementGoo.Value.MovementType);
-            DA.SetData(3, movementGoo.Value.Precision);
-            DA.SetData(4, movementGoo.Value.RobotTool);
-            DA.SetData(5, movementGoo.Value.WorkObject);
-            DA.SetData(6, movementGoo.Value.DigitalOutput);
+            DA.SetData(0, movement.Target);
+            DA.SetData(1, movement.SpeedData);
+            DA.SetData(2, movement.MovementType);
+            DA.SetData(3, movement.Precision);
+            DA.SetData(4, movement.RobotTool);
+            DA.SetData(5, movement.WorkObject);
+            DA.SetData(6, movement.DigitalOutput);
         }
 
         #region menu item

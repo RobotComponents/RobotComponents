@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Actions;
+using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
@@ -62,25 +62,25 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_AbsoluteJointMovement absolutJointMovementGoo = null;
+            AbsoluteJointMovement absolutJointMovement = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref absolutJointMovementGoo)) { return; }
+            if (!DA.GetData(0, ref absolutJointMovement)) { return; }
 
             // Check if the object is valid
-            if (!absolutJointMovementGoo.IsValid || !absolutJointMovementGoo.Value.IsValid)
+            if (!absolutJointMovement.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Absolute Joint Movement is not valid");
             }
 
             // Output
-            DA.SetData(0, absolutJointMovementGoo.Value.Name);
-            DA.SetDataList(1, absolutJointMovementGoo.Value.InternalAxisValues);
-            DA.SetDataList(2, absolutJointMovementGoo.Value.ExternalAxisValues);
-            DA.SetData(3, absolutJointMovementGoo.Value.SpeedData);
-            DA.SetData(4, absolutJointMovementGoo.Value.MovementType);
-            DA.SetData(5, absolutJointMovementGoo.Value.Precision);
-            DA.SetData(6, absolutJointMovementGoo.Value.RobotTool);
+            DA.SetData(0, absolutJointMovement.Name);
+            DA.SetDataList(1, absolutJointMovement.InternalAxisValues);
+            DA.SetDataList(2, absolutJointMovement.ExternalAxisValues);
+            DA.SetData(3, absolutJointMovement.SpeedData);
+            DA.SetData(4, absolutJointMovement.MovementType);
+            DA.SetData(5, absolutJointMovement.Precision);
+            DA.SetData(6, absolutJointMovement.RobotTool);
         }
 
         #region menu item

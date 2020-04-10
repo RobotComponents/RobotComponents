@@ -16,8 +16,6 @@ using GH_IO.Serialization;
 // Robot Components Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
-using RobotComponentsGoos.Actions;
-using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
@@ -103,9 +101,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
-            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
+            List<SpeedData> speedDatas = new List<SpeedData>();
             List<int> precisions = new List<int>();
-            List<GH_RobotTool> robotToolGoos = new List<GH_RobotTool>();
+            List<RobotTool> robotTools = new List<RobotTool>();
 
             // Create an empty Robot Tool
             RobotTool emptyRobotTool = new RobotTool();
@@ -115,22 +113,22 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataTree(1, out internalAxisValuesTree)) { return; }
             if (!DA.GetDataTree(2, out externalAxisValuesTree)) { return; }
-            if (!DA.GetDataList(3, speedDataGoos)) { return; }
+            if (!DA.GetDataList(3, speedDatas)) { return; }
             if (!DA.GetDataList(4, precisions)) { return; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetDataList(variableInputParameters[0].Name, robotToolGoos))
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotTools))
                 {
-                    robotToolGoos = new List<GH_RobotTool>() { new GH_RobotTool(emptyRobotTool) };
+                    robotTools = new List<RobotTool>() { new RobotTool(emptyRobotTool) };
                 }
             }
 
             // Make sure variable input parameters have a default value
-            if (robotToolGoos.Count == 0)
+            if (robotTools.Count == 0)
             {
-                robotToolGoos.Add(new GH_RobotTool(emptyRobotTool)); // Empty Robot Tool
+                robotTools.Add(new RobotTool(emptyRobotTool)); // Empty Robot Tool
             }
 
             // Get longest Input List
@@ -138,9 +136,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             sizeValues[0] = names.Count;
             sizeValues[1] = internalAxisValuesTree.PathCount;
             sizeValues[2] = externalAxisValuesTree.PathCount;
-            sizeValues[3] = speedDataGoos.Count;
+            sizeValues[3] = speedDatas.Count;
             sizeValues[4] = precisions.Count;
-            sizeValues[5] = robotToolGoos.Count;
+            sizeValues[5] = robotTools.Count;
 
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
 
@@ -161,9 +159,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 List<double> internalAxisValues = new List<double>();
                 List<double> externalAxisValues = new List<double>();
 
-                GH_SpeedData speedDataGoo;
+                SpeedData speedData;
                 int precision;
-                GH_RobotTool robotToolGoo;
+                RobotTool robotTool;
 
                 // Target counter
                 if (i < sizeValues[0])
@@ -209,12 +207,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // SpeedData counter
                 if (i < sizeValues[3])
                 {
-                    speedDataGoo = speedDataGoos[i];
+                    speedData = speedDatas[i];
                     speedDataGooCounter++;
                 }
                 else
                 {
-                    speedDataGoo = speedDataGoos[speedDataGooCounter];
+                    speedData = speedDatas[speedDataGooCounter];
                 }
 
                 // Precision counter
@@ -231,16 +229,16 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Robot tool counter
                 if (i < sizeValues[5])
                 {
-                    robotToolGoo = robotToolGoos[i];
+                    robotTool = robotTools[i];
                     robotToolGooCounter++;
                 }
                 else
                 {
-                    robotToolGoo = robotToolGoos[robotToolGooCounter];
+                    robotTool = robotTools[robotToolGooCounter];
                 }
 
                 // JointMovement constructor
-                AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedDataGoo.Value, precision, robotToolGoo.Value);
+                AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedData, precision, robotTool);
                 jointMovements.Add(jointMovement);
             }
 
@@ -257,11 +255,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Check if a right predefined speeddata value is used
-            for (int i = 0; i < speedDataGoos.Count; i++)
+            for (int i = 0; i < speedDatas.Count; i++)
             {
-                if (speedDataGoos[i].Value.PreDefinied == true)
+                if (speedDatas[i].PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDatas[i].V_TCP) == false)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
                             "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +

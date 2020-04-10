@@ -6,12 +6,10 @@
 // System Libs
 using System;
 using System.Windows.Forms;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -60,22 +58,22 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_RobotTool robotToolGoo = null;
+            RobotTool robotTool = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotToolGoo)) { return; }
+            if (!DA.GetData(0, ref robotTool)) { return; }
 
             // Check if the object is valid
-            if (!robotToolGoo.IsValid || !robotToolGoo.Value.IsValid)
+            if (!robotTool.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
             }
 
             // Output
-            DA.SetData(0, robotToolGoo.Value.Name);
-            DA.SetData(1, robotToolGoo.Value.Mesh);
-            DA.SetData(2, robotToolGoo.Value.AttachmentPlane);
-            DA.SetData(3, robotToolGoo.Value.ToolPlane);
+            DA.SetData(0, robotTool.Name);
+            DA.SetData(1, robotTool.Mesh);
+            DA.SetData(2, robotTool.AttachmentPlane);
+            DA.SetData(3, robotTool.ToolPlane);
         }
 
         #region menu item

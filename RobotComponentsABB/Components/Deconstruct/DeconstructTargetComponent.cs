@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Actions;
+using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
@@ -58,22 +58,22 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_Target targetGoo = null;
+            Target target = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref targetGoo)) { return; }
+            if (!DA.GetData(0, ref target)) { return; }
 
             // Check if the object is valid
-            if (!targetGoo.IsValid || !targetGoo.Value.IsValid)
+            if (!target.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Target is not valid");
             }
 
             // Output
-            DA.SetData(0, targetGoo.Value.Name);
-            DA.SetData(1, targetGoo.Value.Plane);
-            DA.SetData(2, targetGoo.Value.AxisConfig);
-            DA.SetDataList(3, targetGoo.Value.ExternalAxisValues);
+            DA.SetData(0, target.Name);
+            DA.SetData(1, target.Plane);
+            DA.SetData(2, target.AxisConfig);
+            DA.SetDataList(3, target.ExternalAxisValues);
         }
 
         #region menu item

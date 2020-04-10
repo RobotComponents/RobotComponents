@@ -17,7 +17,7 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Kinematics;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -75,12 +75,12 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_RobotInfo robotInfoGoo = null;
+            RobotInfo robotInfo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 
             // Catch input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(0, ref robotInfo)) { return; }
             if (!DA.GetDataList(1, internalAxisValues)) { return; }
             if (!DA.GetDataList(2, externalAxisValues)) { return; }
 
@@ -97,7 +97,7 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues, _hideMesh);
+            _fk = new ForwardKinematics(robotInfo, internalAxisValues, externalAxisValues, _hideMesh);
             _fk.Calculate();
 
             // Check the values

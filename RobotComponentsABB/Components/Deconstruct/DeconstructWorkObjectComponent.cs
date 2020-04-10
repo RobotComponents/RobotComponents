@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -57,21 +57,21 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            GH_WorkObject workObjectGoo = null;
+            WorkObject workObject = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref workObjectGoo)) { return; }
+            if (!DA.GetData(0, ref workObject)) { return; }
 
             // Check if the object is valid
-            if (!workObjectGoo.IsValid || !workObjectGoo.Value.IsValid)
+            if (!workObject.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is not valid");
             }
 
             // Output
-            DA.SetData(0, workObjectGoo.Value.Name);
-            DA.SetData(1, workObjectGoo.Value.Plane);
-            DA.SetData(2, workObjectGoo.Value.ExternalAxis);
+            DA.SetData(0, workObject.Name);
+            DA.SetData(1, workObject.Plane);
+            DA.SetData(2, workObject.ExternalAxis);
         }
 
         #region menu item

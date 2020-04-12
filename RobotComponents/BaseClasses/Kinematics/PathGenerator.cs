@@ -352,8 +352,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                                 // This is only needed if move from a fixed work object to a movable work object.
                                 // Or if we switch between to movable workobjects with two different external axes
                                 if (movement1.WorkObject.ExternalAxis == null && 
-                                    movement2.WorkObject.ExternalAxis != null && 
-                                    movement2.WorkObject.ExternalAxis.Name != movement1.WorkObject.ExternalAxis.Name)
+                                    movement2.WorkObject.ExternalAxis != null) 
                                 {
                                     // Get axis logic of the external axis of the movable work object we are using.
                                     movement2.GetPosedGlobalTargetPlane(_robotInfo, out logic);

@@ -72,7 +72,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Input variables
             Plane positionPlane = Plane.WorldXY;
             RobotTool tool = null;
             List<ExternalAxis> externalAxis = new List<ExternalAxis>();
@@ -81,13 +80,10 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
-            // Set name
             string name = "IRB1600-X/1.45";
 
-            // Construct an empty robot info
             RobotInfo robotInfo = new RobotInfo();
 
-            // Construct the robot info
             try
             {
                 robotInfo = IRB1600_X_145.GetRobotInfo(name, positionPlane, tool, externalAxis);
@@ -97,7 +93,6 @@ namespace RobotComponentsABB.Components.Definitions
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
             }
 
-            // Output
             DA.SetData(0, robotInfo);
         }
 
@@ -108,10 +103,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

@@ -13,15 +13,18 @@ using RobotComponents.Utils;
 
 namespace RobotComponents.BaseClasses.Definitions.Presets
 {
+    /// <summary>
+    /// Defines the IRB6650-125/3.2
+    /// </summary>
     public static class IRB6650_125_320
     {
         /// <summary>
-        /// Defines the IRB6650-125/3.2
+        /// Defines the IRB6650-125/3.2 Robot Info
         /// </summary>
-        /// <param name="positionPlane"></param>
-        /// <param name="tool"></param>
-        /// <param name="externalAxis"></param>
-        /// <returns></returns>
+        /// <param name="positionPlane"> The position of the robot in world coordinate space as plane. </param>
+        /// <param name="tool"> The robot end-effector as a Robot Tool. </param>
+        /// <param name="externalAxis"> The external axes attaced to the robot as list with External Axes. </param>
+        /// <returns> Returns the Robot Info preset. </returns>
         public static RobotInfo GetRobotInfo(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
         {
             List<Mesh> meshes = GetMeshes();
@@ -52,7 +55,6 @@ namespace RobotComponents.BaseClasses.Definitions.Presets
         /// <returns> Returns a list with meshes. </returns>
         public static List<Mesh> GetMeshes()
         {
-            // Initialize 
             List<Mesh> meshes = new List<Mesh>() { };
             string linkString;
 

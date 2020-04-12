@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.item, "defaultName");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, "defaultName");
             pManager.AddGenericParameter("DT", "DT", "The data tree structure", GH_ParamAccess.tree);
         }
 
@@ -76,10 +76,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

@@ -160,10 +160,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // Only adds speedData Variable if not already in RAPID Code
                 if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
                 {
-                    // Adds SpeedData to RAPIDGenerator SpeedDatasDictionary
                     RAPIDGenerator.SpeedDatas.Add(this.Name, this);
-
-                    // Creates and adds RAPID variable code
                     RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
                 }
             }

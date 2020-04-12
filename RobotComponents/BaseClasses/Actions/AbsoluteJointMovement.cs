@@ -24,8 +24,6 @@ namespace RobotComponents.BaseClasses.Actions
         private SpeedData _speedData;
         private readonly int _movementType;
         private int _precision;
-
-        // Variable fields
         private RobotTool _robotTool;
         #endregion
 
@@ -250,10 +248,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Only adds target code if target is not already defined
             if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
             {
-                // Adds Target to RAPIDGenerator SpeedDatasDictionary
                 RAPIDGenerator.Targets.Add(JointTargetName, new Target());
-
-                // Add variable code line to the RAPID generator string builder
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
             }
         }

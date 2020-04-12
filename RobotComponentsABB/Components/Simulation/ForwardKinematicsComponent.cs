@@ -248,10 +248,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            // Add our own fields
             writer.SetBoolean("Set Hide Mesh", SetHideMesh);
-
-            // Call the base class implementation.
             return base.Write(writer);
         }
 
@@ -262,10 +259,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            // Read our own fields
             SetHideMesh = reader.GetBoolean("Set Hide Mesh");
-
-            // Call the base class implementation.
             return base.Read(reader);
         }
 
@@ -275,16 +269,9 @@ namespace RobotComponentsABB.Components.Simulation
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
-
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -308,8 +295,6 @@ namespace RobotComponentsABB.Components.Simulation
         {
             RecordUndoEvent("Set Hide Mesh");
             _hideMesh = !_hideMesh;
-
-            // Expire solution
             ExpireSolution(true);
         }
         #endregion

@@ -23,8 +23,6 @@ namespace RobotComponents.BaseClasses.Definitions
         private Mesh _mesh; // tool mesh
         private Plane _attachmentPlane; // mounting frame
         private Plane _toolPlane; // tool center point and orientation
-
-        // Fields specific needed for defining the robot tool code
         private bool _robotHold;
         private Point3d _position;
         private Quaternion _orientation;

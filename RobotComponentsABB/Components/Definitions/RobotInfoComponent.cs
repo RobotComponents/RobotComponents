@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.AddPlaneParameter("Axis Planes", "AP", "Axis Planes as Plane List", GH_ParamAccess.list);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Plane", GH_ParamAccess.item);
             pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
             pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
@@ -129,10 +129,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

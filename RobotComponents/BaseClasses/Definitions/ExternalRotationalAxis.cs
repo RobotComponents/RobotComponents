@@ -5,6 +5,7 @@
 
 // System Libs
 using System.Collections.Generic;
+using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
 
@@ -45,7 +46,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _name = "";
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // Todo
+            _axisNumber = null; 
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -90,7 +91,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _name = name;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // Todo
+            _axisNumber = null; 
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -113,7 +114,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _name = name;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // Todo
+            _axisNumber = null;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -219,7 +220,7 @@ namespace RobotComponents.BaseClasses.Definitions
             }
 
             // Transform
-            double radians = Rhino.RhinoMath.ToRadians(axisValue);
+            double radians = axisValue / 180 * PI;
             Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
@@ -255,7 +256,7 @@ namespace RobotComponents.BaseClasses.Definitions
             }
 
             // Transform
-            double radians = Rhino.RhinoMath.ToRadians(value);
+            double radians = value / 180 * PI;
             Transform orientNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
@@ -270,7 +271,7 @@ namespace RobotComponents.BaseClasses.Definitions
         public override void PoseMeshes(double axisValue)
         {
             _posedMeshes.Clear();
-            double radians = Rhino.RhinoMath.ToRadians(axisValue);
+            double radians = axisValue / 180 * PI;
             Transform rotateNow = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());

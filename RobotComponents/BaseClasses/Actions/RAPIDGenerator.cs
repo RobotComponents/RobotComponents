@@ -152,7 +152,6 @@ namespace RobotComponents.BaseClasses.Actions
                 // Check if the action is an override robot tool: if so, set new current tool
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)
                 {
-                    // Override the current tool
                     _robotInfo.Tool = overrideRobotTool.RobotTool;
                 }
 

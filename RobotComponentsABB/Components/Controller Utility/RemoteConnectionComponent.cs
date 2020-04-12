@@ -56,8 +56,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
             pManager.AddBooleanParameter("Upload", "U", "Upload your RAPID code to the Robot", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Run", "R", "Run", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
-            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a string.", GH_ParamAccess.list);
-            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a string", GH_ParamAccess.list);
+            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a text.", GH_ParamAccess.list);
+            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a text", GH_ParamAccess.list);
 
             pManager[5].Optional = true;
             pManager[6].Optional = true;
@@ -434,10 +434,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

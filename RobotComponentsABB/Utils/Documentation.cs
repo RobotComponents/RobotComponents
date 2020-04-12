@@ -89,7 +89,11 @@ namespace RobotComponentsABB.Utils
             { typeof(IRB4600_20_2_50_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             { typeof(IRB4600_40_2_55_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             { typeof(IRB4600_X_2_05_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6620_150_2_20_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6640_185_2_80_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6640_235_2_55_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             { typeof(IRB6650_125_3_20_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6650_200_2_75_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             #endregion
 
             #region Simulation

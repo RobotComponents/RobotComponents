@@ -49,9 +49,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, "default_speed");
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "tcp velocity in mm/s as integer", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ORI Velocity", "vORI", "reorientation of the tool in degree/s as integer", GH_ParamAccess.list, 500);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "default_speed");
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "tcp velocity in mm/s as number", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ORI Velocity", "vORI", "reorientation of the tool in degree/s as number", GH_ParamAccess.list, 500);
             pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "linear external axes velocity in mm/s", GH_ParamAccess.list, 5000);
             pManager.AddNumberParameter("REAX Velocity", "vREAX", "reorientation of the external rotational axes in degrees/s", GH_ParamAccess.list, 1000);
         }
@@ -290,10 +290,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

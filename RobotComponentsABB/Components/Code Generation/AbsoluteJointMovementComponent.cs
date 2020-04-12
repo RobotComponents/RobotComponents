@@ -19,6 +19,7 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -58,9 +59,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, new List<string> { "default" });
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Name", "N", "Name as text.", GH_ParamAccess.list, new List<string> { "default" });
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as datatree with numbers", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as datatree with numbers", GH_ParamAccess.tree);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
 
@@ -101,7 +102,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
-            List<SpeedData> speedDatas = new List<SpeedData>();
+            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> precisions = new List<int>();
             List<RobotTool> robotTools = new List<RobotTool>();
 
@@ -113,7 +114,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataTree(1, out internalAxisValuesTree)) { return; }
             if (!DA.GetDataTree(2, out externalAxisValuesTree)) { return; }
-            if (!DA.GetDataList(3, speedDatas)) { return; }
+            if (!DA.GetDataList(3, speedDataGoos)) { return; }
             if (!DA.GetDataList(4, precisions)) { return; }
 
             // Catch the input data from the variable parameteres
@@ -136,7 +137,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             sizeValues[0] = names.Count;
             sizeValues[1] = internalAxisValuesTree.PathCount;
             sizeValues[2] = externalAxisValuesTree.PathCount;
-            sizeValues[3] = speedDatas.Count;
+            sizeValues[3] = speedDataGoos.Count;
             sizeValues[4] = precisions.Count;
             sizeValues[5] = robotTools.Count;
 
@@ -207,12 +208,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // SpeedData counter
                 if (i < sizeValues[3])
                 {
-                    speedData = speedDatas[i];
+                    speedData = speedDataGoos[i].Value;
                     speedDataGooCounter++;
                 }
                 else
                 {
-                    speedData = speedDatas[speedDataGooCounter];
+                    speedData = speedDataGoos[speedDataGooCounter].Value;
                 }
 
                 // Precision counter
@@ -255,11 +256,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Check if a right predefined speeddata value is used
-            for (int i = 0; i < speedDatas.Count; i++)
+            for (int i = 0; i < speedDataGoos.Count; i++)
             {
-                if (speedDatas[i].PreDefinied == true)
+                if (speedDataGoos[i].Value.PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDatas[i].V_TCP) == false)
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
                             "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
@@ -422,10 +423,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            // Add our own fields
             writer.SetBoolean("Override Robot Tool", OverrideRobotTool);
-
-            // Call the base class implementation.
             return base.Write(writer);
         }
 
@@ -436,10 +434,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            // Read our own fields
             OverrideRobotTool = reader.GetBoolean("Override Robot Tool");
-
-            // Call the base class implementation.
             return base.Read(reader);
         }
 
@@ -449,16 +444,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
-
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -480,11 +468,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="e"> The event data. </param>
         private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
-            // Change bool
             RecordUndoEvent("Override Robot Tool");
             OverrideRobotTool = !OverrideRobotTool;
-
-            // Add or remove the robot tool input parameter
             AddParameter(0);
         }
 
@@ -496,14 +481,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             // Pick the parameter
             IGH_Param parameter = variableInputParameters[index];
-
-            // Parameter name
             string name = variableInputParameters[index].Name;
 
             // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
             {
-                // Unregister the parameter
                 Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
             }
 

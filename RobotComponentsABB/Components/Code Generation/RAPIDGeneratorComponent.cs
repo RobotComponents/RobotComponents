@@ -54,10 +54,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
-            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a string. The default name is MainModule.", GH_ParamAccess.item, "MainModule");
-            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a string. The default name is BASE.", GH_ParamAccess.item, "BASE");
-            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list with strings", GH_ParamAccess.list);
+            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as list with actions", GH_ParamAccess.list);
+            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule.", GH_ParamAccess.item, "MainModule");
+            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE.", GH_ParamAccess.item, "BASE");
+            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list with text.", GH_ParamAccess.list);
             pManager.AddBooleanParameter("Update", "U", "Updates RAPID Code", GH_ParamAccess.item, true);
 
             pManager[2].Optional = true;
@@ -166,22 +166,14 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items to save RAPID modules to a user defined file
             Menu_AppendItem(menu, "Save Program module to file", MenuItemClickSaveProgramModule);
             Menu_AppendItem(menu, "Save System module to file", MenuItemClickSaveSystemModule);
-
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-
         }
 
-        /// <summary>
+        /// <summary>WW
         /// Handles the event when the custom menu item "Documentation" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>

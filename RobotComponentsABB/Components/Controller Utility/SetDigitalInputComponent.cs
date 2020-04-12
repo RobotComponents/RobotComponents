@@ -323,19 +323,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Create the menu item
-            menu.Items.Add("Pick Signal", null, MenuItemClick);
-
-            // Add the menu item
-            base.AppendAdditionalMenuItems(menu);
-
-            // Add menu separator
+            Menu_AppendItem(menu, "Pick Signal", MenuItemClick);
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -357,10 +347,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            // Remove all the input source when the menu item is clicked. 
             this.Params.Input[1].RemoveAllSources();
-
-            // Expire solution
             ExpireSolution(true);
         }
         #endregion

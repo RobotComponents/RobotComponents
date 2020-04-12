@@ -20,6 +20,7 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
+using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -108,7 +109,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Input variables
             List<Target> targets = new List<Target>();
-            List<SpeedData> speedDatas = new List<SpeedData>();
+            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
             List<RobotTool> robotTools = new List<RobotTool>();
@@ -121,7 +122,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targets)) { return; }
-            if (!DA.GetDataList(1, speedDatas)) { return; }
+            if (!DA.GetDataList(1, speedDataGoos)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
             if (!DA.GetDataList(3, precisions)) { return; }
 
@@ -165,7 +166,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Get longest Input List
             int[] sizeValues = new int[7];
             sizeValues[0] = targets.Count;
-            sizeValues[1] = speedDatas.Count;
+            sizeValues[1] = speedDataGoos.Count;
             sizeValues[2] = movementTypes.Count;
             sizeValues[3] = precisions.Count;
             sizeValues[4] = robotTools.Count;
@@ -210,12 +211,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Workobject counter
                 if (i < sizeValues[1])
                 {
-                    speedData = speedDatas[i];
+                    speedData = speedDataGoos[i].Value;
                     speedDataGooCounter++;
                 }
                 else
                 {
-                    speedData = speedDatas[speedDataGooCounter];
+                    speedData = speedDataGoos[speedDataGooCounter].Value;
                 }
 
                 // Movement type counter
@@ -302,11 +303,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Check if a right predefined speeddata value is used
-            for (int i = 0; i < speedDatas.Count; i++)
+            for (int i = 0; i < speedDataGoos.Count; i++)
             {
-                if (speedDatas[i].PreDefinied == true)
+                if (speedDataGoos[i].Value.PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDatas[i].V_TCP) == false)
+                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
                             "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
@@ -401,12 +402,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            // Add our own fields
             writer.SetBoolean("Override Robot Tool", OverrideRobotTool);
             writer.SetBoolean("Override Work Object", OverrideWorkObject);
             writer.SetBoolean("Set Digital Output", SetDigitalOutput);
-
-            // Call the base class implementation.
             return base.Write(writer);
         }
 
@@ -417,12 +415,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            // Read our own fields
             OverrideRobotTool = reader.GetBoolean("Override Robot Tool");
             OverrideWorkObject = reader.GetBoolean("Override Work Object");
             SetDigitalOutput = reader.GetBoolean("Set Digital Output");
-            
-            // Call the base class implementation.
             return base.Read(reader);
         }
 
@@ -432,18 +427,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
             Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, OverrideWorkObject);
             Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, SetDigitalOutput);
-
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -465,11 +453,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="e"> The event data. </param>
         private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
-            // Change bool
             RecordUndoEvent("Override Robot Tool");
             OverrideRobotTool = !OverrideRobotTool;
-
-            // Add or remove the robot tool input parameter
             AddParameter(0);
         }
 
@@ -480,11 +465,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="e"> The event data. </param>
         private void MenuItemClickWorkObject(object sender, EventArgs e)
         {
-            // Change bool
             RecordUndoEvent("Override Work Object");
             OverrideWorkObject = !OverrideWorkObject;
-
-            // Add or remove the work object input parameter
             AddParameter(1);
         }
 
@@ -495,11 +477,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="e"> The event data. </param>
         private void MenuItemClickDigitalOutput(object sender, EventArgs e)
         {
-            // Change bool
             RecordUndoEvent("Set Digital Output");
             SetDigitalOutput = !SetDigitalOutput;
-
-            // Add or remove the digital output parameter
             AddParameter(2);
         }
 
@@ -511,14 +490,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             // Pick the parameter
             IGH_Param parameter = variableInputParameters[index];
-
-            // Parameter name
             string name = variableInputParameters[index].Name;
 
             // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
             {
-                // Unregister the parameter
                 Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
             }
 

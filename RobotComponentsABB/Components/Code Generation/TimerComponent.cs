@@ -47,7 +47,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Duration", "D", "Duration as Double", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Duration", "D", "Duration as a number", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -85,10 +85,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

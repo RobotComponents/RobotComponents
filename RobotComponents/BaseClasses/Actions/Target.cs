@@ -98,7 +98,7 @@ namespace RobotComponents.BaseClasses.Actions
             _plane = plane;            
             _axisConfig = axisConfig;
 
-            // Re-orient the plane to the reference plane
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
@@ -130,12 +130,11 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _plane = plane;
+            _axisConfig = axisConfig;
 
-            // Re-orient the plane to the reference plane
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
-
-            _axisConfig = axisConfig;
 
             // External axis values
             _Eax_a = Eax_a;
@@ -161,9 +160,8 @@ namespace RobotComponents.BaseClasses.Actions
             _plane = plane;
             _axisConfig = axisConfig;
 
-            Eax = CheckExternalAxisValues(Eax);
-
             // External axis values
+            Eax = CheckExternalAxisValues(Eax);
             _Eax_a = Eax[0];
             _Eax_b = Eax[1];
             _Eax_c = Eax[2];
@@ -189,14 +187,12 @@ namespace RobotComponents.BaseClasses.Actions
             _plane = plane;
             _axisConfig = axisConfig;
 
-            // Re-orient the plane to the reference plane
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
-            // Check the length of the list with external axis values
-            Eax = CheckExternalAxisValues(Eax);
-
             // External axis values
+            Eax = CheckExternalAxisValues(Eax);
             _Eax_a = Eax[0];
             _Eax_b = Eax[1];
             _Eax_c = Eax[2];
@@ -226,10 +222,8 @@ namespace RobotComponents.BaseClasses.Actions
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
 
-            // Check the length of the araay with external axis values
-            Eax = CheckExternalAxisValues(Eax);
-
             // External axis values
+            Eax = CheckExternalAxisValues(Eax);
             _Eax_a = Eax[0];
             _Eax_b = Eax[1];
             _Eax_c = Eax[2];
@@ -315,7 +309,7 @@ namespace RobotComponents.BaseClasses.Actions
                 result.Add(axisValues[i]);
             }
 
-            // Add up missing external axisValues
+            // Add missing external axisValues
             for (int i = n; i < 6; i++)
             {
                 result.Add(9e9);
@@ -341,7 +335,7 @@ namespace RobotComponents.BaseClasses.Actions
                 result[i] = axisValues[i];
             }
 
-            // Add up missing external axisValues
+            // Add missing external axisValues
             for (int i = n; i < 6; i++)
             {
                 result[i] = 9e9;
@@ -487,10 +481,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
             set 
             {
-                // Check the length of the araay with external axis values
                 List<double> Eax = CheckExternalAxisValues(value);
-
-                // External axis values
                 _Eax_a = Eax[0];
                 _Eax_b = Eax[1];
                 _Eax_c = Eax[2];

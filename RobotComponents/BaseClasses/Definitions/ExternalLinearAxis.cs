@@ -53,7 +53,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -77,7 +77,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null; 
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -99,7 +99,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null; 
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -124,7 +124,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null; 
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -149,7 +149,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -175,7 +175,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -198,7 +198,7 @@ namespace RobotComponents.BaseClasses.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; //TODO
+            _axisNumber = null; 
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -406,7 +406,7 @@ namespace RobotComponents.BaseClasses.Definitions
                 _posedMeshes[i].Transform(xform);
             }
 
-            GetAxisCurve(); // Set new axis curve
+            GetAxisCurve();
         }
         #endregion
 

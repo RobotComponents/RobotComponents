@@ -56,7 +56,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as string", GH_ParamAccess.list, "defaultTar");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
         }
@@ -506,11 +506,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            // Add our own fields
             writer.SetBoolean("Set Reference Plane", SetReferencePlane);
             writer.SetBoolean("Override External Axis Values", OverrideExternalAxisValues);
-
-            // Call the base class implementation.
             return base.Write(writer);
         }
 
@@ -521,11 +518,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            // Read our own fields
             SetReferencePlane = reader.GetBoolean("Set Reference Plane");
             OverrideExternalAxisValues = reader.GetBoolean("Override External Axis Values");
-
-            // Call the base class implementation.
             return base.Read(reader);
         }
 
@@ -535,17 +529,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, SetReferencePlane);
             Menu_AppendItem(menu, "External Axis Values", MenuItemClickExternalAxisValue, true, OverrideExternalAxisValues);
-
-            // Add menu separator
             Menu_AppendSeparator(menu);
-
-            // Add custom menu items
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 

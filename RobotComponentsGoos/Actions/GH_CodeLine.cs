@@ -252,10 +252,7 @@ namespace RobotComponentsGoos.Actions
         /// Transforms the object or a deformable representation of the object.
         /// </summary>
         /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Transformed geometry. If the local geometry can be transformed accurately, 
-        /// then the returned instance equals this instance. Not all geometry types can be accurately 
-        /// transformed under all circumstances though, if this is the case, this function will 
-        /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
             return null;
@@ -265,10 +262,7 @@ namespace RobotComponentsGoos.Actions
         /// Morph the object or a deformable representation of the object.
         /// </summary>
         /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Deformed geometry. If the local geometry can be deformed accurately, then the returned 
-        /// instance equals this instance. Not all geometry types can be accurately deformed though, if 
-        /// this is the case, this function will return an instance of another IGH_GeometricGoo derived 
-        /// type which can be deformed.</returns>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
         public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
         {
             return null;

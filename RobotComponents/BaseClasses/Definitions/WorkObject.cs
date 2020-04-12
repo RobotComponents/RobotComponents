@@ -95,8 +95,8 @@ namespace RobotComponents.BaseClasses.Definitions
             _fixedFrame = workObject.FixedFrame;
 
             if (workObject.ExternalAxis == null) { _externalAxis = null; }
-            else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); } // TODO: This is making the path and RAPID generator slow!
-            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); } // TODO: This is making the path and RAPID generator slow!            
+            else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); }
+            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); }          
         }
 
         /// <summary>

@@ -316,13 +316,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> The the target plane in the world coordinate system. </returns>
         public Plane GetGlobalTargetPlane()
         {
-            // Deep copy the target plane
-            Plane plane = new Plane(Target.Plane);
-
-            // Re-orient the target plane to the work object plane
+            Plane plane = new Plane(Target.Plane); // Deep copy
             Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
             plane.Transform(orient);
-
             return plane;
         }
 
@@ -345,6 +341,14 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 // Check if the axis is attached to the robot and get the axis logic number
                 axisLogic = robotInfo.ExternalAxis.FindIndex(p => p.Name == _workObject.ExternalAxis.Name);
+
+                // Check axis logic
+                if (axisLogic == -1)
+                {
+                    throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot Info. Did you attach the external axis to the Robot Info?");
+                }
+
+                // Get the external axis
                 ExternalAxis externalAxis = robotInfo.ExternalAxis[axisLogic];
 
                 // Get external axis value
@@ -583,16 +587,13 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates SpeedData Variable Code 
             _speedData.InitRAPIDVar(RAPIDGenerator);
 
-            // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
+            // Create a robtarget if the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
             {
                 // Only adds target code if target is not already defined
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.RobTargetName))
                 {
-                    // Adds target to RAPIDGenerator targets dictionary
                     RAPIDGenerator.Targets.Add(_target.RobTargetName, _target);
-
-                    // Creates and adds RAPID variable code
                     RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
                 }
             }
@@ -603,10 +604,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // Only adds target code if target is not already defined
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.JointTargetName))
                 {
-                    // Adds target to RAPIDGenerator targets dictionary
                     RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
-
-                    // Creates and adds RAPID variable code
                     RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
                 }
             }

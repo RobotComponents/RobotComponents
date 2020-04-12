@@ -97,12 +97,6 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <param name="externalAxis"> The list with attached external axes. </param>
         public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis)
         {
-            // Check list with external axes: maximum sone external linear axis is allowed at the moment
-            if (externalAxis.Count(item => item is ExternalLinearAxis) > 1)
-            {
-                throw new ArgumentException("At the moment RobotComponents supports a maximum one external linear axis.");
-            }
-
             // Robot related fields
             _name = name;
             _meshes = meshes;
@@ -121,7 +115,6 @@ namespace RobotComponents.BaseClasses.Definitions
             _externalAxisPlanes = new List<Plane>();
             _externalAxisLimits = new List<Interval>();
             UpdateExternalAxisFields();
-
 
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
@@ -179,6 +172,24 @@ namespace RobotComponents.BaseClasses.Definitions
         /// </summary>
         private void UpdateExternalAxisFields()
         {
+            // Check the number of external axes
+            if (_externalAxis.Count > 6)
+            {
+                throw new ArgumentException("More than six external axes are defined. A maximum of 6 external axes can be attached to a Robot Info.");
+            }
+
+            // Check list with external axes: maximum of one external linear axis is allowed at the moment
+            if (_externalAxis.Count(item => item is ExternalLinearAxis) > 1)
+            {
+                throw new ArgumentException("At the moment RobotComponents supports a maximum of one external linear axis.");
+            }
+
+            // Assign axis logic number
+            for (int i = 0; i < _externalAxis.Count; i++)
+            {
+                _externalAxis[i].AxisNumber = i;
+            }
+
             // Clear the lists
             _externalAxisPlanes.Clear();
             _externalAxisLimits.Clear();

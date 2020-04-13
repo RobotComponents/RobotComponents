@@ -123,8 +123,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            //get { return Properties.Resources.IRB6620_Icon; } // TODO
-            get { return null; }
+            get { return Properties.Resources.IRB6620_Icon; }
         }
 
         /// <summary>

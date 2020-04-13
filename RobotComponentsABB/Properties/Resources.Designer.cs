@@ -553,9 +553,59 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IRB6620_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB6620_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IRB6640_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB6640_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IRB6650_Icon {
             get {
                 object obj = ResourceManager.GetObject("IRB6650_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IRB6650S_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB6650S_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IRB6700_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB6700_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IRB7600_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB7600_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

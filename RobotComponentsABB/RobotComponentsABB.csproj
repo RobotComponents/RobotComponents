@@ -457,6 +457,21 @@
     <None Include="Resources\GetPlane_Icon.png" />
     <None Include="Resources\QuatToPlane_Icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650S_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB7600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6700_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6620_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6640_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

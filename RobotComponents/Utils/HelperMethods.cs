@@ -124,7 +124,7 @@ namespace RobotComponents.Utils
         /// </summary>
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="plane"> The plane that should be transformed. </param>
-        /// <returns> The quaternion as an Quaternion. </returns>
+        /// <returns> The quaternion as a Quaternion. </returns>
         public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane)
         {
             Quaternion quat = Quaternion.Rotation(refPlane, plane);
@@ -132,10 +132,28 @@ namespace RobotComponents.Utils
         }
 
         /// <summary>
+        /// Transforms a plane to a quarternion.
+        /// </summary>
+        /// <param name="refPlane"> The reference plane. </param>
+        /// <param name="plane"> The plane that should be transformed. </param>
+        /// <param name="origin"> The origin of the plane oriented based on the reference plane. </param>
+        /// <returns> The quaternion as a Quaternion. </returns>
+        public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane, out Point3d origin)
+        {
+            Quaternion quat = Quaternion.Rotation(refPlane, plane);
+
+            origin = new Point3d(plane.Origin);
+            Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
+            origin.Transform(orient);
+
+            return quat;
+        }
+
+        /// <summary>
         /// Transforms a plane to a quarternion with as reference plane WorldXY.
         /// </summary>
         /// <param name="plane"> The plane to should be transformed. </param>
-        /// <returns> The quaternion as an Quaternion.</returns>
+        /// <returns> The quaternion as a Quaternion.</returns>
         public static Quaternion PlaneToQuaternion(Plane plane)
         {
             Plane refPlane = Plane.WorldXY;

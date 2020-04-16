@@ -13,17 +13,21 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.08.000
+// It is replaced with a new component.
+
 namespace RobotComponentsABB.Components.Utilities
 {
     /// <summary>
     /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PlaneToQuaternion : GH_Component
+    public class OldPlaneToQuaternion2 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the Plane to Quarternion
         /// </summary>
-        public PlaneToQuaternion()
+        public OldPlaneToQuaternion2()
           : base("Plane to Quaternion", "PtoQ",
               "Calculates the four coefficient values in a quarternion. "
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
@@ -35,13 +39,28 @@ namespace RobotComponentsABB.Components.Utilities
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Reference Plane", "RP", "The reference plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -65,54 +84,34 @@ namespace RobotComponentsABB.Components.Utilities
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             Plane plane = Plane.WorldXY;
-            Plane refPlane = Plane.WorldXY;
 
             // Catch the input data
             if (!DA.GetData(0, ref plane)) { return; }
-            if (!DA.GetData(1, ref refPlane)) { refPlane = Plane.WorldXY; }
 
             // Get the quarternion
-            Quaternion quat = RobotComponents.Utils.HelperMethods.PlaneToQuaternion(refPlane, plane, out Point3d origin);
+            Quaternion quat = RobotComponents.Utils.HelperMethods.PlaneToQuaternion(plane);
 
             // Write the quarternion value in the string format that is used in the RAPID and BASE code
             string text = "[" + quat.A.ToString("0.######") + ", "  + quat.B.ToString("0.######") + ", " 
                 + quat.C.ToString("0.######") + ", " + quat.D.ToString("0.######") + "]";
 
             // Output
-            DA.SetData(0, origin.X);
-            DA.SetData(1, origin.Y);
-            DA.SetData(2, origin.Z);
+            DA.SetData(0, plane.Origin.X);
+            DA.SetData(1, plane.Origin.Y);
+            DA.SetData(2, plane.Origin.Z);
             DA.SetData(3, quat.A);
             DA.SetData(4, quat.B);
             DA.SetData(5, quat.C);
             DA.SetData(6, quat.D);
             DA.SetData(7, text);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -127,7 +126,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("13A3F345-1C9D-4E35-B50D-B11EF157EC72"); }
+            get { return new Guid("D606FF44-74B7-4312-9198-FE68B47F825F"); }
         }
     }
 }

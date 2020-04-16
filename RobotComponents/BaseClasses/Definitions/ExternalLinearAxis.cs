@@ -295,10 +295,25 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePosition(double axisValue, out bool inLimits)
         {
-            // Bool that indicates if the axis value is within the limits
+            Transform translateNow = CalculateTransformationMatrix(axisValue, out bool isInLimits);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(translateNow);
+
+            inLimits = isInLimits;
+            return positionPlane;
+        }
+
+        /// <summary>
+        /// Calculates the the transformation matrix for a defined external axis value. 
+        /// This method does not take into account the axis limits. 
+        /// </summary>
+        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for in mm. </param>
+        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
+        /// <returns> The transformation matrix </returns>
+        public override Transform CalculateTransformationMatrix(double axisValue, out bool inLimits)
+        {
             bool isInLimits;
 
-            // Check if value is within axis limits
             if (axisValue < AxisLimits.Min)
             {
                 isInLimits = false;
@@ -312,13 +327,10 @@ namespace RobotComponents.BaseClasses.Definitions
                 isInLimits = true;
             }
 
-            // Transform
-            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
-            Plane positionPlane = new Plane(AttachmentPlane);
-            positionPlane.Transform(translateNow);
-
+            Transform transform = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
             inLimits = isInLimits;
-            return positionPlane;
+
+            return transform;
         }
 
         /// <summary>
@@ -326,14 +338,28 @@ namespace RobotComponents.BaseClasses.Definitions
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for in mm. </param>
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePositionSave(double axisValue)
         {
-            // Double that will be used to calculate the real pose within the axis limits
+            Transform translateNow = CalculateTransformationMatrixSave(axisValue);
+            Plane positionPlane = new Plane(AttachmentPlane);
+            positionPlane.Transform(translateNow);
+
+            return positionPlane;
+        }
+
+        /// <summary>
+        /// Calculates the the transformation matrix for a defined external axis value. 
+        /// This method takes into account the external axis limits. If the defined external
+        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// </summary>
+        /// <param name="axisValue"> The external axis value to calculate the transformation matrix for in mm. </param>
+        /// <returns> Returns the transformation matrix. </returns>
+        public override Transform CalculateTransformationMatrixSave(double axisValue)
+        {
             double value;
 
-            // Check if value is within axis limits
             if (axisValue < _axisLimits.Min)
             {
                 value = _axisLimits.Min;
@@ -347,29 +373,22 @@ namespace RobotComponents.BaseClasses.Definitions
                 value = axisValue;
             }
 
-            // Transform
-            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * value);
-            Plane positionPlane = new Plane(AttachmentPlane);
-            positionPlane.Transform(translateNow);
+            Transform transform = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * value);
 
-            return positionPlane;
+            return transform;
         }
 
         /// <summary>
         /// Calculates the position of the external axis mesh for a defined external axis value.
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the meshes for. </param>
+        /// <param name="axisValue"> The external axis value to calculate the position of the meshes for in mm. </param>
         public override void PoseMeshes(double axisValue)
         {
-            // Clear the list with posed meshes
             _posedMeshes.Clear();
-
-            // Duplicate the external meshes
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            // Transform the link mesh
-            Transform translateNow = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
+            Transform translateNow = CalculateTransformationMatrix(axisValue, out bool isInLimits);
             _posedMeshes[1].Transform(translateNow);
         }
 

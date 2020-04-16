@@ -348,33 +348,13 @@ namespace RobotComponents.BaseClasses.Actions
                     throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot Info. Did you attach the external axis to the Robot Info?");
                 }
 
-                // Get the external axis
-                ExternalAxis externalAxis = robotInfo.ExternalAxis[axisLogic];
-
                 // Get external axis value
                 double axisValue = _target.ExternalAxisValues[axisLogic];
                 if (axisValue == 9e9) { axisValue = 0; } // If the user does not define an axis value we set it to zero. 
 
-                // External rotatioanal axis
-                if (_workObject.ExternalAxis is ExternalRotationalAxis)
-                {
-                    // To radians
-                    axisValue = (axisValue / 180) * Math.PI;
-
-                    // Rotate
-                    Transform rotate = Transform.Rotation(axisValue, externalAxis.AxisPlane.ZAxis, externalAxis.AxisPlane.Origin);
-                    plane.Transform(rotate);
-                }
-
-                // External linear axis
-                if (_workObject.ExternalAxis is ExternalLinearAxis)
-                {
-                    // Translate
-                    Vector3d axis = new Vector3d(externalAxis.AxisPlane.ZAxis);
-                    axis.Unitize();
-                    Transform translate = Transform.Translation(axis * axisValue);
-                    plane.Transform(translate);
-                }
+                // Transform
+                Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(axisValue, out bool inLimits);
+                plane.Transform(transform);
             }
 
             logic = axisLogic;

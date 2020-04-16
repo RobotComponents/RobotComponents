@@ -145,28 +145,13 @@ namespace RobotComponents.BaseClasses.Kinematics
                 _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalAxisValues[i]);
 
                 // Check if it is an external linear axis: the first external linear axis
+                // External axes that move the robot: this updates the position of the robot
                 if (externalAxis is ExternalLinearAxis && count == 0)
                 {
                     ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
                     _positionPlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
                     count += 1;
                 }
-
-                /**
-                // Check all other external linear axes 
-                else if (externalAxis is ExternalLinearAxis && count != 0)
-                {
-                    ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
-                    //TODO: ...
-                }
-
-                // Check if the axis is an external rotational axis
-                else if (externalAxis is ExternalRotationalAxis)
-                {
-                    ExternalRotationalAxis externalRotationalAxis = externalAxis as ExternalRotationalAxis;
-                    //TODO: ... 
-                }
-                **/
             }
 
             // Move relative to base

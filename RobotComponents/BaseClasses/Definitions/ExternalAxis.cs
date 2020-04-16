@@ -50,6 +50,15 @@ namespace RobotComponents.BaseClasses.Definitions
         public abstract Plane CalculatePosition(double axisValue, out bool inLimits);
 
         /// <summary>
+        /// Calculates the the transformation matrix for a defined external axis value. 
+        /// This method does not take into account the axis limits. 
+        /// </summary>
+        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
+        /// <returns> The transformation matrix </returns>
+        public abstract Transform CalculateTransformationMatrix(double axisValue, out bool inLimits);
+
+        /// <summary>
         /// Calculates the position of the attachment plane for a defined external axis value.
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
@@ -57,6 +66,15 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
         /// <returns> The posed attachement plane. </returns>
         public abstract Plane CalculatePositionSave(double axisValue);
+
+        /// <summary>
+        /// Calculates the the transformation matrix for a defined external axis value. 
+        /// This method takes into account the external axis limits. If the defined external
+        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// </summary>
+        /// <param name="axisValue"> The external axis value to calculate the transformation matrix for. </param>
+        /// <returns> Returns the transformation matrix. </returns>
+        public abstract Transform CalculateTransformationMatrixSave(double axisValue);
 
         /// <summary>
         /// A method that can be called to reinitialize all the data that is needed to construct a valid external axis. 

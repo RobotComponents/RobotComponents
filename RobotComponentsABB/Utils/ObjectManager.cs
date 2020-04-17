@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 // RobotComponents Libs
+using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Components.Obsolete;
 using RobotComponentsABB.Components.CodeGeneration;
@@ -31,6 +32,11 @@ namespace RobotComponentsABB.Utils
         // contains information on all speedDatas in file to notify the user about duplicates
         private Dictionary<Guid, SpeedDataComponent> _speedDatasByGuid;
         private List<string> _speedDataNames;
+
+        // constains information on all external axes in file to notify the user about duplicates
+        private Dictionary<Guid, ExternalLinearAxisComponent> _externalLinearAxesByGuid;
+        private Dictionary<Guid, ExternalRotationalAxisComponent> _externalRotationalAxesByGuid;
+        private List<string> _axisNames;
 
         // contains information on all robot tools in file for code generation
         private Dictionary<Guid, RobotToolFromDataEulerComponent> _toolsEulerByGuid;
@@ -61,6 +67,10 @@ namespace RobotComponentsABB.Utils
             {
                 _speedDataNames.Add("v" + HelperMethods.ValidPredefiniedSpeedValues[i].ToString());
             }
+
+            _externalLinearAxesByGuid = new Dictionary<Guid, ExternalLinearAxisComponent>();
+            _externalRotationalAxesByGuid = new Dictionary<Guid, ExternalRotationalAxisComponent>();
+            _axisNames = new List<string>();
 
             _toolsEulerByGuid = new Dictionary<Guid, RobotToolFromDataEulerComponent>();
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
@@ -120,21 +130,13 @@ namespace RobotComponentsABB.Utils
             // Add all the work objects from old component
             foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _oldWorkObjectsByGuid)
             {
-                for (int i = 0; i < entry.Value.WorkObjects.Count; i++)
-                {
-                    workObjects.Add(entry.Value.WorkObjects[i]);
-                }
-              
+                workObjects.AddRange(entry.Value.WorkObjects);
             }
 
             // Add all work objects from new component
             foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
             {
-                for (int i = 0; i < entry.Value.WorkObjects.Count; i++)
-                {
-                    workObjects.Add(entry.Value.WorkObjects[i]);
-                }
-
+                workObjects.AddRange(entry.Value.WorkObjects);
             }
 
             // Sort based on name
@@ -142,6 +144,100 @@ namespace RobotComponentsABB.Utils
 
             // Return
             return workObjects;
+        }
+
+        /// <summary>
+        /// Gets all the external axes that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all external axes that are stored in the object mananger. </returns>
+        public List<ExternalAxis> GetExternalAxes()
+        {
+            // Empty list
+            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
+
+            // Adds all the external linear axes as external axis
+            foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _externalLinearAxesByGuid)
+            {
+                externalAxes.Add(entry.Value.ExternalAxis);
+            }
+
+            // Adds all the external rotational axes as external axis
+            foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _externalRotationalAxesByGuid)
+            {
+                externalAxes.Add(entry.Value.ExternalAxis);
+            }
+
+            // Sort based on name
+            externalAxes = externalAxes.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return externalAxes;
+        }
+
+        /// <summary>
+        /// Gets all the absolute joint movements that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the absolute joint movements that are stored in the object mananger. </returns>
+        public List<AbsoluteJointMovement> GetAbsoluteJointMovements()
+        {
+            // Empty list
+            List<AbsoluteJointMovement> jointMomvements = new List<AbsoluteJointMovement>();
+
+            // Add all the absolute joint movements
+            foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _jointTargetsByGuid)
+            {
+                jointMomvements.AddRange(entry.Value.AbsoluteJointMovements);
+            }
+
+            // Sort based on name
+            jointMomvements = jointMomvements.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return jointMomvements;
+        }
+
+        /// <summary>
+        /// Gets all the targets that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the targets that are stored in the object mananger. </returns>
+        public List<Target> GetTargets()
+        {
+            // Empty list
+            List<Target> targets = new List<Target>();
+
+            // Add all the targets
+            foreach (KeyValuePair<Guid, TargetComponent> entry in _targetsByGuid)
+            {
+                targets.AddRange(entry.Value.Targets);
+            }
+
+            // Sort based on name
+            targets = targets.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return targets;
+        }
+
+        /// <summary>
+        /// Gets all the speed datas that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the speed datas that are stored in the object mananger. </returns>
+        public List<SpeedData> GetSpeedDatas()
+        {
+            // Empty list
+            List<SpeedData> speeddatas = new List<SpeedData>();
+
+            // Add all the targets
+            foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _speedDatasByGuid)
+            {
+                speeddatas.AddRange(entry.Value.SpeedDatas);
+            }
+
+            // Sort based on name
+            speeddatas = speeddatas.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return speeddatas;
         }
         #endregion
 
@@ -178,6 +274,32 @@ namespace RobotComponentsABB.Utils
         public List<string> TargetNames
         {
             get { return _targetNames; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the External Linear Axis components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, ExternalLinearAxisComponent> ExternalLinearAxesByGuid
+        {
+            get { return _externalLinearAxesByGuid; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the External Rotational Axis components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, ExternalRotationalAxisComponent> ExternalRotationalAxesByGuid
+        {
+            get { return _externalRotationalAxesByGuid; }
+        }
+
+        /// <summary>
+        /// A list with all the unique External Axis names in this object manager
+        /// </summary>
+        public List<string> ExternalAxisNames
+        {
+            get { return _axisNames; }
         }
 
         /// <summary>

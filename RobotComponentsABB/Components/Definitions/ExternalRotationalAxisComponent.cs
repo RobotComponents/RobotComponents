@@ -69,6 +69,13 @@ namespace RobotComponentsABB.Components.Definitions
             pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");  //Todo: beef this up to be more informative.
         }
 
+        // Fields
+        private string _axisName = String.Empty;
+        private string _lastName = "";
+        private bool _nameUnique;
+        private ObjectManager _objectManager;
+        private ExternalRotationalAxis _externalRotationalAxis;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -89,11 +96,125 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(3, baseMeshes)) { baseMeshes = new List<Mesh>() { new Mesh() }; }
             if (!DA.GetDataList(4, linkMeshes)) { linkMeshes = new List<Mesh>() { new Mesh() }; }
 
-            // Create the external linear axis
-            ExternalRotationalAxis externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMeshes, linkMeshes);
+            // Create the external rotational axis
+            _externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMeshes, linkMeshes);
 
             // Output
-            DA.SetData(0, externalRotationalAxis);
+            DA.SetData(0, _externalRotationalAxis);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears ExternalAxisNames
+            _objectManager.ExternalAxisNames.Remove(_axisName);
+            _axisName = String.Empty;
+
+            // Removes lastName from ExternalAxisNames List
+            if (_objectManager.ExternalAxisNames.Contains(_lastName))
+            {
+                _objectManager.ExternalAxisNames.Remove(_lastName);
+            }
+
+            // Adds Component to ExternalLinarAxesByGuid Dictionary
+            if (!_objectManager.ExternalRotationalAxesByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.ExternalRotationalAxesByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Checks if axis name is already in use and counts duplicates
+            #region Check name in object manager
+            if (_objectManager.ExternalAxisNames.Contains(_externalRotationalAxis.Name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "External Axis Name already in use.");
+                _nameUnique = false;
+                _lastName = "";
+            }
+            else
+            {
+                // Adds Robot Axis Name to list
+                _axisName = _externalRotationalAxis.Name;
+                _objectManager.ExternalAxisNames.Add(_externalRotationalAxis.Name);
+
+                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
+                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
+                {
+                    if (entry.Value.LastName == "")
+                    {
+                        entry.Value.ExpireSolution(true);
+                    }
+                }
+                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
+                {
+                    if (entry.Value.LastName == "")
+                    {
+                        entry.Value.ExpireSolution(true);
+                    }
+                }
+
+                _lastName = _externalRotationalAxis.Name;
+                _nameUnique = true;
+            }
+            #endregion
+
+            // Recognizes if Component is Deleted and removes it from Object Managers axis and name list
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+            #endregion
+        }
+
+        /// <summary>
+        /// This method detects if the user deletes the component from the Grasshopper canvas. 
+        /// </summary>
+        /// <param name="sender"> </param>
+        /// <param name="e"> </param>
+        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                if (_nameUnique == true)
+                {
+                    _objectManager.ExternalAxisNames.Remove(_axisName);
+                }
+                _objectManager.ExternalRotationalAxesByGuid.Remove(this.InstanceGuid);
+
+                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
+                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The external rotational axis created by this component
+        /// </summary>
+        public ExternalRotationalAxis ExternalRotationalAxis
+        {
+            get { return _externalRotationalAxis; }
+        }
+
+        /// <summary>
+        /// The external rotational axis created by this component as External Axis
+        /// </summary>
+        public ExternalAxis ExternalAxis
+        {
+            get { return _externalRotationalAxis as ExternalAxis; }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
         }
 
         #region menu item

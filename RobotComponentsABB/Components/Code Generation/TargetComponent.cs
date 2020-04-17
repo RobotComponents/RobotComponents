@@ -88,6 +88,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
+        private List<Target> _targets = new List<Target>();
         
         private bool _setReferencePlane = false;
         private bool _overrideExternalAxisValues = false;
@@ -221,8 +222,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
             int externalAxisValueCounterE = -1;
             int externalAxisValueCounterF = -1;
 
+            // Clear list
+            _targets.Clear();
+
             // Creates targets
-            List<Target> targets = new List<Target>();
             for (int i = 0; i < biggestSize; i++)
             {
                 string name = "";
@@ -343,11 +346,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 Target target = new Target(name, plane, referencePlane, axisConfig, axisValues);
-                targets.Add(target);
+                _targets.Add(target);
             }
 
             // Sets Output
-            DA.SetDataList(0, targets);
+            DA.SetDataList(0, _targets);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -469,6 +472,14 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// The Targets created by this component
+        /// </summary>
+        public List<Target> Targets
+        {
+            get { return _targets; }
         }
 
         /// <summary>

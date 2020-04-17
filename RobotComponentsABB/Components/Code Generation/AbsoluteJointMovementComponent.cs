@@ -91,6 +91,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
+        private List<AbsoluteJointMovement> _jointMovements = new List<AbsoluteJointMovement>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -151,9 +152,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
             int precisionCounter = -1;
             int robotToolGooCounter = -1;
 
-            //// Creates movements
-            List<AbsoluteJointMovement> jointMovements = new List<AbsoluteJointMovement>();
+            // Clear list
+            _jointMovements.Clear();
 
+            // Creates movements
             for (int i = 0; i < biggestSize; i++)
             {
                 string name;
@@ -240,7 +242,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
                 // JointMovement constructor
                 AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedData, precision, robotTool);
-                jointMovements.Add(jointMovement);
+                _jointMovements.Add(jointMovement);
             }
 
             // Check if a right value is used for the input of the precision
@@ -272,7 +274,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Output
-            DA.SetDataList(0, jointMovements);
+            DA.SetDataList(0, _jointMovements);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -394,6 +396,14 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// The Absolute Joint Movements created by this component
+        /// </summary>
+        public List<AbsoluteJointMovement> AbsoluteJointMovements
+        {
+            get { return _jointMovements; }
         }
 
         /// <summary>

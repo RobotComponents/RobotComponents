@@ -68,6 +68,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private readonly List<string> _speedDataNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
+        private List<SpeedData> _speedDatas = new List<SpeedData>();
         private ObjectManager _objectManager;
 
         /// <summary>
@@ -106,8 +107,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
             int v_leaxCounter = -1;
             int v_reaxCounter = -1;
 
+            // Clear list
+            _speedDatas.Clear();
+
             // Creates speed Datas
-            List<SpeedData> speedDatas = new List<SpeedData>();
             for (int i = 0; i < biggestSize; i++)
             {
                 string name = "";
@@ -173,11 +176,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
                 // Construct speed data
                 SpeedData speedData = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
-                speedDatas.Add(speedData);
+                _speedDatas.Add(speedData);
             }
 
             // Sets Output
-            DA.SetDataList(0, speedDatas);
+            DA.SetDataList(0, _speedDatas);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -222,7 +225,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
                     foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
                     {
-                        if (entry.Value._lastName == "")
+                        if (entry.Value.LastName == "")
                         {
                             entry.Value.ExpireSolution(true);
                         }
@@ -230,16 +233,18 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _lastName = names[i];
                 }
 
-                // Checks if Speed Data Name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(speedDatas[i].Name))
+                // Check variable name: character limit
+                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Speed Data Name exceeds character limit of 32 characters.");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name exceeds character limit of 32 characters.");
+                    break;
                 }
 
-                // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(speedDatas[i].Name))
+                // Check variable name: start with number is not allowed
+                if (HelperMethods.VariableStartsWithNumber(names[i]))
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
+                    break;
                 }
             }
             #endregion
@@ -275,7 +280,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
                 foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
                 {
-                    if (entry.Value._lastName == "")
+                    if (entry.Value.LastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }
@@ -283,7 +288,23 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
         }
 
-        #region menu item
+        /// <summary>
+        /// The Speed Datas created by this component
+        /// </summary>
+        public List<SpeedData> SpeedDatas
+        {
+            get { return _speedDatas; }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+        }
+
+        #region menu item methods
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -325,7 +346,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
         {
             get { return new Guid("5F900CB8-86D0-4429-992A-CC2422BBFBDE"); }
         }
-
     }
 }
 

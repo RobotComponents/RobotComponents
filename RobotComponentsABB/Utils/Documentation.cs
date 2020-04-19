@@ -105,6 +105,7 @@ namespace RobotComponentsABB.Utils
             #region Utilities
             { typeof(FlipPlaneXComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Flip%20Plane%20Y/" },
+            { typeof(GetObjectManager), "https://edek-unikassel.github.io/RobotComponents-Documentation/" }, // TODO: make webpage...
             { typeof(NamingComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Naming/" },
             { typeof(PlaneToQuaternion), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Plane%20Visualizer/" },

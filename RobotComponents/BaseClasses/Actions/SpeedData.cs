@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
 
@@ -26,6 +27,11 @@ namespace RobotComponents.BaseClasses.Actions
         private double _v_leax; // External linear axis speed
         private double _v_reax; // External rotational axis speed
         private bool _predefined; // ABB predefinied data (e.g. v5, v10, v20, v30)?
+        private bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+
+        private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
+        private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
+
         #endregion
 
         #region constructors
@@ -42,8 +48,21 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(double v_tcp)
         {
-            double tcp = Math.Round(v_tcp, 0);
+            // Get nearest predefined speeddata value
+            double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
 
+            // Check if the exact predefined value is used or the nearest one
+            if (v_tcp - tcp == 0)
+            {
+                _exactPredefinedValue = true;
+            }
+            else
+            {
+                _exactPredefinedValue = false;
+            }
+
+
+            // Set other fields
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -58,9 +77,20 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(int v_tcp)
         {
-            double tcp = Convert.ToDouble(v_tcp);
-            tcp = Math.Round(tcp, 0);
+            // Get nearest predefined speeddata value
+            double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
 
+            // Check if the exact predefined value is used or the nearest one
+            if (v_tcp - tcp == 0)
+            {
+                _exactPredefinedValue = true;
+            }
+            else
+            {
+                _exactPredefinedValue = false;
+            }
+
+            // Set other fields
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -85,6 +115,7 @@ namespace RobotComponents.BaseClasses.Actions
             _v_leax = v_leax;
             _v_reax = v_reax;
             _predefined = false;
+            _exactPredefinedValue = false;
         }
 
         /// <summary>
@@ -100,6 +131,7 @@ namespace RobotComponents.BaseClasses.Actions
             _v_leax = speeddata.V_LEAX;
             _v_reax = speeddata.V_REAX;
             _predefined = speeddata.PreDefinied;
+            _exactPredefinedValue = speeddata.ExactPredefinedValue;
         }
 
         /// <summary>
@@ -247,6 +279,31 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _predefined; }
             set { _predefined = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the exact predefined speeddata value is used.
+        /// If false the nearest predefined speedata or a custom zonedata is used.
+        /// </summary>
+        public bool ExactPredefinedValue
+        {
+            get { return _exactPredefinedValue; }
+        }
+
+        /// <summary>
+        /// Defines an array with valid predefined speeddata variable names
+        /// </summary>
+        public static string[] ValidPredefinedNames 
+        { 
+            get { return _validPredefinedNames; }
+        }
+
+        /// <summary>
+        /// Defines an array with valid predefined speeddata values
+        /// </summary>
+        public static double[] ValidPredefinedValues 
+        { 
+            get { return _validPredefinedValues; }
         }
         #endregion
 

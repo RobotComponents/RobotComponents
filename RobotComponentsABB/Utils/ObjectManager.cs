@@ -63,10 +63,7 @@ namespace RobotComponentsABB.Utils
 
             _speedDatasByGuid = new Dictionary<Guid, SpeedDataComponent>();
             _speedDataNames = new List<string>();
-            for (int i = 0; i < HelperMethods.ValidPredefiniedSpeedValues.Length; i++)
-            {
-                _speedDataNames.Add("v" + HelperMethods.ValidPredefiniedSpeedValues[i].ToString());
-            }
+            _speedDataNames.AddRange(SpeedData.ValidPredefinedNames.ToList());
 
             _externalLinearAxesByGuid = new Dictionary<Guid, ExternalLinearAxisComponent>();
             _externalRotationalAxesByGuid = new Dictionary<Guid, ExternalRotationalAxisComponent>();

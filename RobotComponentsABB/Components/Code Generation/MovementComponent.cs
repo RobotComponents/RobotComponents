@@ -302,19 +302,16 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
             }
 
-            // Check if a right predefined speeddata value is used
+            // Check if an exact predefined speeddata value is used
             for (int i = 0; i < speedDataGoos.Count; i++)
             {
-                if (speedDataGoos[i].Value.PreDefinied == true)
+                if (speedDataGoos[i].Value.ExactPredefinedValue == false & speedDataGoos[i].Value.PreDefinied == true)
                 {
-                    if (HelperMethods.PredefinedSpeedValueIsValid(speedDataGoos[i].Value.V_TCP) == false)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Pre-defined speed data <" + i +
-                            "> is invalid. Use the speed data component to create custom speed data or use of one of the valid pre-defined speed datas. " +
-                            "Pre-defined speed data can be set to 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, " +
-                            "400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000 or 7000.");
-                        break;
-                    }
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value <" + i + "> is invalid. " +
+                        "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +
+                        "20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, " +
+                        "5000, 6000 and 7000.");
+                    break;
                 }
             }
 

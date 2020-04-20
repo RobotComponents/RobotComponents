@@ -112,7 +112,6 @@ namespace RobotComponentsABB.Utils
             { typeof(PlaneToQuaternion), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlane), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Quaternion%20to%20Plane/" },
-            { typeof(TargetVisualizerComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Utility/Target%20Visualizer/" },
             { typeof(InfoComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/"},
             #endregion
         };

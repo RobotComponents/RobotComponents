@@ -148,7 +148,7 @@
     <Compile Include="Components\Utilities\NamingComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
-    <Compile Include="Components\Utilities\TargetVisualizerComponent.cs" />
+    <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
     <Compile Include="Goos\GH_Controller.cs" />
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />

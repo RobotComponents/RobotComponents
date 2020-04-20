@@ -33,6 +33,10 @@ namespace RobotComponentsABB.Utils
         private Dictionary<Guid, SpeedDataComponent> _speedDatasByGuid;
         private List<string> _speedDataNames;
 
+        // contains information on all zoneDatas in file to notify the user about duplicates
+        private Dictionary<Guid, ZoneDataComponent> _zoneDatasByGuid;
+        private List<string> _zoneDataNames;
+
         // constains information on all external axes in file to notify the user about duplicates
         private Dictionary<Guid, ExternalLinearAxisComponent> _externalLinearAxesByGuid;
         private Dictionary<Guid, ExternalRotationalAxisComponent> _externalRotationalAxesByGuid;
@@ -64,6 +68,10 @@ namespace RobotComponentsABB.Utils
             _speedDatasByGuid = new Dictionary<Guid, SpeedDataComponent>();
             _speedDataNames = new List<string>();
             _speedDataNames.AddRange(SpeedData.ValidPredefinedNames.ToList());
+
+            _zoneDatasByGuid = new Dictionary<Guid, ZoneDataComponent>();
+            _zoneDataNames = new List<string>();
+            _zoneDataNames.AddRange(ZoneData.ValidPredefinedNames.ToList());
 
             _externalLinearAxesByGuid = new Dictionary<Guid, ExternalLinearAxisComponent>();
             _externalRotationalAxesByGuid = new Dictionary<Guid, ExternalRotationalAxisComponent>();
@@ -224,7 +232,7 @@ namespace RobotComponentsABB.Utils
             // Empty list
             List<SpeedData> speeddatas = new List<SpeedData>();
 
-            // Add all the targets
+            // Add all the speed datas
             foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _speedDatasByGuid)
             {
                 speeddatas.AddRange(entry.Value.SpeedDatas);
@@ -235,6 +243,28 @@ namespace RobotComponentsABB.Utils
 
             // Return
             return speeddatas;
+        }
+
+        /// <summary>
+        /// Gets all the zone datas that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the zone datas that are stored in the object mananger. </returns>
+        public List<ZoneData> GetZoneDatas()
+        {
+            // Empty list
+            List<ZoneData> zonedatas = new List<ZoneData>();
+
+            // Add all the zone datas
+            foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _zoneDatasByGuid)
+            {
+                zonedatas.AddRange(entry.Value.ZoneDatas);
+            }
+
+            // Sort based on name
+            zonedatas = zonedatas.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return zonedatas;
         }
         #endregion
 
@@ -314,6 +344,23 @@ namespace RobotComponentsABB.Utils
         public List<string> SpeedDataNames
         {
             get { return _speedDataNames; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the Zone Data components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, ZoneDataComponent> ZoneDatasByGuid
+        {
+            get { return _zoneDatasByGuid; }
+        }
+
+        /// <summary>
+        /// A list with all the unique Zone Data names in this object manager
+        /// </summary>
+        public List<string> ZoneDataNames
+        {
+            get { return _zoneDataNames; }
         }
 
         /// <summary>

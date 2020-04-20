@@ -39,6 +39,7 @@ namespace RobotComponentsABB.Utils
             { typeof(TargetComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Code%20Generation/Action%20Target/" },
             { typeof(TimerComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Code%20Generation/Action%20Timer/" },
             { typeof(WaitDIComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Code%20Generation/Action%20Wait%20for%20Digital%20Input/" },
+            { typeof(ZoneDataComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/" }, // TODO: make webpage...
             #endregion
 
             #region Controller utility
@@ -62,6 +63,7 @@ namespace RobotComponentsABB.Utils
             { typeof(DeconstructSpeedDataComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Deconstruct/Deconstruct%20Speed%20Data/" },
             { typeof(DeconstructTargetComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Deconstruct/Deconstruct%20Target/" },
             { typeof(DeconstructWorkObjectComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Deconstruct/Deconstruct%20Work%20Object/" },
+            { typeof(DeconstructZoneDataComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/" }, // TODO: make webpage...
             #endregion
 
             #region Definitions

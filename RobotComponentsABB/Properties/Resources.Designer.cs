@@ -263,6 +263,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructZoneData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructZoneData_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DigitalOutput_Icon {
             get {
                 object obj = ResourceManager.GetObject("DigitalOutput_Icon", resourceCulture);
@@ -1191,6 +1201,26 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap WorkObject_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("WorkObject_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ZoneData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ZoneData_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ZoneData_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ZoneData_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

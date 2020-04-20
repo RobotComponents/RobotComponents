@@ -23,6 +23,7 @@ namespace RobotComponents.BaseClasses.Actions
         private RobotInfo _robotInfo; // Robot info to construct the code for
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
+        private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
         private readonly Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
         private readonly Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
@@ -468,10 +469,18 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
         /// </summary>
-        /// 
         public Dictionary<string, SpeedData> SpeedDatas
         {
             get { return _speedDatas; }
+        }
+
+
+        /// <summary>
+        /// Dictionary that stores all ZoneDatas that are used by the RAPID Generator. 
+        /// </summary>
+        public Dictionary<string, ZoneData> ZoneDatas
+        {
+            get { return _zoneDatas; }
         }
 
         /// <summary>

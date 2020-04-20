@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseClasses\Actions\AbsoluteJointMovement.cs" />
+    <Compile Include="BaseClasses\Actions\ZoneData.cs" />
     <Compile Include="BaseClasses\Definitions\ExternalAxis.cs" />
     <Compile Include="BaseClasses\Actions\Action.cs" />
     <Compile Include="BaseClasses\Actions\AutoAxisConfigurator.cs" />

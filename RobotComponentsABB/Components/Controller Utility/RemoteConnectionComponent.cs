@@ -189,15 +189,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        for (int i = 0; i < programCode.Count; i++)
-                        {
-                            filePathProgram = Path.Combine(directory, "ProgramModule_" + i.ToString() + ".mod");
-                            task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
-                        }
                         for (int i = 0; i < systemCode.Count; i++)
                         {
                             filePathSystem = Path.Combine(directory, "SystemModule_" + i.ToString() + ".sys");
                             task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+                        }
+                        for (int i = 0; i < programCode.Count; i++)
+                        {
+                            filePathProgram = Path.Combine(directory, "ProgramModule_" + i.ToString() + ".mod");
+                            task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
                         }
 
                         // Resets the program pointer of this task to the main entry point.

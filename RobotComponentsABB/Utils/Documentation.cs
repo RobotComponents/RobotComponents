@@ -26,6 +26,9 @@ namespace RobotComponentsABB.Utils
         /// </summary>
         public readonly static Dictionary<Type, string> ComponentWeblinks = new Dictionary<Type, string>()
         {
+
+            { typeof(Documentation), "https://edek-unikassel.github.io/RobotComponents-Documentation/" },
+
             #region Code generation
             { typeof(AutoAxisConfigComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Code%20Generation/Action%20Auto%20Axis%20Configuration/" },
             { typeof(AbsoluteJointMovementComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Code%20Generation/Action%20Absolute%20Joint%20Movement/" },
@@ -96,6 +99,9 @@ namespace RobotComponentsABB.Utils
             { typeof(IRB6640_235_2_55_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             { typeof(IRB6650_125_3_20_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             { typeof(IRB6650_200_2_75_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6650S_125_3_50_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6650S_200_3_00_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
+            { typeof(IRB6650S_90_3_90_Component), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Categories/Definitions/Robot%20Info%20Presets/" },
             #endregion
 
             #region Simulation

@@ -76,6 +76,9 @@
     <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructZoneDataComponent.cs" />
     <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_125_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_90_3_90_Component.cs" />
     <Compile Include="Components\Definitions\IRB6640_235_2_55_Component.cs" />
     <Compile Include="Components\Definitions\IRB6620_150_2_20_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650_200_2_75_Component.cs" />

@@ -73,13 +73,24 @@ namespace RobotComponentsABB.Components.Deconstruct
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Absolute Joint Movement is not valid");
             }
 
+            // Set precision value
+            int precision;
+            if (absolutJointMovement.ZoneData.Name == "fine")
+            {
+                precision = -1;
+            }
+            else
+            {
+                precision = (int)absolutJointMovement.ZoneData.PathZoneTCP;
+            }
+
             // Output
             DA.SetData(0, absolutJointMovement.Name);
             DA.SetDataList(1, absolutJointMovement.InternalAxisValues);
             DA.SetDataList(2, absolutJointMovement.ExternalAxisValues);
             DA.SetData(3, absolutJointMovement.SpeedData);
             DA.SetData(4, absolutJointMovement.MovementType);
-            DA.SetData(5, absolutJointMovement.Precision);
+            DA.SetData(5, precision);
             DA.SetData(6, absolutJointMovement.RobotTool);
         }
 

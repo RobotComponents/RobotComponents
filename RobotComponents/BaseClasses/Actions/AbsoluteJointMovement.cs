@@ -23,7 +23,7 @@ namespace RobotComponents.BaseClasses.Actions
         private List<double> _externalAxisValues;
         private SpeedData _speedData;
         private readonly int _movementType;
-        private int _precision;
+        private ZoneData _zoneData;
         private RobotTool _robotTool;
         #endregion
 
@@ -47,7 +47,7 @@ namespace RobotComponents.BaseClasses.Actions
             _externalAxisValues = new List<double>() { };
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
-            _precision = 0;
+            _zoneData = new ZoneData(0);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
         }
@@ -65,7 +65,7 @@ namespace RobotComponents.BaseClasses.Actions
             _externalAxisValues = externalAxisValues;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
-            _precision = 0;
+            _zoneData = new ZoneData(0);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
         }
@@ -77,7 +77,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision)
         {
             _name = name;
@@ -85,7 +85,7 @@ namespace RobotComponents.BaseClasses.Actions
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
-            _precision = precision;
+            _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
         }
@@ -97,7 +97,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="precision"> Robot movement precision. If this value is -1 the robot will go to exactly the specified position. This means its ZoneData in RAPID code is set to fine. </param>
+        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, RobotTool robotTool)
         {
@@ -106,7 +106,7 @@ namespace RobotComponents.BaseClasses.Actions
             _externalAxisValues = externalAxisValues;
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
-            _precision = precision;
+            _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
         }
 
@@ -123,7 +123,7 @@ namespace RobotComponents.BaseClasses.Actions
             _externalAxisValues = new List<double>(jointMovement.ExternalAxisValues);
             _speedData = jointMovement.SpeedData.Duplicate();
             _movementType = jointMovement.MovementType;
-            _precision = jointMovement.Precision;
+            _zoneData = jointMovement.ZoneData.Duplicate();
 
             if (duplicateMesh == true) { _robotTool = jointMovement.RobotTool.Duplicate(); }
             else { _robotTool = jointMovement.RobotTool.DuplicateWithoutMesh(); }
@@ -219,19 +219,8 @@ namespace RobotComponents.BaseClasses.Actions
                 toolName = _robotTool.Name; 
             }
 
-            // Set zone data text (precision value)
-            string zoneName;
-            if (_precision < 0)
-            {
-                zoneName = ", fine, ";
-            }
-            else
-            {
-                zoneName = ", z" + _precision.ToString() + ", ";
-            }
-
             // MoveAbsJ
-            string code = "MoveAbsJ " + JointTargetName + ", " + _speedData.Name + zoneName + toolName + ";";
+            string code = "MoveAbsJ " + JointTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + ";";
 
             return code;
         }
@@ -337,13 +326,13 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Precision for the movement that describes the ABB zondedata. 
+        /// The zone data that applies to movements.
         /// It defines the size of the generated corner path.
         /// </summary>
-        public int Precision
+        public ZoneData ZoneData
         {
-            get { return _precision; }
-            set { _precision = value; }
+            get { return _zoneData; }
+            set { _zoneData = value; }
         }
 
         /// <summary>

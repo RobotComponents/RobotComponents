@@ -73,11 +73,22 @@ namespace RobotComponentsABB.Components.Deconstruct
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
             }
 
+            // Set precision value
+            int precision;
+            if (movement.ZoneData.Name == "fine")
+            {
+                precision = -1;
+            }
+            else
+            {
+                precision = (int)movement.ZoneData.PathZoneTCP;
+            }
+
             // Output
             DA.SetData(0, movement.Target);
             DA.SetData(1, movement.SpeedData);
             DA.SetData(2, movement.MovementType);
-            DA.SetData(3, movement.Precision);
+            DA.SetData(3, precision);
             DA.SetData(4, movement.RobotTool);
             DA.SetData(5, movement.WorkObject);
             DA.SetData(6, movement.DigitalOutput);

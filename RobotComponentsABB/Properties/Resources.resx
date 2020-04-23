@@ -283,6 +283,9 @@
   <data name="IRB6700_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB6700_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IRB6790_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB6790_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="IRB7600_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB7600_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

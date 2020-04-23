@@ -78,8 +78,10 @@
     <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650S_125_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6790_205_2_80_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_150_3_50_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_340_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6790_235_2_65_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_500_2_55_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_400_2_55_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_325_3_10_Component.cs" />
@@ -496,6 +498,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructZoneData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

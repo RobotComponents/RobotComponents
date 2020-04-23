@@ -73,11 +73,13 @@
     <Compile Include="BaseClasses\Definitions\Presets\IRB4600_20_250.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB6650S_125_350.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB6650S_200_300.cs" />
+    <Compile Include="BaseClasses\Definitions\Presets\IRB6790_235_265.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB7600_150_350.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB7600_400_255.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB7600_340_280.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB7600_325_310.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB7600_500_255.cs" />
+    <Compile Include="BaseClasses\Definitions\Presets\IRB6790_205_280.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB6650S_90_390.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB6640_185_280.cs" />
     <Compile Include="BaseClasses\Definitions\Presets\IRB6640_235_255.cs" />
@@ -691,6 +693,48 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB7600_340_2_80_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_205_2_80_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_235_2_65_link_6.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

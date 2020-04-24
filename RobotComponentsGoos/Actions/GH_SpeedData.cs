@@ -310,6 +310,25 @@ namespace RobotComponentsGoos.Actions
                     return true;
                 }
             }
+
+            //Cast from string: Predefined SpeedData
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+                text = text.Replace("v", String.Empty); // Changes v5 to 5, v10 to 5 etc. 
+
+                try
+                {
+                    double number = System.Convert.ToDouble(text);
+                    Value = new SpeedData(number);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
             return false;
         }
         #endregion

@@ -305,7 +305,27 @@ namespace RobotComponentsGoos.Actions
                     return true;
                 }
             }
+
+            //Cast from string: Predefined ZoneData
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+                text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
+
+                try
+                {
+                    double number = System.Convert.ToDouble(text);
+                    Value = new ZoneData(number);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
             return false;
+
         }
         #endregion
 

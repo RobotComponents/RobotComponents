@@ -21,6 +21,10 @@ using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 using RobotComponentsGoos.Actions;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.08.000
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>

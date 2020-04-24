@@ -136,13 +136,6 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ToolNames.Add(_robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
                 foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
                 {
                     if (entry.Value.LastName == "")
@@ -200,10 +193,6 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
                 foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
                 {
                     entry.Value.ExpireSolution(true);

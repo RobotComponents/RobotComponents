@@ -44,7 +44,7 @@ namespace RobotComponentsABB.Utils
         private List<string> _axisNames;
 
         // contains information on all robot tools in file for code generation
-        private Dictionary<Guid, RobotToolFromDataEulerComponent> _toolsEulerByGuid;
+        private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
         private Dictionary<Guid, RobotToolFromPlanesComponent> _toolsPlanesByGuid;
         private Dictionary<Guid, RobotToolFromQuaternionComponent> _toolsQuaternionByGuid;
         private List<string> _toolNames;
@@ -79,7 +79,7 @@ namespace RobotComponentsABB.Utils
             _externalRotationalAxesByGuid = new Dictionary<Guid, ExternalRotationalAxisComponent>();
             _axisNames = new List<string>();
 
-            _toolsEulerByGuid = new Dictionary<Guid, RobotToolFromDataEulerComponent>();
+            _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
             _toolsQuaternionByGuid = new Dictionary<Guid, RobotToolFromQuaternionComponent>();
             _toolNames = new List<string>() { "tool0" };
@@ -101,7 +101,7 @@ namespace RobotComponentsABB.Utils
             List<RobotTool> robotTools = new List<RobotTool>();
 
             // Add robot tools that are created from Euler data
-            foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _toolsEulerByGuid)
+            foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _oldToolsEulerByGuid)
             {
                 robotTools.Add(entry.Value.RobotTool);
             }
@@ -377,9 +377,9 @@ namespace RobotComponentsABB.Utils
         /// Dictionary with all the Robot Tools created from Euler data components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
-        public Dictionary<Guid, RobotToolFromDataEulerComponent> ToolsEulerByGuid
+        public Dictionary<Guid, OldRobotToolFromDataEulerComponent> OldToolsEulerByGuid
         {
-            get { return _toolsEulerByGuid; }
+            get { return _oldToolsEulerByGuid; }
         }
 
         /// <summary>

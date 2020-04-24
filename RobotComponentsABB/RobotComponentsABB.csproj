@@ -159,7 +159,7 @@
     <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
     <Compile Include="Components\Definitions\RobotInfoComponent.cs" />
-    <Compile Include="Components\Definitions\RobotToolFromDataEulerComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\InverseKinematicsComponent.cs" />

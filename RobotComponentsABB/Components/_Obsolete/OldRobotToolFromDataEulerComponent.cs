@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -16,19 +15,23 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.08.000
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Tool from Euler Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromDataEulerComponent : GH_Component
+    public class OldRobotToolFromDataEulerComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolFromDataEulerComponent()
+        public OldRobotToolFromDataEulerComponent()
           : base("Robot Tool From Data", "RobToool",
               "Defines a robot tool based on translation and rotation values."
               + System.Environment.NewLine +
@@ -39,11 +42,19 @@ namespace RobotComponentsABB.Components.Definitions
 
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -85,6 +96,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed in the future.");
+
             // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
@@ -127,9 +141,9 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsEulerByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldToolsEulerByGuid.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.ToolsEulerByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldToolsEulerByGuid.Add(this.InstanceGuid, this);
             }
 
             // Checks if tool name is already in use and counts duplicates
@@ -147,7 +161,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ToolNames.Add(_robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
+                foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _objectManager.OldToolsEulerByGuid)
                 {
                     if (entry.Value.LastName == "")
                     {
@@ -195,29 +209,6 @@ namespace RobotComponentsABB.Components.Definitions
             #endregion
         }
 
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
-        }
-        #endregion
-
         /// <summary>
         /// This method detects if the user deletes the component from the Grasshopper canvas. 
         /// </summary>
@@ -231,10 +222,10 @@ namespace RobotComponentsABB.Components.Definitions
                 {
                     _objectManager.ToolNames.Remove(_toolName);
                 }
-                _objectManager.ToolsEulerByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldToolsEulerByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromDataEulerComponent> entry in _objectManager.ToolsEulerByGuid)
+                foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _objectManager.OldToolsEulerByGuid)
                 {
                         entry.Value.ExpireSolution(true);
                 }

@@ -65,6 +65,27 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        public Movement(Target target, SpeedData speedData, int movementType, ZoneData zoneData)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _zoneData = zoneData;
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         public Movement(Target target, SpeedData speedData, int movementType, int precision)
         {
@@ -206,6 +227,29 @@ namespace RobotComponents.BaseClasses.Actions
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
+            _workObject = workObject;
+            _digitalOutput = digitalOutput;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement. 
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        public Movement(Target target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _zoneData = zoneData;
+            _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
 

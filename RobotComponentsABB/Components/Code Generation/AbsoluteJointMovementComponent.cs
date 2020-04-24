@@ -19,7 +19,6 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
-using RobotComponentsGoos.Actions;
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
@@ -63,9 +62,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as datatree with numbers", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as datatree with numbers", GH_ParamAccess.tree);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
+            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Custom Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
 
             pManager[2].Optional = true;
+            pManager[4].Optional = true;
         }
 
         // Register the number of fixed input parameters
@@ -103,8 +103,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
             List<string> names = new List<string>();
             GH_Structure<GH_Number> internalAxisValuesTree = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesTree = new GH_Structure<GH_Number>();
-            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
-            List<int> precisions = new List<int>();
+            List<SpeedData> speedDatas = new List<SpeedData>();
+            List<ZoneData> zoneDatas = new List<ZoneData>();
             List<RobotTool> robotTools = new List<RobotTool>();
 
             // Create an empty Robot Tool
@@ -115,8 +115,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataTree(1, out internalAxisValuesTree)) { return; }
             if (!DA.GetDataTree(2, out externalAxisValuesTree)) { return; }
-            if (!DA.GetDataList(3, speedDataGoos)) { return; }
-            if (!DA.GetDataList(4, precisions)) { return; }
+            if (!DA.GetDataList(3, speedDatas)) { return; }
+            if (!DA.GetDataList(4, zoneDatas)) { zoneDatas = new List<ZoneData>() { new ZoneData(0) }; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
@@ -138,8 +138,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
             sizeValues[0] = names.Count;
             sizeValues[1] = internalAxisValuesTree.PathCount;
             sizeValues[2] = externalAxisValuesTree.PathCount;
-            sizeValues[3] = speedDataGoos.Count;
-            sizeValues[4] = precisions.Count;
+            sizeValues[3] = speedDatas.Count;
+            sizeValues[4] = zoneDatas.Count;
             sizeValues[5] = robotTools.Count;
 
             int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
@@ -148,9 +148,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             int namesCounter = -1;
             int internalValueCounter = -1;
             int externalValueCounter = -1;
-            int speedDataGooCounter = -1;
+            int speedDataCounter = -1;
             int precisionCounter = -1;
-            int robotToolGooCounter = -1;
+            int robotToolCounter = -1;
 
             // Clear list
             _jointMovements.Clear();
@@ -163,7 +163,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 List<double> externalAxisValues = new List<double>();
 
                 SpeedData speedData;
-                int precision;
+                ZoneData zoneData;
                 RobotTool robotTool;
 
                 // Target counter
@@ -210,57 +210,58 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // SpeedData counter
                 if (i < sizeValues[3])
                 {
-                    speedData = speedDataGoos[i].Value;
-                    speedDataGooCounter++;
+                    speedData = speedDatas[i];
+                    speedDataCounter++;
                 }
                 else
                 {
-                    speedData = speedDataGoos[speedDataGooCounter].Value;
+                    speedData = speedDatas[speedDataCounter];
                 }
 
                 // Precision counter
                 if (i < sizeValues[4])
                 {
-                    precision = precisions[i];
+                    zoneData= zoneDatas[i];
                     precisionCounter++;
                 }
                 else
                 {
-                    precision = precisions[precisionCounter];
+                    zoneData = zoneDatas[precisionCounter];
                 }
 
                 // Robot tool counter
                 if (i < sizeValues[5])
                 {
                     robotTool = robotTools[i];
-                    robotToolGooCounter++;
+                    robotToolCounter++;
                 }
                 else
                 {
-                    robotTool = robotTools[robotToolGooCounter];
+                    robotTool = robotTools[robotToolCounter];
                 }
 
                 // JointMovement constructor
-                AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedData, precision, robotTool);
+                AbsoluteJointMovement jointMovement = new AbsoluteJointMovement(name, internalAxisValues, externalAxisValues, speedData, zoneData, robotTool);
                 _jointMovements.Add(jointMovement);
             }
 
-            // Check if a right value is used for the input of the precision
-            for (int i = 0; i < precisions.Count; i++)
+            // Check if an exact predefined zonedata value is used
+            for (int i = 0; i < zoneDatas.Count; i++)
             {
-                if (HelperMethods.PrecisionValueIsValid(precisions[i]) == false)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Precision value <" + i + "> is invalid. " +
-                        "In can only be set to -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
+                if (zoneDatas[i].ExactPredefinedValue == false & zoneDatas[i].PreDefinied == true)
+                    {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value <" + i + "> is invalid. " +
+                        "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
+                        "0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
                         "A value of -1 will be interpreted as fine movement in RAPID Code.");
                     break;
                 }
             }
 
             // Check if an exact predefined speeddata value is used
-            for (int i = 0; i < speedDataGoos.Count; i++)
+            for (int i = 0; i < speedDatas.Count; i++)
             {
-                if (speedDataGoos[i].Value.ExactPredefinedValue == false & speedDataGoos[i].Value.PreDefinied == true)
+                if (speedDatas[i].ExactPredefinedValue == false & speedDatas[i].PreDefinied == true)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value <" + i + "> is invalid. " +
                         "The nearest valid predefined speeddata value is used. Valid predefined speeddata values are 5, 10, " +
@@ -387,7 +388,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
                 foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
                 {
-                    if (entry.Value._lastName == "")
+                    if (entry.Value.LastName == "")
                     {
                         entry.Value.ExpireSolution(true);
                     }
@@ -602,7 +603,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("962E09EC-D371-4B81-BE27-E786BEE86481"); }
+            get { return new Guid("2928D07D-BFFD-4C0A-931E-B1BF4AD27D04"); }
         }
 
     }

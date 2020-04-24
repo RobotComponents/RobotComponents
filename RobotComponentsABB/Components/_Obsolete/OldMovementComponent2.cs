@@ -20,20 +20,25 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
+using RobotComponentsGoos.Actions;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.08.000
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class MovementComponent : GH_Component, IGH_VariableParameterComponent
+    public class OldMovementComponent2 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MovementComponent()
+        public OldMovementComponent2()
           : base("Action: Movement", "M",
               "Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
@@ -51,7 +56,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -62,9 +75,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Custom Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
-
-            pManager[3].Optional = true;
+            pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
         }
 
         // Register the number of fixed input parameters
@@ -98,6 +109,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Creates the input value list and attachs it to the input parameter
             CreateValueList();
 
@@ -110,9 +126,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Input variables
             List<Target> targets = new List<Target>();
-            List<SpeedData> speedDatas = new List<SpeedData>();
+            List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> movementTypes = new List<int>();
-            List<ZoneData> zoneDatas = new List<ZoneData>();
+            List<int> precisions = new List<int>();
             List<RobotTool> robotTools = new List<RobotTool>();
             List<WorkObject> workObjects = new List<WorkObject>();
             List<DigitalOutput> digitalOutputs = new List<DigitalOutput>();
@@ -123,9 +139,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targets)) { return; }
-            if (!DA.GetDataList(1, speedDatas)) { return; }
+            if (!DA.GetDataList(1, speedDataGoos)) { return; }
             if (!DA.GetDataList(2, movementTypes)) { return; }
-            if (!DA.GetDataList(3, zoneDatas)) { zoneDatas = new List<ZoneData>() { new ZoneData(0) }; }
+            if (!DA.GetDataList(3, precisions)) { return; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
@@ -167,9 +183,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Get longest Input List
             int[] sizeValues = new int[7];
             sizeValues[0] = targets.Count;
-            sizeValues[1] = speedDatas.Count;
+            sizeValues[1] = speedDataGoos.Count;
             sizeValues[2] = movementTypes.Count;
-            sizeValues[3] = zoneDatas.Count;
+            sizeValues[3] = precisions.Count;
             sizeValues[4] = robotTools.Count;
             sizeValues[5] = workObjects.Count;
             sizeValues[6] = digitalOutputs.Count;
@@ -178,9 +194,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Keeps track of used indicies
             int targetGooCounter = -1;
-            int speedDataCounter = -1;
+            int speedDataGooCounter = -1;
             int movementTypeCounter = -1;
-            int zoneDataCounter = -1;
+            int precisionCounter = -1;
             int robotToolGooCounter = -1;
             int workObjectGooCounter = -1;
             int digitalOutputGooCounter = -1;
@@ -193,7 +209,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 Target target;
                 SpeedData speedData;
                 int movementType;
-                ZoneData zoneData;
+                int precision;
                 RobotTool robotTool;
                 WorkObject workObject;
                 DigitalOutput digitalOutput;
@@ -212,12 +228,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Workobject counter
                 if (i < sizeValues[1])
                 {
-                    speedData = speedDatas[i];
-                    speedDataCounter++;
+                    speedData = speedDataGoos[i].Value;
+                    speedDataGooCounter++;
                 }
                 else
                 {
-                    speedData = speedDatas[speedDataCounter];
+                    speedData = speedDataGoos[speedDataGooCounter].Value;
                 }
 
                 // Movement type counter
@@ -234,12 +250,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 // Precision counter
                 if (i < sizeValues[3])
                 {
-                    zoneData = zoneDatas[i];
-                    zoneDataCounter++;
+                    precision = precisions[i];
+                    precisionCounter++;
                 }
                 else
                 {
-                    zoneData = zoneDatas[zoneDataCounter];
+                    precision = precisions[precisionCounter];
                 }
 
                 // Robot tool counter
@@ -276,7 +292,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
 
                 // Movement constructor
-                Movement movement = new Movement(target, speedData, movementType, zoneData, robotTool, workObject, digitalOutput);
+                Movement movement = new Movement(target, speedData, movementType, precision, robotTool, workObject, digitalOutput);
                 movements.Add(movement);
             }
 
@@ -291,23 +307,22 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
             }
 
-            // Check if an exact predefined zonedata value is used
-            for (int i = 0; i < zoneDatas.Count; i++)
+            // Check if a right value is used for the input of the precision
+            for (int i = 0; i < precisions.Count; i++)
             {
-                if (zoneDatas[i].ExactPredefinedValue == false & zoneDatas[i].PreDefinied == true)
+                if (HelperMethods.PrecisionValueIsValid(precisions[i]) == false)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value <" + i + "> is invalid. " +
-                        "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
-                        "0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Precision value <" + i + "> is invalid. " +
+                        "In can only be set to -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
                         "A value of -1 will be interpreted as fine movement in RAPID Code.");
                     break;
                 }
             }
 
             // Check if an exact predefined speeddata value is used
-            for (int i = 0; i < speedDatas.Count; i++)
+            for (int i = 0; i < speedDataGoos.Count; i++)
             {
-                if (speedDatas[i].ExactPredefinedValue == false & speedDatas[i].PreDefinied == true)
+                if (speedDataGoos[i].Value.ExactPredefinedValue == false & speedDataGoos[i].Value.PreDefinied == true)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value <" + i + "> is invalid. " +
                         "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +
@@ -430,19 +445,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
             Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
             Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, OverrideWorkObject);
             Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, SetDigitalOutput);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
         }
 
         /// <summary>
@@ -602,7 +604,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("78BC39FF-CEBC-44B7-8DF7-9050B001A413"); }
+            get { return new Guid("B1E7F4C2-2FDC-4E9B-8D8A-9F5FBBB5B64F"); }
         }
 
     }

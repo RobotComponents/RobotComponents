@@ -5,32 +5,51 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.08.000
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructMovementComponent : GH_Component
+    public class OldDeconstructMovementComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
-        public DeconstructMovementComponent()
+        public OldDeconstructMovementComponent()
           : base("Deconstruct Movement", "DeConMove",
               "Deconstructs a Movement Component into its parameters."
                 + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -49,7 +68,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
-            pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data");
+            pManager.Register_IntegerParam("Precision", "P", "Precision as int. If value is smaller than 0, precision will be set to fine.");
             pManager.RegisterParam(new RobotToolParameter(), "Override Robot Tool", "RT", "Override Robot Tool");
             pManager.RegisterParam(new WorkObjectParameter(), "Override Work Object", "WO", "Override Work Object");
             pManager.RegisterParam(new DigitalOutputParameter(), "Set Digital Output", "DO", "Digital Output for creation of MoveLDO and MoveJDO");
@@ -61,6 +80,11 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             Movement movement = null;
 
@@ -73,38 +97,26 @@ namespace RobotComponentsABB.Components.Deconstruct
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
             }
 
+            // Set precision value
+            int precision;
+            if (movement.ZoneData.Name == "fine")
+            {
+                precision = -1;
+            }
+            else
+            {
+                precision = (int)movement.ZoneData.PathZoneTCP;
+            }
+
             // Output
             DA.SetData(0, movement.Target);
             DA.SetData(1, movement.SpeedData);
             DA.SetData(2, movement.MovementType);
-            DA.SetData(3, movement.ZoneData);
+            DA.SetData(3, precision);
             DA.SetData(4, movement.RobotTool);
             DA.SetData(5, movement.WorkObject);
             DA.SetData(6, movement.DigitalOutput);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for the component
@@ -119,7 +131,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("ACDB0D71-C805-4AEB-ADC9-99ACC740B096"); }
+            get { return new Guid("1958CD54-4A01-4005-9C47-2E86AC2ABF05"); }
         }
     }
 }

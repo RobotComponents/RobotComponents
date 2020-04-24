@@ -67,13 +67,17 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldMovementComponent2.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructAbsolutJointMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructZoneDataComponent.cs" />
     <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
@@ -107,7 +111,7 @@
     <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />
     <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
-    <Compile Include="Components\Deconstruct\DeconstructAbsolutJointMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructAbsolutJointMovementComponent.cs" />
     <Compile Include="Components\_Obsolete\OldWorkObjectComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\_Obsolete\OldExternalLinearAxisComponent.cs" />

@@ -78,7 +78,15 @@
     <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650S_125_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_300_2_70_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_245_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_200_2_60_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_175_3_05_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_155_2_85_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_150_3_20_Component.cs" />
     <Compile Include="Components\Definitions\IRB6790_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_235_2_65_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_150_3_50_Component.cs" />
     <Compile Include="Components\Definitions\IRB7600_340_2_80_Component.cs" />
     <Compile Include="Components\Definitions\IRB6790_235_2_65_Component.cs" />

@@ -24,9 +24,7 @@ namespace RobotComponentsABB.Utils
     {
         #region fields
         // contains information on all targets in file to notify user about duplicates
-        private Dictionary<Guid, OldAbsoluteJointMovementComponent> _oldJointTargetsByGuid;
         private Dictionary<Guid, AbsoluteJointMovementComponent> _jointTargetsByGuid;
-        private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, TargetComponent> _targetsByGuid;
         private List<string> _targetNames;
 
@@ -44,15 +42,22 @@ namespace RobotComponentsABB.Utils
         private List<string> _axisNames;
 
         // contains information on all robot tools in file for code generation
-        private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
         private Dictionary<Guid, RobotToolFromPlanesComponent> _toolsPlanesByGuid;
         private Dictionary<Guid, RobotToolFromQuaternionComponent> _toolsQuaternionByGuid;
         private List<string> _toolNames;
 
         // contains information on all work objects in file for code generation
-        private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
         private Dictionary<Guid, WorkObjectComponent> _workObjectsByGuid;
         private List<string> _workObjectNames;
+
+        #region OBSOLETE
+        private Dictionary<Guid, OldAbsoluteJointMovementComponent> _oldJointTargetsByGuid;
+        private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
+        private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
+        private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
+        private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
+        #endregion
+
         #endregion
 
         #region constructors
@@ -61,9 +66,7 @@ namespace RobotComponentsABB.Utils
         /// </summary>
         public ObjectManager()
         {
-            _oldJointTargetsByGuid = new Dictionary<Guid, OldAbsoluteJointMovementComponent>();
             _jointTargetsByGuid = new Dictionary<Guid, AbsoluteJointMovementComponent>();
-            _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _targetsByGuid = new Dictionary<Guid, TargetComponent>();
             _targetNames = new List<string>();
 
@@ -79,14 +82,20 @@ namespace RobotComponentsABB.Utils
             _externalRotationalAxesByGuid = new Dictionary<Guid, ExternalRotationalAxisComponent>();
             _axisNames = new List<string>();
 
-            _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
             _toolsPlanesByGuid = new Dictionary<Guid, RobotToolFromPlanesComponent>();
             _toolsQuaternionByGuid = new Dictionary<Guid, RobotToolFromQuaternionComponent>();
             _toolNames = new List<string>() { "tool0" };
 
-            _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
             _workObjectsByGuid = new Dictionary<Guid, WorkObjectComponent>();
             _workObjectNames = new List<string>() { "wobj0" };
+
+            #region OBSOLETE
+            _oldJointTargetsByGuid = new Dictionary<Guid, OldAbsoluteJointMovementComponent>();
+            _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
+            _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
+            _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
+            _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
+            #endregion
         }
         #endregion
 
@@ -100,12 +109,6 @@ namespace RobotComponentsABB.Utils
             // Enpty listt
             List<RobotTool> robotTools = new List<RobotTool>();
 
-            // Add robot tools that are created from Euler data
-            foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _oldToolsEulerByGuid)
-            {
-                robotTools.Add(entry.Value.RobotTool);
-            }
-
             // Add robot tools that are created from Planes
             foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _toolsPlanesByGuid)
             {
@@ -117,6 +120,20 @@ namespace RobotComponentsABB.Utils
             {
                 robotTools.Add(entry.Value.RobotTool);
             }
+
+            #region OBSOLETE
+            // Add robot tools that are created from Euler data
+            foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _oldToolsEulerByGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+
+            // Add robot tools that are created from Quaternion data
+            foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent> entry in _oldToolsQuaternionByGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+            #endregion
 
             // Sort based on name
             robotTools = robotTools.OrderBy(x => x.Name).ToList();
@@ -272,28 +289,12 @@ namespace RobotComponentsABB.Utils
 
         #region Properties
         /// <summary>
-        /// OBSOLETE: Used for old Absolute Joint Movement component. Will be removed in the future.
-        /// </summary>
-        public Dictionary<Guid, OldAbsoluteJointMovementComponent> OldJointTargetsByGuid
-        {
-            get { return _oldJointTargetsByGuid; }
-        }
-
-        /// <summary>
         /// Dictionary with all the Target components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
         public Dictionary<Guid, AbsoluteJointMovementComponent> JointTargetsByGuid
         {
             get { return _jointTargetsByGuid; }
-        }
-
-        /// <summary>
-        /// OBSOLETE: Used for old Target component. Will be removed in the future.
-        /// </summary>
-        public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid
-        {
-            get { return _oldTargetsByGuid; }
         }
 
         /// <summary>
@@ -374,15 +375,6 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// Dictionary with all the Robot Tools created from Euler data components used in this object manager. 
-        /// The components are stored based on there unique GUID.
-        /// </summary>
-        public Dictionary<Guid, OldRobotToolFromDataEulerComponent> OldToolsEulerByGuid
-        {
-            get { return _oldToolsEulerByGuid; }
-        }
-
-        /// <summary>
         /// Dictionary with all the Robot Tools created from Planes components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
@@ -409,14 +401,6 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// OBSOLETE: Used for old Work Object component.Will be removed in the future.
-        /// </summary>
-        public Dictionary<Guid, OldWorkObjectComponent> OldWorkObjectsByGuid 
-        {
-            get { return _oldWorkObjectsByGuid; }
-        }
-
-        /// <summary>
         /// Dictionary with all the Work Object components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
@@ -432,6 +416,49 @@ namespace RobotComponentsABB.Utils
         {
             get { return _workObjectNames; }
         }
+
+        #region OBSOLETE
+        /// <summary>
+        /// OBSOLETE: Used for old Absolute Joint Movement component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldAbsoluteJointMovementComponent> OldJointTargetsByGuid
+        {
+            get { return _oldJointTargetsByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Target component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid
+        {
+            get { return _oldTargetsByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Absolute Joint Movement component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldRobotToolFromDataEulerComponent> OldToolsEulerByGuid
+        {
+            get { return _oldToolsEulerByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Absolute Joint Movement component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldRobotToolFromQuaternionComponent> OldToolsQuaternionByGuid
+        {
+            get { return _oldToolsQuaternionByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Work Object component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldWorkObjectComponent> OldWorkObjectsByGuid
+        {
+            get { return _oldWorkObjectsByGuid; }
+        }
+        #endregion
+
         #endregion
     }
 }

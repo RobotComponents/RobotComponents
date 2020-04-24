@@ -103,6 +103,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
         /// <summary>
         /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
+        /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
@@ -136,6 +137,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
         /// <summary>
         /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
+        /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh as a list with meshes. </param>
@@ -171,6 +173,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
         /// With load data as defined for the default tool tool0.
+        /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
@@ -202,6 +205,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <summary>
         /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
         /// With load data as defined for the default tool tool0.
+        /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh defined in the tool coordinate space as a list with meshes </param>
@@ -232,8 +236,42 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from the TCP point and the TCP orientation defined as a quatertion.
+        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
         /// With load data as defined for the default tool tool0.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh defined in the tool coordinate space as a list with meshes </param>
+        /// <param name="attachmentPlane"> The attachement plane. </param>
+        /// <param name="x"> The x coordinate of the TCP point. </param>
+        /// <param name="y"> The y coordinate of the TCP point. </param>
+        /// <param name="z"> The z coordinate of the TCP point.</param>
+        /// <param name="q1"> The real part of the quaternion. </param>
+        /// <param name="q2"> The first imaginary coefficient of the quaternion. </param>
+        /// <param name="q3"> The second imaginary coefficient of the quaternion. </param>
+        /// <param name="q4"> The third imaginary coefficient of the quaternion. </param>
+        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, double x, 
+            double y, double z, double q1, double q2, double q3, double q4)
+        {
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
+            _attachmentPlane = attachmentPlane;
+
+            _robotHold = true;
+            _mass = 0.001;
+            _centerOfGravity = new Vector3d(0, 0, 0.001);
+            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _inertia = new Vector3d(0, 0, 0);
+
+            _toolPlane = HelperMethods.QuaternionToPlane(_attachmentPlane, x, y, z, q1, q2, q3, q4);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Defines a robot tool from the TCP point and the TCP orientation defined as a quatertion.
+        /// With load data as defined for the default tool tool0. 
+        /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>

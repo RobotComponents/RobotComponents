@@ -88,6 +88,24 @@ namespace RobotComponents.Utils
         /// <summary>
         /// Transforms a Quarternion to a Plane.
         /// </summary>
+        /// <param name="refPlane"> The reference plane. </param>
+        /// <param name="origin"> The origin of the plane. </param>
+        /// <param name="quat"> The quarternion </param>
+        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        public static Plane QuaternionToPlane(Plane refPlane, Point3d origin, Quaternion quat)
+        {
+            quat.GetRotation(out Plane plane);
+            plane = new Plane(origin, plane.XAxis, plane.YAxis);
+
+            Transform transform = Transform.PlaneToPlane(Plane.WorldXY, refPlane);
+            plane.Transform(transform);
+
+            return plane;
+        }
+
+        /// <summary>
+        /// Transforms a Quarternion to a Plane.
+        /// </summary>
         /// <param name="origin"> The origin of the plane. </param>
         /// <param name="A"> The real part of the quaternion. </param>
         /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
@@ -98,6 +116,23 @@ namespace RobotComponents.Utils
         {
             Quaternion quat = new Quaternion(A, B, C, D);
             Plane plane = QuaternionToPlane(origin, quat);
+            return plane;
+        }
+
+        /// <summary>
+        /// Transforms a Quarternion to a Plane.
+        /// </summary
+        /// <param name="refPlane"> The reference plane. </param>
+        /// <param name="origin"> The origin of the plane. </param>
+        /// <param name="A"> The real part of the quaternion. </param>
+        /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
+        /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
+        /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
+        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        public static Plane QuaternionToPlane(Plane refPlane, Point3d origin, double A, double B, double C, double D)
+        {
+            Quaternion quat = new Quaternion(A, B, C, D);
+            Plane plane = QuaternionToPlane(refPlane, origin, quat);
             return plane;
         }
 
@@ -116,6 +151,25 @@ namespace RobotComponents.Utils
         {
             Point3d point = new Point3d(x, y, z);
             Plane plane = QuaternionToPlane(point, A, B, C, D);
+            return plane;
+        }
+
+        /// <summary>
+        /// Transforms a Quarternion to a Plane.
+        /// </summary>
+        /// <param name="refPlane"> The reference plane. </param>
+        /// <param name="x"> The x coordinate of the plane origin. </param>
+        /// <param name="y"> The y coordinate of the plane origin. </param>
+        /// <param name="z"> The z coordinate of the plane origin.</param>
+        /// <param name="A"> The real part of the quaternion. </param>
+        /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
+        /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
+        /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
+        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        public static Plane QuaternionToPlane(Plane refPlane, double x, double y, double z, double A, double B, double C, double D)
+        {
+            Point3d point = new Point3d(x, y, z);
+            Plane plane = QuaternionToPlane(refPlane, point, A, B, C, D);
             return plane;
         }
 

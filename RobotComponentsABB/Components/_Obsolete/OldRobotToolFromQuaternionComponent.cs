@@ -21,14 +21,14 @@ namespace RobotComponentsABB.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromQuaternionComponent : GH_Component
+    public class OldRobotToolFromQuaternionComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolFromQuaternionComponent()
+        public OldRobotToolFromQuaternionComponent()
           : base("Robot Tool From Quaternion Data", "RobTool",
               "Defines a robot tool based on TCP coorindate and quarternion values."
               + System.Environment.NewLine +
@@ -39,11 +39,19 @@ namespace RobotComponentsABB.Components.Definitions
 
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -53,7 +61,6 @@ namespace RobotComponentsABB.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item, "default_tool");
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddNumberParameter("Coord X", "X", "The x-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Coord Y", "Y", "The y-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
             pManager.AddNumberParameter("Coord Z", "Z", "The z-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
@@ -87,10 +94,14 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
-            Plane attachmentPlane = Plane.Unset;
             double x = 0.0;
             double y = 0.0;
             double z = 0.0;
@@ -102,17 +113,16 @@ namespace RobotComponentsABB.Components.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
-            if (!DA.GetData(2, ref attachmentPlane)) { return; }
-            if (!DA.GetData(3, ref x)) { return; }
-            if (!DA.GetData(4, ref y)) { return; }
-            if (!DA.GetData(5, ref z)) { return; }
-            if (!DA.GetData(6, ref quat1)) { return; }
-            if (!DA.GetData(7, ref quat2)) { return; }
-            if (!DA.GetData(8, ref quat3)) { return; }
-            if (!DA.GetData(9, ref quat4)) { return; }
+            if (!DA.GetData(2, ref x)) { return; }
+            if (!DA.GetData(3, ref y)) { return; }
+            if (!DA.GetData(4, ref z)) { return; }
+            if (!DA.GetData(5, ref quat1)) { return; }
+            if (!DA.GetData(6, ref quat2)) { return; }
+            if (!DA.GetData(7, ref quat3)) { return; }
+            if (!DA.GetData(8, ref quat4)) { return; }
 
             // Create the robot tool
-            _robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);
+            _robotTool = new RobotTool(name, meshes, x, y, z, quat1, quat2, quat3, quat4);
 
             // Outputs
             DA.SetData(0, _robotTool);
@@ -134,9 +144,9 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsQuaternionByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldToolsQuaternionByGuid.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.ToolsQuaternionByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldToolsQuaternionByGuid.Add(this.InstanceGuid, this);
             }
 
             // Checks if tool name is already in use and counts duplicates
@@ -194,29 +204,6 @@ namespace RobotComponentsABB.Components.Definitions
             }
             #endregion
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
-        }
-        #endregion
 
         /// <summary>
         /// This method detects if the user deletes the component from the Grasshopper canvas. 
@@ -277,7 +264,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("66039008-4312-4F9D-A00F-6556E474934B"); }
+            get { return new Guid("037FD832-E3DF-41AB-AE03-23CE4FFEF075"); }
         }
     }
 }

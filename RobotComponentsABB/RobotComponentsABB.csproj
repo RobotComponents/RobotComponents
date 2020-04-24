@@ -67,6 +67,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />

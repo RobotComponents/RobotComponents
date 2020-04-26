@@ -18,6 +18,7 @@ namespace RobotComponentsABB.Utils
     {
         #region fields
         /// <summary>
+        /// OBSOLETE: Is only uaed in obsolete components. Use the ZoneData base class to acces this data. 
         /// List with the pre-defined precision values that can be used for defining the precision of a robot movement. 
         /// </summary>
         private static readonly int[] _validPrecisionValues = new int[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -86,6 +87,7 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
+        /// OBSOLETE: Is only used in obsolete components. Use the ZoneData base class to acces predefined values.
         /// A method to check if the precision value is valid to use a pre-defined precision value (zonedata). 
         /// </summary>
         /// <param name="value"> The precision value (double) to check for. </param>

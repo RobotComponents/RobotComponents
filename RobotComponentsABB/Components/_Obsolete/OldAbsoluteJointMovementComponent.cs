@@ -91,7 +91,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
         /// <summary>
         /// Registers all the output parameters for this component.
-        /// </summary>
+        /// </summary>GH_RuntimeMessageLevel.Blank
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
@@ -112,7 +112,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 

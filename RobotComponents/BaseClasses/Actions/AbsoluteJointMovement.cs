@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
@@ -44,7 +45,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = new List<double>() { };
+            _externalAxisValues = Enumerable.Repeat(9e9, 6).ToList();
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
             _zoneData = new ZoneData(0);
@@ -62,7 +63,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
+            _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
             _zoneData = new ZoneData(0);
@@ -82,7 +83,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
+            _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
             _zoneData = new ZoneData(precision);
@@ -102,7 +103,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
+            _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
             _zoneData = zoneData;
@@ -123,7 +124,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
+            _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
             _zoneData = new ZoneData(precision);
@@ -143,7 +144,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _name = name;
             _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
+            _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
             _zoneData = zoneData;
@@ -199,6 +200,69 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Method that checks the list with external axis values. 
+        /// Always returns a list with 6 external axis values. 
+        /// For missing values 9e9 (not connected) will be used. 
+        /// </summary>
+        /// <param name="axisValues">A list with the external axis values.</param>
+        /// <returns>Returns a list with 6 external axis values.</returns>
+        private List<double> CheckExternalAxisValues(List<double> axisValues)
+        {
+            List<double> result = new List<double>();
+            int n = Math.Min(axisValues.Count, 6);
+
+            // Copy definied external axis values
+            for (int i = 0; i < n; i++)
+            {
+                result.Add(axisValues[i]);
+            }
+
+            // Add missing external axisValues
+            for (int i = n; i < 6; i++)
+            {
+                result.Add(9e9);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Cheks for the axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robotInfo"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckForAxisLimits(RobotInfo robotInfo)
+        {
+            // Initiate list
+            List<string> errors = new List<string>();
+
+            // Check for internal axis values
+            for (int i = 0; i < _internalAxisValues.Count; i++)
+            {
+                if (robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
+                {
+                    errors.Add("Movement " + _name + "\\wobj0: Internal axis value " + (i + 1).ToString() + " is not in range.");
+                }
+            }
+
+            // Check for external axis values
+            for (int i = 0; i < robotInfo.ExternalAxis.Count; i++)
+            {
+                if (_externalAxisValues[i] == 9e9)
+                {
+                    errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not definied by the user.");
+                }
+
+                else if (robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
+                {
+                    errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not in range.");
+                }
+            }
+
+            return errors;
+        }
+
+        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
@@ -217,16 +281,18 @@ namespace RobotComponents.BaseClasses.Actions
 
             // Adds all External Axis Values
             code += "], [";
-            for (int i = 0; i < this._externalAxisValues.Count; i++)
+            for (int i = 0; i < 6; i++)
             {
-                code += this._externalAxisValues[i].ToString("0.##") + ", ";
+                if (this._externalAxisValues[i] == 9e9)
+                {
+                    code += "9E9" + ", ";
+                }
+                else
+                {
+                    code += this._externalAxisValues[i].ToString("0.##") + ", ";
+                }
             }
 
-            // Adds 9E9 for all missing external Axis Values
-            for (int i = this._externalAxisValues.Count; i < 6; i++)
-            {
-                code += "9E9" + ", ";
-            }
             code = code.Remove(code.Length - 2);
             code += "]];";
 
@@ -282,6 +348,7 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 RAPIDGenerator.Targets.Add(JointTargetName, new Target());
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.RobotInfo));
             }
         }
 
@@ -345,7 +412,7 @@ namespace RobotComponents.BaseClasses.Actions
         public List<double> ExternalAxisValues
         {
             get { return _externalAxisValues; }
-            set { _externalAxisValues = value; }
+            set { _externalAxisValues = CheckExternalAxisValues(value); }
         }
 
         /// <summary>

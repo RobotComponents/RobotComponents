@@ -456,7 +456,6 @@ namespace RobotComponents.BaseClasses.Actions
                     {
                         code += Target.ExternalAxisValues[i].ToString("0.##") + ", ";
                     }
-
                 }
                 code = code.Remove(code.Length - 2, 2);
                 code += "]];";
@@ -624,6 +623,7 @@ namespace RobotComponents.BaseClasses.Actions
                 {
                     RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
                     RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.RobotInfo.InverseKinematics.ErrorText));
                 }
             }
         }

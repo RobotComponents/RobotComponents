@@ -91,7 +91,7 @@ namespace RobotComponentsABB.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
@@ -191,38 +191,12 @@ namespace RobotComponentsABB.Components.Obsolete
             // Check if there is a mesh available to display
             if (_fk.PosedInternalAxisMeshes != null)
             {
-                // A boolean that defines if the axis values are valid.
-                bool AxisAreValid = true;
-
-                // Chekc if the internal axis values are valid
-                for (int i = 0; i < _fk.InternalAxisInLimit.Count; i++)
-                {
-                    if (_fk.InternalAxisInLimit[i] == false)
-                    {
-                        AxisAreValid = false;
-                        break;
-                    }
-                }
-
-                // Check if the external axis values are valid
-                if (AxisAreValid == true)
-                {
-                    for (int i = 0; i < _fk.ExternalAxisInLimit.Count; i++)
-                    {
-                        if (_fk.ExternalAxisInLimit[i] == false)
-                        {
-                            AxisAreValid = false;
-                            break;
-                        }
-                    }
-                }
-
                 // Initiate the display color and transparancy of the robot mesh
                 Color color;
                 double trans;
 
                 // Set the display color and transparancy of the robot mesh
-                if (AxisAreValid == true)
+                if (_fk.InLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;

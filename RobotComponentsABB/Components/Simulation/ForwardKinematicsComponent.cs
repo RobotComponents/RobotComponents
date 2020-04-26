@@ -171,38 +171,12 @@ namespace RobotComponentsABB.Components.Simulation
             // Check if there is a mesh available to display and the onlyTCP function not active
             if (_fk.PosedInternalAxisMeshes != null && !_hideMesh)
             {
-                // A boolean that defines if the axis values are valid.
-                bool AxisAreValid = true;
-
-                // Chekc if the internal axis values are valid
-                for (int i = 0; i < _fk.InternalAxisInLimit.Count; i++)
-                {
-                    if (_fk.InternalAxisInLimit[i] == false)
-                    {
-                        AxisAreValid = false;
-                        break;
-                    }
-                }
-
-                // Check if the external axis values are valid
-                if (AxisAreValid == true)
-                {
-                    for (int i = 0; i < _fk.ExternalAxisInLimit.Count; i++)
-                    {
-                        if (_fk.ExternalAxisInLimit[i] == false)
-                        {
-                            AxisAreValid = false;
-                            break;
-                        }
-                    }
-                }
-
                 // Initiate the display color and transparancy of the robot mesh
                 Color color;
                 double trans;
 
                 // Set the display color and transparancy of the robot mesh
-                if (AxisAreValid == true)
+                if (_fk.InLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;

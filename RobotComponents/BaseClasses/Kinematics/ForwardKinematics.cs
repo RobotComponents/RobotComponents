@@ -23,14 +23,13 @@ namespace RobotComponents.BaseClasses.Kinematics
         private Plane _positionPlane = Plane.Unset; // Robot Position Plane: needed for external linear axis
         private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
         private double[] _internalAxisRads; // Internal Axis Values in Radiants
-        private readonly List<bool> _internalAxisInLimit = new List<bool>(); // Internal Axis in Limit?: Bool List
         private Plane[] _posedExternalAxisPlanes; // External Axis Planes 
         private List<double> _externalAxisValues = new List<double>(); // External Axis Values in degrees or meters
-        private readonly List<bool> _externalAxisInLimit = new List<bool>(); // External Axis in Limit?: Bool List
         private readonly List<string> _errorText = new List<string>(); // Error text
         private List<Mesh> _posedInternalAxisMeshes = new List<Mesh>(); // Posed Robot Meshes
         private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>(); //Posed Axis Meshes
         private Plane _tcpPlane = Plane.Unset; // TCP Plane of end effector
+        private bool _inLimits = true; // Indicates if the axis values are in limits 
         private bool _hideMesh;
         #endregion
 
@@ -92,10 +91,9 @@ namespace RobotComponents.BaseClasses.Kinematics
                     forwardKinematics.PosedExternalAxisMeshes[i][j] = forwardKinematics.PosedExternalAxisMeshes[i][j].DuplicateMesh();
                 }
             }
-            _internalAxisInLimit = new List<bool>(forwardKinematics.InternalAxisInLimit);
-            _externalAxisInLimit = new List<bool>(forwardKinematics.ExternalAxisInLimit);
             _internalAxisRads = new List<double>(forwardKinematics.InternalAxisRads).ToArray();
             _posedExternalAxisPlanes = new List<Plane>(forwardKinematics.PosedExternalAxisPlanes).ToArray();
+            _inLimits = forwardKinematics.InLimits;
         }
 
         /// <summary>
@@ -242,8 +240,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         public void Clear()
         {
-            _internalAxisInLimit.Clear();
-            _externalAxisInLimit.Clear();
+            _errorText.Clear();
             _posedInternalAxisMeshes.Clear();
             for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
             {
@@ -252,6 +249,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             _posedExternalAxisMeshes.Clear();
             _positionPlane = Plane.Unset;
             _tcpPlane = Plane.Unset;
+            _inLimits = true;
         }
 
         /// <summary>
@@ -275,16 +273,11 @@ namespace RobotComponents.BaseClasses.Kinematics
         {
             for (int i = 0; i < _internalAxisValues.Count; i++)
             {
-                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false))
+                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
                 {
-                    _internalAxisInLimit.Add(true);
+                    _errorText.Add("Internal axis value " + (i + 1).ToString() + " is not in range.");
+                    _inLimits = false;
                 }
-                else
-                {
-                    _errorText.Add("Internal Axis Value " + i + " is not in Range.");
-                    _internalAxisInLimit.Add(false);
-                }
-
             }
         }
 
@@ -293,16 +286,18 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         private void CheckForExternalAxisLimits()
         {
-            for (int i = 0; i < _externalAxisValues.Count; i++)
+            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                if (_robotInfo.ExternalAxisLimits[i].IncludesParameter(_externalAxisValues[i], false))
+                if (_externalAxisValues[i] == 9e9)
                 {
-                    _externalAxisInLimit.Add(true);
+                    _errorText.Add("External axis value " + (i + 1).ToString() + " is not definied by the user.");
+                    _inLimits = false;
                 }
-                else
+
+                else if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
                 {
-                    _errorText.Add("External Axis Value " + i + " is not in Range.");
-                    _externalAxisInLimit.Add(false);
+                    _errorText.Add("External axis value " + (i + 1).ToString() + " is not in range.");
+                    _inLimits = false;
                 }
             }
         }
@@ -356,19 +351,11 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// List of boolean defining whether or not the robot is outside of there axis limits.
+        /// Bool that indicates if the internal and external values are within their limits
         /// </summary>
-        public List<bool> InternalAxisInLimit
+        public bool InLimits
         {
-            get { return _internalAxisInLimit; }
-        }
-
-        /// <summary>
-        /// List of bools defining if the external axes are in their limit.
-        /// </summary>
-        public List<bool> ExternalAxisInLimit
-        {
-            get { return _externalAxisInLimit; }
+            get { return _inLimits; }
         }
 
         /// <summary>
@@ -413,7 +400,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
-        /// List of strings collecting error messages which can be displayed in a grasshopper component.
+        /// List of strings with collected error messages. 
         /// </summary>
         public List<string> ErrorText
         {
@@ -421,6 +408,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         }
 
         /// <summary>
+        /// 
         /// A boolean that indicates if the posed mesh is or will be calculated
         /// </summary>
         public bool HideMesh

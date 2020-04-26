@@ -47,6 +47,9 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         private readonly List<double> _internalAxisValues = new List<double>(); // Final calculated internal axis values
         private readonly List<double> _externalAxisValues = new List<double>(); // Final calculated external axis values
+
+        private readonly List<string> _errorText = new List<string>(); // Error text
+        private bool _inLimits = true; // Indicates if the axis values are in limits 
         #endregion
 
         #region constructors
@@ -96,6 +99,8 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             _internalAxisValues = new List<double>(inverseKinematics.InternalAxisValues);
             _externalAxisValues = new List<double>(inverseKinematics.ExternalAxisValues);
+            _errorText = new List<string>(inverseKinematics.ErrorText);
+            _inLimits = inverseKinematics.InLimits;
         }
 
         /// <summary>
@@ -182,12 +187,16 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         public void Calculate()
         {
+            ClearCurrentSolutions();
             CalculateInternalAxisValues();
             CalculateExternalAxisValues();
+            CheckForInternalAxisLimits();
+            CheckForExternalAxisLimits();
         }
 
         /// <summary>
         /// Calculates the internal axis values. 
+        /// This method does not check the internal axis limits. 
         /// </summary>
         public void CalculateInternalAxisValues()
         {
@@ -341,6 +350,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         /// <summary>
         /// Calculates the external axis values.
+        /// This method does not check the external axis limits. 
         /// </summary>
         public void CalculateExternalAxisValues()
         {
@@ -410,6 +420,9 @@ namespace RobotComponents.BaseClasses.Kinematics
             _internalAxisValue4.Clear();
             _internalAxisValue5.Clear();
             _internalAxisValue6.Clear();
+
+            _errorText.Clear();
+            _inLimits = true;
         }
 
         /// <summary>
@@ -471,6 +484,36 @@ namespace RobotComponents.BaseClasses.Kinematics
 
             // Returns the position plane of the robot
             return plane;
+        }
+
+        /// <summary>
+        /// Checks if the interal axis values are outside its limits.
+        /// </summary>
+        private void CheckForInternalAxisLimits()
+        {
+            for (int i = 0; i < _internalAxisValues.Count; i++)
+            {
+                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
+                { 
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
+                    _inLimits = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if the external axis values are outside its limits.
+        /// </summary>
+        private void CheckForExternalAxisLimits()
+        {
+            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            {
+                if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
+                {
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + (i + 1).ToString() + " is not in range.");
+                    _inLimits = false;
+                }
+            }
         }
         #endregion
 
@@ -545,6 +588,22 @@ namespace RobotComponents.BaseClasses.Kinematics
         public List<double> ExternalAxisValues 
         {
             get { return _externalAxisValues; }
+        }
+
+        /// <summary>
+        /// List of strings with collected error messages. 
+        /// </summary>
+        public List<string> ErrorText
+        {
+            get { return _errorText; }
+        }
+
+        /// <summary>
+        /// Bool that indicates if the internal and external values are within their limits
+        /// </summary>
+        public bool InLimits
+        {
+            get { return _inLimits; }
         }
         #endregion
     }

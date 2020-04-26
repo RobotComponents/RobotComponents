@@ -25,6 +25,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         private readonly List<Curve> _paths; // The path curves between two movement targets
         private readonly List<List<double>> _internalAxisValues; // The internal axis values needed to follow the path
         private readonly List<List<double>> _externalAxisValues; // The external axis values needed to follow the path
+        private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         #endregion
 
         #region constructors
@@ -86,6 +87,10 @@ namespace RobotComponents.BaseClasses.Kinematics
             // Hide the mesh when calculating the forward kinematics
             _robotInfo.ForwardKinematics.HideMesh = true;
 
+            // Axis logic and numbers
+            int nAxes = _robotInfo.ExternalAxis.Count;
+            int logic;
+
             // Initiate movement
             Movement movement1 = new Movement(new Target("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
             Movement movement2; // Used for movement[i+1]: to movement we are carrying out
@@ -101,7 +106,8 @@ namespace RobotComponents.BaseClasses.Kinematics
             if (movements[0] is AbsoluteJointMovement castedJointMovement)
             {
                 target2InternalAxisValues = new List<double>(castedJointMovement.InternalAxisValues);
-                target2ExternalAxisValues = new List<double>(castedJointMovement.ExternalAxisValues);
+                target2ExternalAxisValues = new List<double>(castedJointMovement.ExternalAxisValues.GetRange(0,nAxes));
+                _errorText.AddRange(castedJointMovement.CheckForAxisLimits(_robotInfo));
             }
             else if (movements[0] is Movement castedMovement)
             {
@@ -109,6 +115,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 _robotInfo.InverseKinematics.Calculate();
                 target2InternalAxisValues = new List<double>(_robotInfo.InverseKinematics.InternalAxisValues);
                 target2ExternalAxisValues = new List<double>(_robotInfo.InverseKinematics.ExternalAxisValues);
+                _errorText.AddRange(new List<string>(_robotInfo.InverseKinematics.ErrorText));
             }
 
             // Initialize other variables
@@ -122,9 +129,6 @@ namespace RobotComponents.BaseClasses.Kinematics
             // Initiate list with points between two targets
             List<Point3d> points = new List<Point3d>();
 
-            // Axis logic
-            int logic;
-
             // Make path if we have at least two movements with targets
             if (movements.Count > 1)
             {
@@ -136,6 +140,9 @@ namespace RobotComponents.BaseClasses.Kinematics
                         // Get the movement
                         jointMovement = movements[i + 1] as AbsoluteJointMovement;
 
+                        // Check for axis limits
+                        _errorText.AddRange(jointMovement.CheckForAxisLimits(_robotInfo));
+
                         // Update tool
                         _robotInfo.Tool = jointMovement.RobotTool;
 
@@ -145,7 +152,7 @@ namespace RobotComponents.BaseClasses.Kinematics
 
                         // Get the axis values definied for the joint movement
                         target2InternalAxisValues = new List<double>(jointMovement.InternalAxisValues);
-                        target2ExternalAxisValues = new List<double>(jointMovement.ExternalAxisValues); // TODO: match list length with external axis list length of robot info
+                        target2ExternalAxisValues = new List<double>(jointMovement.ExternalAxisValues.GetRange(0, nAxes)); // TODO: match list length with external axis list length of robot info
 
                         // Calculate axis value difference and change between both targets
                         externalAxisValueChange.Clear();
@@ -207,7 +214,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                         }
 
                         // Add last point
-                        _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                        _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues.GetRange(0, nAxes));
                         Point3d lastPoint = _robotInfo.ForwardKinematics.TCPPlane.Origin;
                         if (points[points.Count - 1] != lastPoint)
                         {
@@ -234,6 +241,12 @@ namespace RobotComponents.BaseClasses.Kinematics
                         _robotInfo.InverseKinematics.Calculate();
                         target2InternalAxisValues = new List<double>(_robotInfo.InverseKinematics.InternalAxisValues);
                         target2ExternalAxisValues = new List<double>(_robotInfo.InverseKinematics.ExternalAxisValues);
+
+                        // Collect error message for absolute joint movement
+                        if (movement2.MovementType == 0)
+                        {
+                            _errorText.AddRange(new List<string>(_robotInfo.InverseKinematics.ErrorText));
+                        }
 
                         // Calculate axis value difference between both targets: needed for all movement types
                         externalAxisValueChange.Clear();
@@ -323,7 +336,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                             else if (movements[i] is AbsoluteJointMovement)
                             {
                                 jointMovement = movements[i] as AbsoluteJointMovement;
-                                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues.GetRange(0, nAxes));
                                 movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                             }
 
@@ -489,9 +502,9 @@ namespace RobotComponents.BaseClasses.Kinematics
             else if (movements[movements.Count - 1] is AbsoluteJointMovement)
             {
                 jointMovement = movements[movements.Count - 1] as AbsoluteJointMovement;
-                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues);
+                _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues.GetRange(0, nAxes));
                 _internalAxisValues.Add(new List<double>(jointMovement.InternalAxisValues));
-                _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues));
+                _externalAxisValues.Add(new List<double>(jointMovement.ExternalAxisValues.GetRange(0, nAxes)));
                 _planes.Add(new Plane(_robotInfo.ForwardKinematics.TCPPlane));
             }
         }
@@ -613,11 +626,10 @@ namespace RobotComponents.BaseClasses.Kinematics
             _internalAxisValues.Clear();
             _externalAxisValues.Clear();
 
-            // Clear the list with planes
+            // Clears other lists
             _planes.Clear();
-
-            // Clear the list with path curves
             _paths.Clear();
+            _errorText.Clear();
         }
         #endregion
 
@@ -681,6 +693,14 @@ namespace RobotComponents.BaseClasses.Kinematics
         public List<List<double>> ExternalAxisValues 
         {
             get { return _externalAxisValues; }
+        }
+
+        /// <summary>
+        /// List of strings with collected error messages. 
+        /// </summary>
+        public List<string> ErrorText
+        {
+            get { return _errorText; }
         }
         #endregion
     }

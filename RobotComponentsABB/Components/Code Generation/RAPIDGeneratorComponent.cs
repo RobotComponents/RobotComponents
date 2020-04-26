@@ -79,6 +79,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbs = true;
+        private bool _raiseWarnings = false;
         private string _programCode = "";
         private string _systemCode = "";
 
@@ -146,12 +147,34 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
+
+                // Raise warnings?
+                if (_rapidGenerator.ErrorText.Count != 0)
+                {
+                    _raiseWarnings = true;
+                }
+                else
+                {
+                    _raiseWarnings = false;
+                }
             }
 
             // Checks if first Movement is MoveAbsJ
             if (_firstMovementIsMoveAbs == false)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
+            }
+
+            // Show warning messages
+            if (_raiseWarnings == true)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only axis values of absolute joint movements are checked.");
+
+                for (int i = 0; i < _rapidGenerator.ErrorText.Count; i++)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _rapidGenerator.ErrorText[i]);
+                    if (i == 30) { break; }
+                }
             }
 
             // Output

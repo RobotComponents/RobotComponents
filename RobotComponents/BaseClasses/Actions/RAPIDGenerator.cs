@@ -34,6 +34,7 @@ namespace RobotComponents.BaseClasses.Actions
         private string _systemName; // The module name of the rapod system code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
+        private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         #endregion
 
         #region constructors
@@ -100,10 +101,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID program code as a string. </returns>
         public string CreateProgramCode()
         {
-            // Resets Dictionaries
+            // Resets dictionaries and error messages
             _movements.Clear();
             _speedDatas.Clear();
             _targets.Clear();
+            _errorText.Clear();
 
             // Save initial tool
             RobotTool initTool = _robotInfo.Tool.Duplicate();
@@ -505,6 +507,14 @@ namespace RobotComponents.BaseClasses.Actions
         public StringBuilder StringBuilder
         {
             get { return _stringBuilder; }
+        }
+
+        /// <summary>
+        /// List of strings with collected error messages. 
+        /// </summary>
+        public List<string> ErrorText
+        {
+            get { return _errorText; }
         }
         #endregion
     }

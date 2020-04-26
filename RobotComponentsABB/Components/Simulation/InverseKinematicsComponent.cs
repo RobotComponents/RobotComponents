@@ -74,6 +74,12 @@ namespace RobotComponentsABB.Components.Simulation
             InverseKinematics inverseKinematics = new InverseKinematics(Movement, robotInfo);
             inverseKinematics.Calculate();
 
+            // Check the values
+            for (int i = 0; i < inverseKinematics.ErrorText.Count; i++)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, inverseKinematics.ErrorText[i]);
+            }
+
             // Output
             DA.SetDataList(0, inverseKinematics.InternalAxisValues);
             DA.SetDataList(1, inverseKinematics.ExternalAxisValues);

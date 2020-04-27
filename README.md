@@ -36,7 +36,6 @@ Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponents
 
 ## Roadmap
 Planned developments:
-- Adding the ABB IRB 6620, 6640, 6650S, 6700, 6790 and 7600 series as Robot Info presets. 
 - Adding support for MultiMove.
 - Improve inverse kinematics performance.
 
@@ -54,7 +53,7 @@ RobotComponents is a free to use Grasshopper plugin and does not legally bind yo
 
 ```
 EDEK Uni Kassel (2020).  
-RobotComponents v0.07.004: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+RobotComponents v0.08.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/EDEK-UniKassel/RobotComponents
 ```
 

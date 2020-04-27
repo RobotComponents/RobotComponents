@@ -68,6 +68,7 @@ namespace RobotComponentsABB.Components.Simulation
         // Fields
         private RobotInfo _robotInfo;
         private PathGenerator _pathGenerator = new PathGenerator();
+        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
         private List<Plane> _planes = new List<Plane>();
         private List<Curve> _paths = new List<Curve>();
         private List<List<double>> _internalAxisValues = new List<List<double>>();
@@ -100,6 +101,9 @@ namespace RobotComponentsABB.Components.Simulation
             // Update the path
             if (update == true || _lastInterpolations != interpolations)
             {
+                // Create forward kinematics for mesh display
+                _forwardKinematics = new ForwardKinematics(_robotInfo);
+
                 // Create the path generator
                 _pathGenerator = new PathGenerator(_robotInfo);
 
@@ -137,10 +141,10 @@ namespace RobotComponentsABB.Components.Simulation
             int index = (int)(((_planes.Count - 1) * interpolationSlider));
 
             // Calcualte foward kinematics
-            _robotInfo.ForwardKinematics.InternalAxisValues = _internalAxisValues[index];
-            _robotInfo.ForwardKinematics.ExternalAxisValues = _externalAxisValues[index];
-            _robotInfo.ForwardKinematics.HideMesh = !_previewMesh;
-            _robotInfo.ForwardKinematics.Calculate();
+            _forwardKinematics.InternalAxisValues = _internalAxisValues[index];
+            _forwardKinematics.ExternalAxisValues = _externalAxisValues[index];
+            _forwardKinematics.HideMesh = !_previewMesh;
+            _forwardKinematics.Calculate();
 
             // Show error messages
             if (_raiseWarnings == true)
@@ -155,10 +159,10 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Output
-            DA.SetData(0, _robotInfo.ForwardKinematics.TCPPlane);
-            DA.SetDataList(1, _robotInfo.ForwardKinematics.PosedExternalAxisPlanes);
-            DA.SetDataList(2, _internalAxisValues[index]);
-            DA.SetDataList(3, _externalAxisValues[index]);
+            DA.SetData(0, _forwardKinematics.TCPPlane);
+            DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
+            DA.SetDataList(2, _forwardKinematics.InternalAxisValues);
+            DA.SetDataList(3, _forwardKinematics.ExternalAxisValues);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
         }
@@ -285,14 +289,14 @@ namespace RobotComponentsABB.Components.Simulation
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_robotInfo.ForwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
+            if (_forwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
             {
                 // Initiate the display color and transparancy of the robot mesh
                 Color color;
                 double trans;
 
                 // Set the display color and transparancy of the robot mesh
-                if (_robotInfo.ForwardKinematics.InLimits == true)
+                if (_forwardKinematics.InLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;
@@ -304,17 +308,17 @@ namespace RobotComponentsABB.Components.Simulation
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _robotInfo.ForwardKinematics.PosedInternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_robotInfo.ForwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes
-                for (int i = 0; i != _robotInfo.ForwardKinematics.PosedExternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
                 {
-                    for (int j = 0; j != _robotInfo.ForwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
+                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
                     {
-                        args.Display.DrawMeshShaded(_robotInfo.ForwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
                     }
                 }
             }

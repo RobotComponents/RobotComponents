@@ -44,7 +44,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = Enumerable.Repeat(9e9, 6).ToList();
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
@@ -62,7 +62,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0; // The movementType is always an Absolute Joint Movement
@@ -82,7 +82,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
@@ -102,7 +102,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, ZoneData zoneData)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
@@ -123,7 +123,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, int precision, RobotTool robotTool)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
@@ -143,7 +143,7 @@ namespace RobotComponents.BaseClasses.Actions
         public AbsoluteJointMovement(string name, List<double> internalAxisValues, List<double> externalAxisValues, SpeedData speedData, ZoneData zoneData, RobotTool robotTool)
         {
             _name = name;
-            _internalAxisValues = internalAxisValues;
+            _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
             _movementType = 0; // The movement type is always an Absolute Joint Movement
@@ -200,6 +200,33 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Method that checks the list with internal axis values. 
+        /// Always returns a list with 6 external axis values. 
+        /// Missing values will be filled with 0.  
+        /// </summary>
+        /// <param name="axisValues">A list with the internal axis values.</param>
+        /// <returns>Returns a list with 6 internal axis values.</returns>
+        private List<double> CheckInternalAxisValues(List<double> axisValues)
+        {
+            List<double> result = new List<double>();
+            int n = Math.Min(axisValues.Count, 6);
+
+            // Copy definied internal axis values
+            for (int i = 0; i < n; i++)
+            {
+                result.Add(axisValues[i]);
+            }
+
+            // Add up missing internal axis values
+            for (int i = n; i < 6; i++)
+            {
+                result.Add(0);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Method that checks the list with external axis values. 
         /// Always returns a list with 6 external axis values. 
         /// For missing values 9e9 (not connected) will be used. 
@@ -217,7 +244,7 @@ namespace RobotComponents.BaseClasses.Actions
                 result.Add(axisValues[i]);
             }
 
-            // Add missing external axisValues
+            // Add missing external axis values
             for (int i = n; i < 6; i++)
             {
                 result.Add(9e9);
@@ -403,7 +430,7 @@ namespace RobotComponents.BaseClasses.Actions
         public List<double> InternalAxisValues
         {
             get { return _internalAxisValues; }
-            set { _internalAxisValues = value; }
+            set { _internalAxisValues = CheckInternalAxisValues(value); }
         }
 
         /// <summary>

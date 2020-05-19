@@ -263,6 +263,18 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to ZoneData
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.ZoneData == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_ZoneData(Value.ZoneData);
+                return true;
+            }
+
             //Cast to RobotTool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {

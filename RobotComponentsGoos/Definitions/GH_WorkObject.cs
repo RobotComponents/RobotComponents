@@ -184,6 +184,18 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
+            //Cast to ExternalAxisGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.IsValid == false)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis);
+                return true;
+            }
+
             target = default(Q);
             return false;
         }

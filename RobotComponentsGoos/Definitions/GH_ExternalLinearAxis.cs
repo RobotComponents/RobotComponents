@@ -275,6 +275,26 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
+            //Cast to Axis vector (positive movement direction)
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
+            { 
+                if (Value == null)
+                {
+                    target = default(Q);
+                }
+                else if (Value.AxisPlane == null)
+                {
+                    target = default(Q);
+                }
+                else
+                {
+                    Vector3d vector = Value.AxisPlane.ZAxis;
+                    vector.Unitize();
+                    target = (Q)(object)new GH_Vector(vector);
+                }
+                return true;
+            }
+           
             target = default(Q);
             return false;
         }

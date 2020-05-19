@@ -9,6 +9,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponentsGoos.Definitions;
 using RobotComponents.BaseClasses.Actions;
 
 namespace RobotComponentsGoos.Actions
@@ -196,6 +197,42 @@ namespace RobotComponentsGoos.Actions
                     target = default(Q);
                 else
                     target = (Q)(object)new GH_Action(Value);
+                return true;
+            }
+
+            //Cast to SpeedData
+            if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.SpeedData == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_SpeedData(Value.SpeedData);
+                return true;
+            }
+
+            //Cast to ZoneData
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.ZoneData == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_ZoneData(Value.ZoneData);
+                return true;
+            }
+
+            //Cast to RobotTool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            {
+                if (Value == null)
+                    target = default(Q);
+                else if (Value.RobotTool == null)
+                    target = default(Q);
+                else
+                    target = (Q)(object)new GH_RobotTool(Value.RobotTool);
                 return true;
             }
 

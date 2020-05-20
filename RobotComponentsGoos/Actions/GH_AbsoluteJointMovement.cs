@@ -103,14 +103,9 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-            {
                 return "Null Absolute Joint Movement";
-            }
-
             else
-            {
-                return "Absolute Joint Movement";
-            }
+                return Value.ToString();
         }
 
         /// <summary>

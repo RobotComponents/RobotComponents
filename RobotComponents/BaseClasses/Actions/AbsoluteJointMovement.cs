@@ -200,6 +200,22 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Absolute Joint Movement";
+            }
+            else
+            {
+                return "Absolute Joint Movement (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// Method that checks the list with internal axis values. 
         /// Always returns a list with 6 external axis values. 
         /// Missing values will be filled with 0.  

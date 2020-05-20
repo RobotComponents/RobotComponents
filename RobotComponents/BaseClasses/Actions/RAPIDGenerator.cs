@@ -95,6 +95,22 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid RAPID Generator";
+            }
+            else
+            {
+                return "RAPID Generator";
+            }
+        }
+
+        /// <summary>
         /// Creates the RAPID program code.
         /// This method also overwrites or creates a file if saved to file is set eqaul to true.
         /// </summary>

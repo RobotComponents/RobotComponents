@@ -168,6 +168,22 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Robot Info";
+            }
+            else
+            {
+                return "Robot Info (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// Re-initializes the fields related to the list with external axes.
         /// </summary>
         private void UpdateExternalAxisFields()

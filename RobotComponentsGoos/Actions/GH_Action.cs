@@ -116,30 +116,8 @@ namespace RobotComponentsGoos.Actions
         {
             if (Value == null)
                 return "Null Action";
-            else if (Value is AbsoluteJointMovement)
-                return "Absolute Joint Movement";
-            else if (Value is AutoAxisConfig)
-                return "Auto Axis Configuration";
-            else if (Value is CodeLine)
-                return "Code Line";
-            else if (Value is Comment)
-                return "Comment";
-            else if (Value is DigitalOutput)
-                return "Digital Output";
-            else if (Value is Movement)
-                return "Movement";
-            else if (Value is OverrideRobotTool)
-                return "Override Robot Tool";
-            else if (Value is SpeedData)
-                return "Speed Data";
-            else if (Value is Target)
-                return "Target";
-            else if (Value is Timer)
-                return "Timer";
-            else if (Value is WaitDI)
-                return "Wait for Digital Input";
             else
-                return "Action";
+                return Value.ToString();
         }
 
         /// <summary>

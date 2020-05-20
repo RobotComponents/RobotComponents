@@ -108,6 +108,22 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Forward Kinematics";
+            }
+            else
+            {
+                return "Forward Kinematics";
+            }
+        }
+
+        /// <summary>
         /// Calculates Forward Kinematics based on the internal and external axis values.
         /// </summary>
         public void Calculate()

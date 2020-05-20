@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null Timer";
             else
-                return "Timer";
+                return Value.ToString();
         }
 
         /// <summary>

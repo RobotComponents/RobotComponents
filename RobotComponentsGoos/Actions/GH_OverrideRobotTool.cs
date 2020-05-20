@@ -103,9 +103,9 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-                return "Null Set Robot Tool";
+                return "Null Override Robot Tool";
             else
-                return "Set Robot Tool";
+                return Value.ToString();
         }
 
         /// <summary>

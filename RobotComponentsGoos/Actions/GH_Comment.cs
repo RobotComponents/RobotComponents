@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null Comment";
             else
-                return "Comment";
+                return Value.ToString();
         }
 
         /// <summary>

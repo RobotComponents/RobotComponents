@@ -158,17 +158,9 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-            {
-                return "Null ZoneData";
-            }
-            else if (Value.PreDefinied == true)
-            {
-                return "Predefined Zone Data";
-            }
+                return "Null Zone Data";
             else
-            {
-                return "Custom Zone Data";
-            }
+                return Value.ToString();
         }
 
         /// <summary>

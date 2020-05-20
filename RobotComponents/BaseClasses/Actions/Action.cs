@@ -34,6 +34,66 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Action";
+            }
+            else if (this is AbsoluteJointMovement absoluteJointMovement)
+            {
+                return absoluteJointMovement.ToString();
+            }
+            else if (this is AutoAxisConfig autoAxisConfig)
+            {
+                return autoAxisConfig.ToString();
+            }
+            else if (this is CodeLine codeLine)
+            {
+                return codeLine.ToString();
+            }
+            else if (this is Comment comment)
+            {
+                return comment.ToString();
+            }
+            else if (this is DigitalOutput digitalOutput)
+            {
+                return digitalOutput.ToString();
+            }
+            else if (this is Movement movement)
+            {
+                return movement.ToString();
+            }
+            else if (this is OverrideRobotTool overrideRobotTool)
+            {
+                return overrideRobotTool.ToString();
+            }
+            else if (this is SpeedData speedData)
+            { 
+                return speedData.ToString();
+            }
+            else if (this is Target target)
+            {
+                return target.ToString();
+            }
+            else if (this is Timer timer)
+            {
+                return timer.ToString();
+            }
+            else if (this is WaitDI waitDI)
+            {
+                return waitDI.ToString();
+            }
+            else
+            {
+                return "Action";
+            }
+        }
+
+        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>

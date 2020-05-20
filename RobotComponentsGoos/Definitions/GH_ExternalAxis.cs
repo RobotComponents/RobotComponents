@@ -116,12 +116,8 @@ namespace RobotComponentsGoos.Definitions
         {
             if (Value == null)
                 return "Null External Axis";
-            else if (Value is ExternalLinearAxis)
-                return "External Linear Axis";
-            else if (Value is ExternalRotationalAxis)
-                return "External Rotational Axis";
             else
-                return "External Axis";
+                return Value.ToString();
         }
 
         /// <summary>

@@ -80,6 +80,22 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Path Generator";
+            }
+            else
+            {
+                return "Path Generator";
+            }
+        }
+
+        /// <summary>
         /// Generates the internal and external axis values and the path the robot follows. 
         /// </summary>
         public void GetAxisValues(List<Actions.Action> movements, int interpolations)

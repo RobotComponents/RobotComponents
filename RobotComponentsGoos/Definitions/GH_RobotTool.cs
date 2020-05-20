@@ -106,7 +106,7 @@ namespace RobotComponentsGoos.Definitions
             if (Value.Name == "" || Value.Name == null)
                 return "Empty Robot Tool";
             else
-                return "Robot Tool";
+                return Value.ToString();
         }
 
         /// <summary>

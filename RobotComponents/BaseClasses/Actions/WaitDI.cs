@@ -72,6 +72,22 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Wait for Digital Input";
+            }
+            else
+            {
+                return "Wait for Digital Input (" + this.DIName + "\\" + this.Value.ToString() + ")";
+            }
+        }
+
+        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>

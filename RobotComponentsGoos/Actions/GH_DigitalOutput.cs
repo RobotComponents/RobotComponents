@@ -103,10 +103,8 @@ namespace RobotComponentsGoos.Actions
         {
             if (Value == null)
                 return "Null Digital Output";
-            else if (Value.Name == null)
-                return "Empty Digital Output";
             else
-                return "Digital Output";
+                return Value.ToString();
         }
 
         /// <summary>

@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null WaitDI";
             else
-                return "Digital Input";
+                return Value.ToString();
         }
 
         /// <summary>

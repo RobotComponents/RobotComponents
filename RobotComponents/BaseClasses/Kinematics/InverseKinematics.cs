@@ -115,6 +115,22 @@ namespace RobotComponents.BaseClasses.Kinematics
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Inverse Kinematics";
+            }
+            else
+            {
+                return "Inverse Kinematics";
+            }
+        }
+
+        /// <summary>
         /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid inverse kinematics object. 
         /// </summary>
         private void Initialize()

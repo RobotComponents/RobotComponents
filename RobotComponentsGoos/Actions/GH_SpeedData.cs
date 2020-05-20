@@ -163,17 +163,9 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-            {
-                return "Null SpeedData";
-            }
-            else if (Value.PreDefinied == true)
-            {
-                return "Predefined Speed Data";
-            }
+                return "Null Speed Data";
             else
-            {
-                return "Custom Speed Data";
-            }
+                return Value.ToString();
         }
 
         /// <summary>

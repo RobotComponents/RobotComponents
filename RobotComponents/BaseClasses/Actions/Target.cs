@@ -276,6 +276,22 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Target";
+            }
+            else
+            {
+                return "Target (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid target object. 
         /// </summary>
         private void Initialize()

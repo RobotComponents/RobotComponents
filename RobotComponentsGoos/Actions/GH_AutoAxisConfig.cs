@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null Auto Axis Configuration";
             else
-                return "Auto Axis Configuration";
+                return Value.ToString();
         }
 
         /// <summary>

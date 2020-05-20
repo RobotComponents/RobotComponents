@@ -194,6 +194,22 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid External Rotational Axis";
+            }
+            else
+            {
+                return "External Rotational Axis (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// Calculates the position of the attachment plane for a defined external axis value.
         /// This method does not take into account the axis limits. 
         /// </summary>

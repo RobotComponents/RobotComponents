@@ -373,6 +373,22 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Robot Tool";
+            }
+            else
+            {
+                return "Robot Tool (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid robot tool object. 
         /// </summary>
         private void Initialize()

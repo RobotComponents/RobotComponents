@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null Target";
             else
-                return "Target";
+                return Value.ToString();
         }
 
         /// <summary>

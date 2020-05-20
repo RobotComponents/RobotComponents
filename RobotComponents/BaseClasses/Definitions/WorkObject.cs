@@ -120,6 +120,26 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region methods
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Work Object";
+            }
+            else if (this.FixedFrame == false)
+            {
+                return "Movable Work Object (" + this.Name + ")";
+            }
+            else
+            {
+                return "Work Object (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
         /// Method that calculates the quaternion orientation of the work object coordinate system. 
         /// </summary>
         /// <returns> Returns the quaternion orientation of the work object. </returns>

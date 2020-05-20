@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Definitions
             if (Value == null)
                 return "Null Work Object";
             else
-                return "Work Object";
+                return Value.ToString();
         }
 
         /// <summary>

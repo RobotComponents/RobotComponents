@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Actions
             if (Value == null)
                 return "Null CodeLine";
             else
-                return "Code Line";
+                return Value.ToString();
         }
 
         /// <summary>

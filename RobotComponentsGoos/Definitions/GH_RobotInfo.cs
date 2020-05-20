@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Definitions
             if (Value == null)
                 return "Null RobotInfo";
             else
-                return "Robot Info";
+                return Value.ToString();
         }
 
         /// <summary>

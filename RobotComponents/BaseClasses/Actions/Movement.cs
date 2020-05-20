@@ -337,6 +337,34 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region method
         /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
+        public override string ToString()
+        {
+            if (!this.IsValid)
+            {
+                return "Invalid Movement";
+            }
+            else if (this.MovementType == 0)
+            {
+                return "Absolute Joint Movement (" + this.Target.Name + ")";
+            }
+            else if (this.MovementType == 1)
+            {
+                return "Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+            }
+            else if (this.MovementType == 2)
+            {
+                return "Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+            }
+            else
+            {
+                return "Movement";
+            }
+        }
+
+        /// <summary>
         /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid movement object. 
         /// </summary>
         private void Initialize()

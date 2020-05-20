@@ -104,7 +104,7 @@ namespace RobotComponentsGoos.Definitions
             if (Value == null)
                 return "Null External Linear Axis";
             else
-                return "External Linear Axis";
+                return Value.ToString();
         }
 
         /// <summary>

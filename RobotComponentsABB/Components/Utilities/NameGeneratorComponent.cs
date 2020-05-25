@@ -18,14 +18,14 @@ namespace RobotComponentsABB.Components.Utilities
     /// <summary>
     /// RobotComponents Naming component. An inherent from the GH_Component Class.
     /// </summary>
-    public class NamingComponent : GH_Component
+    public class NameGeneratorComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        public NamingComponent()
-          : base("Naming", "N",
-              "This components makes the datatree for the target and speed datas names if datatrees are used." 
+        public NameGeneratorComponent()
+          : base("Name Generator", "NG",
+              "This components can be used to generate the datatree for the target, speed data and zone data names if datatrees are used." 
                 + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
@@ -88,7 +88,7 @@ namespace RobotComponentsABB.Components.Utilities
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
+            Documentation.OpenBrowser(url);
         }
         #endregion
 

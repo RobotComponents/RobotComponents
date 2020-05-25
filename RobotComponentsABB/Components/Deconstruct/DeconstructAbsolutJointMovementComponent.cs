@@ -102,7 +102,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
-            System.Diagnostics.Process.Start(url);
+            Documentation.OpenBrowser(url);
         }
         #endregion
 

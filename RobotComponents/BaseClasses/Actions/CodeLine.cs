@@ -120,7 +120,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(RobotInfo robotInfo)
         {
-            return string.Empty;
+            if (_type == 1)
+            {
+                return _code;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -130,7 +137,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDInstruction(RobotInfo robotInfo)
         {
-            return _code;
+            if (_type == 0)
+            {
+                return _code;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -139,7 +153,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-           if(_type == 1)
+            if (_type == 1)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
             }
@@ -168,6 +182,8 @@ namespace RobotComponents.BaseClasses.Actions
             { 
                 if (Code == null) { return false; }
                 if (Code == "") { return false; }
+                if (Type < 0) { return false; }
+                if (Type > 1) { return false; }
                 return true; 
             }
         }

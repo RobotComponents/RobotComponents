@@ -95,7 +95,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetData(1, ref type)) { return; }
 
             // Create the action
-            CodeLine codeLine = new CodeLine(code);
+            CodeLine codeLine = new CodeLine(code, type);
 
             // Check if a right value is used for the code line type
                 if (type != 0 && type != 1)

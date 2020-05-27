@@ -104,7 +104,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="type"> The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
         public void SetCommentType(int type)
         {
-            if(type == 0 | type == 1)
+            if (type == 0 | type == 1)
             {
                 _type = type;
             }
@@ -121,7 +121,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(RobotInfo robotInfo)
         {
-            return "! " + _comment;
+            if (_type == 1)
+            {
+                return "! " + _comment;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -131,7 +138,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDInstruction(RobotInfo robotInfo)
         {
-            return "! " + _comment;
+            if (_type == 0)
+            {
+                return "! " + _comment;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -142,7 +156,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_type == 1)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
         }
 
@@ -154,7 +168,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_type == 0)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
         }
         #endregion
@@ -169,6 +183,8 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 if (Com == null) { return false; }
                 if (Com == "") { return false; }
+                if (Type < 0) { return false; }
+                if (Type > 1) { return false; }
                 return true; 
             }
         }

@@ -13,6 +13,10 @@ using RobotComponents.BaseClasses.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.09.000
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
@@ -74,6 +78,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             string code = null;
 
@@ -86,29 +95,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
             // Sets Output
             DA.SetData(0, codeLine);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

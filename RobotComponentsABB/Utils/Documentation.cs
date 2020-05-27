@@ -4,7 +4,6 @@
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // System Libs
-using System.Numerics;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;

@@ -52,7 +52,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Text", "T", "The comment as text", GH_ParamAccess.item, "");
+            pManager.AddTextParameter("Text", "T", "The comment as text", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Type", "T", "Comment Type as integer. Use 0 for commenting on instructions, 1 for commenting on declarations", GH_ParamAccess.item, 0);
 
             pManager[1].Optional = true;

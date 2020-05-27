@@ -29,8 +29,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB6650_200_2_75_Component()
           : base("ABB IRB6650-200/2.75", "IRB6650",
+                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB6650-200/2.75 Robot Info preset component."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

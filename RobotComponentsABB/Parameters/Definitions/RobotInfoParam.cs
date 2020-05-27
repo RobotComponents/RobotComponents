@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// Initializes a new instance of the GH_PersistentGeometryParam<RobotInfoGoo> class
         /// </summary>
         public RobotInfoParameter()
-          : base(new GH_InstanceDescription("Robot Info", "RI", 
+          : base(new GH_InstanceDescription("Robot Info", "RI",
+                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Robot Info data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

@@ -33,9 +33,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public AbsoluteJointMovementComponent()
-          : base("Action: Absolute Joint Movement", "AJM",
-              "Defines a absolute joint movement instruction for simulation and code generation."
-                + System.Environment.NewLine +
+          : base("Absolute Joint Movement", "AJM", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines a absolute joint movement instruction for simulation and RAPID program code generation."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
 
@@ -50,7 +50,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

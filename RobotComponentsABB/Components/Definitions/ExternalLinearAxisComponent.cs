@@ -30,8 +30,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public ExternalLinearAxisComponent()
           : base("External Linear Axis", "External Linear Axis",
+                 "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "Defines an External Linear Axis for any Robot."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

@@ -179,7 +179,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(RobotInfo robotInfo)
         {
             if (_predefined == false)
             {
@@ -196,7 +196,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(RobotInfo robotInfo)
         {
             return string.Empty;
         }
@@ -205,7 +205,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             if (_predefined == false)
             {
@@ -213,7 +213,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
                 {
                     RAPIDGenerator.SpeedDatas.Add(this.Name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
                 }
             }
         }
@@ -222,7 +222,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
         #endregion

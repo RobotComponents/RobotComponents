@@ -25,8 +25,9 @@ namespace RobotComponentsABB.Components.Definitions
     {
         public RobotInfoComponent()
           : base("Robot Info", "RobInfo",
+                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "Defines a robot which is needed for Code Generation and Simulation"
-                + System.Environment.NewLine +
+             + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

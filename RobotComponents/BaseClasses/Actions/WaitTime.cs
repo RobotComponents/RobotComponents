@@ -11,9 +11,9 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
-    /// Timer class, defines waiting time between two actions. This command is used to wait a given amount of time.
+    /// WaitTime class, defines waiting time between two actions. This command is used to wait a given amount of time.
     /// </summary>
-    public class Timer : Action
+    public class WaitTime : Action
     {
         #region fields
         private double _duration; // the time expressed in seconds
@@ -21,47 +21,47 @@ namespace RobotComponents.BaseClasses.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty Timer object. 
+        /// Defines an empty WaitTime object. 
         /// </summary>
-        public Timer()
+        public WaitTime()
         {
         }
 
         /// <summary>
-        /// Constructor to create a wait time object. 
+        /// Constructor to create a WaitTime object. 
         /// </summary>
         /// <param name="Duration"> The time, expressed in seconds, that program execution is to wait. </param>
-        public Timer(double Duration)
+        public WaitTime(double Duration)
         {
             this._duration = Duration;
         }
 
         /// <summary>
-        /// Creates a new timer by duplicating an existing timer. 
-        /// This creates a deep copy of the existing timer. 
+        /// Creates a new WaitTime object by duplicating an existing WaitTime object. 
+        /// This creates a deep copy of the existing WaitTime object. 
         /// </summary>
-        /// <param name="timer"> The timer that should be duplicated. </param>
-        public Timer(Timer timer)
+        /// <param name="timer"> The WaitTime that should be duplicated. </param>
+        public WaitTime(WaitTime waitTime)
         {
-            _duration = timer.Duration;
+            _duration = waitTime.Duration;
         }
 
         /// <summary>
-        /// Method to duplicate the Timer object.
+        /// Method to duplicate the WaitTime object.
         /// </summary>
-        /// <returns> Returns a deep copy of the Timer object.</returns>
-        public Timer Duplicate()
+        /// <returns> Returns a deep copy of the WaitTime object.</returns>
+        public WaitTime Duplicate()
         {
-            return new Timer(this);
+            return new WaitTime(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Timer object to an Action object. 
+        /// A method to duplicate the WaitTime object to an Action object. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Timer object as an Action object. </returns>
+        /// <returns> Returns a deep copy of the WaitTime object as an Action object. </returns>
         public override Action DuplicateAction()
         {
-            return new Timer(this) as Action;
+            return new WaitTime(this) as Action;
         }
         #endregion
 
@@ -74,11 +74,11 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (!this.IsValid)
             {
-                return "Invalid Timer";
+                return "Invalid WaitTime";
             }
             else
             {
-                return "Timer (" + this.Duration.ToString("0.##") + " sec.)";
+                return "WaitTime (" + this.Duration.ToString("0.##") + " sec.)";
             }
         }
 
@@ -87,7 +87,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(RobotInfo robotInfo)
         {
             return string.Empty;
         }
@@ -97,7 +97,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(RobotInfo robotInfo)
         {
             return "WaitTime " + _duration + ";";
         }
@@ -106,7 +106,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
@@ -114,15 +114,15 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo)); 
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo)); 
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Timer object is valid.
+        /// A boolean that indicates if the WaitTime object is valid.
         /// </summary>
         public override bool IsValid
         {

@@ -45,7 +45,7 @@ namespace RobotComponentsABB.Utils
             { typeof(RAPIDGeneratorComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/RAPID%20Generator/" },
             { typeof(SpeedDataComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Speed%20Data/" },
             { typeof(TargetComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Target/" },
-            { typeof(TimerComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Timer/" },
+            { typeof(WaitTimeComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Timer/" },
             { typeof(WaitDIComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Wait%20for%20Digital%20Input/" },
             { typeof(ZoneDataComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Zone%20Data/" },
             #endregion
@@ -153,7 +153,7 @@ namespace RobotComponentsABB.Utils
             { typeof(OverrideRobotToolParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Override%20Robot%20Tool/"},
             { typeof(SpeedDataParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Speed%20Data/"},
             { typeof(TargetParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Target/"},
-            { typeof(TimerParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Timer/"},
+            { typeof(WaitTimeParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/WaitTime/"},
             { typeof(WaitDIParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(ZoneDataParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Zone%20Data/"},
 

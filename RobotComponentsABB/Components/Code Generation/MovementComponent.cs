@@ -34,9 +34,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public MovementComponent()
-          : base("Action: Movement", "M",
-              "Defines a robot movement instruction for simulation and code generation."
-                + System.Environment.NewLine +
+          : base("Movement", "M", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines a robot movement instruction for simulation and RAPID program code generation."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
 
@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 if (movementTypes[i] != 0 && movementTypes[i] != 1 && movementTypes[i] != 2)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value <" + i + "> is invalid. " +
-                        "In can only be set to 0, 1 and 2. Use 1 for MoveAbsJ, 2 for MoveL and 3 for MoveJ.");
+                        "In can only be set to 0, 1 and 2. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.");
                     break;
                 }
             }

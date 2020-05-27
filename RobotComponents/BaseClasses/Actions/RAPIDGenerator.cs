@@ -142,7 +142,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Vars
             for (int i = 0; i != _actions.Count; i++)
             {
-                _actions[i].InitRAPIDVar(this);
+                _actions[i].ToRAPIDDeclaration(this);
 
                 // Check if the action is an override robot tool: if so, set new current tool
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)
@@ -166,7 +166,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)
             {
-                _actions[i].ToRAPIDFunction(this);
+                _actions[i].ToRAPIDInstruction(this);
 
                 // Check if the action is an override robot tool: if so, set new current tool
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)

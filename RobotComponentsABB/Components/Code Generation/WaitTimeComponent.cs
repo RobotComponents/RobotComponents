@@ -15,19 +15,19 @@ using RobotComponentsABB.Utils;
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Timer component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : WaitTime component. An inherent from the GH_Component Class.
     /// </summary>
-    public class TimerComponent : GH_Component
+    public class WaitTimeComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public TimerComponent()
-          : base("Action: Timer", "T",
-              "Defines an instruction to wait a given amount of time between two other robot instructions for RAPID main code generation."
-                + System.Environment.NewLine +
+        public WaitTimeComponent()
+          : base("Wait for Time", "WT", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines an instruction to wait a given amount of time between two other robot instructions in RAPID program code generation."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -39,7 +39,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TimerParameter(), "Timer", "T", "Resulting Timer.");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new WaitTimeParameter(), "WaitTime", "WT", "Resulting WaitTime.");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetData(0, ref duration)) { return; }
 
             // Create the action
-            RobotComponents.BaseClasses.Actions.Timer timer = new RobotComponents.BaseClasses.Actions.Timer(duration);
+            RobotComponents.BaseClasses.Actions.WaitTime timer = new RobotComponents.BaseClasses.Actions.WaitTime(duration);
 
             // Output
             DA.SetData(0, timer);

@@ -26,9 +26,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public AutoAxisConfigComponent()
-          : base("Action: Auto Axis Configurator", "AAC",
-              "Defines an instruction to set the axis configuration of the robot automatically in RAPID code generation."
-                + System.Environment.NewLine +
+          : base("Auto Axis Configuration", "AAC", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines an instruction to set the axis configuration of the robot automatically in RAPID program code generation."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -40,7 +40,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

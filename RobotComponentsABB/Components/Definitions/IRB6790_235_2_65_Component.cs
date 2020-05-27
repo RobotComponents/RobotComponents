@@ -29,8 +29,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB6790_235_2_65_Component()
           : base("ABB IRB6790-235/2.65", "IRB6790",
+                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB6790-235/2.65 Robot Info preset component."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

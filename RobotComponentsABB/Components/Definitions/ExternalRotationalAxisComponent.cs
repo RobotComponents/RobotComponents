@@ -30,8 +30,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public ExternalRotationalAxisComponent()
           : base("External Rotational Axis", "External Rotational Axis",
+                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "Defines an External Rotational Axis."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

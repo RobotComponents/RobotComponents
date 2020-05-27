@@ -26,9 +26,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public DigitalOutputComponent()
-          : base("Action: Digital Output", "DO",
-              "Defines an instruction to change the state of a digital output of the robot controller for RAPID code generation."
-                + System.Environment.NewLine +
+          : base("Override Digital Output", "SDO", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines an instruction to override the state of a digital output of the robot controller for RAPID program code generation."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -40,7 +40,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

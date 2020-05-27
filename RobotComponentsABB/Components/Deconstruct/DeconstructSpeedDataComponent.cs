@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructSpeedData class.
         /// </summary>
         public DeconstructSpeedDataComponent()
-          : base("Deconstruct Speed Data", "DeConSpeed",
+          : base("Deconstruct Speed Data", "DeConSpeed", 
+                "Action Deconstructor" + System.Environment.NewLine + System.Environment.NewLine +
               "Deconstructs a Speed Data Component into its parameters."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

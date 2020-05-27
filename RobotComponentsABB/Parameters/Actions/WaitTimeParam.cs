@@ -16,17 +16,18 @@ using RobotComponentsGoos.Actions;
 namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Timer parameter
+    /// WaitTime parameter
     /// </summary>
-    public class TimerParameter : GH_PersistentGeometryParam<GH_Timer>, IGH_PreviewObject
+    public class WaitTimeParameter : GH_PersistentGeometryParam<GH_WaitTime>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<TimerGoo> class
         /// </summary>
-        public TimerParameter()
-          : base(new GH_InstanceDescription("Wait", "W", 
-                "Maintains the Timer data."
-                + System.Environment.NewLine +
+        public WaitTimeParameter()
+          : base(new GH_InstanceDescription("Wait for time", "WT",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Maintains the Wait for time data."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
@@ -38,13 +39,13 @@ namespace RobotComponentsABB.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Timer";
+            return "Wait for time";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Timer"; set => base.Name = value; }
+        public override string Name { get => "Wait for time"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -74,12 +75,12 @@ namespace RobotComponentsABB.Parameters.Actions
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Timer> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitTime> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Timer value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WaitTime value)
         {
             return GH_GetterResult.cancel;
         }

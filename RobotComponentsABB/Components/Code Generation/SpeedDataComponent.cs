@@ -27,9 +27,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public SpeedDataComponent()
-          : base("Action: Speed Data", "SD",
-              "Defines a speed data for robot movements."
-                + System.Environment.NewLine +
+          : base("Speed Data", "SD", "Declarative Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines a speed data declaration for robot movements."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {

@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
         public DeconstructTargetComponent()
-          : base("Deconstruct Target", "DeConTar",
+          : base("Deconstruct Target", "DeConTar", 
+                "Action Deconstructor" + System.Environment.NewLine + System.Environment.NewLine +
               "Deconstructs a Target into its parameters."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

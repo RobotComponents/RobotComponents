@@ -28,9 +28,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public OverrideRobotToolComponent()
-          : base("Action: Override Robot Tool", "Overrides cuurent RobotTool",
-              "Defines an instruction to override the current robot tool of the ABB robot for RAPID base code generation."
-                + System.Environment.NewLine +
+          : base("Override Robot Tool", "Overrides cuurent RobotTool", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines an instruction to override the current robot tool of the ABB robot for RAPID program code generation."
+              + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -42,7 +42,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

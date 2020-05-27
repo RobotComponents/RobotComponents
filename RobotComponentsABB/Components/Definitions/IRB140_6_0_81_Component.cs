@@ -29,8 +29,9 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB140_6_0_81_Component()
           : base("ABB IRB140-6/0.81", "IRB140",
+                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB140-6/0.81 Robot Info preset component."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

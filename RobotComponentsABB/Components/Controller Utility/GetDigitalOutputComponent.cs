@@ -28,9 +28,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the GetDigitalOutput class.
         /// </summary>
         public GetDigitalOutputComponent()
-          : base("Get Digital Output", "GetDO",
+          : base("Get Digital Output", "GetDO", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Gets the signal of a digital output from a defined ABB robot controller."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {

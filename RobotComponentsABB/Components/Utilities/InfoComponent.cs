@@ -25,11 +25,12 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public InfoComponent()
           : base("Info", "I",
+               "Info" + System.Environment.NewLine + System.Environment.NewLine +
               "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinos Grasshopper. " 
                 + "The plugin is a development from the Department of Experimental and Digital Design and Construction of the University of Kassel. " 
                 + "Supervised by the head of the department Prof. Eversmann. " 
                 + "The technical development is executed by student assistant Gabriel Rumpf and " 
-                +  "research associates Benedikt Wannemacher, Arjen Deetman, Mohamed Dawod, Zuardin Akbar and Andrea Rossi." 
+                + "research associates Benedikt Wannemacher, Arjen Deetman, Mohamed Dawod, Zuardin Akbar and Andrea Rossi." 
                 + Environment.NewLine 
                 + Environment.NewLine 
                 + "Documentation and Example Files can be found under: " 
@@ -37,9 +38,19 @@ namespace RobotComponentsABB.Components.Utilities
                 + Environment.NewLine 
                 + "https://github.com/EDEK-UniKassel/RobotComponents/wiki"
                 + System.Environment.NewLine 
+                + System.Environment.NewLine
                 + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.septenary; }
         }
 
         /// <summary>

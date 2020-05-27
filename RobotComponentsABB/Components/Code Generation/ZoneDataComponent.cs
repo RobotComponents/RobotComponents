@@ -27,9 +27,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ZoneDataComponent()
-          : base("Action: Zone Data", "ZD",
-              "Defines a zone data for robot movements."
-                + System.Environment.NewLine +
+          : base("Zone Data", "ZD", "Declarative Action" + System.Environment.NewLine + System.Environment.NewLine +
+              "Defines a zone data declaration for robot movements in RAPID program code generation."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {

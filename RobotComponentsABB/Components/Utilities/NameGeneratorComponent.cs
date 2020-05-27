@@ -25,8 +25,9 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public NameGeneratorComponent()
           : base("Name Generator", "NG",
-              "This components can be used to generate the datatree for the target, speed data and zone data names if datatrees are used." 
-                + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "Utility" + System.Environment.NewLine + System.Environment.NewLine +
+              "This components can be used to generate the datatree for the target, speed data and zone data names if datatrees are used."
+                + System.Environment.NewLine + System.Environment.NewLine  + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

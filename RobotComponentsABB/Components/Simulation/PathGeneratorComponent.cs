@@ -34,8 +34,9 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public PathGeneratorComponent()
           : base("Path Generator", "PG",
+                 "Simulation" + System.Environment.NewLine + System.Environment.NewLine +
               "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {

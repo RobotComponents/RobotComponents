@@ -26,8 +26,9 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public FlipPlaneYComponent()
           : base("Flip Plane Y", "Flip Plane Y",
+              "Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Flips the plane to the oposite direction by setting it's y-Axis negative."
-                + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              + System.Environment.NewLine + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

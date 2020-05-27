@@ -19,6 +19,7 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         private string _comment; // the comment as a string
+        private int _type; // the comment type as int value -> 0 for instruction, 1 for declaration
         #endregion
 
         #region constructors
@@ -36,16 +37,29 @@ namespace RobotComponents.BaseClasses.Actions
         public Comment(string comment)
         {
             _comment = comment;
+            _type = 0;
+        }
+
+        /// <summary>
+        /// A comment constructor inserted into the program to make it easier to understand.
+        /// </summary>
+        /// <param name="comment">The comment as a text string.</param>
+        /// <param name="type">The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations.</param>
+        public Comment(string comment, int type)
+        {
+            _comment = comment;
+            SetCommentType(type);
         }
 
         /// <summary>
         /// Creates a new comment by duplicating an existing comment. 
         /// This creates a deep copy of the existing comment. 
         /// </summary>
-        /// <param name="comment"> The comment that should be duplicated. </param>
+        /// <param name="comment"> The comment that should be duplicated.</param>
         public Comment(Comment comment)
         {
             _comment = comment.Com;
+            _type = comment.Type;
         }
 
         /// <summary>
@@ -85,13 +99,29 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Sets the comment type. 
+        /// </summary>
+        /// <param name="type"> The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
+        public void SetCommentType(int type)
+        {
+            if(type == 0 | type == 1)
+            {
+                _type = type;
+            }
+            else
+            {
+                _type = 0;
+            }
+        }
+
+        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(RobotInfo robotInfo)
         {
-            return string.Empty;
+            return "! " + _comment;
         }
 
         /// <summary>
@@ -99,7 +129,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(RobotInfo robotInfo)
         {
             return "! " + _comment;
         }
@@ -108,17 +138,24 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            if (_type == 1)
+            {
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+            }
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
+            if (_type == 0)
+            {
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
+            }
         }
         #endregion
 
@@ -143,6 +180,14 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _comment; }
             set { _comment = value; }
+        }
+
+        /// <summary>
+        /// Comment type as int value.
+        /// </summary>
+        public int Type
+        {
+            get { return _type; }
         }
         #endregion
     }

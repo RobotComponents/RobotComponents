@@ -14,45 +14,45 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Timer Goo wrapper class, makes sure Timer can be used in Grasshopper.
+    /// WaitTime Goo wrapper class, makes sure WaitTime can be used in Grasshopper.
     /// </summary>
-    public class GH_Timer : GH_GeometricGoo<Timer>, IGH_PreviewData
+    public class GH_WaitTime : GH_GeometricGoo<WaitTime>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_Timer()
+        public GH_WaitTime()
         {
-            this.Value = new Timer();
+            this.Value = new WaitTime();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="timer"> Timer Value to store inside this Goo instance. </param>
-        public GH_Timer(Timer timer)
+        /// <param name="timer"> WaitTime Value to store inside this Goo instance. </param>
+        public GH_WaitTime(WaitTime waitTime)
         {
-            if (timer == null)
-                timer = new Timer();
-            this.Value = timer;
+            if (waitTime == null)
+                waitTime = new WaitTime();
+            this.Value = waitTime;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="timerGoo"> TimerGoo to store inside this Goo instance. </param>
-        public GH_Timer(GH_Timer timerGoo)
+        /// <param name="timerGoo"> WaitTimeGoo to store inside this Goo instance. </param>
+        public GH_WaitTime(GH_WaitTime waitTimeGoo)
         {
-            if (timerGoo == null)
-                timerGoo = new GH_Timer();
-            this.Value = timerGoo.Value;
+            if (waitTimeGoo == null)
+                waitTimeGoo = new GH_WaitTime();
+            this.Value = waitTimeGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TimerGoo. </returns>
+        /// <returns> A duplicate of the WaitTimeGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateTimerGoo();
@@ -61,10 +61,10 @@ namespace RobotComponentsGoos.Actions
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the TimerGoo. </returns>
-        public GH_Timer DuplicateTimerGoo()
+        /// <returns> A duplicate of the WaitTimeGoo. </returns>
+        public GH_WaitTime DuplicateTimerGoo()
         {
-            return new GH_Timer(Value == null ? new Timer() : Value.Duplicate());
+            return new GH_WaitTime(Value == null ? new WaitTime() : Value.Duplicate());
         }
         #endregion
 
@@ -89,9 +89,9 @@ namespace RobotComponentsGoos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Timer instance"; }
+                if (Value == null) { return "No internal WaitTime instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Timer instance: Did you define a duration?"; //Todo: beef this up to be more informative.
+                return "Invalid WaitTime instance: Did you define a duration?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -102,7 +102,7 @@ namespace RobotComponentsGoos.Actions
         public override string ToString()
         {
             if (Value == null)
-                return "Null Timer";
+                return "Null WaitTime";
             else
                 return Value.ToString();
         }
@@ -112,7 +112,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Timer"); }
+            get { return ("WaitTime"); }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Timer."); }
+            get { return ("Defines a WaitTime."); }
         }
 
         /// <summary>
@@ -154,8 +154,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Timer
-            if (typeof(Q).IsAssignableFrom(typeof(Timer)))
+            //Cast to WaitTime
+            if (typeof(Q).IsAssignableFrom(typeof(WaitTime)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -164,13 +164,13 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast to TimerGoo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Timer)))
+            //Cast to WaitTimeGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_WaitTime)))
             {
                 if (Value == null)
                     target = default(Q);
                 else
-                    target = (Q)(object)new GH_Timer(Value);
+                    target = (Q)(object)new GH_WaitTime(Value);
                 return true;
             }
 
@@ -217,17 +217,17 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Timer
-            if (typeof(Timer).IsAssignableFrom(source.GetType()))
+            //Cast from WaitTime
+            if (typeof(WaitTime).IsAssignableFrom(source.GetType()))
             {
-                Value = source as Timer;
+                Value = source as WaitTime;
                 return true;
             }
 
             //Cast from Action
             if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is Timer action)
+                if (source is WaitTime action)
                 {
                     Value = action;
                     return true;
@@ -238,7 +238,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is Timer action)
+                if (actionGoo.Value is WaitTime action)
                 {
                     Value = action;
                     return true;
@@ -249,7 +249,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 GH_Number ghNumber = (GH_Number)source;
-                Value = new Timer(ghNumber.Value);
+                Value = new WaitTime(ghNumber.Value);
                 return true;
             }
             return false;

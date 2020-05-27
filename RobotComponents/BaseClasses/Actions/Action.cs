@@ -79,7 +79,7 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 return target.ToString();
             }
-            else if (this is Timer timer)
+            else if (this is WaitTime timer)
             {
                 return timer.ToString();
             }
@@ -98,26 +98,26 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public abstract string InitRAPIDVar(RobotInfo robotInfo);
+        public abstract string ToRAPIDDeclaration(RobotInfo robotInfo);
 
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public abstract string ToRAPIDFunction(RobotInfo robotInfo);
+        public abstract string ToRAPIDInstruction(RobotInfo robotInfo);
 
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public abstract void InitRAPIDVar(RAPIDGenerator RAPIDGenerator);
+        public abstract void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public abstract void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator);
+        public abstract void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties

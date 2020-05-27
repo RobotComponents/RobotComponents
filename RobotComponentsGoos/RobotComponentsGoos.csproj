@@ -72,7 +72,7 @@
     <Compile Include="Definitions\GH_RobotTool.cs" />
     <Compile Include="Actions\GH_SpeedData.cs" />
     <Compile Include="Actions\GH_Target.cs" />
-    <Compile Include="Actions\GH_Timer.cs" />
+    <Compile Include="Actions\GH_WaitTime.cs" />
     <Compile Include="Definitions\GH_WorkObject.cs" />
   </ItemGroup>
   <ItemGroup>

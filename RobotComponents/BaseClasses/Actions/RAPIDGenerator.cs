@@ -132,6 +132,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Creates Main Module
             _stringBuilder.Append("MODULE " + _programName);
             _stringBuilder.Append(Environment.NewLine);
+            _stringBuilder.Append(Environment.NewLine);
 
             // Add comment lines for tracking which version of RC was used
             _stringBuilder.Append("\t" + "! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
@@ -246,33 +247,33 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // Version number
-            systemCode += " ! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion;
+            systemCode += "\t" + "! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion;
             systemCode += Environment.NewLine;
-            systemCode += " ! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information";
+            systemCode += "\t" + "! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information";
             systemCode += Environment.NewLine;
             systemCode += Environment.NewLine;
 
             // Creates Comments
-            systemCode += " ! System module with basic predefined system data";
+            systemCode += "\t" + "! System module with basic predefined system data";
             systemCode += Environment.NewLine;
-            systemCode += " !************************************************";
+            systemCode += "\t" + "!************************************************";
             systemCode += Environment.NewLine;
             systemCode += Environment.NewLine;
 
             // Creates Predefined System Data: only if it is the BASE module
             if (_systemName == "BASE")
             {
-                systemCode += " ! System data tool0, wobj0 and load0";
+                systemCode += "\t" + "! System data tool0, wobj0 and load0";
                 systemCode += Environment.NewLine;
-                systemCode += " ! Do not translate or delete tool0, wobj0, load0";
+                systemCode += "\t" + "! Do not translate or delete tool0, wobj0, load0";
                 systemCode += Environment.NewLine;
 
                 // Creates Predefined System Data
-                systemCode += " PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];";
+                systemCode += "\t" + "PERS tooldata tool0 := [TRUE, [[0, 0, 0], [1, 0, 0, 0]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]];";
                 systemCode += Environment.NewLine;
-                systemCode += " PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];";
+                systemCode += "\t" + "PERS wobjdata wobj0 := [FALSE, TRUE, \"\" , [[0, 0, 0], [1, 0, 0, 0]], [[0, 0, 0], [1, 0, 0, 0]]];";
                 systemCode += Environment.NewLine;
-                systemCode += " PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];";
+                systemCode += "\t" + "PERS loaddata load0 := [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0];";
                 systemCode += Environment.NewLine;
                 systemCode += Environment.NewLine;
             }
@@ -280,7 +281,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Adds Tools Base Code
             if (robotTools.Count != 0 && robotTools != null)
             {
-                systemCode += " ! User defined tooldata ";
+                systemCode += "\t" + "! User defined tooldata ";
                 systemCode += Environment.NewLine;
                 systemCode += CreateToolSystemCode(robotTools);
                 systemCode += Environment.NewLine;
@@ -289,7 +290,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Adds Work Objects Base Code
             if (workObjects.Count != 0 && workObjects != null)
             {
-                systemCode += " ! User defined wobjdata ";
+                systemCode += "\t" + "! User defined wobjdata ";
                 systemCode += Environment.NewLine;
                 systemCode += CreateWorkObjectSystemCode(workObjects);
                 systemCode += Environment.NewLine;
@@ -298,13 +299,12 @@ namespace RobotComponents.BaseClasses.Actions
             // Adds Custom code line
             if (customCode.Count != 0 && customCode != null)
             {
-                systemCode += " ! User definied custom code lines";
+                systemCode += "\t" + "! User definied custom code lines";
                 systemCode += Environment.NewLine;
 
                 for (int i = 0; i != customCode.Count; i++)
                 {
-                    systemCode += " ";
-                    systemCode += customCode[i];
+                    systemCode += "\t" + customCode[i];
                     systemCode += Environment.NewLine;
                 }
 
@@ -334,12 +334,12 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the robot tool system code as a string. </returns>
         private string CreateToolSystemCode(List<RobotTool> robotTools)
         {
-            string result = " ";
+            string result = "";
 
             for (int i = 0; i != robotTools.Count; i++)
             {
-                result += robotTools[i].GetRSToolData();
-                result += Environment.NewLine + " ";
+                result += "\t" + robotTools[i].GetRSToolData();
+                result += Environment.NewLine;
             }
 
             return result;
@@ -352,12 +352,12 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the robot tool system code as a string. </returns>
         private string CreateWorkObjectSystemCode(List<WorkObject> workObjects)
         {
-            string result = " ";
+            string result = "";
 
             for (int i = 0; i != workObjects.Count; i++)
             {
-                result += workObjects[i].GetWorkObjData();
-                result += Environment.NewLine + " ";
+                result += "\t" + workObjects[i].GetWorkObjData();
+                result += Environment.NewLine;
             }
 
             return result;

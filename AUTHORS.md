@@ -2,14 +2,17 @@
 
 ## Initiators
 
-- Benedikt Wannemacher <<wannemacher@uni-kassel.de>> [@BenediktWannemacher](https://github.com/BenediktWannemacher)
+- Benedikt Wannemacher [@BenediktWannemacher](https://github.com/BenediktWannemacher)
 - Gabriel Rumpf [@GabrielRumpf](https://github.com/GabrielRumpf)
 
 ## Main Developers
 
+### Active
 - Gabriel Rumpf [@GabrielRumpf](https://github.com/GabrielRumpf)
-- Benedikt Wannemacher <<wannemacher@uni-kassel.de>> [@BenediktWannemacher](https://github.com/BenediktWannemacher)
 - Arjen Deetman <<deetman@uni-kassel.de>> [@arjendeetman](https://github.com/arjendeetman)
+
+### Inactive
+- Benedikt Wannemacher [@BenediktWannemacher](https://github.com/BenediktWannemacher)
 
 ## Contributors
 

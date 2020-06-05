@@ -2,6 +2,7 @@
 
 ## Initiators
 
+- [EDEK Uni Kassel](http://edek.uni-kassel.de/)
 - Benedikt Wannemacher [@BenediktWannemacher](https://github.com/BenediktWannemacher)
 - Gabriel Rumpf [@GabrielRumpf](https://github.com/GabrielRumpf)
 

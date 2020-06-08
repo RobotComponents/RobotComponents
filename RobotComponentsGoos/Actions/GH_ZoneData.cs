@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -298,21 +299,24 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from string: Predefined ZoneData
+            //Cast from text: Predefined ZoneData
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 string text = (source as GH_String).Value;
-                text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
 
-                try
+                if (ZoneData.ValidPredefinedNames.Contains(text))
                 {
-                    double number = System.Convert.ToDouble(text);
-                    Value = new ZoneData(number);
-                    return true;
-                }
-                catch
-                {
-                    return false;
+                    try
+                    {
+                        text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
+                        double number = System.Convert.ToDouble(text);
+                        Value = new ZoneData(number);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
 

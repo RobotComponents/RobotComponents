@@ -306,16 +306,24 @@ namespace RobotComponentsGoos.Actions
 
                 if (ZoneData.ValidPredefinedNames.Contains(text))
                 {
-                    try
+                    if (text == "fine")
                     {
-                        text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
-                        double number = System.Convert.ToDouble(text);
-                        Value = new ZoneData(number);
+                        Value = new ZoneData(-1);
                         return true;
                     }
-                    catch
+                    else
                     {
-                        return false;
+                        try
+                        {
+                            text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
+                            double number = System.Convert.ToDouble(text);
+                            Value = new ZoneData(number);
+                            return true;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
                     }
                 }
             }

@@ -35,9 +35,7 @@ RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you 
 Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponents/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/EDEK-UniKassel/RobotComponents/issues/new).
 
 ## Roadmap
-Planned developments:
-- Adding support for MultiMove.
-- Improve inverse kinematics performance.
+Please have a look at the open [issues](https://github.com/EDEK-UniKassel/RobotComponents/issues) and [projects](https://github.com/EDEK-UniKassel/RobotComponents/projects) to know on what we are working and what we want to add and change.  
 
 ## Contribute
 **Bug reports**: Please report bugs at our [issue page](https://github.com/EDEK-UniKassel/RobotComponents/issues). 

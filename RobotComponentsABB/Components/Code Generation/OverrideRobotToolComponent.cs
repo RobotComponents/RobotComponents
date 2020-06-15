@@ -28,11 +28,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public OverrideRobotToolComponent()
-          : base("Override Robot Tool", "Overrides cuurent RobotTool", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Override Robot Tool", "Overrides cuurent RobotTool",
               "Defines an instruction to override the current robot tool of the ABB robot for RAPID program code generation."
               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

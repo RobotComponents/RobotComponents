@@ -29,7 +29,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB1200_7_70_Component()
           : base("ABB IRB1200-7/0.7", "IRB1200",
-                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB 1200-7/0.7 Robot Info preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

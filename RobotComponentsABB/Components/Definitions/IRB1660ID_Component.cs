@@ -29,7 +29,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB1660ID_Component()
           : base("ABB IRB1660ID-X/1.55", "IRB1660ID",
-                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB1660ID-x/1.55 Robot Info preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

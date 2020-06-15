@@ -26,11 +26,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public WaitDIComponent()
-          : base("Wait for Digital Input", "WDI", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Wait for Digital Input", "WDI", 
               "Defines an instruction to wait for the signal of a Digital Input in RAPID program code generation."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

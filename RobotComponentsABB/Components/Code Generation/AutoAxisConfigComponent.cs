@@ -26,11 +26,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public AutoAxisConfigComponent()
-          : base("Auto Axis Configuration", "AAC", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Auto Axis Configuration", "AAC",
               "Defines an instruction to set the axis configuration of the robot automatically in RAPID program code generation."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

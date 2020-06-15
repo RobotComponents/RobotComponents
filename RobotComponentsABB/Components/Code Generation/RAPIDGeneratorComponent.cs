@@ -30,11 +30,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public RAPIDGeneratorComponent()
-          : base("RAPID Generator", "RG", "Code Generation" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("RAPID Generator", "RG",
               "Generates the RAPID program and system code for the ABB IRC5 robot controller from a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

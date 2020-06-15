@@ -34,11 +34,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public MovementComponent()
-          : base("Movement", "M", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Movement", "M",
               "Defines a robot movement instruction for simulation and RAPID program code generation."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
 
         {
             // Create the component label with a message

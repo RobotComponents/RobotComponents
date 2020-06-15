@@ -28,7 +28,6 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructRobotInfoComponent()
           : base("Deconstruct Robot Info", "DeRobInfo", 
-                "Definition Deconstructor" + System.Environment.NewLine + System.Environment.NewLine +
               "Deconstructs a robot info definition into its constituent parts"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

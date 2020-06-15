@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the GetDigitalInput class.
         /// </summary>
         public GetDigitalInputComponent()
-          : base("Get Digital Input", "GetDI", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Get Digital Input", "GetDI", 
               "Gets a digital input from a defined ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

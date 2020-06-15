@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the SetDigitalOutput class.
         /// </summary>
         public SetDigitalOutputComponent()
-          : base("Set Digital Output", "SetDO", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Set Digital Output", "SetDO", 
               "Sets the signal of a digital output for the defined ABB robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

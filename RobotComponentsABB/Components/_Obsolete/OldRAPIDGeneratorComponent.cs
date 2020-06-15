@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "OBSOLETE: Generates the RAPID main and base code for the ABB IRC5 robot controller from a list of Actions."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

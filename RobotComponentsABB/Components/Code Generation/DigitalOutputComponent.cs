@@ -26,11 +26,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public DigitalOutputComponent()
-          : base("Set Digital Output", "SDO", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Set Digital Output", "SDO",
               "Defines an instruction to override the state of a digital output of the robot controller for RAPID program code generation."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines manually an instruction for RAPID main code generation."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

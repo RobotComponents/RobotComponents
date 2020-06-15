@@ -29,7 +29,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB1600_X_1_20_Component()
           : base("ABB IRB1600-X/1.2", "IRB1600",
-                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB1600-X/1.2 Robot Info preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

@@ -32,11 +32,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public TargetComponent()
-          : base("Target", "T", "Declarative Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Target", "T",
               "Defines a target declaration for an Instruction: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";

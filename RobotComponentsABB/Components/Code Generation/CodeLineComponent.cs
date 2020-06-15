@@ -29,11 +29,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public CodeLineComponent()
-          : base("CodeLine", "CL", "Instructive or Declarative Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("CodeLine", "CL",
               "Defines manually an instruction or declaration for RAPID program code generation."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

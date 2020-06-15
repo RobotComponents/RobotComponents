@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public PlaneToQuaternion()
           : base("Plane to Quaternion", "PtoQ",
-              "Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Calculates the four coefficient values in a quarternion. "
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"

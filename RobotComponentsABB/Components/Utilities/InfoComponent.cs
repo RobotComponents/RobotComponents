@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public InfoComponent()
           : base("Info", "I",
-               "Info" + System.Environment.NewLine + System.Environment.NewLine +
               "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinoceros Grasshopper. " 
                 + "This open source project is initiated by the chair of Experimental and Digital Design and Construction of the University of Kassel "
                 + "led by Prof.Eversmann. The technical development is initiated and executed by the research associates and student assistants. "

@@ -23,7 +23,6 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public GetObjectManager()
           : base("Get Object Manager", "Get Object Manager",
-                "Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Gets the Robot Components object manager of this Grasshopper document."
              + System.Environment.NewLine + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")

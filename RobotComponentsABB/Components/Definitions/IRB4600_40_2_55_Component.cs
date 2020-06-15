@@ -29,7 +29,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB4600_40_2_55_Component()
           : base("ABB IRB4600-40/2.55", "IRB4600",
-                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "An ABB IRB4600-40/2.55 Robot Info preset component."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

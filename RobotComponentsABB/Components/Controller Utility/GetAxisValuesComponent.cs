@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
         public GetAxisValuesComponent()
-          : base("Get Axis Values", "GA", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Get Axis Values", "GA",
               "Gets the current robot axis values from a defined ABB robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

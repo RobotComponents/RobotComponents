@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructSpeedDataComponent()
           : base("Deconstruct Speed Data", "DeConSpeed", 
-                "Action Deconstructor" + System.Environment.NewLine + System.Environment.NewLine +
               "Deconstructs a Speed Data Component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

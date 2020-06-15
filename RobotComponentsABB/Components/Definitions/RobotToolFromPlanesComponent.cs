@@ -30,7 +30,6 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public RobotToolFromPlanesComponent()
           : base("Robot Tool From Planes", "RobToool",
-                "Definition" + System.Environment.NewLine + System.Environment.NewLine +
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

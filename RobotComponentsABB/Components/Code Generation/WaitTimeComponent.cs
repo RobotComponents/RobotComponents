@@ -25,11 +25,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public WaitTimeComponent()
-          : base("Wait for Time", "WT", "Instructive Action" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Wait for Time", "WT",
               "Defines an instruction to wait a given amount of time between two other robot instructions in RAPID program code generation."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

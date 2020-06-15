@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the SetDigitalInput class.
         /// </summary>
         public SetDigitalInputComponent()
-          : base("Set Digital Input", "SetDI", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
+          : base("Set Digital Input", "SetDI", 
               "Sets the signal of a digital input for the defined ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

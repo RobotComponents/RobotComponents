@@ -21,18 +21,35 @@ namespace RobotComponentsABB.Components.Deconstruct
     /// <summary>
     /// RobotComponents Deconstruct Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotInfoComponent : GH_Component
+    public class OldDeconstructRobotInfoComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotInfoComponent class.
         /// </summary>
-        public DeconstructRobotInfoComponent()
-          : base("Deconstruct Robot Info", "DeRobInfo", 
+        public OldDeconstructRobotInfoComponent()
+          : base("Deconstruct Robot Info", "DeRobInfo",
               "Deconstructs a robot info definition into its constituent parts"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -54,6 +71,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Tool Plane", "TP", "Tool Plane (TCP) as Frame", GH_ParamAccess.item);
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool", GH_ParamAccess.item);
             pManager.RegisterParam(new ExternalAxisParameter(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
@@ -118,7 +136,7 @@ namespace RobotComponentsABB.Components.Deconstruct
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
                 }
             }
-           
+
             // Output
             DA.SetData(0, robotInfo.Name);
             DA.SetDataList(1, meshes);
@@ -126,8 +144,9 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetDataList(3, robotInfo.InternalAxisLimits);
             DA.SetData(4, robotInfo.BasePlane);
             DA.SetData(5, robotInfo.MountingFrame);
-            DA.SetData(6, robotInfo.Tool);
-            DA.SetDataList(7, robotInfo.ExternalAxis);
+            DA.SetData(6, robotInfo.ToolPlane);
+            DA.SetData(7, robotInfo.Tool);
+            DA.SetDataList(8, robotInfo.ExternalAxis);
         }
 
         #region menu item
@@ -205,7 +224,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E651BA0F-7CE3-40BC-A04F-C76EA0665D1A"); }
+            get { return new Guid("8452629c-5da8-4e64-82f2-23f00c49ae4b"); }
         }
     }
 }

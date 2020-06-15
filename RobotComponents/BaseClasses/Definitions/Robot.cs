@@ -16,9 +16,9 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponents.BaseClasses.Definitions
 {
     /// <summary>
-    /// RobotInfo class, defines the basic properties and methods for any Robot Info.
+    /// Robot class, defines the basic properties and methods for any Robot.
     /// </summary>
-    public class RobotInfo
+    public class Robot
     {
         #region fields
         private string _name; // The name of the robot
@@ -30,23 +30,23 @@ namespace RobotComponents.BaseClasses.Definitions
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
-        private InverseKinematics _inverseKinematics; // Robot Info inverse kinematics
-        private ForwardKinematics _forwardKinematics; // Robot Info forward kinematics
+        private InverseKinematics _inverseKinematics; // Robot inverse kinematics
+        private ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion
 
         #region constructors
         /// <summary>
-        /// An empty constuctor that creates an robot info.
+        /// An empty constuctor that creates an robot.
         /// </summary>
-        public RobotInfo()
+        public Robot()
         {
-            _name = "Empty RobotInfo";
+            _name = "Empty Robot";
         }
 
         /// <summary>
-        /// Defines a robot info without external axes. 
+        /// Defines a robot without external axes. 
         /// </summary>
         /// <param name="name"> The robot name. </param>
         /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
@@ -55,7 +55,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <param name="basePlane"> The position of the robot in the world coordinate space as a plane. </param>
         /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
         /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
-        public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
+        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
             // Update robot related fields
             _name = name;
@@ -85,7 +85,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Defines a robot info with attached external axes.
+        /// Defines a robot with attached external axes.
         /// </summary>
         /// <param name="name"> The robot name. </param>
         /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
@@ -95,7 +95,7 @@ namespace RobotComponents.BaseClasses.Definitions
         /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
         /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
         /// <param name="externalAxis"> The list with attached external axes. </param>
-        public RobotInfo(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis)
+        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis)
         {
             // Robot related fields
             _name = name;
@@ -126,43 +126,43 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Creates a new robot info by duplicating an existing robot info.
-        /// This creates a deep copy of the existing robot info. 
+        /// Creates a new robot by duplicating an existing robot.
+        /// This creates a deep copy of the existing robot. 
         /// It clears the solution of the inverse and forward kinematics. 
         /// </summary>
-        /// <param name="robotInfo"> The robot info that should be duplicated. </param>
-        public RobotInfo(RobotInfo robotInfo)
+        /// <param name="robot"> The robot that should be duplicated. </param>
+        public Robot(Robot robot)
         {
             // Robot related fields
-            _name = robotInfo.Name;
-            _meshes = robotInfo.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
+            _name = robot.Name;
+            _meshes = robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
 
-            _internalAxisPlanes = new List<Plane>(robotInfo.InternalAxisPlanes);
-            _internalAxisLimits = new List<Interval>(robotInfo.InternalAxisLimits);
-            _basePlane = new Plane(robotInfo.BasePlane);
-            _mountingFrame = new Plane(robotInfo.MountingFrame);
+            _internalAxisPlanes = new List<Plane>(robot.InternalAxisPlanes);
+            _internalAxisLimits = new List<Interval>(robot.InternalAxisLimits);
+            _basePlane = new Plane(robot.BasePlane);
+            _mountingFrame = new Plane(robot.MountingFrame);
 
             // Tool related fields
-            _tool = robotInfo.Tool.Duplicate();
-            _toolPlane = new Plane(robotInfo.ToolPlane);
+            _tool = robot.Tool.Duplicate();
+            _toolPlane = new Plane(robot.ToolPlane);
 
             // External axis related fields
-            _externalAxis = new List<ExternalAxis>(robotInfo.ExternalAxis); //TODO: make deep copy
-            _externalAxisPlanes = new List<Plane>(robotInfo.ExternalAxisPlanes);
-            _externalAxisLimits = new List<Interval>(robotInfo.ExternalAxisLimits);
+            _externalAxis = new List<ExternalAxis>(robot.ExternalAxis); //TODO: make deep copy
+            _externalAxisPlanes = new List<Plane>(robot.ExternalAxisPlanes);
+            _externalAxisLimits = new List<Interval>(robot.ExternalAxisLimits);
 
             // Kinematics
-            _inverseKinematics = new InverseKinematics(robotInfo.InverseKinematics.Movement.Duplicate(), this);
-            _forwardKinematics = new ForwardKinematics(this, robotInfo.ForwardKinematics.HideMesh);
+            _inverseKinematics = new InverseKinematics(robot.InverseKinematics.Movement.Duplicate(), this);
+            _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
         }
 
         /// <summary>
-        /// A method to duplicate the RobotInfo object. 
+        /// A method to duplicate the Robot object. 
         /// </summary>
-        /// <returns> Returns a deep copy for the RobotInfo object. </returns>
-        public RobotInfo Duplicate()
+        /// <returns> Returns a deep copy for the Robot object. </returns>
+        public Robot Duplicate()
         {
-            return new RobotInfo(this);
+            return new Robot(this);
         }
         #endregion
 
@@ -175,11 +175,11 @@ namespace RobotComponents.BaseClasses.Definitions
         {
             if (!this.IsValid)
             {
-                return "Invalid Robot Info";
+                return "Invalid Robot";
             }
             else
             {
-                return "Robot Info (" + this.Name + ")";
+                return "Robot (" + this.Name + ")";
             }
         }
 
@@ -191,7 +191,7 @@ namespace RobotComponents.BaseClasses.Definitions
             // Check the number of external axes
             if (_externalAxis.Count > 6)
             {
-                throw new ArgumentException("More than six external axes are defined. A maximum of 6 external axes can be attached to a Robot Info.");
+                throw new ArgumentException("More than six external axes are defined. A maximum of 6 external axes can be attached to a Robot.");
             }
 
             // Check list with external axes: maximum of one external linear axis is allowed at the moment
@@ -253,7 +253,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// Transforms the robot info spatial properties (planes and meshes.
+        /// Transforms the robot spatial properties (planes and meshes.
         /// The attached external axes will not be transformed. 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
@@ -282,7 +282,7 @@ namespace RobotComponents.BaseClasses.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Robot Info object is valid. 
+        /// A boolean that indicates if the Robot object is valid. 
         /// </summary>
         public bool IsValid
         {
@@ -303,7 +303,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// The Robot Info name. 
+        /// The Robot name. 
         /// </summary>
         public string Name
         {
@@ -312,7 +312,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// A list with all the robot info meshes, including the mesh of the attached tool.
+        /// A list with all the robot meshes, including the mesh of the attached tool.
         /// </summary>
         public List<Mesh> Meshes
         {
@@ -404,7 +404,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// The inverse kinematics of this robot info. 
+        /// The inverse kinematics of this robot. 
         /// </summary>
         public InverseKinematics InverseKinematics
         {
@@ -412,7 +412,7 @@ namespace RobotComponents.BaseClasses.Definitions
         }
 
         /// <summary>
-        /// The forward kinematics of this robot info. 
+        /// The forward kinematics of this robot. 
         /// </summary>
         public ForwardKinematics ForwardKinematics
         {

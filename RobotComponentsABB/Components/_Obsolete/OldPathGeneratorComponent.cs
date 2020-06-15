@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
@@ -103,7 +103,7 @@ namespace RobotComponentsABB.Components.Simulation
                 "from the ribbon.");
 
             // Input variables
-            RobotInfo robotInfo = new RobotInfo();
+            Robot robotInfo = new Robot();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;

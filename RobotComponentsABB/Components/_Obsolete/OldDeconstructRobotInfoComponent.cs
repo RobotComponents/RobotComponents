@@ -57,7 +57,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             _doc = this.OnPingDocument();
 
             // Input variables
-            RobotInfo robotInfo = null;
+            Robot robotInfo = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robotInfo)) { return; }
@@ -200,16 +200,6 @@ namespace RobotComponentsABB.Components.Deconstruct
                 args.Display.DrawMeshShaded(_meshes[i], material);
             }
         }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
 
         /// <summary>
         /// Provides an Icon for the component.

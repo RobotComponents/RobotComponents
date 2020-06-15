@@ -98,14 +98,14 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public abstract string ToRAPIDDeclaration(RobotInfo robotInfo);
+        public abstract string ToRAPIDDeclaration(Robot robotInfo);
 
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public abstract string ToRAPIDInstruction(RobotInfo robotInfo);
+        public abstract string ToRAPIDInstruction(Robot robotInfo);
 
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.

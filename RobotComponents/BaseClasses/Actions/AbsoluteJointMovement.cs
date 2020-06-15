@@ -274,7 +274,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> The robot info to check the axis values for. </param>
         /// <returns> Returns a list with error messages. </returns>
-        public List<string> CheckForAxisLimits(RobotInfo robotInfo)
+        public List<string> CheckForAxisLimits(Robot robotInfo)
         {
             // Initiate list
             List<string> errors = new List<string>();
@@ -310,7 +310,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
             // Creates Code Variable
             string code = "CONST jointtarget " + JointTargetName + " := [[";
@@ -347,7 +347,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
             // Set tool name
             string toolName;

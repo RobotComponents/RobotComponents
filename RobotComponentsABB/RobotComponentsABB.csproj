@@ -164,7 +164,7 @@
     <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
     <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
-    <Compile Include="Components\Definitions\RobotInfoComponent.cs" />
+    <Compile Include="Components\Definitions\RobotComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="Parameters\Definitions\ExternalLinearAxisParam.cs" />
     <Compile Include="Parameters\Definitions\ExternalRotationalAxisParam.cs" />
     <Compile Include="Parameters\Actions\MovementParam.cs" />
-    <Compile Include="Parameters\Definitions\RobotInfoParam.cs" />
+    <Compile Include="Parameters\Definitions\RobotParam.cs" />
     <Compile Include="Parameters\Definitions\RobotToolParam.cs" />
     <Compile Include="Parameters\Actions\OverrideRobotToolParam.cs" />
     <Compile Include="Parameters\Actions\TargetParam.cs" />

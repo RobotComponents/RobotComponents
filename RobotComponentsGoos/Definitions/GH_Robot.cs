@@ -14,45 +14,45 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// RobotInfo Goo wrapper class, makes sure RobotInfo can be used in Grasshopper.
+    /// robot Goo wrapper class, makes sure robot can be used in Grasshopper.
     /// </summary>
-    public class GH_RobotInfo : GH_GeometricGoo<RobotInfo>, IGH_PreviewData
+    public class GH_Robot : GH_GeometricGoo<Robot>, IGH_PreviewData
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_RobotInfo()
+        public GH_Robot()
         {
-            this.Value = new RobotInfo();
+            this.Value = new Robot();
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="robotInfo"> RobotInfo Value to store inside this Goo instance. </param>
-        public GH_RobotInfo(RobotInfo robotInfo)
+        /// <param name="robot"> robot Value to store inside this Goo instance. </param>
+        public GH_Robot(Robot robot)
         {
-            if (robotInfo == null)
-                robotInfo = new RobotInfo();
-            this.Value = robotInfo;
+            if (robot == null)
+                robot = new Robot();
+            this.Value = robot;
         }
 
         /// <summary>
         /// Data constructor, m_value will be set to internal_data.
         /// </summary>
-        /// <param name="robotInfoGoo"> RobotInfoGoo to store inside this Goo instance. </param>
-        public GH_RobotInfo(GH_RobotInfo robotInfoGoo)
+        /// <param name="robotGoo"> robotGoo to store inside this Goo instance. </param>
+        public GH_Robot(GH_Robot robotGoo)
         {
-            if (robotInfoGoo == null)
-                robotInfoGoo = new GH_RobotInfo();
-            this.Value = robotInfoGoo.Value;
+            if (robotGoo == null)
+                robotGoo = new GH_Robot();
+            this.Value = robotGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotInfoGoo. </returns>
+        /// <returns> A duplicate of the robotGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateRobotInfoGoo();
@@ -61,10 +61,10 @@ namespace RobotComponentsGoos.Definitions
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotInfoGoo. </returns>
-        public GH_RobotInfo DuplicateRobotInfoGoo()
+        /// <returns> A duplicate of the robotGoo. </returns>
+        public GH_Robot DuplicateRobotInfoGoo()
         {
-            return new GH_RobotInfo(Value == null ? new RobotInfo() : Value.Duplicate());
+            return new GH_Robot(Value == null ? new Robot() : Value.Duplicate());
         }
         #endregion
 
@@ -89,9 +89,9 @@ namespace RobotComponentsGoos.Definitions
         {
             get
             {
-                if (Value == null) { return "No internal RobotInfo instance"; }
+                if (Value == null) { return "No internal robot instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotInfo instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
+                return "Invalid robot instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
             }
         }
 
@@ -102,7 +102,7 @@ namespace RobotComponentsGoos.Definitions
         public override string ToString()
         {
             if (Value == null)
-                return "Null RobotInfo";
+                return "Null robot";
             else
                 return Value.ToString();
         }
@@ -112,7 +112,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("RobotInfo"); }
+            get { return ("robot"); }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single RobotInfo"); }
+            get { return ("Defines a single robot"); }
         }
 
         /// <summary>
@@ -185,8 +185,8 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to RobotInfo.
-            if (typeof(Q).IsAssignableFrom(typeof(RobotInfo)))
+            //Cast to robot.
+            if (typeof(Q).IsAssignableFrom(typeof(Robot)))
             {
                 if (Value == null)
                     target = default(Q);
@@ -210,10 +210,10 @@ namespace RobotComponentsGoos.Definitions
             //Cast to Mesh.
 
             // Casting is only possible from one to one (does not work with lists)
-            // The Robot Info mesh is stored in a list.
+            // The robot mesh is stored in a list.
             // It can only be returned as one single mesh and not as list with a mesh for the separate links. 
             // Therefore, casting to a mesh is not implemented. 
-            // If the users wants to get the robot mesh they can use the Deconstuct Robot Info Component. 
+            // If the users wants to get the robot mesh they can use the Deconstuct robot Component. 
 
             target = default(Q);
             return false;
@@ -228,10 +228,10 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from RobotInfo
-            if (typeof(RobotInfo).IsAssignableFrom(source.GetType()))
+            //Cast from robot
+            if (typeof(Robot).IsAssignableFrom(source.GetType()))
             {
-                Value = (RobotInfo)source;
+                Value = (Robot)source;
                 return true;
             }
 

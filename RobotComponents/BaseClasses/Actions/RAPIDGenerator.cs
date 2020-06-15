@@ -20,7 +20,7 @@ namespace RobotComponents.BaseClasses.Actions
     public class RAPIDGenerator
     {
         #region fields
-        private RobotInfo _robotInfo; // Robot info to construct the code for
+        private Robot _robotInfo; // Robot info to construct the code for
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
@@ -54,7 +54,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="filePath"> The path where the code files should be saved. </param>
         /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
         /// <param name="robotInfo"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, RobotInfo robotInfo)
+        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, Robot robotInfo)
         {
             _programName = programName;
             _systemName = systemName;
@@ -451,7 +451,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// The robot info that is should be uses to create the code for.
         /// </summary>
-        public RobotInfo RobotInfo
+        public Robot RobotInfo
         {
             get { return _robotInfo; }
             set { _robotInfo = value; }

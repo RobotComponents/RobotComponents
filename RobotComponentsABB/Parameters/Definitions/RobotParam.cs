@@ -18,15 +18,15 @@ namespace RobotComponentsABB.Parameters.Definitions
     /// <summary>
     /// Robot Info parameter
     /// </summary>
-    public class RobotInfoParameter : GH_PersistentGeometryParam<GH_RobotInfo>, IGH_PreviewObject
+    public class RobotParameter : GH_PersistentGeometryParam<GH_Robot>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<RobotInfoGoo> class
         /// </summary>
-        public RobotInfoParameter()
-          : base(new GH_InstanceDescription("Robot Info", "RI",
+        public RobotParameter()
+          : base(new GH_InstanceDescription("Robot", "R",
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Robot Info data."
+                "Maintains the robot data."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -39,13 +39,13 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Robot Info";
+            return "Robot";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Robot Info"; set => base.Name = value; }
+        public override string Name { get => "Robot"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -75,12 +75,12 @@ namespace RobotComponentsABB.Parameters.Definitions
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotInfo> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Robot> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotInfo value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Robot value)
         {
             return GH_GetterResult.cancel;
         }

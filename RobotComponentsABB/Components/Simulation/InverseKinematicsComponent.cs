@@ -42,7 +42,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot Info", "RI", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new MovementParameter(), "Movement", "M", "Movement or target input. A target will automatically be casted to a movement.", GH_ParamAccess.item);
         }
 
@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotInfo robotInfo = null;
+            Robot robotInfo = null;
             Movement Movement = null;
 
             // Catch the input data

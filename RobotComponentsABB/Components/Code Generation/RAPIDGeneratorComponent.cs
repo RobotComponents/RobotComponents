@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as list with actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule.", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE.", GH_ParamAccess.item, "BASE");
@@ -94,7 +94,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Input variables
-            RobotInfo robInfo = new RobotInfo();
+            Robot robInfo = new Robot();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             string programName = "";
             string systemName = "";

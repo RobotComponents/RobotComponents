@@ -22,7 +22,7 @@ namespace RobotComponents.BaseClasses.Kinematics
     public class InverseKinematics
     {
         #region fields
-        private RobotInfo _robotInfo;
+        private Robot _robotInfo;
         private RobotTool _robotTool;
         private Movement _movement;
         private Target _target;
@@ -65,7 +65,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         /// <param name="movement"> The robot momvement to calculated the axis values for. </param>
         /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(Movement movement, RobotInfo robotInfo)
+        public InverseKinematics(Movement movement, Robot robotInfo)
         {
             _robotInfo = robotInfo;
             _movement = movement;
@@ -78,7 +78,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         /// <param name="target"> The robot target to calculated the axis values for. </param>
         /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(Target target, RobotInfo robotInfo)
+        public InverseKinematics(Target target, Robot robotInfo)
         {
             _robotInfo = robotInfo;
             _movement = new Movement(target);
@@ -550,7 +550,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// The robot info where the axis values are calculated for.
         /// </summary>
-        public RobotInfo RobotInfo
+        public Robot RobotInfo
         {
             get 
             { 

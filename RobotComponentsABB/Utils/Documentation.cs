@@ -78,7 +78,7 @@ namespace RobotComponentsABB.Utils
             #region Definitions
             { typeof(ExternalLinearAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/External%20Linear%20Axis/" },
             { typeof(ExternalRotationalAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/External%20Rotational%20Axis/" },
-            { typeof(RobotInfoComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Info/" },
+            { typeof(RobotComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Info/" },
             { typeof(RobotToolFromPlanesComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Tool%20from%20Planes/" },
             { typeof(RobotToolFromQuaternionComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Tool%20from%20Quaternion%20Data/" },
             { typeof(WorkObjectComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Work%20Object/" },
@@ -159,7 +159,7 @@ namespace RobotComponentsABB.Utils
             { typeof(ExternalAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Axis/"},
             { typeof(ExternalLinearAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Linear%20Axis/"},
             { typeof(ExternalRotationalAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Rotational%20Axis/"},
-            { typeof(RobotInfoParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Info/"},
+            { typeof(RobotParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Info/"},
             { typeof(RobotToolParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Tool/"},
             { typeof(WorkObjectParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Work%20Object/"},
             #endregion

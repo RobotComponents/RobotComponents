@@ -21,10 +21,10 @@ namespace RobotComponentsABB.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotInfoComponent : GH_Component
+    public class RobotComponent : GH_Component
     {
-        public RobotInfoComponent()
-          : base("Robot Info", "RobInfo",
+        public RobotComponent()
+          : base("Robot", "Rob",
               "Defines a robot which is needed for Code Generation and Simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Name as String", GH_ParamAccess.item, "Empty RobotInfo");
+            pManager.AddTextParameter("Name", "N", "Robot Name as String", GH_ParamAccess.item, "New Robot");
             pManager.AddMeshParameter("Meshes", "M", "Robot Meshes as Mesh List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Axis Planes", "AP", "Axis Planes as Plane List", GH_ParamAccess.list);
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
@@ -64,7 +64,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotInfoParameter(), "Robot Info", "RI", "Resulting Robot Info", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotParameter(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string name = "default robot Info";
+            string name = "default robot";
             List<Mesh> meshes = new List<Mesh>();
             List<Plane> axisPlanes = new List<Plane>();
             List<Interval> axisLimits = new List<Interval>();
@@ -94,8 +94,8 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetData(6, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(7, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
-            // Construct empty robot info
-            RobotInfo robotInfo = new RobotInfo();
+            // Construct empty robot
+            Robot robot = new Robot();
 
             // Override position plane when an external axis is coupled
             for (int i = 0; i < externalAxis.Count; i++)
@@ -106,12 +106,12 @@ namespace RobotComponentsABB.Components.Definitions
                 }
             }
 
-            // Construct the robot info
+            // Construct the robot
             try
             {
-                robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
+                robot = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
                 Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-                robotInfo.Transfom(trans);
+                robot.Transfom(trans);
             }
             catch (Exception ex)
             {
@@ -119,7 +119,7 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Output
-            DA.SetData(0, robotInfo);
+            DA.SetData(0, robot);
         }
 
         #region menu item
@@ -166,7 +166,7 @@ namespace RobotComponentsABB.Components.Definitions
 
         public override string ToString()
         {
-            return "Robot Info";
+            return "Robot";
         }
     }
 }

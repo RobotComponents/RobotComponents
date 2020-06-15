@@ -400,7 +400,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo"> The robot info with the external axes that defined the axis logic. </param>
         /// <param name="logic"> Retuns the axis logic number as an int. </param>
         /// <returns> The posed target plane in the word coordinate system. </returns>
-        public Plane GetPosedGlobalTargetPlane(RobotInfo robotInfo, out int logic)
+        public Plane GetPosedGlobalTargetPlane(Robot robotInfo, out int logic)
         {
             // Not transformed global target plane
             Plane plane = new Plane(_globalTargetPlane);
@@ -438,7 +438,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
             // Initialize code line
             string code = "";
@@ -538,7 +538,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
             // Set tool name
             string toolName;

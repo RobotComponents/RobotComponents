@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB6620_150_2_20_Component()
           : base("ABB IRB6620-150/2.20", "IRB6620",
-              "An ABB IRB6620-150/2.20 Robot Info preset component."
+              "An ABB IRB6620-150/2.20 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotInfoParameter(), "Robot Info", "RI", "Resulting Robot Info", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotParameter(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
             string name = "IRB6620-150/2.20";
-            RobotInfo robotInfo = new RobotInfo();
+            Robot robotInfo = new Robot();
 
             try
             {

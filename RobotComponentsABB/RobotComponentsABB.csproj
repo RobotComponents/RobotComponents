@@ -70,6 +70,7 @@
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\_Obsolete\OldCodeLine_Component.cs" />
     <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />

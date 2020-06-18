@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public DigitalOutputComponent()
           : base("Set Digital Output", "SDO",
-              "Defines an instruction to override the state of a digital output of the robot controller for RAPID program code generation."
+              "Defines an instruction to change the state of a digital output of the robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -48,8 +48,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State as bool", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the digital output as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the digital output as boolean", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new DigitalOutputParameter(), "Digital Output", "DO", "Resulting Digital Output");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new DigitalOutputParameter(), "Set Digital Output", "SDO", "Resulting Set Digital Output instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

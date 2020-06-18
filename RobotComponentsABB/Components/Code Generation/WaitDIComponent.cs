@@ -26,8 +26,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public WaitDIComponent()
-          : base("Wait for Digital Input", "WDI", 
-              "Defines an instruction to wait for the signal of a Digital Input in RAPID program code generation."
+          : base("Wait for Digital Input", "WDI",
+              "Defines an instruction to wait for the signal of a Digital Input from the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -48,8 +48,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("DI Name", "N", "Digital Input Name as text.", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "Digital Input State as bool.", GH_ParamAccess.item);
+            pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the Digital Input as bool", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new WaitDIParameter(), "Wait DI", "WDI", "Resulting Wait DI");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new WaitDIParameter(), "Wait DI", "WDI", "Resulting Wait for Digital Input instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

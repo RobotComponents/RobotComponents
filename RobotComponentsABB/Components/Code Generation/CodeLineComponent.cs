@@ -29,8 +29,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public CodeLineComponent()
-          : base("CodeLine", "CL",
-              "Defines manually an instruction or declaration for RAPID program code generation."
+          : base("Code", "C",
+              "Defines manually an instruction or declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -51,8 +51,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Code", "C", "The custom code line as text", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Type", "T", "Comment Type as integer. Use 0 for creating an instructions, 1 for creating a declarations", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Code", "C", "Content of the code as text.", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Type", "T", "Type of the code. Use 0 for adding the code as instruction. Use 1 for adding the code as declaration.", GH_ParamAccess.item, 0);
 
             pManager[1].Optional = true;
         }
@@ -62,7 +62,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new CodeLineParameter(), "Code Line", "CL", "Resulting Code Line");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new CodeLineParameter(), "Code", "C", "Resulting Code");  //Todo: beef this up to be more informative.
         }
 
 

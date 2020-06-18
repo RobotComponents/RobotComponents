@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public WaitTimeComponent()
           : base("Wait for Time", "WT",
-              "Defines an instruction to wait a given amount of time between two other robot instructions in RAPID program code generation."
+              "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -47,7 +47,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Duration", "D", "Duration as a number", GH_ParamAccess.item, 1);
+            pManager.AddNumberParameter("Duration", "D", "Duration in seconds as a number", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new WaitTimeParameter(), "WaitTime", "WT", "Resulting WaitTime.");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new WaitTimeParameter(), "WaitTime", "WT", "Resulting Wait for Time instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

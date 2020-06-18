@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public AbsoluteJointMovementComponent()
           : base("Absolute Joint Movement", "AJM",
-              "Defines a absolute joint movement instruction for simulation and RAPID program code generation."
+              "Defines an aboslute joint movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -58,11 +58,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text.", GH_ParamAccess.list, new List<string> { "default" });
+            pManager.AddTextParameter("Name", "N", "Name of the joint target as text value", GH_ParamAccess.list, new List<string> { "default" });
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as datatree with numbers", GH_ParamAccess.tree, new List<double> { 0, 0, 0, 0, 0, 0 });
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as datatree with numbers", GH_ParamAccess.tree);
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Custom Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
 
             pManager[2].Optional = true;
             pManager[4].Optional = true;
@@ -82,7 +82,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement instruction", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields

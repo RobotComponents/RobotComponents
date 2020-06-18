@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public SpeedDataComponent()
           : base("Speed Data", "SD", 
-              "Defines a speed data declaration for robot movements."
+              "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -49,11 +49,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "default_speed");
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "tcp velocity in mm/s as number", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ORI Velocity", "vORI", "reorientation of the tool in degree/s as number", GH_ParamAccess.list, 500);
-            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "linear external axes velocity in mm/s", GH_ParamAccess.list, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "reorientation of the external rotational axes in degrees/s", GH_ParamAccess.list, 1000);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.list, "default_speed");
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.list, 500);
+            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.list, 5000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Eeorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data");
+            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
 
         // Fields

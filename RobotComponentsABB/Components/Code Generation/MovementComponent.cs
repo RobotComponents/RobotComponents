@@ -34,8 +34,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
         public MovementComponent()
-          : base("Movement", "M",
-              "Defines a robot movement instruction for simulation and RAPID program code generation."
+          : base("Move", "M",
+              "Defines a linear or nonlinear movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -59,10 +59,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Custom Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
 
             pManager[3].Optional = true;
         }
@@ -73,9 +73,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         // Create an array with the variable input parameters
         readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as as list", Access = GH_ParamAccess.list, Optional = true},
-            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as a list", Access = GH_ParamAccess.list, Optional = true },
-            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as a list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
+            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.list, Optional = true},
+            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.list, Optional = true },
+            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Movement");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Move instruction");  //Todo: beef this up to be more informative.
         }
 
         // Fields

@@ -26,8 +26,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public AutoAxisConfigComponent()
-          : base("Auto Axis Configuration", "AAC",
-              "Defines an instruction to set the axis configuration of the robot automatically in RAPID program code generation."
+          : base("Set Auto Axis Configuration", "SAAC",
+              "Defines an instruction to activate or deactivate auto axis configuration for all following instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -48,7 +48,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddBooleanParameter("Is Active", "A", "Is Active as Bool", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("Is Active", "A", "Defines if the axis configuration of the robot is set automatically based on a boolean value.", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AutoAxisConfigParameter(), "Auto Axis Config", "AAC", " Resutling Auto Axis Configurator");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public OverrideRobotToolComponent()
           : base("Override Robot Tool", "Overrides cuurent RobotTool",
-              "Defines an instruction to override the current robot tool of the ABB robot for RAPID program code generation."
+              "Defines an instruction to change the current robot tool of the ABB robot."
               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -59,7 +59,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new OverrideRobotToolParameter(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new OverrideRobotToolParameter(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

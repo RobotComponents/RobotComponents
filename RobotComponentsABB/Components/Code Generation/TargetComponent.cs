@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public TargetComponent()
           : base("Target", "T",
-              "Defines a target declaration for an Instruction: Movement or Inverse Kinematics component."
+              "Defines a target declaration for a Move or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
@@ -56,9 +56,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
+            pManager.AddTextParameter("Name", "N", "Name of the Target as text", GH_ParamAccess.list, "defaultTar");
+            pManager.AddPlaneParameter("Plane", "P", "Plane of the Target as Plane", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as integer value. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
         }
 
         // Register the number of fixed input parameters
@@ -80,7 +80,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target declaration");  //Todo: beef this up to be more informative.
         }
 
         // Fields

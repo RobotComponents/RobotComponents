@@ -63,6 +63,10 @@ namespace RobotComponents.BaseClasses.Actions
             {
                 return digitalOutput.ToString();
             }
+            else if (this is ExternalJointPosition extJointPosition)
+            {
+                return extJointPosition.ToString();
+            }
             else if (this is Movement movement)
             {
                 return movement.ToString();
@@ -70,6 +74,10 @@ namespace RobotComponents.BaseClasses.Actions
             else if (this is OverrideRobotTool overrideRobotTool)
             {
                 return overrideRobotTool.ToString();
+            }
+            else if (this is RobotJointPosition robotJointPosition)
+            {
+                return robotJointPosition.ToString();
             }
             else if (this is SpeedData speedData)
             { 

@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseClasses\Actions\AbsoluteJointMovement.cs" />
+    <Compile Include="BaseClasses\Actions\ITarget.cs" />
+    <Compile Include="BaseClasses\Actions\Declarations\JointTarget.cs" />
     <Compile Include="BaseClasses\Actions\Declarations\RobotJointPosition.cs" />
     <Compile Include="BaseClasses\Actions\IJointPosition.cs" />
     <Compile Include="BaseClasses\Actions\Declarations\ExternalJointPosition.cs" />

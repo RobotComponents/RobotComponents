@@ -20,12 +20,12 @@ namespace RobotComponents.BaseClasses.Actions
     public class RAPIDGenerator
     {
         #region fields
-        private Robot _robotInfo; // Robot info to construct the code for
+        private Robot _robot; // Robot info to construct the code for
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
-        private readonly Dictionary<string, Movement> _movements = new Dictionary<string, Movement>();  // Dictionary that stores all movement used by the RAPIDGenerator
-        private readonly Dictionary<string, Target> _targets = new Dictionary<string, Target>(); // Dictionary that stores all targets used by the RAPIDGenerator
+        private readonly Dictionary<string, Target> _robotTargets = new Dictionary<string, Target>(); // Dictionary that stores all the unique robot targets used by the RAPIDGenerator
+        private readonly Dictionary<string, JointTarget> _jointTargets = new Dictionary<string, JointTarget>(); // Dictionary that stores all the unique jonit targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programCode; // The rapid program code
@@ -54,11 +54,11 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="filePath"> The path where the code files should be saved. </param>
         /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
         /// <param name="robotInfo"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, Robot robotInfo)
+        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, Robot robot)
         {
             _programName = programName;
             _systemName = systemName;
-            _robotInfo = robotInfo.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
+            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = actions;
             _filePath = filePath;
             _saveToFile = saveToFile;
@@ -73,7 +73,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             _programName = generator.ProgramName;
             _systemName = generator.SystemName;
-            _robotInfo = generator.RobotInfo.Duplicate();
+            _robot = generator.RobotInfo.Duplicate();
             _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _filePath = generator.FilePath;
             _saveToFile = generator.SaveToFile;
@@ -118,13 +118,12 @@ namespace RobotComponents.BaseClasses.Actions
         public string CreateProgramCode()
         {
             // Resets dictionaries and error messages
-            _movements.Clear();
             _speedDatas.Clear();
-            _targets.Clear();
+            _robotTargets.Clear();
             _errorText.Clear();
 
             // Save initial tool
-            RobotTool initTool = _robotInfo.Tool.Duplicate();
+            RobotTool initTool = _robot.Tool.Duplicate();
 
             // Creates String Builder
             _stringBuilder = new StringBuilder();
@@ -149,7 +148,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)
                 {
                     // Override the current tool
-                    _robotInfo.Tool = overrideRobotTool.RobotTool;
+                    _robot.Tool = overrideRobotTool.RobotTool;
                 }
             }
 
@@ -162,7 +161,7 @@ namespace RobotComponents.BaseClasses.Actions
             bool foundFirstMovement = false;
 
             // Set back initial tool
-            _robotInfo.Tool = initTool;
+            _robot.Tool = initTool;
 
             // Creates Movement Instruction and other Functions
             for (int i = 0; i != _actions.Count; i++)
@@ -172,7 +171,7 @@ namespace RobotComponents.BaseClasses.Actions
                 // Check if the action is an override robot tool: if so, set new current tool
                 if (_actions[i] is OverrideRobotTool overrideRobotTool)
                 {
-                    _robotInfo.Tool = overrideRobotTool.RobotTool;
+                    _robot.Tool = overrideRobotTool.RobotTool;
                 }
 
                 // Checks if first movement is MoveAbsJ
@@ -449,12 +448,12 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The robot info that is should be uses to create the code for.
+        /// Defines the robot that is used to create the RAPID code for. 
         /// </summary>
         public Robot RobotInfo
         {
-            get { return _robotInfo; }
-            set { _robotInfo = value; }
+            get { return _robot; }
+            set { _robot = value; }
         }
 
         /// <summary>
@@ -502,20 +501,21 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Dictionary that stores all Movements that are used by the RAPID Generator. 
-        /// </summary>
-        public Dictionary<string, Movement> Movements
-        {
-            get { return _movements; }
-        }
-
-        /// <summary>
-        /// Dictionary that stores all Targets that are used by the RAPID Generator. 
+        /// Defines all the unique Robot Targets used in this RAPID Generator
         /// </summary>
         public Dictionary<string, Target> Targets
         {
-            get { return _targets; }
+            get { return _robotTargets; }
         }
+
+        /// <summary>
+        /// Defines all the unique Joint Targets used in this RAPID Generator
+        /// </summary>
+        public Dictionary<string, JointTarget> JointTargets
+        {
+            get { return _jointTargets; }
+        }
+
 
         /// <summary>
         /// Stringbuilder used by the RAPID Generator. 

@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<WaitDIGoo> class
         /// </summary>
         public WaitDIParameter()
-          : base(new GH_InstanceDescription("Wait for Digital Input", "WDI", 
+          : base(new GH_InstanceDescription("Wait for Digital Input", "WDI",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Wait for Digital Input data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

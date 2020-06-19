@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -303,21 +304,24 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from string: Predefined SpeedData
+            //Cast from text: Predefined SpeedData
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 string text = (source as GH_String).Value;
-                text = text.Replace("v", String.Empty); // Changes v5 to 5, v10 to 5 etc. 
 
-                try
+                if (SpeedData.ValidPredefinedNames.Contains(text))
                 {
-                    double number = System.Convert.ToDouble(text);
-                    Value = new SpeedData(number);
-                    return true;
-                }
-                catch
-                {
-                    return false;
+                    try
+                    {
+                        text = text.Replace("v", String.Empty); // Changes v5 to 5, v10 to 10 etc. 
+                        double number = System.Convert.ToDouble(text);
+                        Value = new SpeedData(number);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
 

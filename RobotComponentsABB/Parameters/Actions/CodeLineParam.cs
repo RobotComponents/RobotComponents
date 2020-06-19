@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<CodeLineGoo> class
         /// </summary>
         public CodeLineParameter()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP", 
+          : base(new GH_InstanceDescription("Code Line Parameter", "CLP",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Code Line data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

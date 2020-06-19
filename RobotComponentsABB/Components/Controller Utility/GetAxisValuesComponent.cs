@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         public GetAxisValuesComponent()
           : base("Get Axis Values", "GA",
               "Gets the current robot axis values from a defined ABB robot controller."
-                + System.Environment.NewLine +
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {

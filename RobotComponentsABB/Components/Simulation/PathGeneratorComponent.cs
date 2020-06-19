@@ -35,7 +35,7 @@ namespace RobotComponentsABB.Components.Simulation
         public PathGeneratorComponent()
           : base("Path Generator", "PG",
               "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
@@ -46,7 +46,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "RI", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
@@ -66,7 +66,7 @@ namespace RobotComponentsABB.Components.Simulation
         }
 
         // Fields
-        private RobotInfo _robotInfo;
+        private Robot _robotInfo;
         private PathGenerator _pathGenerator = new PathGenerator();
         private ForwardKinematics _forwardKinematics = new ForwardKinematics();
         private List<Plane> _planes = new List<Plane>();

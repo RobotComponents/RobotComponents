@@ -29,8 +29,8 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB6650_125_3_20_Component()
           : base("ABB IRB6650-125/3.2", "IRB6650",
-              "An ABB IRB6650-125/3.2 Robot Info preset component."
-                + System.Environment.NewLine +
+              "An ABB IRB6650-125/3.2 Robot preset component."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotInfoParameter(), "Robot Info", "RI", "Resulting Robot Info", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotParameter(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
             string name = "IRB6650-125/3.2";
-            RobotInfo robotInfo = new RobotInfo();
+            Robot robotInfo = new Robot();
 
             try
             {

@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<CommentGoo> class
         /// </summary>
         public CommentParameter()
-          : base(new GH_InstanceDescription("Comment", "C", 
+          : base(new GH_InstanceDescription("Comment", "C",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Comment data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

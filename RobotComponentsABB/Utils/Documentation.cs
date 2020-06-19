@@ -4,7 +4,6 @@
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // System Libs
-using System.Numerics;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -45,7 +44,7 @@ namespace RobotComponentsABB.Utils
             { typeof(RAPIDGeneratorComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/RAPID%20Generator/" },
             { typeof(SpeedDataComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Speed%20Data/" },
             { typeof(TargetComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Target/" },
-            { typeof(TimerComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Timer/" },
+            { typeof(WaitTimeComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Timer/" },
             { typeof(WaitDIComponent) , "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Wait%20for%20Digital%20Input/" },
             { typeof(ZoneDataComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Action%20Zone%20Data/" },
             #endregion
@@ -79,7 +78,7 @@ namespace RobotComponentsABB.Utils
             #region Definitions
             { typeof(ExternalLinearAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/External%20Linear%20Axis/" },
             { typeof(ExternalRotationalAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/External%20Rotational%20Axis/" },
-            { typeof(RobotInfoComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Info/" },
+            { typeof(RobotComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Info/" },
             { typeof(RobotToolFromPlanesComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Tool%20from%20Planes/" },
             { typeof(RobotToolFromQuaternionComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Robot%20Tool%20from%20Quaternion%20Data/" },
             { typeof(WorkObjectComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Definitions/Work%20Object/" },
@@ -153,14 +152,14 @@ namespace RobotComponentsABB.Utils
             { typeof(OverrideRobotToolParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Override%20Robot%20Tool/"},
             { typeof(SpeedDataParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Speed%20Data/"},
             { typeof(TargetParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Target/"},
-            { typeof(TimerParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Timer/"},
+            { typeof(WaitTimeParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/WaitTime/"},
             { typeof(WaitDIParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(ZoneDataParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Zone%20Data/"},
 
             { typeof(ExternalAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Axis/"},
             { typeof(ExternalLinearAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Linear%20Axis/"},
             { typeof(ExternalRotationalAxisParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Rotational%20Axis/"},
-            { typeof(RobotInfoParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Info/"},
+            { typeof(RobotParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Info/"},
             { typeof(RobotToolParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Robot%20Tool/"},
             { typeof(WorkObjectParameter), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/Work%20Object/"},
             #endregion

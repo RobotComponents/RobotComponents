@@ -25,9 +25,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent()
-          : base("Deconstruct Movement", "DeConMove",
+          : base("Deconstruct Movement", "DeConMove", 
               "Deconstructs a Movement Component into its parameters."
-                + System.Environment.NewLine +
+        + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

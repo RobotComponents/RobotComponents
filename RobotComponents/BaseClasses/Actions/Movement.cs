@@ -400,7 +400,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotInfo"> The robot info with the external axes that defined the axis logic. </param>
         /// <param name="logic"> Retuns the axis logic number as an int. </param>
         /// <returns> The posed target plane in the word coordinate system. </returns>
-        public Plane GetPosedGlobalTargetPlane(RobotInfo robotInfo, out int logic)
+        public Plane GetPosedGlobalTargetPlane(Robot robotInfo, out int logic)
         {
             // Not transformed global target plane
             Plane plane = new Plane(_globalTargetPlane);
@@ -438,7 +438,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
             // Initialize code line
             string code = "";
@@ -538,7 +538,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
             // Set tool name
             string toolName;
@@ -595,7 +595,7 @@ namespace RobotComponents.BaseClasses.Actions
                     string code = "MoveAbsJ " + _target.JointTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ";";
                     // Add the code line for the digital output
                     code += " ";
-                    code += _digitalOutput.ToRAPIDFunction(robotInfo);
+                    code += _digitalOutput.ToRAPIDInstruction(robotInfo);
 
                     return code;
                 }
@@ -624,13 +624,13 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // Creates SpeedData Variable Code 
-            _speedData.InitRAPIDVar(RAPIDGenerator);
+            _speedData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Creates ZoneData Variable Code
-            _zoneData.InitRAPIDVar(RAPIDGenerator);
+            _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Create a robtarget if the movement type is MoveL (1) or MoveJ (2)
             if (_movementType == 1 || _movementType == 2)
@@ -639,7 +639,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.RobTargetName))
                 {
                     RAPIDGenerator.Targets.Add(_target.RobTargetName, _target);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
                 }
             }
 
@@ -650,7 +650,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (!RAPIDGenerator.Targets.ContainsKey(_target.JointTargetName))
                 {
                     RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
                     RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.RobotInfo.InverseKinematics.ErrorText));
                 }
             }
@@ -660,9 +660,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

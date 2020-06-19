@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<AutoAxisConfigGoo> class
         /// </summary>
         public AutoAxisConfigParameter()
-          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP", 
+          : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Auto Axis Configuration data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

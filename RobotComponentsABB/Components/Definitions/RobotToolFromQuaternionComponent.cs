@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.Definitions
         public RobotToolFromQuaternionComponent()
           : base("Robot Tool From Quaternion Data", "RobTool",
               "Defines a robot tool based on TCP coorindate and quarternion values."
-              + System.Environment.NewLine +
+            + System.Environment.NewLine + System.Environment.NewLine +
               "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

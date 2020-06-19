@@ -30,7 +30,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         public GetDigitalOutputComponent()
           : base("Get Digital Output", "GetDO",
               "Gets the signal of a digital output from a defined ABB robot controller."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {

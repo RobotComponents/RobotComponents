@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         public DeconstructRobotToolComponent()
           : base("Deconstruct Robot Tool", "DeRobTool",
               "Deconstructs a robot tool definition into its constituent parts"
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

@@ -32,9 +32,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
         public GetPlaneComponent()
-          : base("Get Plane", "GP",
+          : base("Get Plane", "GP", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Gets the position of a mechanical unit from a defined ABB robot controller as a plane."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {

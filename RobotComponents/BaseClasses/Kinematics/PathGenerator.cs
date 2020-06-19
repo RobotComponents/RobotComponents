@@ -20,7 +20,7 @@ namespace RobotComponents.BaseClasses.Kinematics
     public class PathGenerator
     {
         #region fields
-        private RobotInfo _robotInfo; // The robot info to construct the path for
+        private Robot _robotInfo; // The robot info to construct the path for
         private readonly List<Plane> _planes; // The planes the path follow
         private readonly List<Curve> _paths; // The path curves between two movement targets
         private readonly List<List<double>> _internalAxisValues; // The internal axis values needed to follow the path
@@ -44,7 +44,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// Defines a Path Generator with a robot info.
         /// </summary>
         /// <param name="robotInfo"> The robot info to construct the path for. </param>
-        public PathGenerator(RobotInfo robotInfo)
+        public PathGenerator(Robot robotInfo)
         {
             _planes = new List<Plane>();
             _paths = new List<Curve>();
@@ -665,7 +665,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// The robot info to construct the path for.
         /// </summary>
-        public RobotInfo RobotInfo
+        public Robot RobotInfo
         {
             get 
             { 

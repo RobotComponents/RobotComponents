@@ -24,9 +24,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructZoneData class.
         /// </summary>
         public DeconstructZoneDataComponent()
-          : base("Deconstruct Zone Data", "DeConZone",
+          : base("Deconstruct Zone Data", "DeConZone", 
               "Deconstructs a Zone Data Component into its parameters."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

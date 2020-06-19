@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.Obsolete
               "OBSOLETE: Defines a target for an Action: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

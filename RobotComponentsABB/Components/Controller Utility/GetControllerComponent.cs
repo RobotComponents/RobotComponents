@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         public GetControllerComponent()
           : base("Get Controller", "GC",
               "Connects to a virtual or real ABB controller to extract data from it."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {

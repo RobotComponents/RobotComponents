@@ -56,7 +56,6 @@ namespace RobotComponentsABB.Components.Utilities
             pManager.Register_DoubleParam("Quaternion B", "B", "The first imaginary coefficient of the quaternion.");
             pManager.Register_DoubleParam("Quaternion C", "C", "The second imaginary coefficient of the quaternion.");
             pManager.Register_DoubleParam("Quaternion D", "D", "The third imaginary coefficient of the quaternion.");
-            pManager.Register_StringParam("String", "STR", "The quaternion in string format that can be used in RAPID code.");
         }
 
         /// <summary>
@@ -76,10 +75,6 @@ namespace RobotComponentsABB.Components.Utilities
             // Get the quarternion
             Quaternion quat = RobotComponents.Utils.HelperMethods.PlaneToQuaternion(refPlane, plane, out Point3d origin);
 
-            // Write the quarternion value in the string format that is used in the RAPID and BASE code
-            string text = "[" + quat.A.ToString("0.######") + ", "  + quat.B.ToString("0.######") + ", " 
-                + quat.C.ToString("0.######") + ", " + quat.D.ToString("0.######") + "]";
-
             // Output
             DA.SetData(0, origin.X);
             DA.SetData(1, origin.Y);
@@ -88,7 +83,6 @@ namespace RobotComponentsABB.Components.Utilities
             DA.SetData(4, quat.B);
             DA.SetData(5, quat.C);
             DA.SetData(6, quat.D);
-            DA.SetData(7, text);
         }
 
         #region menu item
@@ -127,7 +121,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("13A3F345-1C9D-4E35-B50D-B11EF157EC72"); }
+            get { return new Guid("310F7FA9-6591-4BC3-901B-1DD924D0E5C3"); }
         }
     }
 }

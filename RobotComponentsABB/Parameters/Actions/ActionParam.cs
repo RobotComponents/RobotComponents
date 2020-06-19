@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<ActionGoo> class
         /// </summary>
         public ActionParameter()
-          : base(new GH_InstanceDescription("Action Parameter", "A", 
+          : base(new GH_InstanceDescription("Action Parameter", "A",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Action data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

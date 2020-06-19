@@ -25,8 +25,9 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public AbsoluteJointMovementParameter()
           : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Maintains the Absolute Joint Movement data."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

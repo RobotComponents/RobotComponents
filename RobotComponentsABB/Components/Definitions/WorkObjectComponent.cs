@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Components.Definitions
         public WorkObjectComponent()
           : base("Work Object", "WorkObj",
               "Defines a new work object."
-                + System.Environment.NewLine +
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {

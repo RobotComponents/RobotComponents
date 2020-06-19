@@ -19,7 +19,7 @@ namespace RobotComponents.BaseClasses.Kinematics
     public class ForwardKinematics
     {
         #region fields
-        private RobotInfo _robotInfo; // Robot info
+        private Robot _robotInfo; // Robot info
         private Plane _positionPlane = Plane.Unset; // Robot Position Plane: needed for external linear axis
         private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
         private double[] _internalAxisRads; // Internal Axis Values in Radiants
@@ -46,7 +46,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// </summary>
         /// <param name="robotInfo"> Robot Information the FK should be calculated for. </param>
         /// <param name="hideMesh"> Boolean that indicates if the mesh will be supressed. </param>
-        public ForwardKinematics(RobotInfo robotInfo, bool hideMesh = false)
+        public ForwardKinematics(Robot robotInfo, bool hideMesh = false)
         {
             _robotInfo = robotInfo;
             _hideMesh = hideMesh;
@@ -59,7 +59,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <param name="internalAxisValues">List of internal axis values. The length of the list should be equal to 6.</param>
         /// <param name="externalAxisValues">List of external axis values. The length of the list should be (for now) equal to 1.</param>
         /// <param name="hideMesh"> Boolean that indicates if the mesh will be supressed. </param>
-        public ForwardKinematics(RobotInfo robotInfo, List<double> internalAxisValues, List<double> externalAxisValues, bool hideMesh = false)
+        public ForwardKinematics(Robot robotInfo, List<double> internalAxisValues, List<double> externalAxisValues, bool hideMesh = false)
         {
             _robotInfo = robotInfo;
             _hideMesh = hideMesh;
@@ -336,7 +336,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// RobotInformation the FK should be calculated for.
         /// </summary>
-        public RobotInfo RobotInfo
+        public Robot RobotInfo
         {
             get { return _robotInfo; }
             set { _robotInfo = value; }

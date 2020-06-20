@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\Declarations\GH_ExternalJointPosition.cs" />
+    <Compile Include="Actions\Declarations\GH_JointTarget.cs" />
     <Compile Include="Actions\Declarations\GH_RobotJointPosition.cs" />
     <Compile Include="Actions\GH_AbsoluteJointMovement.cs" />
     <Compile Include="Actions\GH_AutoAxisConfig.cs" />

@@ -54,6 +54,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Declarations\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\GH_AbsoluteJointMovement.cs" />
     <Compile Include="Actions\GH_AutoAxisConfig.cs" />
     <Compile Include="Actions\GH_CodeLine.cs" />

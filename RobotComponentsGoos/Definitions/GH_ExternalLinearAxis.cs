@@ -14,7 +14,7 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// ExternalLinearAxis Goo wrapper class, makes sure ExternalLinearAxis can be used in Grasshopper.
+    /// External Linear Axis Goo wrapper class, makes sure the External Linear Axis class can be used in Grasshopper.
     /// </summary>
     public class GH_ExternalLinearAxis : GH_GeometricGoo<ExternalLinearAxis>, IGH_PreviewData
     {
@@ -24,44 +24,46 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public GH_ExternalLinearAxis()
         {
-            this.Value = new ExternalLinearAxis();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates an External Linear Axis Goo instance from an External Linear Axis instance.
         /// </summary>
-        /// <param name="externalLinearAxis"> ExternalLinearAxis Value to store inside this Goo instance. </param>
+        /// <param name="externalLinearAxis"> External Linear Axis Value to store inside this Goo instance. </param>
         public GH_ExternalLinearAxis(ExternalLinearAxis externalLinearAxis)
         {
-            if (externalLinearAxis == null)
-                externalLinearAxis = new ExternalLinearAxis();
             this.Value = externalLinearAxis;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates External Linear Axis Goo instance from another External Linear Axis Goo instance.
+        /// This creates a shallow copy of the passed External Linear Axis Goo instance. 
         /// </summary>
-        /// <param name="externalLinearAxisGoo"> ExternalLinearAxisGooe to store inside this Goo instance. </param>
+        /// <param name="externalLinearAxisGoo"> External Linear Axis Goo instance to copy. </param>
         public GH_ExternalLinearAxis(GH_ExternalLinearAxis externalLinearAxisGoo)
         {
             if (externalLinearAxisGoo == null)
+            {
                 externalLinearAxisGoo = new GH_ExternalLinearAxis();
+            }
+
             this.Value = externalLinearAxisGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalLinearAxisGoo. </returns>
+        /// <returns> A duplicate of the External Linear Axis Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateExternalLinearAxisGoo();
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalLinearAxisGoo. </returns>
+        /// <returns> A duplicate of the External Linear Axis Goo. </returns>
         public GH_ExternalLinearAxis DuplicateExternalLinearAxisGoo()
         {
             return new GH_ExternalLinearAxis(Value == null ? new ExternalLinearAxis() : Value.Duplicate());
@@ -82,29 +84,27 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal ExternalLinearAxis instance"; }
+                if (Value == null) { return "No internal External Linear Axis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalLinearAxis instance: Did you define an interval, attachment plane and axis vector?"; //Todo: beef this up to be more informative.
+                return "Invalid External Linear Axis instance: Did you define an interval, attachment plane and axis vector?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null External Linear Axis";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null External Linear Axis"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Linear Axis"); }
+            get { return "External Linear Axis"; }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an External Linear Axis."); }
+            get { return "Defines an External Linear Axis."; }
         }
 
         /// <summary>
@@ -182,67 +182,70 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalLinearAxis
+            //Cast to External Linear Axis
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else if (Value.IsValid == false) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ExternalLinearAxisGoo
+            //Cast to External Linear Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalLinearAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ExternalLinearAxis(Value);
+                if (Value == null) { target = default(Q); }
+                else if (Value.IsValid == false) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalLinearAxis(Value); }
                 return true;
             }
 
-            //Cast to ExternalAxisGoo
+            //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ExternalAxis(Value);
+                if (Value == null) { target = default(Q); }
+                else if (Value.IsValid == false) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalAxis(Value); }
                 return true;
             }
 
-            //Cast to Plane.
+            //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AttachmentPlane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Plane(Value.AttachmentPlane);
+                if (Value == null) { target = default(Q); }
+                else if (Value.AttachmentPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Plane(Value.AttachmentPlane); }
                 return true;
             }
 
-            //Cast to Point.
+            //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AttachmentPlane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin);
+                if (Value == null) { target = default(Q); }
+                else if (Value.AttachmentPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin); }
                 return true;
             }
 
-            //Cast to Curve.
+            //Cast to Interval
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
+            {
+                if (Value == null) { target = default(Q); }
+                else if (Value.AxisLimits == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Interval(Value.AxisLimits); }
+                return true;
+            }
+
+            //Cast to Axis vector (positive movement direction)
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
+            { 
+                if (Value == null) { target = default(Q); }
+                else if (Value.AxisPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Vector(Value.AxisPlane.ZAxis); }
+                return true;
+            }
+
+            //Cast to Curve
             if (typeof(Q).IsAssignableFrom(typeof(GH_Curve)))
             {
                 if (Value == null)
@@ -255,7 +258,6 @@ namespace RobotComponentsGoos.Definitions
                 }
                 else
                 {
-                    // Cast to a curve with a domain equal to the axis limits.
                     Curve curve = Value.AxisCurve.DuplicateCurve();
                     curve.Domain = Value.AxisLimits;
                     target = (Q)(object)new GH_Curve(curve);
@@ -263,38 +265,6 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
-            //Cast to Interval.
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
-            {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.AxisLimits == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Interval(Value.AxisLimits);
-                return true;
-            }
-
-            //Cast to Axis vector (positive movement direction)
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
-            { 
-                if (Value == null)
-                {
-                    target = default(Q);
-                }
-                else if (Value.AxisPlane == null)
-                {
-                    target = default(Q);
-                }
-                else
-                {
-                    Vector3d vector = Value.AxisPlane.ZAxis;
-                    vector.Unitize();
-                    target = (Q)(object)new GH_Vector(vector);
-                }
-                return true;
-            }
-           
             target = default(Q);
             return false;
         }
@@ -308,7 +278,7 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from ExternalLinearAxis
+            //Cast from External Linear Axis
             if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
@@ -316,7 +286,7 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
-            //Cast from ExternalLinearAxisGoo
+            //Cast from External Linear Axis Goo
             if (typeof(GH_ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalLinearAxis externalLinearAxisGoo = source as GH_ExternalLinearAxis;
@@ -324,7 +294,7 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
-            //Cast from ExternalAxis
+            //Cast from External Axis
             if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 if (source is ExternalLinearAxis externalLinearAxis)
@@ -334,7 +304,7 @@ namespace RobotComponentsGoos.Definitions
                 }
             }
 
-            //Cast from ExternalAxisGoo
+            //Cast from External Axis Goo
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;                 
@@ -376,7 +346,7 @@ namespace RobotComponentsGoos.Definitions
                 ExternalLinearAxis externalLinearAxis = Value.Duplicate();
                 // Transform
                 externalLinearAxis.Transform(xform);
-                // Make new goo instance
+                // Make new Goo instance
                 GH_ExternalLinearAxis externalLinearAxisGoo = new GH_ExternalLinearAxis(externalLinearAxis);
                 // Return
                 return externalLinearAxisGoo;
@@ -413,7 +383,10 @@ namespace RobotComponentsGoos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) { return; }
+            if (Value == null) 
+            { 
+                return; 
+            }
 
             if (Value.BaseMesh != null)
             {

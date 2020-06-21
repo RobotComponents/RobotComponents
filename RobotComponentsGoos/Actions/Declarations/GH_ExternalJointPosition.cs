@@ -12,7 +12,7 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// External Joint Position Goo wrapper class, makes sure External Joint Positions can be used in Grasshopper.
+    /// External Joint Position Goo wrapper class, makes sure the External Joint Position class can be used in Grasshopper.
     /// </summary>
     public class GH_ExternalJointPosition : GH_Goo<ExternalJointPosition>
     {
@@ -22,27 +22,23 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_ExternalJointPosition()
         {
-            this.Value = new ExternalJointPosition();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates an External Joint Position Goo instance from an External Joint Position instance. 
         /// </summary>
         /// <param name="externalJointPosition"> External Joint Position Value to store inside this Goo instance. </param>
         public GH_ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
-            if (externalJointPosition == null)
-            {
-                externalJointPosition = new ExternalJointPosition();
-            }
-
             this.Value = externalJointPosition;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates an External Joint Position Goo instance from another External Joint Position Goo instance.
+        /// This creates a shallow copy of the passed External Joint Position Goo instance. 
         /// </summary>
-        /// <param name="externalJointPositionGoo"> Goo instance to copy. </param>
+        /// <param name="externalJointPositionGoo"> External Joint Position Goo instance to copy. </param>
         public GH_ExternalJointPosition(GH_ExternalJointPosition externalJointPositionGoo)
         {
             if (externalJointPositionGoo == null)
@@ -54,7 +50,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this instance. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the this Goo instance. </returns>
         public override IGH_Goo Duplicate()
@@ -86,7 +82,7 @@ namespace RobotComponentsGoos.Actions
             {
                 if (Value == null) { return "No internal ExternalJointPosition instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalJointPosition instance: Did you define external axis values?"; //Todo: beef this up to be more informative.
+                return "Invalid ExternalJointPosition instance: Did you define external axis values?";
             }
         }
 

@@ -4,19 +4,16 @@
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // Grasshopper Libs
-using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Wait Digital Input wrapper class, makes sure the WaitDI can be used in Grasshopper.
+    /// Wait DI Goo wrapper class, makes sure the Wait DI class can be used in Grasshopper.
     /// </summary>
-    public class GH_WaitDI : GH_GeometricGoo<WaitDI>, IGH_PreviewData
+    public class GH_WaitDI : GH_Goo<WaitDI>
     {
         #region constructors
         /// <summary>
@@ -24,45 +21,38 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_WaitDI()
         {
-            this.Value = new WaitDI();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Create a Wait for Digital Input Goo instance from a Wait for Digital Input instance.
         /// </summary>
-        /// <param name="waitDI"> WaitDI Value to store inside this Goo instance. </param>
+        /// <param name="waitDI"> Wait DI Value to store inside this Goo instance. </param>
         public GH_WaitDI(WaitDI waitDI)
         {
-            if (waitDI == null)
-                waitDI = new WaitDI();
             this.Value = waitDI;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Wait for Digital Input Goo instance from another Wait for Digital Input Goo instance.
+        /// This creates a shallow copy of the passed Wait for Digital Input Goo instance. 
         /// </summary>
-        /// <param name="waitDIGoo"> WaitDIGoo to store inside this Goo instance. </param>
+        /// <param name="waitDIGoo"> Wait DI Goo to copy. </param>
         public GH_WaitDI(GH_WaitDI waitDIGoo)
         {
             if (waitDIGoo == null)
+            {
                 waitDIGoo = new GH_WaitDI();
+            }
+
             this.Value = waitDIGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the WaitDIGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateWaitDIGoo();
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the WaitDIGoo. </returns>
-        public GH_WaitDI DuplicateWaitDIGoo()
+        public override IGH_Goo Duplicate()
         {
             return new GH_WaitDI(Value == null ? new WaitDI() : Value.Duplicate());
         }
@@ -82,16 +72,16 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal WaitDI instance"; }
+                if (Value == null) { return "No internal Wait DI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitDI instance: Did you define the digital input name and value?"; //Todo: beef this up to be more informative.
+                return "Invalid Wait DI instance: Did you define the digital input name and value?"; 
             }
         }
 
@@ -101,10 +91,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null WaitDI";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Wait DI"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -112,7 +100,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Wait for Digital Input"); }
+            get { return "Wait for Digital Input"; }
         }
 
         /// <summary>
@@ -120,28 +108,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Wait for Digital Input data."); }
-        }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            get { return "Defines a Wait for Digital Input"; }
         }
         #endregion
 
@@ -152,55 +119,45 @@ namespace RobotComponentsGoos.Actions
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
-            // Cast to WaitDI
+            // Cast to Wait DI
             if (typeof(Q).IsAssignableFrom(typeof(WaitDI)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            // Cast to WaitDIGoo
+            // Cast to Wait DI Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_WaitDI)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_WaitDI(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_WaitDI(Value); }
                 return true;
             }
 
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
             //Cast to Boolean
             if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Boolean(Value.Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Boolean(Value.Value); }
                 return true;
             }
 
@@ -217,7 +174,7 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            // Cast from WaitDI
+            // Cast from Wait DI
             if (typeof(WaitDI).IsAssignableFrom(source.GetType()))
             {
                 Value = source as WaitDI;
@@ -234,7 +191,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -246,55 +203,6 @@ namespace RobotComponentsGoos.Actions
             }
 
             return false;
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
-        }
-        #endregion
-
-        #region drawing methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get { return Boundingbox; }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
         }
         #endregion
     }

@@ -15,7 +15,7 @@ using RobotComponentsGoos.Definitions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Movement Goo wrapper class, makes sure the Movement can be used in Grasshopper.
+    /// Movement Goo wrapper class, makes sure the Movement class can be used in Grasshopper.
     /// </summary>
     public class GH_Movement : GH_GeometricGoo<Movement>, IGH_PreviewData
     {
@@ -25,44 +25,46 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_Movement()
         {
-            this.Value = new Movement();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Movement Goo instance from a Movement instance.
         /// </summary>
         /// <param name="movement"> Movement Value to store inside this Goo instance. </param>
         public GH_Movement(Movement movement)
         {
-            if (movement == null)
-                movement = new Movement();
             this.Value = movement;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Momvement Goo instance from another Movement Goo instance.
+        /// This creates a shallow copy of the passed Momvement Goo instance. 
         /// </summary>
-        /// <param name="movementGoo"> MovementGoo to store inside this Goo instance. </param>
+        /// <param name="movementGoo"> Movement Goo instance to copy. </param>
         public GH_Movement(GH_Movement movementGoo)
         {
             if (movementGoo == null)
+            {
                 movementGoo = new GH_Movement();
+            }
+
             this.Value = movementGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
+        /// <returns> A duplicate of the Movement Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateMovementGoo();
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
+        /// <returns> A duplicate of the Movement Goo. </returns>
         public GH_Movement DuplicateMovementGoo()
         {
             return new GH_Movement(Value == null ? new Movement() : Value.Duplicate());
@@ -83,7 +85,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
@@ -92,21 +94,18 @@ namespace RobotComponentsGoos.Actions
             {
                 if (Value == null) { return "No internal Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Movement instance: Did you define a target?"; //Todo: beef this up to be more informative.
+                return "Invalid Movement instance: Did you define a Target?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Movement";
-
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Movement"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -114,7 +113,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Movement"); }
+            get { return "Movement"; }
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Movement"); }
+            get { return "Defines a Movement"; }
         }
 
         /// <summary>
@@ -130,10 +129,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
+            get { return BoundingBox.Empty; }
         }
 
         /// <summary>
@@ -143,7 +139,7 @@ namespace RobotComponentsGoos.Actions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return BoundingBox.Empty;
         }
         #endregion
 
@@ -156,139 +152,107 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Movement.
+            //Cast to Movement
             if (typeof(Q).IsAssignableFrom(typeof(Movement)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to Movement.
+            //Cast to Movement Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Movement)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Movement(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Movement(Value); }
                 return true;
             }
 
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            //Cast to Target
+            //Cast to Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.Target == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Target(Value.Target);
+                if (Value == null) { target = default(Q); }
+                else if (Value.Target == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Target(Value.Target); }
                 return true;
             }
 
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.GlobalTargetPlane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane);
+                if (Value == null) { target = default(Q); }
+                else if (Value.GlobalTargetPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane); }
                 return true;
             }
 
             //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.GlobalTargetPlane == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin);
+                if (Value == null) { target = default(Q); }
+                else if (Value.GlobalTargetPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin); }
                 return true;
             }
 
-            //Cast to SpeedData
+            //Cast to Speed Data
             if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.SpeedData == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_SpeedData(Value.SpeedData);
+                if (Value == null) { target = default(Q); }
+                else if (Value.SpeedData == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_SpeedData(Value.SpeedData); }
                 return true;
             }
 
-            //Cast to ZoneData
+            //Cast to Zone Data
             if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.ZoneData == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ZoneData(Value.ZoneData);
+                if (Value == null) { target = default(Q); }
+                else if (Value.ZoneData == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ZoneData(Value.ZoneData); }
                 return true;
             }
 
-            //Cast to RobotTool
+            //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.RobotTool == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_RobotTool(Value.RobotTool);
+                if (Value == null) { target = default(Q); }
+                else if (Value.RobotTool == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
                 return true;
             }
 
-            //Cast to WorkObject
+            //Cast to Work Object
             if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.WorkObject == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_WorkObject(Value.WorkObject);
+                if (Value == null) { target = default(Q); }
+                else if (Value.WorkObject == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_WorkObject(Value.WorkObject); }
                 return true;
             }
 
-            //Cast to DigitalOutput
+            //Cast to Digital Output
             if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.DigitalOutput == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput);
+                if (Value == null) { target = default(Q); }
+                else if (Value.DigitalOutput == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
                 return true;
             }
 
@@ -312,7 +276,7 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast from TargetGoo
+            //Cast from Target Goo
             if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
             {
                 GH_Target targetGoo = source as GH_Target;
@@ -338,7 +302,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;

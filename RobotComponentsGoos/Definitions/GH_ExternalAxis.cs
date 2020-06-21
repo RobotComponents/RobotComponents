@@ -14,7 +14,7 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// ExternalAxis Goo wrapper class, makes sure ExternalAxis can be used in Grasshopper.
+    /// External Axis Goo wrapper class, makes sure the External Axis class can be used in Grasshopper.
     /// </summary>
     public class GH_ExternalAxis : GH_GeometricGoo<ExternalAxis>, IGH_PreviewData
     {
@@ -28,23 +28,19 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// Data constructor from from ExternalAxis
+        /// Data constructor: Creates an External Axis Goo instance from an External Axis instance.
         /// </summary>
-        /// <param name="externalAxis"> ExternalAxis Value to store inside this Goo instance. </param>
+        /// <param name="externalAxis"> External Axis Value to store inside this Goo instance. </param>
         public GH_ExternalAxis(ExternalAxis externalAxis)
         {
-            if (externalAxis == null)
-            {
-                externalAxis = null;
-            }
-
             this.Value = externalAxis;
         }
 
         /// <summary>
-        /// Data constructor from ExternalAxisGoo
+        /// Data constructor: Creates a External Axis Goo instance from another External Axis Goo instance.
+        /// This creates a shallow copy of the passed External Axis Goo instance. 
         /// </summary>
-        /// <param name="externalAxisGoo"> ExternalAxisGoo to store inside this Goo instance. </param>
+        /// <param name="externalAxisGoo"> External Axis Goo instance to copy </param>
         public GH_ExternalAxis(GH_ExternalAxis externalAxisGoo)
         {
             if (externalAxisGoo == null)
@@ -56,28 +52,22 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
+        /// <returns> A duplicate of the External Axis Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateExternalAxisGoo();
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ExternalAxisGoo. </returns>
+        /// <returns> A duplicate of the External Axis Goo. </returns>
         public GH_ExternalAxis DuplicateExternalAxisGoo()
         {
-            if (Value == null) 
-                return null; 
-
-            else if (Value is ExternalAxis) 
-                return new GH_ExternalAxis(Value.DuplicateExternalAxis()); 
-
-            else 
-                return null; 
+            if (Value == null) { return new GH_ExternalAxis(); }
+            else  { return new GH_ExternalAxis(Value.DuplicateExternalAxis()); }
         }
         #endregion
 
@@ -95,29 +85,27 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal ExternalAxis instance"; }
+                if (Value == null) { return "No internal External Axis instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ExternalAxis instance: Did you define an interval and axis plane?"; //Todo: beef this up to be more informative.
+                return "Invalid External Axis instance: Did you define an interval and axis plane?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null External Axis";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null External Axis"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -125,7 +113,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Axis"); }
+            get { return "External Axis"; }
         }
 
         /// <summary>
@@ -133,7 +121,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a External Axis."); }
+            get { return "Defines an External Axis."; }
         }
 
         /// <summary>
@@ -189,33 +177,27 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to ExternalAxis.
+            //Cast to External Axis
             if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ExternalLinearAxis.
+            //Cast to External Linear Axis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ExternalRotationalAxis.
+            //Cast to External Rotational Axis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
@@ -232,14 +214,14 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from ExternalAxis
+            //Cast from External Axis
             if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = source as ExternalAxis;
                 return true;
             }
 
-            //Cast from ExternalAxisGoo
+            //Cast from External Axis Goo
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;
@@ -247,14 +229,14 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
-            //Cast from ExternalLinearAxis
+            //Cast from External Linear Axis
             if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = source as ExternalAxis;
                 return true;
             }
 
-            //Cast from ExternalLinearAxisGoo
+            //Cast from External Linear Axis Goo
             if (typeof(GH_ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalLinearAxis externalLinearAxisGoo = source as GH_ExternalLinearAxis;
@@ -262,14 +244,14 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
-            //Cast from ExternalRotatioanlAxis
+            //Cast from External Rotatioanl Axis
             if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = source as ExternalAxis;
                 return true;
             }
 
-            //Cast from ExternalRotationalAxisGoo
+            //Cast from External Rotational Axis Goo
             if (typeof(GH_ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalRotationalAxis externalRotationalAxisGoo = source as GH_ExternalRotationalAxis;
@@ -308,7 +290,7 @@ namespace RobotComponentsGoos.Definitions
                 ExternalAxis externalAxis = Value.DuplicateExternalAxis();
                 // Transform
                 externalAxis.Transform(xform);
-                // Make new goo instance
+                // Make new Goo instance
                 GH_ExternalAxis externalAxisGoo = new GH_ExternalAxis(externalAxis);
                 // Return
                 return externalAxisGoo;
@@ -347,7 +329,10 @@ namespace RobotComponentsGoos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) { return; }
+            if (Value == null) 
+            { 
+                return; 
+            }
 
             if (Value.BaseMesh != null)
             {

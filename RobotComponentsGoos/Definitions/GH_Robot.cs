@@ -14,7 +14,7 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// robot Goo wrapper class, makes sure robot can be used in Grasshopper.
+    /// Robot Goo wrapper class, makes sure the Robot class can be used in Grasshopper.
     /// </summary>
     public class GH_Robot : GH_GeometricGoo<Robot>, IGH_PreviewData
     {
@@ -24,44 +24,46 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public GH_Robot()
         {
-            this.Value = new Robot();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Robot Goo instance from a Robot instance.
         /// </summary>
-        /// <param name="robot"> robot Value to store inside this Goo instance. </param>
+        /// <param name="robot"> Robot to store inside this Goo instance. </param>
         public GH_Robot(Robot robot)
         {
-            if (robot == null)
-                robot = new Robot();
             this.Value = robot;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Robot Goo instance from another Robot Goo instance.
+        /// This creates a shallow copy of the passed Robot Goo instance. 
         /// </summary>
-        /// <param name="robotGoo"> robotGoo to store inside this Goo instance. </param>
+        /// <param name="robotGoo"> Robot Goo instance to copy. </param>
         public GH_Robot(GH_Robot robotGoo)
         {
             if (robotGoo == null)
+            {
                 robotGoo = new GH_Robot();
+            }
+
             this.Value = robotGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo insance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the robotGoo. </returns>
+        /// <returns> A duplicate of the Robot Goo instance. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateRobotInfoGoo();
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the robotGoo. </returns>
+        /// <returns> A duplicate of the Robot Goo instance. </returns>
         public GH_Robot DuplicateRobotInfoGoo()
         {
             return new GH_Robot(Value == null ? new Robot() : Value.Duplicate());
@@ -82,29 +84,27 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal robot instance"; }
+                if (Value == null) { return "No internal Robot instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid robot instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Robot instance: Did you define the axis limits, position plane, axis planes and tool attachment plane?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null robot";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Robot"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("robot"); }
+            get { return "Robot"; }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single robot"); }
+            get { return "Defines a Robot"; }
         }
 
         /// <summary>
@@ -130,8 +130,16 @@ namespace RobotComponentsGoos.Definitions
         {
             get
             {
-                if (Value == null) { return BoundingBox.Empty; }
-                if (Value.Meshes == null) { return BoundingBox.Empty; }
+                if (Value == null) 
+                { 
+                    return BoundingBox.Empty; 
+                }
+                
+                else if (Value.Meshes == null) 
+                { 
+                    return BoundingBox.Empty; 
+                }
+
                 else
                 {
                     // Make an empty bounding box
@@ -185,35 +193,22 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to robot.
+            //Cast to Robot
             if (typeof(Q).IsAssignableFrom(typeof(Robot)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to RobotTool
+            //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.Tool == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_RobotTool(Value.Tool);
+                if (Value == null) { target = default(Q); }
+                else if (Value.Tool == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotTool(Value.Tool); }
                 return true;
             }
-
-            //Cast to Mesh.
-
-            // Casting is only possible from one to one (does not work with lists)
-            // The robot mesh is stored in a list.
-            // It can only be returned as one single mesh and not as list with a mesh for the separate links. 
-            // Therefore, casting to a mesh is not implemented. 
-            // If the users wants to get the robot mesh they can use the Deconstuct robot Component. 
 
             target = default(Q);
             return false;
@@ -228,7 +223,7 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from robot
+            //Cast from Robot
             if (typeof(Robot).IsAssignableFrom(source.GetType()))
             {
                 Value = (Robot)source;
@@ -283,7 +278,10 @@ namespace RobotComponentsGoos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) { return; }
+            if (Value == null) 
+            { 
+                return; 
+            }
 
             // Robot meshes
             if (Value.Meshes != null)

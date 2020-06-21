@@ -12,7 +12,7 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Robot Joint Position Goo wrapper class, makes sure Robot Joint Positions can be used in Grasshopper.
+    /// Robot Joint Position Goo wrapper class, makes sure the Robot Joint Position class can be used in Grasshopper.
     /// </summary>
     public class GH_RobotJointPosition : GH_Goo<RobotJointPosition>
     {
@@ -22,39 +22,35 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_RobotJointPosition()
         {
-            this.Value = new RobotJointPosition();
+            this.Value = null;
         }
 
         /// <summary>
         /// Data constructor
         /// </summary>
         /// <param name="RobotJointPosition"> Robot Joint Position Value to store inside this Goo instance. </param>
-        public GH_RobotJointPosition(RobotJointPosition RobotJointPosition)
+        public GH_RobotJointPosition(RobotJointPosition robotJointPosition)
         {
-            if (RobotJointPosition == null)
-            {
-                RobotJointPosition = new RobotJointPosition();
-            }
-
-            this.Value = RobotJointPosition;
+            this.Value = robotJointPosition;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates a Robot Joint Position instance from another Robot Joint Position Goo instance.
+        /// This creates a shallow copy of the passed Robot Joint Position Goo instance. 
         /// </summary>
-        /// <param name="RobotJointPositionGoo"> RobotJointPositionGoo to store inside this Goo instance. </param>
-        public GH_RobotJointPosition(GH_RobotJointPosition RobotJointPositionGoo)
+        /// <param name="robotJointPositionGoo"> Robot Joint Position Goo instance to copy. </param>
+        public GH_RobotJointPosition(GH_RobotJointPosition robotJointPositionGoo)
         {
-            if (RobotJointPositionGoo == null)
+            if (robotJointPositionGoo == null)
             {
-                RobotJointPositionGoo = new GH_RobotJointPosition();
+                robotJointPositionGoo = new GH_RobotJointPosition();
             }
 
-            this.Value = RobotJointPositionGoo.Value;
+            this.Value = robotJointPositionGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this goo instance. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of this Goo instance. </returns>
         public override IGH_Goo Duplicate()
@@ -91,7 +87,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()

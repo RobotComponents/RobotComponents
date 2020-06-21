@@ -14,7 +14,7 @@ using RobotComponents.BaseClasses.Definitions;
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// RobotTool Goo wrapper class, makes sure RobotTool can be used in Grasshopper.
+    /// Robot Tool Goo wrapper class, makes sure the Robot Tool class can be used in Grasshopper.
     /// </summary>
     public class GH_RobotTool : GH_GeometricGoo<RobotTool>, IGH_PreviewData
     {
@@ -24,35 +24,37 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public GH_RobotTool()
         {
-            this.Value = new RobotTool();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Create a Robot Tool instance from a Robot Tool.
         /// </summary>
-        /// <param name="robotTool"> RobotTool Value to store inside this Goo instance. </param>
+        /// <param name="robotTool"> Robot Tool Value to store inside this Goo instance. </param>
         public GH_RobotTool(RobotTool robotTool)
         {
-            if (robotTool == null)
-                robotTool = new RobotTool();
             this.Value = robotTool;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Robot Tool Goo instance from another Robot Tool Goo instance.
+        /// This creates a shallow copy of the passed Robot Tool Goo instance. 
         /// </summary>
-        /// <param name="robotToolGoo"> RobotToolGoo to store inside this Goo instance. </param>
+        /// <param name="robotToolGoo"> Robot Tool Goo instance to copy. </param>
         public GH_RobotTool(GH_RobotTool robotToolGoo)
         {
             if (robotToolGoo == null)
+            {
                 robotToolGoo = new GH_RobotTool();
+            }
+
             this.Value = robotToolGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo insance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotToolGoo. </returns>
+        /// <returns> A duplicate of the Robot Tool Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateRobotToolGoo();
@@ -61,7 +63,7 @@ namespace RobotComponentsGoos.Definitions
         /// <summary>
         /// Make a complete duplicate of this geometry. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the RobotToolGoo. </returns>
+        /// <returns> A duplicate of the Robot Tool Goo. </returns>
         public GH_RobotTool DuplicateRobotToolGoo()
         {
             return new GH_RobotTool(Value == null ? new RobotTool() : Value.Duplicate());
@@ -82,31 +84,28 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal RobotTool instance"; }
+                if (Value == null) { return "No internal Robot Tool instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotTool instance: Did you define the attachment plane and TCP plane?"; //Todo: beef this up to be more informative.
+                return "Invalid Robot Tool instance: Did you define the attachment plane and TCP plane?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null RobotTool";
-            if (Value.Name == "" || Value.Name == null)
-                return "Empty Robot Tool";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Robot Tool"; }
+            if (Value.Name == "" || Value.Name == null) { return "Empty Robot Tool"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -114,7 +113,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("RobotTool"); }
+            get { return "RobotTool"; }
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single RobotTool"); }
+            get { return "Defines a single RobotTool"; }
         }
 
         /// <summary>
@@ -158,25 +157,20 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to RobotTool.
+            //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to Mesh.
+            //Cast to Mesh
             if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.Mesh == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object) new GH_Mesh(Value.Mesh);
+                if (Value == null) { target = default(Q); }
+                else if (Value.Mesh == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Mesh(Value.Mesh); }
                 return true;
             }
 
@@ -193,7 +187,7 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from RobotTool
+            //Cast from Robot Tool
             if (typeof(RobotTool).IsAssignableFrom(source.GetType()))
             {
                 Value = (RobotTool)source;
@@ -231,7 +225,7 @@ namespace RobotComponentsGoos.Definitions
                 RobotTool robotTool = Value.Duplicate();
                 // Transform
                 robotTool.Transform(xform);
-                // Make new goo instance
+                // Make new Goo instance
                 GH_RobotTool robotToolGoo = new GH_RobotTool(robotTool);
                 // Return
                 return robotToolGoo;
@@ -268,7 +262,11 @@ namespace RobotComponentsGoos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) { return; }
+            if (Value == null) 
+            {
+                return; 
+            }
+
             if (Value.Mesh != null)
             {
                 args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));

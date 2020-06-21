@@ -21,7 +21,7 @@ namespace RobotComponentsABB.Parameters.Definitions
     public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalAxisGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalAxis> class
         /// </summary>
         public ExternalAxisParameter()
           : base(new GH_InstanceDescription("External Axis", "EA",

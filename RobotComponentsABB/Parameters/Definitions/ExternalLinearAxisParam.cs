@@ -21,7 +21,7 @@ namespace RobotComponentsABB.Parameters.Definitions
     public class ExternalLinearAxisParameter : GH_PersistentGeometryParam<GH_ExternalLinearAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalLinearAxisGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalLinearAxis> class
         /// </summary>
         public ExternalLinearAxisParameter()
           : base(new GH_InstanceDescription("External Linear Axis", "ELA",

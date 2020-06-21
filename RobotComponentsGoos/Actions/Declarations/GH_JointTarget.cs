@@ -12,7 +12,7 @@ using RobotComponents.BaseClasses.Actions;
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Joint Target Goo wrapper class, makes sure Joint Targets can be used in Grasshopper.
+    /// Joint Target Goo wrapper class, makes sure the Joint Target class can be used in Grasshopper.
     /// </summary>
     public class GH_JointTarget : GH_Goo<JointTarget>
     {
@@ -22,27 +22,23 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_JointTarget()
         {
-            this.Value = new JointTarget();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Create a Joint Target Goo instance from a Joint Target instance.
         /// </summary>
         /// <param name="jointTarget"> Joint Target Value to store inside this Goo instance. </param>
         public GH_JointTarget(JointTarget jointTarget)
         {
-            if (jointTarget == null)
-            {
-                jointTarget = new JointTarget();
-            }
-
             this.Value = jointTarget;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates a Joint Target Goo instance from another Joint Target instance.
+        /// This creates a shallow copy of the passed Joint Target Goo instance. 
         /// </summary>
-        /// <param name="jointTargetGoo"> JointTargetGoo to store inside this Goo instance. </param>
+        /// <param name="jointTargetGoo"> Joint Target Goo instance to copy. </param>
         public GH_JointTarget(GH_JointTarget jointTargetGoo)
         {
             if (jointTargetGoo == null)
@@ -54,7 +50,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this Goo. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the JointTargetGoo. </returns>
         public override IGH_Goo Duplicate()
@@ -77,7 +73,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot

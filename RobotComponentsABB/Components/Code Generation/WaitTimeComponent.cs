@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

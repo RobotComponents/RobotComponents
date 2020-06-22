@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines manually an instruction or declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

@@ -30,7 +30,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines an instruction to wait for the signal of a Digital Input from the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

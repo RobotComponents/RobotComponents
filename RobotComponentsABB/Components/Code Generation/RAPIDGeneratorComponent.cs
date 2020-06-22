@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Generates the RAPID program and system module for the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

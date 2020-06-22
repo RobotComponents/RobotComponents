@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

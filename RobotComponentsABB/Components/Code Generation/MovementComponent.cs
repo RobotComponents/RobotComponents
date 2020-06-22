@@ -38,7 +38,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines a linear or nonlinear movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
 
         {
             // Create the component label with a message

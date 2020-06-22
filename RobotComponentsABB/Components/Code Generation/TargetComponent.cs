@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines a target declaration for a Move or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";

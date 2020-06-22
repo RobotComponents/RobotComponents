@@ -30,7 +30,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "Defines an instruction to change the state of a digital output of the robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+              "RobotComponents", "Code Generation")
         {
         }
 

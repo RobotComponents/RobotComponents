@@ -25,7 +25,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructZoneDataComponent()
           : base("Deconstruct Zone Data", "DeConZone", 
-              "Deconstructs a Zone Data Component into its parameters."
+              "Deconstructs a Zone Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
@@ -37,7 +37,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Custom Zone Data or as a number", GH_ParamAccess.item);
+            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number", GH_ParamAccess.item);
         }
 
         /// <summary>

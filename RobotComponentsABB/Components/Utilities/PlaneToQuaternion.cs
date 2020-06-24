@@ -25,7 +25,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public PlaneToQuaternion()
           : base("Plane to Quaternion", "PtoQ",
-              "Calculates the four coefficient values in a quarternion. "
+              "Converts a plane to quaternion values."
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
@@ -40,7 +40,7 @@ namespace RobotComponentsABB.Components.Utilities
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Reference Plane", "RP", "The reference plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddPlaneParameter("Reference Plane", "RP", "The Reference Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager[1].Optional = true;
         }
 

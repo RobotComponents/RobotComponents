@@ -47,7 +47,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
-            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis");
+            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
         }
 
         /// <summary>

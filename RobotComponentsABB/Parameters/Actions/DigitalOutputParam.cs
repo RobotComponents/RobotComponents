@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Actions
         public DigitalOutputParameter()
           : base(new GH_InstanceDescription("Digital Output", "DO",
                 "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Digital Output data."
+                "Contains the data of a Set Digital Output instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

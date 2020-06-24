@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructRobotInfoComponent()
           : base("Deconstruct Robot Info", "DeRobInfo", 
-              "Deconstructs a robot info definition into its constituent parts"
+              "Deconstructs a Robot coponent into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
@@ -54,7 +54,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Interval List", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Mounting Frame", "MF", "Mounting Frame as Frame", GH_ParamAccess.item);
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool", GH_ParamAccess.item);
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool", GH_ParamAccess.item);
             pManager.RegisterParam(new ExternalAxisParameter(), "External Axes", "EA", "External Axes as External Axis Parameter", GH_ParamAccess.list);
         }
 

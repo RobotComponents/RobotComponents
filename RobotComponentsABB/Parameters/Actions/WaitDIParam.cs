@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Actions
         public WaitDIParameter()
           : base(new GH_InstanceDescription("Wait for Digital Input", "WDI",
                 "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Wait for Digital Input data."
+                "Contains the data of a Wait for Digital Input instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

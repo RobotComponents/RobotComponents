@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Definitions
         public ExternalAxisParameter()
           : base(new GH_InstanceDescription("External Axis", "EA",
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the External Axis data."
+                "Contains the data of an External Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

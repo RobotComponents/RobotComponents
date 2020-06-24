@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Actions
         public SpeedDataParameter()
           : base(new GH_InstanceDescription("Speed Data", "SD",
                 "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Speed Data data."
+                "Contains the data of a Speed Data declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

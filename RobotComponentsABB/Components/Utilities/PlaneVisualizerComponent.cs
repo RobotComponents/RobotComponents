@@ -30,7 +30,7 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public PlaneVisualizerComponent()
           : base("Plane Visualizer", "PV",
-              "Visualizer for plane orientation."
+              "Visualizes the orientation vectors of a plane."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")

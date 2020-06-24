@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Definitions
         public WorkObjectParameter()
           : base(new GH_InstanceDescription("Work Object Parameter", "WO",
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Work Object data"
+                "Contains the data of a Work Object."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

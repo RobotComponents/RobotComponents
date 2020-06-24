@@ -28,8 +28,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the GetDigitalInput class.
         /// </summary>
         public GetDigitalInputComponent()
-          : base("Get Digital Input", "GetDI", 
-              "Gets a digital input from a defined ABB robot controller."
+          : base("Get Digital Input", "GetDI",
+              "Gets the signal of a defined digital input from an ABB IRC5 robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
@@ -51,7 +51,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to be connected to as Robot Controller", GH_ParamAccess.item);
             pManager.AddTextParameter("DI Name", "N", "Digital Input Name as text", GH_ParamAccess.item);
             pManager[1].Optional = true;
         }
@@ -62,7 +62,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             //TODO: Replace generic parameter with a RobotComponents Parameter
-            pManager.AddGenericParameter("Signal", "S", "The Digital Input Signal", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Input", GH_ParamAccess.item);
         }
 
         // Fields

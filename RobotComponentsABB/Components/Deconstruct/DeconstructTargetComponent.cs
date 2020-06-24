@@ -47,8 +47,8 @@ namespace RobotComponentsABB.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
-            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.");
-            pManager.Register_DoubleParam("External Axis Values", "EAV", "The user definied override external axis values.");
+            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
+            pManager.Register_DoubleParam("External Axis Values", "EAV", "External Axis Values as list of numbers.");
         }
    
         /// <summary>

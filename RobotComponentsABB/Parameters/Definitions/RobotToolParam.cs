@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Definitions
         public RobotToolParameter()
           : base(new GH_InstanceDescription("Robot Tool", "RT",
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Robot Tool data."
+                "Contains the data of a Robot Tool."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

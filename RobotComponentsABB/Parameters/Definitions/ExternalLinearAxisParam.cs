@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Definitions
         public ExternalLinearAxisParameter()
           : base(new GH_InstanceDescription("External Linear Axis", "ELA",
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the External Linear Axis data."
+                "Contains the data of an External Linear Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

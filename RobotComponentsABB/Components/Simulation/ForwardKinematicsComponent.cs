@@ -48,8 +48,8 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
         }
 
         /// <summary>

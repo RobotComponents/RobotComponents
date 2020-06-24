@@ -26,7 +26,7 @@ namespace RobotComponentsABB.Parameters.Actions
         public WaitTimeParameter()
           : base(new GH_InstanceDescription("Wait for time", "WT",
                 "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Maintains the Wait for time data."
+                "Contains the data of a Wait for Time instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

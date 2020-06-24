@@ -25,7 +25,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructExternalRotationalAxisComponent()
           : base("Deconstruct External Rotational Axis", "DeConERA", 
-              "Deconstructs an External Rotational Axis into its parameters."
+              "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")

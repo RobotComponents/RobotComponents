@@ -21,14 +21,14 @@ namespace RobotComponentsABB.Components.Deconstruct
     /// <summary>
     /// RobotComponents Deconstruct Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotInfoComponent : GH_Component
+    public class DeconstructRobotComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotInfoComponent class.
         /// </summary>
-        public DeconstructRobotInfoComponent()
-          : base("Deconstruct Robot Info", "DeRobInfo", 
-              "Deconstructs a Robot coponent into its parameters"
+        public DeconstructRobotComponent()
+          : base("Deconstruct Robot", "DeRob", 
+              "Deconstructs a Robot component into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")

@@ -85,7 +85,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             try
             {
-                robotInfo = IRB1200_7_070.GetRobotInfo(name, positionPlane, tool, externalAxis);
+                robotInfo = IRB1200_7_070.GetRobot(name, positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

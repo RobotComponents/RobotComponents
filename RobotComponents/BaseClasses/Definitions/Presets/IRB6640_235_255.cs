@@ -19,13 +19,13 @@ namespace RobotComponents.BaseClasses.Definitions.Presets
     public static class IRB6640_235_255
     {
         /// <summary>
-        /// Defines the IRB6640-135/2.55 Robot Info
+        /// Defines the IRB6640-135/2.55 Robot
         /// </summary>
         /// <param name="positionPlane"> The position of the robot in world coordinate space as plane. </param>
         /// <param name="tool"> The robot end-effector as a Robot Tool. </param>
         /// <param name="externalAxis"> The external axes attaced to the robot as list with External Axes. </param>
-        /// <returns> Returns the Robot Info preset. </returns>
-        public static Robot GetRobotInfo(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
+        /// <returns> Returns the Robot preset. </returns>
+        public static Robot GetRobot(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
         {
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();

@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public AbsoluteJointMovementComponent()
           : base("Absolute Joint Movement", "AJM",
-              "Defines an aboslute joint movement instruction."
+              "Defines an Aboslute Joint Movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")

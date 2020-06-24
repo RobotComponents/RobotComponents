@@ -47,9 +47,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name as a string.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Internal Axis Values", "Internal Axis Values as List of numbers", "", GH_ParamAccess.list);
-            pManager.AddNumberParameter("External Axis Values", "External Axis Values as List of numbers", "", GH_ParamAccess.list);
-            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "Speed Data as Speed Data", "Speed Data");
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List of numbers", GH_ParamAccess.list);
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List of numbers", GH_ParamAccess.list);
+            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data");
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool");

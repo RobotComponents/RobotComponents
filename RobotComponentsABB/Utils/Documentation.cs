@@ -69,7 +69,7 @@ namespace RobotComponentsABB.Utils
 
             { typeof(DeconstructExternalLinearAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20External%20Linear%20Axis/" },
             { typeof(DeconstructExternalRotationalAxisComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20External%20Rotational%20Axis/" },
-            { typeof(DeconstructRobotInfoComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20Robot%20Info/" },
+            { typeof(DeconstructRobotComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20Robot%20Info/" },
             { typeof(DeconstructRobotToolComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20Robot%20Tool/" },
             { typeof(DeconstructWorkObjectComponent), "https://edek-unikassel.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20Work%20Object/" },
             

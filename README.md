@@ -27,9 +27,9 @@ A release on Food4Rhino is planned in the next months.
 ## Credits
 ![EDEK_logo](https://github.com/EDEK-UniKassel/RobotComponents/blob/master/Utility/181101_EDEK-LOGO-01.png)
 
-Robot Components is an open source project initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/) led by Prof. Eversmann. The technical development is initiated and executed by the research associates and student assistants which are listed [here](https://github.com/EDEK-UniKassel/RobotComponents/blob/master/AUTHORS.md).
+Robot Components is an open source project developed and initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/) led by Prof. Eversmann. The technical development is initiated and executed by the research associates and student assistants which are listed [here](https://github.com/EDEK-UniKassel/RobotComponents/blob/master/AUTHORS.md).
 
-RobotComponents uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project [here](http://developercenter.robotstudio.com/landing).
+Robot Components uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project [here](http://developercenter.robotstudio.com/landing).
 
 ## Known Issues
 Known issues are listed [here](https://github.com/EDEK-UniKassel/RobotComponents/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/EDEK-UniKassel/RobotComponents/issues/new).
@@ -73,7 +73,7 @@ x.xx.000 ---> bug fixes and small improvements
 ## License
 Robot Components
 
-Copyright (c) 2020, EDEK Uni Kassel
+Copyright (c) 2018-2020 [The Robot Components authors and / or their affiliations](AUTHORS.md)
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 

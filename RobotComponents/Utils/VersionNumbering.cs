@@ -5,15 +5,18 @@
 
 namespace RobotComponents.Utils
 {
+    /// <summary>
+    /// Stores the current version number of Robot Components
+    /// </summary>
     public static class VersionNumbering
     {
         /// <summary>
-        /// Returns the Current Version of the RobotComponent Plugin. Has to be manually updated each time
+        /// Returns the current version of the RobotComponent Plugin. Has to be manually updated each time
         /// 0.XX.XXX ---> mature release
-        /// X.00.XXX ---> minor release(for example new functions new components...etc.)
-        /// X.XX.000 ---> Bug fixes small improvements
+        /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
+        /// X.XX.000 ---> bug fixes and small improvements
         /// </summary>
-        public static readonly string CurrentVersion = "0.09.000";
+        public const string CurrentVersion = "0.09.000";
     }
 
 }

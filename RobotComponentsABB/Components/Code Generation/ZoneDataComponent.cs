@@ -329,13 +329,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 _objectManager.ZoneDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _objectManager.ZoneDatasByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateZoneDatas();
             }
         }
 

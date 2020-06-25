@@ -303,7 +303,7 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
+        /// Runs SolveInstance on all other Robot Tools to check if tool names are unique.
         /// </summary>
         public void UpdateRobotTools()
         {
@@ -341,7 +341,7 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+        /// Runs SolveInstance on all other Targets to check if target names are unique.
         /// </summary>
         public void UpdateTargets()
         {
@@ -363,7 +363,7 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+        /// Runs SolveInstance on all other WorkObjects to check if work object names are unique.
         /// </summary>
         public void UpdateWorkObjects()
         {
@@ -371,6 +371,21 @@ namespace RobotComponentsABB.Utils
             foreach (KeyValuePair<Guid, WorkObjectComponent> entry in WorkObjectsByGuid)
             {
                 if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other ZoneDatas to check if zone data names are unique.
+        /// </summary>
+        public void UpdateZoneDatas()
+        {
+            // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, ZoneDataComponent> entry in ZoneDatasByGuid)
+            {
+                if (entry.Value.LastName == "") 
                 {
                     entry.Value.ExpireSolution(true);
                 }

@@ -391,6 +391,22 @@ namespace RobotComponentsABB.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
+        /// </summary>
+        public void UpdateExternalAxis()
+        {
+            // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in ExternalLinearAxesByGuid)
+            {
+                entry.Value.ExpireSolution(true);
+            }
+            foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in ExternalRotationalAxesByGuid)
+            {
+                entry.Value.ExpireSolution(true);
+            }
+        }
         #endregion
 
         #region Properties

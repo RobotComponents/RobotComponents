@@ -184,15 +184,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.ExternalLinearAxesByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
+                _objectManager.UpdateExternalAxis();
             }
         }
 

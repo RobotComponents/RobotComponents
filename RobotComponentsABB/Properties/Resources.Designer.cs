@@ -773,7 +773,7 @@ namespace RobotComponentsABB.Properties {
         ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
         ///// under the terms of GNU General Public License as published by the 
         ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -848,7 +848,7 @@ namespace RobotComponentsABB.Properties {
         ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
         ///// under the terms of GNU General Public License as published by the 
         ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
         ///namespace RobotComponentsABB.Resources
         ///{
@@ -923,7 +923,7 @@ namespace RobotComponentsABB.Properties {
         ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
         ///// under the terms of GNU General Public License as published by the 
         ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/EDEK-UniKassel/RobotComponents&gt;.
+        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
         ///namespace RobotComponentsABB.Resources
         ///{

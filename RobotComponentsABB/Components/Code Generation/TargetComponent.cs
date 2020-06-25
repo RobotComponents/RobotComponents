@@ -32,9 +32,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public TargetComponent()
-          : base("Action: Target", "T",
-              "Defines a target for an Action: Movement or Inverse Kinematics component."
-                + System.Environment.NewLine +
+          : base("Target", "T",
+              "Defines a target declaration for a Move or Inverse Kinematics component."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -56,9 +56,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
+            pManager.AddTextParameter("Name", "N", "Name of the Target as text", GH_ParamAccess.list, "defaultTar");
+            pManager.AddPlaneParameter("Plane", "P", "Plane of the Target as Plane", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as integer value. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
         }
 
         // Register the number of fixed input parameters
@@ -80,7 +80,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target declaration");  //Todo: beef this up to be more informative.
         }
 
         // Fields
@@ -394,20 +394,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
-                    foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                    {
-                        if (entry.Value._lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateTargets();
 
                     _lastName = names[i];
                 }
@@ -456,21 +443,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
                 _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                // Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                _objectManager.UpdateTargets();
             }
         }
 

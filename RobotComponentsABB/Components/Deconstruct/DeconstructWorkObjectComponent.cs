@@ -24,9 +24,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructWorkObject class.
         /// </summary>
         public DeconstructWorkObjectComponent()
-          : base("Deconstruct Work Object", "DeConTar",
+          : base("Deconstruct Work Object", "DeConTar", 
               "Deconstructs a Work Object into its parameters."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
@@ -47,7 +47,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
-            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis");
+            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
         }
 
         /// <summary>

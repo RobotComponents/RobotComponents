@@ -26,8 +26,8 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public FlipPlaneXComponent()
           : base("Flip Plane X", "Flip Plane X",
-              "Flips the plane to the oposite direction by setting it's x-Axis negative." 
-                + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "Flips the plane to the oposite direction by setting it's x-Axis negative."
+                + System.Environment.NewLine + System.Environment.NewLine + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

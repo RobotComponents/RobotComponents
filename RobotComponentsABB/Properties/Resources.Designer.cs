@@ -633,6 +633,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Logo {
+            get {
+                object obj = ResourceManager.GetObject("Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Movement_Icon {
             get {
                 object obj = ResourceManager.GetObject("Movement_Icon", resourceCulture);
@@ -676,6 +686,26 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap ObjectManager_Icon {
             get {
                 object obj = ResourceManager.GetObject("ObjectManager_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OldCodeLine_Icon {
+            get {
+                object obj = ResourceManager.GetObject("OldCodeLine_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OldComment_Icon {
+            get {
+                object obj = ResourceManager.GetObject("OldComment_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -29,8 +29,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public RemoteConnectionComponent()
           : base("Remote Connection", "Remote Connection",
-              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB robot controller."
-              + System.Environment.NewLine +
+              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB IRC5 robot controller."
+              + System.Environment.NewLine + System.Environment.NewLine +
               "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
@@ -51,13 +51,13 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             //TODO: Replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Upload", "U", "Upload your RAPID code to the Robot", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Run", "R", "Run", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause", GH_ParamAccess.item);
-            pManager.AddTextParameter("Program Module", "PM", "Insert here the Program module code as a text.", GH_ParamAccess.list);
-            pManager.AddTextParameter("System Module", "SM", "Insert here the System module code as a text", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connect to as Robot Controller", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller as bool", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item);
+            pManager.AddTextParameter("Program Module", "PM", "Program Module code as text", GH_ParamAccess.list);
+            pManager.AddTextParameter("System Module", "SM", "System Module code as text", GH_ParamAccess.list);
 
             pManager[5].Optional = true;
             pManager[6].Optional = true;
@@ -68,7 +68,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Updates about what is going on here.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Status", "S", "Status of the ABB IRC5 robot controller", GH_ParamAccess.item);
         }
 
         // Fields

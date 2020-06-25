@@ -25,8 +25,9 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public ZoneDataParameter()
           : base(new GH_InstanceDescription("Zone Data", "ZD",
-                "Maintains the Zone Data data."
-                + System.Environment.NewLine +
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Contains the data of a Zone Data declaration. "
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

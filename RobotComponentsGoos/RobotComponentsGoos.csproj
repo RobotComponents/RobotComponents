@@ -68,11 +68,11 @@
     <Compile Include="Actions\GH_Movement.cs" />
     <Compile Include="Actions\GH_OverrideRobotTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Definitions\GH_RobotInfo.cs" />
+    <Compile Include="Definitions\GH_Robot.cs" />
     <Compile Include="Definitions\GH_RobotTool.cs" />
     <Compile Include="Actions\GH_SpeedData.cs" />
     <Compile Include="Actions\GH_Target.cs" />
-    <Compile Include="Actions\GH_Timer.cs" />
+    <Compile Include="Actions\GH_WaitTime.cs" />
     <Compile Include="Definitions\GH_WorkObject.cs" />
   </ItemGroup>
   <ItemGroup>

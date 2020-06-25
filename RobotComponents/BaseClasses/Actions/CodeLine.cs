@@ -16,7 +16,8 @@ namespace RobotComponents.BaseClasses.Actions
     public class CodeLine : Action
     {
         #region fields
-        private string _code;
+        private string _code; // the code line as a string
+        private int _type;  // the code line type as int value -> 0 for instruction, 1 for declaration
         #endregion
 
         #region constructors
@@ -34,6 +35,18 @@ namespace RobotComponents.BaseClasses.Actions
         public CodeLine(string code)
         {
             _code = code;
+            _type = 0;
+        }
+
+        /// <summary>
+        /// Defines a RAPID code line.
+        /// </summary>
+        /// <param name="code">The code line as a text string.</param>
+        /// <param name="type">The code type as int value. Use 0 for an instructions and 1 for a declarations.</param>
+        public CodeLine(string code, int type)
+        {
+            _code = code;
+            SetCodeLineType(type);
         }
 
         /// <summary>
@@ -44,6 +57,7 @@ namespace RobotComponents.BaseClasses.Actions
         public CodeLine(CodeLine codeLine)
         {
             _code = codeLine.Code;
+            _type = codeLine.Type;
         }
 
         /// <summary>
@@ -82,14 +96,38 @@ namespace RobotComponents.BaseClasses.Actions
             }
         }
 
+
+        /// <summary>
+        /// Sets the code line type. 
+        /// </summary>
+        /// <param name="type"> The code line type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
+        public void SetCodeLineType(int type)
+        {
+            if (type == 0 | type == 1)
+            {
+                _type = type;
+            }
+            else
+            {
+                _type = 0;
+            }
+        }
+
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
-            return string.Empty;
+            if (_type == 1)
+            {
+                return _code;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
@@ -97,26 +135,40 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
-            return _code;
+            if (_type == 0)
+            {
+                return _code;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            if (_type == 1)
+            {
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
+            }
         }
 
         /// <summary>
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code); 
+            if (_type == 0)
+            {
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
+            }
         }
         #endregion
 
@@ -130,6 +182,8 @@ namespace RobotComponents.BaseClasses.Actions
             { 
                 if (Code == null) { return false; }
                 if (Code == "") { return false; }
+                if (Type < 0) { return false; }
+                if (Type > 1) { return false; }
                 return true; 
             }
         }
@@ -141,6 +195,14 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _code; }
             set { _code = value; }
+        }
+
+        /// <summary>
+        /// Code type as int value.
+        /// </summary>
+        public int Type
+        {
+            get { return _type; }
         }
         #endregion
     }

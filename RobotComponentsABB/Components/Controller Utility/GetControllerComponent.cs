@@ -26,8 +26,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public GetControllerComponent()
           : base("Get Controller", "GC",
-              "Connects to a virtual or real ABB controller to extract data from it."
-                + System.Environment.NewLine +
+              "Connects to a real or virtual ABB IRC5 robot controller and extracts data from it."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
@@ -47,7 +47,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddBooleanParameter("Update", "U", "Update Controller", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("Update", "U", "Update Controller as bool", GH_ParamAccess.item, true);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Robotic Controller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Resulting Robot Controller", GH_ParamAccess.item);
         }
 
         // Fields

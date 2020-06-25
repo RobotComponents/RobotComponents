@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.Definitions
         public ExternalLinearAxisComponent()
           : base("External Linear Axis", "External Linear Axis",
               "Defines an External Linear Axis for any Robot."
-                + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
@@ -140,20 +140,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ExternalAxisNames.Add(_externalLinearAxis.Name);
 
                 // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateExternalAxis();
 
                 _lastName = _externalLinearAxis.Name;
                 _nameUnique = true;
@@ -184,15 +171,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.ExternalLinearAxesByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
+                _objectManager.UpdateExternalAxis();
             }
         }
 

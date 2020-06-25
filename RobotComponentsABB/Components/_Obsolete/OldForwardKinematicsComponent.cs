@@ -65,7 +65,7 @@ namespace RobotComponentsABB.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
             pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
         }
@@ -96,7 +96,7 @@ namespace RobotComponentsABB.Components.Obsolete
                 "from the ribbon.");
 
             // Input variables
-            GH_RobotInfo robotInfoGoo = null;
+            GH_Robot robotInfoGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 

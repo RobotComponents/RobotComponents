@@ -36,7 +36,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
               "OBSOLETE: Generates the RAPID main and base code for the ABB IRC5 robot controller from a list of Actions."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 
@@ -62,7 +62,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Module Name", "MN", "Name of the Module as String", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("File Path", "FP", "File Path as String", GH_ParamAccess.item, "null");
@@ -106,7 +106,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Input variables
-            RobotInfo robInfo = new RobotInfo();
+            Robot robInfo = new Robot();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             string moduleName = "";
             string filePath = "";

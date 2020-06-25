@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// Initializes a new instance of the GH_PersistentGeometryParam<WorkObjectGoo> class
         /// </summary>
         public WorkObjectParameter()
-          : base(new GH_InstanceDescription("Work Object Parameter", "WO", 
-                "Maintains the Work Object data"
-                + System.Environment.NewLine +
+          : base(new GH_InstanceDescription("Work Object Parameter", "WO",
+                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Contains the data of a Work Object."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

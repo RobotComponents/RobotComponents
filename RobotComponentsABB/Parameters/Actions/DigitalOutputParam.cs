@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<DigitalOutputGoo> class
         /// </summary>
         public DigitalOutputParameter()
-          : base(new GH_InstanceDescription("Digital Output", "DO", 
-                "Maintains the Digital Output data."
-                + System.Environment.NewLine +
+          : base(new GH_InstanceDescription("Digital Output", "DO",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Contains the data of a Set Digital Output instruction."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

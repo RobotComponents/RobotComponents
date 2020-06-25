@@ -190,13 +190,7 @@ namespace RobotComponentsABB.Components.Definitions
                     _objectManager.WorkObjectNames.Add(names[i]);
 
                     // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _objectManager.OldWorkObjectsByGuid)
-                    {
-                        if (entry.Value._lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateWorkObjects();
 
                     _lastName = names[i];
                 }
@@ -255,14 +249,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.OldWorkObjectsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _objectManager.OldWorkObjectsByGuid)
-                {
-                    if (entry.Value._lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+                _objectManager.UpdateWorkObjects();
             }
         }
 
@@ -273,6 +261,8 @@ namespace RobotComponentsABB.Components.Definitions
         {
             get { return _workObjects; }
         }
+
+        public string LastName { get => _lastName; }
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

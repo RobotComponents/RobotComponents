@@ -26,9 +26,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public DigitalOutputComponent()
-          : base("Action: Digital Output", "DO",
-              "Defines an instruction to change the state of a digital output of the robot controller for RAPID code generation."
-                + System.Environment.NewLine +
+          : base("Set Digital Output", "SDO",
+              "Defines an instruction to change the state of a digital output of the robot controller."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -40,7 +40,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -48,8 +48,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State as bool", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the digital output as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the digital output as boolean", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new DigitalOutputParameter(), "Digital Output", "DO", "Resulting Digital Output");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new DigitalOutputParameter(), "Set Digital Output", "SDO", "Resulting Set Digital Output instruction");  //Todo: beef this up to be more informative.
         }
 
         /// <summary>

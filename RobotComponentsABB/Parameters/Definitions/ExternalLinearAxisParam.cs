@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalLinearAxisGoo> class
         /// </summary>
         public ExternalLinearAxisParameter()
-          : base(new GH_InstanceDescription("External Linear Axis", "ELA", 
-                "Maintains the External Linear Axis data."
-                + System.Environment.NewLine +
+          : base(new GH_InstanceDescription("External Linear Axis", "ELA",
+                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Contains the data of an External Linear Axis."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

@@ -24,9 +24,10 @@ namespace RobotComponentsABB.Parameters.Actions
         /// Initializes a new instance of the GH_PersistentGeometryParam<OverrideRobotToolGoo> class
         /// </summary>
         public OverrideRobotToolParameter()
-          : base(new GH_InstanceDescription("Override Robot Tool", "RT", 
-                "Maintains the Override Robot Tool data."
-                + System.Environment.NewLine +
+          : base(new GH_InstanceDescription("Override Robot Tool", "ORT",
+                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
+                "Contains the data of a Override Robot Tool instruction."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {

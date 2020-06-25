@@ -31,8 +31,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public RAPIDGeneratorComponent()
           : base("RAPID Generator", "RG",
-              "Generates the RAPID program and system code for the ABB IRC5 robot controller from a list of Actions."
-                + System.Environment.NewLine +
+              "Generates the RAPID program and system module for the ABB robot controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -53,12 +53,12 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotInfoParameter(), "Robot Info", "RI", "Robot Info as Robot Info", GH_ParamAccess.item);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as list with actions", GH_ParamAccess.list);
-            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule.", GH_ParamAccess.item, "MainModule");
-            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE.", GH_ParamAccess.item, "BASE");
-            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list with text.", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("Update", "U", "Updates RAPID Code", GH_ParamAccess.item, true);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot that is used as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as list of instructive and declarative Actions", GH_ParamAccess.list);
+            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule", GH_ParamAccess.item, "MainModule");
+            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE", GH_ParamAccess.item, "BASE");
+            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list of text", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("Update", "U", "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made.", GH_ParamAccess.item, true);
 
             pManager[2].Optional = true;
             pManager[3].Optional = true;
@@ -94,7 +94,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Input variables
-            RobotInfo robInfo = new RobotInfo();
+            Robot robInfo = new Robot();
             List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
             string programName = "";
             string systemName = "";

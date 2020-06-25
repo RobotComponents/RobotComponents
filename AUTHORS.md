@@ -2,17 +2,20 @@
 
 ## Initiators
 
-- Benedikt Wannemacher <<wannemacher@uni-kassel.de>> [@BenediktWannemacher](https://github.com/BenediktWannemacher)
-- Gabriel Rumpf [@GabrielRumpf](https://github.com/GabrielRumpf)
+- [Benedikt Wannemacher](https://github.com/BenediktWannemacher) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
+- [Gabriel Rumpf](https://github.com/GabrielRumpf) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
 
 ## Main Developers
 
-- Gabriel Rumpf [@GabrielRumpf](https://github.com/GabrielRumpf)
-- Benedikt Wannemacher <<wannemacher@uni-kassel.de>> [@BenediktWannemacher](https://github.com/BenediktWannemacher)
-- Arjen Deetman <<deetman@uni-kassel.de>> [@arjendeetman](https://github.com/arjendeetman)
+### Active
+- [Arjen Deetman](https://github.com/arjendeetman) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)] <<deetman@uni-kassel.de>>
+- [Gabriel Rumpf](https://github.com/GabrielRumpf) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
+
+### Inactive
+- [Benedikt Wannemacher](https://github.com/BenediktWannemacher) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
 
 ## Contributors
 
-- Andrea Rossi <<rossi@uni-kassel.de>> [@ar0551](https://github.com/ar0551)
-- Mohamed Dawod [@dawodx](https://github.com/dawodx)
-- Zuardin Akbar <<akbar@uni-kassel.de>> [@zuardinakbar](https://github.com/zuardinakbar)
+- [Andrea Rossi](https://github.com/ar0551) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)] <<rossi@uni-kassel.de>>
+- [Mohamed Dawod](https://github.com/dawodx) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
+- [Zuardin Akbar](https://github.com/zuardinakbar) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]

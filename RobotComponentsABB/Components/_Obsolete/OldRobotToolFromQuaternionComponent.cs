@@ -164,20 +164,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ToolNames.Add(_robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateRobotTools();
 
                 _lastName = _robotTool.Name;
                 _nameUnique = true;
@@ -218,17 +205,10 @@ namespace RobotComponentsABB.Components.Definitions
                 {
                     _objectManager.ToolNames.Remove(_toolName);
                 }
-                _objectManager.ToolsQuaternionByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldToolsQuaternionByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                {
-                        entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
+                _objectManager.UpdateRobotTools();
             }
         }
 

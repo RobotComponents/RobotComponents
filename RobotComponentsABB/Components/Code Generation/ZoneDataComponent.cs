@@ -27,9 +27,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ZoneDataComponent()
-          : base("Action: Zone Data", "ZD",
-              "Defines a zone data for robot movements."
-                + System.Environment.NewLine +
+          : base("Zone Data", "ZD",
+              "Defines a zone data declaration for robot movements in RAPID program code generation."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -49,7 +49,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "default_zone");
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.list, "default_zone");
             pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.list, false);
             pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.list, 0);
             pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.list, 0);
@@ -64,7 +64,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Resulting Zone Data");
+            pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Resulting Zone Data declaration");
         }
 
         // Fields
@@ -329,13 +329,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 _objectManager.ZoneDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _objectManager.ZoneDatasByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateZoneDatas();
             }
         }
 

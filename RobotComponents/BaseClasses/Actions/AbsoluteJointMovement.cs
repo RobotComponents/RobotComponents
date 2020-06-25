@@ -274,7 +274,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> The robot info to check the axis values for. </param>
         /// <returns> Returns a list with error messages. </returns>
-        public List<string> CheckForAxisLimits(RobotInfo robotInfo)
+        public List<string> CheckForAxisLimits(Robot robotInfo)
         {
             // Initiate list
             List<string> errors = new List<string>();
@@ -310,7 +310,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
             // Creates Code Variable
             string code = "CONST jointtarget " + JointTargetName + " := [[";
@@ -347,7 +347,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
             // Set tool name
             string toolName;
@@ -378,19 +378,19 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // Creates SpeedData Variable Code
-            _speedData.InitRAPIDVar(RAPIDGenerator);
+            _speedData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Creates ZoneData Variable Code
-            _zoneData.InitRAPIDVar(RAPIDGenerator);
+            _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Only adds target code if target is not already defined
             if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
             {
                 RAPIDGenerator.Targets.Add(JointTargetName, new Target());
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.InitRAPIDVar(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
                 RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.RobotInfo));
             }
         }
@@ -399,9 +399,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

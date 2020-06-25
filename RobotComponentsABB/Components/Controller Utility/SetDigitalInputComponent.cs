@@ -29,8 +29,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public SetDigitalInputComponent()
           : base("Set Digital Input", "SetDI",
-              "Sets the signal of a digital input for the defined ABB robot controller."
-                + System.Environment.NewLine +
+              "Changes the state of a defined digital input from an ABB IRC5 robot controller in Realtime."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
@@ -51,10 +51,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             //TODO: Replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State of the Digital Input", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input", GH_ParamAccess.item, false);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to be connected to as Robot Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the Digital Input as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
 
             pManager[1].Optional = true;
         }
@@ -65,7 +65,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Signal", "S", "The Signal of the Digital Input", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Input", GH_ParamAccess.item);
         }
 
         // Fields

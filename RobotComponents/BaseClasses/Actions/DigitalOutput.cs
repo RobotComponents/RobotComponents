@@ -91,7 +91,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string InitRAPIDVar(RobotInfo robotInfo)
+        public override string ToRAPIDDeclaration(Robot robotInfo)
         {
             return string.Empty;
         }
@@ -101,7 +101,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDFunction(RobotInfo robotInfo)
+        public override string ToRAPIDInstruction(Robot robotInfo)
         {
             if (_isActive == true)
             {
@@ -117,7 +117,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void InitRAPIDVar(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
@@ -125,9 +125,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
         /// </summary>
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
-        public override void ToRAPIDFunction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDFunction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
         }
         #endregion
 

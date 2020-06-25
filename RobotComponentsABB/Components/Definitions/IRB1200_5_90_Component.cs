@@ -29,8 +29,8 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public IRB1200_5_90_Component()
           : base("ABB IRB1200-5/0.9", "IRB1200",
-              "An ABB IRB 1200-5/0.9 Robot Info preset component."
-                + System.Environment.NewLine +
+              "An ABB IRB 1200-5/0.9 Robot preset component."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
@@ -63,7 +63,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotInfoParameter(), "Robot Info", "RI", "Resulting Robot Info", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotParameter(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);  //Todo: beef this up to be more informative.
         }
 
         /// <summary>
@@ -81,11 +81,11 @@ namespace RobotComponentsABB.Components.Definitions
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
             string name = "IRB1200-5/0.9";
-            RobotInfo robotInfo = new RobotInfo();
+            Robot robotInfo = new Robot();
 
             try
             {
-                robotInfo = IRB1200_5_090.GetRobotInfo(name, positionPlane, tool, externalAxis);
+                robotInfo = IRB1200_5_090.GetRobot(name, positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

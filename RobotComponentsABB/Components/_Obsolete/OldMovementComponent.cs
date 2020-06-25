@@ -38,7 +38,7 @@ namespace RobotComponentsABB.Components.Obsolete
               "OBSOLETE: Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
                 "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "RobotComponents", "RAPID Generation")
         {
         }
 

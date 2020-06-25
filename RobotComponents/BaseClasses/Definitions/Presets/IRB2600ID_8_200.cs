@@ -19,13 +19,13 @@ namespace RobotComponents.BaseClasses.Definitions.Presets
     public static class IRB2600ID_8_200
     {
         /// <summary>
-        /// Defines the IRB2600ID-8/2.00 Robot Info
+        /// Defines the IRB2600ID-8/2.00 Robot
         /// </summary>
         /// <param name="positionPlane"> The position of the robot in world coordinate space as plane. </param>
         /// <param name="tool"> The robot end-effector as a Robot Tool. </param>
         /// <param name="externalAxis"> The external axes attaced to the robot as list with External Axes. </param>
-        /// <returns> Returns the Robot Info preset. </returns>
-        public static RobotInfo GetRobotInfo(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
+        /// <returns> Returns the Robot preset. </returns>
+        public static Robot GetRobot(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
         {
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
@@ -42,7 +42,7 @@ namespace RobotComponents.BaseClasses.Definitions.Presets
                 }
             }
 
-            RobotInfo robotInfo = new RobotInfo(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
+            Robot robotInfo = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
             Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
             robotInfo.Transfom(trans);
 

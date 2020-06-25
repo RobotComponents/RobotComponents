@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldCodeLine_Component.cs" />
+    <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructRobotInfoComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromPlanesComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
@@ -129,7 +135,7 @@
     <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
     <Compile Include="Components\Code Generation\TargetComponent.cs" />
     <Compile Include="Components\_Obsolete\OldTargetComponent.cs" />
-    <Compile Include="Components\Code Generation\TimerComponent.cs" />
+    <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponent.cs" />
     <Compile Include="Components\Controller Utility\GetControllerComponent.cs" />
@@ -140,7 +146,7 @@
     <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructMovementComponent.cs" />
-    <Compile Include="Components\Deconstruct\DeconstructRobotInfoComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobotComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotToolComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructSpeedDataComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructTargetComponent.cs" />
@@ -160,7 +166,7 @@
     <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
     <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
     <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
-    <Compile Include="Components\Definitions\RobotInfoComponent.cs" />
+    <Compile Include="Components\Definitions\RobotComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
@@ -188,11 +194,11 @@
     <Compile Include="Parameters\Definitions\ExternalLinearAxisParam.cs" />
     <Compile Include="Parameters\Definitions\ExternalRotationalAxisParam.cs" />
     <Compile Include="Parameters\Actions\MovementParam.cs" />
-    <Compile Include="Parameters\Definitions\RobotInfoParam.cs" />
+    <Compile Include="Parameters\Definitions\RobotParam.cs" />
     <Compile Include="Parameters\Definitions\RobotToolParam.cs" />
     <Compile Include="Parameters\Actions\OverrideRobotToolParam.cs" />
     <Compile Include="Parameters\Actions\TargetParam.cs" />
-    <Compile Include="Parameters\Actions\TimerParam.cs" />
+    <Compile Include="Parameters\Actions\WaitTimeParam.cs" />
     <Compile Include="Parameters\Actions\WaitDIParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -515,6 +521,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB6790_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OldCodeLine_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OldComment_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

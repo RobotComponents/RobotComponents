@@ -22,7 +22,7 @@ You can download the latest release directly from this repository's [releases pa
 
 You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://robotcomponents.github.io/RobotComponents-Documentation/). Note: The documentation website is currently in development and not complete yet. 
 
-A release on Food4Rhino is planned in the next months.
+A release on Food4Rhino is planned in the next months. For easy sharing of the download link and the documentation (with e.g. students) you can also use our linktree: https://linktr.ee/RobotComponents
 
 ## Credits
 ![EDEK_logo](/Utility/181101_EDEK-LOGO-01.png)

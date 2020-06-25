@@ -21,14 +21,14 @@ namespace RobotComponentsABB.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromQuaternionComponent : GH_Component
+    public class OldRobotToolFromQuaternionComponent2 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolFromQuaternionComponent()
+        public OldRobotToolFromQuaternionComponent2()
           : base("Robot Tool From Quaternion Data", "RobTool",
               "Defines a robot tool based on TCP coorindate and quarternion values."
             + System.Environment.NewLine + System.Environment.NewLine +
@@ -43,7 +43,15 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -71,6 +79,7 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 
         // Fields
@@ -115,6 +124,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Outputs
             DA.SetData(0, _robotTool);
+            DA.SetData(1, _robotTool.GetRSToolData());
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -132,9 +142,9 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsQuaternionByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldToolsQuaternionByGuid2.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.ToolsQuaternionByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldToolsQuaternionByGuid2.Add(this.InstanceGuid, this);
             }
 
             // Checks if tool name is already in use and counts duplicates
@@ -229,7 +239,7 @@ namespace RobotComponentsABB.Components.Definitions
                 {
                     _objectManager.ToolNames.Remove(_toolName);
                 }
-                _objectManager.ToolsQuaternionByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldToolsQuaternionByGuid2.Remove(this.InstanceGuid);
 
                 // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
                 _objectManager.UpdateRobotTools();
@@ -268,7 +278,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("333DC18E-7669-47BA-A13D-718402E59FB1"); }
+            get { return new Guid("66039008-4312-4F9D-A00F-6556E474934B"); }
         }
     }
 }

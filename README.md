@@ -25,7 +25,7 @@ You can find a collection of example files demonstrating the main features of Ro
 A release on Food4Rhino is planned in the next months.
 
 ## Credits
-![EDEK_logo](https://github.com/EDEK-UniKassel/RobotComponents/blob/master/Utility/181101_EDEK-LOGO-01.png)
+![EDEK_logo](/Utility/181101_EDEK-LOGO-01.png)
 
 The project is a development from the [Department of Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/). Supervised by the head of the department Prof. Eversmann. The technical development is initiated and executed by the research associates and student assistants which are listed [here](https://github.com/EDEK-UniKassel/RobotComponents/blob/master/AUTHORS.md).
 

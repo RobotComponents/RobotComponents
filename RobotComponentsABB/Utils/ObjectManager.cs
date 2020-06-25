@@ -339,6 +339,28 @@ namespace RobotComponentsABB.Utils
                 entry.Value.ExpireSolution(true);
             }
         }
+
+        /// <summary>
+        /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+        /// </summary>
+        public void UpdateTargets()
+        {
+            // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, TargetComponent> entry in TargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+            foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in JointTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
         #endregion
 
         #region Properties

@@ -456,21 +456,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
                 _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                _objectManager.UpdateTargets();
             }
         }
 

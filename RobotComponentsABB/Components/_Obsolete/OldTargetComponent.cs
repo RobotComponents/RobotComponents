@@ -264,14 +264,8 @@ namespace RobotComponentsABB.Components.Obsolete
                 }
                 objectManager.OldTargetsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, OldTargetComponent> entry in objectManager.OldTargetsByGuid)
-                {
-                    if (entry.Value.lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                objectManager.UpdateTargets();
             }
         }
 

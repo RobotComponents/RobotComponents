@@ -224,19 +224,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.OldToolsEulerByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in _objectManager.OldToolsEulerByGuid)
-                {
-                        entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                {
-                        entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
+                _objectManager.UpdateRobotTools();
             }
         }
 

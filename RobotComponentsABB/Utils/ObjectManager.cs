@@ -361,6 +361,21 @@ namespace RobotComponentsABB.Utils
                 }
             }
         }
+
+        /// <summary>
+        /// Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+        /// </summary>
+        public void UpdateWorkObjects()
+        {
+            // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in WorkObjectsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
         #endregion
 
         #region Properties

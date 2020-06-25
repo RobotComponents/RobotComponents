@@ -255,14 +255,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.OldWorkObjectsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _objectManager.OldWorkObjectsByGuid)
-                {
-                    if (entry.Value._lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+                _objectManager.UpdateWorkObjects();
             }
         }
 

@@ -273,14 +273,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
-                {
-                    if (entry.Value._lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+                _objectManager.UpdateWorkObjects();
             }
         }
 
@@ -310,5 +304,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             get { return new Guid("E76C475E-0C31-484D-A45D-690F45BD154C"); }
         }
+
+        public string LastName { get => _lastName; }
     }
 }

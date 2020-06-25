@@ -288,5 +288,6 @@ namespace RobotComponentsABB.Components.Obsolete
             get { return new Guid("E1AED1B2-3D79-41E7-AA12-C096F79FEE5E"); }
         }
 
+        public string LastName { get => lastName; }
     }
 }

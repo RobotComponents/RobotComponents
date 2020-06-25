@@ -317,7 +317,7 @@ namespace RobotComponentsABB.Utils
                 entry.Value.ExpireSolution(true);
             }
 
-            // Run SolveInstance on other obolete Tools with no unique Name to check if their name is now available
+            // Run SolveInstance on other obsolete Tools with no unique Name to check if their name is now available
             // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in OldToolsEulerByGuid)
             {
@@ -360,6 +360,16 @@ namespace RobotComponentsABB.Utils
                     entry.Value.ExpireSolution(true);
                 }
             }
+
+            // Run SolveInstance on other obsolete Targets with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldTargetComponent> entry in OldTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
         }
 
         /// <summary>
@@ -369,6 +379,16 @@ namespace RobotComponentsABB.Utils
         {
             // Run SolveInstance on other Targets with no unique Name to check if their name is now available
             foreach (KeyValuePair<Guid, WorkObjectComponent> entry in WorkObjectsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete Work Objects with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in OldWorkObjectsByGuid)
             {
                 if (entry.Value.LastName == "")
                 {

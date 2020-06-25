@@ -21,14 +21,14 @@ namespace RobotComponentsABB.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Tool from Planes component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromPlanesComponent : GH_Component
+    public class OldRobotToolFromPlanesComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear,  Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolFromPlanesComponent()
+        public OldRobotToolFromPlanesComponent()
           : base("Robot Tool From Planes", "RobToool",
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
@@ -43,7 +43,15 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -65,11 +73,12 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 
         // Fields
         private string _toolName = String.Empty;
-        private string _lastName = ""; 
+        private string _lastName = "";
         private bool _nameUnique;
         private RobotTool _robotTool = new RobotTool();
         private ObjectManager _objectManager;
@@ -98,6 +107,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Outputs
             DA.SetData(0, _robotTool);
+            DA.SetData(1, _robotTool.GetRSToolData());
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -114,9 +124,9 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldRobotToolFromPlanesGuid.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldRobotToolFromPlanesGuid.Add(this.InstanceGuid, this);
             }
 
             // Checks if the tool name is already in use and counts duplicates
@@ -188,7 +198,7 @@ namespace RobotComponentsABB.Components.Definitions
                 {
                     _objectManager.ToolNames.Remove(_toolName);
                 }
-                _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldRobotToolFromPlanesGuid.Remove(this.InstanceGuid);
 
                 // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
                 _objectManager.UpdateRobotTools();
@@ -242,7 +252,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             get { return Properties.Resources.ToolPlane_Icon; }
         }
- 
+
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
         /// It is vital this Guid doesn't change otherwise old ghx files 
@@ -250,7 +260,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("004DA2A9-9A59-4AAA-8CC5-3EE706E83043"); }
+            get { return new Guid("6d430719-5c45-4b66-a676-71be54f6ee93"); }
         }
     }
 

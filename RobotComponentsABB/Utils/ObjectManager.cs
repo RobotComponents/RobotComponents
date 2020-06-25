@@ -310,33 +310,51 @@ namespace RobotComponentsABB.Utils
             // Run SolveInstance on other Tools with no unique Name to check if their name is now available
             foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in ToolsPlanesByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
             foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in ToolsQuaternionByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
 
             // Run SolveInstance on other obsolete Tools with no unique Name to check if their name is now available
             // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in OldToolsEulerByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
 
             foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent> entry in OldRobotToolFromPlanesGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
 
             foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent> entry in OldToolsQuaternionByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
 
             foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent2> entry in OldToolsQuaternionByGuid2)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
         }
 
@@ -364,6 +382,21 @@ namespace RobotComponentsABB.Utils
             // Run SolveInstance on other obsolete Targets with no unique Name to check if their name is now available
             // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldTargetComponent> entry in OldTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other Speed Datas to check if speed data names are unique.
+        /// </summary>
+        public void UpdateSpeedDatas()
+        {
+            // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, SpeedDataComponent> entry in SpeedDatasByGuid)
             {
                 if (entry.Value.LastName == "")
                 {

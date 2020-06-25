@@ -394,20 +394,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
-                    foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                    {
-                        if (entry.Value._lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateTargets();
 
                     _lastName = names[i];
                 }
@@ -456,7 +443,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 }
                 _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
 
-                /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                // Runs SolveInstance on all other Targets to check if robot tool names are unique.
                 _objectManager.UpdateTargets();
             }
         }

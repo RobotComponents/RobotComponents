@@ -140,20 +140,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ExternalAxisNames.Add(_externalLinearAxis.Name);
 
                 // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateExternalAxis();
 
                 _lastName = _externalLinearAxis.Name;
                 _nameUnique = true;

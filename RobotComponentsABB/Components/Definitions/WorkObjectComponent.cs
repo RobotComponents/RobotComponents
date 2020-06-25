@@ -195,13 +195,7 @@ namespace RobotComponentsABB.Components.Definitions
                     _objectManager.WorkObjectNames.Add(names[i]);
 
                     // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
-                    {
-                        if (entry.Value._lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateWorkObjects();
 
                     _lastName = names[i];
                 }

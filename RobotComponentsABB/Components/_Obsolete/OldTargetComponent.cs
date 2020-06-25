@@ -206,13 +206,7 @@ namespace RobotComponentsABB.Components.Obsolete
                     objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, OldTargetComponent> entry in objectManager.OldTargetsByGuid)
-                    {
-                        if (entry.Value.lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    objectManager.UpdateTargets();
 
                     lastName = names[i];
                 }

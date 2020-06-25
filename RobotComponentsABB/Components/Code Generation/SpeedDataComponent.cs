@@ -223,13 +223,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.SpeedDataNames.Add(names[i]);
 
                     // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateSpeedDatas();
+
                     _lastName = names[i];
                 }
 
@@ -278,13 +273,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 _objectManager.SpeedDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateSpeedDatas();
             }
         }
 

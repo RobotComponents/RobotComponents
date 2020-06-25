@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("ABB IRB6700-245/3.0", "IRB6700",
               "An ABB IRB6700-245/3.0 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

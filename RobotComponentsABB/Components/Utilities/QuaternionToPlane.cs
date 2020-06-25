@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.Utilities
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
-                + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

@@ -33,7 +33,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Action: CodeLine", "CL",
               "Defines manually an instruction for RAPID main code generation."
                 + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
         {
         }

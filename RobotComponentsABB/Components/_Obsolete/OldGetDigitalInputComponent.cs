@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
           : base("Get Digital Input", "GetDI",
               "OBSOLETE: Gets a digital input from a defined ABB robot controller."
                 + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }

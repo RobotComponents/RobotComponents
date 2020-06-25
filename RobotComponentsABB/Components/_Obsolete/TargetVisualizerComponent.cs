@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.Utilities
           : base("Target Visualizer", "TV",
               "Displays Target Information."
                 + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

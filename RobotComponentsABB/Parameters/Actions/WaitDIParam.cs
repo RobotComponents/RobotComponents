@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Parameters.Actions
                 "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Wait for Digital Input instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

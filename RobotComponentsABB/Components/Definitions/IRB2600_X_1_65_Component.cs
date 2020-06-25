@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("ABB IRB2600-X/1.65", "IRB2600",
               "An ABB IRB2600-X/1.65 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

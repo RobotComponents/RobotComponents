@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.Deconstruct
           : base("Deconstruct Absolute Joint Movement", "DeConAbsMove", 
               "Deconstructs a Absolute Joint Movement component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Parameters.Definitions
                 "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Work Object."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

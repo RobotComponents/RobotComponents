@@ -35,7 +35,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("Robot Tool From Data", "RobToool",
               "Defines a robot tool based on translation and rotation values."
               + System.Environment.NewLine +
-              "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

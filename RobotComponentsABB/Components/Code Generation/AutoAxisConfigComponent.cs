@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Set Auto Axis Configuration", "SAAC",
               "Defines an instruction to activate or deactivate auto axis configuration for all following instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

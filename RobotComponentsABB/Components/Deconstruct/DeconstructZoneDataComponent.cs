@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.Deconstruct
           : base("Deconstruct Zone Data", "DeConZone", 
               "Deconstructs a Zone Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

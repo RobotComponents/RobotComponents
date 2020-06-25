@@ -30,7 +30,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Speed Data", "SD", 
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.list);
             pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.list, 500);
             pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.list, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Eeorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace RobotComponentsABB.Components.Simulation
           : base("Forward Kinematics", "FK",
               "Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
         }

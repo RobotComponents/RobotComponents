@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.Deconstruct
           : base("Deconstruct Work Object", "DeConTar",
               "Deconstructs a Work Object into its parameters."
                 + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

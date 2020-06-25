@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Wait for Digital Input", "WDI",
               "Defines an instruction to wait for the signal of a Digital Input from the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

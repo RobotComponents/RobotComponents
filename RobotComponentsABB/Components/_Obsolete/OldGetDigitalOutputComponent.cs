@@ -34,7 +34,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
           : base("Get Digital Output", "GetDO",
               "OBSOLETE: Gets the signal of a digital output from a defined ABB robot controller."
                 + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }

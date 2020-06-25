@@ -42,7 +42,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Action: Movement", "M",
               "Defines a robot movement instruction for simulation and code generation."
                 + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
 
         {

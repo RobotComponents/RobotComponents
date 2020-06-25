@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
           : base("Get Controller", "GC",
               "Connects to a real or virtual ABB IRC5 robot controller and extracts data from it."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }

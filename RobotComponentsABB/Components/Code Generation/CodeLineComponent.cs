@@ -32,7 +32,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Code", "C",
               "Defines manually an instruction or declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

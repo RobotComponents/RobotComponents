@@ -1,10 +1,18 @@
-# Robot Components
-[![Release version](https://img.shields.io/github/v/release/RobotComponents/RobotComponents?include_prereleases&style=flat-square)]()
-[![Release date](https://img.shields.io/github/release-date-pre/RobotComponents/RobotComponents?style=flat-square)]()
-[![Downloads](https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total?style=flat-square)]()
-[![License](https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square)]()
-[![Closed Issues](https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square)]()
-[![Open Issues](https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents?style=flat-square)]()
+
+<p align="center">
+  <img src="Utility/RC_Logo.png">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?include_prereleases&style=flat-square">
+  <img src="https://img.shields.io/github/release-date-pre/RobotComponents/RobotComponents?style=flat-square">
+  <img src="https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total?style=flat-square">
+  <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square">
+  <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square">
+  <img src="https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents?style=flat-square">
+</p>
+
+---
 
 Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper. RobotComponents has the following possibilities and advantages: 
 

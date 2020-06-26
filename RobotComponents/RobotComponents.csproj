@@ -61,10 +61,10 @@
   <ItemGroup>
     <Compile Include="BaseClasses\Actions\AbsoluteJointMovement.cs" />
     <Compile Include="BaseClasses\Actions\ITarget.cs" />
-    <Compile Include="BaseClasses\Actions\Declarations\JointTarget.cs" />
-    <Compile Include="BaseClasses\Actions\Declarations\RobotJointPosition.cs" />
+    <Compile Include="BaseClasses\Actions\JointTarget.cs" />
+    <Compile Include="BaseClasses\Actions\RobotJointPosition.cs" />
     <Compile Include="BaseClasses\Actions\IJointPosition.cs" />
-    <Compile Include="BaseClasses\Actions\Declarations\ExternalJointPosition.cs" />
+    <Compile Include="BaseClasses\Actions\ExternalJointPosition.cs" />
     <Compile Include="BaseClasses\Actions\ZoneData.cs" />
     <Compile Include="BaseClasses\Definitions\ExternalAxis.cs" />
     <Compile Include="BaseClasses\Actions\Action.cs" />

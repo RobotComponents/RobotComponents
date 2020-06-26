@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System lib
 using System;
@@ -131,9 +131,47 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
+        /// Cheks for the axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckForAxisLimits(Robot robot)
+        {
+            // Initiate list
+            List<string> errors = new List<string>();
+
+            // Check for internal axis values
+            for (int i = 0; i < 6; i++)
+            {
+                if (robot.InternalAxisLimits[i].IncludesParameter(_robJointPosition[i], false) == false)
+                {
+                    errors.Add("Joint Target  " + _name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
+                }
+            }
+
+            // Check for external axis values
+            for (int i = 0; i < robot.ExternalAxis.Count; i++)
+            {
+                int logicNumber = (int)robot.ExternalAxis[i].AxisNumber;
+
+                if (_extJointPosition[logicNumber] == 9e9)
+                {
+                    errors.Add("Joint Target " + _name + ": External axis value " + (i + 1).ToString() + " is not definied (9E9).");
+                }
+
+                else if (robot.ExternalAxis[i].AxisLimits.IncludesParameter(_extJointPosition[logicNumber], false) == false)
+                {
+                    errors.Add("Joint Target " + _name + ": External axis value " + (i + 1).ToString() + " is not in range.");
+                }
+            }
+
+            return errors;
+        }
+
+        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
@@ -151,7 +189,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
@@ -167,7 +205,7 @@ namespace RobotComponents.BaseClasses.Actions
             if (!RAPIDGenerator.JointTargets.ContainsKey(_name))
             {
                 RAPIDGenerator.JointTargets.Add(_name, this);
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -9,7 +9,6 @@ using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
 
-// NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple. 
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
@@ -207,7 +206,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string.  </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
@@ -237,7 +236,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns an empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {

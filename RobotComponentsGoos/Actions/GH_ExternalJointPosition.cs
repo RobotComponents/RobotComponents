@@ -1,61 +1,60 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Actions;
 
-// NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple. 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Robot Joint Position Goo wrapper class, makes sure the Robot Joint Position class can be used in Grasshopper.
+    /// External Joint Position Goo wrapper class, makes sure the External Joint Position class can be used in Grasshopper.
     /// </summary>
-    public class GH_RobotJointPosition : GH_Goo<RobotJointPosition>
+    public class GH_ExternalJointPosition : GH_Goo<ExternalJointPosition>
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_RobotJointPosition()
+        public GH_ExternalJointPosition()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates an External Joint Position Goo instance from an External Joint Position instance. 
         /// </summary>
-        /// <param name="RobotJointPosition"> Robot Joint Position Value to store inside this Goo instance. </param>
-        public GH_RobotJointPosition(RobotJointPosition robotJointPosition)
+        /// <param name="externalJointPosition"> External Joint Position Value to store inside this Goo instance. </param>
+        public GH_ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
-            this.Value = robotJointPosition;
+            this.Value = externalJointPosition;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Robot Joint Position instance from another Robot Joint Position Goo instance.
-        /// This creates a shallow copy of the passed Robot Joint Position Goo instance. 
+        /// Data constructor: Creates an External Joint Position Goo instance from another External Joint Position Goo instance.
+        /// This creates a shallow copy of the passed External Joint Position Goo instance. 
         /// </summary>
-        /// <param name="robotJointPositionGoo"> Robot Joint Position Goo instance to copy. </param>
-        public GH_RobotJointPosition(GH_RobotJointPosition robotJointPositionGoo)
+        /// <param name="externalJointPositionGoo"> External Joint Position Goo instance to copy. </param>
+        public GH_ExternalJointPosition(GH_ExternalJointPosition externalJointPositionGoo)
         {
-            if (robotJointPositionGoo == null)
+            if (externalJointPositionGoo == null)
             {
-                robotJointPositionGoo = new GH_RobotJointPosition();
+                externalJointPositionGoo = new GH_ExternalJointPosition();
             }
 
-            this.Value = robotJointPositionGoo.Value;
+            this.Value = externalJointPositionGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of this Goo instance. </returns>
+        /// <returns> A duplicate of the this Goo instance. </returns>
         public override IGH_Goo Duplicate()
         {
-            return new GH_RobotJointPosition(Value == null ? new RobotJointPosition() : Value.Duplicate());
+            return new GH_ExternalJointPosition(Value == null ? new ExternalJointPosition() : Value.Duplicate());
         }
         #endregion
 
@@ -80,20 +79,20 @@ namespace RobotComponentsGoos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal RobotJointPosition instance"; }
+                if (Value == null) { return "No internal ExternalJointPosition instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid RobotJointPosition instance: Did you define axis values?";
+                return "Invalid ExternalJointPosition instance: Did you define external axis values?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value.
+        /// Creates a string description of the current instance value
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Robot Joint Position"; }
-            else { return Value.ToString(); }  
+            if (Value == null) { return "Null External Joint Position"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Robot Joint Position"; }
+            get { return "External Joint Position"; }
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Robot Joint Position"; }
+            get { return ("Defines an External Joint Position"); }
         }
         #endregion
 
@@ -117,24 +116,24 @@ namespace RobotComponentsGoos.Actions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to RobotJointPosition
-            if (typeof(Q).IsAssignableFrom(typeof(RobotJointPosition)))
+            //Cast to ExternalJointPosition
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalJointPosition)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to RobotJointPositionGoo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotJointPosition)))
+            //Cast to ExternalJointPositionGoo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_RobotJointPosition(Value); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value); }
                 return true;
             }
 
@@ -142,7 +141,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)Value; }
+                else { target = (Q)(object)Value; } 
                 return true;
             }
 
@@ -167,17 +166,24 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from RobotJointPosition
-            if (typeof(RobotJointPosition).IsAssignableFrom(source.GetType()))
+            //Cast from number: The user only defines the first external axis value
+            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
-                Value = source as RobotJointPosition;
+                Value = new ExternalJointPosition((source as GH_Number).Value);
+                return true;
+            }
+
+            //Cast from ExternalJointPosition
+            if (typeof(ExternalJointPosition).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ExternalJointPosition;
                 return true;
             }
 
             //Cast from Action
             if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is RobotJointPosition action)
+                if (source is ExternalJointPosition action)
                 {
                     Value = action;
                     return true;
@@ -188,7 +194,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is RobotJointPosition action)
+                if (actionGoo.Value is ExternalJointPosition action)
                 {
                     Value = action;
                     return true;

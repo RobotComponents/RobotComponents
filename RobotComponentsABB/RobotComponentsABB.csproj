@@ -181,6 +181,7 @@
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
     <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
+    <Compile Include="Parameters\Actions\JointTargetParam.cs" />
     <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />
     <Compile Include="Parameters\Actions\ZoneDataParam.cs" />
     <Compile Include="Parameters\Definitions\ExternalAxisParam.cs" />

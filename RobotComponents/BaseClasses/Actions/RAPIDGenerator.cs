@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -139,7 +139,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Add comment lines for tracking which version of RC was used
             _stringBuilder.Append("\t" + "! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion);
             _stringBuilder.Append(Environment.NewLine);
-            _stringBuilder.Append("\t" + "! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information");
+            _stringBuilder.Append("\t" + "! Visit www.github.com/RobotComponents for more information");
             _stringBuilder.Append(Environment.NewLine);
 
             // Creates declarations
@@ -213,7 +213,7 @@ namespace RobotComponents.BaseClasses.Actions
             // Version number
             systemCode += "\t" + "! This RAPID code was generated with RobotComponents v" + VersionNumbering.CurrentVersion;
             systemCode += Environment.NewLine;
-            systemCode += "\t" + "! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information";
+            systemCode += "\t" + "! Visit www.github.com/RobotComponents for more information";
             systemCode += Environment.NewLine;
             systemCode += Environment.NewLine;
 

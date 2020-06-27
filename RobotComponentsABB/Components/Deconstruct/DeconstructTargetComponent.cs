@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.Deconstruct
           : base("Deconstruct Target", "DeConTar", 
               "Deconstructs a Target into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -47,8 +47,8 @@ namespace RobotComponentsABB.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
-            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.");
-            pManager.Register_DoubleParam("External Axis Values", "EAV", "The user definied override external axis values.");
+            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
+            pManager.Register_DoubleParam("External Axis Values", "EAV", "External Axis Values as list of numbers.");
         }
    
         /// <summary>

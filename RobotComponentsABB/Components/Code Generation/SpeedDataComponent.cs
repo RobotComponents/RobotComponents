@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -30,8 +30,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Speed Data", "SD", 
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "RobotComponents", "Code Generation")
         {
         }
 
@@ -53,7 +53,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.list);
             pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.list, 500);
             pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.list, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Eeorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
         }
 
         /// <summary>
@@ -223,13 +223,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.SpeedDataNames.Add(names[i]);
 
                     // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateSpeedDatas();
+
                     _lastName = names[i];
                 }
 
@@ -278,13 +273,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 _objectManager.SpeedDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, SpeedDataComponent> entry in _objectManager.SpeedDatasByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateSpeedDatas();
             }
         }
 

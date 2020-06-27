@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -30,9 +30,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public GetAxisValuesComponent()
           : base("Get Axis Values", "GA",
-              "Gets the current robot axis values from a defined ABB robot controller."
+              "Gets the current robot axis values from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -52,7 +52,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract the axis values from", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller as Robot Controller", GH_ParamAccess.item);
         }
 
         /// <summary>

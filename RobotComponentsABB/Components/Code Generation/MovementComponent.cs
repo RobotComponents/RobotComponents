@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -37,8 +37,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Move", "M",
               "Defines a linear or nonlinear movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "RobotComponents", "Code Generation")
 
         {
             // Create the component label with a message

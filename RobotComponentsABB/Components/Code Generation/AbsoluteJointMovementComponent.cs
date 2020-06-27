@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -34,10 +34,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public AbsoluteJointMovementComponent()
           : base("Absolute Joint Movement", "AJM",
-              "Defines an aboslute joint movement instruction."
+              "Defines an Aboslute Joint Movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "RobotComponents", "Code Generation")
 
         {
             // Create the component label with a message
@@ -316,20 +316,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
-                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateTargets();
 
                     _lastName = names[i];
                 }
@@ -376,23 +363,10 @@ namespace RobotComponentsABB.Components.CodeGeneration
                         _objectManager.TargetNames.Remove(_targetNames[i]);
                     }
                 }
-                _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
+                _objectManager.JointTargetsByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateTargets();
             }
         }
 

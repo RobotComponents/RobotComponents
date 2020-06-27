@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("Work Object", "WorkObj",
               "Defines a new work object."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }
@@ -195,13 +195,7 @@ namespace RobotComponentsABB.Components.Definitions
                     _objectManager.WorkObjectNames.Add(names[i]);
 
                     // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
-                    {
-                        if (entry.Value._lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateWorkObjects();
 
                     _lastName = names[i];
                 }
@@ -273,14 +267,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _objectManager.WorkObjectsByGuid)
-                {
-                    if (entry.Value._lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
+                _objectManager.UpdateWorkObjects();
             }
         }
 
@@ -310,5 +298,7 @@ namespace RobotComponentsABB.Components.Definitions
         {
             get { return new Guid("E76C475E-0C31-484D-A45D-690F45BD154C"); }
         }
+
+        public string LastName { get => _lastName; }
     }
 }

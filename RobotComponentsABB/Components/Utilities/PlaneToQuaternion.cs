@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -25,11 +25,11 @@ namespace RobotComponentsABB.Components.Utilities
         /// </summary>
         public PlaneToQuaternion()
           : base("Plane to Quaternion", "PtoQ",
-              "Calculates the four coefficient values in a quarternion. "
+              "Converts a plane to quaternion values."
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
-                + "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -40,7 +40,7 @@ namespace RobotComponentsABB.Components.Utilities
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Reference Plane", "RP", "The reference plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddPlaneParameter("Reference Plane", "RP", "The Reference Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager[1].Optional = true;
         }
 

@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -32,7 +32,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("Robot Tool From Planes", "RobToool",
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }
@@ -65,7 +65,6 @@ namespace RobotComponentsABB.Components.Definitions
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
-            pManager.Register_StringParam("Robot Tool Code", "RTC", "Robot Tool Code as a string");
         }
 
         // Fields
@@ -99,7 +98,6 @@ namespace RobotComponentsABB.Components.Definitions
 
             // Outputs
             DA.SetData(0, _robotTool);
-            DA.SetData(1, _robotTool.GetRSToolData());
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -136,20 +134,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ToolNames.Add(_robotTool.Name);
 
                 // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateRobotTools();
 
                 _lastName = _robotTool.Name;
                 _nameUnique = true;
@@ -192,15 +177,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in _objectManager.ToolsPlanesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in _objectManager.ToolsQuaternionByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
+                _objectManager.UpdateRobotTools();
             }
         }
 
@@ -259,7 +237,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6d430719-5c45-4b66-a676-71be54f6ee93"); }
+            get { return new Guid("004DA2A9-9A59-4AAA-8CC5-3EE706E83043"); }
         }
     }
 

@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -15,26 +16,22 @@ using RobotComponents.BaseClasses.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
-// This component is OBSOLETE!
-// It is OBSOLETE since version 0.08.000
-// It is replaced with a new component. 
-
 namespace RobotComponentsABB.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Tool from Euler Data component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class OldRobotToolFromDataEulerComponent : GH_Component
+    public class OldRobotToolFromQuaternionComponent2 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public OldRobotToolFromDataEulerComponent()
-          : base("Robot Tool From Data", "RobToool",
-              "Defines a robot tool based on translation and rotation values."
-              + System.Environment.NewLine +
+        public OldRobotToolFromQuaternionComponent2()
+          : base("Robot Tool From Quaternion Data", "RobTool",
+              "Defines a robot tool based on TCP coorindate and quarternion values."
+            + System.Environment.NewLine + System.Environment.NewLine +
               "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
@@ -42,7 +39,7 @@ namespace RobotComponentsABB.Components.Definitions
 
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
         public override GH_Exposure Exposure
         {
@@ -64,12 +61,14 @@ namespace RobotComponentsABB.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item, "default_tool");
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Translation X", "TX", "Translation in X direction", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Translation Y", "TY", "Translation in Y direction", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Translation Z", "TZ", "Translation in Z direction", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Rotation X", "RX", "Rotation around the X Axis in radians", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Rotation Y", "RY", "Rotation around the Y Axis in radians", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Rotation Z", "RZ", "Rotation around the Z Axis in radians", GH_ParamAccess.item, 0.0);
+            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager.AddNumberParameter("Coord X", "X", "The x-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Coord Y", "Y", "The y-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Coord Z", "Z", "The z-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Quaternion A", "A", "The real part of the quaternion.", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("Quaternion B", "B", "The first imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Quaternion C", "C", "The second imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Quaternion D", "D", "The third imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
 
             pManager[1].Optional = true;
         }
@@ -96,31 +95,32 @@ namespace RobotComponentsABB.Components.Definitions
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed in the future.");
-
             // Input variables
             string name = "default_tool";
             List<Mesh> meshes = new List<Mesh>();
-            double toolTransX = 0.0;
-            double toolTransY = 0.0;
-            double toolTransZ = 0.0;
-            double toolRotX = 0.0;
-            double toolRotY = 0.0;
-            double toolRotZ = 0.0;
+            Plane attachmentPlane = Plane.Unset;
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+            double quat1 = 0.0;
+            double quat2 = 0.0;
+            double quat3 = 0.0;
+            double quat4 = 0.0;
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
-            if (!DA.GetData(2, ref toolTransX)) { return; }
-            if (!DA.GetData(3, ref toolTransY)) { return; }
-            if (!DA.GetData(4, ref toolTransZ)) { return; }
-            if (!DA.GetData(5, ref toolRotX)) { return; }
-            if (!DA.GetData(6, ref toolRotY)) { return; }
-            if (!DA.GetData(7, ref toolRotZ)) { return; }
+            if (!DA.GetData(2, ref attachmentPlane)) { return; }
+            if (!DA.GetData(3, ref x)) { return; }
+            if (!DA.GetData(4, ref y)) { return; }
+            if (!DA.GetData(5, ref z)) { return; }
+            if (!DA.GetData(6, ref quat1)) { return; }
+            if (!DA.GetData(7, ref quat2)) { return; }
+            if (!DA.GetData(8, ref quat3)) { return; }
+            if (!DA.GetData(9, ref quat4)) { return; }
 
             // Create the robot tool
-            _robotTool = new RobotTool(name, meshes, toolTransX, toolTransY, toolTransZ, toolRotX, toolRotY, toolRotZ);
+            _robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);
 
             // Outputs
             DA.SetData(0, _robotTool);
@@ -134,6 +134,7 @@ namespace RobotComponentsABB.Components.Definitions
             _objectManager.ToolNames.Remove(_toolName);
             _toolName = String.Empty;
 
+
             // Removes lastName from toolNameList
             if (_objectManager.ToolNames.Contains(_lastName))
             {
@@ -141,9 +142,9 @@ namespace RobotComponentsABB.Components.Definitions
             }
 
             // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.OldToolsEulerByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldToolsQuaternionByGuid2.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.OldToolsEulerByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldToolsQuaternionByGuid2.Add(this.InstanceGuid, this);
             }
 
             // Checks if tool name is already in use and counts duplicates
@@ -189,6 +190,29 @@ namespace RobotComponentsABB.Components.Definitions
             #endregion
         }
 
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+        #endregion
+
         /// <summary>
         /// This method detects if the user deletes the component from the Grasshopper canvas. 
         /// </summary>
@@ -202,7 +226,7 @@ namespace RobotComponentsABB.Components.Definitions
                 {
                     _objectManager.ToolNames.Remove(_toolName);
                 }
-                _objectManager.OldToolsEulerByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldToolsQuaternionByGuid2.Remove(this.InstanceGuid);
 
                 // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
                 _objectManager.UpdateRobotTools();
@@ -231,7 +255,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ToolData_Icon; }
+            get { return Properties.Resources.ToolQuaternion_Icon; }
         }
 
         /// <summary>
@@ -241,7 +265,7 @@ namespace RobotComponentsABB.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("647AD530-2800-4653-96B4-C5C50D1243CA"); }
+            get { return new Guid("66039008-4312-4F9D-A00F-6556E474934B"); }
         }
     }
 }

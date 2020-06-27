@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -32,7 +32,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("External Rotational Axis", "External Rotational Axis",
               "Defines an External Rotational Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }
@@ -137,20 +137,7 @@ namespace RobotComponentsABB.Components.Definitions
                 _objectManager.ExternalAxisNames.Add(_externalRotationalAxis.Name);
 
                 // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateExternalAxis();
 
                 _lastName = _externalRotationalAxis.Name;
                 _nameUnique = true;
@@ -181,15 +168,8 @@ namespace RobotComponentsABB.Components.Definitions
                 }
                 _objectManager.ExternalRotationalAxesByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in _objectManager.ExternalLinearAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
-                foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in _objectManager.ExternalRotationalAxesByGuid)
-                {
-                    entry.Value.ExpireSolution(true);
-                }
+                // Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
+                _objectManager.UpdateExternalAxis();
             }
         }
 

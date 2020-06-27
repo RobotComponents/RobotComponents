@@ -78,6 +78,8 @@
     <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructRobotInfoComponent.cs" />
     <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromPlanesComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
     <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
@@ -150,7 +152,7 @@
     <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructMovementComponent.cs" />
-    <Compile Include="Components\Deconstruct\DeconstructRobotInfoComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobotComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotToolComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructSpeedDataComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructTargetComponent.cs" />

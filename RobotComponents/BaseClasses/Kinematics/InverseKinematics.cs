@@ -374,7 +374,7 @@ namespace RobotComponents.BaseClasses.Kinematics
             _externalAxisValues.Clear();
 
             // Get user defined external axis values
-            List<double> userDefinedExternalAxisValues = _target.ExternalAxisValues;
+            List<double> userDefinedExternalAxisValues = _target.ExternalJointPosition.ToList();
             double count = 0;
 
             // NOTE: The axis logic is the list order with external axes
@@ -477,7 +477,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                 if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
                 {
                     // Calculate closest base plane if the used did not define an external axis value
-                    if (_target.ExternalAxisValues[i] == 9e9)
+                    if (_target.ExternalJointPosition[i] == 9e9)
                     {
                         ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
                         externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
@@ -488,7 +488,7 @@ namespace RobotComponents.BaseClasses.Kinematics
                     else
                     {
                         ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalAxisValues[i], out bool inLimits);
+                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[i], out bool inLimits);
                     }
 
                     // Break the loop since it should only work for one external linear axis.
@@ -593,6 +593,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// The calculated internal axis values
         /// </summary>
+        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
         public List<double> InternalAxisValues
         {
             get { return _internalAxisValues; }
@@ -601,9 +602,26 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// The calculated external axis values
         /// </summary>
+        [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
         public List<double> ExternalAxisValues 
         {
             get { return _externalAxisValues; }
+        }
+
+        /// <summary>
+        /// Defines the calculated Robot Joint Position
+        /// </summary>
+        public RobotJointPosition RobotJointPosition
+        {
+            get { return new RobotJointPosition(_internalAxisValues); }
+        }
+
+        /// <summary>
+        /// Defines the calculated External Joint Position
+        /// </summary>
+        public ExternalJointPosition ExternalJointPosition
+        {
+            get { return new ExternalJointPosition(_externalAxisValues); }
         }
 
         /// <summary>

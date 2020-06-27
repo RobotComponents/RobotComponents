@@ -27,7 +27,7 @@ namespace RobotComponents.BaseClasses.Actions
         private double _v_leax; // External linear axis speed
         private double _v_reax; // External rotational axis speed
         private bool _predefined; // ABB predefinied data (e.g. v5, v10, v20, v30)?
-        private bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
@@ -177,9 +177,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false)
             {
@@ -194,9 +194,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
@@ -213,7 +213,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
                 {
                     RAPIDGenerator.SpeedDatas.Add(this.Name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

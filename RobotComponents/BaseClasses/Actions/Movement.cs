@@ -20,11 +20,10 @@ namespace RobotComponents.BaseClasses.Actions
     {
         #region fields
         // Fixed fields
-        private Target _target;
+        private ITarget _target;
         private SpeedData _speedData;
         private int _movementType; //TODO: convert to enum
         private ZoneData _zoneData;
-        private Plane _globalTargetPlane;
 
         // Variable fields
         RobotTool _robotTool;
@@ -45,7 +44,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// This constructor is typically used to cast a robot target to a robot movement. 
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
-        public Movement(Target target)
+        public Movement(ITarget target)
         {
             _target = target;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
@@ -55,8 +54,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
-
-            Initialize();
         }
 
         /// <summary>
@@ -66,7 +63,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="zoneData"> The ZoneData as a ZoneData </param>
-        public Movement(Target target, SpeedData speedData, int movementType, ZoneData zoneData)
+        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData)
         {
             _target = target;
             _speedData = speedData;
@@ -76,8 +73,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
-
-            Initialize();
         }
 
         /// <summary>
@@ -87,7 +82,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision)
         {
             _target = target;
             _speedData = speedData;
@@ -97,8 +92,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
-            
-            Initialize();
         }
 
         /// <summary>
@@ -109,7 +102,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool)
         {
             _target = target;
             _speedData = speedData;
@@ -118,8 +111,25 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+        }
 
-            Initialize();
+        /// <summary>
+        /// Constructs a robot movement with an empty digital output, a default work object (wobj0) and a empty robot tool (no override).
+        /// </summary>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool)
+        {
+            _target = target;
+            _speedData = speedData;
+            _movementType = movementType;
+            _zoneData = zoneData;
+            _robotTool = robotTool;
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
         }
 
         /// <summary>
@@ -130,7 +140,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, WorkObject workObject)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject)
         {
             _target = target;
             _speedData = speedData;
@@ -140,8 +150,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
-
-            Initialize();
         }
 
         /// <summary>
@@ -152,7 +160,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine.  </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, DigitalOutput digitalOutput)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, DigitalOutput digitalOutput)
         {
             _target = target;
             _speedData = speedData;
@@ -162,8 +170,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = digitalOutput;
-
-            Initialize();
         }
 
         /// <summary>
@@ -175,7 +181,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject)
         {
             _target = target;
             _speedData = speedData;
@@ -184,8 +190,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
-
-            Initialize();
         }
 
         /// <summary>
@@ -197,7 +201,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
         {
             _target = target;
             _speedData = speedData;
@@ -206,8 +210,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = digitalOutput;
-
-            Initialize();
         }
 
         /// <summary>
@@ -219,7 +221,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _target = target;
             _speedData = speedData;
@@ -229,8 +231,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = workObject;
             _digitalOutput = digitalOutput;
-
-            Initialize();
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _target = target;
             _speedData = speedData;
@@ -252,8 +252,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
-
-            Initialize();
         }
 
         /// <summary>
@@ -266,7 +264,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(Target target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _target = target;
             _speedData = speedData;
@@ -275,8 +273,6 @@ namespace RobotComponents.BaseClasses.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
-
-            Initialize();
         }
 
         /// <summary>
@@ -292,7 +288,6 @@ namespace RobotComponents.BaseClasses.Actions
             _movementType = movement.MovementType;
             _zoneData = movement.ZoneData.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
-            _globalTargetPlane = new Plane(movement.GlobalTargetPlane);
 
             if (duplicateMesh == true)
             {
@@ -348,7 +343,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
             else if (this.MovementType == 0)
             {
-                return "Absolute Joint Movement (" + this.Target.Name + ")";
+                return "Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
             }
             else if (this.MovementType == 1)
             {
@@ -365,180 +360,90 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid movement object. 
-        /// </summary>
-        private void Initialize()
-        {
-            _globalTargetPlane = GetGlobalTargetPlane();
-        }
-
-        /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid movement object.
-        /// </summary>
-        public void ReInitialize()
-        {
-            Initialize();
-        }
-
-        /// <summary>
         /// Calculates the position and the orientation of the target in the world coordinate system. 
         /// If an external axis is attached to the work object this returns the pose of the 
-        /// target plane in the world coorinate system for axis values equal to zero.
+        /// target plane in the world coorinate space for axis values equal to zero.
         /// </summary>
         /// <returns> The the target plane in the world coordinate system. </returns>
         public Plane GetGlobalTargetPlane()
         {
-            Plane plane = new Plane(Target.Plane); // Deep copy
-            Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
-            plane.Transform(orient);
-            return plane;
-        }
-
-        /// <summary>
-        /// Calculates the tranformed global target plane for the defined Robot Info with attached external axes.
-        /// </summary>
-        /// <param name="robotInfo"> The robot info with the external axes that defined the axis logic. </param>
-        /// <param name="logic"> Retuns the axis logic number as an int. </param>
-        /// <returns> The posed target plane in the word coordinate system. </returns>
-        public Plane GetPosedGlobalTargetPlane(Robot robotInfo, out int logic)
-        {
-            // Not transformed global target plane
-            Plane plane = new Plane(_globalTargetPlane);
-
-            // Initiate axis logic
-            int axisLogic = -1; // dummy value
-
-            // Re-orient the target plane if an external axis is attached to the work object
-            if (_workObject.ExternalAxis != null)
+            if (_target is Target robotTarget)
             {
-                // Check if the axis is attached to the robot and get the axis logic number
-                axisLogic = robotInfo.ExternalAxis.FindIndex(p => p.Name == _workObject.ExternalAxis.Name);
-
-                // Check axis logic
-                if (axisLogic == -1)
-                {
-                    throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot Info. Did you attach the external axis to the Robot Info?");
-                }
-
-                // Get external axis value
-                double axisValue = _target.ExternalAxisValues[axisLogic];
-                if (axisValue == 9e9) { axisValue = 0; } // If the user does not define an axis value we set it to zero. 
-
-                // Transform
-                Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(axisValue, out bool inLimits);
-                plane.Transform(transform);
+                Plane plane = new Plane(robotTarget.Plane); // Deep copy
+                Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
+                plane.Transform(orient);
+                return plane;
             }
 
-            logic = axisLogic;
-            return plane;
+            else
+            {
+                return Plane.Unset;
+            }
+
+        } 
+
+        /// <summary>
+        /// Calculates the posed target plane for the defined Robot with attached external axes in world coorindate space.
+        /// </summary>
+        /// <param name="robot"> The robot info with the external axes that defined the axis logic. </param>
+        /// <param name="logic"> Retuns the axis logic number as an int. </param>
+        /// <returns> The posed target plane in the word coordinate system. </returns>
+        public Plane GetPosedGlobalTargetPlane(Robot robot, out int logic)
+        {
+            // Initiate axis logic
+            logic = -1; // dummy value
+
+            if (_target is Target robotTarget)
+            {
+                // Not transformed global target plane
+                Plane plane = GetGlobalTargetPlane();
+
+                // Re-orient the target plane if an external axis is attached to the work object
+                if (_workObject.ExternalAxis != null)
+                {
+                    // Check if the axis is attached to the robot and get the axis logic number
+                    logic = robot.ExternalAxis.FindIndex(p => p.Name == _workObject.ExternalAxis.Name); // TODO: use _workObject.ExternalAxis.AxisNumber;
+
+                    // Check axis logic
+                    if (logic == -1)
+                    {
+                        throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
+                    }
+
+                    // Get external axis value
+                    double axisValue = robotTarget.ExternalJointPosition[logic];
+                    if (axisValue == 9e9) { axisValue = 0; } // If the user does not define an axis value we set it to zero. 
+
+                    // Transform
+                    Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(axisValue, out bool inLimits);
+                    plane.Transform(transform);
+                }
+
+                return plane;
+            }
+
+            else
+            {
+                return Plane.Unset;
+            }
         }
 
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
-            // Initialize code line
-            string code = "";
-
-            // Set movement
-            robotInfo.InverseKinematics.Movement = this;
-
-            // Create a robtarget if  the movement type is MoveL (1) or MoveJ (2)
-            if (_movementType == 1 || _movementType == 2)
-            {
-                // Calculate inverse kinematics
-                robotInfo.InverseKinematics.CalculateExternalAxisValues();
-                List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
-
-                // Creates targetName variable
-                string robTargetVar = "VAR robtarget " + _target.RobTargetName;
-
-                code += robTargetVar + " := [["
-                    + _target.Plane.Origin.X.ToString("0.##") + ", "
-                    + _target.Plane.Origin.Y.ToString("0.##") + ", "
-                    + _target.Plane.Origin.Z.ToString("0.##") + "], ["
-                    + _target.Quat.A.ToString("0.######") + ", "
-                    + _target.Quat.B.ToString("0.######") + ", "
-                    + _target.Quat.C.ToString("0.######") + ", "
-                    + _target.Quat.D.ToString("0.######") + "],"
-                    + "[0,0,0," + _target.AxisConfig;
-
-                // Adds all External Axis Values
-                code += "], [";
-                for (int i = 0; i < externalAxisValues.Count; i++)
-                {
-                    code += externalAxisValues[i].ToString("0.##") + ", ";
-                }
-
-                // Adds 9E9 for all missing external Axis Values
-                for (int i = externalAxisValues.Count; i < 6; i++)
-                {
-                    if (Target.ExternalAxisValues[i] == 9e9)
-                    {
-                        code += "9E9" + ", ";
-                    }
-                    else
-                    {
-                        code += Target.ExternalAxisValues[i].ToString("0.##") + ", ";
-                    }
-                }
-                code = code.Remove(code.Length - 2, 2);
-                code += "]];";
-            }
-
-            // Create a jointtarget if the movement type is MoveAbsJ (0)
-            else
-            {
-                // Calculate inverse kinematics
-                robotInfo.InverseKinematics.Calculate();
-                List<double> internalAxisValues = robotInfo.InverseKinematics.InternalAxisValues;
-                List<double> externalAxisValues = robotInfo.InverseKinematics.ExternalAxisValues;
-
-                // Creates targetName variable
-                string jointTargetVar = "CONST jointtarget " + _target.JointTargetName;
-                code += jointTargetVar + " := [[";
-
-                // Adds all Internal Axis Values
-                for (int i = 0; i < internalAxisValues.Count; i++)
-                {
-                    code += internalAxisValues[i].ToString("0.##") + ", ";
-                }
-                code = code.Remove(code.Length - 2, 2);
-
-                // Adds all External Axis Values
-                code += "], [";
-                for (int i = 0; i < externalAxisValues.Count; i++)
-                {
-                    code += externalAxisValues[i].ToString("0.##") + ", ";
-                }
-                // Adds 9E9 for all missing external Axis Values
-                for (int i = externalAxisValues.Count; i < 6; i++)
-                {
-                    if (Target.ExternalAxisValues[i] == 9e9)
-                    {
-                        code += "9E9" + ", ";
-                    }
-                    else
-                    {
-                        code += Target.ExternalAxisValues[i].ToString("0.##") + ", ";
-                    }
-                }
-                code = code.Remove(code.Length - 2, 2);
-                code += "]];";
-            }
-
-            return code; 
+            return String.Empty;
         }
 
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             // Set tool name
             string toolName;
@@ -546,15 +451,18 @@ namespace RobotComponents.BaseClasses.Actions
             // Check first if a tool is set
             if (_robotTool == null) 
             { 
-                toolName = robotInfo.Tool.Name; 
+                toolName = robot.Tool.Name; 
             }
             // Check if a tool is set by checking the name (tool can be empty)
             else if (_robotTool.Name == "" || _robotTool.Name == null) 
             { 
-                toolName = robotInfo.Tool.Name; 
+                toolName = robot.Tool.Name; 
             }
             // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
-            else { toolName = _robotTool.Name; }
+            else 
+            { 
+                toolName = _robotTool.Name; 
+            }
 
             // A movement not combined with a digital output
             if (_digitalOutput.IsValid == false)
@@ -562,60 +470,95 @@ namespace RobotComponents.BaseClasses.Actions
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
-                    return "MoveAbsJ " + _target.JointTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ";";
+                    string code = "MoveAbsJ ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code += toolName;
+                    code += "\\WObj:=" + _workObject.Name + ";";
+                    return code;
                 }
 
                 // MoveL
-                else if (_movementType == 1)
+                else if (_movementType == 1 && _target is Target)
                 {
-                    return "MoveL " + _target.RobTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ";";
+                    string code = "MoveL ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code += toolName;
+                    code += "\\WObj:=" + _workObject.Name + ";";
+                    return code;
                 }
 
                 // MoveJ
-                else if (_movementType == 2)
+                else if (_movementType == 2 && _target is Target)
                 {
-                    return "MoveJ " + _target.RobTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ";";
+                    string code = "MoveJ ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code += toolName + "\\WObj:=";
+                    code += "\\WObj:=" + _workObject.Name + ";";
+                    return code;
                 }
 
-                // Wrong movement type
+                // Wrong movement type or combination
                 else
                 {
-                    return string.Empty;
+                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
 
             // A movement combined with a digital output
             else
             {
-                // MoveAbsJ + SetDO: There is no RAPDID function that combines the an absolute joint movement and a DO.
+                // MoveAbsJ + SetDO: There is no RAPID function that combines the an absolute joint movement and a DO.
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == 0)
                 {
-                    // Add the code line for the absolute joint movement
-                    string code = "MoveAbsJ " + _target.JointTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ";";
-                    // Add the code line for the digital output
-                    code += " ";
-                    code += _digitalOutput.ToRAPIDInstruction(robotInfo);
-
+                    string code = "MoveAbsJ ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code += toolName;
+                    code += "\\WObj:=" + _workObject.Name + "; ";
+                    code += _digitalOutput.ToRAPIDInstruction(robot);
                     return code;
                 }
 
                 // MoveLDO
-                else if (_movementType == 1)
+                else if (_movementType == 1 && _target is Target)
                 {
-                    return "MoveLDO " + _target.RobTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ", " + _digitalOutput.Name + ", " + (_digitalOutput.IsActive ? 1 : 0) + ";";
+                    string code = "MoveLDO ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code += toolName;
+                    code += "\\WObj:=" + _workObject.Name + ", ";
+                    code += _digitalOutput.Name + ", ";
+                    code += (_digitalOutput.IsActive ? 1 : 0) + ";";
+                    return code;
                 }
 
                 // MoveJDO
-                else if (_movementType == 2)
+                else if (_movementType == 2 && _target is Target)
                 {
-                    return "MoveJDO " + _target.RobTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + "\\WObj:=" + _workObject.Name + ", " + _digitalOutput.Name + ", " + (_digitalOutput.IsActive ? 1 : 0) + ";";
+                    string code = "MoveJDO ";
+                    code += _target.Name + ", ";
+                    code += _speedData.Name + ", ";
+                    code += _zoneData.Name + ", ";
+                    code +=  toolName;
+                    code += "\\WObj:=" + _workObject.Name + ", ";
+                    code += _digitalOutput.Name + ", ";
+                    code += (_digitalOutput.IsActive ? 1 : 0) + ";";
+                    return code;
                 }
 
-                // Wrong movement type
+                // Wrong movement type or combination
                 else
                 {
-                    return string.Empty;
+                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }
@@ -626,32 +569,57 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            // Creates SpeedData Variable Code 
+            // Generate the code for the zone and speeddata
             _speedData.ToRAPIDDeclaration(RAPIDGenerator);
-
-            // Creates ZoneData Variable Code
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
-            // Create a robtarget if the movement type is MoveL (1) or MoveJ (2)
-            if (_movementType == 1 || _movementType == 2)
+            // Generate code from robot targets
+            if (_target is Target robotTarget)
             {
-                // Only adds target code if target is not already defined
-                if (!RAPIDGenerator.Targets.ContainsKey(_target.RobTargetName))
+                // Update the movement of the inverse kinematics
+                RAPIDGenerator.Robot.InverseKinematics.Movement = this;
+
+                // Generates the robot target variable for a MoveL or MoveJ instruction
+                if (_movementType == 1 || _movementType == 2)
                 {
-                    RAPIDGenerator.Targets.Add(_target.RobTargetName, _target);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalAxisValues();
+                    robotTarget.ToRAPIDDeclaration(RAPIDGenerator);
+                }
+
+                // Generates the joint target variable from a robot target for a MoveAbsJ instruction
+                else
+                {
+                    if (!RAPIDGenerator.JointTargets.ContainsKey(robotTarget.Name))
+                    {
+                        // Calculate the axis values from the robot target
+                        RAPIDGenerator.Robot.InverseKinematics.Calculate();
+                        RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
+
+                        // Create a joint target from the axis values
+                        RobotJointPosition robJointPosition = new RobotJointPosition(RAPIDGenerator.Robot.InverseKinematics.InternalAxisValues);
+                        ExternalJointPosition extJointPosition = new ExternalJointPosition(RAPIDGenerator.Robot.InverseKinematics.ExternalAxisValues);
+                        JointTarget jointTarget = new JointTarget(robotTarget.Name, robJointPosition, extJointPosition);
+
+                        // Create the RAPID code
+                        jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
+                    }
                 }
             }
 
-            // Create a jointtarget if the movement type is MoveAbsJ (0)
-            else
+            // Generate code from joint targets
+            else if (_target is JointTarget jointTarget)
             {
-                // Only adds target code if target is not already defined
-                if (!RAPIDGenerator.Targets.ContainsKey(_target.JointTargetName))
+                // JointTarget with MoveAbsJ
+                if (_movementType == 0)
                 {
-                    RAPIDGenerator.Targets.Add(_target.JointTargetName, _target);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
-                    RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.RobotInfo.InverseKinematics.ErrorText));
+                    jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
+                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckForAxisLimits(RAPIDGenerator.Robot));
+                }
+
+                // Joint Target combined with MoveL or MoveJ
+                else
+                {
+                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }
@@ -662,7 +630,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -684,24 +652,27 @@ namespace RobotComponents.BaseClasses.Actions
                 if (WorkObject.IsValid == false) { return false; }
                 if (MovementType < 0) { return false; }
                 if (MovementType > 2) { return false; }
+                if (ITarget is JointTarget && MovementType == 1) { return false; }
+                if (ITarget is JointTarget && MovementType == 2) { return false; }
                 return true;
             }
         }
 
         /// <summary>
-        /// The destination target of the robot and external axes.
+        /// OBSOLETE: The destination target of the robot and external axes.
         /// </summary>
         public Target Target
         {
-            get 
-            { 
-                return _target; 
-            }
-            set 
-            { 
-                _target = value;
-                ReInitialize();
-            }
+            get { return _target as Target; }
+            set { _target = value; }
+        }
+
+        /// <summary>
+        /// Defines the destination target of the robot and external axes for this movement.
+        public ITarget ITarget // TODO: Rename to Target after renaming Target to Robot Target
+        {
+            get { return _target; }
+            set { _target = value; }
         }
 
         /// <summary>
@@ -737,16 +708,6 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The position and the orientation of the used target in the global coordinate system.
-        /// In case an external axis is connected to the work object this the position of the 
-        /// target plane if the external axis values are zero. 
-        /// </summary>
-        public Plane GlobalTargetPlane
-        {
-            get { return _globalTargetPlane; }
-        }
-
-        /// <summary>
         /// The tool in use when the robot moves. 
         /// </summary>
         public RobotTool RobotTool
@@ -760,15 +721,8 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public WorkObject WorkObject
         {
-            get 
-            { 
-                return _workObject; 
-            }
-            set 
-            { 
-                _workObject = value;
-                ReInitialize();
-            }
+            get { return _workObject; }
+            set { _workObject = value; }
         }
 
         /// <summary>

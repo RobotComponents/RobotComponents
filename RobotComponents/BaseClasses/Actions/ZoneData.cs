@@ -28,7 +28,7 @@ namespace RobotComponents.BaseClasses.Actions
         private double _zone_leax; // Zone linear external axes
         private double _zone_reax; // Zone rotational external axes
         private bool _predefined; // ABB predefinied data (e.g. fine, z1, z5, z10 etc.)?
-        private bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
 
         private static readonly string[] _validPredefinedNames = new string[] { "fine", "z0", "z1", "z5", "z10", "z15", "z20", "z30", "z40", "z50", "z60", "z80", "z100", "z150", "z200" };
         private static readonly double[] _validPredefinedValues = new double[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -254,9 +254,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false)
             {
@@ -284,9 +284,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
@@ -303,7 +303,7 @@ namespace RobotComponents.BaseClasses.Actions
                 if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
                 {
                     RAPIDGenerator.ZoneDatas.Add(this.Name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

@@ -14,7 +14,7 @@ using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Deconstruct
-
+{ 
     /// <summary>
     /// RobotComponents Deconstruct External Joint Position component. An inherent from the GH_Component Class.
     /// </summary>

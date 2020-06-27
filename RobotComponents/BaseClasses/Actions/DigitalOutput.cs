@@ -89,9 +89,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -99,9 +99,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             if (_isActive == true)
             {
@@ -127,7 +127,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 

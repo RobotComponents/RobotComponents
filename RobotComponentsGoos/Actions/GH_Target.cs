@@ -204,6 +204,15 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            {
+                if (Value == null) { target = default(Q); }
+                else if (Value.ExternalJointPosition == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
+                return true;
+            }
+
             target = default(Q);
             return false;
         }

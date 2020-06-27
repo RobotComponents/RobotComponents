@@ -197,8 +197,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null) { target = default(Q); }
-                else if (Value.GlobalTargetPlane == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Plane(Value.GlobalTargetPlane); }
+                else { target = (Q)(object)new GH_Plane(Value.GetGlobalTargetPlane()); }
                 return true;
             }
 
@@ -206,8 +205,7 @@ namespace RobotComponentsGoos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
                 if (Value == null) { target = default(Q); }
-                else if (Value.GlobalTargetPlane == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Point(Value.GlobalTargetPlane.Origin); }
+                else { target = (Q)(object)new GH_Point(Value.GetGlobalTargetPlane().Origin); }
                 return true;
             }
 
@@ -355,10 +353,14 @@ namespace RobotComponentsGoos.Actions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Plane plane = Value.GlobalTargetPlane;
-            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+            Plane plane = Value.GetGlobalTargetPlane();
+
+            if (plane != Plane.Unset)
+            {
+                args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+            }
         }
 
         /// <summary>

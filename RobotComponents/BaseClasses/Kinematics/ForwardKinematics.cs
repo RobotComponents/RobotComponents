@@ -9,6 +9,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.BaseClasses.Actions;
 using RobotComponents.BaseClasses.Definitions;
 
 namespace RobotComponents.BaseClasses.Kinematics
@@ -65,6 +66,23 @@ namespace RobotComponents.BaseClasses.Kinematics
             _hideMesh = hideMesh;
             _internalAxisValues = internalAxisValues;
             _externalAxisValues = externalAxisValues;
+            UpdateInternalAxisValuesRadians();
+        }
+
+        /// <summary>
+        /// Defines a Forward Kinematic Object for certain axis values.
+        /// </summary>
+        /// <param name="robotInfo">Robot Information the FK should be calculated for.</param>
+        /// <param name="robotJointPosition">The internal axis values as a Robot Joint Position.</param>
+        /// <param name="externalJointPosition">The external axis values as an External Joint Position.</param>
+        /// <param name="hideMesh"> Boolean that indicates if the mesh will be supressed. </param>
+        public ForwardKinematics(Robot robotInfo, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition, bool hideMesh = false)
+        {
+            _robotInfo = robotInfo;
+            _hideMesh = hideMesh;
+            _internalAxisValues = robotJointPosition.ToList();
+            _externalAxisValues = externalJointPosition.ToList();
+            _externalAxisValues.Remove(9e9); // TODO: temporary solution
             UpdateInternalAxisValuesRadians();
         }
 
@@ -377,6 +395,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// List of internal axis values in degrees.
         /// </summary>
+        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
         public List<double> InternalAxisValues
         {
             get 
@@ -393,6 +412,7 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// Array of internal axis values in radians.
         /// </summary>
+        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
         public double[] InternalAxisRads
         {
             get { return _internalAxisRads; }
@@ -401,10 +421,27 @@ namespace RobotComponents.BaseClasses.Kinematics
         /// <summary>
         /// List of external axis values in ?. A external axis can be meter or degree
         /// </summary>
+        [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
         public List<double> ExternalAxisValues
         {
             get { return _externalAxisValues; }
             set { _externalAxisValues = value; }
+        }
+
+        /// <summary>
+        /// Defines the Robot Joint Position
+        /// </summary>
+        public RobotJointPosition RobotJointPosition
+        {
+            get { return new RobotJointPosition(_internalAxisValues); }
+        }
+
+        /// <summary>
+        /// Defines the External Joint Position
+        /// </summary>
+        public ExternalJointPosition ExternalJointPosition
+        {
+            get { return new ExternalJointPosition(_externalAxisValues); }
         }
 
         /// <summary>

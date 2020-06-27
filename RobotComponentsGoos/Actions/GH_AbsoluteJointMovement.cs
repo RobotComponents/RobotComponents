@@ -181,6 +181,40 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            #region casting methods to new datatypes
+            //Cast to Movement Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Movement)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Movement(Value.ConvertToMovement()); }
+                return true;
+            }
+
+            //Cast to Joint Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_JointTarget(Value.ConvertToJointTarget()); }
+                return true;
+            }
+
+            //Cast to Robot Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotJointPosition)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotJointPosition(Value.ConvertToRobotJointPosition()); }
+                return true;
+            }
+
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value.ConvertToExternalJointPosition()); }
+                return true;
+            }
+            #endregion
+
             target = default(Q);
             return false;
         }

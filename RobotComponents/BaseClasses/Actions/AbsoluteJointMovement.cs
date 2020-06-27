@@ -15,6 +15,7 @@ namespace RobotComponents.BaseClasses.Actions
     /// <summary>
     /// Absolute Joint Movement class
     /// </summary>
+    [Obsolete("The Absolute Joint Movement class will be removed in the future. Instead, combine a Joint Target object with a Movement object.", false)]
     public class AbsoluteJointMovement : Action
     {
         #region fields
@@ -272,9 +273,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Cheks for the axis limits and returns a list with possible errors messages. 
         /// </summary>
-        /// <param name="robotInfo"> The robot info to check the axis values for. </param>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
         /// <returns> Returns a list with error messages. </returns>
-        public List<string> CheckForAxisLimits(Robot robotInfo)
+        public List<string> CheckForAxisLimits(Robot robot)
         {
             // Initiate list
             List<string> errors = new List<string>();
@@ -282,21 +283,23 @@ namespace RobotComponents.BaseClasses.Actions
             // Check for internal axis values
             for (int i = 0; i < _internalAxisValues.Count; i++)
             {
-                if (robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
+                if (robot.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: Internal axis value " + (i + 1).ToString() + " is not in range.");
                 }
             }
 
             // Check for external axis values
-            for (int i = 0; i < robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < robot.ExternalAxis.Count; i++)
             {
-                if (_externalAxisValues[i] == 9e9)
+                int logicNumber = (int)robot.ExternalAxis[i].AxisNumber;
+
+                if (_externalAxisValues[logicNumber] == 9e9)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not definied by the user.");
                 }
 
-                else if (robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
+                else if (robot.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[logicNumber], false) == false)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not in range.");
                 }
@@ -308,12 +311,12 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
             // Creates Code Variable
-            string code = "CONST jointtarget " + JointTargetName + " := [[";
+            string code = "CONST jointtarget " + _name + " := [[";
 
             // Adds all Internal Axis Values
             for (int i = 0; i < this._internalAxisValues.Count; i++)
@@ -345,9 +348,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             // Set tool name
             string toolName;
@@ -355,12 +358,12 @@ namespace RobotComponents.BaseClasses.Actions
             // Check first if a tool is set
             if (_robotTool == null) 
             { 
-                toolName = robotInfo.Tool.Name; 
+                toolName = robot.Tool.Name; 
             }
             // Check if a tool is set by checking the name (tool can be empty)
             else if (_robotTool.Name == "" || _robotTool.Name == null)
             { 
-                toolName = robotInfo.Tool.Name; 
+                toolName = robot.Tool.Name; 
             } 
             // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
             else 
@@ -369,7 +372,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
 
             // MoveAbsJ
-            string code = "MoveAbsJ " + JointTargetName + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + ";";
+            string code = "MoveAbsJ " + _name + ", " + _speedData.Name + ", " + _zoneData.Name + ", " + toolName + ";";
 
             return code;
         }
@@ -387,11 +390,11 @@ namespace RobotComponents.BaseClasses.Actions
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Only adds target code if target is not already defined
-            if (!RAPIDGenerator.Targets.ContainsKey(JointTargetName))
+            if (!RAPIDGenerator.JointTargets.ContainsKey(_name))
             {
-                RAPIDGenerator.Targets.Add(JointTargetName, new Target());
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.RobotInfo));
-                RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.RobotInfo));
+                RAPIDGenerator.JointTargets.Add(_name, this.ConvertToJointTarget());
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.Robot));
             }
         }
 
@@ -401,7 +404,45 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.RobotInfo));
+            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+        }
+        #endregion
+
+        #region convert methods: this class is obsolete, however, with these methods it can be converted to new objects
+        /// <summary>
+        /// Defines the External Joint Position of this Absolute Joint Movement
+        /// </summary>
+        /// <returns> The External Joint Position of this Absolute Joint Movement. </returns>
+        public Movement ConvertToMovement()
+        {
+            return new Movement(ConvertToJointTarget(), _speedData, _movementType, _zoneData, _robotTool);
+        }
+
+        /// <summary>
+        /// Defines the Joint Target of this Absolute Joint Movement
+        /// </summary>
+        /// <returns> The Joint Target of this Absolute Joint Movement. </returns>
+        public JointTarget ConvertToJointTarget()
+        {
+            return new JointTarget(_name, this.ConvertToRobotJointPosition(), this.ConvertToExternalJointPosition());
+        }
+
+        /// <summary>
+        /// Defines the Robot Joint Position of this Absolute Joint Movement
+        /// </summary>
+        /// <returns> The Robot Joint Position of this Absolute Joint Movement. </returns>
+        public RobotJointPosition ConvertToRobotJointPosition()
+        {
+            return new RobotJointPosition(_internalAxisValues);
+        }
+
+        /// <summary>
+        /// Defines the External Joint Position of this Absolute Joint Movement
+        /// </summary>
+        /// <returns> The External Joint Position of this Absolute Joint Movement. </returns>
+        public ExternalJointPosition ConvertToExternalJointPosition()
+        {
+            return new ExternalJointPosition(_externalAxisValues);
         }
         #endregion
 
@@ -430,14 +471,6 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get { return _name; }
             set { _name = value; }
-        }
-
-        /// <summary>
-        /// The target name when it is used as a joint target.
-        /// </summary>
-        public string JointTargetName
-        {
-            get { return Name + "_jm"; }
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace RobotComponents.BaseClasses.Actions
     public class RAPIDGenerator
     {
         #region fields
-        private Robot _robot; // Robot info to construct the code for
+        private Robot _robot; // Robot to construct the code for
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
@@ -30,8 +30,8 @@ namespace RobotComponents.BaseClasses.Actions
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programCode; // The rapid program code
         private string _systemCode; // The rapid system code
-        private string _programName; // The module name of the rapid program code
-        private string _systemName; // The module name of the rapod system code
+        private string _programModuleName; // The module name of the rapid program code
+        private string _systemModuleName; // The module name of the rapod system code
         private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
@@ -48,16 +48,16 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Initiates an RAPID generator. This constructor does not call the methods that create and write the code. 
         /// </summary>
-        /// <param name="programName"> The name of the program module </param>
-        /// <param name="systemName"> The name of the system module </param>
+        /// <param name="programModuleName"> The name of the program module </param>
+        /// <param name="systemModuleName"> The name of the system module </param>
         /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
         /// <param name="filePath"> The path where the code files should be saved. </param>
         /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
-        /// <param name="robotInfo"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programName, string systemName, List<Action> actions, string filePath, bool saveToFile, Robot robot)
+        /// <param name="robot"> The robot info wherefore the code should be created. </param>
+        public RAPIDGenerator(string programModuleName, string systemModuleName, List<Action> actions, string filePath, bool saveToFile, Robot robot)
         {
-            _programName = programName;
-            _systemName = systemName;
+            _programModuleName = programModuleName;
+            _systemModuleName = systemModuleName;
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = actions;
             _filePath = filePath;
@@ -71,9 +71,9 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="generator"> The RAPID generator that should be duplicated. </param>
         public RAPIDGenerator(RAPIDGenerator generator)
         {
-            _programName = generator.ProgramName;
-            _systemName = generator.SystemName;
-            _robot = generator.RobotInfo.Duplicate();
+            _programModuleName = generator.ProgramModuleName;
+            _systemModuleName = generator.SystemModuleName;
+            _robot = generator.Robot.Duplicate();
             _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _filePath = generator.FilePath;
             _saveToFile = generator.SaveToFile;
@@ -117,7 +117,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <returns> Returns the RAPID program code as a string. </returns>
         public string CreateProgramCode()
         {
-            // Resets dictionaries and error messages
+            // Reset fields
             _speedDatas.Clear();
             _robotTargets.Clear();
             _errorText.Clear();
@@ -125,11 +125,14 @@ namespace RobotComponents.BaseClasses.Actions
             // Save initial tool
             RobotTool initTool = _robot.Tool.Duplicate();
 
+            // Check if the first movement is an Absolute Joint Movement
+            _firstMovementIsMoveAbs = CheckFirstMovement();
+
             // Creates String Builder
             _stringBuilder = new StringBuilder();
 
             // Creates Main Module
-            _stringBuilder.Append("MODULE " + _programName);
+            _stringBuilder.Append("MODULE " + _programModuleName);
             _stringBuilder.Append(Environment.NewLine);
             _stringBuilder.Append(Environment.NewLine);
 
@@ -139,17 +142,10 @@ namespace RobotComponents.BaseClasses.Actions
             _stringBuilder.Append("\t" + "! Visit www.github.com/EDEK-UniKassel/RobotComponents for more information");
             _stringBuilder.Append(Environment.NewLine);
 
-            // Creates Vars
+            // Creates declarations
             for (int i = 0; i != _actions.Count; i++)
             {
                 _actions[i].ToRAPIDDeclaration(this);
-
-                // Check if the action is an override robot tool: if so, set new current tool
-                if (_actions[i] is OverrideRobotTool overrideRobotTool)
-                {
-                    // Override the current tool
-                    _robot.Tool = overrideRobotTool.RobotTool;
-                }
             }
 
             // Create Program
@@ -157,44 +153,13 @@ namespace RobotComponents.BaseClasses.Actions
             _stringBuilder.Append(Environment.NewLine);
             _stringBuilder.Append("\t" + "PROC main()");
 
-            _firstMovementIsMoveAbs = false;
-            bool foundFirstMovement = false;
-
             // Set back initial tool
             _robot.Tool = initTool;
 
-            // Creates Movement Instruction and other Functions
+            // Creates instructions
             for (int i = 0; i != _actions.Count; i++)
             {
                 _actions[i].ToRAPIDInstruction(this);
-
-                // Check if the action is an override robot tool: if so, set new current tool
-                if (_actions[i] is OverrideRobotTool overrideRobotTool)
-                {
-                    _robot.Tool = overrideRobotTool.RobotTool;
-                }
-
-                // Checks if first movement is MoveAbsJ
-                if (foundFirstMovement == false)
-                {
-                    // Absolute joint movement found in Action.Movement
-                    if (_actions[i] is Movement)
-                    {
-                        if (((Movement)_actions[i]).MovementType == 0)
-                        {
-                            _firstMovementIsMoveAbs = true;
-                        }
-
-                        foundFirstMovement = true;
-                    }
-
-                    // Absolute joint movement found as Action.JointMovement
-                    else if (_actions[i] is AbsoluteJointMovement)
-                    {
-                        _firstMovementIsMoveAbs = true;
-                        foundFirstMovement = true;
-                    }
-                }
             }
 
             // Closes Program
@@ -232,7 +197,7 @@ namespace RobotComponents.BaseClasses.Actions
             string systemCode = "";
 
             // First line
-            if (_systemName == "BASE")
+            if (_systemModuleName == "BASE")
             {
                 systemCode += "MODULE BASE (SYSMODULE, NOSTEPIN, VIEWONLY)";
                 systemCode += Environment.NewLine;
@@ -240,7 +205,7 @@ namespace RobotComponents.BaseClasses.Actions
             }
             else
             {
-                systemCode += "MODULE " + _systemName + " (SYSMODULE)";
+                systemCode += "MODULE " + _systemModuleName + " (SYSMODULE)";
                 systemCode += Environment.NewLine;
                 systemCode += Environment.NewLine;
             }
@@ -260,7 +225,7 @@ namespace RobotComponents.BaseClasses.Actions
             systemCode += Environment.NewLine;
 
             // Creates Predefined System Data: only if it is the BASE module
-            if (_systemName == "BASE")
+            if (_systemModuleName == "BASE")
             {
                 systemCode += "\t" + "! System data tool0, wobj0 and load0";
                 systemCode += Environment.NewLine;
@@ -369,7 +334,7 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_filePath != null && _filePath != "" && _filePath != "null")
             {
-                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _programName + ".mod", false))
+                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _programModuleName + ".mod", false))
                 {
                     writer.WriteLine(_programCode);
                 }
@@ -383,11 +348,43 @@ namespace RobotComponents.BaseClasses.Actions
         {
             if (_filePath != null && _filePath != "" && _filePath != "null")
             {
-                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _systemName + ".sys", false))
+                using (StreamWriter writer = new StreamWriter(_filePath + "\\" + _systemModuleName + ".sys", false))
                 {
                     writer.WriteLine(_systemCode);
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks whether the first movement type is an Absolute Joint Movement
+        /// </summary>
+        /// <returns> Returns a boolean that indicates if the first movement type is an Absolute Joint Movement. </returns>
+        private bool CheckFirstMovement()
+        {
+            _firstMovementIsMoveAbs = false;
+
+            for (int i = 0; i != _actions.Count; i++)
+            {
+                if (_actions[i] is Movement movement)
+                {
+                    if (movement.MovementType == 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                else if (_actions[i] is AbsoluteJointMovement)
+                {
+                    return true;
+                }
+            }
+
+            // Returns true if no movements were defined
+            return true; 
         }
         #endregion
 
@@ -448,30 +445,30 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// Defines the robot that is used to create the RAPID code for. 
+        /// Defines the Robot that is used to create the RAPID code for. 
         /// </summary>
-        public Robot RobotInfo
+        public Robot Robot
         {
             get { return _robot; }
             set { _robot = value; }
         }
 
         /// <summary>
-        /// The module name of the RAPID program code
+        /// The module name of the RAPID program module
         /// </summary>
-        public string ProgramName
+        public string ProgramModuleName
         {
-            get { return _programName; }
-            set { _programName = value; }
+            get { return _programModuleName; }
+            set { _programModuleName = value; }
         }
 
         /// <summary>
-        /// The module name of the RAPID system code
+        /// The module name of the RAPID system module
         /// </summary>
-        public string SystemName
+        public string SystemModuleName
         {
-            get { return _systemName; }
-            set { _systemName = value; }
+            get { return _systemModuleName; }
+            set { _systemModuleName = value; }
         }
 
         /// <summary>
@@ -503,7 +500,7 @@ namespace RobotComponents.BaseClasses.Actions
         /// <summary>
         /// Defines all the unique Robot Targets used in this RAPID Generator
         /// </summary>
-        public Dictionary<string, Target> Targets
+        public Dictionary<string, Target> RobotTargets
         {
             get { return _robotTargets; }
         }

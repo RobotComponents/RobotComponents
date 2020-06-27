@@ -73,7 +73,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(0, target.Name);
             DA.SetData(1, target.Plane);
             DA.SetData(2, target.AxisConfig);
-            DA.SetDataList(3, target.ExternalAxisValues);
+            DA.SetDataList(3, target.ExternalJointPosition.ToList());
         }
 
         #region menu item

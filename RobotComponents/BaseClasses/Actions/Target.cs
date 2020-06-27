@@ -10,26 +10,21 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.BaseClasses.Actions
 {
     /// <summary>
     /// Target class, defines target data. The target data is used to define the position of the robot and external axes.
     /// </summary>
-    public class Target : Action
+    public class Target : Action, ITarget
     {
         #region fields
         private string _name; // target variable name
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
         private Quaternion _quat; // target plane orientation (as quarternion)
         private int _axisConfig; // the axis configuration of the robot 
-
-        private double _Eax_a; // the user override position of the external logical axis “a” expressed in degrees or mm 
-        private double _Eax_b; // the user override position of the external logical axis “b” expressed in degrees or mm
-        private double _Eax_c; // the user override position of the external logical axis “c” expressed in degrees or mm
-        private double _Eax_d; // the user override position of the external logical axis “d” expressed in degrees or mm
-        private double _Eax_e; // the user override position of the external logical axis “e” expressed in degrees or mm
-        private double _Eax_f; // the user override position of the external logical axis “f” expressed in degrees or mm
+        private ExternalJointPosition _externalJointPosition; // the position of the external axes
         #endregion
 
         #region constructors
@@ -50,16 +45,8 @@ namespace RobotComponents.BaseClasses.Actions
             _name = name;
             _plane = plane;
             _axisConfig = 0;
-
-            // External axis values
-            _Eax_a = 9e9;
-            _Eax_b = 9e9;
-            _Eax_c = 9e9;
-            _Eax_d = 9e9;
-            _Eax_e = 9e9;
-            _Eax_f = 9e9;
-
-            Initialize();
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
 
         /// <summary>
@@ -73,16 +60,8 @@ namespace RobotComponents.BaseClasses.Actions
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
-
-            // External axis values
-            _Eax_a = 9e9;
-            _Eax_b = 9e9;
-            _Eax_c = 9e9;
-            _Eax_d = 9e9;
-            _Eax_e = 9e9;
-            _Eax_f = 9e9;
-
-            Initialize();
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
 
         /// <summary>
@@ -97,20 +76,12 @@ namespace RobotComponents.BaseClasses.Actions
             _name = name;
             _plane = plane;            
             _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
 
             // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
-
-            // External axis values
-            _Eax_a = 9e9;
-            _Eax_b = 9e9;
-            _Eax_c = 9e9;
-            _Eax_d = 9e9;
-            _Eax_e = 9e9;
-            _Eax_f = 9e9;
-
-            Initialize();
         }
 
         /// <summary>
@@ -120,31 +91,23 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="plane">Robot target plane.</param>
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origin (WorldXY). </param>
         /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
-        /// <param name="Eax_a"></param>
-        /// <param name="Eax_b"></param>
-        /// <param name="Eax_c"></param>
-        /// <param name="Eax_d"></param>
-        /// <param name="Eax_e"></param>
-        /// <param name="Eax_f"></param>
+        /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
+        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
+        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
+        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
+        /// <param name="Eax_e"> The position of the external logical axis “e” expressed in degrees or mm. </param>
+        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
         {
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition(Eax_a, Eax_b, Eax_c, Eax_d, Eax_e, Eax_f);
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
 
             // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
-
-            // External axis values
-            _Eax_a = Eax_a;
-            _Eax_b = Eax_b;
-            _Eax_c = Eax_c;
-            _Eax_d = Eax_d;
-            _Eax_e = Eax_e;
-            _Eax_f = Eax_f;
-
-            Initialize();
         }
 
         /// <summary>
@@ -153,23 +116,30 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="Eax">The user defined external axis values as a list.</param>
+        /// <param name="Eax">The user defined external joint positions as a list with axis values.</param>
         public Target(string name, Plane plane, int axisConfig, List<double> Eax)
         {
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition(Eax);
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
 
-            // External axis values
-            Eax = CheckExternalAxisValues(Eax);
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
-
-            Initialize();
+        /// <summary>
+        /// Defines a robot target with a user defined external joint position.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition">The user defined external joint position.</param>
+        public Target(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _name = name;
+            _plane = plane;
+            _axisConfig = axisConfig;
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
 
         /// <summary>
@@ -186,21 +156,12 @@ namespace RobotComponents.BaseClasses.Actions
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition(Eax);
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
 
             // Re-orient the plane from the reference coordinate system to the world coordinate system
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
-
-            // External axis values
-            Eax = CheckExternalAxisValues(Eax);
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
-
-            Initialize();
         }
 
         /// <summary>
@@ -217,21 +178,35 @@ namespace RobotComponents.BaseClasses.Actions
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition(Eax);
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
 
             // Re-orient the plane to the reference plane
             Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
             _plane.Transform(orient);
+        }
 
-            // External axis values
-            Eax = CheckExternalAxisValues(Eax);
-            _Eax_a = Eax[0];
-            _Eax_b = Eax[1];
-            _Eax_c = Eax[2];
-            _Eax_d = Eax[3];
-            _Eax_e = Eax[4];
-            _Eax_f = Eax[5];
 
-            Initialize();
+        /// <summary>
+        /// Defines a robot target with a user defined external joint position.
+        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// </summary>
+        /// <param name="name">Robot target name, must be unique.</param>
+        /// <param name="plane">Robot target plane.</param>
+        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
+        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition">The user defined external joint position.</param>
+        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _name = name;
+            _plane = plane;
+            _axisConfig = axisConfig;
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
         }
 
         /// <summary>
@@ -244,15 +219,8 @@ namespace RobotComponents.BaseClasses.Actions
             _name = target.Name;
             _plane = new Plane(target.Plane);
             _axisConfig = target.AxisConfig;
+            _externalJointPosition = target.ExternalJointPosition;
             _quat = target.Quat;
-
-            // External axis values
-            _Eax_a = target.ExternalAxisValueA;
-            _Eax_b = target.ExternalAxisValueB;
-            _Eax_c = target.ExternalAxisValueC;
-            _Eax_d = target.ExternalAxisValueD;
-            _Eax_e = target.ExternalAxisValueE;
-            _Eax_f = target.ExternalAxisValueF;
         }
 
         /// <summary>
@@ -292,101 +260,39 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid target object. 
-        /// </summary>
-        private void Initialize()
-        {
-            _quat = CalcQuaternion();
-        }
-
-        /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid target object.
-        /// </summary>
-        public void ReInitialize()
-        {
-            Initialize();
-        }
-
-        /// <summary>
-        /// Method that checks the list with external axis values. 
-        /// Always returns a list with 6 external axis values. 
-        /// For missing values 9e9 (not connected) will be used. 
-        /// </summary>
-        /// <param name="axisValues">A list with the external axis values.</param>
-        /// <returns>Returns a list with 6 external axis values.</returns>
-        private List<double> CheckExternalAxisValues(List<double> axisValues)
-        {
-            List<double> result = new List<double>();
-            int n = Math.Min(axisValues.Count, 6);
-
-            // Copy definied external axis values
-            for (int i = 0; i < n; i++)
-            {
-                result.Add(axisValues[i]);
-            }
-
-            // Add missing external axisValues
-            for (int i = n; i < 6; i++)
-            {
-                result.Add(9e9);
-            }
-
-            return result;
-        }
-
-        /// <summary></summary>
-        /// Method that checks the array with external axis values. 
-        /// Always returns a list with 6 external axis values. 
-        /// For missing values 9e9 (not connected) will be used. 
-        /// <param name="axisValues">A list with the external axis values.</param>
-        /// <returns>Returns an array with 6 external axis values.</returns>
-        private double[] CheckExternalAxisValues(double[] axisValues)
-        {
-            double[] result = new double[6];
-            int n = Math.Min(axisValues.Length, 6);
-
-            // Copy definied external axis values
-            for (int i = 0; i < n; i++)
-            {
-                result[i] = axisValues[i];
-            }
-
-            // Add missing external axisValues
-            for (int i = n; i < 6; i++)
-            {
-                result[i] = 9e9;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Calculate the four quarternion coefficients of the target plane needed for writing the RAPID code. 
-        /// </summary>
-        /// <returns>The four quarternion coefficients of the target plane.</returns>
-        private Quaternion CalcQuaternion()
-        {
-            Plane refPlane = new Plane(Plane.WorldXY);
-            Quaternion quat = Quaternion.Rotation(refPlane, _plane);
-            return quat;
-        }
-
-        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDDeclaration(Robot robotInfo)
+        public override string ToRAPIDDeclaration(Robot robot)
         {
-            return string.Empty;
+            string code = "VAR robtarget "; 
+
+            code += _name;
+            code += " := [";
+            code += "[" + _plane.Origin.X.ToString("0.##") + ", ";           
+            code += _plane.Origin.Y.ToString("0.##") + ", ";
+            code += _plane.Origin.Z.ToString("0.##") + "]";
+            code += ", ";
+            code += "[" + _quat.A.ToString("0.######") + ", ";
+            code += _quat.B.ToString("0.######") + ", ";
+            code += _quat.C.ToString("0.######") + ", ";
+            code += _quat.D.ToString("0.######") + "]";
+            code += ", ";
+            code += "[0,0,0," + _axisConfig + "]";
+            code += ", ";
+            code += _externalJointPosition.ToRAPIDDeclaration(robot); //TODO: Use the external axis values one from the IK of the robot? 
+            code += "];";
+
+            return code;
         }
 
         /// <summary>
         /// Used to create action instruction code line. 
         /// </summary>
-        /// <param name="robotInfo"> Defines the Robot Info were the code is generated for. </param>
+        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
-        public override string ToRAPIDInstruction(Robot robotInfo)
+        public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
@@ -397,6 +303,36 @@ namespace RobotComponents.BaseClasses.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            // Only adds target code if target is not already defined
+            if (!RAPIDGenerator.RobotTargets.ContainsKey(_name))
+            {
+                // Add to dictionary
+                RAPIDGenerator.RobotTargets.Add(_name, this);
+
+                // Set the external joint position from the inverse kinematics: IK calculation is called inside the Movement class
+                ExternalJointPosition externalJointPosition = new ExternalJointPosition(RAPIDGenerator.Robot.InverseKinematics.ExternalAxisValues);
+
+                // Generate code
+                string code = "VAR robtarget ";
+                code += _name;
+                code += " := [";
+                code += "[" + _plane.Origin.X.ToString("0.##") + ", ";
+                code += _plane.Origin.Y.ToString("0.##") + ", ";
+                code += _plane.Origin.Z.ToString("0.##") + "]";
+                code += ", ";
+                code += "[" + _quat.A.ToString("0.######") + ", ";
+                code += _quat.B.ToString("0.######") + ", ";
+                code += _quat.C.ToString("0.######") + ", ";
+                code += _quat.D.ToString("0.######") + "]";
+                code += ", ";
+                code += "[0,0,0," + _axisConfig + "]";
+                code += ", ";
+                code += externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator.Robot);
+                code += "];";
+
+                // Add to stringbuilder
+                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + code);
+            }
         }
 
         /// <summary>
@@ -416,16 +352,19 @@ namespace RobotComponents.BaseClasses.Actions
         {
             get
             {
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 if (Plane == null) { return false; }
                 if (Plane == Plane.Unset) { return false; }
                 if (Name == null) { return false; }
                 if (Name == "") { return false; }
                 if (AxisConfig < 0) { return false; }
                 if (AxisConfig > 7) { return false; }
+                if (ExternalJointPosition.IsValid == false) { return false; }
                 return true;
             }
         }
-
+        
         /// <summary>
         /// The target variable name, must be unique.
         /// </summary>
@@ -447,7 +386,7 @@ namespace RobotComponents.BaseClasses.Actions
             set 
             { 
                 _plane = value;
-                ReInitialize();
+                _quat = HelperMethods.PlaneToQuaternion(_plane);
             }
         }
 
@@ -456,8 +395,15 @@ namespace RobotComponents.BaseClasses.Actions
         /// </summary>
         public Quaternion Quat
         {
-            get { return _quat; }
-            set { _quat = value; }
+            get 
+            { 
+                return _quat; 
+            }
+            set 
+            { 
+                _quat = value; 
+                _plane = HelperMethods.QuaternionToPlane(_plane.Origin, _quat);
+            }
         }
 
         /// <summary>
@@ -470,101 +416,12 @@ namespace RobotComponents.BaseClasses.Actions
         }
 
         /// <summary>
-        /// The robot target name when it is used as a joint target.
+        /// Defines the External Joint Position
         /// </summary>
-        public string JointTargetName
+        public ExternalJointPosition ExternalJointPosition
         {
-            get { return Name + "_jt"; }
-        }
-
-        /// <summary>
-        /// The robot target name when it is used as a robot target.
-        /// </summary>
-        public string RobTargetName
-        {
-            get { return Name + "_rt"; }
-        }
-
-        /// <summary>
-        /// The external axis values as a list.
-        /// </summary>
-        public List<double> ExternalAxisValues
-        {
-            get
-            {
-                List<double> ExternalAxisValues = new List<double> { _Eax_a, _Eax_b, _Eax_c, _Eax_d, _Eax_e, _Eax_f };
-                return ExternalAxisValues;
-            }
-            set 
-            {
-                List<double> Eax = CheckExternalAxisValues(value);
-                _Eax_a = Eax[0];
-                _Eax_b = Eax[1];
-                _Eax_c = Eax[2];
-                _Eax_d = Eax[3];
-                _Eax_e = Eax[4];
-                _Eax_f = Eax[5];
-            }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “a” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueA
-        {
-            get { return _Eax_a; }
-            set { _Eax_a = value; }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “b” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueB
-        {
-            get { return _Eax_b; }
-            set { _Eax_b = value; }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “c” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueC
-        {
-            get { return _Eax_c; }
-            set { _Eax_c = value; }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “d” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueD
-        {
-            get { return _Eax_d; }
-            set { _Eax_d = value; }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “e” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueE
-        {
-            get { return _Eax_e; }
-            set { _Eax_e = value; }
-        }
-
-        /// <summary>
-        /// The position of the external logical axis “f” expressed in degrees or mm (depending on the type of axis).
-        /// If 9e9 is used the inverse kinematics will calculate the axis value.
-        /// </summary>
-        public double ExternalAxisValueF
-        {
-            get { return _Eax_f; }
-            set { _Eax_f = value; }
+            get { return _externalJointPosition; }
+            set { _externalJointPosition = value; }
         }
         #endregion
     }

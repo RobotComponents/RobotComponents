@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -35,7 +35,7 @@ namespace RobotComponentsABB.Components.Obsolete
           : base("Action: Target", "T",
               "OBSOLETE: Defines a target for an Action: Movement or Inverse Kinematics component."
                 + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "RAPID Generation")
         {
         }
@@ -206,13 +206,7 @@ namespace RobotComponentsABB.Components.Obsolete
                     objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, OldTargetComponent> entry in objectManager.OldTargetsByGuid)
-                    {
-                        if (entry.Value.lastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    objectManager.UpdateTargets();
 
                     lastName = names[i];
                 }
@@ -264,14 +258,8 @@ namespace RobotComponentsABB.Components.Obsolete
                 }
                 objectManager.OldTargetsByGuid.Remove(this.InstanceGuid);
 
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, OldTargetComponent> entry in objectManager.OldTargetsByGuid)
-                {
-                    if (entry.Value.lastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                objectManager.UpdateTargets();
             }
         }
 
@@ -294,5 +282,6 @@ namespace RobotComponentsABB.Components.Obsolete
             get { return new Guid("E1AED1B2-3D79-41E7-AA12-C096F79FEE5E"); }
         }
 
+        public string LastName { get => lastName; }
     }
 }

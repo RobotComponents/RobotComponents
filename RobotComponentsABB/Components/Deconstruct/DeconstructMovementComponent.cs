@@ -25,10 +25,10 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent()
-          : base("Deconstruct Movement", "DeConMove", 
-              "Deconstructs a Movement Component into its parameters."
+          : base("Deconstruct Move", "DeConMove", 
+              "Deconstructs a Move component into its parameters."
         + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -46,13 +46,13 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target Data");
-            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data");
+            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Target as Target");
+            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data");
             pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
-            pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data");
-            pManager.RegisterParam(new RobotToolParameter(), "Override Robot Tool", "RT", "Override Robot Tool");
-            pManager.RegisterParam(new WorkObjectParameter(), "Override Work Object", "WO", "Override Work Object");
-            pManager.RegisterParam(new DigitalOutputParameter(), "Set Digital Output", "DO", "Digital Output for creation of MoveLDO and MoveJDO");
+            pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data");
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool");
+            pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Work Object as Work Object");
+            pManager.RegisterParam(new DigitalOutputParameter(), "Digital Output", "DO", "Digital Output as Digital Output");
         }
 
         /// <summary>

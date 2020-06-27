@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.Definitions
           : base("ABB IRB6650-125/3.2", "IRB6650",
               "An ABB IRB6650-125/3.2 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }
@@ -85,7 +85,7 @@ namespace RobotComponentsABB.Components.Definitions
 
             try
             {
-                robotInfo = IRB6650_125_320.GetRobotInfo(name, positionPlane, tool, externalAxis);
+                robotInfo = IRB6650_125_320.GetRobot(name, positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -28,10 +28,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Initializes a new instance of the SetDigitalOutput class.
         /// </summary>
         public SetDigitalOutputComponent()
-          : base("Set Digital Output", "SetDO", 
-              "Sets the signal of a digital output for the defined ABB robot controller."
+          : base("Set Digital Output", "SetDO",
+              "Changes the state of a defined digital output from an ABB IRC5 robot controller in Realtime."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -51,10 +51,10 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             //TODO: Replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to be connected to", GH_ParamAccess.item);
-            pManager.AddTextParameter("DO Name", "N", "Name of the Digital Output", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State of the Digital Output", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input", GH_ParamAccess.item, false);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connected to as Robot Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("DO Name", "N", "Name of the Digital Output as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the Digital Output as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
 
             pManager[1].Optional = true;
         }
@@ -65,7 +65,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Signal", "S", "The Signal of the Digital Output", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Output", GH_ParamAccess.item);
         }
 
         // Fields

@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -54,7 +54,9 @@ namespace RobotComponentsABB.Utils
         private Dictionary<Guid, OldAbsoluteJointMovementComponent> _oldJointTargetsByGuid;
         private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
+        private Dictionary<Guid, OldRobotToolFromPlanesComponent> _oldRobotToolFromPlanesGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
+        private Dictionary<Guid, OldRobotToolFromQuaternionComponent2> _oldToolsQuaternionByGuid2;
         private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
         #endregion
 
@@ -93,7 +95,9 @@ namespace RobotComponentsABB.Utils
             _oldJointTargetsByGuid = new Dictionary<Guid, OldAbsoluteJointMovementComponent>();
             _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
+            _oldRobotToolFromPlanesGuid = new Dictionary<Guid, OldRobotToolFromPlanesComponent>();
             _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
+            _oldToolsQuaternionByGuid2 = new Dictionary<Guid, OldRobotToolFromQuaternionComponent2>();
             _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
             #endregion
         }
@@ -128,8 +132,20 @@ namespace RobotComponentsABB.Utils
                 robotTools.Add(entry.Value.RobotTool);
             }
 
+            // Add robot tools that are created from Planes
+            foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent> entry in _oldRobotToolFromPlanesGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+
             // Add robot tools that are created from Quaternion data
             foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent> entry in _oldToolsQuaternionByGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+
+            // Add robot tools that are created from Quaternion data
+            foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent2> entry in _oldToolsQuaternionByGuid2)
             {
                 robotTools.Add(entry.Value.RobotTool);
             }
@@ -285,6 +301,165 @@ namespace RobotComponentsABB.Utils
             // Return
             return zonedatas;
         }
+
+        /// <summary>
+        /// Runs SolveInstance on all other Robot Tools to check if tool names are unique.
+        /// </summary>
+        public void UpdateRobotTools()
+        {
+            // Run SolveInstance on other Tools with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, RobotToolFromPlanesComponent> entry in ToolsPlanesByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+            foreach (KeyValuePair<Guid, RobotToolFromQuaternionComponent> entry in ToolsQuaternionByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete Tools with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in OldToolsEulerByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent> entry in OldRobotToolFromPlanesGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent> entry in OldToolsQuaternionByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldRobotToolFromQuaternionComponent2> entry in OldToolsQuaternionByGuid2)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other Targets to check if target names are unique.
+        /// </summary>
+        public void UpdateTargets()
+        {
+            // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, TargetComponent> entry in TargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+            foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in JointTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete Targets with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldTargetComponent> entry in OldTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other Speed Datas to check if speed data names are unique.
+        /// </summary>
+        public void UpdateSpeedDatas()
+        {
+            // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, SpeedDataComponent> entry in SpeedDatasByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other WorkObjects to check if work object names are unique.
+        /// </summary>
+        public void UpdateWorkObjects()
+        {
+            // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in WorkObjectsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete Work Objects with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in OldWorkObjectsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other ZoneDatas to check if zone data names are unique.
+        /// </summary>
+        public void UpdateZoneDatas()
+        {
+            // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, ZoneDataComponent> entry in ZoneDatasByGuid)
+            {
+                if (entry.Value.LastName == "") 
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
+        /// </summary>
+        public void UpdateExternalAxis()
+        {
+            // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in ExternalLinearAxesByGuid)
+            {
+                entry.Value.ExpireSolution(true);
+            }
+            foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in ExternalRotationalAxesByGuid)
+            {
+                entry.Value.ExpireSolution(true);
+            }
+        }
         #endregion
 
         #region Properties
@@ -435,19 +610,26 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// OBSOLETE: Used for old Absolute Joint Movement component.Will be removed in the future.
+        /// OBSOLETE: Used for old Tool components.Will be removed in the future.
         /// </summary>
         public Dictionary<Guid, OldRobotToolFromDataEulerComponent> OldToolsEulerByGuid
         {
             get { return _oldToolsEulerByGuid; }
         }
 
-        /// <summary>
-        /// OBSOLETE: Used for old Absolute Joint Movement component.Will be removed in the future.
-        /// </summary>
+        public Dictionary<Guid, OldRobotToolFromPlanesComponent> OldRobotToolFromPlanesGuid
+        {
+            get { return _oldRobotToolFromPlanesGuid; }
+        }
+
         public Dictionary<Guid, OldRobotToolFromQuaternionComponent> OldToolsQuaternionByGuid
         {
             get { return _oldToolsQuaternionByGuid; }
+        }
+
+        public Dictionary<Guid, OldRobotToolFromQuaternionComponent2> OldToolsQuaternionByGuid2 
+        {
+            get { return _oldToolsQuaternionByGuid2; }
         }
 
         /// <summary>
@@ -457,6 +639,8 @@ namespace RobotComponentsABB.Utils
         {
             get { return _oldWorkObjectsByGuid; }
         }
+
+
         #endregion
 
         #endregion

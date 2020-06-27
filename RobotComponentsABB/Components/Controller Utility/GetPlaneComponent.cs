@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -33,9 +33,9 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public GetPlaneComponent()
           : base("Get Plane", "GP", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
-              "Gets the position of a mechanical unit from a defined ABB robot controller as a plane."
+              "Gets the position of a mechanical unit from the defined ABB IRC5 robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -55,8 +55,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             // To do: replace generic parameter with an RobotComponents Parameter
-            pManager.AddGenericParameter("Robot Controller", "RC", "Controller to extract the position from", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Coordinate system", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to extract the position from as Robot Controller", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "The position plane of the mechanical unit", GH_ParamAccess.list);
-            pManager.AddTextParameter("Name", "N", "The names of the mechanical units", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Position Plane of the mechanical unit", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Names of the mechanical units", GH_ParamAccess.list);
         }
 
         // Fields

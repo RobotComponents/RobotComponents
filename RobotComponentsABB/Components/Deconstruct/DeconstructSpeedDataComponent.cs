@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -25,9 +25,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructSpeedDataComponent()
           : base("Deconstruct Speed Data", "DeConSpeed", 
-              "Deconstructs a Speed Data Component into its parameters."
+              "Deconstructs a Speed Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }
@@ -37,7 +37,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number", GH_ParamAccess.item);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@ namespace RobotComponentsABB.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string",GH_ParamAccess.item);
             pManager.Register_DoubleParam("TCP Velocity", "vTCP", "tcp velocity in mm/s as a number");
-            pManager.Register_DoubleParam("ORI Velocity", "vORI", "reorientation of the tool in degree/s as a number");
+            pManager.Register_DoubleParam("ORI Velocity", "vORI", "reorientation velocity of the tool in degree/s as a number");
             pManager.Register_DoubleParam("LEAX Velocity", "vLEAX", "linear external axes velocity in mm/s as a number");
-            pManager.Register_DoubleParam("REAX Velocity", "vREAX", "reorientation of the external rotational axes in degrees/s as a number");
+            pManager.Register_DoubleParam("REAX Velocity", "vREAX", "reorientation velocity of the external rotational axes in degrees/s as a number");
         }
 
         /// <summary>

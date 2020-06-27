@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -30,8 +30,8 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Zone Data", "ZD",
               "Defines a zone data declaration for robot movements in RAPID program code generation."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "RAPID Generation")
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "RobotComponents", "Code Generation")
         {
         }
 
@@ -329,13 +329,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                 _objectManager.ZoneDatasByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _objectManager.ZoneDatasByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateZoneDatas();
             }
         }
 

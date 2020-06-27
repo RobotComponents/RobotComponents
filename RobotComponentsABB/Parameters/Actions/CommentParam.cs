@@ -23,7 +23,6 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public CommentParameter()
           : base(new GH_InstanceDescription("Comment", "C",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Comment."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

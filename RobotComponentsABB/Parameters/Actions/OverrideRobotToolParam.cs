@@ -23,7 +23,6 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public OverrideRobotToolParameter()
           : base(new GH_InstanceDescription("Override Robot Tool", "ORT",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Override Robot Tool instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

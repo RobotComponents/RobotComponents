@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public MovementParameter()
           : base(new GH_InstanceDescription("Move", "M",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Move instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

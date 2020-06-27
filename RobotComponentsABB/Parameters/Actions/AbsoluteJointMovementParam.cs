@@ -6,8 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -25,7 +23,6 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public AbsoluteJointMovementParameter()
           : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of an Absolute Joint Movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

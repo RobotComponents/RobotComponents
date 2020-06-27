@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public TargetParameter()
           : base(new GH_InstanceDescription("Target", "T",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

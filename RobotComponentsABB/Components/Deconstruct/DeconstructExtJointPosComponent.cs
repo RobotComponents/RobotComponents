@@ -25,7 +25,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         public DeconstructExtJointPosComponent()
           : base("Deconstruct External Joint Position", "DeConExtJoint",
-              "Deconstructs a External Joint Position Component into its parameters."
+              "Deconstructs an External Joint Position Component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")

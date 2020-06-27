@@ -22,7 +22,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public JointTargetParameter()
           : base(new GH_InstanceDescription("Joint Target", "JT",
-                "Maintains the Joint Target data."
+                "Contains the data of a Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

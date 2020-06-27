@@ -25,7 +25,6 @@ namespace RobotComponentsABB.Parameters.Definitions
         /// </summary>
         public ExternalRotationalAxisParameter()
           : base(new GH_InstanceDescription("External Rotational Axis", "ERA",
-                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of an External Rotational Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

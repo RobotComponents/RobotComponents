@@ -7,9 +7,9 @@
 using System;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Robot Joint Position class, defines the robot axis positions of the in degrees.

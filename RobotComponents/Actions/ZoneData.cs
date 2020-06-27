@@ -7,9 +7,9 @@
 using System;
 using System.Linq;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// ZoneData class. Zoned Data is used to specify how a position is to be terminated, 

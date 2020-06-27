@@ -72,7 +72,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             if (!DA.GetData(0, ref duration)) { return; }
 
             // Create the action
-            RobotComponents.BaseClasses.Actions.WaitTime timer = new RobotComponents.BaseClasses.Actions.WaitTime(duration);
+            RobotComponents.Actions.WaitTime timer = new RobotComponents.Actions.WaitTime(duration);
 
             // Output
             DA.SetData(0, timer);

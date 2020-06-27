@@ -9,10 +9,10 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Actions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Kinematics
+namespace RobotComponents.Kinematics
 {
     /// <summary>
     /// Forward Kinematics class

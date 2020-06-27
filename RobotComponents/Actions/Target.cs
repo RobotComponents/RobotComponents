@@ -9,10 +9,10 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 using RobotComponents.Utils;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Target class, defines target data. The target data is used to define the position of the robot and external axes.

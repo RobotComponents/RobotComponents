@@ -9,7 +9,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {

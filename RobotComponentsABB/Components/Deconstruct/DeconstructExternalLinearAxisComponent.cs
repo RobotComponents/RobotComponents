@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 

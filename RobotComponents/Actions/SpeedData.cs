@@ -7,9 +7,9 @@
 using System;
 using System.Linq;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// SpeedData class. SpeedData is used to specify the velocity at which both the robot and the external axes move.

@@ -14,8 +14,8 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Kinematics;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Kinematics;
+using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
@@ -86,7 +86,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
+            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;

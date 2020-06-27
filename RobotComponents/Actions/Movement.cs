@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Movement class

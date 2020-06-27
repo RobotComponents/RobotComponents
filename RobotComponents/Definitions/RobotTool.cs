@@ -10,7 +10,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Utils;
 
-namespace RobotComponents.BaseClasses.Definitions
+namespace RobotComponents.Definitions
 {
     /// <summary>
     /// RobotTool class, defines the basic properties and methods for any Robot Tool.

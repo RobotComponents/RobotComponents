@@ -6,9 +6,9 @@
 // System Libs
 using System;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// WaitTime class, defines waiting time between two actions. This command is used to wait a given amount of time.

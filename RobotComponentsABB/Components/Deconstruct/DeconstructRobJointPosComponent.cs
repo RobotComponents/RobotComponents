@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
@@ -27,8 +27,8 @@ namespace RobotComponentsABB.Components.Deconstruct
           : base("Deconstruct Robot Joint Position", "DeConRobJoint",
               "Deconstructs a Robot Joint Position Component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Deconstruct")
+                "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "RobotComponents", "Deconstruct")
         {
         }
 

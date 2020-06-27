@@ -8,9 +8,9 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Absolute Joint Movement class

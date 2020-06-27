@@ -6,9 +6,9 @@
 // System Libs
 using System;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 

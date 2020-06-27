@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Text;
 // RobotComponents Libs
 using RobotComponents.Utils;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// RAPID Generator class, creates RAPID Code from Actions.

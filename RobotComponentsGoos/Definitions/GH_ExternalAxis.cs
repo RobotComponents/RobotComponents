@@ -9,7 +9,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RbootComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
 namespace RobotComponentsGoos.Definitions
 {

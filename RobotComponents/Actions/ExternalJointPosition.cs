@@ -7,9 +7,9 @@
 using System;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// External Joint Position class, defines external joint position data. Is used to define 

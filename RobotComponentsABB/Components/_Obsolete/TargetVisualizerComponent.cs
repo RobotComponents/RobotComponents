@@ -12,7 +12,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsGoos.Actions;
 
 // This component is OBSOLETE!

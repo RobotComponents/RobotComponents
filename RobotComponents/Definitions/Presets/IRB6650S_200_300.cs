@@ -11,7 +11,7 @@ using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.Utils;
 
-namespace RobotComponents.BaseClasses.Definitions.Presets
+namespace RobotComponents.Definitions.Presets
 {
     /// <summary>
     /// Defines the IRB6650S-200/3.00

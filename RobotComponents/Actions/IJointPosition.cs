@@ -6,7 +6,7 @@
 // System lib
 using System.Collections.Generic;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Defines the interface for different joint position types

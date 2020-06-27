@@ -6,7 +6,7 @@
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsGoos.Definitions;
 
 namespace RobotComponentsGoos.Actions

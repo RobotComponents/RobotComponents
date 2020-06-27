@@ -6,7 +6,7 @@
 // Rhino Libs
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses.Definitions
+namespace RobotComponents.Definitions
 {
     /// <summary>
     /// The WorkObject class creates the work object data for the RAPID base code.

@@ -9,7 +9,7 @@ using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses.Definitions
+namespace RobotComponents.Definitions
 {
     public class ExternalRotationalAxis : ExternalAxis
     {

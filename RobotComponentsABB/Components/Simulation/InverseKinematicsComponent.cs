@@ -9,11 +9,11 @@ using System.Windows.Forms;
 //Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Actions;
+using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
-using RobotComponents.BaseClasses.Kinematics;
+using RobotComponents.Kinematics;
 using RobotComponentsABB.Utils;
 
 namespace RobotComponentsABB.Components.Simulation

@@ -4,9 +4,9 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Action class, abstract main class for all actions.

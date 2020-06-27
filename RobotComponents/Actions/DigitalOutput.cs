@@ -6,9 +6,9 @@
 // System Libs
 using System;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Digital Output class. Is used to change the value of a digital output signal.

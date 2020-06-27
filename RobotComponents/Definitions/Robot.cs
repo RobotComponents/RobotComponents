@@ -10,10 +10,10 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Kinematics;
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Kinematics;
+using RobotComponents.Actions;
 
-namespace RobotComponents.BaseClasses.Definitions
+namespace RobotComponents.Definitions
 {
     /// <summary>
     /// Robot class, defines the basic properties and methods for any Robot.

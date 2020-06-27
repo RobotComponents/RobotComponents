@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 
-namespace RobotComponents.BaseClasses.Definitions
+namespace RobotComponents.Definitions
 {
     /// <summary>
     /// External linear axis class, main class for external linear axis.

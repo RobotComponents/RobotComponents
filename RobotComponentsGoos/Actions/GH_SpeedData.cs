@@ -9,7 +9,7 @@ using System.Linq;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
@@ -185,7 +185,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.BaseClasses.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; }
@@ -228,7 +228,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.BaseClasses.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is SpeedData action)
                 {

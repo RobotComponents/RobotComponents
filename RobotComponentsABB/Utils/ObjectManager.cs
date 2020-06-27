@@ -8,8 +8,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Actions;
+using RobotComponents.Definitions;
 using RobotComponentsABB.Components.Obsolete;
 using RobotComponentsABB.Components.CodeGeneration;
 using RobotComponentsABB.Components.Definitions;

@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
 // NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple.
-namespace RobotComponents.BaseClasses.Actions
+namespace RobotComponents.Actions
 {
     /// <summary>
     /// Joint Target class, defines each individual axis position, for both the robot and the external axes.

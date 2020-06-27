@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 

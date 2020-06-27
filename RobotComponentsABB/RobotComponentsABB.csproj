@@ -70,6 +70,7 @@
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\_Obsolete\OldCodeLine_Component.cs" />
     <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />

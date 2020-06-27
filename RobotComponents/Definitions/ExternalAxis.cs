@@ -11,11 +11,6 @@ using Rhino.Geometry;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// Defines if the axis moves linear or rotational
-    /// </summary>
-    public enum AxisType { LINEAR, ROTATIONAL };
-
-    /// <summary>
     /// External axis class, main Class for external axis.
     /// An external axis (linear and rotational) can be attached to a robot or a workobject
     /// </summary>

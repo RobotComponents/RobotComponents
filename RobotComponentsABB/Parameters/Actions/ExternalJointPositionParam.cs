@@ -25,7 +25,7 @@ namespace RobotComponentsABB.Parameters.Actions
           : base(new GH_InstanceDescription("Ext Joint Position", "EJ",
                 "Maintains the Ext Joint Position data."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

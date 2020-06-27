@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("External Joint Position", "EJ",
               "Defines an External Joint Position for a Declaration : Robot Target or Joint Target."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
             // Create the component label with a message

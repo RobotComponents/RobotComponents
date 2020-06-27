@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
           : base("Robot Joint Position", "RJ",
               "Defines a Robot Joint Position for a Declaration : Joint Target."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "RobotComponents: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

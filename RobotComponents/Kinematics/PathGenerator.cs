@@ -127,11 +127,24 @@ namespace RobotComponents.Kinematics
             }
             else if (movements[0] is Movement castedMovement)
             {
-                _robotInfo.InverseKinematics.Movement = castedMovement;
-                _robotInfo.InverseKinematics.Calculate();
-                target2InternalAxisValues = new List<double>(_robotInfo.InverseKinematics.InternalAxisValues);
-                target2ExternalAxisValues = new List<double>(_robotInfo.InverseKinematics.ExternalAxisValues);
-                _errorText.AddRange(new List<string>(_robotInfo.InverseKinematics.ErrorText));
+                if (castedMovement.Target is JointTarget jointTarget)
+                {
+                    // Calculate the axis values for the second target
+                    target2InternalAxisValues = jointTarget.RobotJointPosition.ToList();
+                    target2ExternalAxisValues = jointTarget.ExternalJointPosition.ToList();
+
+                    // Remove undefined values
+                    target2ExternalAxisValues.RemoveAll(value => value == 9e9);
+                }
+
+                else
+                {
+                    _robotInfo.InverseKinematics.Movement = castedMovement;
+                    _robotInfo.InverseKinematics.Calculate();
+                    target2InternalAxisValues = new List<double>(_robotInfo.InverseKinematics.InternalAxisValues);
+                    target2ExternalAxisValues = new List<double>(_robotInfo.InverseKinematics.ExternalAxisValues);
+                    _errorText.AddRange(new List<string>(_robotInfo.InverseKinematics.ErrorText));
+                }
             }
 
             // Initialize other variables
@@ -259,7 +272,7 @@ namespace RobotComponents.Kinematics
                             target2ExternalAxisValues = jointTarget.ExternalJointPosition.ToList();
 
                             // Remove undefined values
-                            target2ExternalAxisValues.Remove(9e9);
+                            target2ExternalAxisValues.RemoveAll(value => value == 9e9);
 
                             // Check axis limits
                             _errorText.AddRange(jointTarget.CheckForAxisLimits(_robotInfo));
@@ -605,9 +618,11 @@ namespace RobotComponents.Kinematics
                 {
                     target2InternalAxisValues = jointTarget.RobotJointPosition.ToList();
                     target2ExternalAxisValues = jointTarget.ExternalJointPosition.ToList();
-                    target2ExternalAxisValues.Remove(9e9);
-                    _internalAxisValues.Add(target2InternalAxisValues);
-                    _externalAxisValues.Add(target2ExternalAxisValues);
+                    target2ExternalAxisValues.RemoveAll(value => value == 9e9);
+                    _internalAxisValues.Add(new List<double>(target2InternalAxisValues));
+                    _externalAxisValues.Add(new List<double>(target2ExternalAxisValues));
+                    _robotInfo.ForwardKinematics.Calculate(target2InternalAxisValues, target2ExternalAxisValues);
+                    _planes.Add(new Plane(_robotInfo.ForwardKinematics.TCPPlane));
                 }
 
                 else

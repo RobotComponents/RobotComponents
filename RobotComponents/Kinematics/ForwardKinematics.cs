@@ -82,7 +82,7 @@ namespace RobotComponents.Kinematics
             _hideMesh = hideMesh;
             _internalAxisValues = robotJointPosition.ToList();
             _externalAxisValues = externalJointPosition.ToList();
-            _externalAxisValues.Remove(9e9); // TODO: temporary solution
+            _externalAxisValues.RemoveAll(value => value == 9e9); ; // TODO: temporary solution
             UpdateInternalAxisValuesRadians();
         }
 

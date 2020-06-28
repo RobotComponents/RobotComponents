@@ -121,6 +121,22 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
+            //Cast to Target
+            if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Target(Value); }
+                return true;
+            }
+
             //Cast to Joint Target
             if (typeof(Q).IsAssignableFrom(typeof(JointTarget)))
             {
@@ -129,7 +145,7 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast to JointTargetGoo
+            //Cast to Joint Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
             {
                 if (Value == null) { target = default(Q); }
@@ -182,11 +198,25 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Joint Target
-            if (typeof(JointTarget).IsAssignableFrom(source.GetType()))
+            //Cast from Target
+            if (typeof(ITarget).IsAssignableFrom(source.GetType()))
             {
-                Value = source as JointTarget;
-                return true;
+                if (source is JointTarget target)
+                {
+                    Value = target;
+                    return true;
+                }
+            }
+
+            //Cast from Target Goo
+            if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
+            {
+                GH_Target targetGoo = source as GH_Target;
+                if (targetGoo.Value is JointTarget target)
+                {
+                    Value = target;
+                    return true;
+                }
             }
 
             //Cast from Action
@@ -199,7 +229,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -208,6 +238,21 @@ namespace RobotComponentsGoos.Actions
                     Value = action;
                     return true;
                 }
+            }
+
+            //Cast from Joint Target
+            if (typeof(JointTarget).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as JointTarget;
+                return true;
+            }
+
+            //Cast from Joint Target Goo
+            if (typeof(GH_JointTarget).IsAssignableFrom(source.GetType()))
+            {
+                GH_JointTarget targetGoo = source as GH_JointTarget;
+                Value = targetGoo.Value;
+                return true;
             }
 
             return false;

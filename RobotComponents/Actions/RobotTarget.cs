@@ -15,12 +15,12 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Target class, defines target data. The target data is used to define the position of the robot and external axes.
+    /// Robot Target class, defines robot target data. The robt target data is used to define the position of the robot and external axes.
     /// </summary>
-    public class Target : Action, ITarget
+    public class RobotTarget : Action, ITarget
     {
         #region fields
-        private string _name; // target variable name
+        private string _name; // robot target variable name
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
         private Quaternion _quat; // target plane orientation (as quarternion)
         private int _axisConfig; // the axis configuration of the robot 
@@ -29,9 +29,9 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty Target object.
+        /// Defines an empty Robot Target object.
         /// </summary>
-        public Target()
+        public RobotTarget()
         {
         }
 
@@ -40,7 +40,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
-        public Target(string name, Plane plane)
+        public RobotTarget(string name, Plane plane)
         {
             _name = name;
             _plane = plane;
@@ -55,7 +55,7 @@ namespace RobotComponents.Actions
         /// <param name="name">Robot target name, must be unique.</param>
         /// <param name="plane">Robot target plane.</param>
         /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
-        public Target(string name, Plane plane, int axisConfig)
+        public RobotTarget(string name, Plane plane, int axisConfig)
         {
             _name = name;
             _plane = plane;
@@ -71,7 +71,7 @@ namespace RobotComponents.Actions
         /// <param name="plane">Robot target plane.</param>
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
         /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
             _name = name;
             _plane = plane;            
@@ -97,7 +97,7 @@ namespace RobotComponents.Actions
         /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
         /// <param name="Eax_e"> The position of the external logical axis “e” expressed in degrees or mm. </param>
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
         {
             _name = name;
             _plane = plane;
@@ -117,7 +117,7 @@ namespace RobotComponents.Actions
         /// <param name="plane">Robot target plane.</param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
         /// <param name="Eax">The user defined external joint positions as a list with axis values.</param>
-        public Target(string name, Plane plane, int axisConfig, List<double> Eax)
+        public RobotTarget(string name, Plane plane, int axisConfig, List<double> Eax)
         {
             _name = name;
             _plane = plane;
@@ -133,7 +133,7 @@ namespace RobotComponents.Actions
         /// <param name="plane">Robot target plane.</param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
         /// <param name="externalJointPosition">The user defined external joint position.</param>
-        public Target(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _name = name;
             _plane = plane;
@@ -151,7 +151,7 @@ namespace RobotComponents.Actions
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
         /// <param name="Eax">The user defined external axis values as a list.</param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
         {
             _name = name;
             _plane = plane;
@@ -173,7 +173,7 @@ namespace RobotComponents.Actions
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
         /// <param name="Eax">The user defined external axis values as an array.</param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
         {
             _name = name;
             _plane = plane;
@@ -196,7 +196,7 @@ namespace RobotComponents.Actions
         /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
         /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
         /// <param name="externalJointPosition">The user defined external joint position.</param>
-        public Target(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _name = name;
             _plane = plane;
@@ -214,7 +214,7 @@ namespace RobotComponents.Actions
         /// This creates a deep copy of the existing target. 
         /// </summary>
         /// <param name="target"> The target that should be duplicated. </param>
-        public Target(Target target)
+        public RobotTarget(RobotTarget target)
         {
             _name = target.Name;
             _plane = new Plane(target.Plane);
@@ -227,9 +227,18 @@ namespace RobotComponents.Actions
         /// Method to duplicate the Target object.
         /// </summary>
         /// <returns>Returns a deep copy of the Target object.</returns>
-        public Target Duplicate()
+        public RobotTarget Duplicate()
         {
-            return new Target(this);
+            return new RobotTarget(this);
+        }
+
+        /// <summary>
+        /// A method to duplicate the Robot Target object to an ITarget object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Robot Target object as an ITarget object. </returns>
+        public ITarget DuplicateTarget()
+        {
+            return new RobotTarget(this) as ITarget;
         }
 
         /// <summary>
@@ -238,7 +247,7 @@ namespace RobotComponents.Actions
         /// <returns> Returns a deep copy of the Target object as an Action object. </returns>
         public override Action DuplicateAction()
         {
-            return new Target(this) as Action;
+            return new RobotTarget(this) as Action;
         }
         #endregion
 
@@ -251,11 +260,11 @@ namespace RobotComponents.Actions
         {
             if (!this.IsValid)
             {
-                return "Invalid Target";
+                return "Invalid Robot Target";
             }
             else
             {
-                return "Target (" + this.Name + ")";
+                return "Robot Target (" + this.Name + ")";
             }
         }
 
@@ -309,9 +318,6 @@ namespace RobotComponents.Actions
                 // Add to dictionary
                 RAPIDGenerator.RobotTargets.Add(_name, this);
 
-                // Set the external joint position from the inverse kinematics: IK calculation is called inside the Movement class
-                ExternalJointPosition externalJointPosition = new ExternalJointPosition(RAPIDGenerator.Robot.InverseKinematics.ExternalAxisValues);
-
                 // Generate code
                 string code = "VAR robtarget ";
                 code += _name;
@@ -327,7 +333,7 @@ namespace RobotComponents.Actions
                 code += ", ";
                 code += "[0,0,0," + _axisConfig + "]";
                 code += ", ";
-                code += externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator.Robot);
+                code += RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.ToRAPIDDeclaration(RAPIDGenerator.Robot);
                 code += "];";
 
                 // Add to stringbuilder
@@ -346,7 +352,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Target object is valid.
+        /// A boolean that indicuate if the Robot Target object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -366,7 +372,7 @@ namespace RobotComponents.Actions
         }
         
         /// <summary>
-        /// The target variable name, must be unique.
+        /// The robot target variable name, must be unique.
         /// </summary>
         public string Name
         {

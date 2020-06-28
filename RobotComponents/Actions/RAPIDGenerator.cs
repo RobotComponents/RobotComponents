@@ -24,7 +24,7 @@ namespace RobotComponents.Actions
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
-        private readonly Dictionary<string, Target> _robotTargets = new Dictionary<string, Target>(); // Dictionary that stores all the unique robot targets used by the RAPIDGenerator
+        private readonly Dictionary<string, RobotTarget> _robotTargets = new Dictionary<string, RobotTarget>(); // Dictionary that stores all the unique robot targets used by the RAPIDGenerator
         private readonly Dictionary<string, JointTarget> _jointTargets = new Dictionary<string, JointTarget>(); // Dictionary that stores all the unique jonit targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
@@ -500,7 +500,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Defines all the unique Robot Targets used in this RAPID Generator
         /// </summary>
-        public Dictionary<string, Target> RobotTargets
+        public Dictionary<string, RobotTarget> RobotTargets
         {
             get { return _robotTargets; }
         }

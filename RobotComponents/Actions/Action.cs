@@ -87,9 +87,9 @@ namespace RobotComponents.Actions
             { 
                 return speedData.ToString();
             }
-            else if (this is Target target)
+            else if (this is RobotTarget robotTarget)
             {
-                return target.ToString();
+                return robotTarget.ToString();
             }
             else if (this is WaitTime timer)
             {

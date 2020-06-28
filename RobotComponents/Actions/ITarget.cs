@@ -6,11 +6,29 @@
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Defines the interface for different target types
+    /// A boolean that indicates if the Target object is valid.
     /// </summary>
     public interface ITarget
     {
+        #region constructors
+
+        #endregion
+
+        #region methods
+        /// <summary>
+        /// Method to duplicate the Target object as an ITarget object
+        /// </summary>
+        /// <returns>Returns a deep copy of the ITarget object. </returns>
+        ITarget DuplicateTarget();
+
+        #endregion
+
         #region properties
+        /// <summary>
+        /// Indicates if the Target object is valid. 
+        /// </summary>
+        bool IsValid { get; }
+
         /// <summary>
         /// Defines the variable name of the Target
         /// </summary>

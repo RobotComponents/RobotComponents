@@ -283,7 +283,7 @@ namespace RobotComponents.Actions
         /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
         public Movement(Movement movement, bool duplicateMesh = true)
         {
-            _target = movement.Target.Duplicate();
+            _target = movement.Target.DuplicateTarget();
             _speedData = movement.SpeedData.Duplicate();
             _movementType = movement.MovementType;
             _zoneData = movement.ZoneData.Duplicate();
@@ -367,7 +367,7 @@ namespace RobotComponents.Actions
         /// <returns> The the target plane in the world coordinate system. </returns>
         public Plane GetGlobalTargetPlane()
         {
-            if (_target is Target robotTarget)
+            if (_target is RobotTarget robotTarget)
             {
                 Plane plane = new Plane(robotTarget.Plane); // Deep copy
                 Transform orient = Transform.PlaneToPlane(Plane.WorldXY, WorkObject.GlobalWorkObjectPlane);
@@ -393,7 +393,7 @@ namespace RobotComponents.Actions
             // Initiate axis logic
             logic = -1; // dummy value
 
-            if (_target is Target robotTarget)
+            if (_target is RobotTarget robotTarget)
             {
                 // Not transformed global target plane
                 Plane plane = GetGlobalTargetPlane();
@@ -480,7 +480,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveL
-                else if (_movementType == 1 && _target is Target)
+                else if (_movementType == 1 && _target is RobotTarget)
                 {
                     string code = "MoveL ";
                     code += _target.Name + ", ";
@@ -492,7 +492,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveJ
-                else if (_movementType == 2 && _target is Target)
+                else if (_movementType == 2 && _target is RobotTarget)
                 {
                     string code = "MoveJ ";
                     code += _target.Name + ", ";
@@ -528,7 +528,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveLDO
-                else if (_movementType == 1 && _target is Target)
+                else if (_movementType == 1 && _target is RobotTarget)
                 {
                     string code = "MoveLDO ";
                     code += _target.Name + ", ";
@@ -542,7 +542,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveJDO
-                else if (_movementType == 2 && _target is Target)
+                else if (_movementType == 2 && _target is RobotTarget)
                 {
                     string code = "MoveJDO ";
                     code += _target.Name + ", ";
@@ -574,7 +574,7 @@ namespace RobotComponents.Actions
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Generate code from robot targets
-            if (_target is Target robotTarget)
+            if (_target is RobotTarget robotTarget)
             {
                 // Update the movement of the inverse kinematics
                 RAPIDGenerator.Robot.InverseKinematics.Movement = this;
@@ -636,7 +636,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Movement object is valid.
+        /// A boolean that indicates if the Movement object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -652,8 +652,8 @@ namespace RobotComponents.Actions
                 if (WorkObject.IsValid == false) { return false; }
                 if (MovementType < 0) { return false; }
                 if (MovementType > 2) { return false; }
-                if (ITarget is JointTarget && MovementType == 1) { return false; }
-                if (ITarget is JointTarget && MovementType == 2) { return false; }
+                if (Target is JointTarget && MovementType == 1) { return false; }
+                if (Target is JointTarget && MovementType == 2) { return false; }
                 return true;
             }
         }
@@ -661,15 +661,17 @@ namespace RobotComponents.Actions
         /// <summary>
         /// OBSOLETE: The destination target of the robot and external axes.
         /// </summary>
-        public Target Target
+        [Obsolete("This property is obsolete. Instead, use Target.", false)]
+        public RobotTarget RobotTarget
         {
-            get { return _target as Target; }
+            get { return _target as RobotTarget; }
             set { _target = value; }
         }
 
         /// <summary>
         /// Defines the destination target of the robot and external axes for this movement.
-        public ITarget ITarget // TODO: Rename to Target after renaming Target to Robot Target
+        /// </summary>
+        public ITarget Target
         {
             get { return _target; }
             set { _target = value; }

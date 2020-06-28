@@ -80,7 +80,7 @@ namespace RobotComponents.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
             _forwardKinematics = new ForwardKinematics(this);
         }
 
@@ -121,7 +121,7 @@ namespace RobotComponents.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new Target("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
             _forwardKinematics = new ForwardKinematics(this);
         }
 

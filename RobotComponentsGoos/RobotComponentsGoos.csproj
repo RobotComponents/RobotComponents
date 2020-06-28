@@ -62,6 +62,7 @@
     <Compile Include="Actions\GH_CodeLine.cs" />
     <Compile Include="Actions\GH_Comment.cs" />
     <Compile Include="Actions\GH_DigitalOutput.cs" />
+    <Compile Include="Actions\GH_RobotTarget.cs" />
     <Compile Include="Actions\GH_ZoneData.cs" />
     <Compile Include="Actions\GH_WaitDI.cs" />
     <Compile Include="Actions\GH_Action.cs" />

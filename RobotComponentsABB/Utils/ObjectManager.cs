@@ -240,10 +240,10 @@ namespace RobotComponentsABB.Utils
         /// Gets all the targets that are stored in the object mananger
         /// </summary>
         /// <returns> A list with all the targets that are stored in the object mananger. </returns>
-        public List<Target> GetTargets()
+        public List<RobotTarget> GetTargets()
         {
             // Empty list
-            List<Target> targets = new List<Target>();
+            List<RobotTarget> targets = new List<RobotTarget>();
 
             // Add all the targets
             foreach (KeyValuePair<Guid, TargetComponent> entry in _targetsByGuid)

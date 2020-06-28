@@ -193,6 +193,26 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to Robot Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else if (Value.Target == null) { target = default(Q); }
+                else if (Value.Target is RobotTarget robotTarget) { target = (Q)(object)new GH_RobotTarget(robotTarget); }
+                else { target = default(Q); }
+                return true;
+            }
+
+            //Cast to Robot Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else if (Value.Target == null) { target = default(Q); }
+                else if (Value.Target is JointTarget jointTarget) { target = (Q)(object)new GH_JointTarget(jointTarget); }
+                else { target = default(Q); }
+                return true;
+            }
+
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
@@ -274,6 +294,13 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast from Target
+            if (typeof(ITarget).IsAssignableFrom(source.GetType()))
+            {
+                Value = new Movement(source as ITarget);
+                return true;
+            }
+
             //Cast from Target Goo
             if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
             {
@@ -282,11 +309,35 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast from Target
-            if (typeof(Target).IsAssignableFrom(source.GetType()))
+            //Cast from Robot Target
+            if (typeof(RobotTarget).IsAssignableFrom(source.GetType()))
             {
-                Target target = (Target)source;
+                RobotTarget target = (RobotTarget)source;
                 Value = new Movement(target);
+                return true;
+            }
+
+            //Cast from Robot Target Goo
+            if (typeof(GH_RobotTarget).IsAssignableFrom(source.GetType()))
+            {
+                GH_RobotTarget targetGoo = (GH_RobotTarget)source;
+                Value = new Movement(targetGoo.Value);
+                return true;
+            }
+
+            //Cast from Joint Target
+            if (typeof(JointTarget).IsAssignableFrom(source.GetType()))
+            {
+                JointTarget target = (JointTarget)source;
+                Value = new Movement(target);
+                return true;
+            }
+
+            //Cast from Joint Target Goo
+            if (typeof(GH_JointTarget).IsAssignableFrom(source.GetType()))
+            {
+                GH_JointTarget targetGoo = (GH_JointTarget)source;
+                Value = new Movement(targetGoo.Value);
                 return true;
             }
 

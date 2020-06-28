@@ -146,7 +146,7 @@ namespace RobotComponentsABB.Components.Obsolete
             int axisConfigCounter = -1;
 
             // Creates targets
-            List<Target> targets = new List<Target>();
+            List<RobotTarget> targets = new List<RobotTarget>();
             for (int i = 0; i < biggestSize; i++)
             {
                 string name = "";
@@ -183,7 +183,7 @@ namespace RobotComponentsABB.Components.Obsolete
                     axisConfig = axisConfigs[axisConfigCounter];
                 }
 
-                Target target = new Target(name, plane, axisConfig);
+                RobotTarget target = new RobotTarget(name, plane, axisConfig);
                 targets.Add(target);
             }
 

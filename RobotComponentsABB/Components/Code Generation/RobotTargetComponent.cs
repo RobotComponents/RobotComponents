@@ -76,7 +76,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotTargetParameter(), "Target", "T", "Resulting Robot Target");
         }
 
         // Fields

@@ -72,7 +72,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new RobotTargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.list);
             pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Custom Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
             pManager.AddIntegerParameter("Zone Data", "Z", "The zone size for the TCP path as int. If the value is smaller than 0, zonedata will be set to fine.", GH_ParamAccess.list, 0);
@@ -125,7 +125,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Input variables
-            List<Target> targets = new List<Target>();
+            List<RobotTarget> targets = new List<RobotTarget>();
             List<GH_SpeedData> speedDataGoos = new List<GH_SpeedData>();
             List<int> movementTypes = new List<int>();
             List<int> precisions = new List<int>();
@@ -206,7 +206,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             for (int i = 0; i < biggestSize; i++)
             {
-                Target target;
+                RobotTarget target;
                 SpeedData speedData;
                 int movementType;
                 int precision;

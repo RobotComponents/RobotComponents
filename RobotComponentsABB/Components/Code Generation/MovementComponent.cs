@@ -109,7 +109,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Input variables
-            List<Target> targets = new List<Target>();
+            List<ITarget> targets = new List<ITarget>();
             List<SpeedData> speedDatas = new List<SpeedData>();
             List<int> movementTypes = new List<int>();
             List<ZoneData> zoneDatas = new List<ZoneData>();
@@ -190,7 +190,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             for (int i = 0; i < biggestSize; i++)
             {
-                Target target;
+                ITarget target;
                 SpeedData speedData;
                 int movementType;
                 ZoneData zoneData;

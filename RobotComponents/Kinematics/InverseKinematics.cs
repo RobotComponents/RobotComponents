@@ -25,7 +25,7 @@ namespace RobotComponents.Kinematics
         private Robot _robotInfo;
         private RobotTool _robotTool;
         private Movement _movement;
-        private Target _target;
+        private RobotTarget _target;
         private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
         private Plane _targetPlane;
         private Plane _endPlane;
@@ -78,7 +78,7 @@ namespace RobotComponents.Kinematics
         /// </summary>
         /// <param name="target"> The robot target to calculated the axis values for. </param>
         /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(Target target, Robot robotInfo)
+        public InverseKinematics(RobotTarget target, Robot robotInfo)
         {
             _robotInfo = robotInfo;
             _movement = new Movement(target);
@@ -152,7 +152,7 @@ namespace RobotComponents.Kinematics
             }
 
             // Movement related fields
-            _target = _movement.Target;
+            _target = _movement.RobotTarget;
 
             // Calculate the position and the orientation of the target plane in the word coordinate system
             // If there is an external axes connected to work object of the movement the 

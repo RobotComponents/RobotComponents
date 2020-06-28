@@ -108,7 +108,7 @@ namespace RobotComponents.Kinematics
             int logic;
 
             // Initiate movement
-            Movement movement1 = new Movement(new Target("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
+            Movement movement1 = new Movement(new RobotTarget("init", Plane.WorldXY)); // Used for movement[i]: the movement before which defines the starting point / target of the current movement.
             Movement movement2; // Used for movement[i+1]: to movement we are carrying out
             AbsoluteJointMovement jointMovement;
 
@@ -139,7 +139,7 @@ namespace RobotComponents.Kinematics
             List<double> externalAxisValueChange = new List<double>();
 
             // Initiate target and movement for linear movement interpolation
-            Target subTarget = new Target("subTarget", Plane.WorldXY);
+            RobotTarget subTarget = new RobotTarget("subTarget", Plane.WorldXY);
             Movement subMovement = new Movement(subTarget);
 
             // Initiate list with points between two targets
@@ -252,7 +252,7 @@ namespace RobotComponents.Kinematics
                         target1InternalAxisValues = new List<double>(target2InternalAxisValues);
                         target1ExternalAxisValues = new List<double>(target2ExternalAxisValues);
                         
-                        if (movement2.ITarget is JointTarget jointTarget)
+                        if (movement2.Target is JointTarget jointTarget)
                         {
                             // Calculate the axis values for the second target
                             target2InternalAxisValues = jointTarget.RobotJointPosition.ToList();
@@ -429,29 +429,29 @@ namespace RobotComponents.Kinematics
                                 // Get movement before (especially the target plane): the start point of the current movement
                                 if (movements[i] is Movement movement)
                                 {
-                                    if (movement.ITarget is Target)
+                                    if (movement.Target is RobotTarget)
                                     {
                                         movement1 = movements[i] as Movement;
                                     }
                                     else
                                     {
-                                        jointTarget = movement.ITarget as JointTarget;
+                                        jointTarget = movement.Target as JointTarget;
                                         _robotInfo.ForwardKinematics.Calculate(jointTarget.RobotJointPosition.ToList(), jointTarget.ExternalJointPosition.ToList().GetRange(0, nAxes));
-                                        movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
+                                        movement1 = new Movement(new RobotTarget("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                                     }
                                 }
                                 else if (movements[i] is AbsoluteJointMovement)
                                 {
                                     jointMovement = movements[i] as AbsoluteJointMovement;
                                     _robotInfo.ForwardKinematics.Calculate(jointMovement.InternalAxisValues, jointMovement.ExternalAxisValues.GetRange(0, nAxes));
-                                    movement1 = new Movement(new Target("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
+                                    movement1 = new Movement(new RobotTarget("jointTarget", _robotInfo.ForwardKinematics.TCPPlane));
                                 }
 
                                 // If both movements are on the same work object and with the same tool
                                 if (movement1.WorkObject.Name == movement2.WorkObject.Name && movement1.RobotTool.Name == movement2.RobotTool.Name)
                                 {
-                                    plane1 = movement1.Target.Plane;
-                                    plane2 = movement2.Target.Plane;
+                                    plane1 = movement1.RobotTarget.Plane;
+                                    plane2 = movement2.RobotTarget.Plane;
                                 }
 
                                 // Else the movements are not on the same work object and / or the tools are differnt
@@ -461,7 +461,7 @@ namespace RobotComponents.Kinematics
                                     // Get plane1 and plane2
                                     _robotInfo.ForwardKinematics.Calculate(target1InternalAxisValues, target1ExternalAxisValues);
                                     plane1 = new Plane(_robotInfo.ForwardKinematics.TCPPlane); // In world coordinate space
-                                    plane2 = movement2.Target.Plane; // In work object coordinate space
+                                    plane2 = movement2.RobotTarget.Plane; // In work object coordinate space
 
                                     // Re-orient plane1 to the other work object coordinate space of the plane2
                                     Plane globalWorkObjectPlane = new Plane(movement2.WorkObject.GlobalWorkObjectPlane);
@@ -522,7 +522,7 @@ namespace RobotComponents.Kinematics
                                 #endregion
 
                                 // Correct axis configuration, tool and work object
-                                subTarget.AxisConfig = movement2.Target.AxisConfig;
+                                subTarget.AxisConfig = movement2.RobotTarget.AxisConfig;
                                 subMovement.RobotTool = movement2.RobotTool;
                                 subMovement.WorkObject = movement2.WorkObject;
 
@@ -545,7 +545,7 @@ namespace RobotComponents.Kinematics
                                     subTarget.ExternalJointPosition = new ExternalJointPosition(externalAxisValues);
 
                                     // Update the movement
-                                    subMovement.Target = subTarget;
+                                    subMovement.RobotTarget = subTarget;
 
                                     // Calculate internal axis values
                                     _robotInfo.InverseKinematics.Movement = subMovement;
@@ -601,7 +601,7 @@ namespace RobotComponents.Kinematics
             {
                 movement2 = movements[movements.Count - 1] as Movement;
 
-                if (movement2.ITarget is JointTarget jointTarget)
+                if (movement2.Target is JointTarget jointTarget)
                 {
                     target2InternalAxisValues = jointTarget.RobotJointPosition.ToList();
                     target2ExternalAxisValues = jointTarget.ExternalJointPosition.ToList();

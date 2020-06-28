@@ -150,7 +150,7 @@ namespace RobotComponentsABB.Components.Utilities
                         }
 
                         GH_Plane planeGoo = actions.Branches[i][j] as GH_Plane;
-                        Target target = new Target(targetName, planeGoo.Value);
+                        RobotTarget target = new RobotTarget(targetName, planeGoo.Value);
                         GH_Target targetGoo = new GH_Target(target);
                         _targetGoos.Append(targetGoo, iPath);
                     }
@@ -179,7 +179,7 @@ namespace RobotComponentsABB.Components.Utilities
                 for (int j = 0; j < branches.Count; j++)
                 {
                     // Get the target
-                    Target target = branches[j].Value;
+                    RobotTarget target = branches[j].Value as RobotTarget;
 
                     // Display the name of the target
                     if (_displayNames == true)

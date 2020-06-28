@@ -14,16 +14,16 @@ using RobotComponentsGoos.Actions;
 namespace RobotComponentsABB.Parameters.Actions
 {
     /// <summary>
-    /// Target parameter
+    /// Robot Target parameter
     /// </summary>
-    public class TargetParameter : GH_PersistentParam<GH_Target>
+    public class RobotTargetParameter : GH_PersistentParam<GH_RobotTarget>
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentParam<TargetGoo> class
         /// </summary>
-        public TargetParameter()
-          : base(new GH_InstanceDescription("Target", "T",
-                "Contains the data of a Target declaration."
+        public RobotTargetParameter()
+          : base(new GH_InstanceDescription("Robot Target", "RT",
+                "Contains the data of a Robot Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponentsABB.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Target";
+            return "Robot Target";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Target"; set => base.Name = value; }
+        public override string Name { get => "Robot Target"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; } //TODO
+            get { return Properties.Resources.Target_Parameter_Icon; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F2A7AF5B-13E9-4480-8316-B84670ABF954"); }
+            get { return new Guid("7032DC09-06E9-4D53-A06C-E2842E5EFFFE"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Target> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotTarget> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Target value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_RobotTarget value)
         {
             return GH_GetterResult.cancel;
         }

@@ -104,6 +104,15 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// A method to duplicate the Joint Target object to an ITarget object. 
+        /// </summary>
+        /// <returns> Returns a deep copy of the Joint Target object as an ITarget object. </returns>
+        public ITarget DuplicateTarget()
+        {
+            return new JointTarget(this) as ITarget;
+        }
+
+        /// <summary>
         /// A method to duplicate the Joint Target object to an Action object. 
         /// </summary>
         /// <returns> Returns a deep copy of the Joint Target object as an Action object. </returns>

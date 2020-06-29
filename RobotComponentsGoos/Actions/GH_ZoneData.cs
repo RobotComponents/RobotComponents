@@ -299,19 +299,20 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from text: Predefined ZoneData
+            //Cast from Text: Predefined Zone Data
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 string text = (source as GH_String).Value;
 
-                if (ZoneData.ValidPredefinedNames.Contains(text))
+                if (text == "fine")
                 {
-                    if (text == "fine")
-                    {
-                        Value = new ZoneData(-1);
-                        return true;
-                    }
-                    else
+                    Value = new ZoneData(-1);
+                    return true;
+                }
+
+                else if (text.Contains("z"))
+                {
+                    if (ZoneData.ValidPredefinedNames.Contains(text))
                     {
                         try
                         {
@@ -326,6 +327,21 @@ namespace RobotComponentsGoos.Actions
                         }
                     }
                 }
+
+                else
+                {
+                    try
+                    {
+                        double number = System.Convert.ToDouble(text);
+                        Value = new ZoneData(number);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+
             }
 
             return false;

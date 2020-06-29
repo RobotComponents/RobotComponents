@@ -304,16 +304,33 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from text: Predefined SpeedData
+            //Cast from Text: Predefined Speed Data
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 string text = (source as GH_String).Value;
 
-                if (SpeedData.ValidPredefinedNames.Contains(text))
+                if (text.Contains("v"))
+                {
+                    if (SpeedData.ValidPredefinedNames.Contains(text))
+                    {
+                        try
+                        {
+                            text = text.Replace("v", String.Empty); // Changes v5 to 5, v10 to 10 etc. 
+                            double number = System.Convert.ToDouble(text);
+                            Value = new SpeedData(number);
+                            return true;
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                else
                 {
                     try
                     {
-                        text = text.Replace("v", String.Empty); // Changes v5 to 5, v10 to 10 etc. 
                         double number = System.Convert.ToDouble(text);
                         Value = new SpeedData(number);
                         return true;

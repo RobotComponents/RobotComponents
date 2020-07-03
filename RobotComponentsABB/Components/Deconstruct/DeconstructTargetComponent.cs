@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
@@ -37,7 +37,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotTargetParameter(), "Target", "T", "Target as Target", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Target target = null;
+            RobotTarget target = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref target)) { return; }
@@ -73,7 +73,7 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(0, target.Name);
             DA.SetData(1, target.Plane);
             DA.SetData(2, target.AxisConfig);
-            DA.SetDataList(3, target.ExternalAxisValues);
+            DA.SetDataList(3, target.ExternalJointPosition.ToList());
         }
 
         #region menu item

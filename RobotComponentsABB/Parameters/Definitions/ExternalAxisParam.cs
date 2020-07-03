@@ -21,12 +21,11 @@ namespace RobotComponentsABB.Parameters.Definitions
     public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<ExternalAxisGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalAxis> class
         /// </summary>
         public ExternalAxisParameter()
           : base(new GH_InstanceDescription("External Axis", "EA",
-                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
-                "Contains the data of an External Axis."
+                "Contains the data of any External Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))

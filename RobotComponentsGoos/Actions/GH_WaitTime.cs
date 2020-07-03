@@ -4,19 +4,16 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
-using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// WaitTime Goo wrapper class, makes sure WaitTime can be used in Grasshopper.
+    /// Wait Time Goo wrapper class, makes sure the Wait Time class can be used in Grasshopper.
     /// </summary>
-    public class GH_WaitTime : GH_GeometricGoo<WaitTime>, IGH_PreviewData
+    public class GH_WaitTime : GH_Goo<WaitTime>
     {
         #region constructors
         /// <summary>
@@ -24,45 +21,38 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_WaitTime()
         {
-            this.Value = new WaitTime();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Wait Time Goo instance from a Wait Time instance.
         /// </summary>
-        /// <param name="timer"> WaitTime Value to store inside this Goo instance. </param>
+        /// <param name="waitTime"> WaitTime Value to store inside this Goo instance. </param>
         public GH_WaitTime(WaitTime waitTime)
         {
-            if (waitTime == null)
-                waitTime = new WaitTime();
             this.Value = waitTime;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Wait Time Goo instance from another Wait Time Goo instance.
+        /// This creates a shallow copy of the passed Wait Time Goo instance. 
         /// </summary>
-        /// <param name="timerGoo"> WaitTimeGoo to store inside this Goo instance. </param>
+        /// <param name="waitTimeGoo"> Wait Time Goo instacne to copy. </param>
         public GH_WaitTime(GH_WaitTime waitTimeGoo)
         {
             if (waitTimeGoo == null)
+            {
                 waitTimeGoo = new GH_WaitTime();
+            }
+
             this.Value = waitTimeGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the WaitTimeGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateTimerGoo();
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the WaitTimeGoo. </returns>
-        public GH_WaitTime DuplicateTimerGoo()
+        public override IGH_Goo Duplicate()
         {
             return new GH_WaitTime(Value == null ? new WaitTime() : Value.Duplicate());
         }
@@ -82,16 +72,16 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal WaitTime instance"; }
+                if (Value == null) { return "No internal Wait Time instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid WaitTime instance: Did you define a duration?"; //Todo: beef this up to be more informative.
+                return "Invalid Wait Time instance: Did you define a duration?";
             }
         }
 
@@ -101,10 +91,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null WaitTime";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Wait Time"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -112,7 +100,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("WaitTime"); }
+            get { return "Wait Time"; }
         }
 
         /// <summary>
@@ -120,28 +108,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a WaitTime."); }
-        }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            get { return "Defines a Wait Time."; }
         }
         #endregion
 
@@ -152,55 +119,45 @@ namespace RobotComponentsGoos.Actions
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to WaitTime
+            //Cast to Wait Time
             if (typeof(Q).IsAssignableFrom(typeof(WaitTime)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to WaitTimeGoo
+            //Cast to Wait Time Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_WaitTime)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_WaitTime(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_WaitTime(Value); }
                 return true;
             }
 
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
             //Cast to Number
             if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Number(Value.Duration);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Number(Value.Duration); }
                 return true;
             }
 
@@ -217,7 +174,7 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from WaitTime
+            //Cast from Wait Time
             if (typeof(WaitTime).IsAssignableFrom(source.GetType()))
             {
                 Value = source as WaitTime;
@@ -234,7 +191,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -245,7 +202,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            // Cast from number
+            // Cast from Number
             if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 GH_Number ghNumber = (GH_Number)source;
@@ -253,55 +210,6 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
             return false;
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
-        }
-        #endregion
-
-        #region drawing methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get { return Boundingbox; }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
         }
         #endregion
     }

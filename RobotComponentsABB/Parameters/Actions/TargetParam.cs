@@ -6,8 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -18,14 +16,13 @@ namespace RobotComponentsABB.Parameters.Actions
     /// <summary>
     /// Target parameter
     /// </summary>
-    public class TargetParameter : GH_PersistentGeometryParam<GH_Target>, IGH_PreviewObject
+    public class TargetParameter : GH_PersistentParam<GH_Target>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<TargetGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<TargetGoo> class
         /// </summary>
         public TargetParameter()
           : base(new GH_InstanceDescription("Target", "T",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -53,7 +50,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Target_Parameter_Icon; }
+            get { return null; } //TODO
         }
 
         /// <summary>
@@ -70,7 +67,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7032DC09-06E9-4D53-A06C-E2842E5EFFFE"); }
+            get { return new Guid("F2A7AF5B-13E9-4480-8316-B84670ABF954"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
@@ -99,58 +96,6 @@ namespace RobotComponentsABB.Parameters.Actions
             item.Text = "Not available";
             item.Visible = false;
             return item;
-        }
-        #endregion
-
-        #region preview methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get
-            {
-                return Preview_ComputeClippingBox();
-            }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            Preview_DrawMeshes(args);
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            //Use a standard method to draw wires, you don't have to specifically implement this.
-            Preview_DrawWires(args);
-        }
-
-        private bool m_hidden = false;
-
-        /// <summary>
-        /// Gets or sets the hidden flag for this component. Does not affect Hidden flags on parameters associated with this component.
-        /// </summary>
-        public bool Hidden
-        {
-            get { return m_hidden; }
-            set { m_hidden = value; }
-        }
-
-        /// <summary>
-        /// If a single parameter is PreviewCapable, so is the component. Override this property if you need special Preview flags.
-        /// </summary>
-        public bool IsPreviewCapable
-        {
-            get { return true; }
         }
         #endregion
 

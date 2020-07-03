@@ -7,19 +7,16 @@
 using System;
 using System.Linq;
 // Grasshopper Libs
-using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-// Rhno Libs
-using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// SpeedData wrapper class, makes sure SpeedData can be used in Grasshopper.
+    /// Speed Data Goo wrapper class, makes sure the Speed Data class can be used in Grasshopper.
     /// </summary>
-    public class GH_SpeedData : GH_GeometricGoo<SpeedData>, IGH_PreviewData
+    public class GH_SpeedData : GH_Goo<SpeedData>
     {
         #region constructors
         /// <summary>
@@ -27,43 +24,47 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_SpeedData()
         {
-            this.Value = new SpeedData();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Create a Speed Data Goo instance from a Speed Data instance.
         /// </summary>
-        /// <param name="speedData"> SpeedData Value to store inside this Goo instance. </param>
+        /// <param name="speedData"> Speed Data Value to store inside this Goo instance. </param>
         public GH_SpeedData(SpeedData speedData)
         {
-            if (speedData == null)
-                speedData = new SpeedData();
             this.Value = speedData;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Speed Data Goo instance from another Speed Data Goo instance.
+        /// This creates a shallow copy of the passed Speed Data Goo instance. 
         /// </summary>
-        /// <param name="speedDataGoo"> SpeedDataGoo to store inside this Goo instance. </param>
+        /// <param name="speedDataGoo"> Speed Data Goo instance to copy. </param>
         public GH_SpeedData(GH_SpeedData speedDataGoo)
         {
             if (speedDataGoo == null)
+            {
                 speedDataGoo = new GH_SpeedData();
+            }
+
             this.Value = speedDataGoo.Value;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Speed Data Goo instance from a Number Goo instance. 
+        /// This result a Predefined Speed Data Value. 
         /// </summary>
         /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
+        /// the the Speed Data value stored inside this Goo instance. </param>
         public GH_SpeedData(GH_Number tcpSpeed)
         {
             this.Value = new SpeedData(tcpSpeed.Value);
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Speed Data Goo instance from an Integer Goo instance. 
+        /// This result a Predefined Speed Data Value. 
         /// </summary>
         /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
         /// the the SpeedData value stored inside this Goo instance. </param>
@@ -73,26 +74,8 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
-        /// </summary>
-        /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
-        /// the the SpeedData value stored inside this Goo instance. </param>
-        public GH_SpeedData(GH_String tcpSpeed)
-        {
-            if (tcpSpeed == null)
-            {
-                this.Value = new SpeedData();
-            }
-            else
-            {
-                string text = tcpSpeed.Value;
-                double speed = Convert.ToDouble(text);
-                this.Value = new SpeedData(speed);
-            }
-        }
-
-        /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Speed Data Goo instance from a Double. 
+        /// This result a Predefined Speed Data Value. 
         /// </summary>
         /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
         /// the the SpeedData value stored inside this Goo instance. </param>
@@ -102,7 +85,8 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Speed Data Goo instance from an Integer. 
+        /// This result a Predefined Speed Data Value. 
         /// </summary>
         /// <param name="tcpSpeed"> The tool center point speed in mm/s to create 
         /// the the SpeedData value stored inside this Goo instance. </param>
@@ -112,19 +96,10 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the SpeedDataGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateSpeedDataGoo();
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the SpeedDataGoo. </returns>
-        public GH_SpeedData DuplicateSpeedDataGoo()
+        /// <returns> A duplicate of the Speed Data Goo. </returns>
+        public override IGH_Goo Duplicate()
         {
             return new GH_SpeedData(Value == null ? new SpeedData() : Value.Duplicate());
         }
@@ -144,16 +119,16 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
             get
             {
-                if (Value == null) { return "No internal SpeedData instance"; }
+                if (Value == null) { return "No internal Speed Data instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid SpeedData instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
+                return "Invalid Speed Data instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
             }
         }
 
@@ -163,10 +138,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Speed Data";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Speed Data"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -174,7 +147,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("SpeedData"); }
+            get { return ("Speed Data"); }
         }
 
         /// <summary>
@@ -182,28 +155,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single SpeedData"); }
-        }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            get { return ("Defines a Speed Data"); }
         }
         #endregion
 
@@ -214,45 +166,37 @@ namespace RobotComponentsGoos.Actions
         /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to SpeedData
+            //Cast to Speed Data
             if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to SpeedDataGoo
+            //Cast to Speed Data Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_SpeedData(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_SpeedData(Value); }
                 return true;
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.BaseClasses.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
@@ -276,7 +220,7 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast from number: Predefined SpeedData
+            //Cast from Number: Predefined Speed Data
             if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 Value = new SpeedData((source as GH_Number).Value);
@@ -284,7 +228,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.BaseClasses.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is SpeedData action)
                 {
@@ -293,7 +237,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -343,55 +287,6 @@ namespace RobotComponentsGoos.Actions
             }
 
             return false;
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
-        }
-        #endregion
-
-        #region drawing methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get { return Boundingbox; }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
         }
         #endregion
     }

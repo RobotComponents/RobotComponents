@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponentsABB.Parameters.Definitions;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (February 2020)

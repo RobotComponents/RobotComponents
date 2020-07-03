@@ -11,8 +11,8 @@ using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Kinematics;
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Kinematics;
+using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 
@@ -104,7 +104,7 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Input variables
             Robot robotInfo = new Robot();
-            List<RobotComponents.BaseClasses.Actions.Action> actions = new List<RobotComponents.BaseClasses.Actions.Action>();
+            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool displayPath = false;

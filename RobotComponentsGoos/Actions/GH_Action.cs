@@ -9,12 +9,12 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Action Goo wrapper class, makes sure Actions can be used in Grasshopper.
+    /// Action Goo wrapper class, makes sure the Action class can be used in Grasshopper.
     /// </summary>
     public class GH_Action : GH_GeometricGoo<Action>, IGH_PreviewData
     {
@@ -28,23 +28,19 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor from from an Action
+        /// Data constructor: Creates an Action Goo instance from an Action instance.
         /// </summary>
         /// <param name="action"> Action Value to store inside this Goo instance. </param>
         public GH_Action(Action action)
         {
-            if (action == null)
-            {
-                action = null;
-            }
-
             this.Value = action;
         }
 
         /// <summary>
-        /// Data constructor from ActionGoo
+        /// Data constructor: Creates a Action Goo instance from another Action Goo instance.
+        /// This creates a shallow copy of the passed Action Goo instance. 
         /// </summary>
-        /// <param name="actionGoo"> ActionGoo to store inside this Goo instance. </param>
+        /// <param name="actionGoo"> Action Goo instance to copy. </param>
         public GH_Action(GH_Action actionGoo)
         {
             if (actionGoo == null)
@@ -56,28 +52,23 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ActionGoo. </returns>
+        /// <returns> A duplicate of the Action Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
             return DuplicateActionGoo();
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ActionGoo. </returns>
+        /// <returns> A duplicate of the Action Goo. </returns>
         public GH_Action DuplicateActionGoo()
         {
-            if (Value == null) 
-                return null; 
-
-            else if (Value is Action) 
-                return new GH_Action(Value.DuplicateAction()); 
-
-            else 
-                return null; 
+            if (Value == null) { return null; }
+            else if (Value is Action) { return new GH_Action(Value.DuplicateAction()); }
+            else { return null; }
         }
         #endregion
 
@@ -95,7 +86,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
@@ -104,7 +95,7 @@ namespace RobotComponentsGoos.Actions
             {
                 if (Value == null) { return "No internal Action instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Action instance: ?"; //Todo: beef this up to be more informative.
+                return "Invalid Action instance";
             }
         }
 
@@ -114,10 +105,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Action";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Action"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -125,7 +114,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Action"); }
+            get { return "Action"; }
         }
 
         /// <summary>
@@ -133,7 +122,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an Action."); }
+            get { return "Defines an Action."; }
         }
 
         /// <summary>
@@ -164,23 +153,19 @@ namespace RobotComponentsGoos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Action.
+            //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
@@ -204,7 +189,7 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;

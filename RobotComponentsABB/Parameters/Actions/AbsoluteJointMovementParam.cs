@@ -6,8 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -18,14 +16,13 @@ namespace RobotComponentsABB.Parameters.Actions
     /// <summary>
     /// Absolute Joint Movement parameter
     /// </summary>
-    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>, IGH_PreviewObject
+    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<AbsoluteJoinMovementGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<AbsoluteJoinMovementGoo> class
         /// </summary>
         public AbsoluteJointMovementParameter()
           : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
-                "Action Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of an Absolute Joint Movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -99,57 +96,6 @@ namespace RobotComponentsABB.Parameters.Actions
             item.Text = "Not available";
             item.Visible = false;
             return item;
-        }
-        #endregion
-
-        #region preview methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get
-            {
-                return Preview_ComputeClippingBox();
-            }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            Preview_DrawMeshes(args);
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            Preview_DrawWires(args);
-        }
-
-        private bool m_hidden = false;
-
-        /// <summary>
-        /// Gets or sets the hidden flag for this component. Does not affect Hidden flags on parameters associated with this component.
-        /// </summary>
-        public bool Hidden
-        {
-            get { return m_hidden; }
-            set { m_hidden = value; }
-        }
-
-        /// <summary>
-        /// If a single parameter is PreviewCapable, so is the component. Override this property if you need special Preview flags.
-        /// </summary>
-        public bool IsPreviewCapable
-        {
-            get { return true; }
         }
         #endregion
     }

@@ -21,11 +21,10 @@ namespace RobotComponentsABB.Parameters.Definitions
     public class WorkObjectParameter : GH_PersistentGeometryParam<GH_WorkObject>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<WorkObjectGoo> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_WorkObject> class
         /// </summary>
         public WorkObjectParameter()
           : base(new GH_InstanceDescription("Work Object Parameter", "WO",
-                "Definition Parameter" + System.Environment.NewLine + System.Environment.NewLine +
                 "Contains the data of a Work Object."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

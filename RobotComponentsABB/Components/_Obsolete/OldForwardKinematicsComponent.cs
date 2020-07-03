@@ -14,7 +14,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Kinematics;
+using RobotComponents.Kinematics;
 using RobotComponentsGoos.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 

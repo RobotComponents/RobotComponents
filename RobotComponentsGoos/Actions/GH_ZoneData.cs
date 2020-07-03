@@ -7,19 +7,16 @@
 using System;
 using System.Linq;
 // Grasshopper Libs
-using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-// Rhno Libs
-using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// ZoneData wrapper class, makes sure ZoneData can be used in Grasshopper.
+    /// Zone Data Goo wrapper class, makes sure the Zone Data class can be used in Grasshopper.
     /// </summary>
-    public class GH_ZoneData : GH_GeometricGoo<ZoneData>, IGH_PreviewData
+    public class GH_ZoneData : GH_Goo<ZoneData>
     {
         #region constructors
         /// <summary>
@@ -27,33 +24,36 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_ZoneData()
         {
-            this.Value = new ZoneData();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Create a Zone Data Goo instance from a Zone Data instance.
         /// </summary>
-        /// <param name="zoneData"> ZoneData Value to store inside this Goo instance. </param>
+        /// <param name="zoneData"> Zone Data Value to store inside this Goo instance. </param>
         public GH_ZoneData(ZoneData zoneData)
         {
-            if (zoneData == null)
-                zoneData = new ZoneData();
             this.Value = zoneData;
         }
 
         /// <summary>
-        /// Data constructor
+        /// Data constructor: Creates a Zone Data Goo instance from another Zone Data Goo instance.
+        /// This creates a shallow copy of the passed Zone Data Goo instance. 
         /// </summary>
-        /// <param name="zoneDataGoo"> ZoneDataGoo to store inside this Goo instance. </param>
+        /// <param name="zoneDataGoo"> Zone Data Goo instance to copy.  </param>
         public GH_ZoneData(GH_ZoneData zoneDataGoo)
         {
             if (zoneDataGoo == null)
+            {
                 zoneDataGoo = new GH_ZoneData();
+            }
+
             this.Value = zoneDataGoo.Value;
         }
 
         /// <summary>
-        /// Data constructor fron pre-defined zonedata value
+        /// Data constructor: Creates a Zone Data Goo instance from a Number Goo instance. 
+        /// This result a Predefined Zone Data Value. 
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm.  </param>
         public GH_ZoneData(GH_Number zone)
@@ -62,7 +62,8 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor fron pre-defined zonedata value
+        /// Data constructor: Creates a Zone Data Goo instance from an Integer Goo instance. 
+        /// This result a Predefined Zone Data Value. 
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public GH_ZoneData(GH_Integer zone)
@@ -71,25 +72,8 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor fron pre-defined zonedata value
-        /// </summary>
-        /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
-        public GH_ZoneData(GH_String zone)
-        {
-            if (zone == null)
-            {
-                this.Value = new ZoneData();
-            }
-            else
-            {
-                string text = zone.Value;
-                double val = Convert.ToDouble(text);
-                this.Value = new ZoneData(val);
-            }
-        }
-
-        /// <summary>
-        /// Data constructor fron pre-defined zonedata value
+        /// Data constructor: Creates a Zone Data Goo instance from a Double.
+        /// This result a Predefined Zone Data Value. 
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public GH_ZoneData(double zone)
@@ -98,7 +82,8 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Data constructor fron pre-defined zonedata value
+        /// Data constructor: Creates a Zone Data Goo instance from an Integer. 
+        /// This result a Predefined Zone Data Value. 
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public GH_ZoneData(int zone)
@@ -107,19 +92,10 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the ZoneDataGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateZoneDataGoo();
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the ZoneDataGoo. </returns>
-        public GH_ZoneData DuplicateZoneDataGoo()
+        /// <returns> A duplicate of the Zone Data Goo. </returns>
+        public override IGH_Goo Duplicate()
         {
             return new GH_ZoneData(Value == null ? new ZoneData() : Value.Duplicate());
         }
@@ -158,10 +134,8 @@ namespace RobotComponentsGoos.Actions
         /// <returns> Description of the the current instance value. </returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Zone Data";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Zone Data"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -169,7 +143,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("ZoneData"); }
+            get { return "Zone Data"; }
         }
 
         /// <summary>
@@ -177,28 +151,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single ZoneData"); }
-        }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty;
+            get { return "Defines a Zone Data"; }
         }
         #endregion
 
@@ -209,45 +162,37 @@ namespace RobotComponentsGoos.Actions
         /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to ZoneData
+            //Cast to Zone Data
             if (typeof(Q).IsAssignableFrom(typeof(ZoneData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ZoneDataGoo
+            //Cast to Zone Data Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ZoneData(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ZoneData(Value); }
                 return true;
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.BaseClasses.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
@@ -264,14 +209,14 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from ZoneData: Custom ZoneData
+            //Cast from Zone Data: Custom Zone Data
             if (typeof(ZoneData).IsAssignableFrom(source.GetType()))
             {
                 Value = (ZoneData)source;
                 return true;
             }
 
-            //Cast from number: Predefined ZoneData
+            //Cast from Number: Predefined Zone Data
             if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 Value = new ZoneData((source as GH_Number).Value);
@@ -279,7 +224,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.BaseClasses.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is ZoneData action)
                 {
@@ -288,7 +233,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -327,7 +272,7 @@ namespace RobotComponentsGoos.Actions
                         }
                     }
                 }
-
+                
                 else
                 {
                     try
@@ -346,55 +291,6 @@ namespace RobotComponentsGoos.Actions
 
             return false;
 
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
-        }
-        #endregion
-
-        #region drawing methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get { return Boundingbox; }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
         }
         #endregion
     }

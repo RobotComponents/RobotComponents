@@ -9,12 +9,12 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Definitions;
+using RobotComponents.Definitions;
 
 namespace RobotComponentsGoos.Definitions
 {
     /// <summary>
-    /// Work object wrapper class, makes sure the work object can be used in Grasshopper.
+    /// Work Object Goo wrapper class, makes sure the Work Object class can be used in Grasshopper.
     /// </summary>
     public class GH_WorkObject : GH_GeometricGoo<WorkObject>, IGH_PreviewData
     {
@@ -24,33 +24,35 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public GH_WorkObject()
         {
-            this.Value = new WorkObject();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Work Object Goo instance from a Work Object.
         /// </summary>
         /// <param name="workObject"> WorkObject Value to store inside this Goo instance. </param>
         public GH_WorkObject(WorkObject workObject)
         {
-            if (workObject == null)
-                workObject = new WorkObject();
             this.Value = workObject;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates a Work Object Goo instance from another Work Object Goo instance.
+        /// This creates a shallow copy of the passed Work Object Goo instance. 
         /// </summary>
-        /// <param name="workObjectGoo"> WorkObjectGoo to store inside this Goo instance. </param>
+        /// <param name="workObjectGoo"> Work Object Goo instance to copy. </param>
         public GH_WorkObject(GH_WorkObject workObjectGoo)
         {
             if (workObjectGoo == null)
+            {
                 workObjectGoo = new GH_WorkObject();
+            }
+
             this.Value = workObjectGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
         /// <returns> A duplicate of the WorkObjectGoo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
@@ -59,9 +61,9 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the WorkObjectGoo. </returns>
+        /// <returns> A duplicate of this Work Object Goo instance. </returns>
         public GH_WorkObject DuplicateWorkObjectGoo()
         {
             return new GH_WorkObject(Value == null ? new WorkObject() : Value.Duplicate());
@@ -82,7 +84,7 @@ namespace RobotComponentsGoos.Definitions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
@@ -91,20 +93,18 @@ namespace RobotComponentsGoos.Definitions
             {
                 if (Value == null) { return "No internal Work Object instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Work Object instance: Did you set a plane and name?"; //Todo: beef this up to be more informative.
+                return "Invalid Work Object instance: Did you set a plane and name?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Work Object";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Work Object"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Work Object"); }
+            get { return "Work Object"; }
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Work Object."); }
+            get { return "Defines a Work Object."; }
         }
 
         /// <summary>
@@ -128,10 +128,7 @@ namespace RobotComponentsGoos.Definitions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
+            get { return BoundingBox.Empty; }
         }
 
         /// <summary>
@@ -141,7 +138,7 @@ namespace RobotComponentsGoos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            return BoundingBox.Empty; 
         }
         #endregion
 
@@ -149,7 +146,7 @@ namespace RobotComponentsGoos.Definitions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
@@ -157,42 +154,33 @@ namespace RobotComponentsGoos.Definitions
             //Cast to Work Object
             if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to plane
+            //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object) new GH_Plane(Value.GlobalWorkObjectPlane);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Plane(Value.GlobalWorkObjectPlane); }
                 return true;
             }
 
-            //Cast to point
+            //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Point(Value.GlobalWorkObjectPlane.Origin);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Point(Value.GlobalWorkObjectPlane.Origin); }
                 return true;
             }
 
-            //Cast to ExternalAxisGoo
+            //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.IsValid == false)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis);
+                if (Value == null) { target = default(Q); }
+                else if (Value.IsValid == false) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis); }
                 return true;
             }
 
@@ -209,7 +197,7 @@ namespace RobotComponentsGoos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from WorkObject
+            //Cast from Work Object
             if (typeof(WorkObject).IsAssignableFrom(source.GetType()))
             {
                 Value = (WorkObject)source;

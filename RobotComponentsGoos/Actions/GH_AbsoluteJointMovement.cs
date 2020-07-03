@@ -4,20 +4,17 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
-using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponentsGoos.Definitions;
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 
 namespace RobotComponentsGoos.Actions
 {
     /// <summary>
-    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement can be used in Grasshopper.
+    /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement class can be used in Grasshopper.
     /// </summary>
-    public class GH_AbsoluteJointMovement : GH_GeometricGoo<AbsoluteJointMovement>, IGH_PreviewData
+    public class GH_AbsoluteJointMovement : GH_Goo<AbsoluteJointMovement>
     {
         #region constructors
         /// <summary>
@@ -25,45 +22,38 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public GH_AbsoluteJointMovement()
         {
-            this.Value = new AbsoluteJointMovement();
+            this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates an Absolute Joint Momvement Goo instance from an Absolute Joint Movement instance.
         /// </summary>
-        /// <param name="absoluteJointMovement"> AbsoluteJointMovement Value to store inside this Goo instance. </param>
+        /// <param name="absoluteJointMovement"> Absolute Joint Movement Value to store inside this Goo instance. </param>
         public GH_AbsoluteJointMovement(AbsoluteJointMovement absoluteJointMovement)
         {
-            if (absoluteJointMovement == null)
-                absoluteJointMovement = new AbsoluteJointMovement();
             this.Value = absoluteJointMovement;
         }
 
         /// <summary>
-        /// Data constructor, m_value will be set to internal_data.
+        /// Data constructor: Creates an Absolute Joint Movement Goo instance from another Absolute Joint Movement Goo instance.
+        /// This creates a shallow copy of the passed Absolute Joint Movement Goo instance. 
         /// </summary>
-        /// <param name="absoluteJointMovementGoo"> absolutJointMovementGoo to store inside this Goo instance. </param>
+        /// <param name="absoluteJointMovementGoo"> Absolute Joint Movement Goo instance to copy. </param>
         public GH_AbsoluteJointMovement(GH_AbsoluteJointMovement absoluteJointMovementGoo)
         {
             if (absoluteJointMovementGoo == null)
+            {
                 absoluteJointMovementGoo = new GH_AbsoluteJointMovement();
+            }
+
             this.Value = absoluteJointMovementGoo.Value;
         }
 
         /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateAbsoluteJointMovementGoo();
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the MovementGoo. </returns>
-        public GH_AbsoluteJointMovement DuplicateAbsoluteJointMovementGoo()
+        /// <returns> A duplicate of the Movement Goo. </returns>
+        public override IGH_Goo Duplicate()
         {
             return new GH_AbsoluteJointMovement(Value == null ? new AbsoluteJointMovement() : Value.Duplicate());
         }
@@ -83,7 +73,7 @@ namespace RobotComponentsGoos.Actions
         }
 
         /// <summary>
-        /// ets a string describing the state of "invalidness". 
+        /// Gets a string describing the state of "invalidness". 
         /// If the instance is valid, then this property should return Nothing or String.Empty.
         /// </summary>
         public override string IsValidWhyNot
@@ -92,20 +82,18 @@ namespace RobotComponentsGoos.Actions
             {
                 if (Value == null) { return "No internal Absolute Joint Movement instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Absolute Joint Movement instance: ?"; //Todo: beef this up to be more informative.
+                return "Invalid Absolute Joint Movement instance: Did you define a name, speed and axis values?";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value
+        /// Creates a string description of the current instance value.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null)
-                return "Null Absolute Joint Movement";
-            else
-                return Value.ToString();
+            if (Value == null) { return "Null Absolute Joint Movement"; }
+            else { return Value.ToString(); }
         }
 
         /// <summary>
@@ -113,7 +101,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Absolute Joint Movement"); }
+            get { return "Absolute Joint Movement"; }
         }
 
         /// <summary>
@@ -121,28 +109,7 @@ namespace RobotComponentsGoos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Absolute Joint Movement"); }
-        }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get
-            {
-                return BoundingBox.Empty; //Note: beef this up if needed
-            }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty; //Note: beef this up if needed
+            get { return "Defines an Absolute Joint Movement"; }
         }
         #endregion
 
@@ -153,83 +120,100 @@ namespace RobotComponentsGoos.Actions
         /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to AbsoluteJointMovement
+            //Cast to Absolute Joint Movement
             if (typeof(Q).IsAssignableFrom(typeof(AbsoluteJointMovement)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to AbsoluteJointMovementGoo
+            //Cast to Absolute Joint Movement Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_AbsoluteJointMovement)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_AbsoluteJointMovement(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_AbsoluteJointMovement(Value); }
                 return true;
             }
 
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)Value;
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ActionGoo
+            //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_Action(Value);
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            //Cast to SpeedData
+            //Cast to Speed Data
             if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.SpeedData == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_SpeedData(Value.SpeedData);
+                if (Value == null) { target = default(Q); }
+                else if (Value.SpeedData == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_SpeedData(Value.SpeedData); }
                 return true;
             }
 
-            //Cast to ZoneData
+            //Cast to Zone Data
             if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.ZoneData == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_ZoneData(Value.ZoneData);
+                if (Value == null) { target = default(Q); }
+                else if (Value.ZoneData == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ZoneData(Value.ZoneData); }
                 return true;
             }
 
-            //Cast to RobotTool
+            //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null)
-                    target = default(Q);
-                else if (Value.RobotTool == null)
-                    target = default(Q);
-                else
-                    target = (Q)(object)new GH_RobotTool(Value.RobotTool);
+                if (Value == null) { target = default(Q); }
+                else if (Value.RobotTool == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
                 return true;
             }
+
+            #region casting methods to new datatypes
+            //Cast to Movement Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Movement)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Movement(Value.ConvertToMovement()); }
+                return true;
+            }
+
+            //Cast to Joint Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_JointTarget(Value.ConvertToJointTarget()); }
+                return true;
+            }
+
+            //Cast to Robot Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotJointPosition)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotJointPosition(Value.ConvertToRobotJointPosition()); }
+                return true;
+            }
+
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value.ConvertToExternalJointPosition()); }
+                return true;
+            }
+            #endregion
 
             target = default(Q);
             return false;
@@ -269,7 +253,7 @@ namespace RobotComponentsGoos.Actions
                 }
             }
 
-            //Cast from ActionGoo
+            //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
@@ -281,55 +265,6 @@ namespace RobotComponentsGoos.Actions
             }
 
             return false;
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
-        }
-        #endregion
-
-        #region drawing methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get { return Boundingbox; }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(GH_PreviewWireArgs args)
-        {
         }
         #endregion
     }

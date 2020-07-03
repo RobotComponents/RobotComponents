@@ -15,7 +15,7 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.BaseClasses.Actions;
+using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
@@ -80,7 +80,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new TargetParameter(), "Target", "T", "Resulting Target declaration");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotTargetParameter(), "Target", "T", "Resulting Target declaration");  //Todo: beef this up to be more informative.
         }
 
         // Fields
@@ -88,7 +88,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
-        private List<Target> _targets = new List<Target>();
+        private List<RobotTarget> _targets = new List<RobotTarget>();
         
         private bool _setReferencePlane = false;
         private bool _overrideExternalAxisValues = false;
@@ -345,7 +345,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     axisValues[5] = externalAxisValueF[externalAxisValueCounterF];
                 }
 
-                Target target = new Target(name, plane, referencePlane, axisConfig, axisValues);
+                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, axisValues);
                 _targets.Add(target);
             }
 
@@ -451,7 +451,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <summary>
         /// The Targets created by this component
         /// </summary>
-        public List<Target> Targets
+        public List<RobotTarget> Targets
         {
             get { return _targets; }
         }

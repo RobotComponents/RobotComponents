@@ -39,6 +39,8 @@ Robot Components is an open source project developed and initiated by the chair 
 
 Robot Components uses the ABB PC SDK for real-time connection to ABB Robots, you can find the .dll used in this project [here](http://developercenter.robotstudio.com/landing).
 
+We would like to acknowledge [Jose Luis Garcia del Castillo](https://github.com/garciadelcastillo) and [Vicente Soler](https://github.com/visose) for making their Grasshopper plugins [RobotExMachina](https://github.com/RobotExMachina) and [Robots](https://github.com/visose/Robots) available. Even our approach is different it was helpful for us to see how you implemented certain functionalities and approached certain issues. 
+
 ## Known Issues
 Known issues are listed [here](https://github.com/RobotComponents/RobotComponents/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/RobotComponents/RobotComponents/issues/new).
 
@@ -59,7 +61,7 @@ RobotComponents is a free to use Grasshopper plugin and does not legally bind yo
 
 ```
 EDEK Uni Kassel (2020).  
-RobotComponents v0.09.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+RobotComponents v0.09.001: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 
@@ -73,8 +75,13 @@ x.00.xxx ---> minor release (e.g. new functions, new components etc. )
 x.xx.000 ---> bug fixes and small improvements
 ```
 
-## References
+## Used in 
+
+### Conference contributions
 [Dawod M. et al. (2020) Continuous Timber Fibre Placement. In: Gengnagel C., Baverel O., Burry J., Ramsgaard Thomsen M., Weinzierl S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
+
+### Workshops
+[Robot Wood Printing Workshop at the Design Modeling Symposium 2019](https://design-modelling-symposium.de/workshops/robotic-wood-printing-workshop/)
 
 ## License
 Robot Components

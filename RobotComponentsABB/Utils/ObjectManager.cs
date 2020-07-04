@@ -532,11 +532,17 @@ namespace RobotComponentsABB.Utils
             // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
             foreach (KeyValuePair<Guid, ExternalLinearAxisComponent> entry in ExternalLinearAxesByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
             foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in ExternalRotationalAxesByGuid)
             {
-                entry.Value.ExpireSolution(true);
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
             }
         }
         #endregion

@@ -13,23 +13,43 @@ using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+
 namespace RobotComponentsABB.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructTargetComponent : GH_Component
+    public class OldDeconstructTargetComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
-        public DeconstructTargetComponent()
+        public OldDeconstructTargetComponent()
           : base("Deconstruct Target", "DeConTar", 
               "Deconstructs a Target into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -75,29 +95,6 @@ namespace RobotComponentsABB.Components.Deconstruct
             DA.SetData(2, target.AxisConfig);
             DA.SetDataList(3, target.ExternalJointPosition.ToList());
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for the component

@@ -19,19 +19,23 @@ using RobotComponents.Actions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+// It is replaced with the new Robot Target component. 
+
 namespace RobotComponentsABB.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class TargetComponent : GH_Component, IGH_VariableParameterComponent
+    public class OldTargetComponent2 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public TargetComponent()
+        public OldTargetComponent2()
           : base("Target", "T",
               "Defines a target declaration for a Move or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -48,7 +52,15 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -99,6 +111,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Sets inputs and creates target
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
@@ -370,9 +387,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Adds Component to TargetByGuid Dictionary
-            if (!_objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldTargetsByGuid2.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.TargetsByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldTargetsByGuid2.Add(this.InstanceGuid, this);
             }
 
             // Checks if target name is already in use and counts duplicates
@@ -441,7 +458,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                         _objectManager.TargetNames.Remove(_targetNames[i]);
                     }
                 }
-                _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldTargetsByGuid2.Remove(this.InstanceGuid);
 
                 // Runs SolveInstance on all other Targets to check if robot tool names are unique.
                 _objectManager.UpdateTargets();
@@ -517,19 +534,6 @@ namespace RobotComponentsABB.Components.CodeGeneration
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, SetReferencePlane);
             Menu_AppendItem(menu, "External Axis Values", MenuItemClickExternalAxisValue, true, OverrideExternalAxisValues);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
 
         /// <summary>

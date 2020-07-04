@@ -24,8 +24,8 @@ namespace RobotComponentsABB.Utils
     {
         #region fields
         // contains information on all targets in file to notify user about duplicates
-        private Dictionary<Guid, AbsoluteJointMovementComponent> _jointTargetsByGuid;
-        private Dictionary<Guid, TargetComponent> _targetsByGuid;
+        private Dictionary<Guid, JointTargetComponent> _jointTargetsByGuid;
+        private Dictionary<Guid, RobotTargetComponent> _robotTargetsByGuid;
         private List<string> _targetNames;
 
         // contains information on all speedDatas in file to notify the user about duplicates
@@ -52,7 +52,9 @@ namespace RobotComponentsABB.Utils
 
         #region OBSOLETE
         private Dictionary<Guid, OldAbsoluteJointMovementComponent> _oldJointTargetsByGuid;
+        private Dictionary<Guid, OldAbsoluteJointMovementComponent2> _oldJointTargetsByGuid2;
         private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
+        private Dictionary<Guid, OldTargetComponent2> _oldTargetsByGuid2;
         private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
         private Dictionary<Guid, OldRobotToolFromPlanesComponent> _oldRobotToolFromPlanesGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
@@ -68,8 +70,8 @@ namespace RobotComponentsABB.Utils
         /// </summary>
         public ObjectManager()
         {
-            _jointTargetsByGuid = new Dictionary<Guid, AbsoluteJointMovementComponent>();
-            _targetsByGuid = new Dictionary<Guid, TargetComponent>();
+            _jointTargetsByGuid = new Dictionary<Guid, JointTargetComponent>();
+            _robotTargetsByGuid = new Dictionary<Guid, RobotTargetComponent>();
             _targetNames = new List<string>();
 
             _speedDatasByGuid = new Dictionary<Guid, SpeedDataComponent>();
@@ -93,7 +95,9 @@ namespace RobotComponentsABB.Utils
 
             #region OBSOLETE
             _oldJointTargetsByGuid = new Dictionary<Guid, OldAbsoluteJointMovementComponent>();
+            _oldJointTargetsByGuid2 = new Dictionary<Guid, OldAbsoluteJointMovementComponent2>();
             _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
+            _oldTargetsByGuid2 = new Dictionary<Guid, OldTargetComponent2>();
             _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
             _oldRobotToolFromPlanesGuid = new Dictionary<Guid, OldRobotToolFromPlanesComponent>();
             _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
@@ -167,14 +171,14 @@ namespace RobotComponentsABB.Utils
             // Empty list
             List<WorkObject> workObjects = new List<WorkObject>();
 
-            // Add all the work objects from old component
-            foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _oldWorkObjectsByGuid)
+            // Add all work objects from new component
+            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
             {
                 workObjects.AddRange(entry.Value.WorkObjects);
             }
 
-            // Add all work objects from new component
-            foreach (KeyValuePair<Guid, WorkObjectComponent> entry in _workObjectsByGuid)
+            // Add all the work objects from old component
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _oldWorkObjectsByGuid)
             {
                 workObjects.AddRange(entry.Value.WorkObjects);
             }
@@ -215,41 +219,91 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
-        /// Gets all the absolute joint movements that are stored in the object mananger
-        /// </summary>
-        /// <returns> A list with all the absolute joint movements that are stored in the object mananger. </returns>
-        public List<AbsoluteJointMovement> GetAbsoluteJointMovements()
-        {
-            // Empty list
-            List<AbsoluteJointMovement> jointMomvements = new List<AbsoluteJointMovement>();
-
-            // Add all the absolute joint movements
-            foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _jointTargetsByGuid)
-            {
-                jointMomvements.AddRange(entry.Value.AbsoluteJointMovements);
-            }
-
-            // Sort based on name
-            jointMomvements = jointMomvements.OrderBy(x => x.Name).ToList();
-
-            // Return
-            return jointMomvements;
-        }
-
-        /// <summary>
         /// Gets all the targets that are stored in the object mananger
         /// </summary>
         /// <returns> A list with all the targets that are stored in the object mananger. </returns>
-        public List<RobotTarget> GetTargets()
+        public List<ITarget> GetTargets()
+        {
+            // Empty list
+            List<ITarget> targets = new List<ITarget>();
+
+            // Add alltargets
+            targets.AddRange(this.GetRobotTargets());
+            targets.AddRange(this.GetJointTargets());
+
+            // Sort based on name
+            targets = targets.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return targets;
+        }
+
+        /// <summary>
+        /// Gets all the robot targets that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the robot targets that are stored in the object mananger. </returns>
+        public List<RobotTarget> GetRobotTargets()
         {
             // Empty list
             List<RobotTarget> targets = new List<RobotTarget>();
 
-            // Add all the targets
-            foreach (KeyValuePair<Guid, TargetComponent> entry in _targetsByGuid)
+            // Add all the robot targets
+            foreach (KeyValuePair<Guid, RobotTargetComponent> entry in _robotTargetsByGuid)
+            {
+                targets.AddRange(entry.Value.RobotTargets);
+            }
+
+            #region OBSOLETE components
+            foreach (KeyValuePair<Guid, OldTargetComponent> entry in _oldTargetsByGuid)
             {
                 targets.AddRange(entry.Value.Targets);
             }
+
+            foreach (KeyValuePair<Guid, OldTargetComponent2> entry in _oldTargetsByGuid2)
+            {
+                targets.AddRange(entry.Value.Targets);
+            }
+            #endregion
+
+            // Sort based on name
+            targets = targets.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return targets;
+        }
+
+        /// <summary>
+        /// Gets all the robot targets that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the robot targets that are stored in the object mananger. </returns>
+        public List<JointTarget> GetJointTargets()
+        {
+            // Empty list
+            List<JointTarget> targets = new List<JointTarget>();
+
+            // Add all the joint targets
+            foreach (KeyValuePair<Guid, JointTargetComponent> entry in _jointTargetsByGuid)
+            {
+                targets.AddRange(entry.Value.JointTargets);
+            }
+
+            #region OBSOLETE components
+            foreach (KeyValuePair<Guid, OldAbsoluteJointMovementComponent> entry in _oldJointTargetsByGuid)
+            {
+                for (int i = 0; i < entry.Value.AbsoluteJointMovements.Count; i++)
+                {
+                    targets.Add(entry.Value.AbsoluteJointMovements[i].ConvertToJointTarget());
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldAbsoluteJointMovementComponent2> entry in _oldJointTargetsByGuid2)
+            {
+                for (int i = 0; i < entry.Value.AbsoluteJointMovements.Count; i++)
+                {
+                    targets.Add(entry.Value.AbsoluteJointMovements[i].ConvertToJointTarget());
+                }
+            }
+            #endregion
 
             // Sort based on name
             targets = targets.OrderBy(x => x.Name).ToList();
@@ -364,14 +418,15 @@ namespace RobotComponentsABB.Utils
         public void UpdateTargets()
         {
             // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-            foreach (KeyValuePair<Guid, TargetComponent> entry in TargetsByGuid)
+            foreach (KeyValuePair<Guid, RobotTargetComponent> entry in RobotTargetsByGuid)
             {
                 if (entry.Value.LastName == "")
                 {
                     entry.Value.ExpireSolution(true);
                 }
             }
-            foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in JointTargetsByGuid)
+
+            foreach (KeyValuePair<Guid, JointTargetComponent> entry in JointTargetsByGuid)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -382,6 +437,30 @@ namespace RobotComponentsABB.Utils
             // Run SolveInstance on other obsolete Targets with no unique Name to check if their name is now available
             // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldTargetComponent> entry in OldTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldTargetComponent2> entry in OldTargetsByGuid2)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldAbsoluteJointMovementComponent> entry in OldJointTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldAbsoluteJointMovementComponent2> entry in OldJointTargetsByGuid2)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -464,21 +543,21 @@ namespace RobotComponentsABB.Utils
 
         #region Properties
         /// <summary>
-        /// Dictionary with all the Target components used in this object manager. 
+        /// Dictionary with all the Robot Target components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
-        public Dictionary<Guid, AbsoluteJointMovementComponent> JointTargetsByGuid
+        public Dictionary<Guid, RobotTargetComponent> RobotTargetsByGuid
         {
-            get { return _jointTargetsByGuid; }
+            get { return _robotTargetsByGuid; }
         }
 
         /// <summary>
-        /// Dictionary with all the Target components used in this object manager. 
+        /// Dictionary with all the Joint Target components used in this object manager. 
         /// The components are stored based on there unique GUID.
         /// </summary>
-        public Dictionary<Guid, TargetComponent> TargetsByGuid
+        public Dictionary<Guid, JointTargetComponent> JointTargetsByGuid
         {
-            get { return _targetsByGuid; }
+            get { return _jointTargetsByGuid; }
         }
 
         /// <summary>
@@ -602,11 +681,27 @@ namespace RobotComponentsABB.Utils
         }
 
         /// <summary>
+        /// OBSOLETE: Used for old Absolute Joint Movement component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldAbsoluteJointMovementComponent2> OldJointTargetsByGuid2
+        {
+            get { return _oldJointTargetsByGuid2; }
+        }
+
+        /// <summary>
         /// OBSOLETE: Used for old Target component. Will be removed in the future.
         /// </summary>
         public Dictionary<Guid, OldTargetComponent> OldTargetsByGuid
         {
             get { return _oldTargetsByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Target component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldTargetComponent2> OldTargetsByGuid2
+        {
+            get { return _oldTargetsByGuid2; }
         }
 
         /// <summary>

@@ -70,6 +70,7 @@
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobJointPosComponent.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
-    <Compile Include="Components\Code Generation\AbsoluteJointMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent2.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
@@ -139,7 +140,7 @@
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
     <Compile Include="Components\Code Generation\RAPIDGeneratorComponent.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
-    <Compile Include="Components\Code Generation\TargetComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldTargetComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldTargetComponent.cs" />
     <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
@@ -537,9 +538,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\OldComment_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Logo.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -35,7 +35,7 @@ namespace RobotComponentsABB.Utils
 
             #region Code generation
             { typeof(AutoAxisConfigComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Set%20Auto%20Axis%20Configuration/" },
-            { typeof(AbsoluteJointMovementComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Absolute%20Joint%20Movement/" },
+            { typeof(OldAbsoluteJointMovementComponent2) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Absolute%20Joint%20Movement/" }, // TODO Replace with Joint Target
             { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Code/" },
             { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Comment/" },
             { typeof(DigitalOutputComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Set%20Digital%20Output/" },
@@ -43,7 +43,7 @@ namespace RobotComponentsABB.Utils
             { typeof(OverrideRobotToolComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Override%20Robot%20Tool/" },
             { typeof(RAPIDGeneratorComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/RAPID%20Generator/" },
             { typeof(SpeedDataComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Speed%20Data/" },
-            { typeof(TargetComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Target/" },
+            { typeof(OldTargetComponent2) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Target/" }, // TODO: Replace with Robot Target
             { typeof(WaitTimeComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Wait%20for%20Time/" },
             { typeof(WaitDIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Wait%20for%20Digital%20Input/" },
             { typeof(ZoneDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Zone%20Data/" },

@@ -12,25 +12,27 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.RapidDomain;
 using ABB.Robotics.Controllers.MotionDomain;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+// This component is replaced with a new component
+
 namespace RobotComponentsABB.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetAxisValuesComponent : GH_Component
+    public class OldGetAxisValuesComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
-        public GetAxisValuesComponent()
+        public OldGetAxisValuesComponent()
           : base("Get Axis Values", "GA",
               "Gets the current robot axis values from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
@@ -45,7 +47,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -62,12 +72,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.tree);
             pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
         }
 
         // Fields
-        private readonly List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
+        private readonly GH_Structure<GH_Number> _internalAxisValues = new GH_Structure<GH_Number>();
         private readonly GH_Structure<GH_Number> _externalAxisValues = new GH_Structure<GH_Number>();
 
         /// <summary>
@@ -76,6 +86,11 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             GH_Controller controllerGoo = null;
 
@@ -83,11 +98,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
             if (!DA.GetData(0, ref controllerGoo)) { return; }
 
             // Clear output variables 
-            _robotJointPositions.Clear();
+            _internalAxisValues.Clear();
             _externalAxisValues.Clear();
 
             // Data needed for making the datatree with axis values
             MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
+            int internalAxisValuesPath = 0;
             int externalAxisValuesPath = 0;
             List<double> values;
             GH_Path path;
@@ -97,13 +113,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
             {
                 // Get the ABB joint target of the mechanical unit
                 MechanicalUnit mechanicalUnit = mechanicalUnits[i];
-                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnit.GetPosition();
+                JointTarget jointTarget = mechanicalUnit.GetPosition();
 
                 // For internal axis values
                 if (mechanicalUnit.Type == MechanicalUnitType.TcpRobot)
                 {
                     values = GetInternalAxisValuesAsList(jointTarget);
-                    _robotJointPositions.Add(new RobotJointPosition(values));
+                    path = new GH_Path(internalAxisValuesPath);
+                    _internalAxisValues.AppendRange(values.ConvertAll(val => new GH_Number(val)), path);
+                    internalAxisValuesPath += 1;
                 }
 
                 // For external axis values
@@ -117,7 +135,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Output
-            DA.SetDataList(0, _robotJointPositions);
+            DA.SetDataTree(0, _internalAxisValues);
             DA.SetDataTree(1, _externalAxisValues);
         }
 
@@ -128,7 +146,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        private List<double> GetInternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        private List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -159,7 +177,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        private List<double> GetExternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        private List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };
@@ -172,40 +190,17 @@ namespace RobotComponentsABB.Components.ControllerUtility
             result.Add(jointTarget.ExtAx.Eax_e);
             result.Add(jointTarget.ExtAx.Eax_f);
 
-            // Replace large numbers (the not connected axes)
+            // Replace large numbers (the not connected axes) with an axis value equal to zero 
             for (int i = 0; i < result.Count; i++)
             {
                 if (result[i] > 9.0e+8)
                 {
-                    result[i] = 9e9;
+                    result[i] = 0;
                 }
             }
 
             // Return the list with axis values
             return result;
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 
@@ -222,7 +217,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2C546F24-938B-4C8A-85D9-22927E51E1FD"); }
+            get { return new Guid("691a3c83-114a-4c80-81b9-2e1407004a24"); }
         }
     }
 }

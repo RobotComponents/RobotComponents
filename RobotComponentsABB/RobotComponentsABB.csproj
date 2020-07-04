@@ -84,6 +84,7 @@
     <Compile Include="Components\_Obsolete\OldDeconstructRobotInfoComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructTargetComponent.cs" />
     <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldGetAxisValuesComponent.cs" />
     <Compile Include="Components\_Obsolete\OldInverseKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent3.cs" />
     <Compile Include="Components\_Obsolete\OldPathGeneratorComponent2.cs" />

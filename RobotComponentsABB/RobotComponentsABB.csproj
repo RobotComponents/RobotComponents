@@ -74,9 +74,12 @@
     <Compile Include="Components\Deconstruct\DeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobJointPosComponent.cs" />
+    <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldCodeLine_Component.cs" />
     <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructAbsolutJointMovementComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructRobotInfoComponent.cs" />
     <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromPlanesComponent.cs" />
@@ -87,11 +90,9 @@
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
-    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent2.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
     <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
-    <Compile Include="Components\Deconstruct\DeconstructAbsolutJointMovementComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructZoneDataComponent.cs" />
     <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
@@ -156,7 +157,6 @@
     <Compile Include="Components\Deconstruct\DeconstructRobotComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotToolComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructSpeedDataComponent.cs" />
-    <Compile Include="Components\Deconstruct\DeconstructTargetComponent.cs" />
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
     <Compile Include="Components\Definitions\IRB1200_7_70_Component.cs" />
@@ -176,7 +176,6 @@
     <Compile Include="Components\Definitions\RobotComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
-    <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\InverseKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldPathGeneratorComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
@@ -196,7 +195,7 @@
     <Compile Include="Parameters\Actions\ZoneDataParam.cs" />
     <Compile Include="Parameters\Definitions\ExternalAxisParam.cs" />
     <Compile Include="Parameters\Actions\SpeedDataParam.cs" />
-    <Compile Include="Parameters\Actions\AbsoluteJointMovementParam.cs" />
+    <Compile Include="Parameters\_Obsolete\AbsoluteJointMovementParam.cs" />
     <Compile Include="Parameters\Definitions\WorkObjectParam.cs" />
     <Compile Include="Parameters\Actions\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\Actions\CodeLineParam.cs" />

@@ -16,26 +16,28 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+// It is replaced with a new component. 
 
 namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ForwardKinematicsComponent : GH_Component 
+    public class OldForwardKinematicsComponent2 : GH_Component 
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ForwardKinematicsComponent()
+        public OldForwardKinematicsComponent2()
           : base("Forward Kinematics", "FK",
               "Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -45,16 +47,30 @@ namespace RobotComponentsABB.Components.Simulation
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Internal Axis Values as Robot Joint Position", GH_ParamAccess.item);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "External Axis Values as External Joint Position", GH_ParamAccess.item);
-
-            pManager[1].Optional = true;
-            pManager[2].Optional = true;
+            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
+            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
         }
 
         /// <summary>
@@ -62,7 +78,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");
+            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");  //Todo: beef this up to be more informative.
             pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
@@ -79,18 +95,35 @@ namespace RobotComponentsABB.Components.Simulation
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             Robot robotInfo = null;
-            RobotJointPosition robotJointPosition = new RobotJointPosition();
-            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+            List<double> internalAxisValues = new List<double>();
+            List<double> externalAxisValues = new List<double>();
 
             // Catch input data
             if (!DA.GetData(0, ref robotInfo)) { return; }
-            if (!DA.GetData(1, ref robotJointPosition)) { robotJointPosition = new RobotJointPosition(); }
-            if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
+            if (!DA.GetDataList(1, internalAxisValues)) { return; }
+            if (!DA.GetDataList(2, externalAxisValues)) { return; }
+
+            // Add up missing internal axisValues
+            for (int i = internalAxisValues.Count; i <6; i++)
+            {
+                internalAxisValues.Add(0);
+            }
+
+            // Add up missing external axisValues
+            for (int i = externalAxisValues.Count; i < 6; i++)
+            {
+                externalAxisValues.Add(0);
+            }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robotInfo, robotJointPosition, externalJointPosition, _hideMesh);
+            _fk = new ForwardKinematics(robotInfo, internalAxisValues, externalAxisValues, _hideMesh);
             _fk.Calculate();
 
             // Check the values
@@ -107,8 +140,8 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Output
             DA.SetDataTree(0, _meshes); 
-            DA.SetData(1, _fk.TCPPlane);
-            DA.SetDataList(2, _fk.PosedExternalAxisPlanes);
+            DA.SetData(1, _fk.TCPPlane); // Outputs the TCP as a plane
+            DA.SetDataList(2, _fk.PosedExternalAxisPlanes); // Outputs the External Axis Planes
         }
 
         /// <summary>
@@ -238,19 +271,6 @@ namespace RobotComponentsABB.Components.Simulation
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
 
         /// <summary>
@@ -282,7 +302,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("438679CC-2135-48B3-B818-F7E3A65503C2"); }
+            get { return new Guid("5D6207E3-2051-4DAD-A1D9-C4A9EAD371FB"); }
         }
 
     }

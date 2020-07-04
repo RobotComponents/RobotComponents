@@ -87,6 +87,22 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
+        /// Defines a Forward Kinematic object from a Joint Target.
+        /// </summary>
+        /// <param name="robotInfo">Robot Information the FK should be calculated for.</param>
+        /// <param name="jointTarget">The internal and external axis values defined as a Joint Target.</param>
+        /// <param name="hideMesh"> Boolean that indicates if the mesh will be supressed. </param>
+        public ForwardKinematics(Robot robotInfo, JointTarget jointTarget, bool hideMesh = false)
+        {
+            _robotInfo = robotInfo;
+            _hideMesh = hideMesh;
+            _internalAxisValues = jointTarget.RobotJointPosition.ToList();
+            _externalAxisValues = jointTarget.ExternalJointPosition.ToList();
+            _externalAxisValues.RemoveAll(value => value == 9e9); ; // TODO: temporary solution
+            UpdateInternalAxisValuesRadians();
+        }
+
+        /// <summary>
         /// Creates a new forward kinematics by duplicating an existing forward kinematics.
         /// This creates a deep copy of the existing forward kinematics.
         /// </summary>
@@ -95,8 +111,8 @@ namespace RobotComponents.Kinematics
         {
             _robotInfo = forwardKinematics.RobotInfo.Duplicate();
             _hideMesh = forwardKinematics.HideMesh;
-            _internalAxisValues = new List<double>(InternalAxisValues);
-            _externalAxisValues = new List<double>(ExternalAxisValues);
+            _internalAxisValues = new List<double>(forwardKinematics.InternalAxisValues);
+            _externalAxisValues = new List<double>(forwardKinematics.ExternalAxisValues);
             _tcpPlane = new Plane(forwardKinematics.TCPPlane);
             _errorText = new List<string>(forwardKinematics.ErrorText);
             _robotInfo = forwardKinematics.RobotInfo.Duplicate();

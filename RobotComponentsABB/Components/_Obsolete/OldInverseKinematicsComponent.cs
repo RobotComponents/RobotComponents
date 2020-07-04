@@ -16,25 +16,46 @@ using RobotComponentsABB.Parameters.Actions;
 using RobotComponents.Kinematics;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class InverseKinematicsComponent : GH_Component
+    public class OldInverseKinematicsComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InverseKinematicsComponent()
+        public OldInverseKinematicsComponent()
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Target."
       + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -51,8 +72,8 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The calculated Robot Joint Position");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The calculated External Joint Position");
+            pManager.Register_DoubleParam("Internal Axis Values", "IAV", "Internal Axis Values");
+            pManager.Register_DoubleParam("External Axis Values", "EAV", "External Axis Values");
         }
 
         /// <summary>
@@ -62,6 +83,11 @@ namespace RobotComponentsABB.Components.Simulation
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             Robot robotInfo = null;
             Movement Movement = null;
@@ -81,32 +107,9 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Output
-            DA.SetData(0, inverseKinematics.RobotJointPosition);
-            DA.SetData(1, inverseKinematics.ExternalJointPosition);
+            DA.SetDataList(0, inverseKinematics.InternalAxisValues);
+            DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
@@ -124,7 +127,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("EAC8F3EF-CA07-49A5-8E90-64BA6D9BDE2E"); }
+            get { return new Guid("0F1746B8-4E3D-4A22-8719-F7B42C2313AA"); }
         }
     }
 

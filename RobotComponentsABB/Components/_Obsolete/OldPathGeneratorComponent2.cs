@@ -14,26 +14,29 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.10.000
+// It is replaced with a new component. 
+
 namespace RobotComponentsABB.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PathGeneratorComponent : GH_Component
+    public class OldPathGeneratorComponent2 : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public PathGeneratorComponent()
+        public OldPathGeneratorComponent2()
           : base("Path Generator", "PG",
               "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -43,11 +46,28 @@ namespace RobotComponentsABB.Components.Simulation
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "RI", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
@@ -61,8 +81,8 @@ namespace RobotComponentsABB.Components.Simulation
         {
             pManager.Register_PlaneParam("Plane", "EP", "Current End Plane as a Plane");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Current Exernal Axis Planes as a list with Planes");
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The current Robot Joint Position");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The current External Joint Position");
+            pManager.Register_DoubleParam("Internal Axis Values", "IAV", "Current Internal Axis Values as a list with numbers");
+            pManager.Register_DoubleParam("External Axis Values", "EAV", "Current External Axis Values as a list with numbers");
             pManager.Register_CurveParam("Tool Path", "TP", "Tool Path as a list with Curves");
         }
 
@@ -86,6 +106,11 @@ namespace RobotComponentsABB.Components.Simulation
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Warning that this component is OBSOLETE
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+                "in the future. Remove this component from your canvas and replace it by picking the new component " +
+                "from the ribbon.");
+
             // Input variables
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             int interpolations = 0;
@@ -162,8 +187,8 @@ namespace RobotComponentsABB.Components.Simulation
             // Output
             DA.SetData(0, _forwardKinematics.TCPPlane);
             DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
-            DA.SetData(2, _forwardKinematics.RobotJointPosition);
-            DA.SetData(3, _forwardKinematics.ExternalJointPosition);
+            DA.SetDataList(2, _forwardKinematics.InternalAxisValues);
+            DA.SetDataList(3, _forwardKinematics.ExternalAxisValues);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
         }
@@ -190,6 +215,7 @@ namespace RobotComponentsABB.Components.Simulation
             _externalAxisValues.Clear();
 
         }
+
         #region menu item
         /// <summary>
         /// Boolean that indicates if the custom menu item for hiding the robot mesh is checked
@@ -243,8 +269,6 @@ namespace RobotComponentsABB.Components.Simulation
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Preview Curve", MenuItemClickPreviewCurve, true, SetPreviewCurve);
             Menu_AppendItem(menu, "Preview Mesh", MenuItemClickPreviewMesh, true, SetPreviewMesh);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
         /// <summary>
@@ -269,17 +293,6 @@ namespace RobotComponentsABB.Components.Simulation
             RecordUndoEvent("Set Preview Mesh");
             _previewMesh = !_previewMesh;
             ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 
@@ -341,7 +354,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("32B682C9-E301-4372-A341-7AB0A97716CF"); }
+            get { return new Guid("1B3D7921-4B70-44F4-B5E9-0C8659CFAF2B"); }
         }
     }
 }

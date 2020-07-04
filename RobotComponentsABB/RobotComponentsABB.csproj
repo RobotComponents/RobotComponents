@@ -86,6 +86,7 @@
     <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldInverseKinematicsComponent.cs" />
     <Compile Include="Components\_Obsolete\OldMovementComponent3.cs" />
+    <Compile Include="Components\_Obsolete\OldPathGeneratorComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromPlanesComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />

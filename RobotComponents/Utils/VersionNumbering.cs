@@ -16,7 +16,7 @@ namespace RobotComponents.Utils
         /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
         /// X.XX.000 ---> bug fixes and small improvements
         /// </summary>
-        public const string CurrentVersion = "0.09.001";
+        public const string CurrentVersion = "0.10.000";
     }
 
 }

@@ -73,6 +73,7 @@ namespace RobotComponents.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -92,6 +93,7 @@ namespace RobotComponents.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -111,6 +113,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -130,6 +133,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -150,6 +154,7 @@ namespace RobotComponents.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -170,6 +175,7 @@ namespace RobotComponents.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = digitalOutput;
+            CheckCombination();
         }
 
         /// <summary>
@@ -190,6 +196,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
         }
 
         /// <summary>
@@ -210,6 +217,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = digitalOutput;
+            CheckCombination();
         }
 
         /// <summary>
@@ -231,6 +239,7 @@ namespace RobotComponents.Actions
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = workObject;
             _digitalOutput = digitalOutput;
+            CheckCombination();
         }
 
         /// <summary>
@@ -252,6 +261,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
+            CheckCombination();
         }
 
         /// <summary>
@@ -273,6 +283,7 @@ namespace RobotComponents.Actions
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
+            CheckCombination();
         }
 
         /// <summary>
@@ -356,6 +367,18 @@ namespace RobotComponents.Actions
             else
             {
                 return "Movement";
+            }
+        }
+
+        /// <summary>
+        /// Checks the combination between the movement type and the target type.
+        /// Throws an exception if the combination is not valid. 
+        /// </summary>
+        private void CheckCombination()
+        {
+            if (_movementType != 0 && _target is JointTarget)
+            {
+                throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
             }
         }
 

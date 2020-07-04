@@ -16,8 +16,10 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Utils;
 
@@ -48,8 +50,11 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Internal Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 } );
-            pManager.AddNumberParameter("External Axis Values", "EAV", "External Axis Values as List of numbers", GH_ParamAccess.list, new List<double> { 0, 0, 0, 0, 0, 0 });
+            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Internal Axis Values as Robot Joint Position", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "External Axis Values as External Joint Position", GH_ParamAccess.item);
+
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -57,7 +62,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");  //Todo: beef this up to be more informative.
+            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");
             pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
@@ -76,28 +81,16 @@ namespace RobotComponentsABB.Components.Simulation
         {
             // Input variables
             Robot robotInfo = null;
-            List<double> internalAxisValues = new List<double>();
-            List<double> externalAxisValues = new List<double>();
+            RobotJointPosition robotJointPosition = new RobotJointPosition();
+            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch input data
             if (!DA.GetData(0, ref robotInfo)) { return; }
-            if (!DA.GetDataList(1, internalAxisValues)) { return; }
-            if (!DA.GetDataList(2, externalAxisValues)) { return; }
-
-            // Add up missing internal axisValues
-            for (int i = internalAxisValues.Count; i <6; i++)
-            {
-                internalAxisValues.Add(0);
-            }
-
-            // Add up missing external axisValues
-            for (int i = externalAxisValues.Count; i < 6; i++)
-            {
-                externalAxisValues.Add(0);
-            }
+            if (!DA.GetData(1, ref robotJointPosition)) { robotJointPosition = new RobotJointPosition(); }
+            if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robotInfo, internalAxisValues, externalAxisValues, _hideMesh);
+            _fk = new ForwardKinematics(robotInfo, robotJointPosition, externalJointPosition, _hideMesh);
             _fk.Calculate();
 
             // Check the values
@@ -114,8 +107,8 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Output
             DA.SetDataTree(0, _meshes); 
-            DA.SetData(1, _fk.TCPPlane); // Outputs the TCP as a plane
-            DA.SetDataList(2, _fk.PosedExternalAxisPlanes); // Outputs the External Axis Planes
+            DA.SetData(1, _fk.TCPPlane);
+            DA.SetDataList(2, _fk.PosedExternalAxisPlanes);
         }
 
         /// <summary>
@@ -289,7 +282,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5D6207E3-2051-4DAD-A1D9-C4A9EAD371FB"); }
+            get { return new Guid("438679CC-2135-48B3-B818-F7E3A65503C2"); }
         }
 
     }

@@ -14,6 +14,7 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
@@ -46,7 +47,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "RI", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
@@ -60,8 +61,8 @@ namespace RobotComponentsABB.Components.Simulation
         {
             pManager.Register_PlaneParam("Plane", "EP", "Current End Plane as a Plane");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Current Exernal Axis Planes as a list with Planes");
-            pManager.Register_DoubleParam("Internal Axis Values", "IAV", "Current Internal Axis Values as a list with numbers");
-            pManager.Register_DoubleParam("External Axis Values", "EAV", "Current External Axis Values as a list with numbers");
+            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The current Robot Joint Position");
+            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The current External Joint Position");
             pManager.Register_CurveParam("Tool Path", "TP", "Tool Path as a list with Curves");
         }
 
@@ -161,8 +162,8 @@ namespace RobotComponentsABB.Components.Simulation
             // Output
             DA.SetData(0, _forwardKinematics.TCPPlane);
             DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
-            DA.SetDataList(2, _forwardKinematics.InternalAxisValues);
-            DA.SetDataList(3, _forwardKinematics.ExternalAxisValues);
+            DA.SetData(2, _forwardKinematics.RobotJointPosition);
+            DA.SetData(3, _forwardKinematics.ExternalJointPosition);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
         }
@@ -340,7 +341,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1B3D7921-4B70-44F4-B5E9-0C8659CFAF2B"); }
+            get { return new Guid("32B682C9-E301-4372-A341-7AB0A97716CF"); }
         }
     }
 }

@@ -84,7 +84,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
-        private List<Target> _targets = new List<Target>();
+        private List<RobotTarget> _targets = new List<RobotTarget>();
 
         private bool _setReferencePlane = false;
         private bool _setExternalJointPosition = false;
@@ -220,7 +220,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     externalJointPosition = externalJointPositions[externalJointPositionCounter];
                 }
 
-                Target target = new Target(name, plane, referencePlane, axisConfig, externalJointPosition);
+                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
                 _targets.Add(target);
             }
 
@@ -245,9 +245,9 @@ namespace RobotComponentsABB.Components.CodeGeneration
             }
 
             // Adds Component to TargetByGuid Dictionary
-            if (!_objectManager.TargetsByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.RobotTargetsByGuid.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.TargetsByGuid.Add(this.InstanceGuid, this); //TODO
+                _objectManager.RobotTargetsByGuid.Add(this.InstanceGuid, this); //TODO
             }
 
             // Checks if target name is already in use and counts duplicates
@@ -269,20 +269,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
                     _objectManager.TargetNames.Add(names[i]);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
-                    foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateTargets();
 
                     _lastName = names[i];
                 }
@@ -329,30 +316,17 @@ namespace RobotComponentsABB.Components.CodeGeneration
                         _objectManager.TargetNames.Remove(_targetNames[i]);
                     }
                 }
-                _objectManager.TargetsByGuid.Remove(this.InstanceGuid);
+                _objectManager.RobotTargetsByGuid.Remove(this.InstanceGuid);
 
                 // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                foreach (KeyValuePair<Guid, TargetComponent> entry in _objectManager.TargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
-                foreach (KeyValuePair<Guid, AbsoluteJointMovementComponent> entry in _objectManager.JointTargetsByGuid)
-                {
-                    if (entry.Value.LastName == "")
-                    {
-                        entry.Value.ExpireSolution(true);
-                    }
-                }
+                _objectManager.UpdateTargets();
             }
         }
 
         /// <summary>
         /// The Targets created by this component
         /// </summary>
-        public List<Target> Targets
+        public List<RobotTarget> RobotTargets
         {
             get { return _targets; }
         }

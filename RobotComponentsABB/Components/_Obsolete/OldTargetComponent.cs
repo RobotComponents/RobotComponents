@@ -77,6 +77,7 @@ namespace RobotComponentsABB.Components.Obsolete
 
         // Fields
         public List<string> targetNames = new List<string>();
+        public List<RobotTarget> _targets = new List<RobotTarget>();
         private string lastName = "";
         private bool namesUnique;
         private ObjectManager objectManager;
@@ -145,8 +146,10 @@ namespace RobotComponentsABB.Components.Obsolete
             int planesCounter = -1;
             int axisConfigCounter = -1;
 
+            // Clear list
+            _targets.Clear();
+
             // Creates targets
-            List<RobotTarget> targets = new List<RobotTarget>();
             for (int i = 0; i < biggestSize; i++)
             {
                 string name = "";
@@ -184,7 +187,7 @@ namespace RobotComponentsABB.Components.Obsolete
                 }
 
                 RobotTarget target = new RobotTarget(name, plane, axisConfig);
-                targets.Add(target);
+                _targets.Add(target);
             }
 
             // Checks if target name is already in use and counts duplicates
@@ -228,7 +231,7 @@ namespace RobotComponentsABB.Components.Obsolete
             #endregion
 
             // Sets Output
-            DA.SetDataList(0, targets);
+            DA.SetDataList(0, _targets);
 
             // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
@@ -261,6 +264,14 @@ namespace RobotComponentsABB.Components.Obsolete
                 /// Runs SolveInstance on all other Targets to check if robot tool names are unique.
                 objectManager.UpdateTargets();
             }
+        }
+
+        /// <summary>
+        /// The Targets created by this component
+        /// </summary>
+        public List<RobotTarget> Targets
+        {
+            get { return _targets; }
         }
 
         /// <summary>

@@ -602,7 +602,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("78BC39FF-CEBC-44B7-8DF7-9050B001A413"); }
+            get { return new Guid("AB744C95-E6A0-4ABD-B62D-14B558BEEDF8"); }
         }
 
     }

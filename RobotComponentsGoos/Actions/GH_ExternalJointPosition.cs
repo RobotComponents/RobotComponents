@@ -3,6 +3,8 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Lib
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
@@ -138,7 +140,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; } 
@@ -166,11 +168,37 @@ namespace RobotComponentsGoos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from number: The user only defines the first external axis value
+            //Cast from Number: The user only defines the first external axis value
             if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
             {
                 Value = new ExternalJointPosition((source as GH_Number).Value);
                 return true;
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                string[] values = text.Split(',');
+
+                try
+                {
+                    ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+
+                    for (int i = 0; i < Math.Min(values.Length, 6); i++)
+                    {
+                        externalJointPosition[i] = System.Convert.ToDouble(values[i]);
+                    }
+
+                    Value = externalJointPosition;
+                    return true;
+                }
+
+                catch
+                {
+                    return false;
+                }
             }
 
             //Cast from ExternalJointPosition
@@ -181,7 +209,7 @@ namespace RobotComponentsGoos.Actions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is ExternalJointPosition action)
                 {

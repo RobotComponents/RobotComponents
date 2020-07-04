@@ -66,7 +66,11 @@ namespace RobotComponentsABB.Components.CodeGeneration
         }
 
         // Fields
-        private readonly List<JointTarget> _jointTargets = new List<JointTarget>();
+        private readonly List<string> _targetNames = new List<string>();
+        private string _lastName = "";
+        private bool _namesUnique;
+        private ObjectManager _objectManager;
+        private List<JointTarget> _jointTargets = new List<JointTarget>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -146,6 +150,118 @@ namespace RobotComponentsABB.Components.CodeGeneration
 
             // Sets Output
             DA.SetDataList(0, _jointTargets);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears targetNames
+            for (int i = 0; i < _targetNames.Count; i++)
+            {
+                _objectManager.TargetNames.Remove(_targetNames[i]);
+            }
+            _targetNames.Clear();
+
+            // Removes lastName from targetNameList
+            if (_objectManager.TargetNames.Contains(_lastName))
+            {
+                _objectManager.TargetNames.Remove(_lastName);
+            }
+
+            // Adds Component to TargetByGuid Dictionary
+            if (!_objectManager.JointTargetsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.JointTargetsByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Checks if target name is already in use and counts duplicates
+            #region Check name in object manager
+            _namesUnique = true;
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (_objectManager.TargetNames.Contains(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
+                    _namesUnique = false;
+                    _lastName = "";
+                    break;
+                }
+                else
+                {
+                    // Adds Target Name to list
+                    _targetNames.Add(names[i]);
+                    _objectManager.TargetNames.Add(names[i]);
+
+                    // Run SolveInstance on other Targets with no unique Name to check if their name is now available
+                    _objectManager.UpdateTargets();
+
+                    _lastName = names[i];
+                }
+
+                // Checks if variable name exceeds max character limit for RAPID Code
+                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
+                    break;
+                }
+
+                // Checks if variable name starts with a number
+                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
+                    break;
+                }
+            }
+            #endregion
+
+            // Recognizes if Component is Deleted and removes it from Object Managers target and name list
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                if (_namesUnique == true)
+                {
+                    for (int i = 0; i < _targetNames.Count; i++)
+                    {
+                        _objectManager.TargetNames.Remove(_targetNames[i]);
+                    }
+                }
+                _objectManager.JointTargetsByGuid.Remove(this.InstanceGuid);
+
+                // Runs SolveInstance on all other Targets to check if robot tool names are unique.
+                _objectManager.UpdateTargets();
+            }
+        }
+
+        /// <summary>
+        /// The Targets created by this component
+        /// </summary>
+        public List<JointTarget> JointTargets
+        {
+            get { return _jointTargets; }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
         }
 
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked

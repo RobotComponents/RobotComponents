@@ -51,8 +51,8 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_DoubleParam("Internal Axis Values", "IAV", "Internal Axis Values");
-            pManager.Register_DoubleParam("External Axis Values", "EAV", "External Axis Values");
+            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The calculated Robot Joint Position");
+            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The calculated External Joint Position");
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace RobotComponentsABB.Components.Simulation
             }
 
             // Output
-            DA.SetDataList(0, inverseKinematics.InternalAxisValues);
-            DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
+            DA.SetData(0, inverseKinematics.RobotJointPosition);
+            DA.SetData(1, inverseKinematics.ExternalJointPosition);
         }
 
         #region menu item
@@ -124,7 +124,7 @@ namespace RobotComponentsABB.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0F1746B8-4E3D-4A22-8719-F7B42C2313AA"); }
+            get { return new Guid("EAC8F3EF-CA07-49A5-8E90-64BA6D9BDE2E"); }
         }
     }
 

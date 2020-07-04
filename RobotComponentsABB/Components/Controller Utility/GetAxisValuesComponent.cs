@@ -12,6 +12,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
+using RobotComponents.Actions;
+using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Utils;
 // ABB Libs
@@ -60,12 +62,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Internal Axis Values", "IAV", "Extracted internal Axis Values", GH_ParamAccess.tree);
+            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
             pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
         }
 
         // Fields
-        private readonly GH_Structure<GH_Number> _internalAxisValues = new GH_Structure<GH_Number>();
+        private readonly List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
         private readonly GH_Structure<GH_Number> _externalAxisValues = new GH_Structure<GH_Number>();
 
         /// <summary>
@@ -81,12 +83,11 @@ namespace RobotComponentsABB.Components.ControllerUtility
             if (!DA.GetData(0, ref controllerGoo)) { return; }
 
             // Clear output variables 
-            _internalAxisValues.Clear();
+            _robotJointPositions.Clear();
             _externalAxisValues.Clear();
 
             // Data needed for making the datatree with axis values
             MechanicalUnitCollection mechanicalUnits = controllerGoo.Value.MotionSystem.MechanicalUnits;
-            int internalAxisValuesPath = 0;
             int externalAxisValuesPath = 0;
             List<double> values;
             GH_Path path;
@@ -96,15 +97,13 @@ namespace RobotComponentsABB.Components.ControllerUtility
             {
                 // Get the ABB joint target of the mechanical unit
                 MechanicalUnit mechanicalUnit = mechanicalUnits[i];
-                JointTarget jointTarget = mechanicalUnit.GetPosition();
+                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnit.GetPosition();
 
                 // For internal axis values
                 if (mechanicalUnit.Type == MechanicalUnitType.TcpRobot)
                 {
                     values = GetInternalAxisValuesAsList(jointTarget);
-                    path = new GH_Path(internalAxisValuesPath);
-                    _internalAxisValues.AppendRange(values.ConvertAll(val => new GH_Number(val)), path);
-                    internalAxisValuesPath += 1;
+                    _robotJointPositions.Add(new RobotJointPosition(values));
                 }
 
                 // For external axis values
@@ -118,7 +117,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Output
-            DA.SetDataTree(0, _internalAxisValues);
+            DA.SetDataList(0, _robotJointPositions);
             DA.SetDataTree(1, _externalAxisValues);
         }
 
@@ -129,7 +128,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        private List<double> GetInternalAxisValuesAsList(JointTarget jointTarget)
+        private List<double> GetInternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -160,7 +159,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        private List<double> GetExternalAxisValuesAsList(JointTarget jointTarget)
+        private List<double> GetExternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };
@@ -173,12 +172,12 @@ namespace RobotComponentsABB.Components.ControllerUtility
             result.Add(jointTarget.ExtAx.Eax_e);
             result.Add(jointTarget.ExtAx.Eax_f);
 
-            // Replace large numbers (the not connected axes) with an axis value equal to zero 
+            // Replace large numbers (the not connected axes)
             for (int i = 0; i < result.Count; i++)
             {
                 if (result[i] > 9.0e+8)
                 {
-                    result[i] = 0;
+                    result[i] = 9e9;
                 }
             }
 
@@ -223,7 +222,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("691a3c83-114a-4c80-81b9-2e1407004a24"); }
+            get { return new Guid("2C546F24-938B-4C8A-85D9-22927E51E1FD"); }
         }
     }
 }

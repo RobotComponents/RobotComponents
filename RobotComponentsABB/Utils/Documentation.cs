@@ -34,19 +34,25 @@ namespace RobotComponentsABB.Utils
             { typeof(Documentation), "https://robotcomponents.github.io/RobotComponents-Documentation/" },
 
             #region Code generation
+            // Declarations
+            { typeof(JointTargetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(ExternalJointPositionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(RobotJointPositionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(SpeedDataComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Speed%20Data/" },
+            { typeof(RobotTargetComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Target/" }, // TODO: Update web page link
+            { typeof(ZoneDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Zone%20Data/" },
+            // Instructions
             { typeof(AutoAxisConfigComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Set%20Auto%20Axis%20Configuration/" },
-            { typeof(AbsoluteJointMovementComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Absolute%20Joint%20Movement/" },
-            { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Code/" },
-            { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Comment/" },
             { typeof(DigitalOutputComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Set%20Digital%20Output/" },
             { typeof(MovementComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Move/" },
             { typeof(OverrideRobotToolComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Override%20Robot%20Tool/" },
-            { typeof(RAPIDGeneratorComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/RAPID%20Generator/" },
-            { typeof(SpeedDataComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Speed%20Data/" },
-            { typeof(TargetComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Target/" },
             { typeof(WaitTimeComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Wait%20for%20Time/" },
             { typeof(WaitDIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Instructive%20Actions/Wait%20for%20Digital%20Input/" },
-            { typeof(ZoneDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Declarative%20Actions/Zone%20Data/" },
+            // Dynamic
+            { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Code/" },
+            { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/Dynamic%20Actions/Comment/" },
+            // Generators
+            { typeof(RAPIDGeneratorComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Code%20Generation/RAPID%20Generator/" },
             #endregion
 
             #region Controller utility
@@ -61,12 +67,15 @@ namespace RobotComponentsABB.Utils
             #endregion
 
             #region Deconstruct
-            { typeof(DeconstructAbsoluteJointMovementComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Absolute%20Joint%20Movement/" },
+            // Actions
             { typeof(DeconstructMovementComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Move/" },
             { typeof(DeconstructSpeedDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Speed%20Data/" },
-            { typeof(DeconstructTargetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Target/" },
+            { typeof(DeconstructRobotTargetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Target/" }, // TODO: Update web page link
             { typeof(DeconstructZoneDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Actions/Deconstruct%20Zone%20Data/" },
-
+            { typeof(DeconstructJointTargetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(DeconstructExtJointPosComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(DeconstructRobJointPosComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            // Definitions
             { typeof(DeconstructExternalLinearAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20External%20Linear%20Axis/" },
             { typeof(DeconstructExternalRotationalAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20External%20Rotational%20Axis/" },
             { typeof(DeconstructRobotComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Deconstruct/Definitions/Deconstruct%20Robot/" },
@@ -142,7 +151,11 @@ namespace RobotComponentsABB.Utils
             #endregion
 
             #region Parameters
-            { typeof(AbsoluteJointMovementParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Absolute%20Joint%20Movement/"},
+            // Actions
+            { typeof(JointTargetParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(RobotTargetParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(RobotJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
+            { typeof(ExternalJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: add web page
             { typeof(ActionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Action/"},
             { typeof(AutoAxisConfigParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Set%20Auto%20Axis%20Configurator/"},
             { typeof(CodeLineParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Code%20Line/"},
@@ -155,7 +168,7 @@ namespace RobotComponentsABB.Utils
             { typeof(WaitTimeParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Wait%20for%20Time/"},
             { typeof(WaitDIParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(ZoneDataParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Actions/Zone%20Data/"},
-
+            // Definitions
             { typeof(ExternalAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Axis/"},
             { typeof(ExternalLinearAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Linear%20Axis/"},
             { typeof(ExternalRotationalAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Robot%20Components/Parameters/Definitions/External%20Rotational%20Axis/"},

@@ -422,9 +422,13 @@ namespace RobotComponents.Actions
                 {
                     result[i] = p1[i] + p2[i];
                 }
-                else if (p1[i] == _defaultValue || p2[i] == _defaultValue)
+                else if (p1[i] == _defaultValue && p2[i] == _defaultValue)
                 {
-                    throw new Exception(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    result[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
                 }
             }
 
@@ -447,9 +451,13 @@ namespace RobotComponents.Actions
                 {
                     result[i] = p1[i] - p2[i];
                 }
-                else if (p1[i] == _defaultValue || p2[i] == _defaultValue)
+                else if (p1[i] == _defaultValue && p2[i] == _defaultValue)
                 {
-                    throw new Exception(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i+1));
+                    result[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
                 }
             }
 
@@ -472,9 +480,13 @@ namespace RobotComponents.Actions
                 {
                     result[i] = p1[i] * p2[i];
                 }
-                else if (p1[i] == _defaultValue || p2[i] == _defaultValue)
+                else if (p1[i] == _defaultValue && p2[i] == _defaultValue)
                 {
-                    throw new Exception(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    result[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
                 }
             }
 
@@ -502,9 +514,13 @@ namespace RobotComponents.Actions
                 {
                     result[i] = p1[i] / p2[i];
                 }
-                else if (p1[i] == _defaultValue || p2[i] == _defaultValue)
+                else if (p1[i] == _defaultValue && p2[i] == _defaultValue)
                 {
-                    throw new Exception(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    result[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
                 }
             }
 

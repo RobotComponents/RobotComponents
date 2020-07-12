@@ -14,6 +14,7 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
@@ -92,8 +93,8 @@ namespace RobotComponentsABB.Components.Simulation
         private ForwardKinematics _forwardKinematics = new ForwardKinematics();
         private List<Plane> _planes = new List<Plane>();
         private List<Curve> _paths = new List<Curve>();
-        private List<List<double>> _internalAxisValues = new List<List<double>>();
-        private List<List<double>> _externalAxisValues = new List<List<double>>();
+        private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
+        private List<ExternalJointPosition> _externalJointPositions = new List<ExternalJointPosition>();
         private int _lastInterpolations = 0;
         private bool _raiseWarnings = false;
         private bool _previewMesh = true;
@@ -145,9 +146,10 @@ namespace RobotComponentsABB.Components.Simulation
                 _paths = _pathGenerator.Paths;
 
                 // Clear the lists with the internal and external axis values
-                ClearAxisValuesLists();
-                _internalAxisValues = _pathGenerator.InternalAxisValues;
-                _externalAxisValues = _pathGenerator.ExternalAxisValues;
+                _robotJointPositions.Clear();
+                _externalJointPositions.Clear();
+                _robotJointPositions = _pathGenerator.RobotJointPositions;
+                _externalJointPositions = _pathGenerator.ExternalJointPositions;
 
                 // Store the number of interpolations that are used, to check if this value is changed. 
                 _lastInterpolations = interpolations;
@@ -166,9 +168,12 @@ namespace RobotComponentsABB.Components.Simulation
             // Get the index number of the current target
             int index = (int)(((_planes.Count - 1) * interpolationSlider));
 
+            List<double> externalAxisValues = _externalJointPositions[index].ToList();
+            externalAxisValues.RemoveAll(val => val == 9e9);
+
             // Calcualte foward kinematics
-            _forwardKinematics.InternalAxisValues = _internalAxisValues[index];
-            _forwardKinematics.ExternalAxisValues = _externalAxisValues[index];
+            _forwardKinematics.InternalAxisValues = _robotJointPositions[index].ToList();
+            _forwardKinematics.ExternalAxisValues = externalAxisValues;
             _forwardKinematics.HideMesh = !_previewMesh;
             _forwardKinematics.Calculate();
 
@@ -191,29 +196,6 @@ namespace RobotComponentsABB.Components.Simulation
             DA.SetDataList(3, _forwardKinematics.ExternalAxisValues);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
-        }
-
-        /// <summary>
-        /// This method clears the two lists with internal and external values
-        /// </summary>
-        private void ClearAxisValuesLists()
-        {
-            // Clear the all the individual lists with internal axis values
-            for (int i = 0; i < _internalAxisValues.Count; i++)
-            {
-                _internalAxisValues[i].Clear();
-            }
-
-            // Clear the all the individual lists with external axis values
-            for (int i = 0; i < _externalAxisValues.Count; i++)
-            {
-                _externalAxisValues.Clear();
-            }
-
-            // Clear both primary lists
-            _internalAxisValues.Clear();
-            _externalAxisValues.Clear();
-
         }
 
         #region menu item

@@ -11,6 +11,7 @@ using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
@@ -86,8 +87,8 @@ namespace RobotComponentsABB.Components.Simulation
         private PathGenerator _pathGenerator = new PathGenerator();
         private List<Plane> _planes = new List<Plane>();
         private List<Curve> _paths = new List<Curve>();
-        private List<List<double>> _internalAxisValues = new List<List<double>>();
-        private List<List<double>> _externalAxisValues = new List<List<double>>();
+        private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
+        private List<ExternalJointPosition> _externalJointPositions = new List<ExternalJointPosition>();
         private int _lastInterpolations = 0;
 
         /// <summary>
@@ -137,9 +138,10 @@ namespace RobotComponentsABB.Components.Simulation
                 _paths = _pathGenerator.Paths;
 
                 // Clear the lists with the internal and external axis values
-                ClearAxisValuesLists();
-                _internalAxisValues = _pathGenerator.InternalAxisValues;
-                _externalAxisValues = _pathGenerator.ExternalAxisValues;
+                _robotJointPositions.Clear();
+                _externalJointPositions.Clear();
+                _robotJointPositions = _pathGenerator.RobotJointPositions;
+                _externalJointPositions = _pathGenerator.ExternalJointPositions;
 
                 // Store the number of interpolations that are used, to check if this value is changed. 
                 _lastInterpolations = interpolations;
@@ -147,11 +149,14 @@ namespace RobotComponentsABB.Components.Simulation
 
             // Get the index number of the current target
             int index = (int)(((_planes.Count - 1) * interpolationSlider));
-          
+
+            List<double> externalAxisValues = _externalJointPositions[index].ToList();
+            externalAxisValues.RemoveAll(val => val == 9e9);
+
             // Output
             DA.SetData(0, _planes[index]);
-            DA.SetDataList(1, _internalAxisValues[index]);
-            DA.SetDataList(2, _externalAxisValues[index]);
+            DA.SetDataList(1, _robotJointPositions[index].ToList());
+            DA.SetDataList(2, externalAxisValues);
 
             if (displayPath == true)
             {
@@ -161,28 +166,6 @@ namespace RobotComponentsABB.Components.Simulation
             {
                 DA.SetDataList(3, null);
             }
-        }
-
-        /// <summary>
-        /// This method clears the two lists with internal and external values
-        /// </summary>
-        private void ClearAxisValuesLists()
-        {
-            // Clear the all the individual lists with internal axis values
-            for (int i = 0; i < _internalAxisValues.Count; i++)
-            {
-                _internalAxisValues[i].Clear();
-            }
-
-            // Clear the all the individual lists with external axis values
-            for (int i = 0; i < _externalAxisValues.Count; i++)
-            {
-                _externalAxisValues.Clear();
-            }
-
-            // Clear both primary lists
-            _internalAxisValues.Clear();
-            _externalAxisValues.Clear();
         }
 
         /// <summary>

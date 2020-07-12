@@ -483,13 +483,13 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotJointPositions.Length; i++)
             {
-                _robotJointPositions[i] = new RobotJointPosition();
+                _robotJointPositions[i].Reset();
             }
         }
 
         private void ResetExternalJointPosition()
         {
-            _externalJointPosition = new ExternalJointPosition();
+            _externalJointPosition.Reset();
         }
 
         /// <summary>

@@ -5,10 +5,10 @@
 
 // System Libs
 using System;
-using System.Linq;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+using Rhino.Geometry.Intersect;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
@@ -38,18 +38,15 @@ namespace RobotComponents.Kinematics
         private double _upperArmLength;
         private double _axis4offsetAngle;
 
-        private readonly List<double> _internalAxisValue1 = new List<double>();
-        private readonly List<double> _internalAxisValue2 = new List<double>();
-        private readonly List<double> _internalAxisValue3 = new List<double>();
-        private readonly List<double> _internalAxisValue4 = new List<double>();
-        private readonly List<double> _internalAxisValue5 = new List<double>();
-        private readonly List<double> _internalAxisValue6 = new List<double>();
-
-        private readonly List<double> _internalAxisValues = new List<double>(); // Final calculated internal axis values
-        private readonly List<double> _externalAxisValues = new List<double>(); // Final calculated external axis values
-
         private readonly List<string> _errorText = new List<string>(); // Error text
         private bool _inLimits = true; // Indicates if the axis values are in limits 
+
+        private RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
+
+        private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
+        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
+
+
         #endregion
 
         #region constructors
@@ -58,17 +55,27 @@ namespace RobotComponents.Kinematics
         /// </summary>
         public InverseKinematics()
         {
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
         }
 
         /// <summary>
         /// Initiatize an inverse kinematics from a robot movement and robot info.
         /// </summary>
-        /// <param name="movement"> The robot momvement to calculated the axis values for. </param>
+        /// <param name="movement"> The robot movement to calculated the axis values for. </param>
         /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
         public InverseKinematics(Movement movement, Robot robotInfo)
         {
             _robotInfo = robotInfo;
             _movement = movement;
+
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
             Initialize();
         }
 
@@ -76,12 +83,18 @@ namespace RobotComponents.Kinematics
         /// Initiatize an inverse kinematics from a robot target and robot info.
         /// The target will be casted to robot movement with wobj0. 
         /// </summary>
-        /// <param name="target"> The robot target to calculated the axis values for. </param>
+        /// <param name="target"> The target to calculated the axis values for. </param>
         /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(RobotTarget target, Robot robotInfo)
+        public InverseKinematics(ITarget target, Robot robotInfo)
         {
             _robotInfo = robotInfo;
             _movement = new Movement(target);
+
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
             Initialize();
         }
 
@@ -95,10 +108,16 @@ namespace RobotComponents.Kinematics
             _robotInfo = inverseKinematics.RobotInfo.Duplicate();
             _movement = inverseKinematics.Movement.Duplicate();
 
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
             Initialize();
 
-            _internalAxisValues = new List<double>(inverseKinematics.InternalAxisValues);
-            _externalAxisValues = new List<double>(inverseKinematics.ExternalAxisValues);
+            _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
+            _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
+
             _errorText = new List<string>(inverseKinematics.ErrorText);
             _inLimits = inverseKinematics.InLimits;
         }
@@ -220,13 +239,11 @@ namespace RobotComponents.Kinematics
         public void CalculateInternalAxisValues()
         {
             // Clear the current solutions before calculating a new ones. 
-            _internalAxisValues.Clear();
-            _internalAxisValue1.Clear();
-            _internalAxisValue2.Clear();
-            _internalAxisValue3.Clear();
-            _internalAxisValue4.Clear();
-            _internalAxisValue5.Clear();
-            _internalAxisValue6.Clear();
+            ResetRobotJointPositions();
+
+            // Tracks the index of the axis configuration
+            int index1 = 0;
+            int index2 = 0;
 
             if (_target is RobotTarget robotTarget)
             { 
@@ -236,21 +253,27 @@ namespace RobotComponents.Kinematics
                 // Caculate internal axis value 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
                 double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
                 if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _internalAxisValue1.AddRange(Enumerable.Repeat(internalAxisValue1, 4).ToList());
+                _robotJointPositions[0][0] = internalAxisValue1;
+                _robotJointPositions[1][0] = internalAxisValue1;
+                _robotJointPositions[2][0] = internalAxisValue1;
+                _robotJointPositions[3][0] = internalAxisValue1;
 
                 // Rotate axis value 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
                 internalAxisValue1 += Math.PI;
                 if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _internalAxisValue1.AddRange(Enumerable.Repeat(internalAxisValue1, 4).ToList());
+                _robotJointPositions[4][0] = internalAxisValue1;
+                _robotJointPositions[5][0] = internalAxisValue1;
+                _robotJointPositions[6][0] = internalAxisValue1;
+                _robotJointPositions[7][0] = internalAxisValue1;
                 #endregion
 
                 // Generates 4 sets of values for each option of axis 1
                 // i = 0: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
                 // i = 1: Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
-                foreach (int i in Enumerable.Range(0, 2))
+                for (int i = 0; i < 2; i++)
                 {
                     // Get the first external axis value
-                    internalAxisValue1 = _internalAxisValue1[i * 4];
+                    internalAxisValue1 = _robotJointPositions[i * 4][0];
 
                     // Get the elbow points
                     Point3d internalAxisPoint1 = new Point3d(_axisPlanes[1].Origin);
@@ -271,41 +294,42 @@ namespace RobotComponents.Kinematics
                     Sphere sphere1 = new Sphere(internalAxisPoint1, _lowerArmLength);
                     Sphere sphere2 = new Sphere(_wrist, _upperArmLength);
 
-                    Circle circ = new Circle();
-
-                    Rhino.Geometry.Intersect.Intersection.SphereSphere(sphere1, sphere2, out circ);
-                    Rhino.Geometry.Intersect.Intersection.PlaneCircle(elbowPlane, circ, out double par1, out double par2);
+                    Intersection.SphereSphere(sphere1, sphere2, out Circle circ);
+                    Intersection.PlaneCircle(elbowPlane, circ, out double par1, out double par2);
 
                     Point3d intersectPt1 = circ.PointAt(par1);
                     Point3d intersectPt2 = circ.PointAt(par2);
 
                     // Calculates the internal axis value 2 and 3
-                    foreach (int j in Enumerable.Range(0, 2))
+                    for (int j = 0; j < 2; j++)
                     {
+                        // Calculate elbow and wrist variables
                         Point3d elbowPoint;
                         if (j == 1) { elbowPoint = intersectPt1; }
                         else { elbowPoint = intersectPt2; }
-
                         elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
                         elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
+
+                        // Calculate axis value 2
                         double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
                         double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
 
-                        // Calculates the internal axis value 2 and 3 (the elbow position angles)
-                        foreach (int k in Enumerable.Range(0, 2))
+                        for (int k = 0; k < 2; k++)
                         {
                             // Adds internal axis value 2
-                            _internalAxisValue2.Add(-internalAxisValue2);
+                            _robotJointPositions[index1][1] = -internalAxisValue2;
 
                             // Calculate internal axis value 3
                             double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
                             while (internalAxisValue3Wrapped >= Math.PI) { internalAxisValue3Wrapped -= 2 * Math.PI; }
                             while (internalAxisValue3Wrapped < -Math.PI) { internalAxisValue3Wrapped += 2 * Math.PI; }
-                            _internalAxisValue3.Add(internalAxisValue3Wrapped);
+                            _robotJointPositions[index1][2] = internalAxisValue3Wrapped;
+
+                            // Update in index tracker
+                            index1++;
                         }
 
-                        // Calculates the internal axis value 4, 5 and 6
-                        foreach (int k in Enumerable.Range(0, 2))
+                        for (int k = 0; k < 2; k++)
                         {
                             // Calculate internal axis value 4
                             Vector3d axis4 = new Vector3d(_wrist - elbowPoint);
@@ -323,7 +347,7 @@ namespace RobotComponents.Kinematics
                             double internalAxisValue4Wrapped = internalAxisValue4 + Math.PI / 2;
                             while (internalAxisValue4Wrapped >= Math.PI) { internalAxisValue4Wrapped -= 2 * Math.PI; }
                             while (internalAxisValue4Wrapped < -Math.PI) { internalAxisValue4Wrapped += 2 * Math.PI; }
-                            _internalAxisValue4.Add(internalAxisValue4Wrapped);
+                            _robotJointPositions[index2][3] = internalAxisValue4Wrapped;
 
                             // Calculate internal axis value 5
                             Plane internalAxisPlane5 = new Plane(internalAxisPlane4);
@@ -331,7 +355,7 @@ namespace RobotComponents.Kinematics
                             internalAxisPlane5 = new Plane(_wrist, -internalAxisPlane5.ZAxis, internalAxisPlane5.XAxis);
                             internalAxisPlane5.ClosestParameter(_endPlane.Origin, out axis6X, out axis6Y);
                             double internalAxisValue5 = Math.Atan2(axis6Y, axis6X);
-                            _internalAxisValue5.Add(internalAxisValue5);
+                            _robotJointPositions[index2][4] = internalAxisValue5;
 
                             // Calculate internal axis value 6
                             Plane internalAxisPlane6 = new Plane(internalAxisPlane5);
@@ -339,43 +363,47 @@ namespace RobotComponents.Kinematics
                             internalAxisPlane6 = new Plane(_wrist, -internalAxisPlane6.YAxis, internalAxisPlane6.ZAxis);
                             internalAxisPlane6.ClosestParameter(_endPlane.PointAt(0, -1), out double endX, out double endY);
                             double internalAxisValue6 = Math.Atan2(endY, endX);
-                            _internalAxisValue6.Add(internalAxisValue6);
+                            _robotJointPositions[index2][5] = internalAxisValue6;
+
+                            // Update index tracker
+                            index2++;
                         }
                     }
                 }
 
-                // Convert the axis angles from radians to degrees + other corrections
-                foreach (int i in Enumerable.Range(0, 8))
+                // Corrections
+                for (int i = 0; i < 8; i++)
                 {
-                    _internalAxisValue1[i] = _internalAxisValue1[i] * (180 / Math.PI) * -1;
-                    _internalAxisValue2[i] = _internalAxisValue2[i] * (180 / Math.PI);
-                    _internalAxisValue3[i] = _internalAxisValue3[i] * (180 / Math.PI);
-                    _internalAxisValue4[i] = _internalAxisValue4[i] * (180 / Math.PI) * -1;
-                    _internalAxisValue5[i] = _internalAxisValue5[i] * (180 / Math.PI);
-                    if (_internalAxisValue6[i] <= 0) { _internalAxisValue6[i] = (180 + (_internalAxisValue6[i] * (180 / Math.PI))) * -1; }
-                    else { _internalAxisValue6[i] = 180 - _internalAxisValue6[i] * (180 / Math.PI); }
+                    // From radians to degrees
+                    _robotJointPositions[i] *= (180 / Math.PI);
+
+                    // Other corrections
+                    _robotJointPositions[i][0] *= -1;
+                    _robotJointPositions[i][1] += 90;
+                    _robotJointPositions[i][2] -= 90;
+                    _robotJointPositions[i][3] *= -1;
+                    if (_robotJointPositions[i][5] <= 0)
+                    {
+                        _robotJointPositions[i][5] = -180 - _robotJointPositions[i][5];
+                    }
+                    else
+                    {
+                        _robotJointPositions[i][5] = 180 - _robotJointPositions[i][5];
+                    }
                 }
 
-                // Pick one of the eight solutions
-                _internalAxisValues.Add(_internalAxisValue1[robotTarget.AxisConfig]);
-                _internalAxisValues.Add(_internalAxisValue2[robotTarget.AxisConfig]);
-                _internalAxisValues.Add(_internalAxisValue3[robotTarget.AxisConfig]);
-                _internalAxisValues.Add(_internalAxisValue4[robotTarget.AxisConfig]);
-                _internalAxisValues.Add(_internalAxisValue5[robotTarget.AxisConfig]);
-                _internalAxisValues.Add(_internalAxisValue6[robotTarget.AxisConfig]);
-
-                // Correction for what? 
-                _internalAxisValues[1] = _internalAxisValues[1] + 90; // + 0.5 * Math.PI
-                _internalAxisValues[2] = _internalAxisValues[2] - 90; // - 0.5 * Math.PI
+                // Select solution
+                _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
             }
 
-            else if  (_target is JointTarget jointTarget)
+            else if (_target is JointTarget jointTarget)
             {
-                _internalAxisValues.AddRange(jointTarget.RobotJointPosition.ToList());
+                _robotJointPosition = jointTarget.RobotJointPosition;
             }
+
             else
             {
-                _internalAxisValues.AddRange(new RobotJointPosition().ToList());
+                _robotJointPosition = new RobotJointPosition();
             }
         }
 
@@ -386,38 +414,34 @@ namespace RobotComponents.Kinematics
         public void CalculateExternalAxisValues()
         {
             // Clear current solution
-            _externalAxisValues.Clear();
+            ResetExternalJointPosition();
 
             if (_target is RobotTarget robotTarget)
             {
-                // Get user defined external axis values
-                List<double> userDefinedExternalAxisValues = robotTarget.ExternalJointPosition.ToList();
                 double count = 0;
 
-                // NOTE: The axis logic is the list order with external axes
                 // NOTE: Only works for a robot info with an maximum of one external linear axis
 
                 // Add the external axis values to the list with external axis values
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    // Check if the axis is an external linear axis
-                    if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis && count == 0)
-                    {
-                        // Get the external linear axis
-                        ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
+                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
 
+                    // Check if the axis is an external linear axis
+                    if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
+                    {
                         // Checks if external linear axis value needs to be negative or positive
                         externalLinearAxis.AxisCurve.ClosestPoint(_robotInfo.BasePlane.Origin, out double robotBasePlaneParam);
                         externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
 
                         if (basePlaneParam >= robotBasePlaneParam)
                         {
-                            _externalAxisValues.Add(_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin));
+                            _externalJointPosition[logic] = _positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin);
                         }
 
                         else
                         {
-                            _externalAxisValues.Add(-_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin));
+                            _externalJointPosition[logic] = -_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin);
                         }
 
                         count += 1;
@@ -427,13 +451,13 @@ namespace RobotComponents.Kinematics
                     // we set as solution an external axis value of 0 or we use the user defined external axis value. 
                     else
                     {
-                        if (userDefinedExternalAxisValues[i] == 9e9)
+                        if (robotTarget.ExternalJointPosition[logic] == 9e9)
                         {
-                            _externalAxisValues.Add(0);
+                            _externalJointPosition[logic] = 0;
                         }
                         else
                         {
-                            _externalAxisValues.Add(userDefinedExternalAxisValues[i]);
+                            _externalJointPosition[logic] = robotTarget.ExternalJointPosition[logic];
                         }
                     }
                 }
@@ -441,7 +465,7 @@ namespace RobotComponents.Kinematics
 
             else
             {
-                _externalAxisValues.AddRange(_target.ExternalJointPosition.ToList());
+                _externalJointPosition = _target.ExternalJointPosition;
             }
         }
 
@@ -450,18 +474,22 @@ namespace RobotComponents.Kinematics
         /// </summary>
         private void ClearCurrentSolutions()
         {
-            _internalAxisValues.Clear();
-            _externalAxisValues.Clear();
-
-            _internalAxisValue1.Clear();
-            _internalAxisValue2.Clear();
-            _internalAxisValue3.Clear();
-            _internalAxisValue4.Clear();
-            _internalAxisValue5.Clear();
-            _internalAxisValue6.Clear();
-
             _errorText.Clear();
             _inLimits = true;
+        }
+
+
+        private void ResetRobotJointPositions()
+        {
+            for (int i = 0; i < _robotJointPositions.Length; i++)
+            {
+                _robotJointPositions[i].Reset();
+            }
+        }
+
+        private void ResetExternalJointPosition()
+        {
+            _externalJointPosition.Reset();
         }
 
         /// <summary>
@@ -496,13 +524,15 @@ namespace RobotComponents.Kinematics
             // Check if an external axis is attached to the robot 
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
+                ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
+                int logic = (int)externalAxis.AxisNumber;
+
                 // Check if an external linear axis is used
-                if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis)
+                if (externalAxis is ExternalLinearAxis externalLinearAxis)
                 {
                     // Calculate closest base plane if the used did not define an external axis value
-                    if (_target.ExternalJointPosition[i] == 9e9)
+                    if (_target.ExternalJointPosition[logic] == 9e9)
                     {
-                        ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
                         externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
                         plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
                     }
@@ -510,8 +540,7 @@ namespace RobotComponents.Kinematics
                     // Otherwise use the user definied external axis value
                     else
                     {
-                        ExternalLinearAxis externalLinearAxis = _robotInfo.ExternalAxis[i] as ExternalLinearAxis;
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[i], out bool inLimits);
+                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out bool inLimits);
                     }
 
                     // Break the loop since it should only work for one external linear axis.
@@ -530,9 +559,9 @@ namespace RobotComponents.Kinematics
         /// </summary>
         private void CheckForInternalAxisLimits()
         {
-            for (int i = 0; i < _internalAxisValues.Count; i++)
+            for (int i = 0; i < _robotJointPosition.Length; i++)
             {
-                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
+                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 { 
                     _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
@@ -547,7 +576,9 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
+                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+
+                if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {
                     _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
@@ -619,7 +650,7 @@ namespace RobotComponents.Kinematics
         [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
         public List<double> InternalAxisValues
         {
-            get { return _internalAxisValues; }
+            get { return _robotJointPosition.ToList(); }
         }
 
         /// <summary>
@@ -628,7 +659,12 @@ namespace RobotComponents.Kinematics
         [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
         public List<double> ExternalAxisValues 
         {
-            get { return _externalAxisValues; }
+            get 
+            {
+                List<double> values = _externalJointPosition.ToList();
+                values.RemoveAll(val => val == 9e9);
+                return values; 
+            }
         }
 
         /// <summary>
@@ -636,7 +672,7 @@ namespace RobotComponents.Kinematics
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
-            get { return new RobotJointPosition(_internalAxisValues); }
+            get { return _robotJointPosition; }
         }
 
         /// <summary>
@@ -644,7 +680,7 @@ namespace RobotComponents.Kinematics
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {
-            get { return new ExternalJointPosition(_externalAxisValues); }
+            get { return _externalJointPosition; }
         }
 
         /// <summary>

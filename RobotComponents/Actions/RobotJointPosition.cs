@@ -29,8 +29,8 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// An undefined external joint position. 
-        /// All external axis values will be set to 0.0.
+        /// An undefined Robot joint position. 
+        /// All Robot axis values will be set to 0.0.
         /// </summary>
         public RobotJointPosition()
         {
@@ -43,7 +43,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an external joint position. 
+        /// Defines an Robot joint position. 
         /// </summary>
         /// <param name="rax_1"> The position of robot axis 1 in degrees from the calibration position. </param>
         /// <param name="rax_2"> The position of robot axis 2 in degrees from the calibration position.</param>
@@ -97,7 +97,7 @@ namespace RobotComponents.Actions
         /// Creates a new robot joint position by duplicating an robot joint position. 
         /// This creates a deep copy of the existing robot joint position. 
         /// </summary>
-        /// <param name="robJointPosition"> The external joint position that should be duplicated. </param>
+        /// <param name="robJointPosition"> The Robot joint position that should be duplicated. </param>
         public RobotJointPosition(RobotJointPosition robJointPosition)
         {
             _val1 = robJointPosition[0];
@@ -202,12 +202,123 @@ namespace RobotComponents.Actions
             _val6 = _defaultValue;
         }
 
+
+        /// <summary>
+        /// Adds a constant number to all the values inside this Joint Position
+        /// </summary>
+        /// <param name="value"> The number that should be added. </param>
+        public void Add(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] += value;
+            }
+        }
+
+        /// <summary>
+        /// Adds the values of an Robot Joint Position to the values inside this Joint Position. 
+        /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The Robot Joint Position that should be added. </param>
+        public void Add(RobotJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] += jointPosition[i];
+            }
+        }
+
+        /// <summary>
+        /// Substracts a constant number from the values inside this Joint Position
+        /// </summary>
+        /// <param name="value"> The number that should be substracted. </param>
+        public void Substract(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] -= value;
+            }
+        }
+
+        /// <summary>
+        /// Substracts the values of an Robot Joint Position from the values inside this Joint Position. 
+        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The Robot Joint Position that should be substracted. </param>
+        public void Substract(RobotJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] -= jointPosition[i];
+            }
+        }
+
+        /// <summary>
+        /// Multiplies the values inside this Joint Position with a constant number.
+        /// </summary>
+        /// <param name="value"> The multiplier as a double. </param>
+        public void Multiply(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] *= value;
+            }
+        }
+
+        /// <summary>
+        /// Multiplies the values inside this Joint Position with the values from another Robot Joint Position.
+        /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The multiplier as an Robot Joint Position. </param>
+        public void Multiply(RobotJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] *= jointPosition[i];
+            }
+        }
+
+        /// <summary>
+        /// Divides the values inside this Joint Position with a constant number.
+        /// </summary>
+        /// <param name="value"> The divider as a double. </param>
+        public void Divide(double value)
+        {
+            if (value == 0)
+            {
+                new DivideByZeroException();
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] /= value;
+            }
+        }
+
+        /// <summary>
+        /// Divides the values inside this Joint Position with the values from another Robot Joint Position.
+        /// Value 1 / value 1, value 2 / value 2, value 3 / value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The divider as an Robot Joint Position. </param>
+        public void Divide(RobotJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (jointPosition[i] == 0)
+                {
+                    new DivideByZeroException();
+                }
+                
+                this[i] /= jointPosition[i];
+            }
+        }
+
         /// <summary></summary>
         /// Method that checks the array with internal axis values. 
         /// Always returns a list with 6 internal axis values. 
         /// For missing values 0.0 will be used. 
         /// <param name="axisValues">A list with the internal axis values.</param>
-        /// <returns> Returns an array with 6 external axis values.</returns>
+        /// <returns> Returns an array with 6 Robot axis values.</returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
@@ -276,7 +387,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the External Joint Position object is valid.
+        /// Defines if the Robot Joint Position object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -300,36 +411,23 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (index < 0 || index > 5)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                switch (index)
-                {
-                    case 0: return _val1;
-                    case 1: return _val2;
-                    case 2: return _val3;
-                    case 3: return _val4;
-                    case 4: return _val5;
-                    case 5: return _val6;
-                }
-                return _defaultValue;
+                if (index == 0) { return _val1; }
+                else if (index == 1) { return _val2; }
+                else if (index == 2) { return _val3; }
+                else if (index == 3) { return _val4; }
+                else if (index == 4) { return _val5; }
+                else if (index == 5) { return _val6; }
+                else { throw new IndexOutOfRangeException(); }
             }
             set
             {
-                if (index < 0 || index > 5)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                switch (index)
-                {
-                    case 0: _val1 = value; break;
-                    case 1: _val2 = value; break;
-                    case 2: _val3 = value; break;
-                    case 3: _val4 = value; break;
-                    case 4: _val5 = value; break;
-                    case 5: _val6 = value; break;
-                }
+                if (index == 0) { _val1 = value; }
+                else if (index == 1) { _val2 = value; }
+                else if (index == 2) { _val3 = value; }
+                else if (index == 3) { _val4 = value; }
+                else if (index == 4) { _val5 = value; }
+                else if (index == 5) { _val6 = value; }
+                else { throw new IndexOutOfRangeException(); }
             }
         }
 

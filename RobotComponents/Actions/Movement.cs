@@ -378,7 +378,7 @@ namespace RobotComponents.Actions
         {
             if (_movementType != 0 && _target is JointTarget)
             {
-                throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                throw new InvalidOperationException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
             }
         }
 
@@ -430,7 +430,7 @@ namespace RobotComponents.Actions
                     // Check axis logic
                     if (logic == -1)
                     {
-                        throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
+                        throw new InvalidOperationException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
                     }
 
                     // Get external axis value
@@ -529,7 +529,7 @@ namespace RobotComponents.Actions
                 // Wrong movement type or combination
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
 
@@ -581,7 +581,7 @@ namespace RobotComponents.Actions
                 // Wrong movement type or combination
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }
@@ -642,7 +642,7 @@ namespace RobotComponents.Actions
                 // Joint Target combined with MoveL or MoveJ
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }

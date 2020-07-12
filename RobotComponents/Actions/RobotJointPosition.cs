@@ -411,36 +411,23 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (index < 0 || index > 5)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                switch (index)
-                {
-                    case 0: return _val1;
-                    case 1: return _val2;
-                    case 2: return _val3;
-                    case 3: return _val4;
-                    case 4: return _val5;
-                    case 5: return _val6;
-                }
-                return _defaultValue;
+                if (index == 0) { return _val1; }
+                else if (index == 1) { return _val2; }
+                else if (index == 2) { return _val3; }
+                else if (index == 3) { return _val4; }
+                else if (index == 4) { return _val5; }
+                else if (index == 5) { return _val6; }
+                else { throw new IndexOutOfRangeException(); }
             }
             set
             {
-                if (index < 0 || index > 5)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-                switch (index)
-                {
-                    case 0: _val1 = value; break;
-                    case 1: _val2 = value; break;
-                    case 2: _val3 = value; break;
-                    case 3: _val4 = value; break;
-                    case 4: _val5 = value; break;
-                    case 5: _val6 = value; break;
-                }
+                if (index == 0) { _val1 = value; }
+                else if (index == 1) { _val2 = value; }
+                else if (index == 2) { _val3 = value; }
+                else if (index == 3) { _val4 = value; }
+                else if (index == 4) { _val5 = value; }
+                else if (index == 5) { _val6 = value; }
+                else { throw new IndexOutOfRangeException(); }
             }
         }
 

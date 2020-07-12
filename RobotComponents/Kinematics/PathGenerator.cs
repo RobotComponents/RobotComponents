@@ -105,18 +105,17 @@ namespace RobotComponents.Kinematics
             }
         }
 
+        /// <summary>
+        /// Calculates the path from a list with Actions
+        /// </summary>
+        /// <param name="actions"> The list with Actions to calculate the path. </param>
+        /// <param name="interpolations"> The amount of interpolatins between two targets. </param>
         public void Calculate(List<Actions.Action> actions, int interpolations)
         {
-            // Clear current solution
-            Reset();
-
-            // Hide mesh
             _robotInfo.ForwardKinematics.HideMesh = true;
-
             _interpolations = interpolations;
-
-            // Movement counter
             int counter = 0;
+            Reset();
 
             // Get path from the list with actions
             for (int i = 0; i < actions.Count; i++)
@@ -189,8 +188,10 @@ namespace RobotComponents.Kinematics
             }
         }
 
-
-
+        /// <summary>
+        /// Sets the correct Robot Tool for the defined movement.
+        /// </summary>
+        /// <param name="movement"> The movemen to set the Robot Tool for. </param>
         private void SetRobotTool(Movement movement)
         {
             if (movement.RobotTool == null)
@@ -207,9 +208,10 @@ namespace RobotComponents.Kinematics
             }
         }
 
-
-
-
+        /// <summary>
+        /// Calculates the interpolated path of a joint movement from a Joint Target. 
+        /// </summary>
+        /// <param name="movement"> The movement with as Target a Joint Target. </param>
         private void JointMovementFromJointTarget(Movement movement)
         {
             // Set the correct tool for this movement
@@ -222,13 +224,18 @@ namespace RobotComponents.Kinematics
             RobotJointPosition towardsRobotJointPosition = jointTarget.RobotJointPosition;
             ExternalJointPosition towardsExternalJointPosition = jointTarget.ExternalJointPosition;
 
-            // TODO: Check the axis limits
-            // TODO _errorText.AddRange(jointTarget.CheckForAxisLimits(_robotInfo));
+            // Add error text
+            _errorText.AddRange(jointTarget.CheckForAxisLimits(_robotInfo));
+
 
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
         }
 
+        /// <summary>
+        /// Calculates the interpolated path of a joint movement from a Robot Target. 
+        /// </summary>
+        /// <param name="movement"> The movement with as Target a Robot Target. </param>
         private void JointMovementFromRobotTarget(Movement movement)
         {
             // Set the correct tool for this movement
@@ -240,12 +247,17 @@ namespace RobotComponents.Kinematics
             RobotJointPosition towardsRobotJointPosition = _robotInfo.InverseKinematics.RobotJointPosition.Duplicate();
             ExternalJointPosition towardsExternalJointPosition = _robotInfo.InverseKinematics.ExternalJointPosition.Duplicate();
 
-            // TODO Error text from IK?
+            // Add error text
+            _errorText.AddRange(_robotInfo.InverseKinematics.ErrorText);
 
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
         }
-                     
+        
+        /// <summary>
+        /// Calculates the interpolated path for a linear movement. 
+        /// </summary>
+        /// <param name="movement"> The movement as a linear movement type. </param>
         private void LinearMovementFromRobotTarget(Movement movement)
         {
             // Set the correct tool for this movement
@@ -263,11 +275,8 @@ namespace RobotComponents.Kinematics
             // External Joint Position change
             ExternalJointPosition externalJointPositionChange = (towardsExternalJointPosition - _lastExternalJointPosition) / _interpolations;
 
-
-
             // TODO: Check with last movement to speed up the process? As in old path generator?
-
-
+                                          
             // First target plane in WORLD coordinate space
             _robotInfo.ForwardKinematics.Calculate(_lastRobotJointPosition, _lastExternalJointPosition);
             Plane plane1 = _robotInfo.ForwardKinematics.TCPPlane;
@@ -361,7 +370,11 @@ namespace RobotComponents.Kinematics
             _lastExternalJointPosition = towardsExternalJointPosition;
         }
 
-
+        /// <summary>
+        /// Calculates the interpolated path for a joint movement.
+        /// </summary>
+        /// <param name="towardsRobotJointPosition"> The final Robot Joint Position of the joint movement. </param>
+        /// <param name="towardsExternalJointPosition"> The final External Joint Position of the joint movement. </param>
         private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition)
         {
             // Calculate the joint position value change per interpolation

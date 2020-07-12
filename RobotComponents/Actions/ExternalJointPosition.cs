@@ -211,7 +211,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
         }
@@ -289,7 +289,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
         }
@@ -337,7 +337,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
         }
@@ -580,7 +580,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
 
@@ -609,7 +609,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
 
@@ -638,7 +638,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
 
@@ -672,7 +672,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
                 }
             }
 

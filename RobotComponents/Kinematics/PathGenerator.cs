@@ -110,6 +110,9 @@ namespace RobotComponents.Kinematics
             // Clear current solution
             Reset();
 
+            // Hide mesh
+            _robotInfo.ForwardKinematics.HideMesh = true;
+
             _interpolations = interpolations;
 
             // Movement counter

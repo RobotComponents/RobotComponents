@@ -29,24 +29,17 @@ namespace RobotComponents.Kinematics
         private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
         private Plane _targetPlane;
         private Plane _endPlane;
-
         private List<Plane> _axisPlanes;
-
         private Point3d _wrist;
         private double _wristOffset;
         private double _lowerArmLength;
         private double _upperArmLength;
         private double _axis4offsetAngle;
-
         private readonly List<string> _errorText = new List<string>(); // Error text
         private bool _inLimits = true; // Indicates if the axis values are in limits 
-
         private RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
-
         private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
-
-
         #endregion
 
         #region constructors
@@ -474,11 +467,15 @@ namespace RobotComponents.Kinematics
         /// </summary>
         private void ClearCurrentSolutions()
         {
+            ResetRobotJointPositions();
+            ResetExternalJointPosition();
             _errorText.Clear();
             _inLimits = true;
         }
 
-
+        /// <summary>
+        /// Resets the Robo Joint Position solutions
+        /// </summary>
         private void ResetRobotJointPositions()
         {
             for (int i = 0; i < _robotJointPositions.Length; i++)
@@ -487,6 +484,9 @@ namespace RobotComponents.Kinematics
             }
         }
 
+        /// <summary>
+        /// Resest the the External Joint Position solution
+        /// </summary>
         private void ResetExternalJointPosition()
         {
             _externalJointPosition.Reset();

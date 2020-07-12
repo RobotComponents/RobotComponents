@@ -177,6 +177,171 @@ namespace RobotComponents.Actions
             _val6 = _defaultValue;
         }
 
+        /// <summary>
+        /// Adds a constant number to all the values inside this Joint Position
+        /// </summary>
+        /// <param name="value"> The number that should be added. </param>
+        public void Add(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue)
+                {
+                    this[i] += value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the values of an External Joint Position to the values inside this Joint Position. 
+        /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The External Joint Position that should be added. </param>
+        public void Add(ExternalJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue && jointPosition[i] != _defaultValue)
+                {
+                    this[i] += jointPosition[i];
+                }
+                else if (this[i] == _defaultValue && this[i] == _defaultValue)
+                {
+                    this[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Substracts a constant number from the values inside this Joint Position
+        /// </summary>
+        /// <param name="value"> The number that should be substracted. </param>
+        public void Substract(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue)
+                {
+                    this[i] -= value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Substracts the values of an External Joint Position from the values inside this Joint Position. 
+        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The External Joint Position that should be substracted. </param>
+        public void Substract(ExternalJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue && jointPosition[i] != _defaultValue)
+                {
+                    this[i] -= jointPosition[i];
+                }
+                else if (this[i] == _defaultValue && this[i] == _defaultValue)
+                {
+                    this[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Multiplies the values inside this Joint Position with a constant number.
+        /// </summary>
+        /// <param name="value"> The multiplier as a double. </param>
+        public void Multiply(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue)
+                {
+                    this[i] *= value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Multiplies the values inside this Joint Position with the values from another External Joint Position.
+        /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The multiplier as an External Joint Position. </param>
+        public void Multiply(ExternalJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue && jointPosition[i] != _defaultValue)
+                {
+                    this[i] *= jointPosition[i];
+                }
+                else if (this[i] == _defaultValue && this[i] == _defaultValue)
+                {
+                    this[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Divides the values inside this Joint Position with a constant number.
+        /// </summary>
+        /// <param name="value"> The divider as a double. </param>
+        public void Divide(double value)
+        {
+            if (value == 0)
+            {
+                new DivideByZeroException();
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue)
+                {
+                    this[i] /= value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Divides the values inside this Joint Position with the values from another External Joint Position.
+        /// Value 1 / value 1, value 2 / value 2, value 3 / value 3 etc.
+        /// </summary>
+        /// <param name="jointPosition"> The divider as an External Joint Position. </param>
+        public void Divide(ExternalJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (jointPosition[i] == 0)
+                {
+                    new DivideByZeroException();
+                }
+                else if (this[i] != _defaultValue && jointPosition[i] != _defaultValue)
+                {
+                    this[i] /= jointPosition[i];
+                }
+                else if (this[i] == _defaultValue && this[i] == _defaultValue)
+                {
+                    this[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on logic number {0}] is combined with an undefinied axis value.", i + 1));
+                }
+            }
+        }
+
         /// <summary></summary>
         /// Method that checks the array with external axis values. 
         /// Always returns a list with 6 external axis values. 

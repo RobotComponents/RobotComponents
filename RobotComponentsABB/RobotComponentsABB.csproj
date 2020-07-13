@@ -545,7 +545,51 @@
   <ItemGroup>
     <None Include="Resources\OldComment_Icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\JointTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointTargetParameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructJointTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobotJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructExternalJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalJointPositionParameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotJointPositionParameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobTargetParameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalJointPosition_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointTarget_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotJointPosition_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobTarget_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobTarget_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

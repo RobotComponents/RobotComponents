@@ -183,6 +183,16 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructExternalJointPosition_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructExternalJointPosition_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructExternalLinearAxis_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructExternalLinearAxis_Icon", resourceCulture);
@@ -196,6 +206,16 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap DeconstructExternalRotationalAxis_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructExternalRotationalAxis_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructJointTarget_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructJointTarget_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -223,9 +243,29 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructRobotJointPosition_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructRobotJointPosition_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructRobotTool_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructRobotTool_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructRobTarget_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructRobTarget_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -296,6 +336,26 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap ExternalAxis_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ExternalAxis_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ExternalJointPosition_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ExternalJointPosition_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ExternalJointPosition_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ExternalJointPosition_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -633,9 +693,19 @@ namespace RobotComponentsABB.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Logo {
+        internal static System.Drawing.Bitmap JointTarget_Icon {
             get {
-                object obj = ResourceManager.GetObject("Logo", resourceCulture);
+                object obj = ResourceManager.GetObject("JointTarget_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap JointTarget_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("JointTarget_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -782,7 +852,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer componen [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer compone [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickControllerForm_designer {
             get {
@@ -857,7 +927,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = nul [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer components = nu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDIForm_designer {
             get {
@@ -932,7 +1002,7 @@ namespace RobotComponentsABB.Properties {
         ///        /// &lt;summary&gt;
         ///        /// Required designer variable.
         ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = nul [rest of string was truncated]&quot;;.
+        ///        private System.ComponentModel.IContainer components = nu [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string PickDOForm_designer {
             get {
@@ -1051,6 +1121,36 @@ namespace RobotComponentsABB.Properties {
         internal static System.Drawing.Bitmap RobotInfo_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("RobotInfo_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobotJointPosition_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobotJointPosition_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobotJointPosition_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobotJointPosition_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobTarget_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobTarget_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

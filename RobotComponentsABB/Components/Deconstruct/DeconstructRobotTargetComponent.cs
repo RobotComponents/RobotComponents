@@ -104,7 +104,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructTarget_Icon; }
+            get { return Properties.Resources.DeconstructRobTarget_Icon; }
         }
 
         /// <summary>

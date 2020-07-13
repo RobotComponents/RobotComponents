@@ -93,9 +93,16 @@ namespace RobotComponentsABB.Components.Utilities
             for (int i = 0; i < _planes.Count; i++)
             {
                 Plane plane = _planes[i];
-                args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-                args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-                args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+
+                if (plane != null)
+                {
+                    if (plane.IsValid == true)
+                    {
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+                    }
+                }
             }
         }
 

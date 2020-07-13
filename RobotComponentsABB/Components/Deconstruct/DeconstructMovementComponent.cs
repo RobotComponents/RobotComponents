@@ -27,7 +27,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         public DeconstructMovementComponent()
           : base("Deconstruct Move", "DeConMove", 
               "Deconstructs a Move component into its parameters."
-        + System.Environment.NewLine + System.Environment.NewLine +
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {

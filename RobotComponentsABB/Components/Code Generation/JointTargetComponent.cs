@@ -294,7 +294,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Target_Icon; }
+            get { return Properties.Resources.JointTarget_Icon; }
         }
 
         /// <summary>

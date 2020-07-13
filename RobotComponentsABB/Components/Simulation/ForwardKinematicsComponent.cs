@@ -237,7 +237,7 @@ namespace RobotComponentsABB.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Hide Mesh", MenuItemClickHideMesh, true, SetHideMesh);
+            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !SetHideMesh);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }

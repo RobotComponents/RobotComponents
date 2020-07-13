@@ -285,19 +285,27 @@ namespace RobotComponents.Kinematics
             RobotTarget robotTarget = movement.Target as RobotTarget;
             Plane plane2 = robotTarget.Plane; 
 
-            // Re-orient the starting plane to the work object coordinate space of the second target plane
-            Plane globalWorkObjectPlane = new Plane(movement.WorkObject.GlobalWorkObjectPlane); // TODO: Check, what if the axis plane is unequal to the work object plane?
-            Transform orient = Transform.ChangeBasis(Plane.WorldXY, globalWorkObjectPlane);
-            plane1.Transform(orient);
-
-            // Correct for the target plane position if we make a movement an a movable work object
+            // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                int logic = (int)movement.WorkObject.ExternalAxis.AxisNumber;
-                double rotationAngle = _lastExternalJointPosition[logic] / 180 * Math.PI;
-                Transform rotate = Transform.Rotation(-rotationAngle, new Vector3d(0, 0, 1), new Point3d(0, 0, 0));
-                plane1.Transform(rotate);
+                if (movement.WorkObject.ExternalAxis is ExternalRotationalAxis externalAxis)
+                {
+                    int logic = (int)externalAxis.AxisNumber;
+                    double rotationAngle = _lastExternalJointPosition[logic] / 180 * Math.PI;
+                    Plane axisPlane = externalAxis.AxisPlane;
+                    Transform rotate = Transform.Rotation(-rotationAngle, axisPlane.ZAxis, axisPlane.Origin);
+                    plane1.Transform(rotate);
+                }
+                else
+                {
+                    throw new InvalidOperationException("A work object moved by an external linear axis is not supported by the path generator.");
+                }
             }
+
+            // Re-orient the starting plane to the work object coordinate space of the second target plane
+            Plane globalWorkObjectPlane = new Plane(movement.WorkObject.GlobalWorkObjectPlane);
+            Transform orient = Transform.ChangeBasis(Plane.WorldXY, globalWorkObjectPlane);
+            plane1.Transform(orient);
 
             // Target plane position and orientation change per interpolation step
             Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;

@@ -645,29 +645,6 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// The calculated internal axis values
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
-        public List<double> InternalAxisValues
-        {
-            get { return _robotJointPosition.ToList(); }
-        }
-
-        /// <summary>
-        /// The calculated external axis values
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
-        public List<double> ExternalAxisValues 
-        {
-            get 
-            {
-                List<double> values = _externalJointPosition.ToList();
-                values.RemoveAll(val => val == 9e9);
-                return values; 
-            }
-        }
-
-        /// <summary>
         /// Defines the calculated Robot Joint Position
         /// </summary>
         public RobotJointPosition RobotJointPosition

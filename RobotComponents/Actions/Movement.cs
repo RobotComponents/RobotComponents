@@ -619,8 +619,8 @@ namespace RobotComponents.Actions
                         RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
 
                         // Create a joint target from the axis values
-                        RobotJointPosition robJointPosition = new RobotJointPosition(RAPIDGenerator.Robot.InverseKinematics.InternalAxisValues);
-                        ExternalJointPosition extJointPosition = new ExternalJointPosition(RAPIDGenerator.Robot.InverseKinematics.ExternalAxisValues);
+                        RobotJointPosition robJointPosition = RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate();
+                        ExternalJointPosition extJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
                         JointTarget jointTarget = new JointTarget(robotTarget.Name, robJointPosition, extJointPosition);
 
                         // Create the RAPID code

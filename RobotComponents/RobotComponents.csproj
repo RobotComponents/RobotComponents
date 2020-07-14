@@ -119,7 +119,6 @@
     <Compile Include="Actions\DigitalOutput.cs" />
     <Compile Include="Kinematics\ForwardKinematics.cs" />
     <Compile Include="Kinematics\InverseKinematics.cs" />
-    <Compile Include="Kinematics\OldPathGenerator.cs" />
     <Compile Include="Kinematics\PathGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Definitions\Robot.cs" />

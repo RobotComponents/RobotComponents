@@ -19,7 +19,6 @@ using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
@@ -168,12 +167,13 @@ namespace RobotComponentsABB.Components.Simulation
             // Get the index number of the current target
             int index = (int)(((_planes.Count - 1) * interpolationSlider));
 
+            // Create list with external axis values
             List<double> externalAxisValues = _externalJointPositions[index].ToList();
             externalAxisValues.RemoveAll(val => val == 9e9);
 
             // Calcualte foward kinematics
-            _forwardKinematics.InternalAxisValues = _robotJointPositions[index].ToList();
-            _forwardKinematics.ExternalAxisValues = externalAxisValues;
+            _forwardKinematics.RobotJointPosition = _robotJointPositions[index];
+            _forwardKinematics.ExternalJointPosition = _externalJointPositions[index];
             _forwardKinematics.HideMesh = !_previewMesh;
             _forwardKinematics.Calculate();
 
@@ -192,8 +192,8 @@ namespace RobotComponentsABB.Components.Simulation
             // Output
             DA.SetData(0, _forwardKinematics.TCPPlane);
             DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
-            DA.SetDataList(2, _forwardKinematics.InternalAxisValues);
-            DA.SetDataList(3, _forwardKinematics.ExternalAxisValues);
+            DA.SetDataList(2, _forwardKinematics.RobotJointPosition.ToList());
+            DA.SetDataList(3, externalAxisValues);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
         }

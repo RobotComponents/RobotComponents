@@ -405,34 +405,6 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// List of internal axis values in degrees.
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
-        public List<double> InternalAxisValues
-        {
-            get { return _robotJointPosition.ToList(); }
-            set { _robotJointPosition = new RobotJointPosition(value); }
-        }
-
-        /// <summary>
-        /// List of external axis values in ?. A external axis can be meter or degree
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
-        public List<double> ExternalAxisValues
-        {
-            get 
-            {
-                List<double> values = _externalJointPosition.ToList();
-                values.RemoveAll(val => val == 9e9);
-                return values; 
-            }
-            set 
-            { 
-                _externalJointPosition = new ExternalJointPosition(value); 
-            }
-        }
-
-        /// <summary>
         /// Defines the Robot Joint Position
         /// </summary>
         public RobotJointPosition RobotJointPosition

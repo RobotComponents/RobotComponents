@@ -140,7 +140,16 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Robot Joint Position";
+                string result = "Robot Joint Position (";
+
+                result += _val1.ToString("0.##") + ", ";
+                result += _val2.ToString("0.##") + ", ";
+                result += _val3.ToString("0.##") + ", ";
+                result += _val4.ToString("0.##") + ", ";
+                result += _val5.ToString("0.##") + ", ";
+                result += _val6.ToString("0.##") + ")";
+
+                return result;
             }
         }
 

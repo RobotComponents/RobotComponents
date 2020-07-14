@@ -142,7 +142,27 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "External Joint Position";
+                string result = "External Joint Position (";
+
+                if (_val1 == _defaultValue) { result += "9E9, "; }
+                else { result += _val1.ToString("0.##") + ", "; }
+
+                if (_val2 == _defaultValue) { result += "9E9, "; }
+                else { result += _val2.ToString("0.##") + ", "; }
+
+                if (_val3 == _defaultValue) { result += "9E9, "; }
+                else { result += _val3.ToString("0.##") + ", "; }
+
+                if (_val4 == _defaultValue) { result += "9E9, "; }
+                else { result += _val4.ToString("0.##") + ", "; }
+
+                if (_val5 == _defaultValue) { result += "9E9, "; }
+                else { result += _val5.ToString("0.##") + ", "; }
+
+                if (_val6 == _defaultValue) { result += "9E9)"; }
+                else { result += _val6.ToString("0.##") + ")"; }
+
+                return result;
             }
         }
 

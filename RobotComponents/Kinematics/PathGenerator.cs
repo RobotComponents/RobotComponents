@@ -4,7 +4,6 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
@@ -288,18 +287,11 @@ namespace RobotComponents.Kinematics
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                if (movement.WorkObject.ExternalAxis is ExternalRotationalAxis externalAxis)
-                {
-                    int logic = (int)externalAxis.AxisNumber;
-                    double rotationAngle = _lastExternalJointPosition[logic] / 180 * Math.PI;
-                    Plane axisPlane = externalAxis.AxisPlane;
-                    Transform rotate = Transform.Rotation(-rotationAngle, axisPlane.ZAxis, axisPlane.Origin);
-                    plane1.Transform(rotate);
-                }
-                else
-                {
-                    throw new InvalidOperationException("A work object moved by an external linear axis is not supported by the path generator.");
-                }
+                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                int logic = (int)externalAxis.AxisNumber;
+                double axisValue = _lastExternalJointPosition[logic];
+                Transform trans = externalAxis.CalculateTransformationMatrix(-axisValue, out _);
+                plane1.Transform(trans);
             }
 
             // Re-orient the starting plane to the work object coordinate space of the second target plane

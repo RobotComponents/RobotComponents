@@ -555,9 +555,6 @@
     <None Include="Resources\RobotJointPosition_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\JointTargetParameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\DeconstructJointTarget_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -565,15 +562,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructExternalJointPosition_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ExternalJointPositionParameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RobotJointPositionParameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RobTargetParameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ExternalJointPosition_Parameter_Icon.png" />

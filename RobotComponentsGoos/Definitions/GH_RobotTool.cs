@@ -174,6 +174,15 @@ namespace RobotComponentsGoos.Definitions
                 return true;
             }
 
+            //Cast to Plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null) { target = default(Q); }
+                else if (Value.ToolPlane == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Plane(Value.ToolPlane); }
+                return true;
+            }
+
             target = default(Q);
             return false;
         }

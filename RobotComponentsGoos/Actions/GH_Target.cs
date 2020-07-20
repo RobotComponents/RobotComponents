@@ -137,6 +137,22 @@ namespace RobotComponentsGoos.Actions
                 return true;
             }
 
+            //Cast to Joint Target
+            if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_JointTarget(Value as JointTarget); }
+                return true;
+            }
+
+            //Cast to Robot Target
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_RobotTarget(Value as RobotTarget); }
+                return true;
+            }
+
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {

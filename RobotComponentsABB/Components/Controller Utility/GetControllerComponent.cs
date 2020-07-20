@@ -93,6 +93,42 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
             // Output
             DA.SetData(0, _controllerGoo);
+
+            // Recognizes if the component is deleted
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+        }
+
+        /// <summary>
+        /// Detect if the components gets removed from the canvase and disposes the controller
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                if (_controllerGoo != null)
+                {
+                    if (_controllerGoo.Value != null)
+                    {
+                        ABB.Robotics.Controllers.Controller controller = _controllerGoo.Value;
+
+                        if (controller.Connected == true)
+                        {
+                            controller.Logoff();
+                        }
+                        
+                        controller.Dispose();
+
+                        _controllerGoo.Value = null;
+                        _controllerGoo = null;
+                    }
+                }
+            }
         }
 
         //  Additional methods

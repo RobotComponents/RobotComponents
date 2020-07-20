@@ -5,7 +5,7 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 //Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -14,7 +14,6 @@ using RobotComponents.Definitions;
 using RobotComponentsABB.Parameters.Definitions;
 using RobotComponentsABB.Parameters.Actions;
 using RobotComponents.Kinematics;
-using RobotComponentsABB.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
@@ -106,9 +105,13 @@ namespace RobotComponentsABB.Components.Simulation
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, inverseKinematics.ErrorText[i]);
             }
 
+            // Create list with externan axis values
+            List<double> externalAxisValues = inverseKinematics.ExternalJointPosition.ToList();
+            externalAxisValues.RemoveAll(val => val == 9e9);
+
             // Output
-            DA.SetDataList(0, inverseKinematics.InternalAxisValues);
-            DA.SetDataList(1, inverseKinematics.ExternalAxisValues);
+            DA.SetDataList(0, inverseKinematics.RobotJointPosition.ToList());
+            DA.SetDataList(1, externalAxisValues);
         }
 
         /// <summary>

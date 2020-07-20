@@ -29,7 +29,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public ExternalJointPositionComponent()
           : base("External Joint Position", "EJ",
-              "Defines an External Joint Position for a Declaration : Robot Target or Joint Target."
+              "Defines an External Joint Position for a Robot Target or Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -313,7 +313,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.ExternalJointPosition_Icon; }
         }
 
         /// <summary>

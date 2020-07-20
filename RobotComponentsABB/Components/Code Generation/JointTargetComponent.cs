@@ -28,7 +28,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public JointTargetComponent()
           : base("Joint Target", "JT",
-              "Defines a Joint Target for an Instruction : Movement."
+              "Defines a Joint Target for a Move instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -294,7 +294,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.JointTarget_Icon; }
         }
 
         /// <summary>

@@ -521,7 +521,7 @@ namespace RobotComponents.Actions
                     code += _target.Name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
-                    code += toolName + "\\WObj:=";
+                    code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
                     return code;
                 }

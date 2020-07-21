@@ -24,8 +24,7 @@ namespace RobotComponents.Actions
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
-        private readonly Dictionary<string, RobotTarget> _robotTargets = new Dictionary<string, RobotTarget>(); // Dictionary that stores all the unique robot targets used by the RAPIDGenerator
-        private readonly Dictionary<string, JointTarget> _jointTargets = new Dictionary<string, JointTarget>(); // Dictionary that stores all the unique jonit targets used by the RAPIDGenerator
+        private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programCode; // The rapid program code
@@ -119,7 +118,7 @@ namespace RobotComponents.Actions
         {
             // Reset fields
             _speedDatas.Clear();
-            _robotTargets.Clear();
+            _targets.Clear();
             _errorText.Clear();
 
             // Save initial tool
@@ -498,21 +497,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines all the unique Robot Targets used in this RAPID Generator
+        /// Defines all the unique Targets used in this RAPID Generator
         /// </summary>
-        public Dictionary<string, RobotTarget> RobotTargets
+        public Dictionary<string, ITarget> Targets
         {
-            get { return _robotTargets; }
+            get { return _targets; }
         }
-
-        /// <summary>
-        /// Defines all the unique Joint Targets used in this RAPID Generator
-        /// </summary>
-        public Dictionary<string, JointTarget> JointTargets
-        {
-            get { return _jointTargets; }
-        }
-
 
         /// <summary>
         /// Stringbuilder used by the RAPID Generator. 

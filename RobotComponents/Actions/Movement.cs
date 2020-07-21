@@ -612,7 +612,7 @@ namespace RobotComponents.Actions
                 // Generates the joint target variable from a robot target for a MoveAbsJ instruction
                 else
                 {
-                    if (!RAPIDGenerator.JointTargets.ContainsKey(robotTarget.Name))
+                    if (!RAPIDGenerator.Targets.ContainsKey(robotTarget.Name))
                     {
                         // Calculate the axis values from the robot target
                         RAPIDGenerator.Robot.InverseKinematics.Calculate();

@@ -390,9 +390,9 @@ namespace RobotComponents.Actions
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
 
             // Only adds target code if target is not already defined
-            if (!RAPIDGenerator.JointTargets.ContainsKey(_name))
+            if (!RAPIDGenerator.Targets.ContainsKey(_name))
             {
-                RAPIDGenerator.JointTargets.Add(_name, this.ConvertToJointTarget());
+                RAPIDGenerator.Targets.Add(_name, this.ConvertToJointTarget());
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.Robot));
             }

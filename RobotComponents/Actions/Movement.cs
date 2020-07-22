@@ -488,13 +488,20 @@ namespace RobotComponents.Actions
             }
 
             // A movement not combined with a digital output
-            if (_digitalOutput.IsValid == false)
+                if (_digitalOutput.IsValid == false)
             {
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
+                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
+                    string name = _target.Name;
+                    if (_target is RobotTarget)
+                    {
+                        name += "_jt";
+                    }
+
                     string code = "MoveAbsJ ";
-                    code += _target.Name + ", ";
+                    code += name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
@@ -521,7 +528,7 @@ namespace RobotComponents.Actions
                     code += _target.Name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
-                    code += toolName + "\\WObj:=";
+                    code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
                     return code;
                 }
@@ -540,8 +547,15 @@ namespace RobotComponents.Actions
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == 0)
                 {
+                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
+                    string name = _target.Name;
+                    if (_target is RobotTarget) 
+                    { 
+                        name += "_jt"; 
+                    }
+
                     string code = "MoveAbsJ ";
-                    code += _target.Name + ", ";
+                    code += name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
@@ -612,7 +626,7 @@ namespace RobotComponents.Actions
                 // Generates the joint target variable from a robot target for a MoveAbsJ instruction
                 else
                 {
-                    if (!RAPIDGenerator.JointTargets.ContainsKey(robotTarget.Name))
+                    if (!RAPIDGenerator.Targets.ContainsKey(robotTarget.Name + "_jt"))
                     {
                         // Calculate the axis values from the robot target
                         RAPIDGenerator.Robot.InverseKinematics.Calculate();
@@ -621,7 +635,7 @@ namespace RobotComponents.Actions
                         // Create a joint target from the axis values
                         RobotJointPosition robJointPosition = RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate();
                         ExternalJointPosition extJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
-                        JointTarget jointTarget = new JointTarget(robotTarget.Name, robJointPosition, extJointPosition);
+                        JointTarget jointTarget = new JointTarget(robotTarget.Name + "_jt", robJointPosition, extJointPosition);
 
                         // Create the RAPID code
                         jointTarget.ToRAPIDDeclaration(RAPIDGenerator);

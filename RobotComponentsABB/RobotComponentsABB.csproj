@@ -52,12 +52,6 @@
       <HintPath>..\DLLs\RhinoCommon.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="RobotStudio.Services.RobApi">
-      <HintPath>..\DLLs\RobotStudio.Services.RobApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RobotStudio.Services.RobApi.Desktop">
-      <HintPath>..\DLLs\RobotStudio.Services.RobApi.Desktop.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />

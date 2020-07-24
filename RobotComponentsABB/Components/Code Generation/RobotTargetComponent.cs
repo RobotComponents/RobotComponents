@@ -76,7 +76,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotTargetParameter(), "Target", "T", "Resulting Robot Target");
+            pManager.RegisterParam(new RobotTargetParameter(), "Robot Target", "RT", "Resulting Robot Target");
         }
 
         // Fields
@@ -556,7 +556,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Target_Icon; }
+            get { return Properties.Resources.RobTarget_Icon; }
         }
 
         /// <summary>

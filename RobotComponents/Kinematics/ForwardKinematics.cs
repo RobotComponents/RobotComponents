@@ -4,13 +4,13 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
-using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using System;
+using System.Collections.Generic;
 
 namespace RobotComponents.Kinematics
 {
@@ -22,16 +22,15 @@ namespace RobotComponents.Kinematics
         #region fields
         private Robot _robotInfo; // Robot info
         private Plane _positionPlane = Plane.Unset; // Robot Position Plane: needed for external linear axis
-        private List<double> _internalAxisValues = new List<double>(); // Internal Axis Values in Degrees
-        private double[] _internalAxisRads; // Internal Axis Values in Radiants
         private Plane[] _posedExternalAxisPlanes; // External Axis Planes 
-        private List<double> _externalAxisValues = new List<double>(); // External Axis Values in degrees or meters
         private readonly List<string> _errorText = new List<string>(); // Error text
         private List<Mesh> _posedInternalAxisMeshes = new List<Mesh>(); // Posed Robot Meshes
         private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>(); //Posed Axis Meshes
         private Plane _tcpPlane = Plane.Unset; // TCP Plane of end effector
         private bool _inLimits = true; // Indicates if the axis values are in limits 
         private bool _hideMesh;
+        private RobotJointPosition _robotJointPosition;
+        private ExternalJointPosition _externalJointPosition;
         #endregion
 
         #region constructors
@@ -64,9 +63,8 @@ namespace RobotComponents.Kinematics
         {
             _robotInfo = robotInfo;
             _hideMesh = hideMesh;
-            _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
-            UpdateInternalAxisValuesRadians();
+            _robotJointPosition = new RobotJointPosition(internalAxisValues);
+            _externalJointPosition = new ExternalJointPosition(externalAxisValues);
         }
 
         /// <summary>
@@ -80,10 +78,8 @@ namespace RobotComponents.Kinematics
         {
             _robotInfo = robotInfo;
             _hideMesh = hideMesh;
-            _internalAxisValues = robotJointPosition.ToList();
-            _externalAxisValues = externalJointPosition.ToList();
-            _externalAxisValues.RemoveAll(value => value == 9e9); ; // TODO: temporary solution
-            UpdateInternalAxisValuesRadians();
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = externalJointPosition;
         }
 
         /// <summary>
@@ -96,10 +92,8 @@ namespace RobotComponents.Kinematics
         {
             _robotInfo = robotInfo;
             _hideMesh = hideMesh;
-            _internalAxisValues = jointTarget.RobotJointPosition.ToList();
-            _externalAxisValues = jointTarget.ExternalJointPosition.ToList();
-            _externalAxisValues.RemoveAll(value => value == 9e9); ; // TODO: temporary solution
-            UpdateInternalAxisValuesRadians();
+            _robotJointPosition = jointTarget.RobotJointPosition;
+            _externalJointPosition = jointTarget.ExternalJointPosition;
         }
 
         /// <summary>
@@ -111,8 +105,8 @@ namespace RobotComponents.Kinematics
         {
             _robotInfo = forwardKinematics.RobotInfo.Duplicate();
             _hideMesh = forwardKinematics.HideMesh;
-            _internalAxisValues = new List<double>(forwardKinematics.InternalAxisValues);
-            _externalAxisValues = new List<double>(forwardKinematics.ExternalAxisValues);
+            _robotJointPosition = forwardKinematics.RobotJointPosition.Duplicate();
+            _externalJointPosition = forwardKinematics.ExternalJointPosition.Duplicate();
             _tcpPlane = new Plane(forwardKinematics.TCPPlane);
             _errorText = new List<string>(forwardKinematics.ErrorText);
             _robotInfo = forwardKinematics.RobotInfo.Duplicate();
@@ -125,7 +119,6 @@ namespace RobotComponents.Kinematics
                     forwardKinematics.PosedExternalAxisMeshes[i][j] = forwardKinematics.PosedExternalAxisMeshes[i][j].DuplicateMesh();
                 }
             }
-            _internalAxisRads = new List<double>(forwardKinematics.InternalAxisRads).ToArray();
             _posedExternalAxisPlanes = new List<Plane>(forwardKinematics.PosedExternalAxisPlanes).ToArray();
             _inLimits = forwardKinematics.InLimits;
         }
@@ -188,16 +181,17 @@ namespace RobotComponents.Kinematics
             {
                 // Get the external axis
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
+                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
 
                 // Get external axis plane
-                _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalAxisValues[i]);
+                _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition[logic]);
 
                 // Check if it is an external linear axis: the first external linear axis
                 // External axes that move the robot: this updates the position of the robot
                 if (externalAxis is ExternalLinearAxis && count == 0)
                 {
                     ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
-                    _positionPlane = externalLinearAxis.CalculatePosition(_externalAxisValues[i], out bool inLimits);
+                    _positionPlane = externalLinearAxis.CalculatePosition(_externalJointPosition[logic], out bool inLimits);
                     count += 1;
                 }
             }
@@ -211,32 +205,32 @@ namespace RobotComponents.Kinematics
             // Axis 1
             Transform rot1;
             Plane planeAxis1 = new Plane(_robotInfo.InternalAxisPlanes[0]);
-            rot1 = Transform.Rotation(_internalAxisRads[0], planeAxis1.ZAxis, planeAxis1.Origin);
+            rot1 = Transform.Rotation(_robotJointPosition[0] * Math.PI / 180, planeAxis1.ZAxis, planeAxis1.Origin);
             // Axis 2
             Transform rot2;
             Plane planeAxis2 = new Plane(_robotInfo.InternalAxisPlanes[1]);
             planeAxis2.Transform(rot1);
-            rot2 = Transform.Rotation(_internalAxisRads[1], planeAxis2.ZAxis, planeAxis2.Origin);
+            rot2 = Transform.Rotation(_robotJointPosition[1] * Math.PI / 180, planeAxis2.ZAxis, planeAxis2.Origin);
             // Axis 3
             Transform rot3;
             Plane planeAxis3 = new Plane(_robotInfo.InternalAxisPlanes[2]);
             planeAxis3.Transform(rot2 * rot1);
-            rot3 = Transform.Rotation(_internalAxisRads[2], planeAxis3.ZAxis, planeAxis3.Origin);
+            rot3 = Transform.Rotation(_robotJointPosition[2] * Math.PI / 180, planeAxis3.ZAxis, planeAxis3.Origin);
             // Axis 4
             Transform rot4;
             Plane planeAxis4 = new Plane(_robotInfo.InternalAxisPlanes[3]);
             planeAxis4.Transform(rot3 * rot2 * rot1);
-            rot4 = Transform.Rotation(_internalAxisRads[3], planeAxis4.ZAxis, planeAxis4.Origin);
+            rot4 = Transform.Rotation(_robotJointPosition[3] * Math.PI / 180, planeAxis4.ZAxis, planeAxis4.Origin);
             // Axis 5
             Transform rot5;
             Plane planeAxis5 = new Plane(_robotInfo.InternalAxisPlanes[4]);
             planeAxis5.Transform(rot4 * rot3 * rot2 * rot1);
-            rot5 = Transform.Rotation(_internalAxisRads[4], planeAxis5.ZAxis, planeAxis5.Origin);
+            rot5 = Transform.Rotation(_robotJointPosition[4] * Math.PI / 180, planeAxis5.ZAxis, planeAxis5.Origin);
             // Axis 6
             Transform rot6;
             Plane planeAxis6 = new Plane(_robotInfo.InternalAxisPlanes[5]);
             planeAxis6.Transform(rot5 * rot4 * rot3 * rot2 * rot1);
-            rot6 = Transform.Rotation(_internalAxisRads[5], planeAxis6.ZAxis, planeAxis6.Origin);
+            rot6 = Transform.Rotation(_robotJointPosition[5] * Math.PI / 180, planeAxis6.ZAxis, planeAxis6.Origin);
 
             // Apply transformations on tcp plane
             _tcpPlane = new Plane(_robotInfo.ToolPlane);
@@ -265,8 +259,8 @@ namespace RobotComponents.Kinematics
                 // External axis meshes
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    // Update the mesh pose of the axis
-                    _robotInfo.ExternalAxis[i].PoseMeshes(_externalAxisValues[i]);
+                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    _robotInfo.ExternalAxis[i].PoseMeshes(_externalJointPosition[logic]);
                     _posedExternalAxisMeshes.Add(_robotInfo.ExternalAxis[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
                 }
             }
@@ -279,9 +273,20 @@ namespace RobotComponents.Kinematics
         /// <param name="externalAxisValues">List of external axis values in meter. The length of the list should be (for now) equal to 1.</param>
         public void Calculate(List<double> internalAxisValues, List<double> externalAxisValues)
         {
-            _internalAxisValues = internalAxisValues;
-            _externalAxisValues = externalAxisValues;
-            UpdateInternalAxisValuesRadians();
+            _robotJointPosition = new RobotJointPosition(internalAxisValues);
+            _externalJointPosition = new ExternalJointPosition(externalAxisValues);
+            Calculate();
+        }
+
+        /// <summary>
+        /// Sets new axis values and calculates the new solution.  
+        /// </summary>
+        /// <param name="robotJointPosition">The internal axis values as a Robot Joint Position.</param>
+        /// <param name="externalJointPosition">The external axis values as an External Joint Position.</param>
+        public void Calculate(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
+        {
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = externalJointPosition;
             Calculate();
         }
 
@@ -303,27 +308,13 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Updates the array with internal axis values in radians based from the list withi internal axis values in degrees. 
-        /// </summary>
-        private void UpdateInternalAxisValuesRadians()
-        {
-            _internalAxisRads = new double[_internalAxisValues.Count];
-            _internalAxisRads[0] = (_internalAxisValues[0] / 180) * Math.PI;
-            _internalAxisRads[1] = (_internalAxisValues[1] / 180) * Math.PI;
-            _internalAxisRads[2] = (_internalAxisValues[2] / 180) * Math.PI;
-            _internalAxisRads[3] = (_internalAxisValues[3] / 180) * Math.PI;
-            _internalAxisRads[4] = (_internalAxisValues[4] / 180) * Math.PI;
-            _internalAxisRads[5] = (_internalAxisValues[5] / 180) * Math.PI;
-        }
-
-        /// <summary>
         /// Checks if the interal axis values are outside its limits.
         /// </summary>
         private void CheckForInternalAxisLimits()
         {
-            for (int i = 0; i < _internalAxisValues.Count; i++)
+            for (int i = 0; i < 6; i++)
             {
-                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_internalAxisValues[i], false) == false)
+                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
                     _errorText.Add("Internal axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
@@ -338,13 +329,15 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                if (_externalAxisValues[i] == 9e9)
+                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+
+                if (_externalJointPosition[logic] == 9e9)
                 {
                     _errorText.Add("External axis value " + (i + 1).ToString() + " is not definied by the user.");
                     _inLimits = false;
                 }
 
-                else if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[i], false) == false)
+                else if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {
                     _errorText.Add("External axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
@@ -362,7 +355,10 @@ namespace RobotComponents.Kinematics
             get
             {
                 if (RobotInfo.IsValid == false) { return false; }
-                if (InternalAxisValues == null) { return false; }
+                if (RobotJointPosition == null) { return false; }
+                if (RobotJointPosition.IsValid == false) { return false; }
+                if (ExternalJointPosition == null) { return false; }
+                if (ExternalJointPosition.IsValid == false) { return false; }
                 return true;
             }
         }
@@ -409,47 +405,12 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// List of internal axis values in degrees.
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
-        public List<double> InternalAxisValues
-        {
-            get 
-            { 
-                return _internalAxisValues; 
-            }
-            set 
-            { 
-                _internalAxisValues = value;
-                UpdateInternalAxisValuesRadians();
-            }
-        }
-
-        /// <summary>
-        /// Array of internal axis values in radians.
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property RobotJointPosition", false)]
-        public double[] InternalAxisRads
-        {
-            get { return _internalAxisRads; }
-        }
-
-        /// <summary>
-        /// List of external axis values in ?. A external axis can be meter or degree
-        /// </summary>
-        [Obsolete("This property is obsolete. Instead, use the property ExternalJointPosition", false)]
-        public List<double> ExternalAxisValues
-        {
-            get { return _externalAxisValues; }
-            set { _externalAxisValues = value; }
-        }
-
-        /// <summary>
         /// Defines the Robot Joint Position
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
-            get { return new RobotJointPosition(_internalAxisValues); }
+            get { return _robotJointPosition; }
+            set { _robotJointPosition = value; }
         }
 
         /// <summary>
@@ -457,7 +418,8 @@ namespace RobotComponents.Kinematics
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {
-            get { return new ExternalJointPosition(_externalAxisValues); }
+            get { return _externalJointPosition; }
+            set { _externalJointPosition = value; }
         }
 
         /// <summary>

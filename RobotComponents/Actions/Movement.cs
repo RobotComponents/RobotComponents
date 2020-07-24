@@ -378,7 +378,7 @@ namespace RobotComponents.Actions
         {
             if (_movementType != 0 && _target is JointTarget)
             {
-                throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
             }
         }
 
@@ -430,7 +430,7 @@ namespace RobotComponents.Actions
                     // Check axis logic
                     if (logic == -1)
                     {
-                        throw new ArgumentException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
+                        throw new InvalidOperationException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
                     }
 
                     // Get external axis value
@@ -488,13 +488,20 @@ namespace RobotComponents.Actions
             }
 
             // A movement not combined with a digital output
-            if (_digitalOutput.IsValid == false)
+                if (_digitalOutput.IsValid == false)
             {
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
+                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
+                    string name = _target.Name;
+                    if (_target is RobotTarget)
+                    {
+                        name += "_jt";
+                    }
+
                     string code = "MoveAbsJ ";
-                    code += _target.Name + ", ";
+                    code += name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
@@ -521,7 +528,7 @@ namespace RobotComponents.Actions
                     code += _target.Name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
-                    code += toolName + "\\WObj:=";
+                    code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
                     return code;
                 }
@@ -529,7 +536,7 @@ namespace RobotComponents.Actions
                 // Wrong movement type or combination
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
 
@@ -540,8 +547,15 @@ namespace RobotComponents.Actions
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == 0)
                 {
+                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
+                    string name = _target.Name;
+                    if (_target is RobotTarget) 
+                    { 
+                        name += "_jt"; 
+                    }
+
                     string code = "MoveAbsJ ";
-                    code += _target.Name + ", ";
+                    code += name + ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
@@ -581,7 +595,7 @@ namespace RobotComponents.Actions
                 // Wrong movement type or combination
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }
@@ -612,16 +626,16 @@ namespace RobotComponents.Actions
                 // Generates the joint target variable from a robot target for a MoveAbsJ instruction
                 else
                 {
-                    if (!RAPIDGenerator.JointTargets.ContainsKey(robotTarget.Name))
+                    if (!RAPIDGenerator.Targets.ContainsKey(robotTarget.Name + "_jt"))
                     {
                         // Calculate the axis values from the robot target
                         RAPIDGenerator.Robot.InverseKinematics.Calculate();
                         RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
 
                         // Create a joint target from the axis values
-                        RobotJointPosition robJointPosition = new RobotJointPosition(RAPIDGenerator.Robot.InverseKinematics.InternalAxisValues);
-                        ExternalJointPosition extJointPosition = new ExternalJointPosition(RAPIDGenerator.Robot.InverseKinematics.ExternalAxisValues);
-                        JointTarget jointTarget = new JointTarget(robotTarget.Name, robJointPosition, extJointPosition);
+                        RobotJointPosition robJointPosition = RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate();
+                        ExternalJointPosition extJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
+                        JointTarget jointTarget = new JointTarget(robotTarget.Name + "_jt", robJointPosition, extJointPosition);
 
                         // Create the RAPID code
                         jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
@@ -642,7 +656,7 @@ namespace RobotComponents.Actions
                 // Joint Target combined with MoveL or MoveJ
                 else
                 {
-                    throw new ArgumentException("Invalid Movement: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }

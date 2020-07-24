@@ -108,7 +108,7 @@ namespace RobotComponentsABB.Components.Deconstruct
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; } // TODO
+            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; } 
         }
 
         /// <summary>

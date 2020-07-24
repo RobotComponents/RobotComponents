@@ -49,7 +49,7 @@ namespace RobotComponentsABB.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; } // TODO
+            get { return Properties.Resources.JointTarget_Parameter_Icon; } 
         }
 
         /// <summary>

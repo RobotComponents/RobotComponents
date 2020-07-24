@@ -14,21 +14,24 @@
 
 ---
 
-Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside of Rhinoceros Grasshopper. RobotComponents has the following possibilities and advantages: 
+Robot Components is a plugin for intuitive robot programming for ABB robots inside of Rhinoceros Grasshopper. Robot Components offers a wide set of tools to create toolpaths, simulate robotic motion and generate RAPID code within Grasshopper. Some of the main features include:
 
-- Predefined ABB robots
-- Possibility to define your own robot
-- Support for external axes
-- Possibility to override all the external axis values
-- Support for work objects including the support for movable work objects
-- An inverse kinematics and forward kinematics component
+- 30+ predefined ABB robot models
+- Possibility to add your own robot models
+- Support for external axes (both linear and rotational)
+- Possibility to define custom strategies for all external axis values
+- Support for work objects (including movable work objects)
+- Efficient forward and inverse kinematics
 - Possibility to add your own custom code lines
-- Support for setting up a real-time connection with the IRC5 controller
+- Real-time connection with IRC5 controllers
+- Open API to develop your custom components using either Python or C# (documentation coming soon)
 
 ## Getting Started
 You can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
 
-You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://robotcomponents.github.io/RobotComponents-Documentation/). Note: The documentation website is currently in development and not complete yet. 
+In case you want to use the components from the Controller Utility section you additionally have to install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the ABB Robot Communication Runtime (you can download it by clicking [here](https://github.com/RobotComponents/RobotComponents/raw/master/Utility/ABB%20Robot%20Communication%20Runtime%207.0.zip)). The current release is built and tested against the ABB PC SDK version 2020.1 (ABB Robot Communication Runtime 7.0). We do not guarantee that the Controller Utility components work with older versions of the ABB Robot Communucation Runtime or Robot Studio.
+
+You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://robotcomponents.github.io/RobotComponents-Documentation/).
 
 A release on Food4Rhino is planned in the next months. For easy sharing of the download link and the documentation (with e.g. students) you can also use our linktree: https://linktr.ee/RobotComponents
 
@@ -61,7 +64,7 @@ RobotComponents is a free to use Grasshopper plugin and does not legally bind yo
 
 ```
 EDEK Uni Kassel (2020).  
-RobotComponents v0.09.001: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+RobotComponents v0.10.002: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 

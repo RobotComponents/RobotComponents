@@ -211,9 +211,9 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (!RAPIDGenerator.JointTargets.ContainsKey(_name))
+            if (!RAPIDGenerator.Targets.ContainsKey(_name))
             {
-                RAPIDGenerator.JointTargets.Add(_name, this);
+                RAPIDGenerator.Targets.Add(_name, this);
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }

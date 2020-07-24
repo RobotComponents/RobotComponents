@@ -35,7 +35,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         public MovementComponent()
           : base("Move", "M",
-              "Defines a linear or nonlinear movement instruction."
+              "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")

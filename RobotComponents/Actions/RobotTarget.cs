@@ -313,10 +313,10 @@ namespace RobotComponents.Actions
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // Only adds target code if target is not already defined
-            if (!RAPIDGenerator.RobotTargets.ContainsKey(_name))
+            if (!RAPIDGenerator.Targets.ContainsKey(_name))
             {
                 // Add to dictionary
-                RAPIDGenerator.RobotTargets.Add(_name, this);
+                RAPIDGenerator.Targets.Add(_name, this);
 
                 // Generate code
                 string code = "VAR robtarget ";

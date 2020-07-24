@@ -17,7 +17,6 @@ using RobotComponentsABB.Parameters.Actions;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Utils;
 // ABB Libs
-using ABB.Robotics.Controllers.RapidDomain;
 using ABB.Robotics.Controllers.MotionDomain;
 
 namespace RobotComponentsABB.Components.ControllerUtility

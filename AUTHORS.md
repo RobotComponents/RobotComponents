@@ -8,7 +8,7 @@
 ## Main Developers
 
 ### Active
-- [Arjen Deetman](https://github.com/arjendeetman) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)] <<deetman@uni-kassel.de>>
+- [Arjen Deetman](https://github.com/arjendeetman) [[EDEK Uni Kassel](http://edek.uni-kassel.de/), [individual/personal](http://www.arjendeetman.nl)] <<deetman@uni-kassel.de>>
 - [Gabriel Rumpf](https://github.com/GabrielRumpf) [[EDEK Uni Kassel](http://edek.uni-kassel.de/)]
 
 ### Inactive

@@ -154,11 +154,17 @@
   <data name="DeconstructAbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructAbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructExternalJointPosition_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructExternalJointPosition_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeconstructExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructExternalRotationalAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructExternalRotationalAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeconstructJointTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructJointTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,8 +172,14 @@
   <data name="DeconstructRobotInfoComponent_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructRobotInfoComponent_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructRobotJointPosition_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructRobotJointPosition_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeconstructRobotTool_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructRobotTool_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeconstructRobTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructRobTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructSpeedData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructSpeedData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -189,6 +201,12 @@
   </data>
   <data name="ExternalAxis_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalAxis_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalJointPosition_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalJointPosition_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExternalJointPosition_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ExternalJointPosition_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ExternalLinearAxis_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ExternalLinearAxis_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -289,6 +307,12 @@
   <data name="IRB7600_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB7600_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="JointTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JointTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JointTarget_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JointTarget_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Movement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Movement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -372,6 +396,18 @@
   </data>
   <data name="RobotInfo_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobotInfo_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RobotJointPosition_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobotJointPosition_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RobotJointPosition_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobotJointPosition_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RobTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RobTarget_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobTarget_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SetDigitalInput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SetDigitalInput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

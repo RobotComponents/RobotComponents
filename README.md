@@ -31,7 +31,7 @@ You can download the latest release directly from this repository's [releases pa
 
 In case you want to use the components from the Controller Utility section you additionally have to install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the ABB Robot Communication Runtime (you can download it by clicking [here](https://github.com/RobotComponents/RobotComponents/raw/master/Utility/ABB%20Robot%20Communication%20Runtime%207.0.zip)). The current release is built and tested against the ABB PC SDK version 2020.1 (ABB Robot Communication Runtime 7.0). We do not guarantee that the Controller Utility components work with older versions of the ABB Robot Communucation Runtime or Robot Studio.
 
-You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://robotcomponents.github.io/RobotComponents-Documentation/). Note: The documentation website is currently in development and not complete yet. 
+You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the documentation [here](https://robotcomponents.github.io/RobotComponents-Documentation/).
 
 A release on Food4Rhino is planned in the next months. For easy sharing of the download link and the documentation (with e.g. students) you can also use our linktree: https://linktr.ee/RobotComponents
 

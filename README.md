@@ -19,7 +19,7 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - 30+ predefined ABB robot models
 - Possibility to add your own robot models
 - Support for external axes (both linear and rotational)
-- Possibility to define customs strategies for all external axis values
+- Possibility to define custom strategies for all external axis values
 - Support for work objects (including movable work objects)
 - Efficient forward and inverse kinematics
 - Possibility to add your own custom code lines

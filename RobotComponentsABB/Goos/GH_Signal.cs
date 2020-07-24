@@ -99,7 +99,7 @@ namespace RobotComponentsABB.Goos
             }
             else
             {
-                return "Signal Name : " + Value.Name + "\nValue : " + Value.Value;
+                return "Signal (" + Value.Name + "\\" + Value.Value + ")";
             }
         }
 

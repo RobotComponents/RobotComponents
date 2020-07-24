@@ -71,7 +71,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         // Fields
         private int _pickedIndex = 0;
         private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
-        private ABB.Robotics.Controllers.Controller _controller = null;
+        private Controller _controller = null;
         private GH_Signal _signalGoo;
         private string _currentSignalName = "";
         private Guid _currentGuid = Guid.Empty;

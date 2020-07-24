@@ -13,6 +13,9 @@ using Grasshopper.Kernel;
 using RobotComponentsABB.Resources;
 using RobotComponentsABB.Goos;
 using RobotComponentsABB.Utils;
+// ABB Libs
+using ABB.Robotics.Controllers;
+using ABB.Robotics.Controllers.Discovery;
 
 namespace RobotComponentsABB.Components.ControllerUtility
 {
@@ -61,7 +64,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
 
         // Fields
         private int _pickedIndex = 0;
-        private static List<ABB.Robotics.Controllers.Controller> _controllerInstance = new List<ABB.Robotics.Controllers.Controller>();
+        private static List<Controller> _controllerInstance = new List<Controller>();
         private GH_Controller _controllerGoo;
         private bool _fromMenu = false;
 
@@ -83,7 +86,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 var controllerNow = GetController();
                 if (controllerNow != null)
                 {
-                    _controllerGoo = new GH_Controller(controllerNow as ABB.Robotics.Controllers.Controller);
+                    _controllerGoo = new GH_Controller(controllerNow as Controller);
                 }
                 else
                 {
@@ -115,7 +118,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                 {
                     if (_controllerGoo.Value != null)
                     {
-                        ABB.Robotics.Controllers.Controller controller = _controllerGoo.Value;
+                        Controller controller = _controllerGoo.Value;
 
                         if (controller.Connected == true)
                         {
@@ -123,9 +126,6 @@ namespace RobotComponentsABB.Components.ControllerUtility
                         }
                         
                         controller.Dispose();
-
-                        _controllerGoo.Value = null;
-                        _controllerGoo = null;
                     }
                 }
             }
@@ -137,15 +137,15 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// Get the controller
         /// </summary>
         /// <returns> The picked controller. </returns>
-        private ABB.Robotics.Controllers.Controller GetController()
+        private Controller GetController()
         {
             // Initiate and clear variables
             _controllerInstance.Clear();
-            ABB.Robotics.Controllers.ControllerInfo[] controllers;
+            ControllerInfo[] controllers;
             List<string> controllerNames = new List<string>() { };
 
             // Scan for a network with controller
-            ABB.Robotics.Controllers.Discovery.NetworkScanner scanner = new ABB.Robotics.Controllers.Discovery.NetworkScanner();
+            NetworkScanner scanner = new NetworkScanner();
             scanner.Scan();
 
             // Try to get the controllers from the netwerok
@@ -162,7 +162,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             // Get the names of all the controllers in the scanned network
             for (int i = 0; i < controllers.Length; i++)
             {
-                _controllerInstance.Add(ABB.Robotics.Controllers.ControllerFactory.CreateFrom(controllers[i]));
+                _controllerInstance.Add(Controller.Connect(controllers[i], ConnectionType.Standalone));
                 controllerNames.Add(_controllerInstance[i].Name);
             }
 
@@ -253,7 +253,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// <summary>
         /// List with all the ABB controllers in the network
         /// </summary>
-        public static List<ABB.Robotics.Controllers.Controller> ControllerInstance
+        public static List<Controller> ControllerInstance
         {
             get { return _controllerInstance; }
         }

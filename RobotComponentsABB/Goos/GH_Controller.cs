@@ -21,7 +21,7 @@ namespace RobotComponentsABB.Goos
         /// </summary>
         public GH_Controller()
         {
-            this.Value = new Controller();
+            this.Value = null;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace RobotComponentsABB.Goos
         public GH_Controller(Controller controller)
         {
             if (controller == null)
-                controller = new Controller();
+                controller = null;
             this.Value = controller;
         }
 
@@ -61,7 +61,7 @@ namespace RobotComponentsABB.Goos
         /// <returns> A duplicate of the CommentGoo. </returns>
         public GH_Controller DuplicateController()
         {
-            return new GH_Controller(Value == null ? new Controller() : Value);
+            return new GH_Controller(Value == null ? null : Value);
         }
         #endregion
 
@@ -90,7 +90,14 @@ namespace RobotComponentsABB.Goos
             }
             else
             {
-                return "Name : " + Value.Name + "\nSystem Name : " + Value.SystemName + "\nIsVirtual : " + Value.IsVirtual.ToString();
+                if (Value.IsVirtual == true)
+                {
+                    return "Virtual controller (" + Value.Name + ")";
+                }
+                else
+                {
+                    return "Physical controller (" + Value.Name + ")";
+                }
             }
         }
 

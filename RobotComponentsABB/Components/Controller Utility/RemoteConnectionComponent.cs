@@ -175,7 +175,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
                     }
 
                     // The real upload
-                    using (Mastership master = Mastership.Request(_controller.Rapid))
+                    using (Mastership master = Mastership.Request(_controller))
                     {
                         // Get task
                         Task[] tasks = _controller.Rapid.GetTasks();
@@ -344,7 +344,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Execute the program
-            using (Mastership master = Mastership.Request(_controller.Rapid))
+            using (Mastership master = Mastership.Request(_controller))
             {
                 _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
 
@@ -377,7 +377,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
             }
 
             // Stop the program
-            using (Mastership master = Mastership.Request(_controller.Rapid))
+            using (Mastership master = Mastership.Request(_controller))
             {
                 _controller.Rapid.Stop(StopMode.Instruction);
 

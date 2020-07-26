@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponents.Gh.Goos
 {
     /// <summary>
     /// Controller wrapper class, makes sure the controller can be used in Grasshopper.

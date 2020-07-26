@@ -11,7 +11,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
-namespace RobotComponentsGoos.Definitions
+namespace RobotComponents.Gh.Goos.Definitions
 {
     /// <summary>
     /// External Linear Axis Goo wrapper class, makes sure the External Linear Axis class can be used in Grasshopper.

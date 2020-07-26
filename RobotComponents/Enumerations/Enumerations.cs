@@ -3,7 +3,7 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponents
+namespace RobotComponents.Enumerations
 {
     /// <summary>
     /// Defines if the axis moves linear or rotational

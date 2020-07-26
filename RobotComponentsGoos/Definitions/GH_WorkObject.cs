@@ -11,7 +11,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
-namespace RobotComponentsGoos.Definitions
+namespace RobotComponents.Gh.Goos.Definitions
 {
     /// <summary>
     /// Work Object Goo wrapper class, makes sure the Work Object class can be used in Grasshopper.

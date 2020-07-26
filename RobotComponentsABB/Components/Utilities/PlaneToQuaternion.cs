@@ -11,9 +11,9 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.

@@ -9,14 +9,14 @@ using System;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.08.000
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Absolute Joint Movement component. An inherent from the GH_Component Class.

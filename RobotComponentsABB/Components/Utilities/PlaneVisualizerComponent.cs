@@ -14,9 +14,9 @@ using Grasshopper.Kernel.Data;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Plane visualization component. An inherent from the GH_Component Class.

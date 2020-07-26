@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using RobotComponentsABB.Components.ControllerUtility;
+using RobotComponents.Gh.Components.ControllerUtility;
 
-namespace RobotComponentsABB.Resources
+namespace RobotComponents.Gh.Resources
 {
     public partial class PickDOForm : Form
     {

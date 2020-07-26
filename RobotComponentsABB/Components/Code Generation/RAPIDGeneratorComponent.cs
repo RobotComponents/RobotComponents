@@ -13,11 +13,11 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Utils;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Parameters.Actions;
+using RobotComponents.Gh.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Actions;
 
-namespace RobotComponentsABB.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
@@ -290,7 +290,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.RAPID_Icon; }
+            get { return RobotComponents.Gh.Properties.Resources.RAPID_Icon; }
         }
 
         /// <summary>

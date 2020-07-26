@@ -6,10 +6,10 @@
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement class can be used in Grasshopper.

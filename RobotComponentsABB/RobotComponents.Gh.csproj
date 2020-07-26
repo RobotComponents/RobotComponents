@@ -8,8 +8,8 @@
     <ProjectGuid>{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RobotComponentsABB</RootNamespace>
-    <AssemblyName>RobotComponentsABB</AssemblyName>
+    <RootNamespace>RobotComponents.Gh</RootNamespace>
+    <AssemblyName>RobotComponents.Gh</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -470,9 +470,9 @@
     <None Include="Resources\Target_Icon_Old.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RobotComponentsGoos\RobotComponentsGoos.csproj">
+    <ProjectReference Include="..\RobotComponentsGoos\RobotComponents.Gh.Goos.csproj">
       <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
-      <Name>RobotComponentsGoos</Name>
+      <Name>RobotComponents.Gh.Goos</Name>
     </ProjectReference>
     <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>

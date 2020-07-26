@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Wait Time Goo wrapper class, makes sure the Wait Time class can be used in Grasshopper.

@@ -12,14 +12,14 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)
 // It is replaced with a new target component.
 
-namespace RobotComponentsABB.Components.Obsolete
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// OBSOLETE: RobotComponents Action : Target component. Will be removed in the future. An inherent from the GH_Component Class.

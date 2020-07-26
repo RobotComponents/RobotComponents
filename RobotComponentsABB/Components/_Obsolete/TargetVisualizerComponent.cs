@@ -13,12 +13,12 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsGoos.Actions;
+using RobotComponents.Gh.Goos.Actions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.08.000
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Target visualization component. An inherent from the GH_Component Class.

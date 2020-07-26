@@ -12,8 +12,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Goos;
+using RobotComponents.Gh.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.RapidDomain;
 using ABB.Robotics.Controllers.MotionDomain;
@@ -22,7 +22,7 @@ using ABB.Robotics.Controllers.MotionDomain;
 // It is OBSOLETE since version 0.10.000
 // This component is replaced with a new component
 
-namespace RobotComponentsABB.Components.ControllerUtility
+namespace RobotComponents.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
@@ -209,7 +209,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.GetAxisValues_Icon; }
+            get { return RobotComponents.Gh.Properties.Resources.GetAxisValues_Icon; }
         }
 
         /// <summary>

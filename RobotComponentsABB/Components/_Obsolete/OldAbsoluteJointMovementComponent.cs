@@ -16,16 +16,16 @@ using GH_IO.Serialization;
 // Robot Components Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
-using RobotComponentsGoos.Actions;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Utils;
+using RobotComponents.Gh.Goos.Actions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.08.000
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Absolute Joint Movement component. An inherent from the GH_Component Class.
@@ -570,7 +570,7 @@ namespace RobotComponentsABB.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.AbsoluteJointMovement_Icon; }
+            get { return RobotComponents.Gh.Properties.Resources.AbsoluteJointMovement_Icon; }
         }
 
         /// <summary>

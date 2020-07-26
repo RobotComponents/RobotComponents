@@ -18,14 +18,14 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Simulation
+namespace RobotComponents.Gh.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

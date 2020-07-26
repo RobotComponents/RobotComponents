@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Auto Axis Configuration Goo wrapper class, makes sure the Auto Axis Configuration class can be used in Grasshopper.

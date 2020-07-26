@@ -14,10 +14,10 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Definitions.Presets;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Definitions
+namespace RobotComponents.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents IRB6650S-200/3.0 preset component. An inherent from the GH_Component Class.

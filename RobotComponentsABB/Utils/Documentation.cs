@@ -8,17 +8,17 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponentsABB.Components.CodeGeneration;
-using RobotComponentsABB.Components.ControllerUtility;
-using RobotComponentsABB.Components.Deconstruct;
-using RobotComponentsABB.Components.Simulation;
-using RobotComponentsABB.Components.Definitions;
-using RobotComponentsABB.Components.Utilities;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Parameters.Definitions;
+using RobotComponents.Gh.Components.CodeGeneration;
+using RobotComponents.Gh.Components.ControllerUtility;
+using RobotComponents.Gh.Components.Deconstruct;
+using RobotComponents.Gh.Components.Simulation;
+using RobotComponents.Gh.Components.Definitions;
+using RobotComponents.Gh.Components.Utilities;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Definitions;
 
 
-namespace RobotComponentsABB.Utils
+namespace RobotComponents.Gh.Utils
 {
     /// <summary>
     /// Static class that contains all the data (e.g. links to pages) that is relevant for our documentation.

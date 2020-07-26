@@ -3,7 +3,7 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponentsABB.Resources
+namespace RobotComponents.Gh.Resources
 {
     partial class PickDOForm
     {

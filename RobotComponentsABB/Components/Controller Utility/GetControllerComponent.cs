@@ -10,14 +10,14 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsABB.Resources;
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Resources;
+using RobotComponents.Gh.Goos;
+using RobotComponents.Gh.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.Discovery;
 
-namespace RobotComponentsABB.Components.ControllerUtility
+namespace RobotComponents.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get and connect to an ABB controller. An inherent from the GH_Component Class.

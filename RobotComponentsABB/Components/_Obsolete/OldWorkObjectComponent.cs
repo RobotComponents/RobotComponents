@@ -12,14 +12,14 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (January 2020)
 // It is replaced with a new component.
 
-namespace RobotComponentsABB.Components.Definitions
+namespace RobotComponents.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.

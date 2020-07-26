@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Target Goo wrapper class, makes sure the Target class can be used in Grasshopper.

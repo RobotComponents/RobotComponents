@@ -15,14 +15,14 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Kinematics;
-using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
+using RobotComponents.Gh.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Obsolete
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

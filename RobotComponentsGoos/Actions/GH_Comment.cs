@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Comment Goo wrapper class, makes sure the Comment class can be used in Grasshopper.

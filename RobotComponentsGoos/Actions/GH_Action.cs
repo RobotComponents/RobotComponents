@@ -11,7 +11,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Action Goo wrapper class, makes sure the Action class can be used in Grasshopper.

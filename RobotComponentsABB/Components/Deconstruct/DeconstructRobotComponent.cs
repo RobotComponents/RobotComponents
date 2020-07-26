@@ -13,10 +13,10 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Robot Info component. An inherent from the GH_Component Class.

@@ -15,13 +15,13 @@ using Grasshopper.Kernel.Special;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponentsABB.Goos;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Goos;
+using RobotComponents.Gh.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.RapidDomain;
 using ABB.Robotics.Controllers.MotionDomain;
 
-namespace RobotComponentsABB.Components.ControllerUtility
+namespace RobotComponents.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get Plane from a defined controller. An inherent from the GH_Component Class.
@@ -230,7 +230,7 @@ namespace RobotComponentsABB.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.GetPlane_Icon; }
+            get { return RobotComponents.Gh.Properties.Resources.GetPlane_Icon; }
         }
 
         /// <summary>

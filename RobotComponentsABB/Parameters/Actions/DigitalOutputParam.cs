@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Actions;
+using RobotComponents.Gh.Goos.Actions;
 
-namespace RobotComponentsABB.Parameters.Actions
+namespace RobotComponents.Gh.Parameters.Actions
 {
     /// <summary>
     /// Digital Output parameter

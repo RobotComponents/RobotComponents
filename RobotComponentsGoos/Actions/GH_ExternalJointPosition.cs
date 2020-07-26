@@ -10,7 +10,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// External Joint Position Goo wrapper class, makes sure the External Joint Position class can be used in Grasshopper.

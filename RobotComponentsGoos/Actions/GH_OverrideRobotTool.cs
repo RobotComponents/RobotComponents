@@ -7,9 +7,9 @@
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Override Robot Tool Goo wrapper class, makes sure the Override Robot Tool class can be used in Grasshopper.

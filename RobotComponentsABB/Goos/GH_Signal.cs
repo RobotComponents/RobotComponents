@@ -12,7 +12,7 @@ using Rhino.Geometry;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers.IOSystemDomain;
 
-namespace RobotComponentsABB.Goos
+namespace RobotComponents.Gh.Goos
 {
     /// <summary>
     /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.

@@ -8,14 +8,14 @@ using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsGoos.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
+using RobotComponents.Gh.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (February 2020)
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.

@@ -10,13 +10,13 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 
-namespace RobotComponentsABB.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.

@@ -11,11 +11,11 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Override Robot Tool component. An inherent from the GH_Component Class.

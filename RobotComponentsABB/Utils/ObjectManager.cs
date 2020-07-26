@@ -10,11 +10,11 @@ using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Components.Obsolete;
-using RobotComponentsABB.Components.CodeGeneration;
-using RobotComponentsABB.Components.Definitions;
+using RobotComponents.Gh.Components.Obsolete;
+using RobotComponents.Gh.Components.CodeGeneration;
+using RobotComponents.Gh.Components.Definitions;
 
-namespace RobotComponentsABB.Utils
+namespace RobotComponents.Gh.Utils
 {
     /// <summary>
     /// The ObjectManager keeps track of different variables to enable global funcionalities

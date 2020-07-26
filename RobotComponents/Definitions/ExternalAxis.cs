@@ -7,6 +7,8 @@
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Definitions
 {

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
+// RobotComponents Libs
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Definitions
 {

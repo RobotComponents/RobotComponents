@@ -10,9 +10,9 @@ using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsGoos.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Movement Goo wrapper class, makes sure the Movement class can be used in Grasshopper.

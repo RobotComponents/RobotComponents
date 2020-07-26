@@ -11,7 +11,7 @@ using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
 
-namespace RobotComponentsGoos.Actions
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Speed Data Goo wrapper class, makes sure the Speed Data class can be used in Grasshopper.

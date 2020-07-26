@@ -9,9 +9,9 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Info component. An inherent from the GH_Component Class.

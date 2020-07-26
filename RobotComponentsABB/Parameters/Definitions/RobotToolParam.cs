@@ -11,9 +11,9 @@ using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponnents Libs
-using RobotComponentsGoos.Definitions;
+using RobotComponents.Gh.Goos.Definitions;
 
-namespace RobotComponentsABB.Parameters.Definitions
+namespace RobotComponents.Gh.Parameters.Definitions
 {
     /// <summary>
     /// Robot Tool parameter

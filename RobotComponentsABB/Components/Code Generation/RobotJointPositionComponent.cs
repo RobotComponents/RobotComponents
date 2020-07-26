@@ -10,10 +10,10 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.

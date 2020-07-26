@@ -13,15 +13,15 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponentsGoos.Actions;
-using RobotComponentsABB.Parameters.Actions;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Goos.Actions;
+using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.05.000 (January 2020)
 // It is replaced with a new movement component. 
 
-namespace RobotComponentsABB.Components.Obsolete
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// OBSOLETE: RobotComponents Action : Momvement component. Will be removed in the future. An inherent from the GH_Component Class.
@@ -269,7 +269,7 @@ namespace RobotComponentsABB.Components.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponentsABB.Properties.Resources.Movement_Icon; }
+            get { return RobotComponents.Gh.Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>

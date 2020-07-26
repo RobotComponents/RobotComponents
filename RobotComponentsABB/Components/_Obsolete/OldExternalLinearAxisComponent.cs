@@ -11,14 +11,14 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponentsABB.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.06.000 (February 2020)
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Definitions
+namespace RobotComponents.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.

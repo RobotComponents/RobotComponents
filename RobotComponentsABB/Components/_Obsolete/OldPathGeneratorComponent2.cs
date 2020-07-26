@@ -17,14 +17,14 @@ using GH_IO.Serialization;
 using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Actions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Simulation
+namespace RobotComponents.Gh.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.

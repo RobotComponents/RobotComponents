@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 
-namespace RobotComponentsABB.Utils
+namespace RobotComponents.Gh.Utils
 {
     /// <summary>
     /// Helper methods and properties

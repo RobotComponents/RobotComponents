@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 
-namespace RobotComponentsABB.Utils
+namespace RobotComponents.Gh.Utils
 {
     /// <summary>
     /// Document Manager class

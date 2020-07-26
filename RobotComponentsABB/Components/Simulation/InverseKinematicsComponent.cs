@@ -13,12 +13,12 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
-using RobotComponentsABB.Parameters.Definitions;
-using RobotComponentsABB.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Kinematics;
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Simulation
+namespace RobotComponents.Gh.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.

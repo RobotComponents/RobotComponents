@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RobotComponentsABB.Properties {
+namespace RobotComponents.Gh.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RobotComponentsABB.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RobotComponentsABB.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RobotComponents.Gh.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -815,9 +815,9 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components.ControllerUtility;
+        ///using RobotComponents.Gh.Components.ControllerUtility;
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    public partial class PickControllerForm : Form
         ///    {
@@ -845,7 +845,7 @@ namespace RobotComponentsABB.Properties {
         ///// Free Software Foundation. For more information and the LICENSE file, 
         ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    partial class PickControllerForm
         ///    {
@@ -890,9 +890,9 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components.ControllerUtility;
+        ///using RobotComponents.Gh.Components.ControllerUtility;
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    public partial class PickDIForm : Form
         ///    {
@@ -920,7 +920,7 @@ namespace RobotComponentsABB.Properties {
         ///// Free Software Foundation. For more information and the LICENSE file, 
         ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    partial class PickDIForm
         ///    {
@@ -965,9 +965,9 @@ namespace RobotComponentsABB.Properties {
         ///using System.Collections.Generic;
         ///using System.Windows.Forms;
         ///
-        ///using RobotComponentsABB.Components.ControllerUtility;
+        ///using RobotComponents.Gh.Components.ControllerUtility;
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    public partial class PickDOForm : Form
         ///    {
@@ -995,7 +995,7 @@ namespace RobotComponentsABB.Properties {
         ///// Free Software Foundation. For more information and the LICENSE file, 
         ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
         ///
-        ///namespace RobotComponentsABB.Resources
+        ///namespace RobotComponents.Gh.Resources
         ///{
         ///    partial class PickDOForm
         ///    {

@@ -11,9 +11,9 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponentsABB.Utils;
+using RobotComponents.Gh.Utils;
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Naming component. An inherent from the GH_Component Class.

@@ -15,7 +15,7 @@ using Rhino.Geometry;
 // It is OBSOLETE since version 0.07.002.
 // It is replaced with a new component. 
 
-namespace RobotComponentsABB.Components.Utilities
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.

@@ -1,0 +1,606 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RobotComponents.Gh</RootNamespace>
+    <AssemblyName>RobotComponents.Gh</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ABB.Robotics.Controllers.PC">
+      <HintPath>..\DLLs\ABB.Robotics.Controllers.PC.dll</HintPath>
+    </Reference>
+    <Reference Include="GH_IO">
+      <HintPath>..\DLLs\GH_IO.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GH_Util">
+      <HintPath>..\DLLs\GH_Util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Grasshopper">
+      <HintPath>..\DLLs\Grasshopper.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\DLLs\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RobotStudio.Services.RobApi, Version=20.1.8982.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\RobotStudio.Services.RobApi.dll</HintPath>
+    </Reference>
+    <Reference Include="RobotStudio.Services.RobApi.Desktop, Version=20.1.8982.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLLs\RobotStudio.Services.RobApi.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExtJointPosComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructJointTargetComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobJointPosComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobotTargetComponent.cs" />
+    <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
+    <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldCodeLine_Component.cs" />
+    <Compile Include="Components\_Obsolete\OldCommentComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructAbsolutJointMovementComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructRobotInfoComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldGetAxisValuesComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldInverseKinematicsComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldMovementComponent3.cs" />
+    <Compile Include="Components\_Obsolete\OldPathGeneratorComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion3.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromPlanesComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
+    <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
+    <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
+    <Compile Include="Components\Code Generation\CommentComponent.cs" />
+    <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldMovementComponent2.cs" />
+    <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructMovementComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructZoneDataComponent.cs" />
+    <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_125_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_300_2_70_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_245_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_200_2_60_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_175_3_05_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_155_2_85_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_150_3_20_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6790_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6700_235_2_65_Component.cs" />
+    <Compile Include="Components\Definitions\IRB7600_150_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB7600_340_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6790_235_2_65_Component.cs" />
+    <Compile Include="Components\Definitions\IRB7600_500_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\IRB7600_400_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\IRB7600_325_3_10_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650S_90_3_90_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6640_235_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6620_150_2_20_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650_200_2_75_Component.cs" />
+    <Compile Include="Components\Definitions\RobotToolFromQuaternionComponent.cs" />
+    <Compile Include="Components\Utilities\GetObjectManager.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion2.cs" />
+    <Compile Include="Components\_Obsolete\OldPlaneToQuaternion.cs" />
+    <Compile Include="Components\_Obsolete\OldQuaternionToPlane.cs" />
+    <Compile Include="Components\_Obsolete\OldGetDigitalOutputComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldGetDigitalInputComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRAPIDGeneratorComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExternalRotationalAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructAbsolutJointMovementComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldWorkObjectComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructWorkObjectComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldDeconstructExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructWorkObjectComponent.cs" />
+    <Compile Include="Components\Definitions\ExternalRotationalAxisComponent.cs" />
+    <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
+    <Compile Include="Components\Utilities\QuaternionToPlane.cs" />
+    <Compile Include="Components\_Obsolete\OldForwardKinematicsComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldMovementComponent.cs" />
+    <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
+    <Compile Include="Components\Code Generation\RAPIDGeneratorComponent.cs" />
+    <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldTargetComponent2.cs" />
+    <Compile Include="Components\_Obsolete\OldTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
+    <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetAxisValuesComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetControllerComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetDigitalInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetDigitalOutputComponent.cs" />
+    <Compile Include="Components\Controller Utility\RemoteConnectionComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetDigitalInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructMovementComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobotComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructRobotToolComponent.cs" />
+    <Compile Include="Components\Deconstruct\DeconstructSpeedDataComponent.cs" />
+    <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
+    <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
+    <Compile Include="Components\Definitions\IRB1200_7_70_Component.cs" />
+    <Compile Include="Components\Definitions\IRB120_3_0_58_Component.cs" />
+    <Compile Include="Components\Definitions\IRB140_6_0_81_Component.cs" />
+    <Compile Include="Components\Definitions\IRB1600_X_1_20_Component.cs" />
+    <Compile Include="Components\Definitions\IRB1600_X_1_45_Component.cs" />
+    <Compile Include="Components\Definitions\IRB1660ID_Component.cs" />
+    <Compile Include="Components\Definitions\IRB2600ID_15_1_85_Component.cs" />
+    <Compile Include="Components\Definitions\IRB2600ID_8_2_00_Component.cs" />
+    <Compile Include="Components\Definitions\IRB2600_12_1_85_Component.cs" />
+    <Compile Include="Components\Definitions\IRB2600_X_1_65_Component.cs" />
+    <Compile Include="Components\Definitions\IRB4600_20_2_50_Component.cs" />
+    <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
+    <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
+    <Compile Include="Components\Definitions\RobotComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
+    <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
+    <Compile Include="Components\Simulation\InverseKinematicsComponent.cs" />
+    <Compile Include="Components\_Obsolete\OldPathGeneratorComponent.cs" />
+    <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
+    <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
+    <Compile Include="Components\Utilities\InfoComponent.cs" />
+    <Compile Include="Components\Utilities\NameGeneratorComponent.cs" />
+    <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
+    <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
+    <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
+    <Compile Include="Goos\GH_Controller.cs" />
+    <Compile Include="Goos\GH_Signal.cs" />
+    <Compile Include="Parameters\Actions\ActionParam.cs" />
+    <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
+    <Compile Include="Parameters\Actions\JointTargetParam.cs" />
+    <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />
+    <Compile Include="Parameters\Actions\RobotTargetParam.cs" />
+    <Compile Include="Parameters\Actions\ZoneDataParam.cs" />
+    <Compile Include="Parameters\Definitions\ExternalAxisParam.cs" />
+    <Compile Include="Parameters\Actions\SpeedDataParam.cs" />
+    <Compile Include="Parameters\_Obsolete\AbsoluteJointMovementParam.cs" />
+    <Compile Include="Parameters\Definitions\WorkObjectParam.cs" />
+    <Compile Include="Parameters\Actions\AutoAxisConfigParam.cs" />
+    <Compile Include="Parameters\Actions\CodeLineParam.cs" />
+    <Compile Include="Parameters\Actions\CommentParam.cs" />
+    <Compile Include="Parameters\Actions\DigitalOutputParam.cs" />
+    <Compile Include="Parameters\Definitions\ExternalLinearAxisParam.cs" />
+    <Compile Include="Parameters\Definitions\ExternalRotationalAxisParam.cs" />
+    <Compile Include="Parameters\Actions\MovementParam.cs" />
+    <Compile Include="Parameters\Definitions\RobotParam.cs" />
+    <Compile Include="Parameters\Definitions\RobotToolParam.cs" />
+    <Compile Include="Parameters\Actions\OverrideRobotToolParam.cs" />
+    <Compile Include="Parameters\Actions\TargetParam.cs" />
+    <Compile Include="Parameters\Actions\WaitTimeParam.cs" />
+    <Compile Include="Parameters\Actions\WaitDIParam.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Documentation.cs" />
+    <Compile Include="Utils\DocumentManager.cs" />
+    <Compile Include="Utils\HelperMethods.cs" />
+    <Compile Include="Utils\ObjectManager.cs" />
+    <Compile Include="Resources\PickControllerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickControllerForm.designer.cs">
+      <DependentUpon>PickControllerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PickDIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickDIForm.designer.cs">
+      <DependentUpon>PickDIForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PickDOForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\PickDOForm.designer.cs">
+      <DependentUpon>PickDOForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PickDOForm.resx">
+      <DependentUpon>PickDOForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PickDIForm.resx">
+      <DependentUpon>PickDIForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PickControllerForm.resx">
+      <DependentUpon>PickControllerForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Auto_Icon.png" />
+    <None Include="Resources\Parameter_Icons.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Auto_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ChangeTool_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ChangeTool_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CodeLine_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CodeLine_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Comment_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Comment_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructExternalLinearAxis_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructMovement_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobotInfoComponent_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobotTool_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructSpeedData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DigitalOutput_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalLinearAxis_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalLinearAxis_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FlipPlane_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FlipPlaneX_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FlipPlaneY_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ForwardKinematics_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetAxisValues_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetController_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetDigitalInput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetDigitalOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Info_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\InverseKinematics_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB120_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB140_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB160_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1200_5_90_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1200_7_70_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1200_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1660ID_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB2600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB2600ID_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB4600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Movement_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Movement_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Naming_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PathGen_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PathGen_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plane_Visualizer_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlaneToQuat_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RAPID_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReadDigitalInput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remote_OFF_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remote_ON_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotInfo_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotInfo_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SetDigitalInput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SetDigitalOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpeedData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpeedData_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Target_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Target_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Target_Visualizer_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Timer_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Timer_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tool_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ToolData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ToolPlane_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitDI_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitDI_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Target_Icon_Old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.Gh.Goos\RobotComponents.Gh.Goos.csproj">
+      <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
+      <Name>RobotComponents.Gh.Goos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
+      <Name>RobotComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Movement_Icon_Old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Work_Object_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WorkObject_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructWorkObject_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AbsoluteJointMovement_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AbsoluteJointMovement_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructAbsoluteJointMovement_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WikiPage_MenuItem_Icon.png" />
+    <None Include="Resources\ToolQuaternion_Icon.png" />
+    <None Include="Resources\ExternalRotationalAxis_Parameter_Icon.png" />
+    <None Include="Resources\DeconstructExternalRotationalAxis_Icon.png" />
+    <None Include="Resources\ExternalRotationalAxis_Icon.png" />
+    <None Include="Resources\Action_Parameter_Icon.png" />
+    <None Include="Resources\ExternalAxis_Parameter_Icon.png" />
+    <None Include="Resources\GetPlane_Icon.png" />
+    <None Include="Resources\QuatToPlane_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6650S_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB7600_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6700_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6620_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6640_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ObjectManager_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ZoneData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ZoneData_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructZoneData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB6790_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OldCodeLine_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OldComment_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructJointTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobotJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructExternalJointPosition_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ExternalJointPosition_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointTarget_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotJointPosition_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobTarget_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructRobTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobTarget_Icon.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <FallbackCulture>en-US</FallbackCulture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartProgram>C:\Program Files\Rhino 6\System\Rhino.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+</Project>

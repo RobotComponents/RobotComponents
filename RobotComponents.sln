@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents", "RobotCom
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E84B28BC-8FC5-4D16-917E-4733DA520162}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.Gh", "RobotComponentsABB\RobotComponents.Gh.csproj", "{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.Gh", "RobotComponents.Gh\RobotComponents.Gh.csproj", "{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.Gh.Goos", "RobotComponentsGoos\RobotComponents.Gh.Goos.csproj", "{4853E4FA-0246-486C-9F1A-0620896690C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.Gh.Goos", "RobotComponents.Gh.Goos\RobotComponents.Gh.Goos.csproj", "{4853E4FA-0246-486C-9F1A-0620896690C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

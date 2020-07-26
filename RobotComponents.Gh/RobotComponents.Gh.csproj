@@ -470,7 +470,7 @@
     <None Include="Resources\Target_Icon_Old.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RobotComponentsGoos\RobotComponents.Gh.Goos.csproj">
+    <ProjectReference Include="..\RobotComponents.Gh.Goos\RobotComponents.Gh.Goos.csproj">
       <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
       <Name>RobotComponents.Gh.Goos</Name>
     </ProjectReference>

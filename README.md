@@ -4,8 +4,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?include_prereleases&style=flat-square">
-  <img src="https://img.shields.io/github/release-date-pre/RobotComponents/RobotComponents?style=flat-square">
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=food4rhino&style=flat-square">
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=latest&include_prereleases&style=flat-square">
   <img src="https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total?style=flat-square">
   <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square">
   <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square">

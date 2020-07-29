@@ -5,7 +5,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=stable&style=flat-square">
-  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=wip&include_prereleases&style=flat-square">
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=latest&include_prereleases&style=flat-square">
   <img src="https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total?style=flat-square">
   <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square">
   <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square">

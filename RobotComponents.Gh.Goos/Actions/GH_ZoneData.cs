@@ -223,6 +223,13 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast from Integer: Predefined Zone Data
+            if (typeof(GH_Integer).IsAssignableFrom(source.GetType()))
+            {
+                Value = new ZoneData((source as GH_Integer).Value);
+                return true;
+            }
+
             //Cast from Action
             if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {

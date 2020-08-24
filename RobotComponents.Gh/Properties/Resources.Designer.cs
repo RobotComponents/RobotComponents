@@ -153,6 +153,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CodeTypeValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CodeTypeValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Comment_Icon {
             get {
                 object obj = ResourceManager.GetObject("Comment_Icon", resourceCulture);
@@ -743,6 +753,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MovementTypeValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("MovementTypeValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Naming_Icon {
             get {
                 object obj = ResourceManager.GetObject("Naming_Icon", resourceCulture);
@@ -1208,6 +1228,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SpeedDataValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("SpeedDataValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Target_Icon {
             get {
                 object obj = ResourceManager.GetObject("Target_Icon", resourceCulture);
@@ -1371,6 +1401,16 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap ZoneData_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ZoneData_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ZoneDataValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ZoneDataValueList_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

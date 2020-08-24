@@ -69,6 +69,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
+    <Compile Include="Components\Code Generation\MovementTypeValueList.cs" />
+    <Compile Include="Components\Code Generation\ZoneDataValueList.cs" />
+    <Compile Include="Components\Code Generation\SpeedDataValueList.cs" />
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
@@ -582,6 +586,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\RobTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ZoneDataValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CodeTypeValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpeedDataValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MovementTypeValueList_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

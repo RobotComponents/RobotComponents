@@ -17,7 +17,7 @@ using RobotComponents.Gh.Components.Definitions;
 namespace RobotComponents.Gh.Utils
 {
     /// <summary>
-    /// The ObjectManager keeps track of different variables to enable global funcionalities
+    /// The Object Manager keeps track of different variables to enable global funcionalities inside Grashopper
     /// </summary>
 
     public class ObjectManager
@@ -108,6 +108,15 @@ namespace RobotComponents.Gh.Utils
         #endregion
 
         #region methods
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return "Object Manager";
+        }
+
         /// <summary>
         /// Gets all the robot tools that are stored in the object mananger
         /// </summary>

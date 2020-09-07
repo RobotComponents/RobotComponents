@@ -415,17 +415,23 @@ namespace RobotComponents.Kinematics
             RobotJointPosition diff;
             double min = 9e9;
             int closest = -1;
-            double norm;
+            double sum;
 
             for (int i = 0; i < _robotJointPositions.Length; i++)
             {
                 diff = _robotJointPositions[i] - prevJointPosition;
-                norm = diff.Norm();
 
-                if (norm < min)
+                for (int j = 0; j < 6; j++)
+                {
+                    diff[j] = Math.Sqrt(diff[j] * diff[j]);
+                }
+
+                sum = diff.Sum();
+                
+                if (sum < min)
                 {
                     closest = i;
-                    min = norm;
+                    min = sum;
                 }
             }
 

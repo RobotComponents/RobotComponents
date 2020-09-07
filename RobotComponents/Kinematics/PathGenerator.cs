@@ -5,6 +5,7 @@
 
 // System Libs
 using System.Collections.Generic;
+using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -95,12 +96,7 @@ namespace RobotComponents.Kinematics
 
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                _lastRobotJointPosition[i] = _robotInfo.InternalAxisLimits[i].ParameterAt(-0.1);
-            }
-
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
-            {
-                _lastExternalJointPosition[(int)_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Mid;
+                _lastExternalJointPosition[(int)_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
             }
         }
 
@@ -185,6 +181,9 @@ namespace RobotComponents.Kinematics
                 _planes.RemoveRange(0, interpolations);
                 _paths.RemoveAt(0);
             }
+
+            // Remove null
+            _paths.RemoveAll(val => val == null);
         }
 
         /// <summary>
@@ -226,7 +225,6 @@ namespace RobotComponents.Kinematics
             // Add error text
             _errorText.AddRange(jointTarget.CheckForAxisLimits(_robotInfo));
 
-
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
         }
@@ -243,6 +241,14 @@ namespace RobotComponents.Kinematics
             // Get the final joint positions of this movement
             _robotInfo.InverseKinematics.Movement = movement;
             _robotInfo.InverseKinematics.Calculate();
+
+            // Auto Axis Config
+            if (_autoAxisConfig == true && movement.MovementType != 0)
+            {
+                _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
+            }
+
+            // Get the Robot Joint Positions
             RobotJointPosition towardsRobotJointPosition = _robotInfo.InverseKinematics.RobotJointPosition.Duplicate();
             ExternalJointPosition towardsExternalJointPosition = _robotInfo.InverseKinematics.ExternalJointPosition.Duplicate();
 
@@ -267,8 +273,9 @@ namespace RobotComponents.Kinematics
 
             // Get the final joint positions of this movement
             _robotInfo.InverseKinematics.Movement = movement;
-            _robotInfo.InverseKinematics.Calculate();
-            RobotJointPosition towardsRobotJointPosition = _robotInfo.InverseKinematics.RobotJointPosition.Duplicate();
+            _robotInfo.InverseKinematics.CalculateExternalAxisValues();
+
+            // Get the External Joint Positions
             ExternalJointPosition towardsExternalJointPosition = _robotInfo.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
@@ -328,6 +335,19 @@ namespace RobotComponents.Kinematics
                 _robotInfo.InverseKinematics.Movement = subMovement;
                 _robotInfo.InverseKinematics.Calculate();
 
+                // Auto Axis Config
+                if (_autoAxisConfig == true)
+                {
+                    if (i == 0)
+                    {
+                        _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
+                    }
+                    else
+                    {
+                        _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_robotJointPositions.Last());
+                    }
+                }
+
                 // Add te calculated axis values and plane to the class property
                 _robotJointPositions.Add(_robotInfo.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robotInfo.InverseKinematics.ExternalJointPosition.Duplicate());
@@ -364,10 +384,24 @@ namespace RobotComponents.Kinematics
             {
                 _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
             }
-            
-            // Set last joint positions
-            _lastRobotJointPosition = towardsRobotJointPosition;
-            _lastExternalJointPosition = towardsExternalJointPosition;
+            else
+            {
+                _paths.Add(null);
+            }
+
+            // Get the final joint positions of this movement
+            _robotInfo.InverseKinematics.Movement = movement;
+            _robotInfo.InverseKinematics.Calculate();
+
+            // Auto Axis Config
+            if (_autoAxisConfig == true)
+            {
+                _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_robotJointPositions.Last());
+            }
+
+            // Add last Joint Poistions
+            _lastRobotJointPosition = _robotInfo.InverseKinematics.RobotJointPosition.Duplicate();
+            _lastExternalJointPosition = _robotInfo.InverseKinematics.ExternalJointPosition.Duplicate();
         }
 
         /// <summary>
@@ -421,6 +455,10 @@ namespace RobotComponents.Kinematics
             if (points.Count > 1)
             {
                 _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+            }
+            else
+            {
+                _paths.Add(null);
             }
 
             // Set last joint positions

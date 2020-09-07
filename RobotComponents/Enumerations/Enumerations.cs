@@ -20,4 +20,41 @@ namespace RobotComponents.Enumerations
         /// </summary>
         ROTATIONAL = 1
     }
+
+    /// <summary>
+    /// Defines the movement type
+    /// </summary>
+    public enum MovementType : int
+    {
+        /// <summary>
+        /// Absolute joint movement
+        /// </summary>
+        MoveAbsJ = 0,
+
+        /// <summary>
+        /// Linear Movement
+        /// </summary>
+        MoveL = 1,
+
+        /// <summary>
+        /// Joint Movement
+        /// </summary>
+        MoveJ = 2
+    }
+
+    /// <summary>
+    /// Defines the code type
+    /// </summary>
+    public enum CodeType : int
+    {
+        /// <summary>
+        /// Instruction
+        /// </summary>
+        Instruction = 0,
+
+        /// <summary>
+        /// Declaration
+        /// </summary>
+        Declaration = 1
+    }
 }

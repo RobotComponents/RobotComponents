@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 using Rhino.Geometry.Intersect;
@@ -401,6 +402,45 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
+        /// Gets and sets the closest Robot Joint Position to a given previous Robot Joint Position.
+        /// This method returns the closest axis configuration as an integer (0-7) and
+        /// sets the closest Robot Joint Poistion insides this Inverse Kinematics object. Therefore,
+        /// your first have to calculate the Inverse Kinematics solutions before you call this method. 
+        /// This methods is typically used for using the Auto Axis Config inside the Path Generator.
+        /// </summary>
+        /// <param name="prevJointPosition">The previous Robot Joint Position</param>
+        /// <returns>Returns the closest axis configuration as an integer (0-7)</returns>
+        public int GetClosestRobotJointPosition(RobotJointPosition prevJointPosition)
+        {
+            RobotJointPosition diff;
+            double min = 9e9;
+            int closest = -1;
+            double sum;
+
+            for (int i = 0; i < _robotJointPositions.Length; i++)
+            {
+                diff = _robotJointPositions[i] - prevJointPosition;
+
+                for (int j = 0; j < 6; j++)
+                {
+                    diff[j] = Math.Sqrt(diff[j] * diff[j]);
+                }
+
+                sum = diff.Sum();
+                
+                if (sum < min)
+                {
+                    closest = i;
+                    min = sum;
+                }
+            }
+
+            _robotJointPosition = _robotJointPositions[closest];
+
+            return closest;
+        }
+
+        /// <summary>
         /// Calculates the external axis values.
         /// This method does not check the external axis limits. 
         /// </summary>
@@ -642,6 +682,14 @@ namespace RobotComponents.Kinematics
         public RobotTool RobotTool
         {
             get { return _robotTool; }
+        }
+
+        /// <summary>
+        /// Defines the eight calculated Robot Joint Positions
+        /// </summary>
+        public List<RobotJointPosition> RobotJointPositions
+        {
+            get { return _robotJointPositions.ToList(); }
         }
 
         /// <summary>

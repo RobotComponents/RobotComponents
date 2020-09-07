@@ -227,6 +227,13 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast from Integer: Predefined Speed Data
+            if (typeof(GH_Integer).IsAssignableFrom(source.GetType()))
+            {
+                Value = new SpeedData((source as GH_Integer).Value);
+                return true;
+            }
+
             //Cast from Action
             if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {

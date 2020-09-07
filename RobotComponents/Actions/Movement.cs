@@ -20,9 +20,10 @@ namespace RobotComponents.Actions
     {
         #region fields
         // Fixed fields
-        private ITarget _target;
-        private SpeedData _speedData;
         private int _movementType; //TODO: convert to enum
+        private ITarget _target;
+        private int _id; // Synchronization id (for multi move programming)
+        private SpeedData _speedData;
         private ZoneData _zoneData;
 
         // Variable fields
@@ -46,9 +47,10 @@ namespace RobotComponents.Actions
         /// <param name="target"> The target as a Target. </param>
         public Movement(ITarget target)
         {
-            _target = target;
-            _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _movementType = 0;
+            _target = target;
+            _id = -1;
+            _speedData = new SpeedData(5); // Slowest predefined tcp speed
             _zoneData = new ZoneData(0);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -65,9 +67,10 @@ namespace RobotComponents.Actions
         /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = zoneData;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -85,9 +88,10 @@ namespace RobotComponents.Actions
         /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -106,9 +110,10 @@ namespace RobotComponents.Actions
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
@@ -126,9 +131,10 @@ namespace RobotComponents.Actions
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
@@ -146,9 +152,10 @@ namespace RobotComponents.Actions
         /// <param name="workObject"> The Work Object as a Work Object </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -167,9 +174,10 @@ namespace RobotComponents.Actions
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, DigitalOutput digitalOutput)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -189,9 +197,10 @@ namespace RobotComponents.Actions
         /// <param name="workObject"> The Work Object as a Work Object </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
             _workObject = workObject;
@@ -210,9 +219,10 @@ namespace RobotComponents.Actions
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
@@ -231,9 +241,10 @@ namespace RobotComponents.Actions
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject, DigitalOutput digitalOutput)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -254,9 +265,10 @@ namespace RobotComponents.Actions
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
@@ -276,9 +288,10 @@ namespace RobotComponents.Actions
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
         public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
-            _target = target;
-            _speedData = speedData;
             _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
             _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
             _workObject = workObject;
@@ -294,9 +307,10 @@ namespace RobotComponents.Actions
         /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
         public Movement(Movement movement, bool duplicateMesh = true)
         {
-            _target = movement.Target.DuplicateTarget();
-            _speedData = movement.SpeedData.Duplicate();
             _movementType = movement.MovementType;
+            _target = movement.Target.DuplicateTarget();
+            _id = movement.SyncID;
+            _speedData = movement.SpeedData.Duplicate();
             _zoneData = movement.ZoneData.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
 
@@ -352,21 +366,45 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Movement";
             }
-            else if (this.MovementType == 0)
+
+            else if (_id < 0)
             {
-                return "Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                if (this.MovementType == 0)
+                {
+                    return "Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else if (this.MovementType == 1)
+                {
+                    return "Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else if (this.MovementType == 2)
+                {
+                    return "Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else
+                {
+                    return "Movement";
+                }
             }
-            else if (this.MovementType == 1)
-            {
-                return "Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
-            }
-            else if (this.MovementType == 2)
-            {
-                return "Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
-            }
+
             else
             {
-                return "Movement";
+                if (this.MovementType == 0)
+                {
+                    return "Coordinated synchronized Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else if (this.MovementType == 1)
+                {
+                    return "Coordinated synchronized Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else if (this.MovementType == 2)
+                {
+                    return "Coordinated synchronized Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                }
+                else
+                {
+                    return "Coordinated synchronized Movement";
+                }
             }
         }
 
@@ -488,24 +526,33 @@ namespace RobotComponents.Actions
             }
 
             // A movement not combined with a digital output
-                if (_digitalOutput.IsValid == false)
+            if (_digitalOutput.IsValid == false)
             {
                 // MoveAbsJ
                 if (_movementType == 0)
                 {
                     // If a robot target is converted to a joint target we add the suffix _jt to the target name.
                     string name = _target.Name;
+
                     if (_target is RobotTarget)
                     {
                         name += "_jt";
                     }
 
                     string code = "MoveAbsJ ";
-                    code += name + ", ";
+                    code += name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
+
                     return code;
                 }
 
@@ -513,11 +560,19 @@ namespace RobotComponents.Actions
                 else if (_movementType == 1 && _target is RobotTarget)
                 {
                     string code = "MoveL ";
-                    code += _target.Name + ", ";
+                    code += _target.Name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
+
                     return code;
                 }
 
@@ -525,11 +580,19 @@ namespace RobotComponents.Actions
                 else if (_movementType == 2 && _target is RobotTarget)
                 {
                     string code = "MoveJ ";
-                    code += _target.Name + ", ";
+                    code += _target.Name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
+
                     return code;
                 }
 
@@ -549,18 +612,27 @@ namespace RobotComponents.Actions
                 {
                     // If a robot target is converted to a joint target we add the suffix _jt to the target name.
                     string name = _target.Name;
+
                     if (_target is RobotTarget) 
                     { 
                         name += "_jt"; 
                     }
 
                     string code = "MoveAbsJ ";
-                    code += name + ", ";
+                    code += name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + "; ";
                     code += _digitalOutput.ToRAPIDInstruction(robot);
+
                     return code;
                 }
 
@@ -568,13 +640,21 @@ namespace RobotComponents.Actions
                 else if (_movementType == 1 && _target is RobotTarget)
                 {
                     string code = "MoveLDO ";
-                    code += _target.Name + ", ";
+                    code += _target.Name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ", ";
                     code += _digitalOutput.Name + ", ";
                     code += (_digitalOutput.IsActive ? 1 : 0) + ";";
+
                     return code;
                 }
 
@@ -582,13 +662,21 @@ namespace RobotComponents.Actions
                 else if (_movementType == 2 && _target is RobotTarget)
                 {
                     string code = "MoveJDO ";
-                    code += _target.Name + ", ";
+                    code += _target.Name;
+
+                    if (_id > -1)
+                    {
+                        code += "\\ID:=" + _id;
+                    }
+
+                    code += ", ";
                     code += _speedData.Name + ", ";
                     code += _zoneData.Name + ", ";
                     code +=  toolName;
                     code += "\\WObj:=" + _workObject.Name + ", ";
                     code += _digitalOutput.Name + ", ";
                     code += (_digitalOutput.IsActive ? 1 : 0) + ";";
+
                     return code;
                 }
 
@@ -696,13 +784,15 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// OBSOLETE: The destination target of the robot and external axes.
+        /// The movement type.
+        /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
+        /// Two is used for linear movements with robtarget (MoveL)
+        /// Three is used for joint movements with robtargets (MoveJ).
         /// </summary>
-        [Obsolete("This property is obsolete. Instead, use Target.", false)]
-        public RobotTarget RobotTarget
+        public int MovementType
         {
-            get { return _target as RobotTarget; }
-            set { _target = value; }
+            get { return _movementType; }
+            set { _movementType = value; }
         }
 
         /// <summary>
@@ -715,6 +805,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// The Synchronization id for multi move programming. 
+        /// This ID number must be defined for coordinated synchronized movements in multi move systems. 
+        /// Set this property to -1 to define normal movements (not coordinated / not synchronized).
+        /// </summary>
+        public int SyncID
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        /// <summary>
         /// The speed data that applies to movements. Speed data defines the velocity 
         /// for the tool center point, the tool reorientation, and external axes.
         /// </summary>
@@ -722,18 +823,6 @@ namespace RobotComponents.Actions
         {
             get { return _speedData; }
             set { _speedData = value; }
-        }
-
-        /// <summary>
-        /// The movement type.
-        /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
-        /// Two is used for linear movements with robtarget (MoveL)
-        /// Three is used for joint movements with robtargets (MoveJ).
-        /// </summary>
-        public int MovementType
-        {
-            get { return _movementType; }
-            set { _movementType = value; }
         }
 
         /// <summary>

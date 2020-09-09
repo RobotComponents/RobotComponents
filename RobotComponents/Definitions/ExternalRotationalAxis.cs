@@ -13,6 +13,9 @@ using RobotComponents.Enumerations;
 
 namespace RobotComponents.Definitions
 {
+    /// <summary>
+    /// External rotational axis class, main class for external rotational axis.
+    /// </summary>
     public class ExternalRotationalAxis : ExternalAxis
     {
         #region fields
@@ -315,7 +318,7 @@ namespace RobotComponents.Definitions
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            Transform rotateNow = CalculateTransformationMatrix(axisValue, out bool inLimits);
+            Transform rotateNow = CalculateTransformationMatrix(axisValue, out _);
             _posedMeshes[1].Transform(rotateNow);
         }
 

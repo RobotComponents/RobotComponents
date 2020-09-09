@@ -196,7 +196,7 @@ namespace RobotComponents.Actions
         /// Creates a new zonedata by duplicating an existing zonedata. 
         /// This creates a deep copy of the existing zonedata. 
         /// </summary>
-        /// <param name="speeddata"> The speeddata that should be duplicated. </param>
+        /// <param name="zonedata"> The speeddata that should be duplicated. </param>
         public ZoneData(ZoneData zonedata)
         {
             _name = zonedata.Name;

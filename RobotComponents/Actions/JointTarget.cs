@@ -86,7 +86,7 @@ namespace RobotComponents.Actions
         /// Creates a new joint target by duplicating an existing joint target. 
         /// This creates a deep copy of the existing joint target. 
         /// </summary>
-        /// <param name="jointtarget"> The joint target that should be duplicated. </param>
+        /// <param name="jointTarget"> The joint target that should be duplicated. </param>
         public JointTarget(JointTarget jointTarget)
         {
             _name = jointTarget.Name;

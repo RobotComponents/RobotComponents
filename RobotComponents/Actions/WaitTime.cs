@@ -40,7 +40,7 @@ namespace RobotComponents.Actions
         /// Creates a new WaitTime object by duplicating an existing WaitTime object. 
         /// This creates a deep copy of the existing WaitTime object. 
         /// </summary>
-        /// <param name="timer"> The WaitTime that should be duplicated. </param>
+        /// <param name="waitTime"> The WaitTime that should be duplicated. </param>
         public WaitTime(WaitTime waitTime)
         {
             _duration = waitTime.Duration;

@@ -406,7 +406,7 @@ namespace RobotComponents.Definitions
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            Transform translateNow = CalculateTransformationMatrix(axisValue, out bool isInLimits);
+            Transform translateNow = CalculateTransformationMatrix(axisValue, out _);
             _posedMeshes[1].Transform(translateNow);
         }
 

@@ -121,7 +121,7 @@ namespace RobotComponents.Utils
 
         /// <summary>
         /// Transforms a Quarternion to a Plane.
-        /// </summary
+        /// </summary>
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="origin"> The origin of the plane. </param>
         /// <param name="A"> The real part of the quaternion. </param>

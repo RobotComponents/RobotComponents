@@ -11,6 +11,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Kinematics
 {
@@ -134,28 +135,28 @@ namespace RobotComponents.Kinematics
 
                 else if (actions[i] is Movement movement)
                 {
-                    if (movement.Target is RobotTarget && movement.MovementType == 0)
+                    if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromRobotTarget(movement);
                         _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is RobotTarget && movement.MovementType == 1)
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveL)
                     {
                         LinearMovementFromRobotTarget(movement);
                         _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is RobotTarget && movement.MovementType == 2)
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveJ)
                     {
                         JointMovementFromRobotTarget(movement);
                         _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is JointTarget && movement.MovementType == 0)
+                    else if (movement.Target is JointTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromJointTarget(movement);
                         _lastMovement = movement;
@@ -243,7 +244,7 @@ namespace RobotComponents.Kinematics
             _robotInfo.InverseKinematics.Calculate();
 
             // Auto Axis Config
-            if (_autoAxisConfig == true && movement.MovementType != 0)
+            if (_autoAxisConfig == true && movement.MovementType != MovementType.MoveAbsJ)
             {
                 _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
             }

@@ -17,6 +17,7 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -292,7 +293,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 }
 
                 // Movement constructor
-                Movement movement = new Movement(target, speedData, movementType, precision, robotTool, workObject, digitalOutput);
+                Movement movement = new Movement((MovementType)movementType, target, speedData, new ZoneData(precision), robotTool, workObject, digitalOutput);
                 movements.Add(movement);
             }
 

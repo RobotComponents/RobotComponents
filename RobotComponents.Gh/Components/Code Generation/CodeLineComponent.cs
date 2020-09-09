@@ -13,6 +13,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Enumerations;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -90,7 +91,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             string code = null;
             int type = 0;
 
-            // Cathc the input data
+            // Catch the input data
             if (!DA.GetData(0, ref code)) { return; }
             if (!DA.GetData(1, ref type)) { return; }
 
@@ -127,8 +128,13 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 obj.ListItems.Clear();
 
                 // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("Instruction", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("Declaration", "1"));
+                string[] names = Enum.GetNames(typeof(CodeType));
+                int[] values = (int[])Enum.GetValues(typeof(CodeType));
+
+                for (int i = 0; i < names.Length; i++)
+                {
+                    obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
+                }
 
                 // Make point where the valuelist should be created on the canvas
                 obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);

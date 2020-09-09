@@ -341,9 +341,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 obj.ListItems.Clear();
 
                 // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+                // Add the items to the value list
+                string[] names = Enum.GetNames(typeof(MovementType));
+                int[] values = (int[])Enum.GetValues(typeof(MovementType));
+
+                for (int i = 0; i < names.Length; i++)
+                {
+                    obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
+                }
 
                 // Make point where the valuelist should be created on the canvas
                 obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);

@@ -946,7 +946,6 @@
     </StartArguments>
     <StartAction>Program</StartAction>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\RobotComponents.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

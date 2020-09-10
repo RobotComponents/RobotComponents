@@ -293,7 +293,7 @@ namespace RobotComponents.Actions
             // Check for external axis values
             for (int i = 0; i < robot.ExternalAxis.Count; i++)
             {
-                int logicNumber = (int)robot.ExternalAxis[i].AxisNumber;
+                int logicNumber = robot.ExternalAxis[i].AxisNumber;
 
                 if (_externalAxisValues[logicNumber] == 9e9)
                 {

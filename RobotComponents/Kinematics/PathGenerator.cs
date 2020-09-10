@@ -97,7 +97,7 @@ namespace RobotComponents.Kinematics
 
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                _lastExternalJointPosition[(int)_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
+                _lastExternalJointPosition[_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
             }
         }
 
@@ -296,7 +296,7 @@ namespace RobotComponents.Kinematics
             if (movement.WorkObject.ExternalAxis != null)
             {
                 ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
-                int logic = (int)externalAxis.AxisNumber;
+                int logic = externalAxis.AxisNumber;
                 double axisValue = _lastExternalJointPosition[logic];
                 Transform trans = externalAxis.CalculateTransformationMatrix(-axisValue, out _);
                 plane1.Transform(trans);

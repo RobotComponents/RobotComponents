@@ -458,7 +458,7 @@ namespace RobotComponents.Kinematics
                 // Add the external axis values to the list with external axis values
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                     // Check if the axis is an external linear axis
                     if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
@@ -565,7 +565,7 @@ namespace RobotComponents.Kinematics
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = (int)externalAxis.AxisNumber;
+                int logic = externalAxis.AxisNumber;
 
                 // Check if an external linear axis is used
                 if (externalAxis is ExternalLinearAxis externalLinearAxis)
@@ -616,7 +616,7 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                 if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {

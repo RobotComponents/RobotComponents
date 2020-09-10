@@ -29,7 +29,6 @@ namespace RobotComponents.Kinematics
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages
 
         private readonly RobotTool _initialTool; // Defines the first tool that will be used
-        private Movement _lastMovement; // Defines the last movement
         private RobotJointPosition _lastRobotJointPosition; // Defines the last Robot Joint Position
         private ExternalJointPosition _lastExternalJointPosition; // Defines the last External Joint Position
         private RobotTool _currentTool; // Defines the default robot tool
@@ -129,7 +128,6 @@ namespace RobotComponents.Kinematics
                 else if (actions[i] is AbsoluteJointMovement absoluteJointMovement)
                 {
                     JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
-                    _lastMovement = absoluteJointMovement.ConvertToMovement();
                     counter++;
                 }
 
@@ -138,28 +136,24 @@ namespace RobotComponents.Kinematics
                     if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
                     else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveL)
                     {
                         LinearMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
                     else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveJ)
                     {
                         JointMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
                     else if (movement.Target is JointTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromJointTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
                 }

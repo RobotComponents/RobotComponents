@@ -271,18 +271,18 @@ namespace RobotComponents.Definitions
             }
             
             // Add user frame coordinate < uframe of pose > < trans of pos >
-            result += $"[[{_userFrame.Origin.X.ToString("0.####")}, {_userFrame.Origin.Y.ToString("0.####")}, {_userFrame.Origin.Z.ToString("0.####")}], ";
+            result += $"[[{_userFrame.Origin.X:0.####}, {_userFrame.Origin.Y:0.####}, {_userFrame.Origin.Z:0.####}], ";
 
             // Add user frame orientation < uframe of pose > < rot of orient >
-            result += $"[{_userFrameOrientation.A.ToString("0.#######")}, {_userFrameOrientation.B.ToString("0.#######")}, " +
-                $"{_userFrameOrientation.C.ToString("0.#######")}, {_userFrameOrientation.D.ToString("0.#######")}]], ";
+            result += $"[{_userFrameOrientation.A:0.#######}, {_userFrameOrientation.B:0.#######}, " +
+                $"{_userFrameOrientation.C:0.#######}, {_userFrameOrientation.D:0.#######}]], ";
 
             // Add object frame coordinate < oframe of pose > < trans of pos >
-            result += $"[[{_plane.Origin.X.ToString("0.####")}, {_plane.Origin.Y.ToString("0.####")}, {_plane.Origin.Z.ToString("0.####")}], ";
+            result += $"[[{_plane.Origin.X:0.####}, {_plane.Origin.Y:0.####}, {_plane.Origin.Z:0.####}], ";
 
             // Add object frame orientation < oframe of pose > < rot of orient >
-            result += $"[{_orientation.A.ToString("0.#######")}, {_orientation.B.ToString("0.#######")}, " +
-                $"{_orientation.C.ToString("0.#######")}, {_orientation.D.ToString("0.#######")}]]];";
+            result += $"[{_orientation.A:0.#######}, {_orientation.B:0.#######}, " +
+                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]];";
 
             return result;
         }

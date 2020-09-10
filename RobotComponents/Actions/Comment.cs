@@ -7,6 +7,7 @@
 using System;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -19,7 +20,7 @@ namespace RobotComponents.Actions
     {
         #region fields
         private string _comment; // the comment as a string
-        private int _type; // the comment type as int value -> 0 for instruction, 1 for declaration
+        private CodeType _type; // the comment type as a CodeType enum
         #endregion
 
         #region constructors
@@ -37,18 +38,18 @@ namespace RobotComponents.Actions
         public Comment(string comment)
         {
             _comment = comment;
-            _type = 0;
+            _type = CodeType.Instruction;
         }
 
         /// <summary>
         /// A comment constructor inserted into the program to make it easier to understand.
         /// </summary>
         /// <param name="comment">The comment as a text string.</param>
-        /// <param name="type">The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations.</param>
-        public Comment(string comment, int type)
+        /// <param name="type">The comment type as a CodeType.</param>
+        public Comment(string comment, CodeType type)
         {
             _comment = comment;
-            SetCommentType(type);
+            _type = type;
         }
 
         /// <summary>
@@ -99,29 +100,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Sets the comment type. 
-        /// </summary>
-        /// <param name="type"> The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
-        public void SetCommentType(int type)
-        {
-            if (type == 0 | type == 1)
-            {
-                _type = type;
-            }
-            else
-            {
-                _type = 0;
-            }
-        }
-
-        /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
         /// <param name="robot"> Defines the Robot were the code is generated for. </param>
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 return "! " + _comment;
             }
@@ -138,7 +123,7 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 return "! " + _comment;
             }
@@ -154,7 +139,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
@@ -166,7 +151,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
@@ -183,8 +168,6 @@ namespace RobotComponents.Actions
             {
                 if (Com == null) { return false; }
                 if (Com == "") { return false; }
-                if (Type < 0) { return false; }
-                if (Type > 1) { return false; }
                 return true; 
             }
         }
@@ -199,11 +182,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Comment type as int value.
+        /// Comment type as a CodeType.
         /// </summary>
-        public int Type
+        public CodeType Type
         {
             get { return _type; }
+            set { _type = value; }
         }
         #endregion
     }

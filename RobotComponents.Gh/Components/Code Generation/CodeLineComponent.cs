@@ -96,7 +96,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(1, ref type)) { return; }
 
             // Create the action
-            CodeLine codeLine = new CodeLine(code, type);
+            CodeLine codeLine = new CodeLine(code, (CodeType)type);
 
             // Check if a right value is used for the code line type
                 if (type != 0 && type != 1)

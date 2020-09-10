@@ -101,7 +101,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             List<Comment> comments = new List<Comment>();
             for (int i = 0; i < lines.Length; i++)
             {
-                Comment comment = new Comment(lines[i], type);
+                Comment comment = new Comment(lines[i], (CodeType)type);
                 comments.Add(comment);
             }
 

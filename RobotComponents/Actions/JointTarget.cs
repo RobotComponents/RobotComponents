@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 // NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple.
 namespace RobotComponents.Actions
@@ -18,6 +19,7 @@ namespace RobotComponents.Actions
     public class JointTarget : Action, ITarget
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // joint target variable name
         private RobotJointPosition _robJointPosition; // the position of the robot
         private ExternalJointPosition _extJointPosition; // the position of the external axes
@@ -38,6 +40,7 @@ namespace RobotComponents.Actions
         /// <param name="robJointPosition">The rob joint position</param>
         public JointTarget(string name, RobotJointPosition robJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = robJointPosition;
             _extJointPosition = new ExternalJointPosition();
@@ -51,6 +54,7 @@ namespace RobotComponents.Actions
         /// <param name="axisValues">The rob joint position defined as a list with axis values</param>
         public JointTarget(string name, List<double> axisValues)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = new RobotJointPosition(axisValues);
             _extJointPosition = new ExternalJointPosition();
@@ -64,6 +68,7 @@ namespace RobotComponents.Actions
         /// <param name="extJointPosition">The external joint position</param>
         public JointTarget(string name, RobotJointPosition robJointPosition, ExternalJointPosition extJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = robJointPosition;
             _extJointPosition = extJointPosition;
@@ -77,6 +82,7 @@ namespace RobotComponents.Actions
         /// <param name="externalAxisValues">The external joint position as a list wiht axis values</param>
         public JointTarget(string name, List<double> internalAxisValues, List<double> externalAxisValues)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = new RobotJointPosition(internalAxisValues);
             _extJointPosition = new ExternalJointPosition(externalAxisValues);
@@ -89,6 +95,7 @@ namespace RobotComponents.Actions
         /// <param name="jointTarget"> The joint target that should be duplicated. </param>
         public JointTarget(JointTarget jointTarget)
         {
+            _referenceType = jointTarget.ReferenceType;
             _name = jointTarget.Name;
             _robJointPosition = jointTarget.RobotJointPosition.Duplicate();
             _extJointPosition = jointTarget.ExternalJointPosition.Duplicate();
@@ -184,7 +191,8 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string code = "CONST jointtarget ";
+            string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+            code += " jointtarget ";
             code += _name;
             code += " := [";
             code += _robJointPosition.ToRAPIDDeclaration(robot);
@@ -243,6 +251,15 @@ namespace RobotComponents.Actions
                 if (ExternalJointPosition.IsValid == false) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Defines the reference type (PERS, VAR or CONST)
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -19,6 +20,7 @@ namespace RobotComponents.Actions
     public class ZoneData : Action
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // ZoneData variable name
         private bool _finep; // Fine point
         private double _pzone_tcp; // Path zone TCP
@@ -56,6 +58,8 @@ namespace RobotComponents.Actions
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
+            _referenceType = ReferenceType.VAR;
+
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
 
@@ -115,6 +119,8 @@ namespace RobotComponents.Actions
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
+            _referenceType = ReferenceType.VAR;
+
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
 
@@ -180,6 +186,7 @@ namespace RobotComponents.Actions
         public ZoneData(string name, bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _finep = finep;
             _pzone_tcp = pzone_tcp;
@@ -199,6 +206,7 @@ namespace RobotComponents.Actions
         /// <param name="zonedata"> The speeddata that should be duplicated. </param>
         public ZoneData(ZoneData zonedata)
         {
+            _referenceType = zonedata.ReferenceType;
             _name = zonedata.Name;
             _finep = zonedata.FinePoint;
             _pzone_tcp = zonedata.PathZoneTCP;
@@ -260,7 +268,8 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                string code = "VAR zonedata ";
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " zonedata ";
                 code += _name + " := [";
                 
                 if (_finep == false) { code +=  "FALSE, "; }
@@ -335,6 +344,15 @@ namespace RobotComponents.Actions
                 if (ZoneExternalRotationalAxes < 0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Defines the reference type (PERS, VAR or CONST)
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>

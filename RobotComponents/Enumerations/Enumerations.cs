@@ -57,4 +57,25 @@ namespace RobotComponents.Enumerations
         /// </summary>
         Declaration = 1
     }
+
+    /// <summary>
+    /// Defines the reference type
+    /// </summary>
+    public enum ReferenceType : int
+    {
+        /// <summary>
+        /// Persistent data type
+        /// </summary>
+        PERS = 0,
+
+        /// <summary>
+        /// Variable data type
+        /// </summary>
+        VAR = 1,
+
+        /// <summary>
+        /// Constant data type
+        /// </summary>
+        CONST = 2
+    }
 }

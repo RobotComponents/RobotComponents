@@ -3,6 +3,9 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// Robot Component Libs
+using RobotComponents.Enumerations;
+
 namespace RobotComponents.Actions
 {
     /// <summary>
@@ -28,6 +31,11 @@ namespace RobotComponents.Actions
         /// Indicates if the Target object is valid. 
         /// </summary>
         bool IsValid { get; }
+
+        /// <summary>
+        /// Defines the reference type (PERS, VAR or CONST)
+        /// </summary>
+        ReferenceType ReferenceType { get; set;}
 
         /// <summary>
         /// Defines the variable name of the Target

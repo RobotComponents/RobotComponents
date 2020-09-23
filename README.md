@@ -27,7 +27,7 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - Robot Components API to develop your custom components using either Python or C# (w.i.p, documentation coming soon)
 
 ## Getting Started
-You can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
+You can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
 
 In case you want to use the components from the Controller Utility section you additionally have to install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the ABB Robot Communication Runtime (you can download it by clicking [here](https://github.com/RobotComponents/RobotComponents/raw/master/Utility/ABB%20Robot%20Communication%20Runtime%207.0.zip)). The current release is built and tested against the ABB PC SDK version 2020.1 (ABB Robot Communication Runtime 7.0). We do not guarantee that the Controller Utility components work with older versions of the ABB Robot Communucation Runtime. Please contact us if you have problems with establishing a real-time connection from Grasshopper.
 
@@ -59,25 +59,25 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 
 **Adding support for other brands**: Robot Components is developed to intuitive program ABB robots inside Grasshopper. At the moment we have no plans to implement the support for other robot brands. However, we have a few ideas about how to implement this and since we want to keep Robot Components as intuitive as possible we kindly ask you to contact one of the [developers](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md) first in case if you want to implement other robot brands. We are happy to contribute to and support this development.
 
-## Cite RobotComponents
+## Cite Robot Components
 Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. To cite Robot Components in publications use:
 
 ```
 EDEK Uni Kassel (2020).  
-RobotComponents v0.11.001: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+Robot Components v0.11.002: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 
-Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of RobotComponents used. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
+Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of Robot Components used. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
 
 ## Version numbering
-RobotComponents uses the following version numbering scheme: 
+Robot Components uses the following version numbering scheme: 
 ```
 0.xx.xxx ---> major release  
 x.00.xxx ---> minor release (e.g. new functions, new components etc. )  
 x.xx.000 ---> bug fixes and small improvements
 ```
-Versions that were not released on Food4Rhino are marked as pre-release. 
+Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/robot-components) are marked as pre-release. 
 
 ## Used in 
 

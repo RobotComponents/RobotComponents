@@ -410,34 +410,73 @@ namespace RobotComponents.Kinematics
         /// </summary>
         /// <param name="prevJointPosition">The previous Robot Joint Position</param>
         /// <returns>Returns the closest axis configuration as an integer (0-7)</returns>
-        public int GetClosestRobotJointPosition(RobotJointPosition prevJointPosition)
+        public RobotJointPosition GetClosestRobotJointPosition(RobotJointPosition prevJointPosition)
         {
             RobotJointPosition diff;
-            double min = 9e9;
-            int closest = -1;
             double sum;
+
+            // First, check the selected axis configuration
+            diff = _robotJointPosition - prevJointPosition;
+
+            for (int i = 0; i < 6; i++)
+            {
+                diff[i] = Math.Sqrt(diff[i] * diff[i]);
+            }
+
+            double min = diff.Sum();
+    
+            _robotJointPosition = _robotJointPosition.Duplicate();
+
+            // Check for flipping axis 4 and 6 (if this is within the axis limits)
+            double[] joint4 = new double[3] { -360, 0, 360 };
+            double[] joint6 = new double[3] { -360, 0, 360 };
 
             for (int i = 0; i < _robotJointPositions.Length; i++)
             {
-                diff = _robotJointPositions[i] - prevJointPosition;
-
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < joint4.Length; j++)
                 {
-                    diff[j] = Math.Sqrt(diff[j] * diff[j]);
-                }
+                    // Check axis 4
+                    if (_robotInfo.InternalAxisLimits[3].IncludesParameter(_robotJointPositions[i][3] + joint4[j], false) == true)
+                    {
+                        // Add value to axis 4
+                        _robotJointPositions[i][3] += joint4[j];
 
-                sum = diff.Sum();
-                
-                if (sum < min)
-                {
-                    closest = i;
-                    min = sum;
+                        for (int k = 0; k < joint6.Length; k++)
+                        {
+                            // Check axis 6
+                            if (_robotInfo.InternalAxisLimits[5].IncludesParameter(_robotJointPositions[i][5] + joint6[k], false) == true)
+                            {
+                                // Add value to axis 6
+                                _robotJointPositions[i][5] += joint6[k];
+
+                                // Check the configuration (min. rotation)
+                                diff = _robotJointPositions[i] - prevJointPosition;
+
+                                for (int l = 0; l < 6; l++)
+                                {
+                                    diff[l] = Math.Sqrt(diff[l] * diff[l]);
+                                }
+
+                                sum = diff.Sum();
+
+                                if (sum < min)
+                                {
+                                    _robotJointPosition = _robotJointPositions[i].Duplicate();
+                                    min = sum;
+                                }
+
+                                // Reset axis 6 (substract value from axis 6)
+                                _robotJointPositions[i][5] -= joint6[k];
+                            }
+                        }
+
+                        // Reset axis 4 (substract value from axis 4)
+                        _robotJointPositions[i][3] -= joint4[j];
+                    }
                 }
             }
 
-            _robotJointPosition = _robotJointPositions[closest];
-
-            return closest;
+            return _robotJointPosition;
         }
 
         /// <summary>

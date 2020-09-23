@@ -23,6 +23,9 @@ namespace RobotComponents.Gh.Utils
     public class ObjectManager
     {
         #region fields
+        // RC document id
+        private readonly string _id;
+
         // contains information on all targets in file to notify user about duplicates
         private Dictionary<Guid, JointTargetComponent> _jointTargetsByGuid;
         private Dictionary<Guid, RobotTargetComponent> _robotTargetsByGuid;
@@ -68,8 +71,10 @@ namespace RobotComponents.Gh.Utils
         /// <summary>
         /// Creates an empty object manager. 
         /// </summary>
-        public ObjectManager()
+        public ObjectManager(string id)
         {
+            _id = id;
+
             _jointTargetsByGuid = new Dictionary<Guid, JointTargetComponent>();
             _robotTargetsByGuid = new Dictionary<Guid, RobotTargetComponent>();
             _targetNames = new List<string>();
@@ -114,7 +119,7 @@ namespace RobotComponents.Gh.Utils
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "Object Manager";
+            return "Object Manager (" + _id + ")";
         }
 
         /// <summary>
@@ -556,7 +561,15 @@ namespace RobotComponents.Gh.Utils
         }
         #endregion
 
-        #region Properties
+        #region properties
+        /// <summary>
+        /// Gets the Robot Components document ID
+        /// </summary>
+        public string ID
+        {
+            get { return _id; }
+        }
+
         /// <summary>
         /// Dictionary with all the Robot Target components used in this object manager. 
         /// The components are stored based on there unique GUID.

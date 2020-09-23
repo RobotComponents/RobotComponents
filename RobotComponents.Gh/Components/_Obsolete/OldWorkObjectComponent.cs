@@ -90,18 +90,8 @@ namespace RobotComponents.Gh.Components.Definitions
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
-            // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new one
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentID))
-            {
-                DocumentManager.ObjectManagers.Add(documentID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.ObjectManagers[documentID];
+            // Gets the Object Manager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
 
             // Clears Work Object Name
             for (int i = 0; i < _woNames.Count; i++)

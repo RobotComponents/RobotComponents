@@ -93,23 +93,15 @@ namespace RobotComponents.Gh.Components.Obsolete
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
+            // Gets the Object Manager of this document
+            objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
             // Clears targetNames
             for (int i = 0; i < targetNames.Count; i++)
             {
                 objectManager.TargetNames.Remove(targetNames[i]);
             }
             targetNames.Clear();
-
-            // Gets Document ID
-            string documentGUID = DocumentManager.GetRobotComponentsDocumentID(this.OnPingDocument());
-
-            // Checks if ObjectManager for this document already exists. If not it creates a new ObjectManager in DocumentManger Dictionary
-            if (!DocumentManager.ObjectManagers.ContainsKey(documentGUID)) {
-                DocumentManager.ObjectManagers.Add(documentGUID, new ObjectManager());
-            }
-
-            // Gets ObjectManager of this document
-            objectManager = DocumentManager.ObjectManagers[documentGUID];
 
             // Adds Component to TargetByGuid Dictionary
             if (!objectManager.OldTargetsByGuid.ContainsKey(this.InstanceGuid))

@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -13,10 +15,34 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Override Robot Tool class
     /// </summary>
-    public class OverrideRobotTool : Action
+    [Serializable()]
+    public class OverrideRobotTool : Action, ISerializable
     {
         #region fields
         private RobotTool _robotTool; // The robot that should be used
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected OverrideRobotTool(SerializationInfo info, StreamingContext context)
+        {
+            _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Robot Tool", _robotTool, typeof(RobotTool));
+        }
         #endregion
 
         #region constructors

@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
@@ -19,7 +21,8 @@ namespace RobotComponents.Actions
     /// the velocities often limits all movements.The velocity of the other movements will be reduced in such a way 
     /// that all movements will finish executing at the same time.
     /// </summary>
-    public class SpeedData : Action
+    [Serializable()]
+    public class SpeedData : Action, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -34,6 +37,41 @@ namespace RobotComponents.Actions
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
 
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected SpeedData(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
+            _v_ori = (double)info.GetValue("v_ori", typeof(double));
+            _v_leax = (double)info.GetValue("v_leax", typeof(double));
+            _v_reax = (double)info.GetValue("v_reax", typeof(double));
+            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("v_tcp", _v_tcp, typeof(double));
+            info.AddValue("v_ori", _v_ori, typeof(double));
+            info.AddValue("v_leax", _v_leax, typeof(double));
+            info.AddValue("v_reax", _v_reax, typeof(double));
+            info.AddValue("Predefined", _predefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+        }
         #endregion
 
         #region constructors

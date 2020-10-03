@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
@@ -17,7 +19,8 @@ namespace RobotComponents.Actions
     /// i.e. how close to the programmed position the axes must be before moving towards 
     /// the next position.
     /// </summary>
-    public class ZoneData : Action
+    [Serializable()]
+    public class ZoneData : Action, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -40,6 +43,45 @@ namespace RobotComponents.Actions
         private static readonly double[] _predefinedZoneOri = new double[] { 0, 0.03, 0.1, 0.8, 1.5, 2.3, 3, 4.5, 6, 7.5, 9, 12, 15, 23, 30 };
         private static readonly double[] _predefinedZoneLeax = new double[] { 0, 0.3, 1, 8, 15, 23, 30, 45, 60, 75, 90, 120, 150, 225, 300 };
         private static readonly double[] _predefinedZoneReax = new double[] { 0, 0.03, 0.1, 0.8, 1.5, 2.3, 3, 4.5, 6, 7.5, 9, 12, 15, 23, 30 };
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected ZoneData(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _pzone_tcp = (double)info.GetValue("pzone_tcp", typeof(double));
+            _pzone_ori = (double)info.GetValue("pzone_ori", typeof(double));
+            _pzone_eax = (double)info.GetValue("pzone_eax", typeof(double));
+            _zone_ori = (double)info.GetValue("zone_ori", typeof(double));
+            _zone_leax = (double)info.GetValue("zone_leax", typeof(double));
+            _zone_reax = (double)info.GetValue("zone_reax", typeof(double));
+            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("pzone_tcp", _pzone_tcp, typeof(double));
+            info.AddValue("pzone_ori", _pzone_ori, typeof(double));
+            info.AddValue("pzone_eax", _pzone_eax, typeof(double));
+            info.AddValue("zone_ori", _zone_ori, typeof(double));
+            info.AddValue("zone_leax", _zone_leax, typeof(double));
+            info.AddValue("zone_reax", _zone_reax, typeof(double));
+            info.AddValue("Predefined", _predefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+        }
         #endregion
 
         #region constructors

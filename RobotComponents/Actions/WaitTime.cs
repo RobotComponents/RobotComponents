@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -13,10 +15,34 @@ namespace RobotComponents.Actions
     /// <summary>
     /// WaitTime class, defines waiting time between two actions. This command is used to wait a given amount of time.
     /// </summary>
-    public class WaitTime : Action
+    [Serializable()]
+    public class WaitTime : Action, ISerializable
     {
         #region fields
         private double _duration; // the time expressed in seconds
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WaitTime(SerializationInfo info, StreamingContext context)
+        {
+            _duration = (double)info.GetValue("Duration", typeof(double));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Duration", _duration, typeof(double));
+        }
         #endregion
 
         #region constructors

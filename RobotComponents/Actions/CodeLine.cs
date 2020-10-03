@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
@@ -14,11 +16,37 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Code Line class, defines a CodeLine in RAPID Code.
     /// </summary>
-    public class CodeLine : Action
+    [Serializable()]
+    public class CodeLine : Action, ISerializable
     {
         #region fields
         private string _code; // the code line as a string
         private CodeType _type;  // the code line type as a CodeType enum
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected CodeLine(SerializationInfo info, StreamingContext context)
+        {
+            _code = (string)info.GetValue("Code", typeof(string));
+            _type = 0; // TODO
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Code", _code, typeof(string));
+            // TODO: Code type
+        }
         #endregion
 
         #region constructors

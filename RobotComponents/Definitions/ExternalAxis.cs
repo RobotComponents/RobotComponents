@@ -4,6 +4,7 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
@@ -16,6 +17,7 @@ namespace RobotComponents.Definitions
     /// External axis class, main Class for external axis.
     /// An external axis (linear and rotational) can be attached to a robot or a workobject
     /// </summary>
+    [Serializable()]
     public abstract class ExternalAxis
     {
         #region fields

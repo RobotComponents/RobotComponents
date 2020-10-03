@@ -3,6 +3,8 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -11,6 +13,7 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Action class, abstract main class for all actions.
     /// </summary>
+    [Serializable()]
     public abstract class Action
     {
         #region fields

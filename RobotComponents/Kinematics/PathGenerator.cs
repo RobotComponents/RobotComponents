@@ -11,6 +11,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Kinematics
 {
@@ -28,7 +29,6 @@ namespace RobotComponents.Kinematics
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages
 
         private readonly RobotTool _initialTool; // Defines the first tool that will be used
-        private Movement _lastMovement; // Defines the last movement
         private RobotJointPosition _lastRobotJointPosition; // Defines the last Robot Joint Position
         private ExternalJointPosition _lastExternalJointPosition; // Defines the last External Joint Position
         private RobotTool _currentTool; // Defines the default robot tool
@@ -96,7 +96,7 @@ namespace RobotComponents.Kinematics
 
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                _lastExternalJointPosition[(int)_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
+                _lastExternalJointPosition[_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
             }
         }
 
@@ -128,37 +128,32 @@ namespace RobotComponents.Kinematics
                 else if (actions[i] is AbsoluteJointMovement absoluteJointMovement)
                 {
                     JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
-                    _lastMovement = absoluteJointMovement.ConvertToMovement();
                     counter++;
                 }
 
                 else if (actions[i] is Movement movement)
                 {
-                    if (movement.Target is RobotTarget && movement.MovementType == 0)
+                    if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is RobotTarget && movement.MovementType == 1)
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveL)
                     {
                         LinearMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is RobotTarget && movement.MovementType == 2)
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveJ)
                     {
                         JointMovementFromRobotTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
 
-                    else if (movement.Target is JointTarget && movement.MovementType == 0)
+                    else if (movement.Target is JointTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromJointTarget(movement);
-                        _lastMovement = movement;
                         counter++;
                     }
                 }
@@ -243,7 +238,7 @@ namespace RobotComponents.Kinematics
             _robotInfo.InverseKinematics.Calculate();
 
             // Auto Axis Config
-            if (_autoAxisConfig == true && movement.MovementType != 0)
+            if (_autoAxisConfig == true && movement.MovementType != MovementType.MoveAbsJ)
             {
                 _robotInfo.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
             }
@@ -295,7 +290,7 @@ namespace RobotComponents.Kinematics
             if (movement.WorkObject.ExternalAxis != null)
             {
                 ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
-                int logic = (int)externalAxis.AxisNumber;
+                int logic = externalAxis.AxisNumber;
                 double axisValue = _lastExternalJointPosition[logic];
                 Transform trans = externalAxis.CalculateTransformationMatrix(-axisValue, out _);
                 plane1.Transform(trans);

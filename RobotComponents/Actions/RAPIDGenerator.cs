@@ -11,6 +11,7 @@ using System.Text;
 // RobotComponents Libs
 using RobotComponents.Utils;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -366,7 +367,7 @@ namespace RobotComponents.Actions
             {
                 if (_actions[i] is Movement movement)
                 {
-                    if (movement.MovementType == 0)
+                    if (movement.MovementType == MovementType.MoveAbsJ)
                     {
                         return true;
                     }

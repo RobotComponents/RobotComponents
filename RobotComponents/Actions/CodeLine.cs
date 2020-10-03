@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -20,7 +21,7 @@ namespace RobotComponents.Actions
     {
         #region fields
         private string _code; // the code line as a string
-        private int _type;  // the code line type as int value -> 0 for instruction, 1 for declaration
+        private CodeType _type;  // the code line type as a CodeType enum
         #endregion
 
         #region (de)serialization
@@ -63,18 +64,18 @@ namespace RobotComponents.Actions
         public CodeLine(string code)
         {
             _code = code;
-            _type = 0;
+            _type = CodeType.Instruction;
         }
 
         /// <summary>
         /// Defines a RAPID code line.
         /// </summary>
         /// <param name="code">The code line as a text string.</param>
-        /// <param name="type">The code type as int value. Use 0 for an instructions and 1 for a declarations.</param>
-        public CodeLine(string code, int type)
+        /// <param name="type">The code type as a CodeType.</param>
+        public CodeLine(string code, CodeType type)
         {
             _code = code;
-            SetCodeLineType(type);
+            _type = type;
         }
 
         /// <summary>
@@ -124,23 +125,6 @@ namespace RobotComponents.Actions
             }
         }
 
-
-        /// <summary>
-        /// Sets the code line type. 
-        /// </summary>
-        /// <param name="type"> The code line type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
-        public void SetCodeLineType(int type)
-        {
-            if (type == 0 | type == 1)
-            {
-                _type = type;
-            }
-            else
-            {
-                _type = 0;
-            }
-        }
-
         /// <summary>
         /// Used to create variable definition code of this action. 
         /// </summary>
@@ -148,7 +132,7 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 return _code;
             }
@@ -165,7 +149,7 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 return _code;
             }
@@ -181,7 +165,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
             }
@@ -193,7 +177,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
             }
@@ -210,8 +194,6 @@ namespace RobotComponents.Actions
             { 
                 if (Code == null) { return false; }
                 if (Code == "") { return false; }
-                if (Type < 0) { return false; }
-                if (Type > 1) { return false; }
                 return true; 
             }
         }
@@ -226,11 +208,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Code type as int value.
+        /// Code type as a CodeType.
         /// </summary>
-        public int Type
+        public CodeType Type
         {
             get { return _type; }
+            set { _type = value; }
         }
         #endregion
     }

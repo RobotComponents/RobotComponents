@@ -22,7 +22,7 @@ namespace RobotComponents.Definitions
         private Plane _attachmentPlane; // The plane where the robot or the work object is attached
         private Plane _axisPlane; // Z-Axis of the _axisPlane is the linear axis
         private Interval _axisLimits; // The movement limits
-        private int? _axisNumber; // TODO: The axis logic number
+        private int _axisNumber; // TODO: The axis logic number
         private Mesh _baseMesh; // The base mesh (fixed)
         private Mesh _linkMesh; // The link mesh posed for axis value 0
         private Curve _axisCurve; // The axis curve
@@ -39,6 +39,7 @@ namespace RobotComponents.Definitions
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
+            _axisNumber = -1;
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null;
+            _axisNumber = -1;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -79,7 +80,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -101,7 +102,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -126,7 +127,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -151,7 +152,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
-            _axisNumber = null;
+            _axisNumber = -1;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -177,7 +178,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null;
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -200,7 +201,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -406,7 +407,7 @@ namespace RobotComponents.Definitions
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            Transform translateNow = CalculateTransformationMatrix(axisValue, out bool isInLimits);
+            Transform translateNow = CalculateTransformationMatrix(axisValue, out _);
             _posedMeshes[1].Transform(translateNow);
         }
 
@@ -524,7 +525,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// The logic number of the external axis. 
         /// </summary>
-        public override int? AxisNumber 
+        public override int AxisNumber 
         { 
             get { return _axisNumber; }
             set { _axisNumber = value; }

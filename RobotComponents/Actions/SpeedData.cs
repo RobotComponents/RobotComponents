@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -24,6 +25,7 @@ namespace RobotComponents.Actions
     public class SpeedData : Action, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // SpeeData variable name
         private double _v_tcp; // Tool center point speed
         private double _v_ori; // Re-orientation speed
@@ -101,6 +103,7 @@ namespace RobotComponents.Actions
 
 
             // Set other fields
+            _referenceType = ReferenceType.VAR;
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -129,6 +132,7 @@ namespace RobotComponents.Actions
             }
 
             // Set other fields
+            _referenceType = ReferenceType.VAR;
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -147,6 +151,7 @@ namespace RobotComponents.Actions
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _v_tcp = v_tcp;
             _v_ori = v_ori;
@@ -163,6 +168,7 @@ namespace RobotComponents.Actions
         /// <param name="speeddata"> The speeddata that should be duplicated. </param>
         public SpeedData(SpeedData speeddata)
         {
+            _referenceType = speeddata.ReferenceType;
             _name = speeddata.Name;
             _v_tcp = speeddata.V_TCP;
             _v_ori = speeddata.V_ORI;
@@ -221,7 +227,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                return "VAR speeddata " + _name + " := [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];";
+                return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];";
             }
             else
             {
@@ -281,6 +287,15 @@ namespace RobotComponents.Actions
                 if (V_REAX <= 0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Defines the reference type (PERS, VAR or CONST)
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>

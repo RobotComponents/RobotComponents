@@ -153,7 +153,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// The axis logic as number (0, 1, 2, 3, 4 or 5)
         /// </summary>
-        public abstract int? AxisNumber { get; set; }
+        public abstract int AxisNumber { get; set; }
 
         /// <summary>
         /// The fixed base mesh of the external axis. 

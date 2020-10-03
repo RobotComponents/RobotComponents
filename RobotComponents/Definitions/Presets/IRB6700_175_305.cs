@@ -21,6 +21,7 @@ namespace RobotComponents.Definitions.Presets
         /// <summary>
         /// Defines the IRB6700-175/3.05 Robot
         /// </summary>
+        /// <param name="name"> The Robot name as a string. </param>
         /// <param name="positionPlane"> The position of the robot in world coordinate space as plane. </param>
         /// <param name="tool"> The robot end-effector as a Robot Tool. </param>
         /// <param name="externalAxis"> The external axes attaced to the robot as list with External Axes. </param>

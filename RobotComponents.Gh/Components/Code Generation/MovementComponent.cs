@@ -17,6 +17,7 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -276,7 +277,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 }
 
                 // Movement constructor
-                Movement movement = new Movement(target, speedData, movementType, zoneData, robotTool, workObject, digitalOutput);
+                Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
                 movements.Add(movement);
             }
 
@@ -340,9 +341,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 obj.ListItems.Clear();
 
                 // Add the items to the value list
-                obj.ListItems.Add(new GH_ValueListItem("MoveAbsJ", "0"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveL", "1"));
-                obj.ListItems.Add(new GH_ValueListItem("MoveJ", "2"));
+                // Add the items to the value list
+                string[] names = Enum.GetNames(typeof(MovementType));
+                int[] values = (int[])Enum.GetValues(typeof(MovementType));
+
+                for (int i = 0; i < names.Length; i++)
+                {
+                    obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
+                }
 
                 // Make point where the valuelist should be created on the canvas
                 obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);

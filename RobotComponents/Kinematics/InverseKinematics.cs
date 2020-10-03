@@ -172,7 +172,7 @@ namespace RobotComponents.Kinematics
                 // Calculate the position and the orientation of the target plane in the word coordinate system
                 // If there is an external axes connected to work object of the movement the 
                 // target plane will be re-oriented according to the pose of the this external axes. 
-                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
+                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out _);
 
                 // Update the base plane / position plane
                 _positionPlane = GetPositionPlane();
@@ -497,7 +497,7 @@ namespace RobotComponents.Kinematics
                 // Add the external axis values to the list with external axis values
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                     // Check if the axis is an external linear axis
                     if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
@@ -604,7 +604,7 @@ namespace RobotComponents.Kinematics
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = (int)externalAxis.AxisNumber;
+                int logic = externalAxis.AxisNumber;
 
                 // Check if an external linear axis is used
                 if (externalAxis is ExternalLinearAxis externalLinearAxis)
@@ -619,7 +619,7 @@ namespace RobotComponents.Kinematics
                     // Otherwise use the user definied external axis value
                     else
                     {
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out bool inLimits);
+                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out _);
                     }
 
                     // Break the loop since it should only work for one external linear axis.
@@ -655,7 +655,7 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                 if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {

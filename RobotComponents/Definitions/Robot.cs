@@ -33,8 +33,8 @@ namespace RobotComponents.Definitions
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
         private List<ExternalAxis> _externalAxis; // The attached external axes
-        private InverseKinematics _inverseKinematics; // Robot inverse kinematics
-        private ForwardKinematics _forwardKinematics; // Robot forward kinematics
+        private readonly InverseKinematics _inverseKinematics; // Robot inverse kinematics
+        private readonly ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
         #endregion

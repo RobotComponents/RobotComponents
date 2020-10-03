@@ -411,7 +411,12 @@ namespace RobotComponents.Definitions
         /// <returns> Returns the local tool center point coordinates. </returns>
         public Point3d GetToolPosition()
         {
-            _position = new Point3d(_toolPlane.Origin - _attachmentPlane.Origin);
+            Plane toolPlane = new Plane(_toolPlane);
+            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_attachmentPlane, Plane.WorldXY);
+            toolPlane.Transform(orient);
+
+            _position = new Point3d(toolPlane.Origin);
+            
             return _position;
         }
 

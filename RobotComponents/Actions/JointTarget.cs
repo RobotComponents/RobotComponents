@@ -6,21 +6,50 @@
 // System lib
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
-// NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple.
 namespace RobotComponents.Actions
 {
     /// <summary>
     /// Joint Target class, defines each individual axis position, for both the robot and the external axes.
     /// </summary>
-    public class JointTarget : Action, ITarget
+    [Serializable()]
+    public class JointTarget : Action, ITarget, ISerializable
     {
         #region fields
         private string _name; // joint target variable name
         private RobotJointPosition _robJointPosition; // the position of the robot
         private ExternalJointPosition _extJointPosition; // the position of the external axes
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected JointTarget(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _robJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
+            _extJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Robot Joint Position", _robJointPosition, typeof(RobotJointPosition));
+            info.AddValue("External Joint Position", _extJointPosition, typeof(ExternalJointPosition));
+        }
         #endregion
 
         #region constructors

@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -14,11 +16,37 @@ namespace RobotComponents.Actions
     /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 
     /// is used to wait until a digital input is set.
     /// </summary>
-    public class WaitDI : Action
+    [Serializable()]
+    public class WaitDI : Action, ISerializable
     {
         #region fields
         private string _DIName; // The name of the digital input signal
         private bool _value; // The desired state / value of the digtal input signal
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WaitDI(SerializationInfo info, StreamingContext context)
+        {
+            _DIName = (string)info.GetValue("Name", typeof(string));
+            _value = (bool)info.GetValue("Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _DIName, typeof(string));
+            info.AddValue("Value", _value, typeof(bool));
+        }
         #endregion
 
         #region constructors

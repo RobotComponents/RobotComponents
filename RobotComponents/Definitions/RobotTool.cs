@@ -4,7 +4,10 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -15,7 +18,8 @@ namespace RobotComponents.Definitions
     /// <summary>
     /// RobotTool class, defines the basic properties and methods for any Robot Tool.
     /// </summary>
-    public class RobotTool
+    [Serializable()]
+    public class RobotTool : ISerializable
     {
         #region fields
         // Fields specific needed for constructors and visualization
@@ -30,6 +34,47 @@ namespace RobotComponents.Definitions
         private Vector3d _centerOfGravity;
         private Quaternion _centerOfGravityOrientation;
         private Vector3d _inertia;
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected RobotTool(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _mesh = (Mesh)info.GetValue("Mesh", typeof(Mesh));
+            _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
+            _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
+            _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
+            _mass = (double)info.GetValue("Mass", typeof(double));
+            _centerOfGravity = (Vector3d)info.GetValue("Center Of Gravity", typeof(Vector3d));
+            _centerOfGravityOrientation = (Quaternion)info.GetValue("Center Of Gravity Orientation", typeof(Quaternion)); ;
+            _inertia = (Vector3d)info.GetValue("Inertia", typeof(Vector3d));
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("name", _name, typeof(string));
+            info.AddValue("Mesh", _attachmentPlane, typeof(Mesh));
+            info.AddValue("Attachment Plane", typeof(Plane));
+            info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
+            info.AddValue("Robot Hold", _robotHold, typeof(bool));
+            info.AddValue("Mass", _mass, typeof(double));
+            info.AddValue("Center Of Gravity", _centerOfGravity, typeof(Vector3d));
+            info.AddValue("Center Of Gravity Orientation", _centerOfGravityOrientation, typeof(Quaternion));
+            info.AddValue("Inertia", _inertia, typeof(Vector3d));
+        }
         #endregion
 
         #region constructors

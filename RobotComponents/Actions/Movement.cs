@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -16,7 +18,8 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Movement class
     /// </summary>
-    public class Movement : Action
+    [Serializable()]
+    public class Movement : Action, ISerializable
     {
         #region fields
         // Fixed fields
@@ -30,6 +33,43 @@ namespace RobotComponents.Actions
         RobotTool _robotTool;
         WorkObject _workObject;
         DigitalOutput _digitalOutput;
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected Movement(SerializationInfo info, StreamingContext context)
+        {
+            _movementType = 0; // TODO
+            _target = (ITarget)info.GetValue("Target", typeof(ITarget));
+            _id = (int)info.GetValue("ID", typeof(int));
+            _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
+            _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
+            _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
+            _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
+            _digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            // TODO: MovementType
+            info.AddValue("Target", _target, typeof(ITarget));
+            info.AddValue("ID", _id, typeof(int));
+            info.AddValue("Speed Data", _speedData, typeof(SpeedData));
+            info.AddValue("Zone Data", _zoneData, typeof(ZoneData));
+            info.AddValue("Robot Tool", _robotTool, typeof(RobotTool));
+            info.AddValue("Work Object", _workObject, typeof(WorkObject));
+            info.AddValue("Digital Output", _digitalOutput, typeof(DigitalOutput));
+        }
         #endregion
 
         #region constructors

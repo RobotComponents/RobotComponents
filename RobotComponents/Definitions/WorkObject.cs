@@ -3,6 +3,10 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 
@@ -13,7 +17,8 @@ namespace RobotComponents.Definitions
     /// Work object data is used to describe the work object that the robot welds, processes, moves within, etc.
     /// The work object is typically combined with a robot movement to defined the global coordinate of the robot target. 
     /// </summary>
-    public class WorkObject
+    [Serializable()]
+    public class WorkObject : ISerializable
     {
         #region fields
         private string _name; // The work object name
@@ -25,6 +30,39 @@ namespace RobotComponents.Definitions
         private Plane _userFrame; // The user frame coordinate system
         private Quaternion _userFrameOrientation; // the orienation of the user frame coordinate system
         private Plane _globalPlane; // global work object plane
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WorkObject(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _plane = (Plane)info.GetValue("Plane", typeof(Plane));
+            _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
+            _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
+            _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Plane", _plane, typeof(Plane));
+            info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));
+            info.AddValue("Robot Hold", _robotHold, typeof(bool));
+            info.AddValue("User Frame", _userFrame , typeof(Plane));
+        }
         #endregion
 
         #region constructors

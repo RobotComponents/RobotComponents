@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -17,7 +19,8 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Robot Target class, defines robot target data. The robt target data is used to define the position of the robot and external axes.
     /// </summary>
-    public class RobotTarget : Action, ITarget
+    [Serializable()]
+    public class RobotTarget : Action, ITarget, ISerializable
     {
         #region fields
         private string _name; // robot target variable name
@@ -25,6 +28,37 @@ namespace RobotComponents.Actions
         private Quaternion _quat; // target plane orientation (as quarternion)
         private int _axisConfig; // the axis configuration of the robot 
         private ExternalJointPosition _externalJointPosition; // the position of the external axes
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected RobotTarget(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _plane = (Plane)info.GetValue("Plane", typeof(Plane));
+            _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
+            _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
+
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Plane", _plane, typeof(Plane));
+            info.AddValue("Axis Configuration", _axisConfig, typeof(int));
+            info.AddValue("External Joint Position", _externalJointPosition, typeof(ExternalJointPosition));
+        }
         #endregion
 
         #region constructors

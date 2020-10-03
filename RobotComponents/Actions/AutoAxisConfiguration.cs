@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -13,10 +15,34 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Auto Axis Configuration Class, sets Auto Axis Configuration to True or False.
     /// </summary>
-    public class AutoAxisConfig : Action
+    [Serializable()]
+    public class AutoAxisConfig : Action, ISerializable
     {
         #region fields
         private bool _isActive; // boolean that indicates if the auto axis configuration is active
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected AutoAxisConfig(SerializationInfo info, StreamingContext context)
+        {
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Is Active", _isActive, typeof(bool));
+        }
         #endregion
 
         #region constructors

@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
@@ -13,11 +15,37 @@ namespace RobotComponents.Actions
     /// <summary>
     /// Digital Output class. Is used to change the value of a digital output signal.
     /// </summary>
-    public class DigitalOutput : Action
+    [Serializable()]
+    public class DigitalOutput : Action, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
         private bool _isActive; // the desired value of the signal 0 or 1.
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected DigitalOutput(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Is Active", _isActive, typeof(bool));
+        }
         #endregion
 
         #region constructors

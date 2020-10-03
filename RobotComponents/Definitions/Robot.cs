@@ -5,20 +5,23 @@
 
 // System Libs
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
+using RobotComponents.Actions;
 // RobotComponents Libs
 using RobotComponents.Kinematics;
-using RobotComponents.Actions;
 
 namespace RobotComponents.Definitions
 {
     /// <summary>
     /// Robot class, defines the basic properties and methods for any Robot.
     /// </summary>
-    public class Robot
+    [Serializable()]
+    public class Robot : ISerializable
     {
         #region fields
         private string _name; // The name of the robot
@@ -34,6 +37,52 @@ namespace RobotComponents.Definitions
         private ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private readonly List<Plane> _externalAxisPlanes; // The external axis planes
         private readonly List<Interval> _externalAxisLimits; // The external axis limit
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected Robot(SerializationInfo info, StreamingContext context)
+        {
+            _name = (string)info.GetValue("Name", typeof(string));
+            _meshes = (List<Mesh>)info.GetValue("Meshes", typeof(List<Mesh>));
+            _internalAxisPlanes = (List<Plane>)info.GetValue("Internal Axis Planes", typeof(List<Plane>));
+            _internalAxisLimits = (List<Interval>)info.GetValue("Internal Axis Limits", typeof(List<Interval>));
+            _basePlane = (Plane)info.GetValue("Base Plane", typeof(Plane));
+            _mountingFrame = (Plane)info.GetValue("Mounting Frame", typeof(Plane));
+            _tool = (RobotTool)info.GetValue("RobotTool", typeof(RobotTool));
+            _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
+            _externalAxis = (List<ExternalAxis>)info.GetValue("External Axis", typeof(List<ExternalAxis>));
+            _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
+            _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
+
+            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _forwardKinematics = new ForwardKinematics(this);
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Meshes", _meshes, typeof(List<Mesh>));
+            info.AddValue("Internal Axis Planes", _internalAxisPlanes, typeof(List<Plane>));
+            info.AddValue("Internal Axis Limits", _internalAxisLimits, typeof(List<Interval>));
+            info.AddValue("Base Plane", _basePlane, typeof(Plane));
+            info.AddValue("Mounting Frame", _mountingFrame, typeof(Plane));
+            info.AddValue("RobotTool", _tool, typeof(RobotTool));
+            info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
+            info.AddValue("External Axis", _externalAxis, typeof(List<ExternalAxis>));
+            info.AddValue("External Axis Planes", _externalAxisPlanes, typeof(List<Plane>));
+            info.AddValue("External Axis Limits", _externalAxisLimits, typeof(List<Interval>));
+        }
         #endregion
 
         #region constructors

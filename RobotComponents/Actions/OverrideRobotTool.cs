@@ -111,7 +111,6 @@ namespace RobotComponents.Actions
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // We don't write a comment between our variable names
-            this.ToRAPIDDeclaration(RAPIDGenerator.Robot);
         }
 
         /// <summary>
@@ -121,6 +120,12 @@ namespace RobotComponents.Actions
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+
+            // Collect unique robot tools
+            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
+            {
+                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
+            }
         }
 
         /// <summary>

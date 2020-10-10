@@ -25,6 +25,8 @@ namespace RobotComponents.Actions
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
+        private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); // Dictionary that stores all the unique robo ttools used by the RAPIDGenerator
+        private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>(); // Dictionary that stores all the unique work objects used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programCode; // The rapid program code
@@ -119,10 +121,14 @@ namespace RobotComponents.Actions
             // Reset fields
             _speedDatas.Clear();
             _targets.Clear();
+            _zoneDatas.Clear();
+            _robotTools.Clear();
+            _workObjects.Clear();
             _errorText.Clear();
 
-            // Save initial tool
+            // Save initial tool and add to used tools
             RobotTool initTool = _robot.Tool.Duplicate();
+            _robotTools.Add(_robot.Tool.Name, _robot.Tool);
 
             // Check if the first movement is an Absolute Joint Movement
             _firstMovementIsMoveAbs = CheckFirstMovement();
@@ -183,7 +189,40 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE
+        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
+        /// It adds the robot tools and work objects that are collected by this RAPID generator. 
+        /// For this you have to call the CreateProgamCode first. 
+        /// This method also overwrites or creates a file if saved to file is set equal to true.
+        /// </summary>
+        /// <param name="customCode"> Custom user definied base code as list with strings. </param>
+        /// <returns> Returns the RAPID system code as a string. </returns>
+        public string CreateSystemCode(List<string> customCode)
+        {
+            List<RobotTool> robotTools = new List<RobotTool>();
+            List<WorkObject> workObjects = new List<WorkObject>();
+
+            foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
+            {
+                if (entry.Value.Name != "tool0" & entry.Value.Name != "" & entry.Value.Name != null)
+                {
+                    robotTools.Add(entry.Value);
+                }
+            }
+
+            foreach (KeyValuePair<string, WorkObject> entry in _workObjects)
+            {
+                if (entry.Value.Name != "wobj0" & entry.Value.Name != "" & entry.Value.Name != null)
+                {
+                    workObjects.Add(entry.Value);
+                }
+            }
+
+            return CreateSystemCode(robotTools, workObjects, customCode);
+        }
+
+        /// <summary>
+        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
+        /// It is adds the robot tools, work objects and custom code lines from the given lists. 
         /// This method also overwrites or creates a file if saved to file is set equal to true.
         /// </summary>
         /// <param name="robotTools"> The robot tools that should be added to the BASE code as a list. </param>
@@ -219,7 +258,7 @@ namespace RobotComponents.Actions
             // Creates Comments
             systemCode += "\t" + "! System module with basic predefined system data";
             systemCode += Environment.NewLine;
-            systemCode += "\t" + "!************************************************";
+            systemCode += "\t" + "! ***********************************************";
             systemCode += Environment.NewLine;
             systemCode += Environment.NewLine;
 
@@ -502,6 +541,22 @@ namespace RobotComponents.Actions
         public Dictionary<string, ITarget> Targets
         {
             get { return _targets; }
+        }
+
+        /// <summary>
+        /// Defines all the unique Robot Tools used in this RAPID Generator
+        /// </summary>
+        public Dictionary<string, RobotTool> RobotTools
+        {
+            get { return _robotTools; }
+        }
+
+        /// <summary>
+        /// Defines all the unique Work Objects used in this RAPID Generator
+        /// </summary>
+        public Dictionary<string, WorkObject> WorkObjects
+        {
+            get { return _workObjects; }
         }
 
         /// <summary>

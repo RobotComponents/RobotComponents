@@ -756,6 +756,18 @@ namespace RobotComponents.Actions
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+
+            // Collect unique robot tools
+            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
+            {
+                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
+            }
+
+            // Collect unique work objects
+            if (!RAPIDGenerator.WorkObjects.ContainsKey(_workObject.Name))
+            {
+                RAPIDGenerator.WorkObjects.Add(_workObject.Name, _workObject);
+            }
         }
         #endregion
 

@@ -45,6 +45,8 @@ namespace RobotComponents.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotTool(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _name = (string)info.GetValue("Name", typeof(string));
             _mesh = (Mesh)info.GetValue("Mesh", typeof(Mesh));
             _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
@@ -66,9 +68,11 @@ namespace RobotComponents.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("name", _name, typeof(string));
-            info.AddValue("Mesh", _attachmentPlane, typeof(Mesh));
-            info.AddValue("Attachment Plane", typeof(Plane));
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Mesh", _mesh, typeof(Mesh));
+            info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
             info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
             info.AddValue("Robot Hold", _robotHold, typeof(bool));
             info.AddValue("Mass", _mass, typeof(double));

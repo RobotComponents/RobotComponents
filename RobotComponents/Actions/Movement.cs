@@ -13,6 +13,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
@@ -44,7 +45,8 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected Movement(SerializationInfo info, StreamingContext context)
         {
-            _movementType = 0; // TODO
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
@@ -62,7 +64,8 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            // TODO: MovementType
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Movement Type", _movementType, typeof(MovementType));
             info.AddValue("Target", _target, typeof(ITarget));
             info.AddValue("ID", _id, typeof(int));
             info.AddValue("Speed Data", _speedData, typeof(SpeedData));

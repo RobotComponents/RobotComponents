@@ -11,6 +11,7 @@ using System.Security.Permissions;
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
@@ -43,6 +44,8 @@ namespace RobotComponents.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
@@ -60,6 +63,8 @@ namespace RobotComponents.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
             info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));

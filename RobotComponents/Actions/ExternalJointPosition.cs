@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
@@ -39,6 +40,7 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization.</param>
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
             _val3 = (double)info.GetValue("Axis value 3", typeof(double));
@@ -55,6 +57,7 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Axis value 1", _val1, typeof(double));
             info.AddValue("Axis value 2", _val2, typeof(double));
             info.AddValue("Axis value 3", _val3, typeof(double));

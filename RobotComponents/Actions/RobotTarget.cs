@@ -40,6 +40,8 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotTarget(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
@@ -56,6 +58,8 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
             info.AddValue("Axis Configuration", _axisConfig, typeof(int));

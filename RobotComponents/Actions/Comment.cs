@@ -10,6 +10,7 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
@@ -34,8 +35,9 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected Comment(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _comment = (string)info.GetValue("Comment", typeof(string));
-            _type = 0; // TODO
+            _type = (CodeType)info.GetValue("Code Type", typeof(CodeType));
         }
 
         /// <summary>
@@ -46,8 +48,9 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Comment", _comment, typeof(string));
-            // TODO: Code type
+            info.AddValue("Code Type", _type, typeof(CodeType));
         }
         #endregion
 

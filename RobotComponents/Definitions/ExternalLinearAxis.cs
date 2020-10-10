@@ -4,18 +4,23 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
     /// <summary>
     /// External linear axis class, main class for external linear axis.
     /// </summary>
-    public class ExternalLinearAxis : ExternalAxis
+    [Serializable()]
+    public class ExternalLinearAxis : ExternalAxis, ISerializable
     {
         #region fields
         private string _name; // The name of the external axis
@@ -27,6 +32,47 @@ namespace RobotComponents.Definitions
         private Mesh _linkMesh; // The link mesh posed for axis value 0
         private Curve _axisCurve; // The axis curve
         private List<Mesh> _posedMeshes; // The mesh posed for a certain axis value
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Special contructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected ExternalLinearAxis(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _name = (string)info.GetValue("Name", typeof(string));
+            _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
+            _axisPlane = (Plane)info.GetValue("Axis Plane", typeof(Plane));
+            _axisLimits = (Interval)info.GetValue("Axis Limits", typeof(Interval));
+            _axisNumber = (int)info.GetValue("Axis Number", typeof(int));
+            _baseMesh= (Mesh)info.GetValue("Base Mesh", typeof(Mesh));
+            _linkMesh = (Mesh)info.GetValue("Link Mesh", typeof(Mesh));
+            _axisCurve = (Curve)info.GetValue("Axis Curve", typeof(Curve));
+            _posedMeshes = (List<Mesh>)info.GetValue("Posed Meshed", typeof(List<Mesh>));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
+            info.AddValue("Axis Plane", _axisPlane , typeof(Plane));
+            info.AddValue("Axis Limits", _axisLimits, typeof(Interval));
+            info.AddValue("Axis Number", _axisNumber, typeof(int));
+            info.AddValue("Base Mesh", _baseMesh, typeof(Mesh));
+            info.AddValue("Link Mesh", _linkMesh, typeof(Mesh));
+            info.AddValue("Axis Curve", _axisCurve, typeof(Curve));
+            info.AddValue("Posed Meshed", _posedMeshes, typeof(List<Mesh>));
+        }
         #endregion
 
         #region constructors

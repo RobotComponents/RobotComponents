@@ -11,9 +11,10 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
-using RobotComponents.Actions;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
@@ -71,6 +72,8 @@ namespace RobotComponents.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Meshes", _meshes, typeof(List<Mesh>));
             info.AddValue("Internal Axis Planes", _internalAxisPlanes, typeof(List<Plane>));

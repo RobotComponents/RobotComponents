@@ -9,6 +9,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
@@ -30,6 +31,7 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitTime(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _duration = (double)info.GetValue("Duration", typeof(double));
         }
 
@@ -41,6 +43,7 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Duration", _duration, typeof(double));
         }
         #endregion

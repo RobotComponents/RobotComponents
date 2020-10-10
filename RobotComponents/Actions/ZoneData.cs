@@ -11,6 +11,7 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
@@ -53,6 +54,8 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected ZoneData(SerializationInfo info, StreamingContext context)
         {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _name = (string)info.GetValue("Name", typeof(string));
             _pzone_tcp = (double)info.GetValue("pzone_tcp", typeof(double));
             _pzone_ori = (double)info.GetValue("pzone_ori", typeof(double));
@@ -72,6 +75,8 @@ namespace RobotComponents.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("pzone_tcp", _pzone_tcp, typeof(double));
             info.AddValue("pzone_ori", _pzone_ori, typeof(double));

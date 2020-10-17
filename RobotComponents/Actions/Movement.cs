@@ -6,21 +6,26 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Movement class
+    /// Represents several Move instructions. 
     /// </summary>
-    public class Movement : Action
+    [Serializable()]
+    public class Movement : Action, ISerializable
     {
         #region fields
         // Fixed fields
-        private int _movementType; //TODO: convert to enum
+        private MovementType _movementType;
         private ITarget _target;
         private int _id; // Synchronization id (for multi move programming)
         private SpeedData _speedData;
@@ -30,6 +35,45 @@ namespace RobotComponents.Actions
         RobotTool _robotTool;
         WorkObject _workObject;
         DigitalOutput _digitalOutput;
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected Movement(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
+            _target = (ITarget)info.GetValue("Target", typeof(ITarget));
+            _id = (int)info.GetValue("ID", typeof(int));
+            _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
+            _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
+            _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
+            _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
+            _digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Movement Type", _movementType, typeof(MovementType));
+            info.AddValue("Target", _target, typeof(ITarget));
+            info.AddValue("ID", _id, typeof(int));
+            info.AddValue("Speed Data", _speedData, typeof(SpeedData));
+            info.AddValue("Zone Data", _zoneData, typeof(ZoneData));
+            info.AddValue("Robot Tool", _robotTool, typeof(RobotTool));
+            info.AddValue("Work Object", _workObject, typeof(WorkObject));
+            info.AddValue("Digital Output", _digitalOutput, typeof(DigitalOutput));
+        }
         #endregion
 
         #region constructors
@@ -61,11 +105,31 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData)
+        {
+            _movementType = movementType;
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
+            _zoneData = new ZoneData(0);
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            CheckCombination();
+        }
+
+        /// <summary>
+        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
+        /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
+        /// <param name="target"> The target as a Target. </param>
+        /// <param name="speedData"> The SpeedData as a SpeedData </param>
         /// <param name="zoneData"> The ZoneData as a ZoneData </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData)
         {
             _movementType = movementType;
             _target = target;
@@ -80,56 +144,14 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
-        /// </summary>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision)
-        {
-            _movementType = movementType;
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _zoneData = new ZoneData(precision);
-            _robotTool = new RobotTool(); // Default Robot Tool tool0
-            _robotTool.Clear(); // Empty Robot Tool
-            _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
-            CheckCombination();
-        }
-
-        /// <summary>
         /// Constructs a robot movement with an empty digital output, a default work object (wobj0) and a empty robot tool (no override).
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovemenType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool)
-        {
-            _movementType = movementType;
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _zoneData = new ZoneData(precision);
-            _robotTool = robotTool;
-            _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Constructs a robot movement with an empty digital output, a default work object (wobj0) and a empty robot tool (no override).
-        /// </summary>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
         /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool)
         {
             _movementType = movementType;
             _target = target;
@@ -145,18 +167,18 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Constructs a robot movement with an empty digital output, an empty robot tool (no override) and a user definied work object. 
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, WorkObject workObject)
         {
             _movementType = movementType;
             _target = target;
             _id = -1;
             _speedData = speedData;
-            _zoneData = new ZoneData(precision);
+            _zoneData = zoneData;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = workObject;
@@ -167,18 +189,18 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and user definied digital output. 
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine.  </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _target = target;
             _id = -1;
             _speedData = speedData;
-            _zoneData = new ZoneData(precision);
+            _zoneData = zoneData;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -189,19 +211,19 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Constructs a robot movement with an empty digital output.
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject)
         {
             _movementType = movementType;
             _target = target;
             _id = -1;
             _speedData = speedData;
-            _zoneData = new ZoneData(precision);
+            _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = new DigitalOutput(); // InValid / empty DO
@@ -213,57 +235,11 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _zoneData = new ZoneData(precision);
-            _robotTool = robotTool;
-            _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = digitalOutput;
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Constructs a robot movement with an empty robot tool (no override).
-        /// </summary>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
-        /// <param name="workObject"> The Work Object as a Work Object </param>
-        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, WorkObject workObject, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _zoneData = new ZoneData(precision);
-            _robotTool = new RobotTool(); // Default Robot Tool tool0
-            _robotTool.Clear(); // Empty Robot Tool
-            _workObject = workObject;
-            _digitalOutput = digitalOutput;
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Constructs a robot movement. 
-        /// </summary>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="workObject"> The Work Object as a Work Object </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _target = target;
@@ -271,7 +247,7 @@ namespace RobotComponents.Actions
             _speedData = speedData;
             _zoneData = zoneData;
             _robotTool = robotTool;
-            _workObject = workObject;
+            _workObject = new WorkObject(); // Default work object wobj0
             _digitalOutput = digitalOutput;
             CheckCombination();
         }
@@ -279,20 +255,20 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Constructs a robot movement. 
         /// </summary>
+        /// <param name="movementType"> The movement type as a MovementType. </param>
         /// <param name="target"> The target as a Target. </param>
         /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as an integer (0, 1 or 2). </param>
-        /// <param name="precision"> Robot movement precision. This value will be casted to the nearest predefined zonedata value. Use -1 for fine. </param>
+        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object as a Work Object </param>
         /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
-        public Movement(ITarget target, SpeedData speedData, int movementType, int precision, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _target = target;
             _id = -1;
             _speedData = speedData;
-            _zoneData = new ZoneData(precision);
+            _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
             _digitalOutput = digitalOutput;
@@ -369,15 +345,15 @@ namespace RobotComponents.Actions
 
             else if (_id < 0)
             {
-                if (this.MovementType == 0)
+                if (this.MovementType == MovementType.MoveAbsJ)
                 {
                     return "Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
-                else if (this.MovementType == 1)
+                else if (this.MovementType == MovementType.MoveL)
                 {
                     return "Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
-                else if (this.MovementType == 2)
+                else if (this.MovementType == MovementType.MoveJ)
                 {
                     return "Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
@@ -389,15 +365,15 @@ namespace RobotComponents.Actions
 
             else
             {
-                if (this.MovementType == 0)
+                if (this.MovementType == MovementType.MoveAbsJ)
                 {
                     return "Coordinated synchronized Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
-                else if (this.MovementType == 1)
+                else if (this.MovementType == MovementType.MoveL)
                 {
                     return "Coordinated synchronized Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
-                else if (this.MovementType == 2)
+                else if (this.MovementType == MovementType.MoveJ)
                 {
                     return "Coordinated synchronized Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
                 }
@@ -414,7 +390,7 @@ namespace RobotComponents.Actions
         /// </summary>
         private void CheckCombination()
         {
-            if (_movementType != 0 && _target is JointTarget)
+            if (_movementType != MovementType.MoveAbsJ && _target is JointTarget)
             {
                 throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
             }
@@ -529,7 +505,7 @@ namespace RobotComponents.Actions
             if (_digitalOutput.IsValid == false)
             {
                 // MoveAbsJ
-                if (_movementType == 0)
+                if (_movementType == MovementType.MoveAbsJ)
                 {
                     // If a robot target is converted to a joint target we add the suffix _jt to the target name.
                     string name = _target.Name;
@@ -557,7 +533,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveL
-                else if (_movementType == 1 && _target is RobotTarget)
+                else if (_movementType == MovementType.MoveL && _target is RobotTarget)
                 {
                     string code = "MoveL ";
                     code += _target.Name;
@@ -577,7 +553,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveJ
-                else if (_movementType == 2 && _target is RobotTarget)
+                else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
                 {
                     string code = "MoveJ ";
                     code += _target.Name;
@@ -608,7 +584,7 @@ namespace RobotComponents.Actions
             {
                 // MoveAbsJ + SetDO: There is no RAPID function that combines the an absolute joint movement and a DO.
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
-                if (_movementType == 0)
+                if (_movementType == MovementType.MoveAbsJ)
                 {
                     // If a robot target is converted to a joint target we add the suffix _jt to the target name.
                     string name = _target.Name;
@@ -637,7 +613,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveLDO
-                else if (_movementType == 1 && _target is RobotTarget)
+                else if (_movementType == MovementType.MoveL && _target is RobotTarget)
                 {
                     string code = "MoveLDO ";
                     code += _target.Name;
@@ -659,7 +635,7 @@ namespace RobotComponents.Actions
                 }
 
                 // MoveJDO
-                else if (_movementType == 2 && _target is RobotTarget)
+                else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
                 {
                     string code = "MoveJDO ";
                     code += _target.Name;
@@ -705,7 +681,7 @@ namespace RobotComponents.Actions
                 RAPIDGenerator.Robot.InverseKinematics.Movement = this;
 
                 // Generates the robot target variable for a MoveL or MoveJ instruction
-                if (_movementType == 1 || _movementType == 2)
+                if (_movementType == MovementType.MoveL || _movementType == MovementType.MoveJ)
                 {
                     RAPIDGenerator.Robot.InverseKinematics.CalculateExternalAxisValues();
                     robotTarget.ToRAPIDDeclaration(RAPIDGenerator);
@@ -724,6 +700,7 @@ namespace RobotComponents.Actions
                         RobotJointPosition robJointPosition = RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate();
                         ExternalJointPosition extJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
                         JointTarget jointTarget = new JointTarget(robotTarget.Name + "_jt", robJointPosition, extJointPosition);
+                        jointTarget.ReferenceType = _target.ReferenceType;
 
                         // Create the RAPID code
                         jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
@@ -735,10 +712,10 @@ namespace RobotComponents.Actions
             else if (_target is JointTarget jointTarget)
             {
                 // JointTarget with MoveAbsJ
-                if (_movementType == 0)
+                if (_movementType == MovementType.MoveAbsJ)
                 {
                     jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
-                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckForAxisLimits(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckAxisLimits(RAPIDGenerator.Robot));
                 }
 
                 // Joint Target combined with MoveL or MoveJ
@@ -773,7 +750,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Movement object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -787,28 +764,24 @@ namespace RobotComponents.Actions
                 if (ZoneData.IsValid == false) { return false; }
                 if (WorkObject == null) { return false;  }
                 if (WorkObject.IsValid == false) { return false; }
-                if (MovementType < 0) { return false; }
-                if (MovementType > 2) { return false; }
-                if (Target is JointTarget && MovementType == 1) { return false; }
-                if (Target is JointTarget && MovementType == 2) { return false; }
+                if (Target is JointTarget && MovementType == MovementType.MoveL) { return false; }
+                if (Target is JointTarget && MovementType == MovementType.MoveJ) { return false; }
                 return true;
             }
         }
 
         /// <summary>
-        /// The movement type.
-        /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
-        /// Two is used for linear movements with robtarget (MoveL)
-        /// Three is used for joint movements with robtargets (MoveJ).
+        /// Gets or sets the Movement Type.
         /// </summary>
-        public int MovementType
+        public MovementType MovementType
         {
             get { return _movementType; }
             set { _movementType = value; }
         }
 
         /// <summary>
-        /// Defines the destination target of the robot and external axes for this movement.
+        /// Gets or sets the Target.
+        /// Defines the destination target of the robot and external axes.
         /// </summary>
         public ITarget Target
         {
@@ -817,7 +790,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The Synchronization id for multi move programming. 
+        /// Gets or sets the synchronization id for multi move programming. 
         /// This ID number must be defined for coordinated synchronized movements in multi move systems. 
         /// Set this property to -1 to define normal movements (not coordinated / not synchronized).
         /// </summary>
@@ -828,8 +801,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The speed data that applies to movements. Speed data defines the velocity 
-        /// for the tool center point, the tool reorientation, and external axes.
+        /// Gets or sets the Speed Data. 
         /// </summary>
         public SpeedData SpeedData
         {
@@ -838,8 +810,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone data that applies to movements.
-        /// It defines the size of the generated corner path.
+        /// Gets or sets the Zone Data.
         /// </summary>
         public ZoneData ZoneData
         {
@@ -848,7 +819,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The tool in use when the robot moves. 
+        /// Gets or sets the Robot Tool.
+        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
         /// </summary>
         public RobotTool RobotTool
         {
@@ -857,7 +829,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The work object (coordinate system) to which the robot position in the instruction is related.
+        /// Gets or sets the Work Object. 
         /// </summary>
         public WorkObject WorkObject
         {
@@ -866,9 +838,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The digital output. If an empty digital output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
-        /// If a valid digital output is combined movement will be created (MoveLDO or MoveJDO). 
-        /// In case an absolute joint movement is set an extra code line will be added that sets the digital output (SetDO).
+        /// Gets or set the Digital Output. 
+        /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
+        /// If a valid Digital oOutput is combined movement will be created (MoveLDO or MoveJDO). 
+        /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
         /// </summary>
         public DigitalOutput DigitalOutput
         {

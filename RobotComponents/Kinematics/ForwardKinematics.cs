@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Forward Kinematics class
+    /// Represent the Forward Kinematics for a 6-axis spherical Robot and its attached external axes. 
     /// </summary>
     public class ForwardKinematics
     {
@@ -181,7 +181,7 @@ namespace RobotComponents.Kinematics
             {
                 // Get the external axis
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                 // Get external axis plane
                 _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition[logic]);
@@ -259,7 +259,7 @@ namespace RobotComponents.Kinematics
                 // External axis meshes
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
                     _robotInfo.ExternalAxis[i].PoseMeshes(_externalJointPosition[logic]);
                     _posedExternalAxisMeshes.Add(_robotInfo.ExternalAxis[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
                 }
@@ -329,7 +329,7 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                 if (_externalJointPosition[logic] == 9e9)
                 {
@@ -348,7 +348,7 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Forward Kinematics object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

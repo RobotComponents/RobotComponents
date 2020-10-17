@@ -4,26 +4,73 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
-    public class ExternalRotationalAxis : ExternalAxis
+    /// <summary>
+    /// Represents an External Rotational Axis.
+    /// </summary>
+    [Serializable()]
+    public class ExternalRotationalAxis : ExternalAxis, ISerializable
     {
         #region fields
         private string _name; // The name of the external axis
         private Plane _attachmentPlane; // The plane where the robot or the work object is attached
         private Plane _axisPlane; // Todo: now only the attachment plane is copied
         private Interval _axisLimits; // The movement limits
-        private int? _axisNumber; // TODO: The axis logic number
+        private int _axisNumber; // TODO: The axis logic number
         private Mesh _baseMesh; // The base mesh (fixed)
         private Mesh _linkMesh; // The link mesh posed for axis value 0
         private List<Mesh> _posedMeshes; // The mesh posed for a certain axis value
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected ExternalRotationalAxis(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _name = (string)info.GetValue("Name", typeof(string));
+            _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
+            _axisPlane = (Plane)info.GetValue("Axis Plane", typeof(Plane));
+            _axisLimits = (Interval)info.GetValue("Axis Limits", typeof(Interval));
+            _axisNumber = (int)info.GetValue("Axis Number", typeof(int));
+            _baseMesh = (Mesh)info.GetValue("Base Mesh", typeof(Mesh));
+            _linkMesh = (Mesh)info.GetValue("Link Mesh", typeof(Mesh));
+            _posedMeshes = (List<Mesh>)info.GetValue("Posed Meshed", typeof(List<Mesh>));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
+            info.AddValue("Axis Plane", _axisPlane, typeof(Plane));
+            info.AddValue("Axis Limits", _axisLimits, typeof(Interval));
+            info.AddValue("Axis Number", _axisNumber, typeof(int));
+            info.AddValue("Base Mesh", _baseMesh, typeof(Mesh));
+            info.AddValue("Link Mesh", _linkMesh, typeof(Mesh));
+            info.AddValue("Posed Meshed", _posedMeshes, typeof(List<Mesh>));
+        }
         #endregion
 
         #region constructors
@@ -36,6 +83,7 @@ namespace RobotComponents.Definitions
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
+            _axisNumber = -1;
         }
 
         /// <summary>
@@ -48,7 +96,7 @@ namespace RobotComponents.Definitions
             _name = "";
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -70,7 +118,7 @@ namespace RobotComponents.Definitions
             _name = "";
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; // Todo
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -93,7 +141,7 @@ namespace RobotComponents.Definitions
             _name = name;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null; 
+            _axisNumber = -1;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -116,7 +164,7 @@ namespace RobotComponents.Definitions
             _name = name;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
-            _axisNumber = null;
+            _axisNumber = -1;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -315,7 +363,7 @@ namespace RobotComponents.Definitions
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            Transform rotateNow = CalculateTransformationMatrix(axisValue, out bool inLimits);
+            Transform rotateNow = CalculateTransformationMatrix(axisValue, out _);
             _posedMeshes[1].Transform(rotateNow);
         }
 
@@ -356,7 +404,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the External Rotational Axis object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -433,7 +481,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// The logic number of the external axis. 
         /// </summary>
-        public override int? AxisNumber
+        public override int AxisNumber
         {
             get { return _axisNumber; }
             set { _axisNumber = value; }

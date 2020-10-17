@@ -6,16 +6,20 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// External Joint Position class, defines external joint position data. Is used to define 
-    /// the axis positions of external axes, positioners and workpiece manipulators. 
+    /// Represents an External Joint Position declaration.
+    /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators. 
     /// </summary>
-    public class ExternalJointPosition : Action, IJointPosition
+    [Serializable()]
+    public class ExternalJointPosition : Action, IJointPosition, ISerializable
     {
         #region fields
         private double _val1;
@@ -26,6 +30,41 @@ namespace RobotComponents.Actions
         private double _val6;
 
         private const double _defaultValue = 9e9;
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization.</param>
+        protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _val1 = (double)info.GetValue("Axis value 1", typeof(double));
+            _val2 = (double)info.GetValue("Axis value 2", typeof(double));
+            _val3 = (double)info.GetValue("Axis value 3", typeof(double));
+            _val4 = (double)info.GetValue("Axis value 4", typeof(double));
+            _val5 = (double)info.GetValue("Axis value 5", typeof(double));
+            _val6 = (double)info.GetValue("Axis value 6", typeof(double));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Axis value 1", _val1, typeof(double));
+            info.AddValue("Axis value 2", _val2, typeof(double));
+            info.AddValue("Axis value 3", _val3, typeof(double));
+            info.AddValue("Axis value 4", _val4, typeof(double));
+            info.AddValue("Axis value 5", _val5, typeof(double));
+            info.AddValue("Axis value 6", _val6, typeof(double));
+        }
         #endregion
 
         #region constructors
@@ -447,7 +486,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the External Joint Position object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -455,7 +494,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the number of elements in the External Joint Position
+        /// Gets the number of elements in the External Joint Position.
         /// </summary>
         public int Length
         {
@@ -463,7 +502,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Get or set axis values through the indexer. 
+        /// Gets or sets the axis values through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
         /// <returns> The axis value located at the given index. </returns>

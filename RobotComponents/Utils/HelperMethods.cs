@@ -13,16 +13,16 @@ using Rhino.Geometry;
 namespace RobotComponents.Utils
 {
     /// <summary>
-    /// General Helper methods
+    /// Represents general helper methods
     /// </summary>
     public static class HelperMethods
     {
         /// <summary>
         /// Serializes a common object to a byte array. 
-        /// Typically used for serializing robot meshes. 
+        /// Typically used for serializing robot meshes and data inside Goo classes.
         /// </summary>
         /// <param name="obj"> The common object. </param>
-        /// <returns> Returns the byte array. </returns>
+        /// <returns> The byte array. </returns>
         public static byte[] ObjectToByteArray(Object obj)
         {
             if (obj == null) { return null; }
@@ -37,10 +37,10 @@ namespace RobotComponents.Utils
 
         /// <summary>
         /// Deserializes a byte array to a common object. 
-        /// Typically used for deserializing robot meshes. 
+        /// Typically used for deserializing robot meshes and data inside Goo classes.
         /// </summary>
         /// <param name="data"> The byte array. </param>
-        /// <returns> Returns the common object. </returns>
+        /// <returns> The common object. </returns>
         public static Object ByteArrayToObject(byte[] data)
         {
             using (MemoryStream stream = new MemoryStream(data))
@@ -53,20 +53,20 @@ namespace RobotComponents.Utils
         }
 
         /// <summary>
-        /// Flips the plane to the oposite direction by setting it's x-axis negative.
+        /// Flips a plane normal to the oposite direction by setting it's x-axis negative.
         /// </summary>
         /// <param name="plane"> The plane that needs to be flipped. </param>
-        /// <returns> Returns the flipped plane. </returns>
+        /// <returns> Tshe flipped plane. </returns>
         public static Plane FlipPlaneX(Plane plane)
         {
             return new Plane(plane.Origin, -plane.XAxis, plane.YAxis);
         }
 
         /// <summary>
-        /// Flips the plane to the oposite direction by setting it's y-axis negative.
+        /// Flips a plane normal to the oposite direction by setting it's y-axis negative.
         /// </summary>
         /// <param name="plane"> The plane that needs to be flipped. </param>
-        /// <returns> Returns the flipped plane. </returns>
+        /// <returns> The flipped plane. </returns>
         public static Plane FlipPlaneY(Plane plane)
         {
             return new Plane(plane.Origin, plane.XAxis, -plane.YAxis);
@@ -76,7 +76,7 @@ namespace RobotComponents.Utils
         /// Transforms a Quarternion to a Plane.
         /// </summary>
         /// <param name="origin"> The origin of the plane. </param>
-        /// <param name="quat"> The quarternion </param>
+        /// <param name="quat"> The quarternion. </param>
         /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
         public static Plane QuaternionToPlane(Point3d origin, Quaternion quat)
         {
@@ -89,8 +89,8 @@ namespace RobotComponents.Utils
         /// Transforms a Quarternion to a Plane.
         /// </summary>
         /// <param name="refPlane"> The reference plane. </param>
-        /// <param name="origin"> The origin of the plane. </param>
-        /// <param name="quat"> The quarternion </param>
+        /// <param name="origin"> The origin of the new plane. </param>
+        /// <param name="quat"> The quarternion. </param>
         /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
         public static Plane QuaternionToPlane(Plane refPlane, Point3d origin, Quaternion quat)
         {
@@ -121,7 +121,7 @@ namespace RobotComponents.Utils
 
         /// <summary>
         /// Transforms a Quarternion to a Plane.
-        /// </summary
+        /// </summary>
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="origin"> The origin of the plane. </param>
         /// <param name="A"> The real part of the quaternion. </param>
@@ -207,7 +207,7 @@ namespace RobotComponents.Utils
         /// Transforms a plane to a quarternion with as reference plane WorldXY.
         /// </summary>
         /// <param name="plane"> The plane to should be transformed. </param>
-        /// <returns> The quaternion as a Quaternion.</returns>
+        /// <returns> The quaternion. </returns>
         public static Quaternion PlaneToQuaternion(Plane plane)
         {
             Plane refPlane = Plane.WorldXY;

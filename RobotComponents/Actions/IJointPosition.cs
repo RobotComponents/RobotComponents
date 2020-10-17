@@ -9,19 +9,19 @@ using System.Collections.Generic;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Defines the interface for different joint position types
+    /// Represents the interface for different Joint Positions.
     /// </summary>
     public interface IJointPosition
     {
         #region methods
         /// <summary>
-        /// Copies the axis values of the joint position to a new array
+        /// Copies the axis values of the joint position to a new array.
         /// </summary>
         /// <returns> An array containing the axis values of the joint position. </returns>
         double[] ToArray();
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list
+        /// Copies the axis values of the joint position to a new list.
         /// </summary>
         /// <returns> A list containing the axis values of the joint position. </returns>
         List<double> ToList();
@@ -34,12 +34,12 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines the number of elements in the joint position
+        /// Gets the number of elements in the joint position.
         /// </summary>
         int Length { get; }
 
         /// <summary>
-        /// Gets or sets axis values through the indexer. 
+        /// Gets or sets the axis values through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
         /// <returns> The axis value located at the given index. </returns>

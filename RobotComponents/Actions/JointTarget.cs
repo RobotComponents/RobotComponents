@@ -6,21 +6,58 @@
 // System lib
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
-// NOTE: The namespace is missing '.Declarations' to keep the access to the actions simple.
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Joint Target class, defines each individual axis position, for both the robot and the external axes.
+    /// Represents a Joint Target declaration. 
+    /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </summary>
-    public class JointTarget : Action, ITarget
+    [Serializable()]
+    public class JointTarget : Action, ITarget, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // joint target variable name
         private RobotJointPosition _robJointPosition; // the position of the robot
         private ExternalJointPosition _extJointPosition; // the position of the external axes
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected JointTarget(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _robJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
+            _extJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Robot Joint Position", _robJointPosition, typeof(RobotJointPosition));
+            info.AddValue("External Joint Position", _extJointPosition, typeof(ExternalJointPosition));
+        }
         #endregion
 
         #region constructors
@@ -38,6 +75,7 @@ namespace RobotComponents.Actions
         /// <param name="robJointPosition">The rob joint position</param>
         public JointTarget(string name, RobotJointPosition robJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = robJointPosition;
             _extJointPosition = new ExternalJointPosition();
@@ -51,6 +89,7 @@ namespace RobotComponents.Actions
         /// <param name="axisValues">The rob joint position defined as a list with axis values</param>
         public JointTarget(string name, List<double> axisValues)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = new RobotJointPosition(axisValues);
             _extJointPosition = new ExternalJointPosition();
@@ -64,6 +103,7 @@ namespace RobotComponents.Actions
         /// <param name="extJointPosition">The external joint position</param>
         public JointTarget(string name, RobotJointPosition robJointPosition, ExternalJointPosition extJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = robJointPosition;
             _extJointPosition = extJointPosition;
@@ -77,6 +117,7 @@ namespace RobotComponents.Actions
         /// <param name="externalAxisValues">The external joint position as a list wiht axis values</param>
         public JointTarget(string name, List<double> internalAxisValues, List<double> externalAxisValues)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robJointPosition = new RobotJointPosition(internalAxisValues);
             _extJointPosition = new ExternalJointPosition(externalAxisValues);
@@ -86,9 +127,10 @@ namespace RobotComponents.Actions
         /// Creates a new joint target by duplicating an existing joint target. 
         /// This creates a deep copy of the existing joint target. 
         /// </summary>
-        /// <param name="jointtarget"> The joint target that should be duplicated. </param>
+        /// <param name="jointTarget"> The joint target that should be duplicated. </param>
         public JointTarget(JointTarget jointTarget)
         {
+            _referenceType = jointTarget.ReferenceType;
             _name = jointTarget.Name;
             _robJointPosition = jointTarget.RobotJointPosition.Duplicate();
             _extJointPosition = jointTarget.ExternalJointPosition.Duplicate();
@@ -140,16 +182,31 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Cheks for the axis limits and returns a list with possible errors messages. 
+        /// Checks both internal and external axis limits and returns a list with possible errors messages. 
         /// </summary>
         /// <param name="robot"> The robot info to check the axis values for. </param>
         /// <returns> Returns a list with error messages. </returns>
-        public List<string> CheckForAxisLimits(Robot robot)
+        public List<string> CheckAxisLimits(Robot robot)
+        {
+            List<string> errors = new List<string>();
+
+            errors.AddRange(CheckInternalAxisLimits(robot));
+            errors.AddRange(CheckExternalAxisLimits(robot));
+
+            return errors;
+        }
+
+        /// <summary>
+        /// Checks the internal axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckInternalAxisLimits(Robot robot)
         {
             // Initiate list
             List<string> errors = new List<string>();
 
-            // Check for internal axis values
+            // Check internal axis values
             for (int i = 0; i < 6; i++)
             {
                 if (robot.InternalAxisLimits[i].IncludesParameter(_robJointPosition[i], false) == false)
@@ -158,10 +215,23 @@ namespace RobotComponents.Actions
                 }
             }
 
-            // Check for external axis values
+            return errors;
+        }
+
+        /// <summary>
+        /// Checks the external axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckExternalAxisLimits(Robot robot)
+        {
+            // Initiate list
+            List<string> errors = new List<string>();
+
+            // Check external axis values
             for (int i = 0; i < robot.ExternalAxis.Count; i++)
             {
-                int logicNumber = (int)robot.ExternalAxis[i].AxisNumber;
+                int logicNumber = robot.ExternalAxis[i].AxisNumber;
 
                 if (_extJointPosition[logicNumber] == 9e9)
                 {
@@ -184,7 +254,8 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string code = "CONST jointtarget ";
+            string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+            code += " jointtarget ";
             code += _name;
             code += " := [";
             code += _robJointPosition.ToRAPIDDeclaration(robot);
@@ -229,7 +300,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the Joint Target object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -246,7 +317,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the joint target variable name
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Joint Target variable name.
+        /// Each Target variable name has to be unique.
         /// </summary>
         public string Name
         {
@@ -255,7 +336,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the Robot Joint Position
+        /// Gets or sets the Robot Joint Position.
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
@@ -264,7 +345,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the External Joint Position
+        /// Gets or sets the External Joint Position.
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {

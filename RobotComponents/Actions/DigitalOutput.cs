@@ -5,19 +5,51 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Digital Output class. Is used to change the value of a digital output signal.
+    /// Represents a Set Digital Output instruction. 
+    /// This action is used to set the value (state) of a digital output signal.
     /// </summary>
-    public class DigitalOutput : Action
+    [Serializable()]
+    public class DigitalOutput : Action, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
         private bool _isActive; // the desired value of the signal 0 or 1.
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected DigitalOutput(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _name = (string)info.GetValue("Name", typeof(string));
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Is Active", _isActive, typeof(bool));
+        }
         #endregion
 
         #region constructors
@@ -133,7 +165,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the DigitalOutput object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -146,7 +178,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the digital output signal to be changed.
+        /// Gets or sets the name of the Digital Output signal.
         /// </summary>
         public string Name
         {
@@ -155,7 +187,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The desired value / stage of the digital output signal 0 (false) or 1 (true).
+        /// Gets or sets a value indicating whether the Digital Output is active.
         /// </summary>
         public bool IsActive
         {

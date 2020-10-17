@@ -17,8 +17,7 @@ using RobotComponents.Definitions;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Inverse Kinematics class, defines the basic properties and methods for 
-    /// the inverse kinematics of a 6-axis robot and the attached external axes.
+    /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
     public class InverseKinematics
     {
@@ -172,7 +171,7 @@ namespace RobotComponents.Kinematics
                 // Calculate the position and the orientation of the target plane in the word coordinate system
                 // If there is an external axes connected to work object of the movement the 
                 // target plane will be re-oriented according to the pose of the this external axes. 
-                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
+                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out _);
 
                 // Update the base plane / position plane
                 _positionPlane = GetPositionPlane();
@@ -497,7 +496,7 @@ namespace RobotComponents.Kinematics
                 // Add the external axis values to the list with external axis values
                 for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
                 {
-                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                     // Check if the axis is an external linear axis
                     if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
@@ -604,7 +603,7 @@ namespace RobotComponents.Kinematics
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
                 ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = (int)externalAxis.AxisNumber;
+                int logic = externalAxis.AxisNumber;
 
                 // Check if an external linear axis is used
                 if (externalAxis is ExternalLinearAxis externalLinearAxis)
@@ -619,7 +618,7 @@ namespace RobotComponents.Kinematics
                     // Otherwise use the user definied external axis value
                     else
                     {
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out bool inLimits);
+                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out _);
                     }
 
                     // Break the loop since it should only work for one external linear axis.
@@ -655,7 +654,7 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
             {
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
 
                 if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {
@@ -668,7 +667,7 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Inverse Kinematics object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

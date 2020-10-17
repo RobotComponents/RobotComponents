@@ -6,21 +6,24 @@
 // System Libs
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// SpeedData class. SpeedData is used to specify the velocity at which both the robot and the external axes move.
-    /// Speed data defines the velocity at which the tool center point moves, the reorientation speed of the tool, and 
-    /// at which linear or rotating external axes move. When several different types of movement are combined, one of 
-    /// the velocities often limits all movements.The velocity of the other movements will be reduced in such a way 
-    /// that all movements will finish executing at the same time.
+    /// Represents a predefined or user definied Speed Data declaration.
+    /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </summary>
-    public class SpeedData : Action
+    [Serializable()]
+    public class SpeedData : Action, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // SpeeData variable name
         private double _v_tcp; // Tool center point speed
         private double _v_ori; // Re-orientation speed
@@ -32,6 +35,45 @@ namespace RobotComponents.Actions
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
 
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected SpeedData(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
+            _v_ori = (double)info.GetValue("v_ori", typeof(double));
+            _v_leax = (double)info.GetValue("v_leax", typeof(double));
+            _v_reax = (double)info.GetValue("v_reax", typeof(double));
+            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("v_tcp", _v_tcp, typeof(double));
+            info.AddValue("v_ori", _v_ori, typeof(double));
+            info.AddValue("v_leax", _v_leax, typeof(double));
+            info.AddValue("v_reax", _v_reax, typeof(double));
+            info.AddValue("Predefined", _predefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+        }
         #endregion
 
         #region constructors
@@ -63,6 +105,7 @@ namespace RobotComponents.Actions
 
 
             // Set other fields
+            _referenceType = ReferenceType.VAR;
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -91,6 +134,7 @@ namespace RobotComponents.Actions
             }
 
             // Set other fields
+            _referenceType = ReferenceType.VAR;
             _name = "v" + tcp.ToString();
             _v_tcp = tcp;
             _v_ori = 500;
@@ -109,6 +153,7 @@ namespace RobotComponents.Actions
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _v_tcp = v_tcp;
             _v_ori = v_ori;
@@ -125,6 +170,7 @@ namespace RobotComponents.Actions
         /// <param name="speeddata"> The speeddata that should be duplicated. </param>
         public SpeedData(SpeedData speeddata)
         {
+            _referenceType = speeddata.ReferenceType;
             _name = speeddata.Name;
             _v_tcp = speeddata.V_TCP;
             _v_ori = speeddata.V_ORI;
@@ -183,7 +229,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                return "VAR speeddata " + _name + " := [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];";
+                return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];";
             }
             else
             {
@@ -229,7 +275,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the SpeedData is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -246,7 +292,16 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The SpeedData variable name. 
+        /// Gets or sets the reference type.
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the speeddata variable name.
         /// </summary>
         public string Name
         {
@@ -255,7 +310,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of the tool center point (TCP) in mm/s.
+        /// Gets or sets the velocity of the tool center point (TCP) in mm/s.
         /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
         public double V_TCP
@@ -265,7 +320,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The reorientation velocity of the TCP expressed in degrees/s. 
+        /// Gets or sets the reorientation velocity of the TCP expressed in degrees/s. 
         /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
         public double V_ORI
@@ -275,7 +330,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of linear external axes in mm/s.
+        /// Gets or sets the velocity of linear external axes in mm/s.
         /// </summary>
         public double V_LEAX
         {
@@ -284,7 +339,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of rotating external axes in degrees/s.
+        /// Gets or sets the velocity of rotating external axes in degrees/s.
         /// </summary>
         public double V_REAX
         {
@@ -293,7 +348,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the speeddata is predefined by ABB. 
+        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
         /// </summary>
         public bool PreDefinied
         {
@@ -302,8 +357,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Indicates if the exact predefined speeddata value is used.
-        /// If false the nearest predefined speedata or a custom zonedata is used.
+        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
+        /// </summary>
+        public bool UserDefinied
+        {
+            get { return !_predefined; }
+            set { _predefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
+        /// If false the nearest predefined speedata or a custom speeddata was used. 
         /// </summary>
         public bool ExactPredefinedValue
         {
@@ -311,7 +375,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined speeddata variable names
+        /// Gets the valid predefined speeddata variable names.
         /// </summary>
         public static string[] ValidPredefinedNames 
         { 
@@ -319,7 +383,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined speeddata values
+        /// Gets the valid predefined speeddata values.
         /// </summary>
         public static double[] ValidPredefinedValues 
         { 

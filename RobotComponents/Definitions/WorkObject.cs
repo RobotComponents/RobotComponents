@@ -3,19 +3,26 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
+// Robot Components Libs
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// The WorkObject class creates the work object data for the RAPID base code.
-    /// Work object data is used to describe the work object that the robot welds, processes, moves within, etc.
-    /// The work object is typically combined with a robot movement to defined the global coordinate of the robot target. 
+    /// Represents a Work Object.
     /// </summary>
-    public class WorkObject
+    [Serializable()]
+    public class WorkObject : ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // The work object name
         private Plane _plane; // The work object coordinate system
         private Quaternion _orientation; // The orientation of the work object coordinate system
@@ -27,6 +34,43 @@ namespace RobotComponents.Definitions
         private Plane _globalPlane; // global work object plane
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WorkObject(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _plane = (Plane)info.GetValue("Plane", typeof(Plane));
+            _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
+            _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
+            _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Plane", _plane, typeof(Plane));
+            info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));
+            info.AddValue("Robot Hold", _robotHold, typeof(bool));
+            info.AddValue("User Frame", _userFrame , typeof(Plane));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
         /// An empty constructr that creates the the work object data wobj0 in such a way 
@@ -35,6 +79,7 @@ namespace RobotComponents.Definitions
         /// </summary>
         public WorkObject()
         {
+            _referenceType = ReferenceType.PERS;
             _name = "wobj0";
             _plane = Plane.WorldXY;
             _externalAxis = null;
@@ -51,6 +96,7 @@ namespace RobotComponents.Definitions
         /// <param name="plane"> The work object coorindate system as a Plane. </param>
         public WorkObject(string name, Plane plane)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = null;
@@ -68,6 +114,7 @@ namespace RobotComponents.Definitions
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = externalAxis;
@@ -85,6 +132,7 @@ namespace RobotComponents.Definitions
         /// <param name="duplicateMesh"> A boolean that indicates if the meshes should be duplicated. </param>
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
+            _referenceType = workObject.ReferenceType;
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
             _userFrame = new Plane(workObject.UserFrame);
@@ -235,7 +283,8 @@ namespace RobotComponents.Definitions
             string result = "";
 
             // Adds variable type
-            result += "PERS wobjdata ";
+            result += Enum.GetName(typeof(ReferenceType), _referenceType);
+            result += " wobjdata ";
 
             // Adds work object name
             result += $"{_name} := ";
@@ -271,18 +320,18 @@ namespace RobotComponents.Definitions
             }
             
             // Add user frame coordinate < uframe of pose > < trans of pos >
-            result += $"[[{_userFrame.Origin.X.ToString("0.####")}, {_userFrame.Origin.Y.ToString("0.####")}, {_userFrame.Origin.Z.ToString("0.####")}], ";
+            result += $"[[{_userFrame.Origin.X:0.####}, {_userFrame.Origin.Y:0.####}, {_userFrame.Origin.Z:0.####}], ";
 
             // Add user frame orientation < uframe of pose > < rot of orient >
-            result += $"[{_userFrameOrientation.A.ToString("0.#######")}, {_userFrameOrientation.B.ToString("0.#######")}, " +
-                $"{_userFrameOrientation.C.ToString("0.#######")}, {_userFrameOrientation.D.ToString("0.#######")}]], ";
+            result += $"[{_userFrameOrientation.A:0.#######}, {_userFrameOrientation.B:0.#######}, " +
+                $"{_userFrameOrientation.C:0.#######}, {_userFrameOrientation.D:0.#######}]], ";
 
             // Add object frame coordinate < oframe of pose > < trans of pos >
-            result += $"[[{_plane.Origin.X.ToString("0.####")}, {_plane.Origin.Y.ToString("0.####")}, {_plane.Origin.Z.ToString("0.####")}], ";
+            result += $"[[{_plane.Origin.X:0.####}, {_plane.Origin.Y:0.####}, {_plane.Origin.Z:0.####}], ";
 
             // Add object frame orientation < oframe of pose > < rot of orient >
-            result += $"[{_orientation.A.ToString("0.#######")}, {_orientation.B.ToString("0.#######")}, " +
-                $"{_orientation.C.ToString("0.#######")}, {_orientation.D.ToString("0.#######")}]]];";
+            result += $"[{_orientation.A:0.#######}, {_orientation.B:0.#######}, " +
+                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]];";
 
             return result;
         }
@@ -290,7 +339,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WorkObject object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -304,6 +353,15 @@ namespace RobotComponents.Definitions
                 if (UserFrame == Plane.Unset) { return false;  }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>

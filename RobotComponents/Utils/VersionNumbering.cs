@@ -11,12 +11,22 @@ namespace RobotComponents.Utils
     public static class VersionNumbering
     {
         /// <summary>
-        /// Returns the current version of the RobotComponent Plugin. Has to be manually updated each time
+        /// Gets the current version of the RobotComponent Plugin. 
+        /// Has to be manually updated each time. 
         /// 0.XX.XXX ---> mature release
         /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
         /// X.XX.000 ---> bug fixes and small improvements
         /// </summary>
         public const string CurrentVersion = "0.11.004";
-    }
 
+        /// <summary>
+        /// Gets the current version of the Robot Components plugin as an int. 
+        /// Has to be manually updated each time. 
+        /// Remove the points and the zeros in front of the number. 
+        /// Examples:
+        /// "0.11.003" ----> 11003
+        /// "1.01.000" ----> 101000
+        /// </summary>
+        public const int CurrentVersionAsInt = 11004;
+    }
 }

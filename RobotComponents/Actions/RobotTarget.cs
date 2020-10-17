@@ -6,25 +6,66 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Robot Target class, defines robot target data. The robt target data is used to define the position of the robot and external axes.
+    /// Represents the Robot Target declaration. 
+    /// This action is used to define the pose of the robot and the external axes.
     /// </summary>
-    public class RobotTarget : Action, ITarget
+    [Serializable()]
+    public class RobotTarget : Action, ITarget, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // robot target variable name
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
         private Quaternion _quat; // target plane orientation (as quarternion)
         private int _axisConfig; // the axis configuration of the robot 
         private ExternalJointPosition _externalJointPosition; // the position of the external axes
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected RobotTarget(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _plane = (Plane)info.GetValue("Plane", typeof(Plane));
+            _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
+            _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
+
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Plane", _plane, typeof(Plane));
+            info.AddValue("Axis Configuration", _axisConfig, typeof(int));
+            info.AddValue("External Joint Position", _externalJointPosition, typeof(ExternalJointPosition));
+        }
         #endregion
 
         #region constructors
@@ -42,6 +83,7 @@ namespace RobotComponents.Actions
         /// <param name="plane">Robot target plane.</param>
         public RobotTarget(string name, Plane plane)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = 0;
@@ -57,6 +99,7 @@ namespace RobotComponents.Actions
         /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
         public RobotTarget(string name, Plane plane, int axisConfig)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -73,6 +116,7 @@ namespace RobotComponents.Actions
         /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;            
             _axisConfig = axisConfig;
@@ -99,6 +143,7 @@ namespace RobotComponents.Actions
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -119,6 +164,7 @@ namespace RobotComponents.Actions
         /// <param name="Eax">The user defined external joint positions as a list with axis values.</param>
         public RobotTarget(string name, Plane plane, int axisConfig, List<double> Eax)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -135,6 +181,7 @@ namespace RobotComponents.Actions
         /// <param name="externalJointPosition">The user defined external joint position.</param>
         public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -153,6 +200,7 @@ namespace RobotComponents.Actions
         /// <param name="Eax">The user defined external axis values as a list.</param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -175,6 +223,7 @@ namespace RobotComponents.Actions
         /// <param name="Eax">The user defined external axis values as an array.</param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -198,6 +247,7 @@ namespace RobotComponents.Actions
         /// <param name="externalJointPosition">The user defined external joint position.</param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -216,6 +266,7 @@ namespace RobotComponents.Actions
         /// <param name="target"> The target that should be duplicated. </param>
         public RobotTarget(RobotTarget target)
         {
+            _referenceType = target.ReferenceType;
             _name = target.Name;
             _plane = new Plane(target.Plane);
             _axisConfig = target.AxisConfig;
@@ -275,8 +326,8 @@ namespace RobotComponents.Actions
         /// <returns> Returns the RAPID code line as a string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string code = "VAR robtarget "; 
-
+            string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+            code += " robtarget "; 
             code += _name;
             code += " := [";
             code += "[" + _plane.Origin.X.ToString("0.##") + ", ";           
@@ -319,7 +370,8 @@ namespace RobotComponents.Actions
                 RAPIDGenerator.Targets.Add(_name, this);
 
                 // Generate code
-                string code = "VAR robtarget ";
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " robtarget ";
                 code += _name;
                 code += " := [";
                 code += "[" + _plane.Origin.X.ToString("0.##") + ", ";
@@ -352,7 +404,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Robot Target object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -370,9 +422,19 @@ namespace RobotComponents.Actions
                 return true;
             }
         }
-        
+
         /// <summary>
-        /// The robot target variable name, must be unique.
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Robot Target variable name.
+        /// Each Target variable name has to be unique. 
         /// </summary>
         public string Name
         {
@@ -381,7 +443,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The position and orientation of the tool center as a plane. 
+        /// Gets or sets the desired position and orientation of the tool center point.
         /// </summary>
         public Plane Plane
         {
@@ -397,7 +459,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The orientation of the tool, expressed in the form of a quaternion (q1, q2, q3, and q4). 
+        /// Gets or sets the desired orientation of the tool center point.
         /// </summary>
         public Quaternion Quat
         {
@@ -413,7 +475,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The axis configuration of the robot (0-7).
+        /// Gets or set the axis configuration.
+        /// Min. value 0. Max. value 7.
         /// </summary>
         public int AxisConfig
         {
@@ -422,7 +485,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the External Joint Position
+        /// Gets or sets the External Joint Position.
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {

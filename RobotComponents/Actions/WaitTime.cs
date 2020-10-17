@@ -5,18 +5,48 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// WaitTime class, defines waiting time between two actions. This command is used to wait a given amount of time.
+    /// Represent the Wait Time instruction.
+    /// This action is used to wait a given amount of time between two actions.
     /// </summary>
-    public class WaitTime : Action
+    [Serializable()]
+    public class WaitTime : Action, ISerializable
     {
         #region fields
         private double _duration; // the time expressed in seconds
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WaitTime(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _duration = (double)info.GetValue("Duration", typeof(double));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Duration", _duration, typeof(double));
+        }
         #endregion
 
         #region constructors
@@ -40,7 +70,7 @@ namespace RobotComponents.Actions
         /// Creates a new WaitTime object by duplicating an existing WaitTime object. 
         /// This creates a deep copy of the existing WaitTime object. 
         /// </summary>
-        /// <param name="timer"> The WaitTime that should be duplicated. </param>
+        /// <param name="waitTime"> The WaitTime that should be duplicated. </param>
         public WaitTime(WaitTime waitTime)
         {
             _duration = waitTime.Duration;
@@ -122,7 +152,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WaitTime object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -134,7 +164,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The time, expressed in seconds, that program execution is to wait. Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
+        /// Gets or sets the time, expressed in seconds, that program execution is to wait. 
+        /// Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
         /// </summary>
         public double Duration
         {

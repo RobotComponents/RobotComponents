@@ -4,6 +4,7 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
@@ -13,9 +14,9 @@ using RobotComponents.Enumerations;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// External axis class, main Class for external axis.
-    /// An external axis (linear and rotational) can be attached to a robot or a workobject
+    /// Represents a base class for External Axes. 
     /// </summary>
+    [Serializable()]
     public abstract class ExternalAxis
     {
         #region fields
@@ -117,57 +118,56 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// Boolearn that indicates if the External Axis instance is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public abstract bool IsValid { get; }
 
         /// <summary>
-        /// The name of the external axis
+        /// Gets or sets the axis name. 
         /// </summary>
         public abstract string Name { get; set; }
 
         /// <summary>
-        /// Defines the axis limits as an interval
+        /// Gets or sets the axis limits.
         /// </summary>
         public abstract Interval AxisLimits { get; set; }
 
         /// <summary>
-        /// Defines the axis type (linear or rotational)
+        /// Gets or sets the axis type.
         /// </summary>
         public abstract AxisType AxisType { get; }
 
         /// <summary>
-        /// Defines the plane where the robot or the work object is attached. 
+        /// Gets or sets the attachment plane to attach a robot or work object.
         /// </summary>
         public abstract Plane AttachmentPlane { get; set; }
 
         /// <summary>
-        /// Defines the axis plane. In case of a rotational axis the z-axis of the plane
-        /// defines the rotation center. In case of linear axis the z-axis of the plane defines 
-        /// the movement direction.
+        /// Gets or sets the axis plane.
+        /// In case of a rotational axis the z-axis of the plane defines the rotation center. 
+        /// In case of linear axis the z-axis of the plane defines the movement direction.
         /// </summary>
         public abstract Plane AxisPlane { get; set; }
 
         /// <summary>
-        /// The axis logic as number (0, 1, 2, 3, 4 or 5)
+        /// Gets or sets the axis logic as number.
         /// </summary>
-        public abstract int? AxisNumber { get; set; }
+        public abstract int AxisNumber { get; set; }
 
         /// <summary>
-        /// The fixed base mesh of the external axis. 
+        /// Gets or sets the fixed base mesh of the external axis. 
         /// </summary>
         public abstract Mesh BaseMesh { get; set; }
 
         /// <summary>
-        /// The movable link mesh of the external axis posed for external axis value 0. 
+        /// Gets or sets the movable link mesh of the external axis posed for external axis value 0. 
         /// </summary>
         public abstract Mesh LinkMesh { get; set; }
 
         /// <summary>
-        /// The external axis mesh posed in a certain external axis value.
+        /// Gets the posed axis meshes.
         /// </summary>
         public abstract List<Mesh> PosedMeshes { get; }
         #endregion
-
     }
 }

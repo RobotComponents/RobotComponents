@@ -11,11 +11,13 @@ using System.Text;
 // RobotComponents Libs
 using RobotComponents.Utils;
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// RAPID Generator class, creates RAPID Code from Actions.
+    /// Represents the RAPID Generator.
+    /// This is class is used to generate the RAPID program and system module from a given set of actions.
     /// </summary>
     public class RAPIDGenerator
     {
@@ -33,7 +35,7 @@ namespace RobotComponents.Actions
         private string _systemCode; // The rapid system code
         private string _programModuleName; // The module name of the rapid program code
         private string _systemModuleName; // The module name of the rapod system code
-        private bool _firstMovementIsMoveAbs; // Bool that indicates if the first movememtn is an absolute joint movement
+        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movememtn is an absolute joint movement
         private StringBuilder _stringBuilder;
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         #endregion
@@ -80,7 +82,7 @@ namespace RobotComponents.Actions
             _saveToFile = generator.SaveToFile;
             _programCode = generator.ProgramCode;
             _systemCode = generator.SystemCode;
-            _firstMovementIsMoveAbs = generator.FirstMovementIsMoveAbs;
+            _firstMovementIsMoveAbsJ = generator.FirstMovementIsMoveAbsJ;
         }
 
 
@@ -131,7 +133,7 @@ namespace RobotComponents.Actions
             _robotTools.Add(_robot.Tool.Name, _robot.Tool);
 
             // Check if the first movement is an Absolute Joint Movement
-            _firstMovementIsMoveAbs = CheckFirstMovement();
+            _firstMovementIsMoveAbsJ = CheckFirstMovement();
 
             // Creates String Builder
             _stringBuilder = new StringBuilder();
@@ -399,13 +401,13 @@ namespace RobotComponents.Actions
         /// <returns> Returns a boolean that indicates if the first movement type is an Absolute Joint Movement. </returns>
         private bool CheckFirstMovement()
         {
-            _firstMovementIsMoveAbs = false;
+            _firstMovementIsMoveAbsJ = false;
 
             for (int i = 0; i != _actions.Count; i++)
             {
                 if (_actions[i] is Movement movement)
                 {
-                    if (movement.MovementType == 0)
+                    if (movement.MovementType == MovementType.MoveAbsJ)
                     {
                         return true;
                     }
@@ -428,7 +430,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the RAPID Generator object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -440,7 +442,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The Robot Actions as a list. 
+        /// Gets or sets the Actions. 
         /// </summary>
         public List<Action> Actions
         {
@@ -449,7 +451,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The file path where the code will be saved
+        /// Gets or sets the file path for saving the program and system module.
         /// </summary>
         public string FilePath
         {
@@ -458,7 +460,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the code files should be saved. 
+        /// Gets or sets a value indicating whether the program and system module should be saved to a file.
         /// </summary>
         public bool SaveToFile
         {
@@ -467,7 +469,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The RAPID Program code
+        /// Gest he RAPID code of the program module.
         /// </summary>
         public string ProgramCode
         {
@@ -475,7 +477,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The RAPID System code
+        /// Gets the RAPID code of the system module.
         /// </summary>
         public string SystemCode
         {
@@ -483,7 +485,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the Robot that is used to create the RAPID code for. 
+        /// Gets or sets the Robot. 
         /// </summary>
         public Robot Robot
         {
@@ -492,7 +494,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The module name of the RAPID program module
+        /// Gets or sets the name of the RAPID program module.
         /// </summary>
         public string ProgramModuleName
         {
@@ -501,7 +503,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The module name of the RAPID system module
+        /// Gets or sets the name of the RAPID system module.
         /// </summary>
         public string SystemModuleName
         {
@@ -510,16 +512,15 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if for the first movement an abosulute joint movement is used. 
-        /// It is recommended to use for the first movement an absolute joint movement. 
+        /// Gets a value indicating whether the first movement is an Absolute Joint Movement.
         /// </summary>
-        public bool FirstMovementIsMoveAbs
+        public bool FirstMovementIsMoveAbsJ
         {
-            get { return _firstMovementIsMoveAbs; }
+            get { return _firstMovementIsMoveAbsJ; }
         }
 
         /// <summary>
-        /// Dictionary that stores all SpeedDatas that are used by the RAPID Generator. 
+        /// Gets the collection with unique Speed Datas used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, SpeedData> SpeedDatas
         {
@@ -528,7 +529,7 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Dictionary that stores all ZoneDatas that are used by the RAPID Generator. 
+        /// Gets the collection with unique Zone Datas used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, ZoneData> ZoneDatas
         {
@@ -536,7 +537,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines all the unique Targets used in this RAPID Generator
+        /// Gets the collection with unique Targets used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, ITarget> Targets
         {
@@ -558,9 +559,9 @@ namespace RobotComponents.Actions
         {
             get { return _workObjects; }
         }
-
+      
         /// <summary>
-        /// Stringbuilder used by the RAPID Generator. 
+        /// Gets the mutable Stringbuilder used to generate to the RAPID program module. 
         /// </summary>
         public StringBuilder StringBuilder
         {
@@ -568,7 +569,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// List of strings with collected error messages. 
+        /// Gets the collected error messages. 
         /// </summary>
         public List<string> ErrorText
         {
@@ -576,5 +577,4 @@ namespace RobotComponents.Actions
         }
         #endregion
     }
-
 }

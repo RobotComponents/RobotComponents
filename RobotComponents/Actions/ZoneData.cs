@@ -6,19 +6,24 @@
 // System Libs
 using System;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// ZoneData class. Zoned Data is used to specify how a position is to be terminated, 
-    /// i.e. how close to the programmed position the axes must be before moving towards 
-    /// the next position.
+    /// Represents a predefined or user definied Zone Data declaration.
+    /// This action is used to specify how a position is to be terminated.
     /// </summary>
-    public class ZoneData : Action
+    [Serializable()]
+    public class ZoneData : Action, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType; // reference type
         private string _name; // ZoneData variable name
         private bool _finep; // Fine point
         private double _pzone_tcp; // Path zone TCP
@@ -40,6 +45,49 @@ namespace RobotComponents.Actions
         private static readonly double[] _predefinedZoneReax = new double[] { 0, 0.03, 0.1, 0.8, 1.5, 2.3, 3, 4.5, 6, 7.5, 9, 12, 15, 23, 30 };
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected ZoneData(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _pzone_tcp = (double)info.GetValue("pzone_tcp", typeof(double));
+            _pzone_ori = (double)info.GetValue("pzone_ori", typeof(double));
+            _pzone_eax = (double)info.GetValue("pzone_eax", typeof(double));
+            _zone_ori = (double)info.GetValue("zone_ori", typeof(double));
+            _zone_leax = (double)info.GetValue("zone_leax", typeof(double));
+            _zone_reax = (double)info.GetValue("zone_reax", typeof(double));
+            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("pzone_tcp", _pzone_tcp, typeof(double));
+            info.AddValue("pzone_ori", _pzone_ori, typeof(double));
+            info.AddValue("pzone_eax", _pzone_eax, typeof(double));
+            info.AddValue("zone_ori", _zone_ori, typeof(double));
+            info.AddValue("zone_leax", _zone_leax, typeof(double));
+            info.AddValue("zone_reax", _zone_reax, typeof(double));
+            info.AddValue("Predefined", _predefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
         /// Defines an empty ZoneData object. 
@@ -56,6 +104,8 @@ namespace RobotComponents.Actions
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
+            _referenceType = ReferenceType.VAR;
+
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
 
@@ -115,6 +165,8 @@ namespace RobotComponents.Actions
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
+            _referenceType = ReferenceType.VAR;
+
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
 
@@ -180,6 +232,7 @@ namespace RobotComponents.Actions
         public ZoneData(string name, bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _finep = finep;
             _pzone_tcp = pzone_tcp;
@@ -196,9 +249,10 @@ namespace RobotComponents.Actions
         /// Creates a new zonedata by duplicating an existing zonedata. 
         /// This creates a deep copy of the existing zonedata. 
         /// </summary>
-        /// <param name="speeddata"> The speeddata that should be duplicated. </param>
+        /// <param name="zonedata"> The speeddata that should be duplicated. </param>
         public ZoneData(ZoneData zonedata)
         {
+            _referenceType = zonedata.ReferenceType;
             _name = zonedata.Name;
             _finep = zonedata.FinePoint;
             _pzone_tcp = zonedata.PathZoneTCP;
@@ -260,7 +314,8 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                string code = "VAR zonedata ";
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " zonedata ";
                 code += _name + " := [";
                 
                 if (_finep == false) { code +=  "FALSE, "; }
@@ -319,7 +374,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the SpeedData is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -338,7 +393,16 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The ZoneData variable name. 
+        /// Gets or sets the reference type.
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the ZoneData variable name. 
         /// </summary>
         public string Name
         {
@@ -347,7 +411,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point.
+        /// Gets or sets a value indicating whether the movement is to terminate as a stop point (fine point) or as a fly-by point.
         /// </summary>
         public bool FinePoint
         {
@@ -356,7 +420,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The size (the radius) of the TCP zone in mm.
+        /// Gets or sets the size (the radius) of the TCP zone in mm.
         /// </summary>
         public double PathZoneTCP
         {
@@ -365,7 +429,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone size (the radius) for the tool reorientation. 
+        /// Gets or sets the zone size (the radius) for the tool reorientation. 
         /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
         public double PathZoneOrientation
@@ -375,7 +439,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone size (the radius) for external axes. 
+        /// Gets or sets the zone size (the radius) for external axes. 
         /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
         public double PathZoneExternalAxes
@@ -385,7 +449,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone size for the tool reorientation in degrees. 
+        /// Gets or sets the zone size for the tool reorientation in degrees. 
         /// If the robot is holding the work object, this means an angle of rotation for the work object.
         /// </summary>
         public double ZoneOrientation
@@ -395,7 +459,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone size for linear external axes in mm. 
+        /// Gets or sets the zone size for linear external axes in mm. 
         /// </summary>
         public double ZoneExternalLinearAxes
         {
@@ -404,7 +468,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone size for rotating external axes in degrees.
+        /// Gets or sets the zone size for rotating external axes in degrees.
         /// </summary>
         public double ZoneExternalRotationalAxes
         {
@@ -413,7 +477,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the zonedata is predefined by ABB. 
+        /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
         /// </summary>
         public bool PreDefinied
         {
@@ -422,8 +486,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Indicates if the exact predefined zonedata value is used.
-        /// If false the nearest predefined zonedata or a custom zonedata is used.
+        /// Gets or sets a value indicating whether this zonedata is a user definied zonedata. 
+        /// </summary>
+        public bool UserDefinied
+        {
+            get { return !_predefined; }
+            set { _predefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined speeddata value. 
+        /// If false the nearest predefined speedata or a custom zonedata was used. 
         /// </summary>
         public bool ExactPredefinedValue
         {
@@ -431,7 +504,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined zonedata variable names
+        /// Gets the valid predefined zonedata variable names.
         /// </summary>
         public static string[] ValidPredefinedNames
         {
@@ -439,7 +512,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined zonedata values
+        /// Gets the valid predefined zonedata values.
         /// </summary>
         public static double[] ValidPredefinedValues
         {

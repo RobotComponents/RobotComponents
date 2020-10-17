@@ -135,13 +135,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 // Initiaties the rapidGenerator
                 _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo);
 
-                // Get tools data for system module
-                List<RobotTool> robotTools = _objectManager.GetRobotTools(); // Gets all the robot tools from the object manager
-                List<WorkObject> workObjects = _objectManager.GetWorkObjects(); // Gets all the work objects from the object manager
-
                 // Generator code
-                _rapidGenerator.CreateSystemCode(robotTools, workObjects, customCodeLines);
                 _rapidGenerator.CreateProgramCode();
+                _rapidGenerator.CreateSystemCode(customCodeLines);
                 _programCode = _rapidGenerator.ProgramCode;
                 _systemCode = _rapidGenerator.SystemCode;
 

@@ -155,18 +155,18 @@ namespace RobotComponents.Gh.Goos.Definitions
                     }
 
                     // Make the bounding box of the external axes
-                    for (int i = 0; i != Value.ExternalAxis.Count; i++)
+                    for (int i = 0; i != Value.ExternalAxes.Count; i++)
                     {
-                        if (Value.ExternalAxis[i].IsValid == true)
+                        if (Value.ExternalAxes[i].IsValid == true)
                         {
-                            if (Value.ExternalAxis[i].BaseMesh != null)
+                            if (Value.ExternalAxes[i].BaseMesh != null)
                             {
-                                MeshBoundingBox.Union(Value.ExternalAxis[i].BaseMesh.GetBoundingBox(true));
+                                MeshBoundingBox.Union(Value.ExternalAxes[i].BaseMesh.GetBoundingBox(true));
                             }
 
-                            if (Value.ExternalAxis[i].LinkMesh != null)
+                            if (Value.ExternalAxes[i].LinkMesh != null)
                             {
-                                MeshBoundingBox.Union(Value.ExternalAxis[i].LinkMesh.GetBoundingBox(true));
+                                MeshBoundingBox.Union(Value.ExternalAxes[i].LinkMesh.GetBoundingBox(true));
                             }
                         }
                     }
@@ -296,18 +296,18 @@ namespace RobotComponents.Gh.Goos.Definitions
             }
 
             // External axis meshes
-            for (int i = 0; i != Value.ExternalAxis.Count; i++)
+            for (int i = 0; i != Value.ExternalAxes.Count; i++)
             {
-                if (Value.ExternalAxis[i].IsValid == true)
+                if (Value.ExternalAxes[i].IsValid == true)
                 {
-                    if (Value.ExternalAxis[i].BaseMesh != null)
+                    if (Value.ExternalAxes[i].BaseMesh != null)
                     {
-                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
 
-                    if (Value.ExternalAxis[i].LinkMesh != null)
+                    if (Value.ExternalAxes[i].LinkMesh != null)
                     {
-                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
                 }
             }

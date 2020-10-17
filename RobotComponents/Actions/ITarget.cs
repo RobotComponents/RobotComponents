@@ -9,7 +9,7 @@ using RobotComponents.Enumerations;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// A boolean that indicates if the Target object is valid.
+    /// Represents the interface for different target types.
     /// </summary>
     public interface ITarget
     {
@@ -19,31 +19,32 @@ namespace RobotComponents.Actions
 
         #region methods
         /// <summary>
-        /// Method to duplicate the Target object as an ITarget object
+        /// Duplicates the Target object as an ITarget object.
         /// </summary>
-        /// <returns>Returns a deep copy of the ITarget object. </returns>
+        /// <returns> A deep copy of the ITarget object. </returns>
         ITarget DuplicateTarget();
 
         #endregion
 
         #region properties
         /// <summary>
-        /// Indicates if the Target object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         bool IsValid { get; }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the Reference Type.
         /// </summary>
         ReferenceType ReferenceType { get; set;}
 
         /// <summary>
-        /// Defines the variable name of the Target
+        /// Gets or sets the Target variable name.
+        /// Each Target variable name has to be unique.
         /// </summary>
         string Name { get; set; }
 
         /// <summary>
-        /// Defines the External Joint Position
+        /// Gets or sets the External Joint Position.
         /// </summary>
         ExternalJointPosition ExternalJointPosition { get; set; }
         #endregion 

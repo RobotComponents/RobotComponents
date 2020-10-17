@@ -19,7 +19,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// Robot class, defines the basic properties and methods for any Robot.
+    /// Represents a 6-axis spherical Robot.
     /// </summary>
     [Serializable()]
     public class Robot : ISerializable
@@ -42,7 +42,7 @@ namespace RobotComponents.Definitions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -334,7 +334,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Robot object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

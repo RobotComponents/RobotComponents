@@ -18,7 +18,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Robot Target class, defines robot target data. The robt target data is used to define the position of the robot and external axes.
+    /// Represents the Robot Target declaration. 
+    /// This action is used to define the pose of the robot and the external axes.
     /// </summary>
     [Serializable()]
     public class RobotTarget : Action, ITarget, ISerializable
@@ -34,7 +35,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -403,7 +404,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicuate if the Robot Target object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -423,7 +424,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the Reference Type. 
         /// </summary>
         public ReferenceType ReferenceType
         {
@@ -432,7 +433,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The robot target variable name, must be unique.
+        /// Gets or sets the Robot Target variable name.
+        /// Each Target variable name has to be unique. 
         /// </summary>
         public string Name
         {
@@ -441,7 +443,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The position and orientation of the tool center as a plane. 
+        /// Gets or sets the desired position and orientation of the tool center point.
         /// </summary>
         public Plane Plane
         {
@@ -457,7 +459,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The orientation of the tool, expressed in the form of a quaternion (q1, q2, q3, and q4). 
+        /// Gets or sets the desired orientation of the tool center point.
         /// </summary>
         public Quaternion Quat
         {
@@ -473,7 +475,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The axis configuration of the robot (0-7).
+        /// Gets or set the axis configuration.
+        /// Min. value 0. Max. value 7.
         /// </summary>
         public int AxisConfig
         {
@@ -482,7 +485,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the External Joint Position
+        /// Gets or sets the External Joint Position.
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {

@@ -15,7 +15,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Code Line class, defines a CodeLine in RAPID Code.
+    /// Represent a custom (user definied) RAPID Code Line.
     /// </summary>
     [Serializable()]
     public class CodeLine : Action, ISerializable
@@ -27,7 +27,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -189,7 +189,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the CodeLine object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -202,7 +202,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The custom RAPID code line
+        /// Gets or sets the custom RAPID Code Line text.
         /// </summary>
         public string Code
         {
@@ -211,7 +211,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Code type as a CodeType.
+        /// Gets or sets the Code Type.
         /// </summary>
         public CodeType Type
         {

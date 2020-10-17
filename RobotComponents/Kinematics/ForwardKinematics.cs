@@ -15,7 +15,7 @@ using System.Collections.Generic;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Forward Kinematics class
+    /// Represent the Forward Kinematics for a 6-axis spherical Robot and its attached external axes. 
     /// </summary>
     public class ForwardKinematics
     {
@@ -348,7 +348,7 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Forward Kinematics object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

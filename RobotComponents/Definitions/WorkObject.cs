@@ -16,9 +16,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// The WorkObject class creates the work object data for the RAPID base code.
-    /// Work object data is used to describe the work object that the robot welds, processes, moves within, etc.
-    /// The work object is typically combined with a robot movement to defined the global coordinate of the robot target. 
+    /// Represents a Work Object.
     /// </summary>
     [Serializable()]
     public class WorkObject : ISerializable
@@ -38,7 +36,7 @@ namespace RobotComponents.Definitions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -341,7 +339,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WorkObject object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -358,7 +356,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the Reference Type. 
         /// </summary>
         public ReferenceType ReferenceType
         {

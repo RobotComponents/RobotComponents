@@ -17,8 +17,7 @@ using RobotComponents.Definitions;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Inverse Kinematics class, defines the basic properties and methods for 
-    /// the inverse kinematics of a 6-axis robot and the attached external axes.
+    /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
     public class InverseKinematics
     {
@@ -668,7 +667,7 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Inverse Kinematics object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

@@ -18,7 +18,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// External rotational axis class, main class for external rotational axis.
+    /// Represents an External Rotational Axis.
     /// </summary>
     [Serializable()]
     public class ExternalRotationalAxis : ExternalAxis, ISerializable
@@ -36,7 +36,7 @@ namespace RobotComponents.Definitions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -404,7 +404,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the External Rotational Axis object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {

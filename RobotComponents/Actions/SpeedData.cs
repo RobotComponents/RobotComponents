@@ -16,11 +16,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// SpeedData class. SpeedData is used to specify the velocity at which both the robot and the external axes move.
-    /// Speed data defines the velocity at which the tool center point moves, the reorientation speed of the tool, and 
-    /// at which linear or rotating external axes move. When several different types of movement are combined, one of 
-    /// the velocities often limits all movements.The velocity of the other movements will be reduced in such a way 
-    /// that all movements will finish executing at the same time.
+    /// Represents a predefined or user definied Speed Data declaration.
+    /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </summary>
     [Serializable()]
     public class SpeedData : Action, ISerializable
@@ -42,7 +39,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -278,7 +275,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the SpeedData is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -295,7 +292,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the reference type.
         /// </summary>
         public ReferenceType ReferenceType
         {
@@ -304,7 +301,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The SpeedData variable name. 
+        /// Gets or sets the speeddata variable name.
         /// </summary>
         public string Name
         {
@@ -313,7 +310,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of the tool center point (TCP) in mm/s.
+        /// Gets or sets the velocity of the tool center point (TCP) in mm/s.
         /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
         public double V_TCP
@@ -323,7 +320,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The reorientation velocity of the TCP expressed in degrees/s. 
+        /// Gets or sets the reorientation velocity of the TCP expressed in degrees/s. 
         /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
         public double V_ORI
@@ -333,7 +330,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of linear external axes in mm/s.
+        /// Gets or sets the velocity of linear external axes in mm/s.
         /// </summary>
         public double V_LEAX
         {
@@ -342,7 +339,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The velocity of rotating external axes in degrees/s.
+        /// Gets or sets the velocity of rotating external axes in degrees/s.
         /// </summary>
         public double V_REAX
         {
@@ -351,7 +348,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the speeddata is predefined by ABB. 
+        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
         /// </summary>
         public bool PreDefinied
         {
@@ -360,8 +357,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Indicates if the exact predefined speeddata value is used.
-        /// If false the nearest predefined speedata or a custom zonedata is used.
+        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
+        /// </summary>
+        public bool UserDefinied
+        {
+            get { return !_predefined; }
+            set { _predefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
+        /// If false the nearest predefined speedata or a custom speeddata was used. 
         /// </summary>
         public bool ExactPredefinedValue
         {
@@ -369,7 +375,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined speeddata variable names
+        /// Gets the valid predefined speeddata variable names.
         /// </summary>
         public static string[] ValidPredefinedNames 
         { 
@@ -377,7 +383,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an array with valid predefined speeddata values
+        /// Gets the valid predefined speeddata values.
         /// </summary>
         public static double[] ValidPredefinedValues 
         { 

@@ -14,7 +14,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Auto Axis Configuration Class, sets Auto Axis Configuration to True or False.
+    /// Represents the Auto Axis Configuration instruction. 
+    /// This action is used to switch on or off the monitoring of movements.  
     /// </summary>
     [Serializable()]
     public class AutoAxisConfig : Action, ISerializable
@@ -25,7 +26,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object. 
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -171,7 +172,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the AutoAxisConfiguration object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -179,7 +180,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the auto axis configruation is enabled.
+        /// Gets or set a value indicating whether Auto Axis Configuration is active. 
         /// </summary>
         public bool IsActive
         {

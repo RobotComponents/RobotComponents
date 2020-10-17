@@ -16,7 +16,9 @@ using RobotComponents.Enumerations;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Path Generator class. This class does an approximation of the path the robot will follow.
+    /// Represent the Path Generator.
+    /// This class is used to approximate of the path the Robot will follow for a given set of Actions. 
+    /// Speed Datas and Zone Datas are neglected. 
     /// </summary>
     public class PathGenerator
     {
@@ -218,7 +220,7 @@ namespace RobotComponents.Kinematics
             ExternalJointPosition towardsExternalJointPosition = jointTarget.ExternalJointPosition;
 
             // Add error text
-            _errorText.AddRange(jointTarget.CheckForAxisLimits(_robotInfo));
+            _errorText.AddRange(jointTarget.CheckAxisLimits(_robotInfo));
 
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
@@ -464,7 +466,7 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Path Generator object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {

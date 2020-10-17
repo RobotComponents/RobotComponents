@@ -11,7 +11,7 @@ namespace RobotComponents.Utils
     public static class VersionNumbering
     {
         /// <summary>
-        /// Returns the current version of the RobotComponent Plugin. 
+        /// Gets the current version of the RobotComponent Plugin. 
         /// Has to be manually updated each time. 
         /// 0.XX.XXX ---> mature release
         /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
@@ -20,7 +20,7 @@ namespace RobotComponents.Utils
         public const string CurrentVersion = "0.11.003";
 
         /// <summary>
-        /// Returns the current version of the Robot Components plugin as an int. 
+        /// Gets the current version of the Robot Components plugin as an int. 
         /// Has to be manually updated each time. 
         /// Remove the points and the zeros in front of the number. 
         /// Examples:

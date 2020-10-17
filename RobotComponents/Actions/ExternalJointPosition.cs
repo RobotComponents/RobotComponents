@@ -15,8 +15,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// External Joint Position class, defines external joint position data. Is used to define 
-    /// the axis positions of external axes, positioners and workpiece manipulators. 
+    /// Represents an External Joint Position declaration.
+    /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators. 
     /// </summary>
     [Serializable()]
     public class ExternalJointPosition : Action, IJointPosition, ISerializable
@@ -34,7 +34,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization.</param>
@@ -486,7 +486,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the External Joint Position object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -494,7 +494,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the number of elements in the External Joint Position
+        /// Gets the number of elements in the External Joint Position.
         /// </summary>
         public int Length
         {
@@ -502,7 +502,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Get or set axis values through the indexer. 
+        /// Gets or sets the axis values through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
         /// <returns> The axis value located at the given index. </returns>

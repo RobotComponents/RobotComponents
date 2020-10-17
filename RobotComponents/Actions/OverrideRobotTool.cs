@@ -14,7 +14,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Override Robot Tool class
+    /// Represents the Override Robot Tool action.
+    /// This action is used to set a new default Robot Tool from this action. 
     /// </summary>
     [Serializable()]
     public class OverrideRobotTool : Action, ISerializable
@@ -25,7 +26,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -164,7 +165,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Override Robot Tool object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -179,7 +180,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The Robot Tool that is set.
+        /// Gets or sets the Robot Tool.
         /// </summary>
         public RobotTool RobotTool
         {
@@ -188,7 +189,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the set Robot Tool.
+        /// Gets the name of the Robot Tool.
         /// </summary>
         public string ToolName
         {

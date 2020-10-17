@@ -14,8 +14,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 
-    /// is used to wait until a digital input is set.
+    /// Represents a Wait for Digital Input instruction.
+    /// This action is used to wait until a digital input is set.
     /// </summary>
     [Serializable()]
     public class WaitDI : Action, ISerializable
@@ -27,7 +27,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -165,7 +165,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WaitDI object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -178,7 +178,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The desired state / value of the digtal input signal
+        /// Gets or sets the desired state of the digtal input signal.
         /// </summary>
         public bool Value 
         {
@@ -187,7 +187,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the digital input signal
+        /// Gets or sets the name of the digital input signal.
         /// </summary>
         public string DIName 
         { 

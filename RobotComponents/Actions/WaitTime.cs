@@ -14,7 +14,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// WaitTime class, defines waiting time between two actions. This command is used to wait a given amount of time.
+    /// Represent the Wait Time instruction.
+    /// This action is used to wait a given amount of time between two actions.
     /// </summary>
     [Serializable()]
     public class WaitTime : Action, ISerializable
@@ -25,7 +26,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -151,7 +152,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WaitTime object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -163,7 +164,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The time, expressed in seconds, that program execution is to wait. Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
+        /// Gets or sets the time, expressed in seconds, that program execution is to wait. 
+        /// Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
         /// </summary>
         public double Duration
         {

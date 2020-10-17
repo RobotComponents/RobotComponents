@@ -11,7 +11,7 @@ using RobotComponents.Definitions;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Action class, abstract main class for all actions.
+    /// Represents a base class for all robot actions (declarations and instructions).
     /// </summary>
     [Serializable()]
     public abstract class Action
@@ -22,16 +22,16 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Empty constructor
+        /// Initializes an empty instance of the Action class. 
         /// </summary>
         public Action()
         {
         }
 
         /// <summary>
-        /// A method to duplicate the object as an Action type
+        /// Returns an exact duplicate of this Action.
         /// </summary>
-        /// <returns> Returns a deep copy of the Action object. </returns>
+        /// <returns> The exact copy of this Action. </returns>
         public abstract Action DuplicateAction();
         #endregion
 
@@ -137,7 +137,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Action object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public abstract bool IsValid { get; }
         #endregion

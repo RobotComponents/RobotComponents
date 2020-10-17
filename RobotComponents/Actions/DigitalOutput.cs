@@ -14,7 +14,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Digital Output class. Is used to change the value of a digital output signal.
+    /// Represents a Set Digital Output instruction. 
+    /// This action is used to set the value (state) of a digital output signal.
     /// </summary>
     [Serializable()]
     public class DigitalOutput : Action, ISerializable
@@ -26,7 +27,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -164,7 +165,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the DigitalOutput object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -177,7 +178,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the digital output signal to be changed.
+        /// Gets or sets the name of the Digital Output signal.
         /// </summary>
         public string Name
         {
@@ -186,7 +187,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The desired value / stage of the digital output signal 0 (false) or 1 (true).
+        /// Gets or sets a value indicating whether the Digital Output is active.
         /// </summary>
         public bool IsActive
         {

@@ -17,7 +17,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// External linear axis class, main class for external linear axis.
+    /// Represents an External Linear Axis.
     /// </summary>
     [Serializable()]
     public class ExternalLinearAxis : ExternalAxis, ISerializable
@@ -36,7 +36,7 @@ namespace RobotComponents.Definitions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -189,7 +189,7 @@ namespace RobotComponents.Definitions
         /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
         /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
         /// <param name="baseMeshes"> The base mesh of the external linear axis as a list with Meshes </param>
-        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as a list with Meshes. </param>
+        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as The list with robot meshes. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
         {
             axis.Unitize();
@@ -240,7 +240,7 @@ namespace RobotComponents.Definitions
         /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
         /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
         /// <param name="baseMeshes"> The base mesh of the external linear axis as list with meshes </param>
-        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as a list with meshes. </param>
+        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as The list with robot meshes. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
         {
             _name = name;
@@ -496,7 +496,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the External Linear Axis object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {

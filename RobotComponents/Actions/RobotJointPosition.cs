@@ -15,7 +15,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Robot Joint Position class, defines the robot axis positions of the in degrees.
+    /// Represents the Robot Joint Position declaration.
+    /// This action is used to define the robot axis positions in degrees.
     /// </summary>
     [Serializable()]
     public class RobotJointPosition : Action, IJointPosition, ISerializable
@@ -33,7 +34,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -435,7 +436,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the Robot Joint Position object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -443,7 +444,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the number of elements in the Robot Joint Position
+        /// Gets the number of elements in the Robot Joint Position.
         /// </summary>
         public int Length
         {
@@ -451,7 +452,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Get or set axis values through the indexer. 
+        /// Gets or sets the axis values through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
         /// <returns> The axis value located at the given index. </returns>

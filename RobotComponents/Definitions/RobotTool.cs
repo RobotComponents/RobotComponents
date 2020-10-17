@@ -17,7 +17,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// RobotTool class, defines the basic properties and methods for any Robot Tool.
+    /// Represents a Robot Tool.
     /// </summary>
     [Serializable()]
     public class RobotTool : ISerializable
@@ -39,7 +39,7 @@ namespace RobotComponents.Definitions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -133,7 +133,7 @@ namespace RobotComponents.Definitions
         /// Defines a robot tool from planes with load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
@@ -194,7 +194,7 @@ namespace RobotComponents.Definitions
         /// The attachment plane is set to WorldXY.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="toolTransX"> The tool center point translation in x-direction. </param>
         /// <param name="toolTransY"> The tool center point translation in y-direction. </param>
         /// <param name="toolTransZ"> The tool center point translation in z-direction. </param>
@@ -588,7 +588,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Robot Tool object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -605,7 +605,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the Reference Type. 
         /// </summary>
         public ReferenceType ReferenceType
         {

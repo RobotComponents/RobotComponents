@@ -20,8 +20,7 @@ namespace RobotComponents.Actions
     public class AbsoluteJointMovement : Action
     {
         #region fields
-        // Fixed fields
-        private string _name; // target variable name
+        private string _name;
         private List<double> _internalAxisValues;
         private List<double> _externalAxisValues;
         private SpeedData _speedData;

@@ -16,7 +16,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Joint Target class, defines each individual axis position, for both the robot and the external axes.
+    /// Represents a Joint Target declaration. 
+    /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </summary>
     [Serializable()]
     public class JointTarget : Action, ITarget, ISerializable
@@ -30,7 +31,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -181,16 +182,31 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Cheks for the axis limits and returns a list with possible errors messages. 
+        /// Checks both internal and external axis limits and returns a list with possible errors messages. 
         /// </summary>
         /// <param name="robot"> The robot info to check the axis values for. </param>
         /// <returns> Returns a list with error messages. </returns>
-        public List<string> CheckForAxisLimits(Robot robot)
+        public List<string> CheckAxisLimits(Robot robot)
+        {
+            List<string> errors = new List<string>();
+
+            errors.AddRange(CheckInternalAxisLimits(robot));
+            errors.AddRange(CheckExternalAxisLimits(robot));
+
+            return errors;
+        }
+
+        /// <summary>
+        /// Checks the internal axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckInternalAxisLimits(Robot robot)
         {
             // Initiate list
             List<string> errors = new List<string>();
 
-            // Check for internal axis values
+            // Check internal axis values
             for (int i = 0; i < 6; i++)
             {
                 if (robot.InternalAxisLimits[i].IncludesParameter(_robJointPosition[i], false) == false)
@@ -199,7 +215,20 @@ namespace RobotComponents.Actions
                 }
             }
 
-            // Check for external axis values
+            return errors;
+        }
+
+        /// <summary>
+        /// Checks the external axis limits and returns a list with possible errors messages. 
+        /// </summary>
+        /// <param name="robot"> The robot info to check the axis values for. </param>
+        /// <returns> Returns a list with error messages. </returns>
+        public List<string> CheckExternalAxisLimits(Robot robot)
+        {
+            // Initiate list
+            List<string> errors = new List<string>();
+
+            // Check external axis values
             for (int i = 0; i < robot.ExternalAxis.Count; i++)
             {
                 int logicNumber = robot.ExternalAxis[i].AxisNumber;
@@ -271,7 +300,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the Joint Target object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -288,7 +317,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the reference type (PERS, VAR or CONST)
+        /// Gets or sets the Reference Type. 
         /// </summary>
         public ReferenceType ReferenceType
         {
@@ -297,7 +326,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the joint target variable name
+        /// Gets or sets the Joint Target variable name.
+        /// Each Target variable name has to be unique.
         /// </summary>
         public string Name
         {
@@ -306,7 +336,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the Robot Joint Position
+        /// Gets or sets the Robot Joint Position.
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
@@ -315,7 +345,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the External Joint Position
+        /// Gets or sets the External Joint Position.
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {

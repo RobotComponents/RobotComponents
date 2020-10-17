@@ -15,8 +15,8 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Comment class, defines a Comment in RAPID Code.
-    /// A comment is only used to make the program easier to understand. 
+    /// Represents a comment in RAPID Code.
+    /// This action is only used to make the program easier to understand. 
     /// It has no effect on the execution of the program.
     /// </summary>
     [Serializable()]
@@ -29,7 +29,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -191,7 +191,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Comment object is valid. 
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -204,7 +204,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Comment line as a string.
+        /// Gets or sets the comment text.
         /// </summary>
         public string Com
         {
@@ -213,7 +213,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Comment type as a CodeType.
+        /// Gets or sets the comment Code Type.
         /// </summary>
         public CodeType Type
         {

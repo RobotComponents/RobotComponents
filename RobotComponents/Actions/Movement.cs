@@ -18,7 +18,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Movement class
+    /// Represents several Move instructions. 
     /// </summary>
     [Serializable()]
     public class Movement : Action, ISerializable
@@ -39,7 +39,7 @@ namespace RobotComponents.Actions
 
         #region (de)serialization
         /// <summary>
-        /// Special contructor needed for deserialization of the object. 
+        /// Protected constructor needed for deserialization of the object.  
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
@@ -715,7 +715,7 @@ namespace RobotComponents.Actions
                 if (_movementType == MovementType.MoveAbsJ)
                 {
                     jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
-                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckForAxisLimits(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckAxisLimits(RAPIDGenerator.Robot));
                 }
 
                 // Joint Target combined with MoveL or MoveJ
@@ -738,7 +738,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Movement object is valid.
+        /// Gets a value indicating whether the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -759,7 +759,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The movement type.
+        /// Gets or sets the Movement Type.
         /// </summary>
         public MovementType MovementType
         {
@@ -768,7 +768,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the destination target of the robot and external axes for this movement.
+        /// Gets or sets the Target.
+        /// Defines the destination target of the robot and external axes.
         /// </summary>
         public ITarget Target
         {
@@ -777,7 +778,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The Synchronization id for multi move programming. 
+        /// Gets or sets the synchronization id for multi move programming. 
         /// This ID number must be defined for coordinated synchronized movements in multi move systems. 
         /// Set this property to -1 to define normal movements (not coordinated / not synchronized).
         /// </summary>
@@ -788,8 +789,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The speed data that applies to movements. Speed data defines the velocity 
-        /// for the tool center point, the tool reorientation, and external axes.
+        /// Gets or sets the Speed Data. 
         /// </summary>
         public SpeedData SpeedData
         {
@@ -798,8 +798,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The zone data that applies to movements.
-        /// It defines the size of the generated corner path.
+        /// Gets or sets the Zone Data.
         /// </summary>
         public ZoneData ZoneData
         {
@@ -808,7 +807,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The tool in use when the robot moves. 
+        /// Gets or sets the Robot Tool.
+        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
         /// </summary>
         public RobotTool RobotTool
         {
@@ -817,7 +817,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The work object (coordinate system) to which the robot position in the instruction is related.
+        /// Gets or sets the Work Object. 
         /// </summary>
         public WorkObject WorkObject
         {
@@ -826,9 +826,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The digital output. If an empty digital output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
-        /// If a valid digital output is combined movement will be created (MoveLDO or MoveJDO). 
-        /// In case an absolute joint movement is set an extra code line will be added that sets the digital output (SetDO).
+        /// Gets or set the Digital Output. 
+        /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
+        /// If a valid Digital oOutput is combined movement will be created (MoveLDO or MoveJDO). 
+        /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
         /// </summary>
         public DigitalOutput DigitalOutput
         {

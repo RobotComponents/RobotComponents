@@ -439,7 +439,7 @@ namespace RobotComponents.Actions
                 if (_workObject.ExternalAxis != null)
                 {
                     // Check if the axis is attached to the robot and get the axis logic number
-                    logic = robot.ExternalAxis.FindIndex(p => p.Name == _workObject.ExternalAxis.Name); // TODO: use _workObject.ExternalAxis.AxisNumber;
+                    logic = robot.ExternalAxes.FindIndex(p => p.Name == _workObject.ExternalAxis.Name); // TODO: use _workObject.ExternalAxis.AxisNumber;
 
                     // Check axis logic
                     if (logic == -1)

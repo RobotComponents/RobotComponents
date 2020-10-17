@@ -96,9 +96,9 @@ namespace RobotComponents.Kinematics
             _lastRobotJointPosition = new RobotJointPosition();
             _lastExternalJointPosition = new ExternalJointPosition();
 
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
-                _lastExternalJointPosition[_robotInfo.ExternalAxis[i].AxisNumber] = _robotInfo.ExternalAxis[i].AxisLimits.Min;
+                _lastExternalJointPosition[_robotInfo.ExternalAxes[i].AxisNumber] = _robotInfo.ExternalAxes[i].AxisLimits.Min;
             }
         }
 

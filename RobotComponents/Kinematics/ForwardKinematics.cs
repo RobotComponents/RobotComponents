@@ -176,12 +176,12 @@ namespace RobotComponents.Kinematics
             double count = 0;
 
             // Calculates external axes positions
-            _posedExternalAxisPlanes = new Plane[_robotInfo.ExternalAxis.Count];
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            _posedExternalAxisPlanes = new Plane[_robotInfo.ExternalAxes.Count];
+            for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
                 // Get the external axis
-                ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
+                ExternalAxis externalAxis = _robotInfo.ExternalAxes[i];
+                int logic = _robotInfo.ExternalAxes[i].AxisNumber;
 
                 // Get external axis plane
                 _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition[logic]);
@@ -257,11 +257,11 @@ namespace RobotComponents.Kinematics
                 _posedInternalAxisMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
 
                 // External axis meshes
-                for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+                for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
                 {
-                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
-                    _robotInfo.ExternalAxis[i].PoseMeshes(_externalJointPosition[logic]);
-                    _posedExternalAxisMeshes.Add(_robotInfo.ExternalAxis[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
+                    int logic = _robotInfo.ExternalAxes[i].AxisNumber;
+                    _robotInfo.ExternalAxes[i].PoseMeshes(_externalJointPosition[logic]);
+                    _posedExternalAxisMeshes.Add(_robotInfo.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
                 }
             }
         }
@@ -327,9 +327,9 @@ namespace RobotComponents.Kinematics
         /// </summary>
         private void CheckForExternalAxisLimits()
         {
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
-                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxes[i].AxisNumber;
 
                 if (_externalJointPosition[logic] == 9e9)
                 {
@@ -337,7 +337,7 @@ namespace RobotComponents.Kinematics
                     _inLimits = false;
                 }
 
-                else if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
+                else if (_robotInfo.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {
                     _errorText.Add("External axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;

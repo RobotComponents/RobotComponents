@@ -229,16 +229,16 @@ namespace RobotComponents.Actions
             List<string> errors = new List<string>();
 
             // Check external axis values
-            for (int i = 0; i < robot.ExternalAxis.Count; i++)
+            for (int i = 0; i < robot.ExternalAxes.Count; i++)
             {
-                int logicNumber = robot.ExternalAxis[i].AxisNumber;
+                int logicNumber = robot.ExternalAxes[i].AxisNumber;
 
                 if (_extJointPosition[logicNumber] == 9e9)
                 {
                     errors.Add("Joint Target " + _name + ": External axis value " + (i + 1).ToString() + " is not definied (9E9).");
                 }
 
-                else if (robot.ExternalAxis[i].AxisLimits.IncludesParameter(_extJointPosition[logicNumber], false) == false)
+                else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_extJointPosition[logicNumber], false) == false)
                 {
                     errors.Add("Joint Target " + _name + ": External axis value " + (i + 1).ToString() + " is not in range.");
                 }

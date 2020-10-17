@@ -494,12 +494,12 @@ namespace RobotComponents.Kinematics
                 // NOTE: Only works for a robot info with an maximum of one external linear axis
 
                 // Add the external axis values to the list with external axis values
-                for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+                for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
                 {
-                    int logic = _robotInfo.ExternalAxis[i].AxisNumber;
+                    int logic = _robotInfo.ExternalAxes[i].AxisNumber;
 
                     // Check if the axis is an external linear axis
-                    if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
+                    if (_robotInfo.ExternalAxes[i] is ExternalLinearAxis externalLinearAxis && count == 0)
                     {
                         // Checks if external linear axis value needs to be negative or positive
                         externalLinearAxis.AxisCurve.ClosestPoint(_robotInfo.BasePlane.Origin, out double robotBasePlaneParam);
@@ -600,9 +600,9 @@ namespace RobotComponents.Kinematics
             Plane plane = new Plane(_robotInfo.BasePlane);
 
             // Check if an external axis is attached to the robot 
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
-                ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
+                ExternalAxis externalAxis = _robotInfo.ExternalAxes[i];
                 int logic = externalAxis.AxisNumber;
 
                 // Check if an external linear axis is used
@@ -652,11 +652,11 @@ namespace RobotComponents.Kinematics
         /// </summary>
         private void CheckForExternalAxisLimits()
         {
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
-                int logic = _robotInfo.ExternalAxis[i].AxisNumber;
+                int logic = _robotInfo.ExternalAxes[i].AxisNumber;
 
-                if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
+                if (_robotInfo.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
                 {
                     _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;

@@ -290,16 +290,16 @@ namespace RobotComponents.Actions
             }
 
             // Check for external axis values
-            for (int i = 0; i < robot.ExternalAxis.Count; i++)
+            for (int i = 0; i < robot.ExternalAxes.Count; i++)
             {
-                int logicNumber = robot.ExternalAxis[i].AxisNumber;
+                int logicNumber = robot.ExternalAxes[i].AxisNumber;
 
                 if (_externalAxisValues[logicNumber] == 9e9)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not definied by the user.");
                 }
 
-                else if (robot.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[logicNumber], false) == false)
+                else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalAxisValues[logicNumber], false) == false)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not in range.");
                 }

@@ -33,11 +33,11 @@ namespace RobotComponents.Definitions
         private Plane _mountingFrame; // The tool mounting frame
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
-        private List<ExternalAxis> _externalAxis; // The attached external axes
+        private List<ExternalAxis> _externalAxes; // The attached external axes
         private readonly InverseKinematics _inverseKinematics; // Robot inverse kinematics
         private readonly ForwardKinematics _forwardKinematics; // Robot forward kinematics
-        private readonly List<Plane> _externalAxisPlanes; // The external axis planes
-        private readonly List<Interval> _externalAxisLimits; // The external axis limit
+        private readonly List<Plane> _externalAxesPlanes; // The external axis planes
+        private readonly List<Interval> _externalAxesLimits; // The external axis limit
         #endregion
 
         #region (de)serialization
@@ -56,9 +56,9 @@ namespace RobotComponents.Definitions
             _mountingFrame = (Plane)info.GetValue("Mounting Frame", typeof(Plane));
             _tool = (RobotTool)info.GetValue("RobotTool", typeof(RobotTool));
             _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
-            _externalAxis = (List<ExternalAxis>)info.GetValue("External Axis", typeof(List<ExternalAxis>));
-            _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
-            _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
+            _externalAxes = (List<ExternalAxis>)info.GetValue("External Axis", typeof(List<ExternalAxis>));
+            _externalAxesPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
+            _externalAxesLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
 
             _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
             _forwardKinematics = new ForwardKinematics(this);
@@ -82,9 +82,9 @@ namespace RobotComponents.Definitions
             info.AddValue("Mounting Frame", _mountingFrame, typeof(Plane));
             info.AddValue("RobotTool", _tool, typeof(RobotTool));
             info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
-            info.AddValue("External Axis", _externalAxis, typeof(List<ExternalAxis>));
-            info.AddValue("External Axis Planes", _externalAxisPlanes, typeof(List<Plane>));
-            info.AddValue("External Axis Limits", _externalAxisLimits, typeof(List<Interval>));
+            info.AddValue("External Axis", _externalAxes, typeof(List<ExternalAxis>));
+            info.AddValue("External Axis Planes", _externalAxesPlanes, typeof(List<Plane>));
+            info.AddValue("External Axis Limits", _externalAxesLimits, typeof(List<Interval>));
         }
         #endregion
 
@@ -123,9 +123,9 @@ namespace RobotComponents.Definitions
             _toolPlane = GetAttachedToolPlane(_tool);
 
             // Update external axis related fields
-            _externalAxis = new List<ExternalAxis>();
-            _externalAxisPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
-            _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
+            _externalAxes = new List<ExternalAxis>();
+            _externalAxesPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
+            _externalAxesLimits = Enumerable.Repeat(new Interval(), 6).ToList();
 
             // Transform Robot Tool to Mounting Frame
             Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
@@ -163,9 +163,9 @@ namespace RobotComponents.Definitions
             _toolPlane = GetAttachedToolPlane(_tool);
 
             // External axis related fields
-            _externalAxis = externalAxis;
-            _externalAxisPlanes = new List<Plane>();
-            _externalAxisLimits = new List<Interval>();
+            _externalAxes = externalAxis;
+            _externalAxesPlanes = new List<Plane>();
+            _externalAxesLimits = new List<Interval>();
             UpdateExternalAxisFields();
 
             // Transform Robot Tool to Mounting Frame
@@ -199,9 +199,9 @@ namespace RobotComponents.Definitions
             _toolPlane = new Plane(robot.ToolPlane);
 
             // External axis related fields
-            _externalAxis = new List<ExternalAxis>(robot.ExternalAxis); //TODO: make deep copy
-            _externalAxisPlanes = new List<Plane>(robot.ExternalAxisPlanes);
-            _externalAxisLimits = new List<Interval>(robot.ExternalAxisLimits);
+            _externalAxes = new List<ExternalAxis>(robot.ExternalAxes); //TODO: make deep copy
+            _externalAxesPlanes = new List<Plane>(robot.ExternalAxisPlanes);
+            _externalAxesLimits = new List<Interval>(robot.ExternalAxisLimits);
 
             // Kinematics
             _inverseKinematics = new InverseKinematics(robot.InverseKinematics.Movement.Duplicate(), this);
@@ -241,39 +241,39 @@ namespace RobotComponents.Definitions
         private void UpdateExternalAxisFields()
         {
             // Check the number of external axes
-            if (_externalAxis.Count > 6)
+            if (_externalAxes.Count > 6)
             {
                 throw new ArgumentException("More than six external axes are defined. A maximum of 6 external axes can be attached to a Robot.");
             }
 
             // Check list with external axes: maximum of one external linear axis is allowed at the moment
-            if (_externalAxis.Count(item => item is ExternalLinearAxis) > 1)
+            if (_externalAxes.Count(item => item is ExternalLinearAxis) > 1)
             {
                 throw new ArgumentException("At the moment RobotComponents supports a maximum of one external linear axis.");
             }
 
             // Assign axis logic number
-            for (int i = 0; i < _externalAxis.Count; i++)
+            for (int i = 0; i < _externalAxes.Count; i++)
             {
-                _externalAxis[i].AxisNumber = i;
+                _externalAxes[i].AxisNumber = i;
             }
 
             // Clear the lists
-            _externalAxisPlanes.Clear();
-            _externalAxisLimits.Clear();
+            _externalAxesPlanes.Clear();
+            _externalAxesLimits.Clear();
 
             // Fill the lists again
             for (int i = 0; i < 6; i++)
             {
-                if (_externalAxis.Count > i && _externalAxis[i] != null)
+                if (_externalAxes.Count > i && _externalAxes[i] != null)
                 {
-                    _externalAxisLimits.Add(_externalAxis[i].AxisLimits);
-                    _externalAxisPlanes.Add(_externalAxis[i].AxisPlane);
+                    _externalAxesLimits.Add(_externalAxes[i].AxisLimits);
+                    _externalAxesPlanes.Add(_externalAxes[i].AxisPlane);
                 }
                 else
                 {
-                    _externalAxisLimits.Add(new Interval());
-                    _externalAxisPlanes.Add(Plane.Unset);
+                    _externalAxesLimits.Add(new Interval());
+                    _externalAxesPlanes.Add(Plane.Unset);
                 }
             }
         }
@@ -442,15 +442,15 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Defines the list with attached external axes.
         /// </summary>
-        public List<ExternalAxis> ExternalAxis
+        public List<ExternalAxis> ExternalAxes
         {
             get
             {
-                return _externalAxis;
+                return _externalAxes;
             }
             set
             {
-                _externalAxis = value;
+                _externalAxes = value;
                 UpdateExternalAxisFields();
             }
         }
@@ -476,7 +476,7 @@ namespace RobotComponents.Definitions
         /// </summary>
         public List<Plane> ExternalAxisPlanes
         {
-            get { return _externalAxisPlanes; }
+            get { return _externalAxesPlanes; }
         }
 
         /// <summary>
@@ -484,7 +484,7 @@ namespace RobotComponents.Definitions
         /// </summary>
         public List<Interval> ExternalAxisLimits
         {
-            get { return _externalAxisLimits; }
+            get { return _externalAxesLimits; }
         }
         #endregion
     }

@@ -73,9 +73,7 @@ namespace RobotComponents.Definitions
 
         #region constructors
         /// <summary>
-        /// An empty constructr that creates the the work object data wobj0 in such a way 
-        /// that the object coordinate system coincides with the world coordinate system. 
-        /// The robot does not hold the work object. 
+        /// Initializes a new instance of the Work Object class with the default work object wobj0. 
         /// </summary>
         public WorkObject()
         {
@@ -90,10 +88,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The constructor to create a fixed user defined work object coordinate system. 
+        /// Initializes a new instance of the Work Object class with a fixed work object.
         /// </summary>
-        /// <param name="name"> The work object name. </param>
-        /// <param name="plane"> The work object coorindate system as a Plane. </param>
+        /// <param name="name"> The work object name, must be unique. </param>
+        /// <param name="plane"> The work object coordinate system. </param>
         public WorkObject(string name, Plane plane)
         {
             _referenceType = ReferenceType.PERS;
@@ -107,10 +105,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The constructor to create a movable usre definied work object coordinate system.
+        /// Initializes a new instance of the Work Object class with a movable work object.
         /// </summary>
-        /// <param name="name"> The work object name. </param>
-        /// <param name="plane"> The work object coorindate system as a Plane. </param>
+        /// <param name="name"> The work object name, must be unique. </param>
+        /// <param name="plane"> The work object coordinate system. </param>
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
         {
@@ -125,11 +123,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Creates a new work object by duplicating an existing movement.
-        /// This creates a deep copy of the existing work object.
+        /// Initializes a new instance of the Work Object class by duplicating an existing Work Object instance. 
         /// </summary>
-        /// <param name="workObject"> The work object that should be duplicated. </param>
-        /// <param name="duplicateMesh"> A boolean that indicates if the meshes should be duplicated. </param>
+        /// <param name="workObject"> The Work Object instance to duplicate. </param>
+        /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
             _referenceType = workObject.ReferenceType;
@@ -148,18 +145,18 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method to duplicate the WorkObject object. 
+        /// Returns an exact duplicate of this Work Object instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the WorkObject object. </returns>
+        /// <returns> A deep copy of the Work Object instance. </returns>
         public WorkObject Duplicate()
         {
             return new WorkObject(this);
         }
 
         /// <summary>
-        /// A method to duplicate the WorkObject object without meshes. 
+        /// Returns an exact duplicate of this Work Object instance without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy of the WorkObject object with an external axis with empty meshes. </returns>
+        /// <returns> A deep copy of the Work Object instance without meshes. </returns>
         public WorkObject DuplicateWithoutMesh()
         {
             return new WorkObject(this, false);
@@ -339,7 +336,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -365,7 +362,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The name of the work object.
+        /// Gets or sets the name of the workobject.
         /// </summary>
         public string Name
         {
@@ -374,7 +371,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines whether or not the robot in the actual program task is holding the work object. 
+        /// Gets a value indicating whether or not the robot is holding the work object. 
         /// </summary>
         public bool RobotHold
         {
@@ -383,8 +380,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Returns the global work object plane since the work object coordinate system and 
-        /// the user frame coordinate system can both be unequal to the world coordinate system.
+        /// Gets the global work object plane.
         /// </summary>
         public Plane GlobalWorkObjectPlane
         {
@@ -392,11 +388,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The user coordinate system, i.e. the position of the current work surface or fixture.
-        /// If the robot is holding the tool, the user coordinate system is defined in the world 
-        /// coordinate system (in the wrist coordinate system if a stationary tool is used). For 
-        /// movable user frame (FixedFrame = false), the user frame is continuously defined by 
-        /// the system.
+        /// Gets or sets the user coordinate system, i.e. the position of the current work surface or fixture.
+        /// If the robot is holding the tool, the user coordinate system is defined in the world coordinate system (in the wrist coordinate system if a stationary tool is used). 
+        /// For movable user frame (FixedFrame = false), the user frame is continuously defined by the system.
         /// </summary>
         public Plane UserFrame
         {
@@ -412,7 +406,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The object coordinate system as a plane (e.g. the position of the current work object).
+        /// Gets or set the work object coordinate system as a plane (e.g. the position of the current work object).
         /// The object coordinate system is defined in the user coordinate system.
         /// </summary>
         public Plane Plane
@@ -429,8 +423,8 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The external axis (mechanical unit) with which the robot movements are coordinated. 
-        /// Only specified in the case of movable user coordinate systems
+        /// Gets or sets the external axis (mechanical unit) with which the robot movements are coordinated. 
+        /// Only specified in the case of movable user coordinate systems.
         /// </summary>
         public ExternalAxis ExternalAxis
         {
@@ -446,15 +440,15 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The Quaternion orientation of the work object coordinate system.
+        /// Gets the Quaternion orientation of the work object coordinate system.
         /// </summary>
         public Quaternion Orientation
         {
-            get { return _userFrameOrientation; }
+            get { return _orientation; }
         }
 
         /// <summary>
-        /// The Quaternion orientation of the user frame coordinate system.
+        /// Gets the Quaternion orientation of the user frame coordinate system.
         /// </summary>
         public Quaternion UserFrameOrientation
         {
@@ -462,7 +456,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines whether or not a fixed user coordinate system is used.
+        /// Gets a value indicating whether or not a fixed user coordinate system is used.
         /// True indicates that the user frame is fixed. 
         /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).
         /// </summary>

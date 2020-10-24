@@ -77,7 +77,7 @@ namespace RobotComponents.Definitions
 
         #region constructors
         /// <summary>
-        /// An empty constuctor that creates an empty external linear axis.
+        /// Initializes an empty instance of the External Linear Axis class.
         /// </summary>
         public ExternalLinearAxis()
         {
@@ -89,11 +89,11 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with empty meshes. 
+        /// Initializes a new instance of the External Linear Axis class with empty meshes.
         /// </summary>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
         public ExternalLinearAxis(Plane attachmentPlane, Vector3d axis, Interval axisLimits)
         {
             axis.Unitize();
@@ -111,13 +111,13 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry. 
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
-        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(Plane attachmentPlane, Vector3d axis, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             axis.Unitize();
@@ -135,13 +135,13 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry.
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
         /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
-        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             _name = "";
@@ -157,14 +157,14 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry and a name.
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
-        /// <param name="name"> The axis name as a string. </param>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
-        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        /// <param name="name"> The External Axis name. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             axis.Unitize();
@@ -182,14 +182,14 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry and a name.
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
-        /// <param name="name"> The axis name as a string. </param>
-        /// <param name="attachmentPlane"> The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axis"> The positive movement direction of the external linear axis as a vector. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMeshes"> The base mesh of the external linear axis as a list with Meshes </param>
-        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as The list with robot meshes. </param>
+        /// <param name="name"> The External Axis name. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
+        /// <param name="axis"> The positive movement direction. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMeshes"> The base mesh. </param>
+        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
         {
             axis.Unitize();
@@ -210,14 +210,14 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry and a name. 
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
-        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="name"> The External Axis name. </param>
         /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMesh"> The base mesh of the external linear axis. </param>
-        /// <param name="linkMesh"> The link mesh of the external linear axis posed for external axis value 0. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             _name = name;
@@ -233,14 +233,14 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines an external linear axis with a mesh geometry and a name. 
+        /// Initializes a new instance of the External Linear Axis class.
         /// </summary>
-        /// <param name="name"> The axis name as a string. </param>
+        /// <param name="name"> The External Axis name. </param>
         /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The Z-axis defines the positive movement direction of the axis. </param>
-        /// <param name="axisLimits"> The movement limits of the external linear axis as an interval. </param>
-        /// <param name="baseMeshes"> The base mesh of the external linear axis as list with meshes </param>
-        /// <param name="linkMeshes"> The link mesh of the external linear axis posed for external axis value 0 as The list with robot meshes. </param>
+        /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
+        /// <param name="baseMeshes"> The base mesh. </param>
+        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
         {
             _name = name;
@@ -259,11 +259,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Creates a new external linear axis by duplicating an existing axis.
-        /// This creates a deep copy of the existing axis.
+        /// Initializes a new instance of the External Linear Axis class by duplicating an existing External Linear Axis instance. 
         /// </summary>
-        /// <param name="externalLinearAxis"> The external linear axis that should be duplicated. </param>
-        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        /// <param name="externalLinearAxis"> The External Linear Axis instance to duplicate. </param>
+        /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public ExternalLinearAxis(ExternalLinearAxis externalLinearAxis, bool duplicateMesh = true)
         {
             _name = externalLinearAxis.Name;
@@ -288,36 +287,36 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method to duplicate the ExternalLinearAxis object. 
+        /// Returns an exact duplicate of this External Linear Axis instance.
         /// </summary>
-        /// <returns> Returns a deep copy for the ExternalLinearAxis object. </returns>
+        /// <returns> A deep copy of the External Linear Axis instance. </returns>
         public ExternalLinearAxis Duplicate()
         {
             return new ExternalLinearAxis(this);
         }
 
         /// <summary>
-        /// A method to duplicate the ExternalLinearAxis object without duplicating the mesh. It will set an empty mesh. 
+        /// Returns an exact duplicate of this External Linear Axis instance without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy for the ExternalLinearAxis object without a mesh. </returns>
+        /// <returns> A deep copy of the External Linear Axis instance without meshes. </returns>
         public ExternalLinearAxis DuplicateWithoutMesh()
         {
             return new ExternalLinearAxis(this, false);
         }
 
         /// <summary>
-        /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object. 
+        /// Returns an exact duplicate of this External Linear Axis instance as an External Axis.
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object. </returns>
+        /// <returns> A deep copy of the External Linear Axis instance as an External Axis. </returns>
         public override ExternalAxis DuplicateExternalAxis()
         {
             return new ExternalLinearAxis(this) as ExternalAxis;
         }
 
         /// <summary>
-        /// A method to duplicate the ExternalLinearAxis object to an ExternalAxis object without the mesh. 
+        /// Returns an exact duplicate of this External Linear Axis instance as an External Axis without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalLinearAxis object as an ExternalAxis object with empty meshes. </returns>
+        /// <returns> A deep copy of the External Linear Axis instance as an External Axis without meshes. </returns>
         public override ExternalAxis DuplicateExternalAxisWithoutMesh()
         {
             return new ExternalLinearAxis(this, false) as ExternalAxis;
@@ -447,7 +446,8 @@ namespace RobotComponents.Definitions
         /// Calculates the position of the external axis mesh for a defined external axis value.
         /// </summary>
         /// <param name="axisValue"> The external axis value to calculate the position of the meshes for in mm. </param>
-        public override void PoseMeshes(double axisValue)
+        /// <returns> The posed meshes. </returns>
+        public override List<Mesh> PoseMeshes(double axisValue)
         {
             _posedMeshes.Clear();
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
@@ -455,6 +455,8 @@ namespace RobotComponents.Definitions
 
             Transform translateNow = CalculateTransformationMatrix(axisValue, out _);
             _posedMeshes[1].Transform(translateNow);
+
+            return _posedMeshes;
         }
 
         /// <summary>
@@ -496,7 +498,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -514,7 +516,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The name of the external axis
+        /// Gets or sets the external axis name. 
         /// </summary>
         public override string Name
         {
@@ -523,7 +525,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The attachment plane of the axis. 
+        /// Gets or sets the attachment plane to attach a robot or work object.
         /// </summary>
         public override Plane AttachmentPlane 
         {
@@ -539,7 +541,8 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The axis plane. The z-axis of the place defines the positive movement direction of the plane. 
+        /// Gets or sets the axis plane.
+        /// The z-axis of the place defines the positive movement direction of the external linear axis.
         /// </summary>
         public override Plane AxisPlane 
         { 
@@ -555,7 +558,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The movement limits of the linear axis in meters. 
+        /// Gets or sets the axis limits in meters.
         /// </summary>
         public override Interval AxisLimits 
         { 
@@ -601,7 +604,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The axis movement type.
+        /// Gets the Axis Type.
         /// </summary>
         public override AxisType AxisType 
         { 
@@ -609,7 +612,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The fixed base mesh of the external axis. 
+        /// Gets or sets the fixed base mesh of the external axis. 
         /// </summary>
         public override Mesh BaseMesh 
         { 
@@ -625,7 +628,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The movable link mesh of the external axis posed for external axis value 0. 
+        /// Gets or sets the movable link mesh of the external axis posed for external axis value set to 0.
         /// </summary>
         public override Mesh LinkMesh 
         { 
@@ -641,8 +644,8 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The external linear axis curve. Defines the movement direction and the spatial
-        /// limits of the attachement plane.
+        /// Gets the axis curve. 
+        /// The direction of the curve defines the movement direction and the spatial limits of the attachement plane. .
         /// </summary>
         public Curve AxisCurve 
         { 
@@ -650,7 +653,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The external axis mesh posed in a certain external axis value.
+        /// Gets latest calculated posed axis meshes.
         /// </summary>
         public override List<Mesh> PosedMeshes 
         { 
@@ -658,7 +661,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Gets a value indicating whether this External Linear Axis moves the Robot.
+        /// Gets a value indicating whether or not this External Linear Axis moves the Robot.
         /// </summary>
         public override bool MovesRobot 
         { 

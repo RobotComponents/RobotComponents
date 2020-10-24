@@ -35,21 +35,21 @@ namespace RobotComponents.Actions
         private string _systemCode; // The rapid system code
         private string _programModuleName; // The module name of the rapid program code
         private string _systemModuleName; // The module name of the rapod system code
-        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movememtn is an absolute joint movement
+        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
         private StringBuilder _stringBuilder;
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty RAPID generator
+        /// Initializes an empty instance of the RAPID Generator class.
         /// </summary>
         public RAPIDGenerator()
         {
         }
 
         /// <summary>
-        /// Initiates an RAPID generator. This constructor does not call the methods that create and write the code. 
+        /// Initializes a new instance of the RAPID Generator class.
         /// </summary>
         /// <param name="programModuleName"> The name of the program module </param>
         /// <param name="systemModuleName"> The name of the system module </param>
@@ -68,10 +68,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new RAPID generator by duplicating an existing RAPID generator. 
-        /// This creates a deep copy of the existing RAPID generator. 
+        /// Initializes a new instance of the RAPDI Generator class by duplicating an existing RAPID Generator instance. 
         /// </summary>
-        /// <param name="generator"> The RAPID generator that should be duplicated. </param>
+        /// <param name="generator"> The RAPID Generator instance to duplicate. </param>
         public RAPIDGenerator(RAPIDGenerator generator)
         {
             _programModuleName = generator.ProgramModuleName;
@@ -87,9 +86,9 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Method to duplicate this RAPID generator object.
+        /// Returns an exact duplicate of this RAPID Generator instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the RAPID generator object. </returns>
+        /// <returns> A deep copy of the RAPID Generator instance. </returns>
         public RAPIDGenerator Duplicate()
         {
             return new RAPIDGenerator(this);
@@ -430,7 +429,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -512,7 +511,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Gets a value indicating whether the first movement is an Absolute Joint Movement.
+        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
         /// </summary>
         public bool FirstMovementIsMoveAbsJ
         {
@@ -545,7 +544,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines all the unique Robot Tools used in this RAPID Generator
+        /// Gets the collection with unique Robot Tools used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, RobotTool> RobotTools
         {
@@ -553,7 +552,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines all the unique Work Objects used in this RAPID Generator
+        /// Gets the collection with unique Work Objects used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, WorkObject> WorkObjects
         {

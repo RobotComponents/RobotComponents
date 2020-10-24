@@ -69,8 +69,7 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// An undefined external joint position. 
-        /// All external axis values will be set to 9E9.
+        /// Initializes a new instance of the External Joint Position class with undefinied external axis values.
         /// </summary>
         public ExternalJointPosition()
         {
@@ -84,7 +83,7 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Defines an external joint position. 
+        /// Initializes a new instance of the External Joint Position class.
         /// </summary>
         /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
         /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm.</param>
@@ -103,9 +102,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an external joint position from a list with values.
+        /// Initializes a new instance of the External Joint Position class from a list with values.
         /// </summary>
-        /// <param name="externalAxisValues"> The user defined external axis values as a list.</param>
+        /// <param name="externalAxisValues"> The external axis values. </param>
         public ExternalJointPosition(List<double> externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues.ToArray());
@@ -119,9 +118,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an external joint position from an array wth values.
+        /// Initializes a new instance of the External Joint Position class from an array with values.
         /// </summary>
-        /// <param name="externalAxisValues">The user defined external axis values as an array.</param>
+        /// <param name="externalAxisValues"> The external axis values. </param>
         public ExternalJointPosition(double[] externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues);
@@ -135,33 +134,32 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new external joint position by duplicating an existing external joint position. 
-        /// This creates a deep copy of the existing external joint position. 
+        /// Initializes a new instance of the External Joint Position class by duplicating an existing External Joint Position instance. 
         /// </summary>
-        /// <param name="extJointPosition"> The external joint position that should be duplicated. </param>
-        public ExternalJointPosition(ExternalJointPosition extJointPosition)
+        /// <param name="externalJointPosition"> The External Joint Position instance to duplicate. </param>
+        public ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
-            _val1 = extJointPosition[0];
-            _val2 = extJointPosition[1];
-            _val3 = extJointPosition[2];
-            _val4 = extJointPosition[3];
-            _val5 = extJointPosition[4];
-            _val6 = extJointPosition[5];
+            _val1 = externalJointPosition[0];
+            _val2 = externalJointPosition[1];
+            _val3 = externalJointPosition[2];
+            _val4 = externalJointPosition[3];
+            _val5 = externalJointPosition[4];
+            _val6 = externalJointPosition[5];
         }
 
         /// <summary>
-        /// Method to duplicate the Ext Joint Position object.
+        /// Returns an exact duplicate of this Digital Output instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the Ext Joint Position object.</returns>
+        /// <returns> A deep copy of the Digital Output instance. </returns>
         public ExternalJointPosition Duplicate()
         {
             return new ExternalJointPosition(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Ext Joint Position object to an Action object. 
+        /// Returns an exact duplicate of this External Joint Position instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Ext Joint Position object as an Action object. </returns>
+        /// <returns> A deep copy of the External Joint Position instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new ExternalJointPosition(this) as Action;
@@ -428,10 +426,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string.  </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string code = "[";
@@ -458,27 +456,29 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns an empty string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -486,7 +486,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -510,28 +510,87 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (index == 0) { return _val1; }
-                else if (index == 1) { return _val2; }
-                else if (index == 2) { return _val3; }
-                else if (index == 3) { return _val4; }
-                else if (index == 4) { return _val5; }
-                else if (index == 5) { return _val6; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: return _val1;
+                    case 1: return _val2;
+                    case 2: return _val3;
+                    case 3: return _val4;
+                    case 4: return _val5;
+                    case 5: return _val6;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
+
             set
             {
-                if (index == 0) { _val1 = value; }
-                else if (index == 1) { _val2 = value; }
-                else if (index == 2) { _val3 = value; }
-                else if (index == 3) { _val4 = value; }
-                else if (index == 4) { _val5 = value; }
-                else if (index == 5) { _val6 = value; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: _val1 = value; break;
+                    case 1: _val2 = value; break;
+                    case 2: _val3 = value; break;
+                    case 3: _val4 = value; break;
+                    case 4: _val5 = value; break;
+                    case 5: _val6 = value; break;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the joint position array has a fixed size.
+        /// Gets or sets the axis values through the indexer.
+        /// </summary>
+        /// <param name="index"> The index character. </param>
+        /// <returns> The axis value located at the given index. </returns>
+        public double this[char index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 'a': return _val1;
+                    case 'b': return _val2;
+                    case 'c': return _val3;
+                    case 'd': return _val4;
+                    case 'e': return _val5;
+                    case 'f': return _val6;
+
+                    case 'A': return _val1;
+                    case 'B': return _val2;
+                    case 'C': return _val3;
+                    case 'D': return _val4;
+                    case 'E': return _val5;
+                    case 'F': return _val6;
+
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case 'a': _val1 = value; break;
+                    case 'b': _val2 = value; break;
+                    case 'c': _val3 = value; break;
+                    case 'd': _val4 = value; break;
+                    case 'e': _val5 = value; break;
+                    case 'f': _val6 = value; break;
+
+                    case 'A': _val1 = value; break;
+                    case 'B': _val2 = value; break;
+                    case 'C': _val3 = value; break;
+                    case 'D': _val4 = value; break;
+                    case 'E': _val5 = value; break;
+                    case 'F': _val6 = value; break;
+
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the joint position array has a fixed size.
         /// </summary>
         public bool IsFixedSize
         {

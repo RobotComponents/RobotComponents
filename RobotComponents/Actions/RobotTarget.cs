@@ -70,17 +70,17 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty Robot Target object.
+        /// Initializes an empty instance of the Robot Target class.
         /// </summary>
         public RobotTarget()
         {
         }
 
         /// <summary>
-        /// Defines a robot target with default axis configuration.
+        /// Initializes a new instance of the Robot Target class with an axis conguration set to zero and an undefined External Joint Position.
         /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> The target plane. </param>
         public RobotTarget(string name, Plane plane)
         {
             _referenceType = ReferenceType.VAR;
@@ -92,11 +92,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a robot target with a user defined axis configuration.
+        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
         /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> Thr target plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
@@ -108,12 +108,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a robot target that will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> The target plane. </param>
+        /// <param name="referencePlane"> The reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
@@ -129,56 +130,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a robot target with user defined (override) external axis values. 
+        /// Initializes a new instance of the Robot Target class.
         /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origin (WorldXY). </param>
-        /// <param name="axisConfig">Robot axis configuration as a number (0-7).</param>
-        /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
-        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
-        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
-        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
-        /// <param name="Eax_e"> The position of the external logical axis “e” expressed in degrees or mm. </param>
-        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
-        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double Eax_a, double Eax_b = 9e9, double Eax_c = 9e9, double Eax_d = 9e9, double Eax_e = 9e9, double Eax_f = 9e9)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition(Eax_a, Eax_b, Eax_c, Eax_d, Eax_e, Eax_f);
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane from the reference coordinate system to the world coordinate system
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-        }
-
-        /// <summary>
-        /// Defines a robot target with user defined (override) external axis values. 
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="Eax">The user defined external joint positions as a list with axis values.</param>
-        public RobotTarget(string name, Plane plane, int axisConfig, List<double> Eax)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition(Eax);
-            _quat = HelperMethods.PlaneToQuaternion(_plane);
-        }
-
-        /// <summary>
-        /// Defines a robot target with a user defined external joint position.
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="externalJointPosition">The user defined external joint position.</param>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
@@ -190,61 +147,14 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a robot target with user defined (override) external axis values.
-        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
+        /// Initializes a new instance of the Robot Target class.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="Eax">The user defined external axis values as a list.</param>
-        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, List<double> Eax)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition(Eax);
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane from the reference coordinate system to the world coordinate system
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-        }
-
-        /// <summary>
-        /// Defines a robot target with user defined (override) external axis values.
-        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="Eax">The user defined external axis values as an array.</param>
-        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, double[] Eax)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition(Eax);
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane to the reference plane
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-        }
-
-
-        /// <summary>
-        /// Defines a robot target with a user defined external joint position.
-        /// Target planes will be re-oriented from the reference coordinate system to the global coordinate system.
-        /// </summary>
-        /// <param name="name">Robot target name, must be unique.</param>
-        /// <param name="plane">Robot target plane.</param>
-        /// <param name="referencePlane">Reference plane. Target planes will be reoriented from this plane to the origon (WorldXY). </param>
-        /// <param name="axisConfig">Robot target axis configuration as a number (0-7).</param>
-        /// <param name="externalJointPosition">The user defined external joint position.</param>
+        /// <param name="name"> The target name, must be unique.</param>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="referencePlane"> The Reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
@@ -260,10 +170,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new target by duplicating an existing target. 
-        /// This creates a deep copy of the existing target. 
+        /// Initializes a new instance of the Robot Target class by duplicating an existing Robot Target instance. 
         /// </summary>
-        /// <param name="target"> The target that should be duplicated. </param>
+        /// <param name="target"> The Robot Target instance to duplicate. </param>
         public RobotTarget(RobotTarget target)
         {
             _referenceType = target.ReferenceType;
@@ -275,27 +184,27 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Method to duplicate the Target object.
+        /// Returns an exact duplicate of this Robot Target instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the Target object.</returns>
+        /// <returns> A deep copy of the Robot Target instance. </returns>
         public RobotTarget Duplicate()
         {
             return new RobotTarget(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Robot Target object to an ITarget object. 
+        /// Returns an exact duplicate of this Robot Target instance as an ITarget. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Robot Target object as an ITarget object. </returns>
+        /// <returns> A deep copy of the Robot Target instance as an ITarget. </returns>
         public ITarget DuplicateTarget()
         {
             return new RobotTarget(this) as ITarget;
         }
 
         /// <summary>
-        /// A method to duplicate the Target object to an Action object. 
+        /// Returns an exact duplicate of this Robot Target instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Target object as an Action object. </returns>
+        /// <returns> A deep copy of the Robot Target instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new RobotTarget(this) as Action;
@@ -320,10 +229,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string code = Enum.GetName(typeof(ReferenceType), _referenceType);
@@ -348,19 +257,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // Only adds target code if target is not already defined
@@ -394,9 +304,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -404,7 +315,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {

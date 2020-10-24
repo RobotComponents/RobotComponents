@@ -26,7 +26,7 @@ namespace RobotComponents.Definitions
     {
         #region fields
         private string _name; // The name of the robot
-        private List<Mesh> _meshes; // The robot mesh
+        private readonly List<Mesh> _meshes; // The robot mesh
         private List<Plane> _internalAxisPlanes; // The internal axis planes
         private List<Interval> _internalAxisLimits; // The internal axis limits
         private Plane _basePlane; // The base plane (position) of the robot
@@ -90,7 +90,7 @@ namespace RobotComponents.Definitions
 
         #region constructors
         /// <summary>
-        /// An empty constuctor that creates an robot.
+        /// Initializes an empty instance of the Robot class.
         /// </summary>
         public Robot()
         {
@@ -98,15 +98,15 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot without external axes. 
+        /// Initializes a new instance of the Robot class without attached external axes.
         /// </summary>
-        /// <param name="name"> The robot name. </param>
-        /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the world coorindate space. </param>
-        /// <param name="internalAxisLimits"> The internal axes limit as intervals. </param>
-        /// <param name="basePlane"> The position of the robot in the world coordinate space as a plane. </param>
-        /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
-        /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
+        /// <param name="name"> The name. </param>
+        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="internalAxisLimits"> The internal axes limit. </param>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
         public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
             // Update robot related fields
@@ -137,17 +137,17 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot with attached external axes.
+        /// Initializes a new instance of the Robot class with attached external axes.
         /// </summary>
-        /// <param name="name"> The robot name. </param>
-        /// <param name="meshes"> The robot base and links meshes as a list defined in the world coorindate space. </param>
-        /// <param name="internalAxisPlanes"> The internal axes planes as a list defined in the world coorindate space. </param>
-        /// <param name="internalAxisLimits"> The internal axes limit as intervals. </param>
-        /// <param name="basePlane"> The position of the robot in the world coordinate space as a plane. </param>
-        /// <param name="mountingFrame"> The tool mounting frame as plane in the world coorindate space. </param>
-        /// <param name="tool"> The attached robot tool as a Robot Tool. </param>
-        /// <param name="externalAxis"> The list with attached external axes. </param>
-        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxis)
+        /// <param name="name"> The name. </param>
+        /// <param name="meshes"> The base and links meshes defined in the world coorindate space. </param>
+        /// <param name="internalAxisPlanes"> The internal axes planes defined in the world coorindate space. </param>
+        /// <param name="internalAxisLimits"> The internal axes limit. </param>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
+        /// <param name="externalAxes"> The attached external axes. </param>
+        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxes)
         {
             // Robot related fields
             _name = name;
@@ -163,7 +163,7 @@ namespace RobotComponents.Definitions
             _toolPlane = GetAttachedToolPlane(_tool);
 
             // External axis related fields
-            _externalAxes = externalAxis;
+            _externalAxes = externalAxes;
             _externalAxesPlanes = new List<Plane>();
             _externalAxesLimits = new List<Interval>();
             UpdateExternalAxisFields();
@@ -178,11 +178,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Creates a new robot by duplicating an existing robot.
-        /// This creates a deep copy of the existing robot. 
-        /// It clears the solution of the inverse and forward kinematics. 
+        /// Initializes a new instance of the Robot class by duplicating an existing Robot instance. 
         /// </summary>
-        /// <param name="robot"> The robot that should be duplicated. </param>
+        /// <param name="robot"> The Robot instance to duplicate. </param>
         public Robot(Robot robot)
         {
             // Robot related fields
@@ -209,9 +207,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method to duplicate the Robot object. 
+        /// Returns an exact duplicate of this Robot instance.
         /// </summary>
-        /// <returns> Returns a deep copy for the Robot object. </returns>
+        /// <returns> A deep copy of the Robot instance. </returns>
         public Robot Duplicate()
         {
             return new Robot(this);
@@ -340,7 +338,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -361,7 +359,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The Robot name. 
+        /// Gets or sets the name of the Robot.
         /// </summary>
         public string Name
         {
@@ -370,16 +368,16 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A list with all the robot meshes, including the mesh of the attached tool.
+        /// Gets the Robot meshes including the mesh of the attached tool.
         /// </summary>
         public List<Mesh> Meshes
         {
             get { return _meshes; }
-            set { _meshes = value; }
         }
 
         /// <summary>
-        /// Defines the list with the internal axis planes. The Z-axis of the planes if defining the rotation centers. 
+        /// Gets or sets the internal axis planes.
+        /// The Z-axes of the planes define the rotation centers. 
         /// </summary>
         public List<Plane> InternalAxisPlanes
         {
@@ -388,7 +386,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the list with internal axis limits in degrees. 
+        /// Gets or sets the axis limits in degrees.
         /// </summary>
         public List<Interval> InternalAxisLimits
         {
@@ -397,7 +395,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the position plane of the robot in the world coordinate space. 
+        /// Gets or sets the position and orientation of the robot in world coordinate space. 
         /// </summary>
         public Plane BasePlane
         {
@@ -406,7 +404,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the mounting plane of the tool in the world coordinate space. 
+        /// Gets or sets the tool mounting frame in world coordinate space.
         /// </summary>
         public Plane MountingFrame
         {
@@ -422,7 +420,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the TCP plane of the tool in the world coordinate space. 
+        /// Gets the TCP plane in world coordinate space.
         /// </summary>
         public Plane ToolPlane
         {
@@ -430,7 +428,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the attached robot tool. 
+        /// Gets or sets the Robot Tool.
         /// </summary>
         public RobotTool Tool
         {
@@ -446,7 +444,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the list with attached external axes.
+        /// Gets or sets the attached external axes.
         /// </summary>
         public List<ExternalAxis> ExternalAxes
         {
@@ -462,7 +460,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The inverse kinematics of this robot. 
+        /// Gets the Inverse Kinematics of this Robot. 
         /// </summary>
         public InverseKinematics InverseKinematics
         {
@@ -470,7 +468,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The forward kinematics of this robot. 
+        /// Gets the Forward Kinimatics of this Robot.
         /// </summary>
         public ForwardKinematics ForwardKinematics
         {
@@ -478,7 +476,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the list with external axis planes. 
+        /// Gets the external axis planes.
         /// </summary>
         public List<Plane> ExternalAxisPlanes
         {
@@ -486,7 +484,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the list with external axis limits. 
+        /// Gets the external axis limits.
         /// </summary>
         public List<Interval> ExternalAxisLimits
         {

@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/RobotComponents/RobotComponents>.Gets a value indicating whether the object is valid.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;

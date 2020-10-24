@@ -54,16 +54,16 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty CodeLine object.
+        /// Initializes a empty instance of the Code Line class.
         /// </summary>
         public CodeLine()
         {
         }
 
         /// <summary>
-        /// Defines a RAPID code line.
+        /// Initializes a new instance of the Code Line class with the Code Type set as instruction.
         /// </summary>
-        /// <param name="code">The code line as a text string.</param>
+        /// <param name="code"> The custom RAPID code line. </param>
         public CodeLine(string code)
         {
             _code = code;
@@ -71,10 +71,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a RAPID code line.
+        /// Initializes a new instance of the Code Line class
         /// </summary>
-        /// <param name="code">The code line as a text string.</param>
-        /// <param name="type">The code type as a CodeType.</param>
+        /// <param name="code"> The custom RAPID code line. </param>
+        /// <param name="type">The Code Type. </param>
         public CodeLine(string code, CodeType type)
         {
             _code = code;
@@ -82,10 +82,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new code line by duplicating an existing code line. 
-        /// This creates a deep copy of the existing code line. 
+        /// Initializes a new instance of the Code Line class by duplicating an existing Code Line instance. 
         /// </summary>
-        /// <param name="codeLine"> The code line that should be duplicated. </param>
+        /// <param name="codeLine"> The Code Line instance to duplicate. </param>
         public CodeLine(CodeLine codeLine)
         {
             _code = codeLine.Code;
@@ -93,18 +92,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A method to duplicate the CodeLine object.
+        /// Returns an exact duplicate of this Code Line instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the CodeLine object. </returns>
+        /// <returns> A deep copy of the Code Line instance. </returns>
         public CodeLine Duplicate()
         {
             return new CodeLine(this);
         }
 
         /// <summary>
-        /// A method to duplicate the CodeLine object to an Action object. 
+        /// Returns an exact duplicate of this Code Line instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the CodeLine object as an Action object. </returns>
+        /// <returns> A deep copy of the Code Line instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new CodeLine(this) as Action;
@@ -129,10 +128,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_type == CodeType.Declaration)
@@ -146,10 +145,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             if (_type == CodeType.Instruction)
@@ -163,9 +162,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             if (_type == CodeType.Declaration)
@@ -175,9 +175,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             if (_type == CodeType.Instruction)
@@ -189,7 +190,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {

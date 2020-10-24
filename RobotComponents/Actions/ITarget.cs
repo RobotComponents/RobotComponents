@@ -19,16 +19,16 @@ namespace RobotComponents.Actions
 
         #region methods
         /// <summary>
-        /// Duplicates the Target object as an ITarget object.
+        /// Returns an exact duplicate of this Target.
         /// </summary>
-        /// <returns> A deep copy of the ITarget object. </returns>
+        /// <returns> The exact copy of this Target. </returns>
         ITarget DuplicateTarget();
 
         #endregion
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         bool IsValid { get; }
 

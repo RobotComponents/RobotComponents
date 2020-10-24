@@ -6,7 +6,7 @@
 namespace RobotComponents.Enumerations
 {
     /// <summary>
-    /// Defines if the axis moves linear or rotational
+    /// Defines if the axis moves linear or rotational.
     /// </summary>
     public enum AxisType : int
     { 
@@ -22,7 +22,7 @@ namespace RobotComponents.Enumerations
     }
 
     /// <summary>
-    /// Defines the movement type
+    /// Defines the movement type.
     /// </summary>
     public enum MovementType : int
     {
@@ -43,7 +43,7 @@ namespace RobotComponents.Enumerations
     }
 
     /// <summary>
-    /// Defines the code type
+    /// Defines the code type.
     /// </summary>
     public enum CodeType : int
     {
@@ -59,7 +59,7 @@ namespace RobotComponents.Enumerations
     }
 
     /// <summary>
-    /// Defines the reference type
+    /// Defines the reference type of the declaration.
     /// </summary>
     public enum ReferenceType : int
     {

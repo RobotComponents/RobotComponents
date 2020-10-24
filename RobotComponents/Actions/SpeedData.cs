@@ -78,14 +78,14 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty SpeedData object. 
+        /// Initializes an empty instance of the Speed Data class.
         /// </summary>
         public SpeedData()
         {
         }
 
         /// <summary>
-        /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
+        /// Initializes a new instance of the Speed Data class with predefined values.
         /// </summary>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(double v_tcp)
@@ -115,7 +115,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructor for creating a predefined SpeedData. ABB defined already a number of speed data in the system module.
+        /// Initializes a new instance of the Speed Data class with predefined values.
         /// </summary>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         public SpeedData(int v_tcp)
@@ -144,9 +144,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructor for creating a custom SpeedData. 
+        /// Initializes a new instance of the Speed Data class with custom values.
         /// </summary>
-        /// <param name="name"> The SpeedData variable name. </param>
+        /// <param name="name"> The Speed Data variable name, must be unique. </param>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
         /// <param name="v_leax"> The velocity of linear external axes in mm/s. </param>
@@ -164,10 +164,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new speeddata by duplicating an existing speeddata. 
-        /// This creates a deep copy of the existing speeddata. 
+        /// Initializes a new instance of the Speed Data class by duplicating an existing Speed Data instance. 
         /// </summary>
-        /// <param name="speeddata"> The speeddata that should be duplicated. </param>
+        /// <param name="speeddata"> The Speed Data instance to duplicate. </param>
         public SpeedData(SpeedData speeddata)
         {
             _referenceType = speeddata.ReferenceType;
@@ -181,18 +180,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Duplicates a SpeedData object
+        /// Returns an exact duplicate of this Speed Data instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the SpeedData object. </returns>
+        /// <returns> A deep copy of the Speed Data instance. </returns>
         public SpeedData Duplicate()
         {
             return new SpeedData(this);
         }
 
         /// <summary>
-        /// A method to duplicate the SpeedData object to an Action object. 
+        /// Returns an exact duplicate of this Spee Data instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the SpeedData object as an Action object. </returns>
+        /// <returns> A deep copy of the Speed Data instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new SpeedData(this) as Action;
@@ -221,10 +220,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false)
@@ -238,19 +237,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             if (_predefined == false)
@@ -265,9 +265,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -275,7 +276,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {

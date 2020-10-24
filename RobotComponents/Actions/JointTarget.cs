@@ -25,8 +25,8 @@ namespace RobotComponents.Actions
         #region fields
         private ReferenceType _referenceType; // reference type
         private string _name; // joint target variable name
-        private RobotJointPosition _robJointPosition; // the position of the robot
-        private ExternalJointPosition _extJointPosition; // the position of the external axes
+        private RobotJointPosition _robotJointPosition; // the position of the robot
+        private ExternalJointPosition _externalJointPosition; // the position of the external axes
         #endregion
 
         #region (de)serialization
@@ -40,8 +40,8 @@ namespace RobotComponents.Actions
             // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _name = (string)info.GetValue("Name", typeof(string));
-            _robJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
-            _extJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
+            _robotJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
+            _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
         }
 
         /// <summary>
@@ -55,109 +55,81 @@ namespace RobotComponents.Actions
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Robot Joint Position", _robJointPosition, typeof(RobotJointPosition));
-            info.AddValue("External Joint Position", _extJointPosition, typeof(ExternalJointPosition));
+            info.AddValue("Robot Joint Position", _robotJointPosition, typeof(RobotJointPosition));
+            info.AddValue("External Joint Position", _externalJointPosition, typeof(ExternalJointPosition));
         }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty Joint Target object.
+        /// Initializes an empty instance of the Joint Target class.
         /// </summary>
         public JointTarget()
         {
         }
 
         /// <summary>
-        /// Defines a joint target with an undefined external joint position
+        /// Initializes a new instance of the Joint Target class with an undefined External Joint Position.
         /// </summary>
-        /// <param name="name">Joint target name, must be unique.</param>
-        /// <param name="robJointPosition">The rob joint position</param>
-        public JointTarget(string name, RobotJointPosition robJointPosition)
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="robotJointPosition"> The robot joint position. </param>
+        public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _referenceType = ReferenceType.CONST;
             _name = name;
-            _robJointPosition = robJointPosition;
-            _extJointPosition = new ExternalJointPosition();
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = new ExternalJointPosition();
         }
 
 
         /// <summary>
-        /// Defines a joint target with an undefined external joint position
+        /// Initializes a new instance of the Joint Target class.
         /// </summary>
-        /// <param name="name">Joint target name, must be unique.</param>
-        /// <param name="axisValues">The rob joint position defined as a list with axis values</param>
-        public JointTarget(string name, List<double> axisValues)
+        /// <param name="name"> The target name, must be unique.</param>
+        /// <param name="robotJointPosition"> The Robot Joint Position</param>
+        /// <param name="externalJointPosition"> The External Joint Position</param>
+        public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _referenceType = ReferenceType.CONST;
             _name = name;
-            _robJointPosition = new RobotJointPosition(axisValues);
-            _extJointPosition = new ExternalJointPosition();
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = externalJointPosition;
         }
 
         /// <summary>
-        /// Defines a joint target
+        /// Initializes a new instance of the Joint Target class by duplicating an existing Joint Target instance. 
         /// </summary>
-        /// <param name="name">Joint target name, must be unique.</param>
-        /// <param name="robJointPosition">The robot joint position</param>
-        /// <param name="extJointPosition">The external joint position</param>
-        public JointTarget(string name, RobotJointPosition robJointPosition, ExternalJointPosition extJointPosition)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _robJointPosition = robJointPosition;
-            _extJointPosition = extJointPosition;
-        }
-
-        /// <summary>
-        /// Defines a joint target
-        /// </summary>
-        /// <param name="name">Joint target name, must be unique.</param>
-        /// <param name="internalAxisValues">The robot joint position as a list with axis values</param>
-        /// <param name="externalAxisValues">The external joint position as a list wiht axis values</param>
-        public JointTarget(string name, List<double> internalAxisValues, List<double> externalAxisValues)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = name;
-            _robJointPosition = new RobotJointPosition(internalAxisValues);
-            _extJointPosition = new ExternalJointPosition(externalAxisValues);
-        }
-
-        /// <summary>
-        /// Creates a new joint target by duplicating an existing joint target. 
-        /// This creates a deep copy of the existing joint target. 
-        /// </summary>
-        /// <param name="jointTarget"> The joint target that should be duplicated. </param>
+        /// <param name="jointTarget"> The Joint Target instance to duplicate. </param>
         public JointTarget(JointTarget jointTarget)
         {
             _referenceType = jointTarget.ReferenceType;
             _name = jointTarget.Name;
-            _robJointPosition = jointTarget.RobotJointPosition.Duplicate();
-            _extJointPosition = jointTarget.ExternalJointPosition.Duplicate();
+            _robotJointPosition = jointTarget.RobotJointPosition.Duplicate();
+            _externalJointPosition = jointTarget.ExternalJointPosition.Duplicate();
         }
 
         /// <summary>
-        /// Method to duplicate the Joint Target object.
+        /// Returns an exact duplicate of this Joint Target instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the Joint Target object.</returns>
+        /// <returns> A deep copy of the Joint Target instance. </returns>
         public JointTarget Duplicate()
         {
             return new JointTarget(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Joint Target object to an ITarget object. 
+        /// Returns an exact duplicate of this Joint Target instance as an ITarget. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Joint Target object as an ITarget object. </returns>
+        /// <returns> A deep copy of the Joint Target instance as an ITarget. </returns>
         public ITarget DuplicateTarget()
         {
             return new JointTarget(this) as ITarget;
         }
 
         /// <summary>
-        /// A method to duplicate the Joint Target object to an Action object. 
+        /// Returns an exact duplicate of this Joint Target instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Joint Target object as an Action object. </returns>
+        /// <returns> A deep copy of the Joint Target instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new JointTarget(this) as Action;
@@ -209,7 +181,7 @@ namespace RobotComponents.Actions
             // Check internal axis values
             for (int i = 0; i < 6; i++)
             {
-                if (robot.InternalAxisLimits[i].IncludesParameter(_robJointPosition[i], false) == false)
+                if (robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
                     errors.Add("Joint Target  " + _name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
                 }
@@ -234,12 +206,12 @@ namespace RobotComponents.Actions
                 int number = robot.ExternalAxes[i].AxisNumber;
                 char logic = robot.ExternalAxes[i].AxisLogic;
 
-                if (_extJointPosition[number] == 9e9)
+                if (_externalJointPosition[number] == 9e9)
                 {
                     errors.Add("Joint Target " + _name + ": External axis value " + logic + " is not definied (9E9).");
                 }
 
-                else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_extJointPosition[number], false) == false)
+                else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
                     errors.Add("Joint Target " + _name + ": External axis value " + logic + " is not in range.");
                 }
@@ -249,38 +221,39 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string code = Enum.GetName(typeof(ReferenceType), _referenceType);
             code += " jointtarget ";
             code += _name;
             code += " := [";
-            code += _robJointPosition.ToRAPIDDeclaration(robot);
+            code += _robotJointPosition.ToRAPIDDeclaration(robot);
             code += ", ";
-            code += _extJointPosition.ToRAPIDDeclaration(robot);
+            code += _externalJointPosition.ToRAPIDDeclaration(robot);
             code += "];";
 
             return code;
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             if (!RAPIDGenerator.Targets.ContainsKey(_name))
@@ -291,9 +264,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -301,7 +275,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -341,8 +315,8 @@ namespace RobotComponents.Actions
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
-            get { return _robJointPosition; }
-            set { _robJointPosition = value; }
+            get { return _robotJointPosition; }
+            set { _robotJointPosition = value; }
         }
 
         /// <summary>
@@ -350,8 +324,8 @@ namespace RobotComponents.Actions
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {
-            get { return _extJointPosition; }
-            set { _extJointPosition = value; }
+            get { return _externalJointPosition; }
+            set { _externalJointPosition = value; }
         }
         #endregion
     }

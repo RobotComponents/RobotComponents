@@ -46,7 +46,7 @@ namespace RobotComponents.Actions
         double this[int index] { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether the joint position array has a fixed size.
+        /// Gets a value indicating whether or not the joint position array has a fixed size.
         /// </summary>
         bool IsFixedSize { get; }
         #endregion

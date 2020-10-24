@@ -25,15 +25,22 @@ namespace RobotComponents.Definitions
 
         #region constructors
         /// <summary>
-        /// A method to duplicate the object as an ExternalAxis type
+        /// Initializes an empty instance of the External Axis class. 
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalAxis object. </returns>
+        public ExternalAxis()
+        {
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this External Axis.
+        /// </summary>
+        /// <returns> A deep copy of the External Axis. </returns>
         public abstract ExternalAxis DuplicateExternalAxis();
 
         /// <summary>
-        /// A method to duplicate the object as an ExternalAxis type with an empty mesh.
+        /// Returns an exact duplicate of this External Axis without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalAxis object with empty meshes. </returns>
+        /// <returns> A deep copy of the External Axis without meshes. </returns>
         public abstract ExternalAxis DuplicateExternalAxisWithoutMesh();
         #endregion
 
@@ -107,7 +114,8 @@ namespace RobotComponents.Definitions
         /// Calculates the position of the external axis mesh for a defined external axis value.
         /// </summary>
         /// <param name="axisValue"> The external axis value to calculate the position of the meshes for. </param>
-        public abstract void PoseMeshes(double axisValue);
+        /// <returns> The posed meshes. </returns>
+        public abstract List<Mesh> PoseMeshes(double axisValue);
 
         /// <summary>
         /// Transforms the linear axis spatial properties (planes and meshes). 
@@ -118,12 +126,12 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public abstract bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the axis name. 
+        /// Gets or sets the external axis name. 
         /// </summary>
         public abstract string Name { get; set; }
 
@@ -133,7 +141,7 @@ namespace RobotComponents.Definitions
         public abstract Interval AxisLimits { get; set; }
 
         /// <summary>
-        /// Gets or sets the axis type.
+        /// Gets the Axis Type.
         /// </summary>
         public abstract AxisType AxisType { get; }
 
@@ -165,17 +173,17 @@ namespace RobotComponents.Definitions
         public abstract Mesh BaseMesh { get; set; }
 
         /// <summary>
-        /// Gets or sets the movable link mesh of the external axis posed for external axis value 0. 
+        /// Gets or sets the movable link mesh of the external axis posed for external axis value set to 0. 
         /// </summary>
         public abstract Mesh LinkMesh { get; set; }
 
         /// <summary>
-        /// Gets the posed axis meshes.
+        /// Gets latest calculated posed axis meshes.
         /// </summary>
         public abstract List<Mesh> PosedMeshes { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this External Axis moves the Robot.
+        /// Gets a value indicating whether or not this External Axis moves the Robot.
         /// </summary>
         public abstract bool MovesRobot { get; }
         #endregion

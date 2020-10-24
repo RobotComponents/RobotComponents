@@ -90,16 +90,15 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Defines an empty ZoneData object. 
+        /// Initializes an empty instance of the Zone Data class.
         /// </summary>
         public ZoneData()
         {
         }
 
         /// <summary>
-        /// Constructor for creating a predefined ZoneData. 
-        /// ABB defined already a number of zone data in the system module.
-        /// Use -1 to define a fine point. 
+        /// Initializes a new instance of the Zone Data class with predefined values.
+        /// Use -1 to define a fine point.
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
@@ -158,9 +157,8 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructor for creating a predefined ZoneData. 
-        /// ABB defined already a number of zone data in the system module.
-        /// Use -1 to define a fine point. 
+        /// Initializes a new instance of the Zone Data class with predefined values.
+        /// Use -1 to define a fine point.
         /// </summary>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
@@ -219,9 +217,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines a custom ZoneData.
+        /// Initializes a new instance of the Zone Data class with custom values.
         /// </summary>
-        /// <param name="name"> The ZoneData variable name. </param>
+        /// <param name="name"> The Zone Data variable name, must be unique. </param>
         /// <param name="finep"> Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point. </param>
         /// <param name="pzone_tcp"> The size (the radius) of the TCP zone in mm. </param>
         /// <param name="pzone_ori"> The zone size (the radius) for the tool reorientation. </param>
@@ -246,10 +244,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new zonedata by duplicating an existing zonedata. 
-        /// This creates a deep copy of the existing zonedata. 
+        /// Initializes a new instance of the Zone Data class by duplicating an existing Zone Data instance. 
         /// </summary>
-        /// <param name="zonedata"> The speeddata that should be duplicated. </param>
+        /// <param name="zonedata"> The Zone Data instance to duplicate. </param>
         public ZoneData(ZoneData zonedata)
         {
             _referenceType = zonedata.ReferenceType;
@@ -266,18 +263,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Duplicates a ZoneData object
+        /// Returns an exact duplicate of this Zone Data instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the ZoneData object. </returns>
+        /// <returns> A deep copy of the Zone Data instance. </returns>
         public ZoneData Duplicate()
         {
             return new ZoneData(this);
         }
 
         /// <summary>
-        /// A method to duplicate the ZoneData object to an Action object. 
+        /// Returns an exact duplicate of this Zone Data instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the ZoneData object as an Action object. </returns>
+        /// <returns> A deep copy of the Zone Data instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new ZoneData(this) as Action;
@@ -306,10 +303,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false)
@@ -337,19 +334,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             if (_predefined == false)
@@ -364,9 +362,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -374,7 +373,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {

@@ -18,7 +18,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Represents several Move instructions. 
+    /// Represents several Move instructions (MoveAbsJ, MoveL, MoveJ, MoveLDO and MoveJDO). 
     /// </summary>
     [Serializable()]
     public class Movement : Action, ISerializable
@@ -78,17 +78,17 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// An empty movement constructor.
+        /// Initializes an empty instance of the Movement class.
         /// </summary>
         public Movement()
         {
         }
 
         /// <summary>
-        /// Constructs robot movement with as only argument a robot target. 
-        /// This constructor is typically used to cast a robot target to a robot movement. 
+        /// Initializes a new instance of the Movement class.
+        /// This constructor is typically used to cast a Robot Target to a movement. 
         /// </summary>
-        /// <param name="target"> The target as a Target. </param>
+        /// <param name="target"> The Target. /param>
         public Movement(ITarget target)
         {
             _movementType = 0;
@@ -103,11 +103,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override), a default Work Object (wobj0) and an empty Digital Output. 
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
+        /// <param name="movementType"> The Movmement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData)
         {
             _movementType = movementType;
@@ -123,12 +123,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and an empty digital output. 
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override), a default Work Object (wobj0) and an empty Digital Output. 
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData)
         {
             _movementType = movementType;
@@ -144,12 +144,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty digital output, a default work object (wobj0) and a empty robot tool (no override).
+        /// Initializes a new instance of the Movement class with a default Work object (wobj0) and an empty Digital Output.
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovemenType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool)
         {
@@ -165,13 +165,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty digital output, an empty robot tool (no override) and a user definied work object. 
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and an empty Digital Output.
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
-        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="workObject"> The Work Object. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, WorkObject workObject)
         {
             _movementType = movementType;
@@ -187,13 +187,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty robot tool (no override), a default work object (wobj0) and user definied digital output. 
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
-        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data.</param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
@@ -209,14 +209,14 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with an empty digital output.
+        /// Initializes a new instance of the Movement class with an empty Digital Output.
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Taret. </param>
+        /// <param name="speedData"> The Speed Data. /param>
+        /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="workObject"> The Work Object as a Work Object </param>
+        /// <param name="workObject"> The Work Object. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject)
         {
             _movementType = movementType;
@@ -231,14 +231,14 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement with a default work object (wobj0). 
+        /// Initializes a new instance of the Movement class with a default Work Object (wobj0). 
         /// </summary>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
@@ -253,15 +253,15 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Constructs a robot movement. 
+        /// Initializes a new instance of the Movement class.
         /// </summary>
-        /// <param name="movementType"> The movement type as a MovementType. </param>
-        /// <param name="target"> The target as a Target. </param>
-        /// <param name="speedData"> The SpeedData as a SpeedData </param>
-        /// <param name="zoneData"> The ZoneData as a ZoneData </param>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="workObject"> The Work Object as a Work Object </param>
-        /// <param name="digitalOutput"> A Digital Output as a Digital Output. When set this will define a MoveLDO or a MoveJDO. </param>
+        /// <param name="workObject"> The Work Object. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
@@ -276,11 +276,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new movement by duplicating an existing movement. 
-        /// This creates a deep copy of the existing movement. 
+        /// Initializes a new instance of the Movement class by duplicating an existing Movement instance. 
         /// </summary>
-        /// <param name="movement"> The movement that should be duplicated. </param>
-        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        /// <param name="movement"> The Movement instance to duplicate. </param>
+        /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public Movement(Movement movement, bool duplicateMesh = true)
         {
             _movementType = movement.MovementType;
@@ -303,28 +302,27 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Duplicates a robot movement.
+        /// Returns an exact duplicate of this Movement instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the Movement object. </returns>
+        /// <returns> A deep copy of the Movement instance. </returns>
         public Movement Duplicate()
         {
             return new Movement(this);
         }
 
         /// <summary>
-        /// Duplicates a robot movement without meshes that are part of the properties.
-        /// Such as the robot tool meshes and the meshes of the external axis that can be attached to the work object. 
+        /// Returns an exact duplicate of this Movement instance without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy of the Movement object. </returns>
+        /// <returns> A deep copy of the Movement instance. </returns>
         public Movement DuplicateWithoutMesh()
         {
             return new Movement(this, false);
         }
 
         /// <summary>
-        /// A method to duplicate the Movement object to an Action object. 
+        /// Returns an exact duplicate of this Movement instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Movement object as an Action object. </returns>
+        /// <returns> A deep copy of the Movement instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new Movement(this) as Action;
@@ -466,20 +464,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return String.Empty;
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             // Set tool name
@@ -665,9 +663,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
             // Generate the code for the zone and speeddata
@@ -727,9 +726,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
@@ -750,7 +750,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Gets a value indicating whether the object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {

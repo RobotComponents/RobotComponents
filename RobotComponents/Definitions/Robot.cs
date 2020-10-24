@@ -247,15 +247,21 @@ namespace RobotComponents.Definitions
             }
 
             // Check list with external axes: maximum of one external linear axis is allowed at the moment
-            if (_externalAxes.Count(item => item is ExternalLinearAxis) > 1)
+            if (_externalAxes.Count(item => item.MovesRobot is true) > 1)
             {
-                throw new ArgumentException("At the moment RobotComponents supports a maximum of one external linear axis.");
+                throw new ArgumentException("At the moment Robot Components supports a maximum of one external linear axis.");
             }
 
-            // Assign axis logic number
             for (int i = 0; i < _externalAxes.Count; i++)
             {
-                _externalAxes[i].AxisNumber = i;
+                if (_externalAxes[i].AxisNumber == -1)
+                {
+                    _externalAxes[i].AxisNumber = i;
+                }
+                else if (!_externalAxes[i].IsValid)
+                {
+                    throw new ArgumentException(String.Format("External Axis {0} ({1}): The set attached External Axis is not valid.", _externalAxes[i].AxisLogic, _externalAxes[i].Name));
+                }
             }
 
             // Clear the lists

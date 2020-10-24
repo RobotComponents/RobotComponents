@@ -654,11 +654,12 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i < _robotInfo.ExternalAxes.Count; i++)
             {
-                int logic = _robotInfo.ExternalAxes[i].AxisNumber;
+                int number = _robotInfo.ExternalAxes[i].AxisNumber;
+                char logic = _robotInfo.ExternalAxes[i].AxisLogic;
 
-                if (_robotInfo.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
+                if (_robotInfo.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + logic + " is not in range.");
                     _inLimits = false;
                 }
             }

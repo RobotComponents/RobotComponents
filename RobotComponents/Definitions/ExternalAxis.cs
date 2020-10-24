@@ -150,9 +150,14 @@ namespace RobotComponents.Definitions
         public abstract Plane AxisPlane { get; set; }
 
         /// <summary>
-        /// Gets or sets the axis logic as number.
+        /// Gets or sets the axis logic as a number (-1, 0, 1, 2, 3, 4, 5).
         /// </summary>
         public abstract int AxisNumber { get; set; }
+
+        /// <summary>
+        /// Gets the axis logic as a char (-, A, B, C, E, E, F).
+        /// </summary>
+        public abstract char AxisLogic { get; }
 
         /// <summary>
         /// Gets or sets the fixed base mesh of the external axis. 
@@ -168,6 +173,11 @@ namespace RobotComponents.Definitions
         /// Gets the posed axis meshes.
         /// </summary>
         public abstract List<Mesh> PosedMeshes { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this External Axis moves the Robot.
+        /// </summary>
+        public abstract bool MovesRobot { get; }
         #endregion
     }
 }

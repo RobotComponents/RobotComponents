@@ -479,12 +479,33 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The logic number of the external axis. 
+        /// Gets or sets the axis logic as a number (-1, 0, 1, 2, 3, 4, 5). 
         /// </summary>
         public override int AxisNumber
         {
             get { return _axisNumber; }
             set { _axisNumber = value; }
+        }
+
+        /// <summary>
+        /// Gets the axis logic as a char (-, A, B, C, D, E, F).
+        /// </summary>
+        public override char AxisLogic
+        {
+            get
+            {
+                switch (_axisNumber)
+                {
+                    case -1: return '-';
+                    case 0: return 'A';
+                    case 1: return 'B';
+                    case 2: return 'C';
+                    case 3: return 'D';
+                    case 4: return 'E';
+                    case 5: return 'F';
+                    default: return '-';
+                }
+            }
         }
 
         /// <summary>
@@ -533,6 +554,14 @@ namespace RobotComponents.Definitions
         public override List<Mesh> PosedMeshes 
         { 
             get { return _posedMeshes; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this External Rotational Axis moves the Robot.
+        /// </summary>
+        public override bool MovesRobot
+        {
+            get { return false; }
         }
         #endregion
     }

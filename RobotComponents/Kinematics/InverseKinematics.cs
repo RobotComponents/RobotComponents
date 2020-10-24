@@ -488,42 +488,72 @@ namespace RobotComponents.Kinematics
 
             if (_target is RobotTarget robotTarget)
             {
-                double count = 0;
+                // NOTE: Only works for a robot with one external axis that moves the robot.
+                double count = 0; // Counts the number of external axes that move the robot.
 
-                // NOTE: Only works for a robot info with an maximum of one external linear axis
-
-                // Add the external axis values to the list with external axis values
+                // Calcualtes the external axis values for each external axis
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
-                    int logic = _robot.ExternalAxes[i].AxisNumber;
+                    ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                    Interval axisLimits = _robot.ExternalAxes[i].AxisLimits;
+                    int logic = externalAxis.AxisNumber;
 
-                    // Check if the axis is an external linear axis
-                    if (_robot.ExternalAxes[i] is ExternalLinearAxis externalLinearAxis && count == 0)
+                    // External Linear axis
+                    if (externalAxis is ExternalLinearAxis externalLinearAxis)
                     {
-                        // Checks if external linear axis value needs to be negative or positive
-                        externalLinearAxis.AxisCurve.ClosestPoint(_robot.BasePlane.Origin, out double robotBasePlaneParam);
-                        externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
-
-                        if (basePlaneParam >= robotBasePlaneParam)
+                        // External Linear Axis that moves the robot
+                        if (externalLinearAxis.MovesRobot == true && count == 0)
                         {
-                            _externalJointPosition[logic] = _positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            // Checks if external linear axis value needs to be negative or positive
+                            externalLinearAxis.AxisCurve.ClosestPoint(_robot.BasePlane.Origin, out double robotBasePlaneParam);
+                            externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
+
+                            if (basePlaneParam >= robotBasePlaneParam)
+                            {
+                                _externalJointPosition[logic] = _positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            }
+
+                            else
+                            {
+                                _externalJointPosition[logic] = -_positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            }
+
+                            count += 1;
                         }
 
+                        // External Linear axis that does not move the robot
                         else
                         {
-                            _externalJointPosition[logic] = -_positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            if (robotTarget.ExternalJointPosition[logic] == 9e9)
+                            {
+                                _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                            }
+                            else
+                            {
+                                _externalJointPosition[logic] = robotTarget.ExternalJointPosition[logic];
+                            }
                         }
-
-                        count += 1;
                     }
 
-                    // If an other type of axis is used or we already set the value for one external linear axis
-                    // we set as solution an external axis value of 0 or we use the user defined external axis value. 
+                    // External Rotational Axis
+                    else if (externalAxis is ExternalRotationalAxis)
+                    {
+                        if (robotTarget.ExternalJointPosition[logic] == 9e9)
+                        {
+                            _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                        }
+                        else
+                        {
+                            _externalJointPosition[logic] = robotTarget.ExternalJointPosition[logic];
+                        }
+                    }
+
+                    // Other External Axis types
                     else
                     {
                         if (robotTarget.ExternalJointPosition[logic] == 9e9)
                         {
-                            _externalJointPosition[logic] = 0;
+                            _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
                         }
                         else
                         {
@@ -533,9 +563,10 @@ namespace RobotComponents.Kinematics
                 }
             }
 
+            // Joint Target
             else
             {
-                _externalJointPosition = _target.ExternalJointPosition;
+                _externalJointPosition = _target.ExternalJointPosition.Duplicate();
             }
         }
 
@@ -602,29 +633,64 @@ namespace RobotComponents.Kinematics
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
                 ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                Interval axisLimits = externalAxis.AxisLimits;
                 int logic = externalAxis.AxisNumber;
 
-                // Check if an external linear axis is used
-                if (externalAxis is ExternalLinearAxis externalLinearAxis)
+                // Moves Robot?
+                if (externalAxis.MovesRobot == true)
                 {
-                    // Calculate closest base plane if the used did not define an external axis value
-                    if (_target.ExternalJointPosition[logic] == 9e9)
+                    // An External Linear Axis that moves the robot
+                    if (externalAxis is ExternalLinearAxis externalLinearAxis)
                     {
-                        externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
-                        plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                        if (_target.ExternalJointPosition[logic] == 9e9)
+                        {
+                            externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
+                            plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                        }
+
+                        else
+                        {
+                            plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out _);
+                        }
                     }
 
-                    // Otherwise use the user definied external axis value
+                    // An External Rotational Axis that moves the robot
+                    else if (externalAxis is ExternalLinearAxis externalRotationalAxis)
+                    {
+                        double axisValue;
+
+                        if (_target.ExternalJointPosition[logic] == 9e9)
+                        {
+                            axisValue = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                        }
+                        else
+                        {
+                            axisValue = _target.ExternalJointPosition[logic];
+                        }
+
+                        plane = externalRotationalAxis.CalculatePosition(axisValue, out _);
+                    }
+
+                    // Other External Axis types that move the robot
                     else
                     {
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out _);
+                        double axisValue;
+
+                        if (_target.ExternalJointPosition[logic] == 9e9)
+                        {
+                            axisValue = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                        }
+                        else
+                        {
+                            axisValue = _target.ExternalJointPosition[logic];
+                        }
+
+                        plane = externalAxis.CalculatePosition(axisValue, out _);
                     }
 
-                    // Break the loop since it should only work for one external linear axis.
+                    // Break the loop since one axternal axis can move the robot.
                     break;
                 }
-
-                // NOTE: We do nothing here when an external rotational axis is used. 
             }
 
             // Returns the position plane of the robot

@@ -347,7 +347,7 @@ namespace RobotComponents.Definitions
         {
             Line line = new Line(_attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Min, _attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Max);
             _axisCurve = line.ToNurbsCurve();
-            _axisCurve.Domain = new Interval(0, 1);
+            _axisCurve.Domain = _axisLimits;
         }
 
         /// <summary>
@@ -645,7 +645,7 @@ namespace RobotComponents.Definitions
 
         /// <summary>
         /// Gets the axis curve. 
-        /// The direction of the curve defines the movement direction and the spatial limits of the attachement plane. .
+        /// The direction of the curve defines the movement direction and the spatial limits of the attachement plane.
         /// </summary>
         public Curve AxisCurve 
         { 

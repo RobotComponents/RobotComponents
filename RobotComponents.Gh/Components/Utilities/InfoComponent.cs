@@ -26,15 +26,41 @@ namespace RobotComponents.Gh.Components.Utilities
         public InfoComponent()
           : base("Info", "I",
               "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinoceros Grasshopper. " 
-                + "This open source project is initiated by the chair of Experimental and Digital Design and Construction of the University of Kassel "
-                + "led by Prof.Eversmann. The technical development is initiated and executed by the research associates and student assistants. "
+                + "This open source project is initiated by the chair of Experimental and Digital Design and Construction "
+                + "of the University of Kassel led by Prof. Eversmann. The technical development is initiated and executed "
+                + "by the research associates and student assistants."
                 + Environment.NewLine 
                 + Environment.NewLine 
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Copyright (c) 2018-2020 The Robot Components authors and / or their affiliations"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components is free software; you can redistribute it and/or modify it under "
+                + "the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; " 
+                + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+                + "See the GNU General Public License for more details."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "You should have received a copy of the GNU General Public License along with Robot Components; "
+                + "If not, see http://www.gnu.org/licenses/."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
                 + "More information can be found here: " 
                 + Environment.NewLine 
                 + "https://github.com/RobotComponents/RobotComponents/"
                 + System.Environment.NewLine 
                 + System.Environment.NewLine
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
                 + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {

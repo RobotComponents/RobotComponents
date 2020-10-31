@@ -257,7 +257,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             if (_programPointerWarning == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The program pointer could not be reset. Check the program modules that are defined" +
-                    " in your controller. Probably you defined two main functions or there are other erros in your RAPID code.");
+                    " in your controller. Probably you defined two main functions or there are other errors in your RAPID code.");
             }
 
             // Output

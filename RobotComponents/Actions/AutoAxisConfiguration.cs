@@ -5,60 +5,89 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Auto Axis Configuration Class, sets Auto Axis Configuration to True or False.
+    /// Represents the Auto Axis Configuration instruction. 
+    /// This action is used to switch on or off the monitoring of movements.  
     /// </summary>
-    public class AutoAxisConfig : Action
+    [Serializable()]
+    public class AutoAxisConfig : Action, ISerializable
     {
         #region fields
         private bool _isActive; // boolean that indicates if the auto axis configuration is active
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object. 
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected AutoAxisConfig(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Is Active", _isActive, typeof(bool));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// Defines an empty Auto Axis Configuration object.
+        /// Initializes an empty instance of the Auto Axis Configuration class. 
         /// </summary>
         public AutoAxisConfig()
         {
         }
 
         /// <summary>
-        /// Defines an Auto Axis configuration.
+        /// Initializes a new instance of the Auto Axis Configuration class. 
         /// </summary>
-        /// <param name="isActive">Bool that enables (true) or disables (false) the auto axis configuration.</param>
+        /// <param name="isActive"> Specifies whether the Auto Axis Configuraion is enabled. </param>
         public AutoAxisConfig(bool isActive)
         {
             _isActive = isActive;
         }
 
         /// <summary>
-        /// Creates a new auto axis configuration by duplicating an existing auto axis configuration. 
-        /// This creates a deep copy of the existing auto axis configuration 
+        /// Initializes a new instance of the Auto Axis Configuration class by duplicating an existing Auto Axis Configuration instance. 
         /// </summary>
-        /// <param name="config"> The auto axis configuration that should be duplicated. </param>
+        /// <param name="config"> The Auto Axis Configuration instance to duplicate. </param>
         public AutoAxisConfig(AutoAxisConfig config)
         {
             _isActive = config.IsActive;
         }
 
         /// <summary>
-        /// A method to duplicate the AutoAxisConfiguration object.
+        /// Returns an exact duplicate of this Auto Axis Configuration instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the AutoAxisConfiguration object. </returns>
+        /// <returns> A deep copy of the Auto Axis Configuration instance. </returns>
         public AutoAxisConfig Duplicate()
         {
             return new AutoAxisConfig(this);
         }
 
         /// <summary>
-        /// A method to duplicate the AutoAxisConfiguration object to an Action object. 
+        /// Returns an exact duplicate of this Auto Axis Configuration instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the AutoAxisConfiguration object as an Action object. </returns>
+        /// <returns> A deep copy of the Auto Axis Configuration instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new AutoAxisConfig(this) as Action;
@@ -87,20 +116,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             if (_isActive == true)
@@ -114,17 +143,19 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             if (_isActive == true)
@@ -142,7 +173,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the AutoAxisConfiguration object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -150,7 +181,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A boolean that indicates if the auto axis configruation is enabled.
+        /// Gets or set a value indicating whether Auto Axis Configuration is active. 
         /// </summary>
         public bool IsActive
         {

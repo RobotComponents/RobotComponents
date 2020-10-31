@@ -6,17 +6,20 @@
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using GH_IO;
+using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Gh.Goos.Definitions
 {
     /// <summary>
     /// Robot Goo wrapper class, makes sure the Robot class can be used in Grasshopper.
     /// </summary>
-    public class GH_Robot : GH_GeometricGoo<Robot>, IGH_PreviewData
+    public class GH_Robot : GH_GeometricGoo<Robot>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
@@ -152,18 +155,18 @@ namespace RobotComponents.Gh.Goos.Definitions
                     }
 
                     // Make the bounding box of the external axes
-                    for (int i = 0; i != Value.ExternalAxis.Count; i++)
+                    for (int i = 0; i != Value.ExternalAxes.Count; i++)
                     {
-                        if (Value.ExternalAxis[i].IsValid == true)
+                        if (Value.ExternalAxes[i].IsValid == true)
                         {
-                            if (Value.ExternalAxis[i].BaseMesh != null)
+                            if (Value.ExternalAxes[i].BaseMesh != null)
                             {
-                                MeshBoundingBox.Union(Value.ExternalAxis[i].BaseMesh.GetBoundingBox(true));
+                                MeshBoundingBox.Union(Value.ExternalAxes[i].BaseMesh.GetBoundingBox(true));
                             }
 
-                            if (Value.ExternalAxis[i].LinkMesh != null)
+                            if (Value.ExternalAxes[i].LinkMesh != null)
                             {
-                                MeshBoundingBox.Union(Value.ExternalAxis[i].LinkMesh.GetBoundingBox(true));
+                                MeshBoundingBox.Union(Value.ExternalAxes[i].LinkMesh.GetBoundingBox(true));
                             }
                         }
                     }
@@ -293,18 +296,18 @@ namespace RobotComponents.Gh.Goos.Definitions
             }
 
             // External axis meshes
-            for (int i = 0; i != Value.ExternalAxis.Count; i++)
+            for (int i = 0; i != Value.ExternalAxes.Count; i++)
             {
-                if (Value.ExternalAxis[i].IsValid == true)
+                if (Value.ExternalAxes[i].IsValid == true)
                 {
-                    if (Value.ExternalAxis[i].BaseMesh != null)
+                    if (Value.ExternalAxes[i].BaseMesh != null)
                     {
-                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
 
-                    if (Value.ExternalAxis[i].LinkMesh != null)
+                    if (Value.ExternalAxes[i].LinkMesh != null)
                     {
-                        args.Pipeline.DrawMeshShaded(Value.ExternalAxis[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        args.Pipeline.DrawMeshShaded(Value.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
                     }
                 }
             }
@@ -317,6 +320,48 @@ namespace RobotComponents.Gh.Goos.Definitions
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
 
+        }
+        #endregion
+
+        #region (de)serialisation
+        /// <summary>
+        /// IO key for (de)serialisation of the value inside this Goo.
+        /// </summary>
+        private const string IoKey = "Robot";
+
+        /// <summary>
+        /// This method is called whenever the instance is required to serialize itself.
+        /// </summary>
+        /// <param name="writer"> Writer object to serialize with. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            if (this.Value != null)
+            {
+                byte[] array = HelperMethods.ObjectToByteArray(this.Value);
+                writer.SetByteArray(IoKey, array);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// This method is called whenever the instance is required to deserialize itself.
+        /// </summary>
+        /// <param name="reader"> Reader object to deserialize from. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            if (!reader.ItemExists(IoKey))
+            {
+                this.Value = null;
+                return true;
+            }
+
+            byte[] array = reader.GetByteArray(IoKey);
+            this.Value = (Robot)HelperMethods.ByteArrayToObject(array);
+
+            return true;
         }
         #endregion
     }

@@ -17,13 +17,12 @@ using RobotComponents.Definitions;
 namespace RobotComponents.Kinematics
 {
     /// <summary>
-    /// Inverse Kinematics class, defines the basic properties and methods for 
-    /// the inverse kinematics of a 6-axis robot and the attached external axes.
+    /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
     public class InverseKinematics
     {
         #region fields
-        private Robot _robotInfo;
+        private Robot _robot;
         private RobotTool _robotTool;
         private Movement _movement;
         private ITarget _target;
@@ -38,14 +37,14 @@ namespace RobotComponents.Kinematics
         private double _axis4offsetAngle;
         private readonly List<string> _errorText = new List<string>(); // Error text
         private bool _inLimits = true; // Indicates if the axis values are in limits 
-        private RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
         private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty Inverse Kinematics object
+        /// Initializes an empty instance of the Inverse Kinematics class.
         /// </summary>
         public InverseKinematics()
         {
@@ -56,13 +55,13 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Initiatize an inverse kinematics from a robot movement and robot info.
+        /// Initializes a new instance of the Inverse Kinematics class from a Movement.
         /// </summary>
-        /// <param name="movement"> The robot movement to calculated the axis values for. </param>
-        /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(Movement movement, Robot robotInfo)
+        /// <param name="movement"> The Movement. </param>
+        /// <param name="robot"> The Robot. </param>
+        public InverseKinematics(Movement movement, Robot robot)
         {
-            _robotInfo = robotInfo;
+            _robot = robot;
             _movement = movement;
 
             for (int i = 0; i < 8; i++)
@@ -74,14 +73,14 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Initiatize an inverse kinematics from a robot target and robot info.
-        /// The target will be casted to robot movement with wobj0. 
+        /// Initializes a new instance of the Inverse Kinematics class from a Target.
+        /// The target will be casted to robot movement with a default work object (wobj0). 
         /// </summary>
-        /// <param name="target"> The target to calculated the axis values for. </param>
-        /// <param name="robotInfo"> The robot info to calcilated the axis values for. </param>
-        public InverseKinematics(ITarget target, Robot robotInfo)
+        /// <param name="target"> The Target </param>
+        /// <param name="robot"> The Robot. </param>
+        public InverseKinematics(ITarget target, Robot robot)
         {
-            _robotInfo = robotInfo;
+            _robot = robot;
             _movement = new Movement(target);
 
             for (int i = 0; i < 8; i++)
@@ -93,13 +92,12 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Creates a new inverse kinematics by duplicating an existing inverse kinematics.
-        /// This creates a deep copy of the existing inverse kinematics.
+        /// Initializes a new instance of the Inverse Kinematics class by duplicating an existing Inverse Kinematics instance. 
         /// </summary>
-        /// <param name="inverseKinematics"> The inverse kinematics that should be duplicated. </param>
+        /// <param name="inverseKinematics"> The Inverse Kinematics instance to duplicate. </param>
         public InverseKinematics(InverseKinematics inverseKinematics)
         {
-            _robotInfo = inverseKinematics.RobotInfo.Duplicate();
+            _robot = inverseKinematics.Robot.Duplicate();
             _movement = inverseKinematics.Movement.Duplicate();
 
             for (int i = 0; i < 8; i++)
@@ -117,9 +115,9 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// A method to duplicate the Inverse Kinematics object.
+        /// Returns an exact duplicate of this Inverse Kinematics instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the Inverse Kinematics object. </returns>
+        /// <returns> A deep copy of the Inverse Kinematics instance. </returns>
         public InverseKinematics Duplicate()
         {
             return new InverseKinematics(this);
@@ -151,7 +149,7 @@ namespace RobotComponents.Kinematics
             // Check robot tool: override if the movement contains a robot tool
             if (_movement.RobotTool == null)
             {
-                _robotTool = _robotInfo.Tool;
+                _robotTool = _robot.Tool;
             }
             // Check if the set tool is not empty
             else if (_movement.RobotTool.Name != "" && _movement.RobotTool.Name != null) //TODO: RobotTool.IsValid is maybe better?
@@ -161,7 +159,7 @@ namespace RobotComponents.Kinematics
             // Otherwise use the tool that is attached to the robot
             else
             {
-                _robotTool = _robotInfo.Tool;
+                _robotTool = _robot.Tool;
             }
 
             // Movement related fields
@@ -172,14 +170,14 @@ namespace RobotComponents.Kinematics
                 // Calculate the position and the orientation of the target plane in the word coordinate system
                 // If there is an external axes connected to work object of the movement the 
                 // target plane will be re-oriented according to the pose of the this external axes. 
-                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robotInfo, out int logic);
+                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robot, out _);
 
                 // Update the base plane / position plane
                 _positionPlane = GetPositionPlane();
                 Transform trans = Transform.PlaneToPlane(_positionPlane, Plane.WorldXY);
 
                 // Needed for transformation from the robot world coordinate system to the local robot coordinate system
-                Transform orient = Transform.PlaneToPlane(_robotInfo.BasePlane, Plane.WorldXY);
+                Transform orient = Transform.PlaneToPlane(_robot.BasePlane, Plane.WorldXY);
 
                 // Orient the target plane to the robot coordinate system 
                 _targetPlane = ToolTransformation(_targetPlane, _robotTool.AttachmentPlane, _robotTool.ToolPlane);
@@ -188,9 +186,9 @@ namespace RobotComponents.Kinematics
 
                 // Deep copy and orient to internal axis planes of the robot. 
                 _axisPlanes = new List<Plane>();
-                for (int i = 0; i < _robotInfo.InternalAxisPlanes.Count; i++)
+                for (int i = 0; i < _robot.InternalAxisPlanes.Count; i++)
                 {
-                    Plane plane = new Plane(_robotInfo.InternalAxisPlanes[i]);
+                    Plane plane = new Plane(_robot.InternalAxisPlanes[i]);
                     plane.Transform(orient);
                     _axisPlanes.Add(plane);
                 }
@@ -222,8 +220,8 @@ namespace RobotComponents.Kinematics
             ClearCurrentSolutions();
             CalculateInternalAxisValues();
             CalculateExternalAxisValues();
-            CheckForInternalAxisLimits();
-            CheckForExternalAxisLimits();
+            CheckInternalAxisLimits();
+            CheckExternalAxisLimits();
         }
 
         /// <summary>
@@ -436,7 +434,7 @@ namespace RobotComponents.Kinematics
                 for (int j = 0; j < joint4.Length; j++)
                 {
                     // Check axis 4
-                    if (_robotInfo.InternalAxisLimits[3].IncludesParameter(_robotJointPositions[i][3] + joint4[j], false) == true)
+                    if (_robot.InternalAxisLimits[3].IncludesParameter(_robotJointPositions[i][3] + joint4[j], false) == true)
                     {
                         // Add value to axis 4
                         _robotJointPositions[i][3] += joint4[j];
@@ -444,7 +442,7 @@ namespace RobotComponents.Kinematics
                         for (int k = 0; k < joint6.Length; k++)
                         {
                             // Check axis 6
-                            if (_robotInfo.InternalAxisLimits[5].IncludesParameter(_robotJointPositions[i][5] + joint6[k], false) == true)
+                            if (_robot.InternalAxisLimits[5].IncludesParameter(_robotJointPositions[i][5] + joint6[k], false) == true)
                             {
                                 // Add value to axis 6
                                 _robotJointPositions[i][5] += joint6[k];
@@ -490,42 +488,72 @@ namespace RobotComponents.Kinematics
 
             if (_target is RobotTarget robotTarget)
             {
-                double count = 0;
+                // NOTE: Only works for a robot with one external axis that moves the robot.
+                double count = 0; // Counts the number of external axes that move the robot.
 
-                // NOTE: Only works for a robot info with an maximum of one external linear axis
-
-                // Add the external axis values to the list with external axis values
-                for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+                // Calcualtes the external axis values for each external axis
+                for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
-                    int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                    ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                    Interval axisLimits = _robot.ExternalAxes[i].AxisLimits;
+                    int logic = externalAxis.AxisNumber;
 
-                    // Check if the axis is an external linear axis
-                    if (_robotInfo.ExternalAxis[i] is ExternalLinearAxis externalLinearAxis && count == 0)
+                    // External Linear axis
+                    if (externalAxis is ExternalLinearAxis externalLinearAxis)
                     {
-                        // Checks if external linear axis value needs to be negative or positive
-                        externalLinearAxis.AxisCurve.ClosestPoint(_robotInfo.BasePlane.Origin, out double robotBasePlaneParam);
-                        externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
-
-                        if (basePlaneParam >= robotBasePlaneParam)
+                        // External Linear Axis that moves the robot
+                        if (externalLinearAxis.MovesRobot == true && count == 0)
                         {
-                            _externalJointPosition[logic] = _positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin);
+                            // Checks if external linear axis value needs to be negative or positive
+                            externalLinearAxis.AxisCurve.ClosestPoint(_robot.BasePlane.Origin, out double robotBasePlaneParam);
+                            externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
+
+                            if (basePlaneParam >= robotBasePlaneParam)
+                            {
+                                _externalJointPosition[logic] = _positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            }
+
+                            else
+                            {
+                                _externalJointPosition[logic] = -_positionPlane.Origin.DistanceTo(_robot.BasePlane.Origin);
+                            }
+
+                            count += 1;
                         }
 
+                        // External Linear axis that does not move the robot
                         else
                         {
-                            _externalJointPosition[logic] = -_positionPlane.Origin.DistanceTo(_robotInfo.BasePlane.Origin);
+                            if (robotTarget.ExternalJointPosition[logic] == 9e9)
+                            {
+                                _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                            }
+                            else
+                            {
+                                _externalJointPosition[logic] = robotTarget.ExternalJointPosition[logic];
+                            }
                         }
-
-                        count += 1;
                     }
 
-                    // If an other type of axis is used or we already set the value for one external linear axis
-                    // we set as solution an external axis value of 0 or we use the user defined external axis value. 
+                    // External Rotational Axis
+                    else if (externalAxis is ExternalRotationalAxis)
+                    {
+                        if (robotTarget.ExternalJointPosition[logic] == 9e9)
+                        {
+                            _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
+                        }
+                        else
+                        {
+                            _externalJointPosition[logic] = robotTarget.ExternalJointPosition[logic];
+                        }
+                    }
+
+                    // Other External Axis types
                     else
                     {
                         if (robotTarget.ExternalJointPosition[logic] == 9e9)
                         {
-                            _externalJointPosition[logic] = 0;
+                            _externalJointPosition[logic] = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
                         }
                         else
                         {
@@ -535,9 +563,10 @@ namespace RobotComponents.Kinematics
                 }
             }
 
+            // Joint Target
             else
             {
-                _externalJointPosition = _target.ExternalJointPosition;
+                _externalJointPosition = _target.ExternalJointPosition.Duplicate();
             }
         }
 
@@ -598,35 +627,47 @@ namespace RobotComponents.Kinematics
             // NOTE: Only works for a robot info with an maximum of one external linear axis
 
             // Deep copy the current position / base plane
-            Plane plane = new Plane(_robotInfo.BasePlane);
+            Plane plane = new Plane(_robot.BasePlane);
 
             // Check if an external axis is attached to the robot 
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
-                ExternalAxis externalAxis = _robotInfo.ExternalAxis[i];
-                int logic = (int)externalAxis.AxisNumber;
+                ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                int logic = externalAxis.AxisNumber;
 
-                // Check if an external linear axis is used
-                if (externalAxis is ExternalLinearAxis externalLinearAxis)
+                // Moves Robot?
+                if (externalAxis.MovesRobot == true)
                 {
-                    // Calculate closest base plane if the used did not define an external axis value
-                    if (_target.ExternalJointPosition[logic] == 9e9)
+                    // An External Linear Axis that moves the robot
+                    if (externalAxis is ExternalLinearAxis externalLinearAxis)
                     {
-                        externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
-                        plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                        if (_target.ExternalJointPosition[logic] == 9e9)
+                        {
+                            externalLinearAxis.AxisCurve.ClosestPoint(_targetPlane.Origin, out double param);
+                            plane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
+                        }
+
+                        else
+                        {
+                            plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition, out _);
+                        }
                     }
 
-                    // Otherwise use the user definied external axis value
+                    // An External Rotational Axis that moves the robot
+                    else if (externalAxis is ExternalLinearAxis externalRotationalAxis)
+                    {
+                        plane = externalRotationalAxis.CalculatePosition(_target.ExternalJointPosition, out _);
+                    }
+
+                    // Other External Axis types that move the robot
                     else
                     {
-                        plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out bool inLimits);
+                        plane = externalAxis.CalculatePosition(_target.ExternalJointPosition, out _);
                     }
 
-                    // Break the loop since it should only work for one external linear axis.
+                    // Break the loop since one axternal axis can move the robot.
                     break;
                 }
-
-                // NOTE: We do nothing here when an external rotational axis is used. 
             }
 
             // Returns the position plane of the robot
@@ -636,11 +677,11 @@ namespace RobotComponents.Kinematics
         /// <summary>
         /// Checks if the interal axis values are outside its limits.
         /// </summary>
-        private void CheckForInternalAxisLimits()
+        private void CheckInternalAxisLimits()
         {
             for (int i = 0; i < _robotJointPosition.Length; i++)
             {
-                if (_robotInfo.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
+                if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 { 
                     _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
@@ -651,15 +692,16 @@ namespace RobotComponents.Kinematics
         /// <summary>
         /// Checks if the external axis values are outside its limits.
         /// </summary>
-        private void CheckForExternalAxisLimits()
+        private void CheckExternalAxisLimits()
         {
-            for (int i = 0; i < _robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
-                int logic = (int)_robotInfo.ExternalAxis[i].AxisNumber;
+                int number = _robot.ExternalAxes[i].AxisNumber;
+                char logic = _robot.ExternalAxes[i].AxisLogic;
 
-                if (_robotInfo.ExternalAxis[i].AxisLimits.IncludesParameter(_externalJointPosition[logic], false) == false)
+                if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External axis value " + logic + " is not in range.");
                     _inLimits = false;
                 }
             }
@@ -668,36 +710,39 @@ namespace RobotComponents.Kinematics
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Inverse Kinematics object is valid. 
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public bool IsValid
         {
             get
             {
-                if (RobotInfo == null) { return false; }
+                if (Robot == null) { return false; }
+                if (Robot.IsValid == false) { return false; }
                 if (Movement == null) { return false; }
+                if (Movement.IsValid == false) { return false; }
                 return true;
             }
         }
 
         /// <summary>
-        /// The robot info where the axis values are calculated for.
+        /// Gets or sets the Robot.
         /// </summary>
-        public Robot RobotInfo
+        public Robot Robot
         {
             get 
             { 
-                return _robotInfo; 
+                return _robot; 
             }
             set 
             { 
-                _robotInfo = value;
+                _robot = value;
                 ReInitialize();
             }
         }
 
         /// <summary>
-        /// The robot movement where the axis values are caculated for. 
+        /// Gets or sets the Movement.
+        /// The target and work object are obtained from this movement.
         /// </summary>
         public Movement Movement
         {
@@ -713,10 +758,9 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// The used robot tool for this inverse kinematics.
-        /// By default the tool attached to the robot info is used. 
+        /// Gets the tool used by the this Inverse Kinematics.
+        /// By default the tool attached to the robot is used. 
         /// If a tool is set as a property of the movement, this tool will be used. 
-        /// The Movement.RobotTool overwrites the tool attached to the robot info. 
         /// </summary>
         public RobotTool RobotTool
         {
@@ -724,7 +768,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Defines the eight calculated Robot Joint Positions
+        /// Gets the eight latest calculated Robot Joint Positions.
         /// </summary>
         public List<RobotJointPosition> RobotJointPositions
         {
@@ -732,7 +776,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Defines the calculated Robot Joint Position
+        /// Gets the latest calculated Robot Joint Position.
         /// </summary>
         public RobotJointPosition RobotJointPosition
         {
@@ -740,7 +784,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Defines the calculated External Joint Position
+        /// Gets the latest calculated External Joint Position.
         /// </summary>
         public ExternalJointPosition ExternalJointPosition
         {
@@ -748,7 +792,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// List of strings with collected error messages. 
+        /// Gets the collected error messages.
         /// </summary>
         public List<string> ErrorText
         {
@@ -756,7 +800,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Bool that indicates if the internal and external values are within their limits
+        /// Gets a value indicating whether or not the internal and external values are within their limits.
         /// </summary>
         public bool InLimits
         {

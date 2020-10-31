@@ -106,12 +106,12 @@ namespace RobotComponents.Gh.Components.Deconstruct
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
             }
 
-            for (int i = 0; i < robotInfo.ExternalAxis.Count; i++)
+            for (int i = 0; i < robotInfo.ExternalAxes.Count; i++)
             {
-                if (robotInfo.ExternalAxis[i].IsValid)
+                if (robotInfo.ExternalAxes[i].IsValid)
                 {
-                    _meshes.Add(robotInfo.ExternalAxis[i].BaseMesh);
-                    _meshes.Add(robotInfo.ExternalAxis[i].LinkMesh);
+                    _meshes.Add(robotInfo.ExternalAxes[i].BaseMesh);
+                    _meshes.Add(robotInfo.ExternalAxes[i].LinkMesh);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(4, robotInfo.BasePlane);
             DA.SetData(5, robotInfo.MountingFrame);
             DA.SetData(6, robotInfo.Tool);
-            DA.SetDataList(7, robotInfo.ExternalAxis);
+            DA.SetDataList(7, robotInfo.ExternalAxes);
         }
 
         #region menu item

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -19,12 +20,11 @@ namespace RobotComponents.Actions
     public class AbsoluteJointMovement : Action
     {
         #region fields
-        // Fixed fields
-        private string _name; // target variable name
+        private string _name;
         private List<double> _internalAxisValues;
         private List<double> _externalAxisValues;
         private SpeedData _speedData;
-        private readonly int _movementType;
+        private readonly MovementType _movementType;
         private ZoneData _zoneData;
         private RobotTool _robotTool;
         #endregion
@@ -66,7 +66,7 @@ namespace RobotComponents.Actions
             _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
-            _movementType = 0; // The movementType is always an Absolute Joint Movement
+            _movementType = MovementType.MoveAbsJ; // The movementType is always an Absolute Joint Movement
             _zoneData = new ZoneData(0);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -86,7 +86,7 @@ namespace RobotComponents.Actions
             _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
-            _movementType = 0; // The movement type is always an Absolute Joint Movement
+            _movementType = MovementType.MoveAbsJ; // The movement type is always an Absolute Joint Movement
             _zoneData = new ZoneData(precision);
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -106,7 +106,7 @@ namespace RobotComponents.Actions
             _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
-            _movementType = 0; // The movement type is always an Absolute Joint Movement
+            _movementType = MovementType.MoveAbsJ; // The movement type is always an Absolute Joint Movement
             _zoneData = zoneData;
             _robotTool = new RobotTool(); // Default Robot Tool tool0
             _robotTool.Clear(); // Empty Robot Tool
@@ -127,7 +127,7 @@ namespace RobotComponents.Actions
             _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
-            _movementType = 0; // The movement type is always an Absolute Joint Movement
+            _movementType = MovementType.MoveAbsJ; // The movement type is always an Absolute Joint Movement
             _zoneData = new ZoneData(precision);
             _robotTool = robotTool;
         }
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
             _internalAxisValues = CheckInternalAxisValues(internalAxisValues);
             _externalAxisValues = CheckExternalAxisValues(externalAxisValues);
             _speedData = speedData;
-            _movementType = 0; // The movement type is always an Absolute Joint Movement
+            _movementType = MovementType.MoveAbsJ; // The movement type is always an Absolute Joint Movement
             _zoneData = zoneData;
             _robotTool = robotTool;
         }
@@ -290,16 +290,16 @@ namespace RobotComponents.Actions
             }
 
             // Check for external axis values
-            for (int i = 0; i < robot.ExternalAxis.Count; i++)
+            for (int i = 0; i < robot.ExternalAxes.Count; i++)
             {
-                int logicNumber = (int)robot.ExternalAxis[i].AxisNumber;
+                int logicNumber = robot.ExternalAxes[i].AxisNumber;
 
                 if (_externalAxisValues[logicNumber] == 9e9)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not definied by the user.");
                 }
 
-                else if (robot.ExternalAxis[i].AxisLimits.IncludesParameter(_externalAxisValues[logicNumber], false) == false)
+                else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalAxisValues[logicNumber], false) == false)
                 {
                     errors.Add("Movement " + _name + "\\wobj0: External axis value " + (i + 1).ToString() + " is not in range.");
                 }
@@ -415,7 +415,7 @@ namespace RobotComponents.Actions
         /// <returns> The External Joint Position of this Absolute Joint Movement. </returns>
         public Movement ConvertToMovement()
         {
-            return new Movement(ConvertToJointTarget(), _speedData, _movementType, _zoneData, _robotTool);
+            return new Movement(_movementType, ConvertToJointTarget(), _speedData, _zoneData, _robotTool);
         }
 
         /// <summary>
@@ -503,10 +503,9 @@ namespace RobotComponents.Actions
 
         /// <summary>
         /// The movement type.
-        /// One is used for absolute joint movements with jointtargets (MoveAbsJ).
         /// For the Absolute Joint Movement Class the MovementType can not be set.
         /// </summary>
-        public int MovementType
+        public MovementType MovementType
         {
             get { return _movementType; }
         }

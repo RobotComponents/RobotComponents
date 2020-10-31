@@ -16,10 +16,10 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
@@ -123,7 +123,7 @@ namespace RobotComponents.Gh.Components.Simulation
             }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robotInfo, internalAxisValues, externalAxisValues, _hideMesh);
+            _fk = new ForwardKinematics(robotInfo, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues), _hideMesh);
             _fk.Calculate();
 
             // Check the values

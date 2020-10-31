@@ -5,57 +5,88 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Comment class, defines a Comment in RAPID Code.
-    /// A comment is only used to make the program easier to understand. 
+    /// Represents a comment in RAPID Code.
+    /// This action is only used to make the program easier to understand. 
     /// It has no effect on the execution of the program.
     /// </summary>
-    public class Comment : Action
+    [Serializable()]
+    public class Comment : Action, ISerializable
     {
         #region fields
         private string _comment; // the comment as a string
-        private int _type; // the comment type as int value -> 0 for instruction, 1 for declaration
+        private CodeType _type; // the comment type as a CodeType enum
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected Comment(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _comment = (string)info.GetValue("Comment", typeof(string));
+            _type = (CodeType)info.GetValue("Code Type", typeof(CodeType));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Comment", _comment, typeof(string));
+            info.AddValue("Code Type", _type, typeof(CodeType));
+        }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty Comment object.
+        /// Initializes an empty instance of the Comment class. 
         /// </summary>
         public Comment()
         {
         }
 
         /// <summary>
-        /// A comment constructor inserted into the program to make it easier to understand.
+        /// Initializes a new instance of the Comment class with the Code Type set as instruction.
         /// </summary>
-        /// <param name="comment">The comment as a text string.</param>
+        /// <param name="comment"> The comment. </param>
         public Comment(string comment)
         {
             _comment = comment;
-            _type = 0;
+            _type = CodeType.Instruction;
         }
 
         /// <summary>
-        /// A comment constructor inserted into the program to make it easier to understand.
+        /// Initializes a new instance of the Comment class.
         /// </summary>
-        /// <param name="comment">The comment as a text string.</param>
-        /// <param name="type">The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations.</param>
-        public Comment(string comment, int type)
+        /// <param name="comment"> the comment. </param>
+        /// <param name="type"> The Code Type. </param>
+        public Comment(string comment, CodeType type)
         {
             _comment = comment;
-            SetCommentType(type);
+            _type = type;
         }
 
         /// <summary>
-        /// Creates a new comment by duplicating an existing comment. 
-        /// This creates a deep copy of the existing comment. 
+        /// Initializes a new instance of the Comment class by duplicating an existing Comment instance. 
         /// </summary>
-        /// <param name="comment"> The comment that should be duplicated.</param>
+        /// <param name="comment"> The Comment instance to duplicate. </param>
         public Comment(Comment comment)
         {
             _comment = comment.Com;
@@ -63,18 +94,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A method to duplicate the Comment object.
+        /// Returns an exact duplicate of this Comment instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the Comment object. </returns>
+        /// <returns> A deep copy of the Comment instance. </returns>
         public Comment Duplicate()
         {
             return new Comment(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Comment object to an Action object. 
+        /// Returns an exact duplicate of this Comment instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Comment object as an Action object. </returns>
+        /// <returns> A deep copy of the Comment instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new Comment(this) as Action;
@@ -99,29 +130,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Sets the comment type. 
+        /// Creates the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="type"> The comment type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
-        public void SetCommentType(int type)
-        {
-            if (type == 0 | type == 1)
-            {
-                _type = type;
-            }
-            else
-            {
-                _type = 0;
-            }
-        }
-
-        /// <summary>
-        /// Used to create variable definition code of this action. 
-        /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 return "! " + _comment;
             }
@@ -132,13 +147,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Creates the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 return "! " + _comment;
             }
@@ -149,24 +164,26 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
             }
@@ -175,7 +192,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Comment object is valid. 
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -183,14 +200,12 @@ namespace RobotComponents.Actions
             {
                 if (Com == null) { return false; }
                 if (Com == "") { return false; }
-                if (Type < 0) { return false; }
-                if (Type > 1) { return false; }
                 return true; 
             }
         }
 
         /// <summary>
-        /// Comment line as a string.
+        /// Gets or sets the comment text.
         /// </summary>
         public string Com
         {
@@ -199,11 +214,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Comment type as int value.
+        /// Gets or sets the comment Code Type.
         /// </summary>
-        public int Type
+        public CodeType Type
         {
             get { return _type; }
+            set { _type = value; }
         }
         #endregion
     }

@@ -88,7 +88,7 @@ namespace RobotComponents.Actions
         /// Initializes a new instance of the Movement class.
         /// This constructor is typically used to cast a Robot Target to a movement. 
         /// </summary>
-        /// <param name="target"> The Target. /param>
+        /// <param name="target"> The Target. </param>
         public Movement(ITarget target)
         {
             _movementType = 0;
@@ -213,7 +213,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="movementType"> The Movement Type. </param>
         /// <param name="target"> The Taret. </param>
-        /// <param name="speedData"> The Speed Data. /param>
+        /// <param name="speedData"> The Speed Data. </param>
         /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object. </param>
@@ -445,12 +445,8 @@ namespace RobotComponents.Actions
                         throw new InvalidOperationException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
                     }
 
-                    // Get external axis value
-                    double axisValue = robotTarget.ExternalJointPosition[logic];
-                    if (axisValue == 9e9) { axisValue = 0; } // If the user does not define an axis value we set it to zero. 
-
                     // Transform
-                    Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(axisValue, out bool inLimits);
+                    Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(robotTarget.ExternalJointPosition, out bool inLimits);
                     plane.Transform(transform);
                 }
 

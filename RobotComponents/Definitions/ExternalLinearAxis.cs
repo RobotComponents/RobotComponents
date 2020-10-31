@@ -11,6 +11,7 @@ using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Enumerations;
 using RobotComponents.Utils;
 
@@ -366,12 +367,12 @@ namespace RobotComponents.Definitions
         /// Calculates the position of the attachment plane for a defined external axis value.
         /// This method does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for. </param>
         /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
-        public override Plane CalculatePosition(double axisValue, out bool inLimits)
+        public override Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
-            Transform translateNow = CalculateTransformationMatrix(axisValue, out bool isInLimits);
+            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out bool isInLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
@@ -383,12 +384,15 @@ namespace RobotComponents.Definitions
         /// Calculates the the transformation matrix for a defined external axis value. 
         /// This method does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for in mm. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in mm. </param>
         /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
         /// <returns> The transformation matrix </returns>
-        public override Transform CalculateTransformationMatrix(double axisValue, out bool inLimits)
+        public override Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
+            double axisValue = externalJointPosition[_axisNumber];
             bool isInLimits;
+
+            if (axisValue == 9e9) { axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); }
 
             if (axisValue < AxisLimits.Min)
             {
@@ -414,11 +418,11 @@ namespace RobotComponents.Definitions
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for in mm. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in mm. </param>
         /// <returns> The posed attachement plane. </returns>
-        public override Plane CalculatePositionSave(double axisValue)
+        public override Plane CalculatePositionSave(ExternalJointPosition externalJointPosition)
         {
-            Transform translateNow = CalculateTransformationMatrixSave(axisValue);
+            Transform translateNow = CalculateTransformationMatrixSave(externalJointPosition);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
@@ -430,11 +434,14 @@ namespace RobotComponents.Definitions
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the transformation matrix for in mm. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the transformation matrix for in mm. </param>
         /// <returns> Returns the transformation matrix. </returns>
-        public override Transform CalculateTransformationMatrixSave(double axisValue)
+        public override Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition)
         {
+            double axisValue = externalJointPosition[_axisNumber];
             double value;
+
+            if (axisValue == 9e9) { axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); }
 
             if (axisValue < _axisLimits.Min)
             {
@@ -457,15 +464,15 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Calculates the position of the external axis mesh for a defined external axis value.
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the meshes for in mm. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the meshes for in mm. </param>
         /// <returns> The posed meshes. </returns>
-        public override List<Mesh> PoseMeshes(double axisValue)
+        public override List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition)
         {
             _posedMeshes.Clear();
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
             _posedMeshes.Add(_linkMesh.DuplicateMesh());
 
-            Transform translateNow = CalculateTransformationMatrix(axisValue, out _);
+            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out _);
             _posedMeshes[1].Transform(translateNow);
 
             return _posedMeshes;

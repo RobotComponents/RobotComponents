@@ -292,9 +292,7 @@ namespace RobotComponents.Kinematics
             if (movement.WorkObject.ExternalAxis != null)
             {
                 ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
-                int logic = externalAxis.AxisNumber;
-                double axisValue = _lastExternalJointPosition[logic];
-                Transform trans = externalAxis.CalculateTransformationMatrix(-axisValue, out _);
+                Transform trans = externalAxis.CalculateTransformationMatrix(_lastExternalJointPosition * -1, out _);
                 plane1.Transform(trans);
             }
 

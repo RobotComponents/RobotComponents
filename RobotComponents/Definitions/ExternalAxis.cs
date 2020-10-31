@@ -9,6 +9,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Enumerations;
 
 namespace RobotComponents.Definitions
@@ -73,37 +74,37 @@ namespace RobotComponents.Definitions
         /// Calculates the position of the attachment plane for a defined external axis value.
         /// This method does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for. </param>
         /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
-        public abstract Plane CalculatePosition(double axisValue, out bool inLimits);
+        public abstract Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
         /// Calculates the the transformation matrix for a defined external axis value. 
         /// This method does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for. </param>
         /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
         /// <returns> The transformation matrix </returns>
-        public abstract Transform CalculateTransformationMatrix(double axisValue, out bool inLimits);
+        public abstract Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
         /// Calculates the position of the attachment plane for a defined external axis value.
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for. </param>
         /// <returns> The posed attachement plane. </returns>
-        public abstract Plane CalculatePositionSave(double axisValue);
+        public abstract Plane CalculatePositionSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
         /// Calculates the the transformation matrix for a defined external axis value. 
         /// This method takes into account the external axis limits. If the defined external
         /// axis value is outside its limits the closest external axis limit will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the transformation matrix for. </param>
+        /// <param name="externalJointPosition"> The external joint postition to calculate the transformation matrix for. </param>
         /// <returns> Returns the transformation matrix. </returns>
-        public abstract Transform CalculateTransformationMatrixSave(double axisValue);
+        public abstract Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
         /// A method that can be called to reinitialize all the data that is needed to construct a valid external axis. 
@@ -113,9 +114,9 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Calculates the position of the external axis mesh for a defined external axis value.
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the meshes for. </param>
+        /// <param name="externalJointPosition"> The external joint position to calculate the position of the meshes for. </param>
         /// <returns> The posed meshes. </returns>
-        public abstract List<Mesh> PoseMeshes(double axisValue);
+        public abstract List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition);
 
         /// <summary>
         /// Transforms the linear axis spatial properties (planes and meshes). 

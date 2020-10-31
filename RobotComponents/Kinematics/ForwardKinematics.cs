@@ -169,12 +169,12 @@ namespace RobotComponents.Kinematics
                 int logic = _robot.ExternalAxes[i].AxisNumber;
 
                 // Get external axis plane
-                _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition[logic]);
+                _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition);
 
                 // Check if an external axis moves the robot and calculate the position plane.
                 if (externalAxis.MovesRobot == true && count == 0)
                 {
-                    _positionPlane = externalAxis.CalculatePosition(_externalJointPosition[logic], out bool inLimits);
+                    _positionPlane = externalAxis.CalculatePosition(_externalJointPosition, out bool inLimits);
                     count += 1;
                 }
             }
@@ -242,8 +242,7 @@ namespace RobotComponents.Kinematics
                 // External axis meshes
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
-                    int logic = _robot.ExternalAxes[i].AxisNumber;
-                    _robot.ExternalAxes[i].PoseMeshes(_externalJointPosition[logic]);
+                    _robot.ExternalAxes[i].PoseMeshes(_externalJointPosition);
                     _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
                 }
             }

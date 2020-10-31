@@ -633,7 +633,6 @@ namespace RobotComponents.Kinematics
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
                 ExternalAxis externalAxis = _robot.ExternalAxes[i];
-                Interval axisLimits = externalAxis.AxisLimits;
                 int logic = externalAxis.AxisNumber;
 
                 // Moves Robot?
@@ -650,42 +649,20 @@ namespace RobotComponents.Kinematics
 
                         else
                         {
-                            plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition[logic], out _);
+                            plane = externalLinearAxis.CalculatePosition(_target.ExternalJointPosition, out _);
                         }
                     }
 
                     // An External Rotational Axis that moves the robot
                     else if (externalAxis is ExternalLinearAxis externalRotationalAxis)
                     {
-                        double axisValue;
-
-                        if (_target.ExternalJointPosition[logic] == 9e9)
-                        {
-                            axisValue = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
-                        }
-                        else
-                        {
-                            axisValue = _target.ExternalJointPosition[logic];
-                        }
-
-                        plane = externalRotationalAxis.CalculatePosition(axisValue, out _);
+                        plane = externalRotationalAxis.CalculatePosition(_target.ExternalJointPosition, out _);
                     }
 
                     // Other External Axis types that move the robot
                     else
                     {
-                        double axisValue;
-
-                        if (_target.ExternalJointPosition[logic] == 9e9)
-                        {
-                            axisValue = Math.Max(0, Math.Min(axisLimits.Min, axisLimits.Max));
-                        }
-                        else
-                        {
-                            axisValue = _target.ExternalJointPosition[logic];
-                        }
-
-                        plane = externalAxis.CalculatePosition(axisValue, out _);
+                        plane = externalAxis.CalculatePosition(_target.ExternalJointPosition, out _);
                     }
 
                     // Break the loop since one axternal axis can move the robot.

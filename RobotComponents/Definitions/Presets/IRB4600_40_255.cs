@@ -33,12 +33,12 @@ namespace RobotComponents.Definitions.Presets
             List<Interval> axisLimits = GetAxisLimits();
             Plane mountingFrame = GetToolMountingFrame();
 
-            // Override position plane when an external linear axis is coupled
+            // Override the position plane when an external axis is coupled that moves the robot
             for (int i = 0; i < externalAxes.Count; i++)
             {
-                if (externalAxes[i] is ExternalLinearAxis)
+                if (externalAxes[i].MovesRobot == true)
                 {
-                    positionPlane = (externalAxes[i] as ExternalLinearAxis).AttachmentPlane;
+                    positionPlane = externalAxes[i].AttachmentPlane;
                     break;
                 }
             }

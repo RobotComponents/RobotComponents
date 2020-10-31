@@ -161,6 +161,7 @@ namespace RobotComponents.Kinematics
 
             // Calculates external axes positions
             _posedExternalAxisPlanes = new Plane[_robot.ExternalAxes.Count];
+
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
                 // Get the external axis
@@ -170,12 +171,10 @@ namespace RobotComponents.Kinematics
                 // Get external axis plane
                 _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition[logic]);
 
-                // Check if it is an external linear axis: the first external linear axis
-                // External axes that move the robot: this updates the position of the robot
-                if (externalAxis is ExternalLinearAxis && count == 0)
+                // Check if an external axis moves the robot and calculate the position plane.
+                if (externalAxis.MovesRobot == true && count == 0)
                 {
-                    ExternalLinearAxis externalLinearAxis = externalAxis as ExternalLinearAxis;
-                    _positionPlane = externalLinearAxis.CalculatePosition(_externalJointPosition[logic], out bool inLimits);
+                    _positionPlane = externalAxis.CalculatePosition(_externalJointPosition[logic], out bool inLimits);
                     count += 1;
                 }
             }

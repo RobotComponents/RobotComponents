@@ -29,6 +29,7 @@ namespace RobotComponents.Definitions
         private Plane _axisPlane; // Todo: now only the attachment plane is copied
         private Interval _axisLimits; // The movement limits
         private int _axisNumber; // TODO: The axis logic number
+        private bool _movesRobot;
         private Mesh _baseMesh; // The base mesh (fixed)
         private Mesh _linkMesh; // The link mesh posed for axis value 0
         private List<Mesh> _posedMeshes; // The mesh posed for a certain axis value
@@ -84,6 +85,7 @@ namespace RobotComponents.Definitions
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
             _axisNumber = -1;
+            _movesRobot = false;
         }
 
         /// <summary>
@@ -97,6 +99,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = false;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -119,6 +122,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = false;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -142,6 +146,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = false;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -165,6 +170,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = false;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -189,6 +195,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = new Plane(externalRotationalAxis.AttachmentPlane);
             _axisLimits = new Interval(externalRotationalAxis.AxisLimits);
             _axisNumber = externalRotationalAxis.AxisNumber;
+            _movesRobot = externalRotationalAxis.MovesRobot;
 
             if (duplicateMesh == true)
             {
@@ -558,11 +565,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not this External Rotational Axis moves the Robot.
+        /// Gets or sets a value indicating whether or not this External Rotational Axis moves the Robot.
         /// </summary>
         public override bool MovesRobot
         {
-            get { return false; }
+            get { return _movesRobot; }
+            set { _movesRobot = value; }
         }
         #endregion
     }

@@ -185,7 +185,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Gets a value indicating whether or not this External Axis moves the Robot.
         /// </summary>
-        public abstract bool MovesRobot { get; }
+        public abstract bool MovesRobot { get; set; }
         #endregion
     }
 }

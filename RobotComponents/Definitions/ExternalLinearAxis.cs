@@ -27,7 +27,8 @@ namespace RobotComponents.Definitions
         private Plane _attachmentPlane; // The plane where the robot or the work object is attached
         private Plane _axisPlane; // Z-Axis of the _axisPlane is the linear axis
         private Interval _axisLimits; // The movement limits
-        private int _axisNumber; // TODO: The axis logic number
+        private int _axisNumber; // The axis logic number
+        private bool _movesRobot;
         private Mesh _baseMesh; // The base mesh (fixed)
         private Mesh _linkMesh; // The link mesh posed for axis value 0
         private Curve _axisCurve; // The axis curve
@@ -48,7 +49,8 @@ namespace RobotComponents.Definitions
             _axisPlane = (Plane)info.GetValue("Axis Plane", typeof(Plane));
             _axisLimits = (Interval)info.GetValue("Axis Limits", typeof(Interval));
             _axisNumber = (int)info.GetValue("Axis Number", typeof(int));
-            _baseMesh= (Mesh)info.GetValue("Base Mesh", typeof(Mesh));
+            _movesRobot = (bool)info.GetValue("Moves Robot", typeof(bool));
+            _baseMesh = (Mesh)info.GetValue("Base Mesh", typeof(Mesh));
             _linkMesh = (Mesh)info.GetValue("Link Mesh", typeof(Mesh));
             _axisCurve = (Curve)info.GetValue("Axis Curve", typeof(Curve));
             _posedMeshes = (List<Mesh>)info.GetValue("Posed Meshed", typeof(List<Mesh>));
@@ -68,6 +70,7 @@ namespace RobotComponents.Definitions
             info.AddValue("Axis Plane", _axisPlane , typeof(Plane));
             info.AddValue("Axis Limits", _axisLimits, typeof(Interval));
             info.AddValue("Axis Number", _axisNumber, typeof(int));
+            info.AddValue("Moves Robot", _movesRobot, typeof(bool));
             info.AddValue("Base Mesh", _baseMesh, typeof(Mesh));
             info.AddValue("Link Mesh", _linkMesh, typeof(Mesh));
             info.AddValue("Axis Curve", _axisCurve, typeof(Curve));
@@ -86,6 +89,7 @@ namespace RobotComponents.Definitions
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
             _axisNumber = -1;
+            _movesRobot = true;
         }
 
         /// <summary>
@@ -103,6 +107,7 @@ namespace RobotComponents.Definitions
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -127,6 +132,7 @@ namespace RobotComponents.Definitions
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -149,6 +155,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -174,6 +181,7 @@ namespace RobotComponents.Definitions
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -199,6 +207,7 @@ namespace RobotComponents.Definitions
             _axisPlane = new Plane(attachmentPlane.Origin, axis);
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -225,6 +234,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
@@ -248,6 +258,7 @@ namespace RobotComponents.Definitions
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
+            _movesRobot = true;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -270,6 +281,7 @@ namespace RobotComponents.Definitions
             _attachmentPlane = new Plane(externalLinearAxis.AttachmentPlane);
             _axisLimits = new Interval(externalLinearAxis.AxisLimits);
             _axisNumber = externalLinearAxis.AxisNumber;
+            _movesRobot = externalLinearAxis.MovesRobot;
             _axisCurve = externalLinearAxis.AxisCurve;
 
             if (duplicateMesh == true)
@@ -661,11 +673,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not this External Linear Axis moves the Robot.
+        /// Gets or sets a value indicating whether or not this External Linear Axis moves the Robot.
         /// </summary>
         public override bool MovesRobot 
         { 
-            get { return true; }
+            get { return _movesRobot; }
+            set { _movesRobot = value; }
         }
         #endregion
     }

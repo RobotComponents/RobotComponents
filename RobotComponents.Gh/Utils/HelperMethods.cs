@@ -186,6 +186,39 @@ namespace RobotComponents.Gh.Utils
 
             return value;
         }
+
+        /// <summary>
+        /// Replaces the spaces with an underscore and removes new lines in a list with strings. 
+        /// Typically used to edit variable names of declarations.
+        /// </summary>
+        /// <param name="strings"> The list with strings. </param>
+        /// <returns> The list with strings. </returns>
+        public static List<string> ReplaceSpacesAndRemoveNewLines(List<string> strings)
+        {
+            List<string> result = new List<string>() { };
+
+            for (int i = 0; i < strings.Count; i++)
+            {
+                result.Add(ReplaceSpacesAndRemoveNewLines(strings[i]));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Replaces the spaces with an underscore and removes new lines in a string. 
+        /// Typically used to edit variable names of declarations.
+        /// </summary>
+        /// <param name="text"> The string. </param>
+        /// <returns> The new string. </returns>
+        public static string ReplaceSpacesAndRemoveNewLines(string text)
+        {
+            string result = text.Replace(" ", "_");
+            result = result.Replace("\n", "");
+            result = result.Replace("\r", "");
+
+            return result;
+        }
         #endregion
 
         #region properties

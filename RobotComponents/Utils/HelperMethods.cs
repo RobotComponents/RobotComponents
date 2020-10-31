@@ -181,7 +181,13 @@ namespace RobotComponents.Utils
         /// <returns> The quaternion as a Quaternion. </returns>
         public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane)
         {
-            Quaternion quat = Quaternion.Rotation(refPlane, plane);
+            Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
+
+            Plane dum = new Plane(plane);
+            dum.Transform(orient);
+
+            Quaternion quat = Quaternion.Rotation(Plane.WorldXY, dum);
+
             return quat;
         }
 
@@ -194,10 +200,14 @@ namespace RobotComponents.Utils
         /// <returns> The quaternion as a Quaternion. </returns>
         public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane, out Point3d origin)
         {
-            Quaternion quat = Quaternion.Rotation(refPlane, plane);
+            Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
+
+            Plane dum = new Plane(plane);
+            dum.Transform(orient);
+
+            Quaternion quat = Quaternion.Rotation(Plane.WorldXY, dum);
 
             origin = new Point3d(plane.Origin);
-            Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
             origin.Transform(orient);
 
             return quat;

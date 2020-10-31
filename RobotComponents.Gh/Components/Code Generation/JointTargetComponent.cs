@@ -88,6 +88,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetDataList(1, robotJointPositions)) { robotJointPositions = new List<RobotJointPosition>() { new RobotJointPosition() }; }
             if (!DA.GetDataList(2, externalJointPositions)) { externalJointPositions = new List<ExternalJointPosition>() { new ExternalJointPosition() }; }
 
+            // Replace spaces
+            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+
             // Get longest input List
             int[] sizeValues = new int[3];
             sizeValues[0] = names.Count;

@@ -190,7 +190,7 @@ namespace RobotComponents.Definitions
         /// <returns> Returns the quaternion orientation of the work object. </returns>
         public Quaternion GetOrientation()
         {
-            _orientation = Quaternion.Rotation(Plane.WorldXY, _plane);
+            _orientation = HelperMethods.PlaneToQuaternion(_plane);
             return _orientation;
         }
 
@@ -200,7 +200,7 @@ namespace RobotComponents.Definitions
         /// <returns> Returns the quaternion orientation of the user frame. </returns>
         public Quaternion GetUserFrameOrientation()
         {
-            _userFrameOrientation = Quaternion.Rotation(Plane.WorldXY, _userFrame);
+            _userFrameOrientation = HelperMethods.PlaneToQuaternion(_userFrame);
             return _userFrameOrientation;
         }
 

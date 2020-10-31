@@ -64,7 +64,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
 
         // Fields
@@ -92,6 +92,9 @@ namespace RobotComponents.Gh.Components.Definitions
             if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
             if (!DA.GetData(2, ref attachmentPlane)) { return; }
             if (!DA.GetData(3, ref toolPlane)) { return; };
+
+            // Replace spaces
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the Robot Tool
             _robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane);

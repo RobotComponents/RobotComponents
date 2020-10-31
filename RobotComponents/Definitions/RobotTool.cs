@@ -488,7 +488,8 @@ namespace RobotComponents.Definitions
         /// <returns> Returns the quaternion orientation of the tool center plane. </returns>
         public Quaternion GetToolOrientation()
         {
-            _orientation = Quaternion.Rotation(_attachmentPlane, _toolPlane);
+            _orientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _toolPlane);
+
             return _orientation;
         }
 

@@ -70,7 +70,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
 
         // Fields
@@ -109,6 +109,9 @@ namespace RobotComponents.Gh.Components.Definitions
             if (!DA.GetData(7, ref quat2)) { return; }
             if (!DA.GetData(8, ref quat3)) { return; }
             if (!DA.GetData(9, ref quat4)) { return; }
+
+            // Replace spaces and new lines
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the robot tool
             _robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);

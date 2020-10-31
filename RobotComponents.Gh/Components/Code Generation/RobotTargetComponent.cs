@@ -136,6 +136,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (referencePlanes.Count == 0) { referencePlanes.Add(Plane.WorldXY); }
             if (externalJointPositions.Count == 0) { externalJointPositions.Add(new ExternalJointPosition()); }
 
+            // Replace spaces
+            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+
             // Get longest Input List
             int[] sizeValues = new int[5];
             sizeValues[0] = names.Count;

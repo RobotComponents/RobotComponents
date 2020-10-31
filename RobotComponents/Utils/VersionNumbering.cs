@@ -18,7 +18,7 @@ namespace RobotComponents.Utils
         /// X.XX.000 ---> bug fixes and small improvements
         /// </summary>
         public const string CurrentVersion = "0.12.000";
-
+      
         /// <summary>
         /// Gets the current version of the Robot Components plugin as an int. 
         /// Has to be manually updated each time. 

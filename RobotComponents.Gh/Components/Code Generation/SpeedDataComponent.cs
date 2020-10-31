@@ -91,6 +91,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetDataList(3, v_leaxs)) { return; }
             if (!DA.GetDataList(4, v_reaxs)) { return; }
 
+            // Replace spaces
+            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+
             // Get longest Input List
             int[] sizeValues = new int[5];
             sizeValues[0] = names.Count;

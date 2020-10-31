@@ -89,6 +89,9 @@ namespace RobotComponents.Gh.Components.Definitions
             if (!DA.GetDataList(1, planes)) { return; }
             if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalRotationalAxis>() { null }; }
 
+            // Replace spaces
+            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+
             // Get longest Input List
             int[] sizeValues = new int[3];
             sizeValues[0] = names.Count;

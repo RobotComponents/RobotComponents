@@ -28,8 +28,9 @@ namespace RobotComponents.Kinematics
         private readonly List<Curve> _paths; // The path curves between two movement targets
         private readonly List<RobotJointPosition> _robotJointPositions; // The robot joint positions needed to follow the path
         private readonly List<ExternalJointPosition> _externalJointPositions; // The external joint position needed to follow the path
-        private readonly List<string> _errorText = new List<string>(); // List with collected error messages
+        private List<string> _errorText = new List<string>(); // List with collected error messages
 
+        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
         private readonly RobotTool _initialTool; // Defines the first tool that will be used
         private RobotJointPosition _lastRobotJointPosition; // Defines the last Robot Joint Position
         private ExternalJointPosition _lastExternalJointPosition; // Defines the last External Joint Position
@@ -93,6 +94,7 @@ namespace RobotComponents.Kinematics
             // Reinitiate starting values
             _currentTool = _initialTool;
             _autoAxisConfig = false;
+            _firstMovementIsMoveAbsJ = false;
             _lastRobotJointPosition = new RobotJointPosition();
             _lastExternalJointPosition = new ExternalJointPosition();
 
@@ -113,6 +115,9 @@ namespace RobotComponents.Kinematics
             _interpolations = interpolations;
             int counter = 0;
             Reset();
+
+            // Check fist movement
+            _firstMovementIsMoveAbsJ = CheckFirstMovement(actions);
 
             // Get path from the list with actions
             for (int i = 0; i < actions.Count; i++)
@@ -182,6 +187,9 @@ namespace RobotComponents.Kinematics
 
             // Remove null
             _paths.RemoveAll(val => val == null);
+
+            // Remove duplicates from error text
+            _errorText = _errorText.Distinct().ToList();
         }
 
         /// <summary>
@@ -221,7 +229,7 @@ namespace RobotComponents.Kinematics
             ExternalJointPosition towardsExternalJointPosition = jointTarget.ExternalJointPosition;
 
             // Add error text
-            _errorText.AddRange(jointTarget.CheckAxisLimits(_robot));
+            _errorText.AddRange(jointTarget.CheckAxisLimits(_robot).ConvertAll(item => string.Copy(item)));
 
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
@@ -251,7 +259,7 @@ namespace RobotComponents.Kinematics
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // Add error text
-            _errorText.AddRange(_robot.InverseKinematics.ErrorText);
+            _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
 
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition);
@@ -348,6 +356,9 @@ namespace RobotComponents.Kinematics
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
 
+                // Add error messages (check axis limits)
+                _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
+
                 // Add the plane
                 Plane globalPlane = subMovement.GetPosedGlobalTargetPlane();
                 _planes.Add(globalPlane);
@@ -394,6 +405,9 @@ namespace RobotComponents.Kinematics
             {
                 _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
             }
+
+            // Add error messages (check axis limits)
+            _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
 
             // Add last Joint Poistions
             _lastRobotJointPosition = _robot.InverseKinematics.RobotJointPosition.Duplicate();
@@ -461,6 +475,37 @@ namespace RobotComponents.Kinematics
             _lastRobotJointPosition = towardsRobotJointPosition;
             _lastExternalJointPosition = towardsExternalJointPosition;
         }
+
+        /// <summary>
+        /// Checks whether the first movement type is an absolute joint movement.
+        /// </summary>
+        /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
+        private bool CheckFirstMovement(List<Action> actions)
+        {
+            for (int i = 0; i != actions.Count; i++)
+            {
+                if (actions[i] is Movement movement)
+                {
+                    if (movement.MovementType == MovementType.MoveAbsJ)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        _errorText.Add("The first movement is not set as an absolute joint movement.");
+                        return false;
+                    }
+                }
+
+                else if (actions[i] is AbsoluteJointMovement)
+                {
+                    return true;
+                }
+            }
+
+            // Returns true if no movements were defined
+            return true;
+        }
         #endregion
 
         #region properties
@@ -524,6 +569,14 @@ namespace RobotComponents.Kinematics
         public List<string> ErrorText
         {
             get { return _errorText; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
+        /// </summary>
+        public bool FirstMovementIsMoveAbsJ
+        {
+            get { return _firstMovementIsMoveAbsJ; }
         }
         #endregion
     }

@@ -286,7 +286,7 @@ namespace RobotComponents.Kinematics
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
-                    _errorText.Add("Internal axis value " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add("Robot joint position " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
                 }
             }
@@ -304,13 +304,13 @@ namespace RobotComponents.Kinematics
 
                 if (_externalJointPosition[index] == 9e9)
                 {
-                    _errorText.Add("External axis value " + logic + " is not definied by the user.");
+                    _errorText.Add("External joint position " + logic + " is not definied by the user.");
                     _inLimits = false;
                 }
 
                 else if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[index], false) == false)
                 {
-                    _errorText.Add("External axis value " + logic + " is not in range.");
+                    _errorText.Add("External joint position " + logic + " is not in range.");
                     _inLimits = false;
                 }
             }

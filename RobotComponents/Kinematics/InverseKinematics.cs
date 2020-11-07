@@ -142,7 +142,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid inverse kinematics object. 
+        /// Initialize the fields to construct a valid Inverse Kinematics instance. 
         /// </summary>
         private void Initialize()
         {
@@ -170,7 +170,7 @@ namespace RobotComponents.Kinematics
                 // Calculate the position and the orientation of the target plane in the word coordinate system
                 // If there is an external axes connected to work object of the movement the 
                 // target plane will be re-oriented according to the pose of the this external axes. 
-                _targetPlane = _movement.GetPosedGlobalTargetPlane(_robot, out _);
+                _targetPlane = _movement.GetPosedGlobalTargetPlane();
 
                 // Update the base plane / position plane
                 _positionPlane = GetPositionPlane();
@@ -180,7 +180,7 @@ namespace RobotComponents.Kinematics
                 Transform orient = Transform.PlaneToPlane(_robot.BasePlane, Plane.WorldXY);
 
                 // Orient the target plane to the robot coordinate system 
-                _targetPlane = ToolTransformation(_targetPlane, _robotTool.AttachmentPlane, _robotTool.ToolPlane);
+                _targetPlane = TransformToolPlane(_targetPlane, _robotTool.AttachmentPlane, _robotTool.ToolPlane);
                 _endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips plane for TCP Offset moving in the right direction
                 _endPlane.Transform(trans);
 
@@ -203,8 +203,8 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid inverse kinematics object. 
-        /// This method also resets the solution. Calculate() has to be called to get the new solution(s). 
+        /// Reinitialize all the fields to construct a valid Inverse Kinematics object. 
+        /// This method also resets the solution. Calculate() has to be called to obtain a new solution. 
         /// </summary>
         public void ReInitialize()
         {
@@ -213,22 +213,22 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Calculates both internal and external axis values. 
+        /// Calculates the inverse kinematics solution.
         /// </summary>
         public void Calculate()
         {
             ClearCurrentSolutions();
-            CalculateInternalAxisValues();
-            CalculateExternalAxisValues();
+            CalculateRobotJointPosition();
+            CalculateExternalJointPosition();
             CheckInternalAxisLimits();
             CheckExternalAxisLimits();
         }
 
         /// <summary>
-        /// Calculates the internal axis values. 
+        /// Calculates the Robot Joint Position of the Inverse Kinematics solution.
         /// This method does not check the internal axis limits. 
         /// </summary>
-        public void CalculateInternalAxisValues()
+        public void CalculateRobotJointPosition()
         {
             // Clear the current solutions before calculating a new ones. 
             ResetRobotJointPositions();
@@ -400,15 +400,14 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Gets and sets the closest Robot Joint Position to a given previous Robot Joint Position.
-        /// This method returns the closest axis configuration as an integer (0-7) and
-        /// sets the closest Robot Joint Poistion insides this Inverse Kinematics object. Therefore,
-        /// your first have to calculate the Inverse Kinematics solutions before you call this method. 
-        /// This methods is typically used for using the Auto Axis Config inside the Path Generator.
+        /// Calculates and returns the closest Robot Joint Position to a given previous Robot Joint Position.
+        /// This methods sets and returns the closest Robot Joint Poistion insides this Inverse Kinematics object. 
+        /// You first have to calculate the Inverse Kinematics solution before you call this method. 
+        /// This method is typically used for using the Auto Axis Config inside the Path Generator.
         /// </summary>
-        /// <param name="prevJointPosition">The previous Robot Joint Position</param>
-        /// <returns>Returns the closest axis configuration as an integer (0-7)</returns>
-        public RobotJointPosition GetClosestRobotJointPosition(RobotJointPosition prevJointPosition)
+        /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
+        /// <returns> The closest Robot Joint Position. </returns>
+        public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
         {
             RobotJointPosition diff;
             double sum;
@@ -478,10 +477,10 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Calculates the external axis values.
+        /// Calculates the External Joint Position of the Inverse Kinematics solution.
         /// This method does not check the external axis limits. 
         /// </summary>
-        public void CalculateExternalAxisValues()
+        public void CalculateExternalJointPosition()
         {
             // Clear current solution
             ResetExternalJointPosition();
@@ -582,7 +581,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Resets the Robo Joint Position solutions
+        /// Resets the Robot Joint Position solutions
         /// </summary>
         private void ResetRobotJointPositions()
         {
@@ -601,13 +600,13 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Transforms the tool plane to calculate the inverse kinematics. 
+        /// Returns the transformed tool plane. 
         /// </summary>
-        /// <param name="targetPlane"> The global target plane defined in the world coordinate system as a plane.</param>
-        /// <param name="attachmentPlane"> The attachement plane of the robot defined the robot coordinate system as plane. </param>
-        /// <param name="toolPlane"> The TCP plane as a plane. </param>
+        /// <param name="targetPlane"> The global target plane defined in the world coordinate space. </param>
+        /// <param name="attachmentPlane"> The attachement plane of the robot defined in the robot coordinate space. </param>
+        /// <param name="toolPlane"> The TCP plane. </param>
         /// <returns> The transfomed tool plane. </returns>
-        private Plane ToolTransformation(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
+        private Plane TransformToolPlane(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
         {
             Plane result = new Plane(attachmentPlane);
             result.Rotate(Math.PI, attachmentPlane.ZAxis); // Flips the plane
@@ -617,9 +616,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Gets the position of the robot in world coordinate space.
-        /// This is closest plane to target plane along the external axis if no external axis value is set. 
-        /// If no external axis is used it will return the fixed position (base plane) of the robot. 
+        /// Returns the base position of the robot in world coordinate space if it is moved by an external axis.
         /// </summary>
         /// <returns> The position of the robot as a plane. </returns>
         private Plane GetPositionPlane()
@@ -654,7 +651,7 @@ namespace RobotComponents.Kinematics
                     }
 
                     // An External Rotational Axis that moves the robot
-                    else if (externalAxis is ExternalLinearAxis externalRotationalAxis)
+                    else if (externalAxis is ExternalRotationalAxis externalRotationalAxis)
                     {
                         plane = externalRotationalAxis.CalculatePosition(_target.ExternalJointPosition, out _);
                     }
@@ -675,7 +672,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the interal axis values are outside its limits.
+        /// Checks if the interal axis values are inside its limits.
         /// </summary>
         private void CheckInternalAxisLimits()
         {
@@ -690,7 +687,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the external axis values are outside its limits.
+        /// Checks if the external axis values are inside its limits.
         /// </summary>
         private void CheckExternalAxisLimits()
         {

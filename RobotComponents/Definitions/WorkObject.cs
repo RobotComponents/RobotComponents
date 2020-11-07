@@ -185,31 +185,30 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Method that calculates the quaternion orientation of the work object coordinate system. 
+        /// Calculates and returns the quaternion orientation of the work object coordinate system. 
         /// </summary>
-        /// <returns> Returns the quaternion orientation of the work object. </returns>
-        public Quaternion GetOrientation()
+        /// <returns> The quaternion orientation of the work object. </returns>
+        public Quaternion CalculateOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_plane);
             return _orientation;
         }
 
         /// <summary>
-        /// Method that calculates the quaternion orientation of the user frame coordinate system. 
+        /// Calculates and returns the quaternion orientation of the user frame coordinate system. 
         /// </summary>
-        /// <returns> Returns the quaternion orientation of the user frame. </returns>
-        public Quaternion GetUserFrameOrientation()
+        /// <returns> The quaternion orientation of the user frame. </returns>
+        public Quaternion CalculateUserFrameOrientation()
         {
             _userFrameOrientation = HelperMethods.PlaneToQuaternion(_userFrame);
             return _userFrameOrientation;
         }
 
         /// <summary>
-        /// Calculates the global work object plane since the work object coordinate system and 
-        /// the user frame coordinate system can both be un equal to the worldc coordinate system. 
+        /// Calculates and returns the global work object plane. 
         /// </summary>
-        /// <returns> Returns the global work object plane. </returns>
-        public Plane GetGlobalWorkObjectPlane()
+        /// <returns> The global work object plane. </returns>
+        public Plane CalculateGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
             _globalPlane = new Plane(_plane);
@@ -221,30 +220,23 @@ namespace RobotComponents.Definitions
             // Re-orient again if an external axis is used
             if (_externalAxis != null)
             {
-                if (_externalAxis is ExternalRotationalAxis)
-                {
-                    // For a external rotational axis the coordinate system of the work object plane
-                    // is definied in the coordinate system of teh external rotational axis (the axis plane)
-                    Transform orient2 = Transform.PlaneToPlane(Plane.WorldXY, _externalAxis.AxisPlane);
-                    _globalPlane.Transform(orient2);
-                }
-                else if (_externalAxis is ExternalLinearAxis)
-                {
-                    //TODO...
-                }
+                // For an external axis the coordinate system of the work object plane
+                // is definied in the coordinate system of the external axis.
+                Transform orient2 = Transform.PlaneToPlane(Plane.WorldXY, _externalAxis.AttachmentPlane);
+                _globalPlane.Transform(orient2);
             }
 
             return _globalPlane;
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid work object. 
+        /// Initializes the fields and properties to construct a valid Work Object instance. 
         /// </summary>
         private void Initialize()
         {
-            GetOrientation();
-            GetUserFrameOrientation();
-            GetGlobalWorkObjectPlane();
+            CalculateOrientation();
+            CalculateUserFrameOrientation();
+            CalculateGlobalWorkObjectPlane();
 
             // Set to a movable frame if an exernal axes is coupled
             if (_externalAxis != null)
@@ -254,7 +246,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid work object. 
+        /// Reinitializes the fields and properties to construct a valid Work Object instance.
         /// </summary>
         public void ReInitialize()
         {
@@ -262,20 +254,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Method for creating the work object data for the system BASE code. 
+        /// Returns the RAPID declaration code line of the this Work Object.
         /// </summary>
-        /// <returns> Returns the work object BASE code as a string. </returns>
-        public string GetWorkObjData()
-        {
-            string result = CreateWorkObjString();
-            return result;
-        }
-
-        /// <summary>
-        /// Private method for creating the work object data for the system BASE code. 
-        /// </summary>
-        /// <returns> Returns the work object BASE code as a string. </returns>
-        private string CreateWorkObjString()
+        /// <returns> The RAPID code line. </returns>
+        public string ToRAPIDDeclaration()
         {
             string result = "";
 

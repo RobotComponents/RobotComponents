@@ -119,8 +119,8 @@ namespace RobotComponents.Definitions
 
             // Update tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
-            _meshes.Add(GetAttachedToolMesh(_tool));
-            _toolPlane = GetAttachedToolPlane(_tool);
+            _meshes.Add(GetAttachedToolMesh());
+            CalculateAttachedToolPlane();
 
             // Update external axis related fields
             _externalAxes = new List<ExternalAxis>();
@@ -159,8 +159,8 @@ namespace RobotComponents.Definitions
 
             // Tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
-            _meshes.Add(GetAttachedToolMesh(_tool));
-            _toolPlane = GetAttachedToolPlane(_tool);
+            _meshes.Add(GetAttachedToolMesh());
+            CalculateAttachedToolPlane();
 
             // External axis related fields
             _externalAxes = externalAxes;
@@ -234,7 +234,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Re-initializes the fields related to the list with external axes.
+        /// Reinitializes the fields that are related to the attached external axes.
         /// </summary>
         private void UpdateExternalAxisFields()
         {
@@ -272,34 +272,33 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the attached tool mesh in the robot coordinate space.
+        /// Returns the attached Robot Tool mesh in robot coordinate space.
         /// </summary>
-        /// <param name="tool"> Ther robot tool to take the mesh from. </param>
         /// <returns> The tool mesh in the robot coordinate space. </returns>
-        public Mesh GetAttachedToolMesh(RobotTool tool)
+        public Mesh GetAttachedToolMesh()
         {
-            Mesh toolMesh = tool.Mesh.DuplicateMesh();
-            Transform trans = Transform.PlaneToPlane(tool.AttachmentPlane, _mountingFrame);
+            Mesh toolMesh = _tool.Mesh.DuplicateMesh();
+            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             toolMesh.Transform(trans);
             return toolMesh;
         }
 
         /// <summary>
-        /// Defines the TCP plane of the attached robot tool in the robot coordinate space.
+        /// Calculates and returns the TCP plane of the attached Robot Tool in robot coordinate space.
         /// </summary>
-        /// <param name="tool"> Ther robot tool to take the mesh from. </param>
-        /// <returns> The attached tool mesh in the robot coordinate space. </returns>
-        public Plane GetAttachedToolPlane(RobotTool tool)
+        /// <returns> The TCP plane in robot coordinate space. </returns>
+        public Plane CalculateAttachedToolPlane()
         {
-            Plane toolPlane = new Plane(tool.ToolPlane);
-            Transform trans = Transform.PlaneToPlane(tool.AttachmentPlane, _mountingFrame);
-            toolPlane.Transform(trans);
-            return toolPlane;
+            _toolPlane = new Plane(_tool.ToolPlane);
+            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            _toolPlane.Transform(trans);
+
+            return _toolPlane;
         }
 
         /// <summary>
-        /// Transforms the robot spatial properties (planes and meshes.
-        /// The attached external axes will not be transformed. 
+        /// Transforms the robot spatial properties (planes and meshes).
+        /// NOTE: The attached external axes will not be transformed. 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
         public void Transfom(Transform xform)
@@ -320,8 +319,7 @@ namespace RobotComponents.Definitions
                 _internalAxisPlanes[i] = new Plane(transformedPlane);
             }
 
-            _toolPlane = GetAttachedToolPlane(_tool);
-
+            CalculateAttachedToolPlane();
         }
         #endregion
 
@@ -404,7 +402,7 @@ namespace RobotComponents.Definitions
             set
             {
                 _mountingFrame = value;
-                _toolPlane = GetAttachedToolPlane(_tool);
+                CalculateAttachedToolPlane();
             }
         }
 
@@ -428,7 +426,7 @@ namespace RobotComponents.Definitions
             set
             {
                 _tool = value;
-                _toolPlane = GetAttachedToolPlane(_tool);
+                CalculateAttachedToolPlane();
             }
         }
 

@@ -354,21 +354,24 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines the axis curve based on the axis limits, the momvement direction and the attachment plane origin.
+        /// Gets the axis curve. The direction of the curve defines the movement direction and the spatial limits of the attachement plane.
         /// </summary>
-        public void GetAxisCurve()
+        /// <returns> The axis curve. </returns>
+        public Curve GetAxisCurve()
         {
             Line line = new Line(_attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Min, _attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Max);
             _axisCurve = line.ToNurbsCurve();
             _axisCurve.Domain = _axisLimits;
+
+            return _axisCurve;
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method does not take into account the axis limits. 
+        /// Returns the position of the attachment plane for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
@@ -381,12 +384,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the the transformation matrix for a defined external axis value. 
-        /// This method does not take into account the axis limits. 
+        /// Returns the the transformation matrix for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in mm. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
-        /// <returns> The transformation matrix </returns>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <returns> The transformation matrix. </returns>
         public override Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
@@ -414,11 +417,11 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Returns the position of the attachment plane for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used.  
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in mm. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePositionSave(ExternalJointPosition externalJointPosition)
         {
@@ -430,12 +433,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the the transformation matrix for a defined external axis value. 
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Returns the the transformation matrix for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the transformation matrix for in mm. </param>
-        /// <returns> Returns the transformation matrix. </returns>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <returns> The transformation matrix. </returns>
         public override Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition)
         {
             double axisValue = externalJointPosition[_axisNumber];
@@ -462,9 +465,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the external axis mesh for a defined external axis value.
+        /// Calculates and returns the position of the external axis meshes for a given External Joint Position.
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the meshes for in mm. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed meshes. </returns>
         public override List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition)
         {
@@ -479,7 +482,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid external linear axis object. 
+        /// Initializes the fields and properties to construct a valid External Linear Axis instance. 
         /// </summary>
         private void Initialize()
         {
@@ -487,7 +490,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid external linear axis. 
+        /// Reinitializes the fields and properties to construct a valid External Linear Axis instance. 
         /// </summary>
         public override void ReInitialize()
         {
@@ -496,9 +499,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Transforms the external linear axis spatial properties (planes and meshes. 
+        /// Transforms the external axis spatial properties (planes and meshes). 
         /// </summary>
-        /// <param name="xform"> Spatial deform. </param>
+        /// <param name="xform"> The spatial deform. </param>
         public override void Transform(Transform xform)
         {
             _attachmentPlane.Transform(xform);

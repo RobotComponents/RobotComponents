@@ -130,7 +130,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>

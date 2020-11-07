@@ -395,11 +395,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Calculates the position and the orientation of the target in the world coordinate system. 
-        /// If an external axis is attached to the work object this returns the pose of the 
+        /// Calculates the position and the orientation of the target in world coordinate space. 
+        /// If an external axis is attached to the work object this method returns the pose of the 
         /// target plane in the world coorinate space for axis values equal to zero.
         /// </summary>
-        /// <returns> The the target plane in the world coordinate system. </returns>
+        /// <returns> The the target plane in world coordinate space. </returns>
         public Plane GetGlobalTargetPlane()
         {
             if (_target is RobotTarget robotTarget)
@@ -418,16 +418,11 @@ namespace RobotComponents.Actions
         } 
 
         /// <summary>
-        /// Calculates the posed target plane for the defined Robot with attached external axes in world coorindate space.
+        /// Calculates the posed target plane for the defined Robot with attached external axes in world coordinate space.
         /// </summary>
-        /// <param name="robot"> The robot info with the external axes that defined the axis logic. </param>
-        /// <param name="logic"> Retuns the axis logic number as an int. </param>
-        /// <returns> The posed target plane in the word coordinate system. </returns>
-        public Plane GetPosedGlobalTargetPlane(Robot robot, out int logic)
+        /// <returns> The posed target plane in world coordinate space. </returns>
+        public Plane GetPosedGlobalTargetPlane()
         {
-            // Initiate axis logic
-            logic = -1; // dummy value
-
             if (_target is RobotTarget robotTarget)
             {
                 // Not transformed global target plane
@@ -436,17 +431,7 @@ namespace RobotComponents.Actions
                 // Re-orient the target plane if an external axis is attached to the work object
                 if (_workObject.ExternalAxis != null)
                 {
-                    // Check if the axis is attached to the robot and get the axis logic number
-                    logic = robot.ExternalAxes.FindIndex(p => p.Name == _workObject.ExternalAxis.Name); // TODO: use _workObject.ExternalAxis.AxisNumber;
-
-                    // Check axis logic
-                    if (logic == -1)
-                    {
-                        throw new InvalidOperationException("The external axis that is attached to the work object could not be found in the list with external axes that are attached to the Robot. Did you attach the external axis to the Robot?");
-                    }
-
-                    // Transform
-                    Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(robotTarget.ExternalJointPosition, out bool inLimits);
+                    Transform transform = _workObject.ExternalAxis.CalculateTransformationMatrix(robotTarget.ExternalJointPosition, out _);
                     plane.Transform(transform);
                 }
 
@@ -460,17 +445,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return String.Empty;
         }
 
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>
@@ -678,7 +663,7 @@ namespace RobotComponents.Actions
                 // Generates the robot target variable for a MoveL or MoveJ instruction
                 if (_movementType == MovementType.MoveL || _movementType == MovementType.MoveJ)
                 {
-                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalAxisValues();
+                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
                     robotTarget.ToRAPIDDeclaration(RAPIDGenerator);
                 }
 

@@ -111,7 +111,7 @@ namespace RobotComponents.Gh.Components.Definitions
 
             // Outputs
             DA.SetData(0, _robotTool);
-            DA.SetData(1, _robotTool.GetRSToolData());
+            DA.SetData(1, _robotTool.ToRAPIDDeclaration());
 
             #region Object manager
             // Gets ObjectManager of this document

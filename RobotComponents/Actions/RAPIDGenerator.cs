@@ -113,10 +113,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID program code.
-        /// This method also overwrites or creates a file if saved to file is set eqaul to true.
+        /// Returns the RAPID program code.
+        /// This method also overwrites or creates a file if the property 'SaveToFile is set equal to true.
         /// </summary>
-        /// <returns> Returns the RAPID program code as a string. </returns>
+        /// <returns> The RAPID program code as a string. </returns>
         public string CreateProgramCode()
         {
             // Reset fields
@@ -190,13 +190,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
+        /// Returns the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
         /// It adds the robot tools and work objects that are collected by this RAPID generator. 
-        /// For this you have to call the CreateProgamCode first. 
-        /// This method also overwrites or creates a file if saved to file is set equal to true.
+        /// For this you have to call the methode 'CreateProgamCode' first. 
+        /// This method also overwrites or creates a file if the property 'SaveToFile' is set equal to true.
         /// </summary>
         /// <param name="customCode"> Custom user definied base code as list with strings. </param>
-        /// <returns> Returns the RAPID system code as a string. </returns>
+        /// <returns> The RAPID system code as a string. </returns>
         public string CreateSystemCode(List<string> customCode)
         {
             List<RobotTool> robotTools = new List<RobotTool>();
@@ -222,14 +222,14 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
+        /// Returns the RAPID system code with as default tool0, wobj0 and load0 if the system module name is equal to BASE.
         /// It is adds the robot tools, work objects and custom code lines from the given lists. 
-        /// This method also overwrites or creates a file if saved to file is set equal to true.
+        /// This method also overwrites or creates a file if the property 'SaveToFile' is set equal to true.
         /// </summary>
-        /// <param name="robotTools"> The robot tools that should be added to the BASE code as a list. </param>
-        /// <param name="workObjects"> The work objects that should be added to the BASE code as a list. </param>
+        /// <param name="robotTools"> The robot tools that should be added to the system code as a list. </param>
+        /// <param name="workObjects"> The work objects that should be added to the system code as a list. </param>
         /// <param name="customCode"> Custom user definied base code as list with strings. </param>
-        /// <returns> Returns the RAPID system code as a string. </returns>
+        /// <returns> The RAPID system code as a string. </returns>
         public string CreateSystemCode(List<RobotTool> robotTools, List<WorkObject> workObjects, List<string> customCode)
         {
             // Initialize
@@ -331,17 +331,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Gets the System Code for all Robot Tools in the list.
+        /// Returns the System Code for the given Robot Tools.
         /// </summary>
-        /// <param name="robotTools"> The list with Robot Tools. </param>
-        /// <returns> Returns the robot tool system code as a string. </returns>
+        /// <param name="robotTools"> The Robot Tools. </param>
+        /// <returns> The robot tool system code as a string. </returns>
         private string CreateToolSystemCode(List<RobotTool> robotTools)
         {
             string result = "";
 
             for (int i = 0; i != robotTools.Count; i++)
             {
-                result += "\t" + robotTools[i].GetRSToolData();
+                result += "\t" + robotTools[i].ToRAPIDDeclaration();
                 result += Environment.NewLine;
             }
 
@@ -349,17 +349,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Gets the System Code for all Robot Tools in the list.
+        /// Returns the System Code for all given Work Objects.
         /// </summary>
-        /// <param name="workObjects"> The list with Robot Tools. </param>
-        /// <returns> Returns the robot tool system code as a string. </returns>
+        /// <param name="workObjects"> The Work Objects. </param>
+        /// <returns> The Work Object system code as a string. </returns>
         private string CreateWorkObjectSystemCode(List<WorkObject> workObjects)
         {
             string result = "";
 
             for (int i = 0; i != workObjects.Count; i++)
             {
-                result += "\t" + workObjects[i].GetWorkObjData();
+                result += "\t" + workObjects[i].ToRAPIDDeclaration();
                 result += Environment.NewLine;
             }
 
@@ -367,7 +367,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Writes the RAPID program code to a file if a file path is set
+        /// Writes the RAPID program code to a file if a file path is set.
         /// </summary>
         public void WriteProgramCodeToFile()
         {
@@ -381,7 +381,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Writes the RAPID system code to a file if a file path is set
+        /// Writes the RAPID system code to a file if a file path is set.
         /// </summary>
         public void WriteSystemCodeToFile()
         {
@@ -395,9 +395,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Checks whether the first movement type is an Absolute Joint Movement
+        /// Checks whether the first movement type is an absolute joint movement.
         /// </summary>
-        /// <returns> Returns a boolean that indicates if the first movement type is an Absolute Joint Movement. </returns>
+        /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
         private bool CheckFirstMovement()
         {
             _firstMovementIsMoveAbsJ = false;

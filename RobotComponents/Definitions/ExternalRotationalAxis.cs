@@ -94,11 +94,13 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class with empty meshes.
         /// </summary>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
         /// <param name="axisLimits"> The motion limits. </param>
-        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits)
+        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits)
         {
             _name = "";
+            _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
@@ -107,21 +109,21 @@ namespace RobotComponents.Definitions
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
 
-            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
-
             Initialize();
         }
 
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class.
         /// </summary>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
         /// <param name="axisLimits"> The motion limits. </param>
         /// <param name="baseMesh"> The base mesh. </param>
         /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             _name = "";
+            _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
@@ -129,8 +131,6 @@ namespace RobotComponents.Definitions
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
-
-            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
 
             Initialize();
         }
@@ -139,13 +139,15 @@ namespace RobotComponents.Definitions
         /// Initializes a new instance of the External Rotational Axis class.
         /// </summary>
         /// <param name="name"> The axis name. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
         /// <param name="axisLimits"> The motion limits. </param>
         /// <param name="baseMesh"> The base mesh. </param>
         /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        public ExternalRotationalAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
         {
             _name = name;
+            _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
@@ -153,8 +155,6 @@ namespace RobotComponents.Definitions
             _baseMesh = baseMesh;
             _linkMesh = linkMesh;
             _posedMeshes = new List<Mesh>();
-
-            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
 
             Initialize();
         }
@@ -163,13 +163,15 @@ namespace RobotComponents.Definitions
         /// Initializes a new instance of the External Rotational Axis class. 
         /// </summary>
         /// <param name="name"> The axis name. </param>
+        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
         /// <param name="axisLimits"> The motion limits. </param>
         /// <param name="baseMeshes"> The base mesh. </param>
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        public ExternalRotationalAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
         {
             _name = name;
+            _attachmentPlane = attachmentPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
@@ -181,7 +183,100 @@ namespace RobotComponents.Definitions
             for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
             for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
 
-            _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class with empty meshes.
+        /// Sets the attachment plane equal to the axis plane.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits)
+        {
+            _name = "";
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = false;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// Sets the attachment plane equal to the axis plane.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _name = "";
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = false;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// Sets the attachment plane equal to the axis plane.
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = false;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class. 
+        /// Sets the attachment plane equal to the axis plane.
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMeshes"> The base mesh. </param>
+        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = false;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
 
             Initialize();
         }
@@ -268,11 +363,11 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method does not take into account the axis limits. 
+        /// Returns the position of the attachment plane for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in degrees. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
@@ -285,12 +380,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method does not take into account the axis limits. 
+        /// Returns the the transformation matrix for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the transformation matrix for in degrees. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
-        /// <returns> The transformation matrix </returns>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <returns> The transformation matrix. </returns>
         public override Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
@@ -319,11 +414,11 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Returns the position of the attachment plane for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used.  
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the attachment plane for in degrees. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed attachement plane. </returns>
         public override Plane CalculatePositionSave(ExternalJointPosition externalJointPosition)
         {
@@ -335,12 +430,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the transformation matrix for a defined external axis value.
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Returns the the transformation matrix for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used. 
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the transformation matrix for in degrees. </param>
-        /// <returns> The transformation matrix </returns>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <returns> The transformation matrix. </returns>
         public override Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition)
         {
             double axisValue = externalJointPosition[_axisNumber];
@@ -368,9 +463,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the external axis mesh for a defined external axis value.
+        /// Calculates and returns the position of the external axis meshes for a given External Joint Position.
         /// </summary>
-        /// <param name="externalJointPosition"> The external joint position to calculate the position of the meshes for in degrees. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed meshes. </returns>
         public override List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition)
         {
@@ -385,7 +480,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid external rotational axis object. 
+        /// Initializes the fields and properties to construct a valid External Rotational Axis instance. 
         /// </summary>
         private void Initialize()
         {
@@ -393,7 +488,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid external rotational axis. 
+        /// Reinitializes the fields and properties to construct a valid External Rotational Axis instance. 
         /// </summary>
         public override void ReInitialize()
         {
@@ -457,7 +552,6 @@ namespace RobotComponents.Definitions
             set 
             { 
                 _attachmentPlane = value;
-                _axisPlane = new Plane(_attachmentPlane); //TODO: for now they are always equal
                 ReInitialize();
             }
         }
@@ -474,7 +568,6 @@ namespace RobotComponents.Definitions
             set 
             { 
                 _axisPlane = value;
-                _attachmentPlane = new Plane(_axisPlane); //TODO: for now they are always equal
                 ReInitialize();
             }
         }

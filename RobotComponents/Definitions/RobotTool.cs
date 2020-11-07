@@ -451,16 +451,16 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid robot tool object. 
+        /// Initializes the fields and properties to construct a valid Robot Tool istance.
         /// </summary>
         private void Initialize()
         {
-            GetToolPosition();
-            GetToolOrientation();
+            CalculateToolPosition();
+            CalculateToolOrientation();
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid robot tool object. 
+        /// Reinitializes the fields and properties to construct a valid Robot Tool instance. 
         /// </summary>
         public void ReInitialize()
         {
@@ -468,10 +468,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the local tool center point relative to the defined attachment plane. 
+        /// Calculates and returns the tool center point relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> Returns the local tool center point coordinates. </returns>
-        public Point3d GetToolPosition()
+        /// <returns> The tool center point. </returns>
+        public Point3d CalculateToolPosition()
         {
             Plane toolPlane = new Plane(_toolPlane);
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_attachmentPlane, Plane.WorldXY);
@@ -483,10 +483,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the tool center orientatin relative to the defined attachment plane. 
+        /// Calculates and returns the tool center orientation relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> Returns the quaternion orientation of the tool center plane. </returns>
-        public Quaternion GetToolOrientation()
+        /// <returns> The quaternion orientation of the tool center plane. </returns>
+        public Quaternion CalculateToolOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _toolPlane);
 
@@ -494,21 +494,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Method for creating the robot tool data for the system BASE code. 
+        /// Returns the RAPID declaration code line of the this Robot Tool.
         /// </summary>
-        /// <returns> Returns the robot tool BASE code as a string. </returns>
-        public string GetRSToolData()
-        {
-            string result;
-            result = CreateToolDataString();
-            return result;
-        }
-
-        /// <summary>
-        /// Private method for creating the robot tool data for the system BASE code. 
-        /// </summary>
-        /// <returns> Returns the robot tool BASE code as a string. </returns>
-        private string CreateToolDataString()
+        /// <returns> The RAPID code line. </returns>
+        public string ToRAPIDDeclaration()
         {
             // Add robot tool name
             string result = Enum.GetName(typeof(ReferenceType), _referenceType);
@@ -555,9 +544,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Clear / unset all the fields and properties of the object.
-        /// Used for constructing an empty Robot Tool object. 
-        /// Since the empty constructor creates the default Robot Tool tool0.
+        /// Clears all the fields and properties of the current instance.
+        /// Typically used for defining an empty Robot Tool instance 
+        /// (since the empty constructor creates the default Robot Tool tool0).
         /// </summary>
         public void Clear()
         {
@@ -577,7 +566,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Transforms the Robot Tool spatial properties (planes and meshes). 
         /// </summary>
-        /// <param name="xform"> Spatial deform. </param>
+        /// <param name="xform"> The spatial deform. </param>
         public void Transform(Transform xform)
         {
             _mesh.Transform(xform);

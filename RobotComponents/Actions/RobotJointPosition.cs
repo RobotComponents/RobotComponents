@@ -192,18 +192,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new array
+        /// Returns the Robot Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> An array containing the axis values of the robot joint position. </returns>
+        /// <returns> The array containing the axis values of the robot joint position. </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list
+        /// Returns the Robot Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> A list containing the axis values of the robot joint position. </returns>
+        /// <returns> The list containing the axis values of the robot joint position. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -251,9 +251,9 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Adds a constant number to all the values inside this Joint Position
+        /// Adds a constant number to all the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be added. </param>
+        /// <param name="value"> The number to be added. </param>
         public void Add(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -266,7 +266,7 @@ namespace RobotComponents.Actions
         /// Adds the values of an Robot Joint Position to the values inside this Joint Position. 
         /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The Robot Joint Position that should be added. </param>
+        /// <param name="jointPosition"> The Robot Joint Position to be added. </param>
         public void Add(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -276,9 +276,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substracts a constant number from the values inside this Joint Position
+        /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be substracted. </param>
+        /// <param name="value"> The number to be substracted. </param>
         public void Substract(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -291,7 +291,7 @@ namespace RobotComponents.Actions
         /// Substracts the values of an Robot Joint Position from the values inside this Joint Position. 
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The Robot Joint Position that should be substracted. </param>
+        /// <param name="jointPosition"> The Robot Joint Position to be substracted. </param>
         public void Substract(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -316,7 +316,7 @@ namespace RobotComponents.Actions
         /// Multiplies the values inside this Joint Position with the values from another Robot Joint Position.
         /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The multiplier as an Robot Joint Position. </param>
+        /// <param name="jointPosition"> The multiplier as a Robot Joint Position. </param>
         public void Multiply(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -361,11 +361,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary></summary>
-        /// Method that checks the array with internal axis values. 
+        /// Cecks the array with internal axis values. 
         /// Always returns a list with 6 internal axis values. 
-        /// For missing values 0.0 will be used. 
-        /// <param name="axisValues">A list with the internal axis values.</param>
-        /// <returns> Returns an array with 6 Robot axis values.</returns>
+        /// For missing values 0.0 is used. 
+        /// <param name="axisValues"> The list with the internal axis values. </param>
+        /// <returns> The array with 6 axis values. </returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
@@ -387,11 +387,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the Joint Position in RAPID code format, e.g. "[0, 0, 0, 0, 45, 0]".
         /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <returns> The string with axis values. </returns>
+        public string ToRAPID()
         {
             string code = "[";
 
@@ -406,10 +405,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> An empty string. </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// Returns the RAPID instruction code line of the this action. 
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -547,7 +556,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Addition of two Robot Joint Position
+        /// Adds a Robot Joint Position to an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -558,7 +567,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substraction of two Robot Joint Position
+        /// Substracts a Robot Joint Position from an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -569,7 +578,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Multiplication of two Robot Joint Positions
+        /// Multiplies a Robot Joint Position woth an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -580,7 +589,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Division of a Robot Joint Position by another Robot Joint Position
+        /// Divides a Robot Joint Position with an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>

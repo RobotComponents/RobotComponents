@@ -15,16 +15,22 @@ namespace RobotComponents.Actions
     {
         #region methods
         /// <summary>
-        /// Copies the axis values of the joint position to a new array.
+        /// Returns the Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> An array containing the axis values of the joint position. </returns>
+        /// <returns> The array containing the axis values of the joint position. </returns>
         double[] ToArray();
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list.
+        /// Returns the Joint Position as a list with axis values.
         /// </summary>
-        /// <returns> A list containing the axis values of the joint position. </returns>
+        /// <returns> The list containing the axis values of the joint position. </returns>
         List<double> ToList();
+
+        /// <summary>
+        /// Returns the Joint Position in RAPID code format, e.g. "[0, 0, 0, 0, 45, 0]".
+        /// </summary>
+        /// <returns> The string with axis values. </returns>
+        string ToRAPID();
 
         /// <summary>
         /// Sets all the elements in the joint position back to its default value.

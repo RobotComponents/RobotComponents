@@ -204,18 +204,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new array
+        /// Returns the External Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> An array containing the axis values of the external joint position. </returns>
+        /// <returns> An array containing the axis values. </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list
+        /// Returns the External Joint Position as a list with axis values.
         /// </summary>
-        /// <returns> A list containing the axis values of the external joint position. </returns>
+        /// <returns> A list containing the axis values. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -235,9 +235,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Adds a constant number to all the values inside this Joint Position
+        /// Adds a constant number to all the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be added. </param>
+        /// <param name="value"> The number to be added. </param>
         public void Add(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -253,7 +253,7 @@ namespace RobotComponents.Actions
         /// Adds the values of an External Joint Position to the values inside this Joint Position. 
         /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The External Joint Position that should be added. </param>
+        /// <param name="jointPosition"> The External Joint Position to be added. </param>
         public void Add(ExternalJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -274,9 +274,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substracts a constant number from the values inside this Joint Position
+        /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be substracted. </param>
+        /// <param name="value"> The number to be substracted. </param>
         public void Substract(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -292,7 +292,7 @@ namespace RobotComponents.Actions
         /// Substracts the values of an External Joint Position from the values inside this Joint Position. 
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The External Joint Position that should be substracted. </param>
+        /// <param name="jointPosition"> The External Joint Position to be substracted. </param>
         public void Substract(ExternalJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -400,11 +400,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary></summary>
-        /// Method that checks the array with external axis values. 
-        /// Always returns a list with 6 external axis values. 
+        /// Checks the array with external axis values. 
+        /// Always returns an array with 6 external axis values. 
         /// For missing values 9E9 (not connected) will be used. 
-        /// <param name="axisValues">A list with the external axis values.</param>
-        /// <returns> Returns an array with 6 external axis values.</returns>
+        /// <param name="axisValues"> The array with axis values. </param>
+        /// <returns> The array with 6 external axis values. </returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
@@ -426,11 +426,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the Joint Position in RAPID code format, e.g. "[100, 9E9, 9E9, 9E9, 9E9, 9E9]".
         /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <returns> The string with axis values. </returns>
+        public string ToRAPID()
         {
             string code = "[";
 
@@ -456,10 +455,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> An empty string. </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// Returns the RAPID instruction code line of the this action. 
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -677,7 +686,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Addition of two External Joint Position
+        /// Adds an External Joint Position with an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -706,7 +715,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substraction of two External Joint Position
+        /// Substracts an External Joint Position from an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -735,7 +744,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Multiplication of two External Joint Positions
+        /// Multiplies an External Joint Position with an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -764,7 +773,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Division of a External Joint Position by another External Joint Position
+        /// Divides an External Joint Positin with by an other External Joint Position
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>

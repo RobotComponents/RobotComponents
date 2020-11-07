@@ -79,7 +79,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Resets / clears all lists with values (planes and axis values)
+        /// Resets / clears the current solution.
         /// </summary>
         private void Reset()
         {
@@ -103,9 +103,9 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Calculates the path from a list with Actions
+        /// Calculates the path from a list with Actions.
         /// </summary>
-        /// <param name="actions"> The list with Actions to calculate the path. </param>
+        /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolatins between two targets. </param>
         public void Calculate(List<Actions.Action> actions, int interpolations)
         {
@@ -125,12 +125,6 @@ namespace RobotComponents.Kinematics
                 else if (actions[i] is AutoAxisConfig autoAxisConfig)
                 {
                     _autoAxisConfig = autoAxisConfig.IsActive;
-                }
-
-                else if (actions[i] is AbsoluteJointMovement absoluteJointMovement)
-                {
-                    JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
-                    counter++;
                 }
 
                 else if (actions[i] is Movement movement)
@@ -159,6 +153,13 @@ namespace RobotComponents.Kinematics
                         counter++;
                     }
                 }
+
+                // OBSOLETE
+                else if (actions[i] is AbsoluteJointMovement absoluteJointMovement)
+                {
+                    JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
+                    counter++;
+                }
             }
 
             // Add joint positions and plane from last movement
@@ -186,7 +187,7 @@ namespace RobotComponents.Kinematics
         /// <summary>
         /// Sets the correct Robot Tool for the defined movement.
         /// </summary>
-        /// <param name="movement"> The movemen to set the Robot Tool for. </param>
+        /// <param name="movement"> The Movement to set the Robot Tool for. </param>
         private void SetRobotTool(Movement movement)
         {
             if (movement.RobotTool == null)
@@ -242,7 +243,7 @@ namespace RobotComponents.Kinematics
             // Auto Axis Config
             if (_autoAxisConfig == true && movement.MovementType != MovementType.MoveAbsJ)
             {
-                _robot.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
+                _robot.InverseKinematics.CalculateClosestRobotJointPosition(_lastRobotJointPosition);
             }
 
             // Get the Robot Joint Positions
@@ -257,7 +258,7 @@ namespace RobotComponents.Kinematics
         }
         
         /// <summary>
-        /// Calculates the interpolated path for a linear movement. 
+        /// Calculates the interpolated path for a linear movement.
         /// </summary>
         /// <param name="movement"> The movement as a linear movement type. </param>
         private void LinearMovementFromRobotTarget(Movement movement)
@@ -270,7 +271,7 @@ namespace RobotComponents.Kinematics
 
             // Get the final joint positions of this movement
             _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.CalculateExternalAxisValues();
+            _robot.InverseKinematics.CalculateExternalJointPosition();
 
             // Get the External Joint Positions
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
@@ -335,11 +336,11 @@ namespace RobotComponents.Kinematics
                 {
                     if (i == 0)
                     {
-                        _robot.InverseKinematics.GetClosestRobotJointPosition(_lastRobotJointPosition);
+                        _robot.InverseKinematics.CalculateClosestRobotJointPosition(_lastRobotJointPosition);
                     }
                     else
                     {
-                        _robot.InverseKinematics.GetClosestRobotJointPosition(_robotJointPositions.Last());
+                        _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
                     }
                 }
 
@@ -348,7 +349,7 @@ namespace RobotComponents.Kinematics
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
 
                 // Add the plane
-                Plane globalPlane = subMovement.GetPosedGlobalTargetPlane(_robot, out _);
+                Plane globalPlane = subMovement.GetPosedGlobalTargetPlane();
                 _planes.Add(globalPlane);
 
                 // Always add the first point to list with paths
@@ -368,7 +369,7 @@ namespace RobotComponents.Kinematics
             }
 
             // Add last point
-            Point3d lastPoint = movement.GetPosedGlobalTargetPlane(_robot, out _).Origin;
+            Point3d lastPoint = movement.GetPosedGlobalTargetPlane().Origin;
             if (points[points.Count - 1] != lastPoint)
             {
                 points.Add(lastPoint);
@@ -391,7 +392,7 @@ namespace RobotComponents.Kinematics
             // Auto Axis Config
             if (_autoAxisConfig == true)
             {
-                _robot.InverseKinematics.GetClosestRobotJointPosition(_robotJointPositions.Last());
+                _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
             }
 
             // Add last Joint Poistions

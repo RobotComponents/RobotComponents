@@ -156,8 +156,8 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Checks both internal and external axis limits and returns a list with possible errors messages. 
         /// </summary>
-        /// <param name="robot"> The robot info to check the axis values for. </param>
-        /// <returns> Returns a list with error messages. </returns>
+        /// <param name="robot"> The robot to check the axis values for. </param>
+        /// <returns> The list with error messages. </returns>
         public List<string> CheckAxisLimits(Robot robot)
         {
             List<string> errors = new List<string>();
@@ -171,8 +171,8 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Checks the internal axis limits and returns a list with possible errors messages. 
         /// </summary>
-        /// <param name="robot"> The robot info to check the axis values for. </param>
-        /// <returns> Returns a list with error messages. </returns>
+        /// <param name="robot"> The robot to check the axis values for. </param>
+        /// <returns> The list with error messages. </returns>
         public List<string> CheckInternalAxisLimits(Robot robot)
         {
             // Initiate list
@@ -193,8 +193,8 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Checks the external axis limits and returns a list with possible errors messages. 
         /// </summary>
-        /// <param name="robot"> The robot info to check the axis values for. </param>
-        /// <returns> Returns a list with error messages. </returns>
+        /// <param name="robot"> The robot to check the axis values for. </param>
+        /// <returns> The list with error messages. </returns>
         public List<string> CheckExternalAxisLimits(Robot robot)
         {
             // Initiate list
@@ -221,7 +221,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>
@@ -231,19 +231,19 @@ namespace RobotComponents.Actions
             code += " jointtarget ";
             code += _name;
             code += " := [";
-            code += _robotJointPosition.ToRAPIDDeclaration(robot);
+            code += _robotJointPosition.ToRAPID();
             code += ", ";
-            code += _externalJointPosition.ToRAPIDDeclaration(robot);
+            code += _externalJointPosition.ToRAPID();
             code += "];";
 
             return code;
         }
 
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;

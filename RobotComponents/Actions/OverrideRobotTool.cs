@@ -112,18 +112,17 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates the RAPID declaration code line of the this action.
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            robot.Tool = _robotTool;
-            return "! " + "Default Robot Tool changed to " + robot.Tool.Name + ".";
+            return String.Empty; // We don't write a comment between our declarations.
         }
-
+        
         /// <summary>
-        /// Creates the RAPID instruction code line of the this action. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>
@@ -140,7 +139,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            // We don't write a comment between our variable names
+            // We don't write a comment between our declarations.
         }
 
         /// <summary>
@@ -157,15 +156,6 @@ namespace RobotComponents.Actions
             {
                 RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
             }
-        }
-
-        /// <summary>
-        /// Get the name of the set Robot Tool.
-        /// </summary>
-        /// <returns> The name of the set Robot Tool. </returns>
-        public string GetToolName()
-        {
-            return _robotTool.Name;
         }
         #endregion
 

@@ -135,7 +135,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Calculates Forward Kinematics based on the internal and external axis values.
+        /// Calculates the forward kinematics solution with the Joint Positions stored inside this Forward Kinematics instance.
         /// </summary>
         public void Calculate()
         {
@@ -249,10 +249,10 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Sets new axis values and calculates the new solution.  
+        /// Calculates the forward kinematics solution with the given Joint Positions.
         /// </summary>
-        /// <param name="robotJointPosition">The internal axis values as a Robot Joint Position.</param>
-        /// <param name="externalJointPosition">The external axis values as an External Joint Position.</param>
+        /// <param name="robotJointPosition"> The  Robot Joint Position. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         public void Calculate(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
             _robotJointPosition = robotJointPosition;
@@ -261,7 +261,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Clears the current solution
+        /// Clears the current solution.
         /// </summary>
         public void Clear()
         {
@@ -278,7 +278,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the interal axis values are outside its limits.
+        /// Checks if the interal axis values are inside its limits.
         /// </summary>
         private void CheckInternalAxisLimits()
         {
@@ -293,7 +293,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the external axis values are outside its limits.
+        /// Checks if the external axis values are inside its limits.
         /// </summary>
         private void CheckExternalAxisLimits()
         {

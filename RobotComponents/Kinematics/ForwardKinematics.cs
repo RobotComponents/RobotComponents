@@ -27,7 +27,7 @@ namespace RobotComponents.Kinematics
         private List<Mesh> _posedInternalAxisMeshes = new List<Mesh>(); // Posed Robot Meshes
         private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>(); //Posed Axis Meshes
         private Plane _tcpPlane = Plane.Unset; // TCP Plane of end effector
-        private bool _inLimits = true; // Indicates if the axis values are in limits 
+        private bool _inLimits = true; // Indicates if the joint positions are in limits 
         private bool _hideMesh;
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
@@ -278,7 +278,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the interal axis values are inside its limits.
+        /// Checks if the positions of the robot axes are inside its limits.
         /// </summary>
         private void CheckInternalAxisLimits()
         {
@@ -286,14 +286,14 @@ namespace RobotComponents.Kinematics
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
-                    _errorText.Add("Robot joint position " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add("The position of robot axis " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
                 }
             }
         }
 
         /// <summary>
-        /// Checks if the external axis values are inside its limits.
+        /// Checks if the positions of the external logical axes are inside its limits.
         /// </summary>
         private void CheckExternalAxisLimits()
         {
@@ -304,13 +304,13 @@ namespace RobotComponents.Kinematics
 
                 if (_externalJointPosition[index] == 9e9)
                 {
-                    _errorText.Add("External joint position " + logic + " is not definied by the user.");
+                    _errorText.Add("The position of external logical axis " + logic + " is not definied.");
                     _inLimits = false;
                 }
 
                 else if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[index], false) == false)
                 {
-                    _errorText.Add("External joint position " + logic + " is not in range.");
+                    _errorText.Add("The position of external logical axis  " + logic + " is not in range.");
                     _inLimits = false;
                 }
             }

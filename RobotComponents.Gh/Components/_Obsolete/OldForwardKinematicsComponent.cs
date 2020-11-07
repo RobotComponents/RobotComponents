@@ -129,8 +129,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Create data tree for output of all posed meshes
-            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
-            meshes = GetPosedMeshesDataTree(forwardKinematics);
+            GH_Structure<GH_Mesh> meshes = GetPosedMeshesDataTree(forwardKinematics);
 
             // Output
             _fk = forwardKinematics;

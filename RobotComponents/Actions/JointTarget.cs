@@ -26,7 +26,7 @@ namespace RobotComponents.Actions
         private ReferenceType _referenceType; // reference type
         private string _name; // joint target variable name
         private RobotJointPosition _robotJointPosition; // the position of the robot
-        private ExternalJointPosition _externalJointPosition; // the position of the external axes
+        private ExternalJointPosition _externalJointPosition; // the position of the external logical axes
         #endregion
 
         #region (de)serialization
@@ -183,7 +183,7 @@ namespace RobotComponents.Actions
             {
                 if (robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
-                    errors.Add("Joint Target  " + _name + ": Internal axis value " + (i + 1).ToString() + " is not in range.");
+                    errors.Add("Joint Target  " + _name + ": The position of robot axis " + (i + 1).ToString() + " is not in range.");
                 }
             }
 
@@ -208,12 +208,12 @@ namespace RobotComponents.Actions
 
                 if (_externalJointPosition[number] == 9e9)
                 {
-                    errors.Add("Joint Target " + _name + ": External axis value " + logic + " is not definied (9E9).");
+                    errors.Add("Joint Target " + _name + ": The position of external logical axis " + logic + " is not definied (9E9).");
                 }
 
                 else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    errors.Add("Joint Target " + _name + ": External axis value " + logic + " is not in range.");
+                    errors.Add("Joint Target " + _name + ": The position of external logical axis " + logic + " is not in range.");
                 }
             }
 

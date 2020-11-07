@@ -36,7 +36,7 @@ namespace RobotComponents.Kinematics
         private double _upperArmLength;
         private double _axis4offsetAngle;
         private readonly List<string> _errorText = new List<string>(); // Error text
-        private bool _inLimits = true; // Indicates if the axis values are in limits 
+        private bool _inLimits = true; // Indicates if the joint positions are in limits 
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
         private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
@@ -242,7 +242,7 @@ namespace RobotComponents.Kinematics
                 #region wrist center relative to axis 1
                 // Note that this is reversed because the clockwise direction when looking 
                 // down at the XY plane is typically taken as the positive direction for robot axis1
-                // Caculate internal axis value 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
+                // Caculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
                 double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
                 if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
                 _robotJointPositions[0][0] = internalAxisValue1;
@@ -250,7 +250,7 @@ namespace RobotComponents.Kinematics
                 _robotJointPositions[2][0] = internalAxisValue1;
                 _robotJointPositions[3][0] = internalAxisValue1;
 
-                // Rotate axis value 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
+                // Rotate the joint position 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
                 internalAxisValue1 += Math.PI;
                 if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
                 _robotJointPositions[4][0] = internalAxisValue1;
@@ -264,7 +264,7 @@ namespace RobotComponents.Kinematics
                 // i = 1: Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
                 for (int i = 0; i < 2; i++)
                 {
-                    // Get the first external axis value
+                    // Get the position of robot axis 1
                     internalAxisValue1 = _robotJointPositions[i * 4][0];
 
                     // Get the elbow points
@@ -292,7 +292,7 @@ namespace RobotComponents.Kinematics
                     Point3d intersectPt1 = circ.PointAt(par1);
                     Point3d intersectPt2 = circ.PointAt(par2);
 
-                    // Calculates the internal axis value 2 and 3
+                    // Calculates the position of robot axis 2 and 3
                     for (int j = 0; j < 2; j++)
                     {
                         // Calculate elbow and wrist variables
@@ -302,16 +302,16 @@ namespace RobotComponents.Kinematics
                         elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
                         elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
 
-                        // Calculate axis value 2
+                        // Calculate the position of robot axis 2
                         double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
                         double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
 
                         for (int k = 0; k < 2; k++)
                         {
-                            // Adds internal axis value 2
+                            // Adds the position of robot axis 2
                             _robotJointPositions[index1][1] = -internalAxisValue2;
 
-                            // Calculate internal axis value 3
+                            // Calculate the position of robot axis 3
                             double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
                             while (internalAxisValue3Wrapped >= Math.PI) { internalAxisValue3Wrapped -= 2 * Math.PI; }
                             while (internalAxisValue3Wrapped < -Math.PI) { internalAxisValue3Wrapped += 2 * Math.PI; }
@@ -323,7 +323,7 @@ namespace RobotComponents.Kinematics
 
                         for (int k = 0; k < 2; k++)
                         {
-                            // Calculate internal axis value 4
+                            // Calculate the position of robot axis 4
                             Vector3d axis4 = new Vector3d(_wrist - elbowPoint);
                             axis4.Rotate(-_axis4offsetAngle, elbowPlane.ZAxis);
                             Plane tempPlane = new Plane(elbowPlane);
@@ -341,7 +341,7 @@ namespace RobotComponents.Kinematics
                             while (internalAxisValue4Wrapped < -Math.PI) { internalAxisValue4Wrapped += 2 * Math.PI; }
                             _robotJointPositions[index2][3] = internalAxisValue4Wrapped;
 
-                            // Calculate internal axis value 5
+                            // Calculate the position of robot axis 5
                             Plane internalAxisPlane5 = new Plane(internalAxisPlane4);
                             internalAxisPlane5.Rotate(internalAxisValue4, internalAxisPlane4.ZAxis);
                             internalAxisPlane5 = new Plane(_wrist, -internalAxisPlane5.ZAxis, internalAxisPlane5.XAxis);
@@ -349,7 +349,7 @@ namespace RobotComponents.Kinematics
                             double internalAxisValue5 = Math.Atan2(axis6Y, axis6X);
                             _robotJointPositions[index2][4] = internalAxisValue5;
 
-                            // Calculate internal axis value 6
+                            // Calculate the position of robot axis 6
                             Plane internalAxisPlane6 = new Plane(internalAxisPlane5);
                             internalAxisPlane6.Rotate(internalAxisValue5, internalAxisPlane5.ZAxis);
                             internalAxisPlane6 = new Plane(_wrist, -internalAxisPlane6.YAxis, internalAxisPlane6.ZAxis);
@@ -495,7 +495,7 @@ namespace RobotComponents.Kinematics
                 // NOTE: Only works for a robot with one external axis that moves the robot.
                 double count = 0; // Counts the number of external axes that move the robot.
 
-                // Calcualtes the external axis values for each external axis
+                // Calcualtes the position of the external axes for each external axis
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
                     ExternalAxis externalAxis = _robot.ExternalAxes[i];
@@ -508,7 +508,7 @@ namespace RobotComponents.Kinematics
                         // External Linear Axis that moves the robot
                         if (externalLinearAxis.MovesRobot == true && count == 0)
                         {
-                            // Checks if external linear axis value needs to be negative or positive
+                            // Checks if the position the external linear axis needs to be negative or positive
                             externalLinearAxis.AxisCurve.ClosestPoint(_robot.BasePlane.Origin, out double robotBasePlaneParam);
                             externalLinearAxis.AxisCurve.ClosestPoint(_positionPlane.Origin, out double basePlaneParam);
 
@@ -677,7 +677,7 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
-        /// Checks if the interal axis values are inside its limits.
+        /// Checks if the positions of the robot axes are inside its limits.
         /// </summary>
         private void CheckInternalAxisLimits()
         {
@@ -685,14 +685,14 @@ namespace RobotComponents.Kinematics
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 { 
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": Robot joint position " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": The position of robot axis " + (i + 1).ToString() + " is not in range.");
                     _inLimits = false;
                 }
             }
         }
 
         /// <summary>
-        /// Checks if the external axis values are inside its limits.
+        /// Checks if the positions of the external axes are inside its limits.
         /// </summary>
         private void CheckExternalAxisLimits()
         {
@@ -703,7 +703,7 @@ namespace RobotComponents.Kinematics
 
                 if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": External joint position " + logic + " is not in range.");
+                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": The position of external logical axis " + logic + " is not in range.");
                     _inLimits = false;
                 }
             }

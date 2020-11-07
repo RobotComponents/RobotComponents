@@ -324,7 +324,7 @@ namespace RobotComponents.Kinematics
             // New external joint position
             ExternalJointPosition newExternalJointPosition = _lastExternalJointPosition;
 
-            // Create the sub target planes, internal axis values and external axis values for every interpolation step
+            // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
             for (int i = 0; i < _interpolations; i++)
             {
                 // Create new plane: the local target plane (in work object coordinate space)
@@ -335,7 +335,7 @@ namespace RobotComponents.Kinematics
                 subTarget.ExternalJointPosition = newExternalJointPosition;
                 subMovement.Target = subTarget;
 
-                // Calculate internal axis values
+                // Calculate joint positions
                 _robot.InverseKinematics.Movement = subMovement;
                 _robot.InverseKinematics.Calculate();
 
@@ -352,7 +352,7 @@ namespace RobotComponents.Kinematics
                     }
                 }
 
-                // Add te calculated axis values and plane to the class property
+                // Add te calculated joint positions and plane to the class property
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
 

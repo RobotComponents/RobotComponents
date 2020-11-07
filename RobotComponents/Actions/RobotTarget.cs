@@ -30,7 +30,7 @@ namespace RobotComponents.Actions
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
         private Quaternion _quat; // target plane orientation (as quarternion)
         private int _axisConfig; // the axis configuration of the robot 
-        private ExternalJointPosition _externalJointPosition; // the position of the external axes
+        private ExternalJointPosition _externalJointPosition; // the position of the external logical axes
         #endregion
 
         #region (de)serialization

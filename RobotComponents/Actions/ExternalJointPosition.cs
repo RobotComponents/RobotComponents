@@ -41,12 +41,12 @@ namespace RobotComponents.Actions
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
             // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _val1 = (double)info.GetValue("Axis value 1", typeof(double));
-            _val2 = (double)info.GetValue("Axis value 2", typeof(double));
-            _val3 = (double)info.GetValue("Axis value 3", typeof(double));
-            _val4 = (double)info.GetValue("Axis value 4", typeof(double));
-            _val5 = (double)info.GetValue("Axis value 5", typeof(double));
-            _val6 = (double)info.GetValue("Axis value 6", typeof(double));
+            _val1 = (double)info.GetValue("Value 1", typeof(double));
+            _val2 = (double)info.GetValue("Value 2", typeof(double));
+            _val3 = (double)info.GetValue("Value 3", typeof(double));
+            _val4 = (double)info.GetValue("Value 4", typeof(double));
+            _val5 = (double)info.GetValue("Value 5", typeof(double));
+            _val6 = (double)info.GetValue("Value 6", typeof(double));
         }
 
         /// <summary>
@@ -58,18 +58,18 @@ namespace RobotComponents.Actions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Axis value 1", _val1, typeof(double));
-            info.AddValue("Axis value 2", _val2, typeof(double));
-            info.AddValue("Axis value 3", _val3, typeof(double));
-            info.AddValue("Axis value 4", _val4, typeof(double));
-            info.AddValue("Axis value 5", _val5, typeof(double));
-            info.AddValue("Axis value 6", _val6, typeof(double));
+            info.AddValue("Value 1", _val1, typeof(double));
+            info.AddValue("Value 2", _val2, typeof(double));
+            info.AddValue("Value 3", _val3, typeof(double));
+            info.AddValue("Value 4", _val4, typeof(double));
+            info.AddValue("Value 5", _val5, typeof(double));
+            info.AddValue("Value 6", _val6, typeof(double));
         }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Initializes a new instance of the External Joint Position class with undefinied external axis values.
+        /// Initializes a new instance of the External Joint Position class with undefinied positions of the external logical axes.
         /// </summary>
         public ExternalJointPosition()
         {
@@ -86,11 +86,11 @@ namespace RobotComponents.Actions
         /// Initializes a new instance of the External Joint Position class.
         /// </summary>
         /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
-        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm.</param>
-        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm.</param>
-        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm.</param>
-        /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm.</param>
-        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm.</param>
+        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
+        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
+        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
+        /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm. </param>
+        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
             _val1 = Eax_a;
@@ -104,7 +104,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class from a list with values.
         /// </summary>
-        /// <param name="externalAxisValues"> The external axis values. </param>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
         public ExternalJointPosition(List<double> externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues.ToArray());
@@ -120,7 +120,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class from an array with values.
         /// </summary>
-        /// <param name="externalAxisValues"> The external axis values. </param>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
         public ExternalJointPosition(double[] externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues);
@@ -204,18 +204,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Returns the External Joint Position as an array with axis values.
+        /// Returns the External Joint Position as an array with the positions of the external logical axes.
         /// </summary>
-        /// <returns> An array containing the axis values. </returns>
+        /// <returns> An array containing the positions of the external logical axes. </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Returns the External Joint Position as a list with axis values.
+        /// Returns the External Joint Position as a list with the positions of the external logical axes.
         /// </summary>
-        /// <returns> A list containing the axis values. </returns>
+        /// <returns> A list containing the positions of the external logical axes. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -268,7 +268,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
@@ -307,7 +307,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
@@ -346,7 +346,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
@@ -394,29 +394,29 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
 
         /// <summary></summary>
-        /// Checks the array with external axis values. 
-        /// Always returns an array with 6 external axis values. 
+        /// Checks the array the positions of the external logical axes. 
+        /// Always returns an array with 6 joint positions. 
         /// For missing values 9E9 (not connected) will be used. 
-        /// <param name="axisValues"> The array with axis values. </param>
-        /// <returns> The array with 6 external axis values. </returns>
+        /// <param name="axisValues"> The array with the positions of the external logical axes. </param>
+        /// <returns> The array with the 6 positions of the external axes. </returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
             int n = Math.Min(axisValues.Length, 6);
 
-            // Copy definied axis values
+            // Copy definied joint positions
             for (int i = 0; i < n; i++)
             {
                 result[i] = axisValues[i];
             }
 
-            // Add missing axis values
+            // Add missing joint positions
             for (int i = n; i < 6; i++)
             {
                 result[i] = _defaultValue;
@@ -428,7 +428,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Returns the Joint Position in RAPID code format, e.g. "[100, 9E9, 9E9, 9E9, 9E9, 9E9]".
         /// </summary>
-        /// <returns> The string with axis values. </returns>
+        /// <returns> The string with the positions of the external axes. </returns>
         public string ToRAPID()
         {
             string code = "[";
@@ -511,10 +511,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Gets or sets the axis values through the indexer. 
+        /// Gets or sets the position of the external logical axis through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The axis value located at the given index. </returns>
+        /// <returns> The position of the external logical axis located at the given index. </returns>
         public double this[int index]
         {
             get
@@ -547,10 +547,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Gets or sets the axis values through the indexer.
+        /// Gets or sets the position of the external logical axis through the indexer. 
         /// </summary>
         /// <param name="index"> The index character. </param>
-        /// <returns> The axis value located at the given index. </returns>
+        /// <returns> The position of the external logical axis located at the given index. </returns>
         public double this[char index]
         {
             get
@@ -707,7 +707,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -736,7 +736,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -765,7 +765,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -799,7 +799,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 

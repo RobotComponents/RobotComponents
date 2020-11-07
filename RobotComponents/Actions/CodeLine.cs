@@ -5,55 +5,86 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Enumerations;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Code Line class, defines a CodeLine in RAPID Code.
+    /// Represents a custom (user definied) RAPID Code Line.
     /// </summary>
-    public class CodeLine : Action
+    [Serializable()]
+    public class CodeLine : Action, ISerializable
     {
         #region fields
         private string _code; // the code line as a string
-        private int _type;  // the code line type as int value -> 0 for instruction, 1 for declaration
+        private CodeType _type;  // the code line type as a CodeType enum
+        #endregion
+
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected CodeLine(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _code = (string)info.GetValue("Code", typeof(string));
+            _type = (CodeType)info.GetValue("Code Type", typeof(CodeType));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Code", _code, typeof(string));
+            info.AddValue("Code Type", _type, typeof(CodeType));
+        }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Defines an empty CodeLine object.
+        /// Initializes a empty instance of the Code Line class.
         /// </summary>
         public CodeLine()
         {
         }
 
         /// <summary>
-        /// Defines a RAPID code line.
+        /// Initializes a new instance of the Code Line class with the Code Type set as instruction.
         /// </summary>
-        /// <param name="code">The code line as a text string.</param>
+        /// <param name="code"> The custom RAPID code line. </param>
         public CodeLine(string code)
         {
             _code = code;
-            _type = 0;
+            _type = CodeType.Instruction;
         }
 
         /// <summary>
-        /// Defines a RAPID code line.
+        /// Initializes a new instance of the Code Line class
         /// </summary>
-        /// <param name="code">The code line as a text string.</param>
-        /// <param name="type">The code type as int value. Use 0 for an instructions and 1 for a declarations.</param>
-        public CodeLine(string code, int type)
+        /// <param name="code"> The custom RAPID code line. </param>
+        /// <param name="type">The Code Type. </param>
+        public CodeLine(string code, CodeType type)
         {
             _code = code;
-            SetCodeLineType(type);
+            _type = type;
         }
 
         /// <summary>
-        /// Creates a new code line by duplicating an existing code line. 
-        /// This creates a deep copy of the existing code line. 
+        /// Initializes a new instance of the Code Line class by duplicating an existing Code Line instance. 
         /// </summary>
-        /// <param name="codeLine"> The code line that should be duplicated. </param>
+        /// <param name="codeLine"> The Code Line instance to duplicate. </param>
         public CodeLine(CodeLine codeLine)
         {
             _code = codeLine.Code;
@@ -61,18 +92,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A method to duplicate the CodeLine object.
+        /// Returns an exact duplicate of this Code Line instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the CodeLine object. </returns>
+        /// <returns> A deep copy of the Code Line instance. </returns>
         public CodeLine Duplicate()
         {
             return new CodeLine(this);
         }
 
         /// <summary>
-        /// A method to duplicate the CodeLine object to an Action object. 
+        /// Returns an exact duplicate of this Code Line instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the CodeLine object as an Action object. </returns>
+        /// <returns> A deep copy of the Code Line instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new CodeLine(this) as Action;
@@ -96,31 +127,14 @@ namespace RobotComponents.Actions
             }
         }
 
-
         /// <summary>
-        /// Sets the code line type. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="type"> The code line type as int value. 0 for commenting on instructions and 1 for commenting on declarations. </param>
-        public void SetCodeLineType(int type)
-        {
-            if (type == 0 | type == 1)
-            {
-                _type = type;
-            }
-            else
-            {
-                _type = 0;
-            }
-        }
-
-        /// <summary>
-        /// Used to create variable definition code of this action. 
-        /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 return _code;
             }
@@ -131,13 +145,13 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 return _code;
             }
@@ -148,24 +162,26 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 1)
+            if (_type == CodeType.Declaration)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
             }
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_type == 0)
+            if (_type == CodeType.Instruction)
             {
                 RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
             }
@@ -174,7 +190,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the CodeLine object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -182,14 +198,12 @@ namespace RobotComponents.Actions
             { 
                 if (Code == null) { return false; }
                 if (Code == "") { return false; }
-                if (Type < 0) { return false; }
-                if (Type > 1) { return false; }
                 return true; 
             }
         }
 
         /// <summary>
-        /// The custom RAPID code line
+        /// Gets or sets the custom RAPID Code Line text.
         /// </summary>
         public string Code
         {
@@ -198,11 +212,12 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Code type as int value.
+        /// Gets or sets the Code Type.
         /// </summary>
-        public int Type
+        public CodeType Type
         {
             get { return _type; }
+            set { _type = value; }
         }
         #endregion
     }

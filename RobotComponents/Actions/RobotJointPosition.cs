@@ -6,15 +6,20 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Robot Joint Position class, defines the robot axis positions of the in degrees.
+    /// Represents the Robot Joint Position declaration.
+    /// This action is used to define the robot axis positions in degrees.
     /// </summary>
-    public class RobotJointPosition : Action, IJointPosition
+    [Serializable()]
+    public class RobotJointPosition : Action, IJointPosition, ISerializable
     {
         #region fields
         private double _val1;
@@ -27,10 +32,44 @@ namespace RobotComponents.Actions
         private const double _defaultValue = 0.0;
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected RobotJointPosition(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _val1 = (double)info.GetValue("Axis value 1", typeof(double));
+            _val2 = (double)info.GetValue("Axis value 2", typeof(double));
+            _val3 = (double)info.GetValue("Axis value 3", typeof(double));
+            _val4 = (double)info.GetValue("Axis value 4", typeof(double));
+            _val5 = (double)info.GetValue("Axis value 5", typeof(double));
+            _val6 = (double)info.GetValue("Axis value 6", typeof(double));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Axis value 1", _val1, typeof(double));
+            info.AddValue("Axis value 2", _val2, typeof(double));
+            info.AddValue("Axis value 3", _val3, typeof(double));
+            info.AddValue("Axis value 4", _val4, typeof(double));
+            info.AddValue("Axis value 5", _val5, typeof(double));
+            info.AddValue("Axis value 6", _val6, typeof(double));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// An undefined Robot joint position. 
-        /// All Robot axis values will be set to 0.0.
+        /// Initializes a new instance of the Robot Joint Position class with all axis values set to zero.
         /// </summary>
         public RobotJointPosition()
         {
@@ -43,7 +82,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an Robot joint position. 
+        /// Initializes a new instance of the Robot Joint Position class.
         /// </summary>
         /// <param name="rax_1"> The position of robot axis 1 in degrees from the calibration position. </param>
         /// <param name="rax_2"> The position of robot axis 2 in degrees from the calibration position.</param>
@@ -62,7 +101,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an robot joint position from a list with values.
+        /// Initializes a new instance of the Robot Joint Position class from a list with values.
         /// </summary>
         /// <param name="internalAxisValues"> The user defined internal axis values as a list.</param>
         public RobotJointPosition(List<double> internalAxisValues)
@@ -78,7 +117,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an robot joint position from an array wth values.
+        /// Initializes a new instance of the Robot Joint Position class from an array.
         /// </summary>
         /// <param name="internalAxisValues">The user defined internal axis values as an array.</param>
         public RobotJointPosition(double[] internalAxisValues)
@@ -94,33 +133,32 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new robot joint position by duplicating an robot joint position. 
-        /// This creates a deep copy of the existing robot joint position. 
+        /// Initializes a new instance of the Robot Joint Position class by duplicating an existing Robot Joint Position instance. 
         /// </summary>
-        /// <param name="robJointPosition"> The Robot joint position that should be duplicated. </param>
-        public RobotJointPosition(RobotJointPosition robJointPosition)
+        /// <param name="robotJointPosition"> The Robot Joint Position instance to duplicate. </param>
+        public RobotJointPosition(RobotJointPosition robotJointPosition)
         {
-            _val1 = robJointPosition[0];
-            _val2 = robJointPosition[1];
-            _val3 = robJointPosition[2];
-            _val4 = robJointPosition[3];
-            _val5 = robJointPosition[4];
-            _val6 = robJointPosition[5];
+            _val1 = robotJointPosition[0];
+            _val2 = robotJointPosition[1];
+            _val3 = robotJointPosition[2];
+            _val4 = robotJointPosition[3];
+            _val5 = robotJointPosition[4];
+            _val6 = robotJointPosition[5];
         }
 
-        /// <summary>ot
-        /// Method to duplicate the Robot Joint Position object.
+        /// <summary>
+        /// Returns an exact duplicate of this Robot Joint Position instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the Robot Joint Position object.</returns>
+        /// <returns> A deep copy of the Robot Joint Position instance. </returns>
         public RobotJointPosition Duplicate()
         {
             return new RobotJointPosition(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Robot Joint Position object to an Action object. 
+        /// Returns an exact duplicate of this Robot Joint Position instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Robot Joint Position object as an Action object. </returns>
+        /// <returns> A deep copy of the Robot Joint Position instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new RobotJointPosition(this) as Action;
@@ -154,18 +192,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new array
+        /// Returns the Robot Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> An array containing the axis values of the robot joint position. </returns>
+        /// <returns> The array containing the axis values of the robot joint position. </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list
+        /// Returns the Robot Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> A list containing the axis values of the robot joint position. </returns>
+        /// <returns> The list containing the axis values of the robot joint position. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -213,9 +251,9 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Adds a constant number to all the values inside this Joint Position
+        /// Adds a constant number to all the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be added. </param>
+        /// <param name="value"> The number to be added. </param>
         public void Add(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -228,7 +266,7 @@ namespace RobotComponents.Actions
         /// Adds the values of an Robot Joint Position to the values inside this Joint Position. 
         /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The Robot Joint Position that should be added. </param>
+        /// <param name="jointPosition"> The Robot Joint Position to be added. </param>
         public void Add(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -238,9 +276,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substracts a constant number from the values inside this Joint Position
+        /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be substracted. </param>
+        /// <param name="value"> The number to be substracted. </param>
         public void Substract(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -253,7 +291,7 @@ namespace RobotComponents.Actions
         /// Substracts the values of an Robot Joint Position from the values inside this Joint Position. 
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The Robot Joint Position that should be substracted. </param>
+        /// <param name="jointPosition"> The Robot Joint Position to be substracted. </param>
         public void Substract(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -278,7 +316,7 @@ namespace RobotComponents.Actions
         /// Multiplies the values inside this Joint Position with the values from another Robot Joint Position.
         /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The multiplier as an Robot Joint Position. </param>
+        /// <param name="jointPosition"> The multiplier as a Robot Joint Position. </param>
         public void Multiply(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -323,11 +361,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary></summary>
-        /// Method that checks the array with internal axis values. 
+        /// Cecks the array with internal axis values. 
         /// Always returns a list with 6 internal axis values. 
-        /// For missing values 0.0 will be used. 
-        /// <param name="axisValues">A list with the internal axis values.</param>
-        /// <returns> Returns an array with 6 Robot axis values.</returns>
+        /// For missing values 0.0 is used. 
+        /// <param name="axisValues"> The list with the internal axis values. </param>
+        /// <returns> The array with 6 axis values. </returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
@@ -349,11 +387,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Returns the Joint Position in RAPID code format, e.g. "[0, 0, 0, 0, 45, 0]".
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string.  </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <returns> The string with axis values. </returns>
+        public string ToRAPID()
         {
             string code = "[";
 
@@ -368,27 +405,39 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns an empty string.  </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// Returns the RAPID instruction code line of the this action. 
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -396,7 +445,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the Robot Joint Position object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -404,7 +453,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the number of elements in the Robot Joint Position
+        /// Gets the number of elements in the Robot Joint Position.
         /// </summary>
         public int Length
         {
@@ -412,7 +461,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Get or set axis values through the indexer. 
+        /// Gets or sets the axis values through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
         /// <returns> The axis value located at the given index. </returns>
@@ -420,28 +469,35 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (index == 0) { return _val1; }
-                else if (index == 1) { return _val2; }
-                else if (index == 2) { return _val3; }
-                else if (index == 3) { return _val4; }
-                else if (index == 4) { return _val5; }
-                else if (index == 5) { return _val6; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: return _val1;
+                    case 1: return _val2;
+                    case 2: return _val3;
+                    case 3: return _val4;
+                    case 4: return _val5;
+                    case 5: return _val6;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
+
             set
             {
-                if (index == 0) { _val1 = value; }
-                else if (index == 1) { _val2 = value; }
-                else if (index == 2) { _val3 = value; }
-                else if (index == 3) { _val4 = value; }
-                else if (index == 4) { _val5 = value; }
-                else if (index == 5) { _val6 = value; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: _val1 = value; break;
+                    case 1: _val2 = value; break;
+                    case 2: _val3 = value; break;
+                    case 3: _val4 = value; break;
+                    case 4: _val5 = value; break;
+                    case 5: _val6 = value; break;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the joint position array has a fixed size.
+        /// Gets a value indicating whether or not the joint position array has a fixed size.
         /// </summary>
         public bool IsFixedSize
         {
@@ -500,7 +556,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Addition of two Robot Joint Position
+        /// Adds a Robot Joint Position to an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -511,7 +567,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substraction of two Robot Joint Position
+        /// Substracts a Robot Joint Position from an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -522,7 +578,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Multiplication of two Robot Joint Positions
+        /// Multiplies a Robot Joint Position woth an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -533,7 +589,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Division of a Robot Joint Position by another Robot Joint Position
+        /// Divides a Robot Joint Position with an other Robot Joint Position.
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
@@ -545,14 +601,7 @@ namespace RobotComponents.Actions
                 throw new DivideByZeroException();
             }
 
-            RobotJointPosition result = new RobotJointPosition();
-
-            for (int i = 0; i < 6; i++)
-            {
-                result[i] = p1[i] / p2[i];
-            }
-
-            return result;
+            return new RobotJointPosition(p1[0] / p2[0], p1[1] / p2[1], p1[2] / p2[2], p1[3] / p2[3], p1[4] / p2[4], p1[5] / p2[5]);
         }
         #endregion
     }

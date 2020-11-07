@@ -5,35 +5,66 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Wait for Digital Input. This class is used to make the code line comamand WaitDI which is 
-    /// is used to wait until a digital input is set.
+    /// Represents a Wait for Digital Input instruction.
+    /// This action is used to wait until a digital input is set.
     /// </summary>
-    public class WaitDI : Action
+    [Serializable()]
+    public class WaitDI : Action, ISerializable
     {
         #region fields
         private string _DIName; // The name of the digital input signal
         private bool _value; // The desired state / value of the digtal input signal
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected WaitDI(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _DIName = (string)info.GetValue("Name", typeof(string));
+            _value = (bool)info.GetValue("Value", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Name", _DIName, typeof(string));
+            info.AddValue("Value", _value, typeof(bool));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// Defines an empty WaitDI object.
+        /// Initializes an empty instance of the Wait DI class.
         /// </summary>
         public WaitDI()
         {
         }
 
         /// <summary>
-        /// Defines a WaitDI object. 
+        /// Initializes a new instance of the Wait DI class.
         /// </summary>
         /// <param name="DIName"> The name of the signal. </param>
-        /// <param name="value"> The desired state / value of the digtal input signal. </param>
+        /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
         public WaitDI(string DIName, bool value)
         {
             _DIName = DIName;
@@ -41,10 +72,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new WaitDI by duplicating an existing WaitDI. 
-        /// This creates a deep copy of the existing WaitDI. 
+        /// Initializes a new instance of the Wait DI class by duplicating an existing Wait DI instance. 
         /// </summary>
-        /// <param name="waitDI"> The wait for digital input that should be duplicated. </param>
+        /// <param name="waitDI"> The Wait DI instance to duplicate. </param>
         public WaitDI(WaitDI waitDI)
         {
             _DIName = waitDI.DIName;
@@ -52,18 +82,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Method to duplicate the WaitDI object.
+        /// Returns an exact duplicate of this Wait DI instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the WaitDI object. </returns>
+        /// <returns> A deep copy of the Wait DI instance. </returns>
         public WaitDI Duplicate()
         {
             return new WaitDI(this);
         }
 
         /// <summary>
-        /// A method to duplicate the WaitDI object to an Action object. 
+        /// Returns an exact duplicate of this Wait DI instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the WaitDI object as an Action object. </returns>
+        /// <returns> A deep copy of the Wait Di instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new WaitDI(this) as Action;
@@ -88,20 +118,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             if (_value == true)
@@ -115,17 +145,19 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>s
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot)); 
@@ -134,7 +166,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the WaitDI object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -147,7 +179,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The desired state / value of the digtal input signal
+        /// Gets or sets the desired state of the digtal input signal.
         /// </summary>
         public bool Value 
         {
@@ -156,7 +188,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the digital input signal
+        /// Gets or sets the name of the digital input signal.
         /// </summary>
         public string DIName 
         { 

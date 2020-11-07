@@ -6,16 +6,20 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// External Joint Position class, defines external joint position data. Is used to define 
-    /// the axis positions of external axes, positioners and workpiece manipulators. 
+    /// Represents an External Joint Position declaration.
+    /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators. 
     /// </summary>
-    public class ExternalJointPosition : Action, IJointPosition
+    [Serializable()]
+    public class ExternalJointPosition : Action, IJointPosition, ISerializable
     {
         #region fields
         private double _val1;
@@ -28,10 +32,44 @@ namespace RobotComponents.Actions
         private const double _defaultValue = 9e9;
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization.</param>
+        protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _val1 = (double)info.GetValue("Value 1", typeof(double));
+            _val2 = (double)info.GetValue("Value 2", typeof(double));
+            _val3 = (double)info.GetValue("Value 3", typeof(double));
+            _val4 = (double)info.GetValue("Value 4", typeof(double));
+            _val5 = (double)info.GetValue("Value 5", typeof(double));
+            _val6 = (double)info.GetValue("Value 6", typeof(double));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Value 1", _val1, typeof(double));
+            info.AddValue("Value 2", _val2, typeof(double));
+            info.AddValue("Value 3", _val3, typeof(double));
+            info.AddValue("Value 4", _val4, typeof(double));
+            info.AddValue("Value 5", _val5, typeof(double));
+            info.AddValue("Value 6", _val6, typeof(double));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// An undefined external joint position. 
-        /// All external axis values will be set to 9E9.
+        /// Initializes a new instance of the External Joint Position class with undefinied positions of the external logical axes.
         /// </summary>
         public ExternalJointPosition()
         {
@@ -45,14 +83,14 @@ namespace RobotComponents.Actions
 
 
         /// <summary>
-        /// Defines an external joint position. 
+        /// Initializes a new instance of the External Joint Position class.
         /// </summary>
         /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
-        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm.</param>
-        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm.</param>
-        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm.</param>
-        /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm.</param>
-        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm.</param>
+        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
+        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
+        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
+        /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm. </param>
+        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
             _val1 = Eax_a;
@@ -64,9 +102,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an external joint position from a list with values.
+        /// Initializes a new instance of the External Joint Position class from a list with values.
         /// </summary>
-        /// <param name="externalAxisValues"> The user defined external axis values as a list.</param>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
         public ExternalJointPosition(List<double> externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues.ToArray());
@@ -80,9 +118,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines an external joint position from an array wth values.
+        /// Initializes a new instance of the External Joint Position class from an array with values.
         /// </summary>
-        /// <param name="externalAxisValues">The user defined external axis values as an array.</param>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
         public ExternalJointPosition(double[] externalAxisValues)
         {
             double[] values = CheckAxisValues(externalAxisValues);
@@ -96,33 +134,32 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new external joint position by duplicating an existing external joint position. 
-        /// This creates a deep copy of the existing external joint position. 
+        /// Initializes a new instance of the External Joint Position class by duplicating an existing External Joint Position instance. 
         /// </summary>
-        /// <param name="extJointPosition"> The external joint position that should be duplicated. </param>
-        public ExternalJointPosition(ExternalJointPosition extJointPosition)
+        /// <param name="externalJointPosition"> The External Joint Position instance to duplicate. </param>
+        public ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
-            _val1 = extJointPosition[0];
-            _val2 = extJointPosition[1];
-            _val3 = extJointPosition[2];
-            _val4 = extJointPosition[3];
-            _val5 = extJointPosition[4];
-            _val6 = extJointPosition[5];
+            _val1 = externalJointPosition[0];
+            _val2 = externalJointPosition[1];
+            _val3 = externalJointPosition[2];
+            _val4 = externalJointPosition[3];
+            _val5 = externalJointPosition[4];
+            _val6 = externalJointPosition[5];
         }
 
         /// <summary>
-        /// Method to duplicate the Ext Joint Position object.
+        /// Returns an exact duplicate of this Digital Output instance.
         /// </summary>
-        /// <returns>Returns a deep copy of the Ext Joint Position object.</returns>
+        /// <returns> A deep copy of the Digital Output instance. </returns>
         public ExternalJointPosition Duplicate()
         {
             return new ExternalJointPosition(this);
         }
 
         /// <summary>
-        /// A method to duplicate the Ext Joint Position object to an Action object. 
+        /// Returns an exact duplicate of this External Joint Position instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the Ext Joint Position object as an Action object. </returns>
+        /// <returns> A deep copy of the External Joint Position instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new ExternalJointPosition(this) as Action;
@@ -167,18 +204,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new array
+        /// Returns the External Joint Position as an array with the positions of the external logical axes.
         /// </summary>
-        /// <returns> An array containing the axis values of the external joint position. </returns>
+        /// <returns> An array containing the positions of the external logical axes. </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Copies the axis values of the joint position to a new list
+        /// Returns the External Joint Position as a list with the positions of the external logical axes.
         /// </summary>
-        /// <returns> A list containing the axis values of the external joint position. </returns>
+        /// <returns> A list containing the positions of the external logical axes. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -198,9 +235,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Adds a constant number to all the values inside this Joint Position
+        /// Adds a constant number to all the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be added. </param>
+        /// <param name="value"> The number to be added. </param>
         public void Add(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -216,7 +253,7 @@ namespace RobotComponents.Actions
         /// Adds the values of an External Joint Position to the values inside this Joint Position. 
         /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The External Joint Position that should be added. </param>
+        /// <param name="jointPosition"> The External Joint Position to be added. </param>
         public void Add(ExternalJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -231,15 +268,15 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
 
         /// <summary>
-        /// Substracts a constant number from the values inside this Joint Position
+        /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number that should be substracted. </param>
+        /// <param name="value"> The number to be substracted. </param>
         public void Substract(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -255,7 +292,7 @@ namespace RobotComponents.Actions
         /// Substracts the values of an External Joint Position from the values inside this Joint Position. 
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </summary>
-        /// <param name="jointPosition"> The External Joint Position that should be substracted. </param>
+        /// <param name="jointPosition"> The External Joint Position to be substracted. </param>
         public void Substract(ExternalJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -270,7 +307,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
@@ -309,7 +346,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
@@ -357,29 +394,29 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
         }
 
         /// <summary></summary>
-        /// Method that checks the array with external axis values. 
-        /// Always returns a list with 6 external axis values. 
+        /// Checks the array the positions of the external logical axes. 
+        /// Always returns an array with 6 joint positions. 
         /// For missing values 9E9 (not connected) will be used. 
-        /// <param name="axisValues">A list with the external axis values.</param>
-        /// <returns> Returns an array with 6 external axis values.</returns>
+        /// <param name="axisValues"> The array with the positions of the external logical axes. </param>
+        /// <returns> The array with the 6 positions of the external axes. </returns>
         private double[] CheckAxisValues(double[] axisValues)
         {
             double[] result = new double[6];
             int n = Math.Min(axisValues.Length, 6);
 
-            // Copy definied axis values
+            // Copy definied joint positions
             for (int i = 0; i < n; i++)
             {
                 result[i] = axisValues[i];
             }
 
-            // Add missing axis values
+            // Add missing joint positions
             for (int i = n; i < 6; i++)
             {
                 result[i] = _defaultValue;
@@ -389,11 +426,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Returns the Joint Position in RAPID code format, e.g. "[100, 9E9, 9E9, 9E9, 9E9, 9E9]".
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string.  </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <returns> The string with the positions of the external axes. </returns>
+        public string ToRAPID()
         {
             string code = "[";
 
@@ -419,27 +455,39 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns an empty string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// Returns the RAPID instruction code line of the this action. 
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
         }
@@ -447,7 +495,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// Defines if the External Joint Position object is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -455,7 +503,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Defines the number of elements in the External Joint Position
+        /// Gets the number of elements in the External Joint Position.
         /// </summary>
         public int Length
         {
@@ -463,36 +511,95 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Get or set axis values through the indexer. 
+        /// Gets or sets the position of the external logical axis through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The axis value located at the given index. </returns>
+        /// <returns> The position of the external logical axis located at the given index. </returns>
         public double this[int index]
         {
             get
             {
-                if (index == 0) { return _val1; }
-                else if (index == 1) { return _val2; }
-                else if (index == 2) { return _val3; }
-                else if (index == 3) { return _val4; }
-                else if (index == 4) { return _val5; }
-                else if (index == 5) { return _val6; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: return _val1;
+                    case 1: return _val2;
+                    case 2: return _val3;
+                    case 3: return _val4;
+                    case 4: return _val5;
+                    case 5: return _val6;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
+
             set
             {
-                if (index == 0) { _val1 = value; }
-                else if (index == 1) { _val2 = value; }
-                else if (index == 2) { _val3 = value; }
-                else if (index == 3) { _val4 = value; }
-                else if (index == 4) { _val5 = value; }
-                else if (index == 5) { _val6 = value; }
-                else { throw new IndexOutOfRangeException(); }
+                switch (index)
+                {
+                    case 0: _val1 = value; break;
+                    case 1: _val2 = value; break;
+                    case 2: _val3 = value; break;
+                    case 3: _val4 = value; break;
+                    case 4: _val5 = value; break;
+                    case 5: _val6 = value; break;
+                    default: throw new IndexOutOfRangeException();
+                }
             }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the joint position array has a fixed size.
+        /// Gets or sets the position of the external logical axis through the indexer. 
+        /// </summary>
+        /// <param name="index"> The index character. </param>
+        /// <returns> The position of the external logical axis located at the given index. </returns>
+        public double this[char index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 'a': return _val1;
+                    case 'b': return _val2;
+                    case 'c': return _val3;
+                    case 'd': return _val4;
+                    case 'e': return _val5;
+                    case 'f': return _val6;
+
+                    case 'A': return _val1;
+                    case 'B': return _val2;
+                    case 'C': return _val3;
+                    case 'D': return _val4;
+                    case 'E': return _val5;
+                    case 'F': return _val6;
+
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case 'a': _val1 = value; break;
+                    case 'b': _val2 = value; break;
+                    case 'c': _val3 = value; break;
+                    case 'd': _val4 = value; break;
+                    case 'e': _val5 = value; break;
+                    case 'f': _val6 = value; break;
+
+                    case 'A': _val1 = value; break;
+                    case 'B': _val2 = value; break;
+                    case 'C': _val3 = value; break;
+                    case 'D': _val4 = value; break;
+                    case 'E': _val5 = value; break;
+                    case 'F': _val6 = value; break;
+
+                    default: throw new IndexOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the joint position array has a fixed size.
         /// </summary>
         public bool IsFixedSize
         {
@@ -579,7 +686,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Addition of two External Joint Position
+        /// Adds an External Joint Position with an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -600,7 +707,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -608,7 +715,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Substraction of two External Joint Position
+        /// Substracts an External Joint Position from an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -629,7 +736,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -637,7 +744,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Multiplication of two External Joint Positions
+        /// Multiplies an External Joint Position with an other External Joint Position.
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -658,7 +765,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 
@@ -666,7 +773,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Division of a External Joint Position by another External Joint Position
+        /// Divides an External Joint Positin with by an other External Joint Position
         /// </summary>
         /// <param name="p1"> The first External Joint Position. </param>
         /// <param name="p2"> The second External Joint Position. </param>
@@ -692,7 +799,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied axis value [on index {0}] is combined with an undefinied axis value.", i));
+                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
                 }
             }
 

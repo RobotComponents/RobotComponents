@@ -7,15 +7,18 @@
 using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
+using GH_IO;
+using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Utils;
  
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Robot Joint Position Goo wrapper class, makes sure the Robot Joint Position class can be used in Grasshopper.
     /// </summary>
-    public class GH_RobotJointPosition : GH_Goo<RobotJointPosition>
+    public class GH_RobotJointPosition : GH_Goo<RobotJointPosition>, GH_ISerializable
     {
         #region constructors
         /// <summary>
@@ -223,6 +226,48 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             return false;
+        }
+        #endregion
+
+        #region (de)serialisation
+        /// <summary>
+        /// IO key for (de)serialisation of the value inside this Goo.
+        /// </summary>
+        private const string IoKey = "Robot Joint Position";
+
+        /// <summary>
+        /// This method is called whenever the instance is required to serialize itself.
+        /// </summary>
+        /// <param name="writer"> Writer object to serialize with. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            if (this.Value != null)
+            {
+                byte[] array = HelperMethods.ObjectToByteArray(this.Value);
+                writer.SetByteArray(IoKey, array);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// This method is called whenever the instance is required to deserialize itself.
+        /// </summary>
+        /// <param name="reader"> Reader object to deserialize from. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            if (!reader.ItemExists(IoKey))
+            {
+                this.Value = null;
+                return true;
+            }
+
+            byte[] array = reader.GetByteArray(IoKey);
+            this.Value = (RobotJointPosition)HelperMethods.ByteArrayToObject(array);
+
+            return true;
         }
         #endregion
     }

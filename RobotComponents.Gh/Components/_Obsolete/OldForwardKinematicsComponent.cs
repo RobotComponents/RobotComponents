@@ -14,6 +14,7 @@ using Grasshopper.Kernel.Types;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Gh.Goos.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
@@ -118,7 +119,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, internalAxisValues, externalAxisValues);
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues));
             forwardKinematics.Calculate();
 
             // Check the values
@@ -128,8 +129,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Create data tree for output of all posed meshes
-            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
-            meshes = GetPosedMeshesDataTree(forwardKinematics);
+            GH_Structure<GH_Mesh> meshes = GetPosedMeshesDataTree(forwardKinematics);
 
             // Output
             _fk = forwardKinematics;

@@ -14,35 +14,36 @@ using RobotComponents.Utils;
 namespace RobotComponents.Definitions.Presets
 {
     /// <summary>
-    /// Defines the IRB1600-X/1.45
+    /// Represents a collection of methods to get the IRB1600-X/1.45 Robot instance.
     /// </summary>
     public static class IRB1600_X_145
     {
         /// <summary>
-        /// Defines the IRB1600-X/1.45 Robot 
+        /// Returns a new IRB1600-X/1.45 Robot instance.
         /// </summary>
-        /// <param name="positionPlane"> The position of the robot in world coordinate space as plane. </param>
-        /// <param name="tool"> The robot end-effector as a Robot Tool. </param>
-        /// <param name="externalAxis"> The external axes attaced to the robot as list with External Axes. </param>
-        /// <returns> Returns the Robot preset. </returns>
-        public static Robot GetRobot(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxis = null)
+        /// <param name="name"> The name of the Robot. </param>
+        /// <param name="positionPlane"> The position and orientation of the Robot in world coordinate space. </param>
+        /// <param name="tool"> The Robot Tool. </param>
+        /// <param name="externalAxes"> The external axes attached to the Robot. </param>
+        /// <returns> The Robot preset. </returns>
+        public static Robot GetRobot(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxes = null)
         {
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
             List<Interval> axisLimits = GetAxisLimits();
             Plane mountingFrame = GetToolMountingFrame();
 
-            // Override position plane when an external linear axis is coupled
-            for (int i = 0; i < externalAxis.Count; i++)
+            // Override the position plane when an external axis is coupled that moves the robot
+            for (int i = 0; i < externalAxes.Count; i++)
             {
-                if (externalAxis[i] is ExternalLinearAxis)
+                if (externalAxes[i].MovesRobot == true)
                 {
-                    positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
+                    positionPlane = externalAxes[i].AttachmentPlane;
                     break;
                 }
             }
 
-            Robot robotInfo = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
+            Robot robotInfo = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxes);
             Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
             robotInfo.Transfom(trans);
 
@@ -50,9 +51,9 @@ namespace RobotComponents.Definitions.Presets
         }
 
         /// <summary>
-        /// Defines the base and link meshes a robot coordinate space. 
+        /// Returns the list with the base and link meshes of the robot in robot coordinate space.
         /// </summary>
-        /// <returns> Returns a list with meshes. </returns>
+        /// <returns> The list with robot meshes. </returns>
         public static List<Mesh> GetMeshes()
         {
             List<Mesh> meshes = new List<Mesh>() { };
@@ -84,7 +85,7 @@ namespace RobotComponents.Definitions.Presets
         }
 
         /// <summary>
-        /// Defines the axis planes in robot coordinate space.
+        /// Returns the list with the axis planes in robot coordinate space. 
         /// </summary>
         /// <returns> Returns a list with planes. </returns>
         public static List<Plane> GetAxisPlanes()
@@ -120,9 +121,9 @@ namespace RobotComponents.Definitions.Presets
         }
 
         /// <summary>
-        /// Defines the axis limits. 
+        /// Returns the list with axis limits.  
         /// </summary>
-        /// <returns> Returns a list with intervals. </returns>
+        /// <returns> The list with axis limits. </returns>
         public static List<Interval> GetAxisLimits()
         {
             List<Interval> axisLimits = new List<Interval> { };
@@ -138,9 +139,9 @@ namespace RobotComponents.Definitions.Presets
         }
 
         /// <summary>
-        /// Defines the tool mounting frame in robot coordinate space. 
+        /// Returns the tool mounting frame in robot coordinate space.
         /// </summary>
-        /// <returns> Returns the mounting frame. </returns>
+        /// <returns> The tool mounting frame. </returns>
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(

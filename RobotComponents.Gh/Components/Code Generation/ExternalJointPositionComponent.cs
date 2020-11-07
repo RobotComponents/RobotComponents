@@ -59,15 +59,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             pManager[1].Optional = externalAxisParameters[1].Optional;
         }
 
-        // Create an array with the external axis value override parameters
+        // Create an array with the parameters for the positions of the external logical axes
         readonly IGH_Param[] externalAxisParameters = new IGH_Param[6]
         {
-            new Param_Number() { Name = "External Axis Value A", NickName = "EAa", Description = "Defines the first external axis value", Access = GH_ParamAccess.item, Optional = true }, // fixed
-            new Param_Number() { Name = "External Axis Value B", NickName = "EAb", Description = "Defines the second external axis value", Access = GH_ParamAccess.item, Optional = true }, // fixed
-            new Param_Number() { Name = "External Axis Value C", NickName = "EAc", Description = "Defines the third external axis value", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External Axis Value D", NickName = "EAd", Description = "Defines the fourth external axis value", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External Axis Value E", NickName = "EAe", Description = "Defines the fifth external axis value", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External Axis Value F", NickName = "EAf", Description = "Defines the sixth external axis value", Access = GH_ParamAccess.item, Optional = true } // variable
+            new Param_Number() { Name = "External axis position A", NickName = "EAa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.item, Optional = true }, // fixed
+            new Param_Number() { Name = "External axis position B", NickName = "EAb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.item, Optional = true }, // fixed
+            new Param_Number() { Name = "External axis position C", NickName = "EAc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External axis position D", NickName = "EAd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External axis position E", NickName = "EAe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External axis position F", NickName = "EAf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.item, Optional = true } // variable
         };
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Override external axis values input variables
+            // Declare variables
             double externalAxisValueA = 9e9;
             double externalAxisValueB = 9e9;
             double externalAxisValueC = 9e9;

@@ -48,12 +48,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Robot axis value 1", "RA1", "Defines the position of robot axis 1 in degrees.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Robot axis value 2", "RA2", "Defines the position of robot axis 2 in degrees.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Robot axis value 3", "RA3", "Defines the position of robot axis 3 in degrees.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Robot axis value 4", "RA4", "Defines the position of robot axis 4 in degrees.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Robot axis value 5", "RA5", "Defines the position of robot axis 5 in degrees.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Robot axis value 6", "RA6", "Defines the position of robot axis 6 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 1", "RA1", "Defines the position of robot axis 1 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 2", "RA2", "Defines the position of robot axis 2 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 3", "RA3", "Defines the position of robot axis 3 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 4", "RA4", "Defines the position of robot axis 4 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 5", "RA5", "Defines the position of robot axis 5 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot axis position 6", "RA6", "Defines the position of robot axis 6 in degrees.", GH_ParamAccess.item, 0.0);
         }
 
         /// <summary>

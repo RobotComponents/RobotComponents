@@ -140,8 +140,6 @@ namespace RobotComponents.Gh.Components.Simulation
             // Show error messages
             if (_pathGenerator.ErrorText.Count != 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only axis values of absolute joint movements are checked.");
-
                 for (int i = 0; i < _pathGenerator.ErrorText.Count; i++)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _pathGenerator.ErrorText[i]);

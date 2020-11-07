@@ -111,7 +111,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
             // Output
             DA.SetData(0, movement.Target);
             DA.SetData(1, movement.SpeedData);
-            DA.SetData(2, movement.MovementType);
+            DA.SetData(2, (int)movement.MovementType);
             DA.SetData(3, precision);
             DA.SetData(4, movement.RobotTool);
             DA.SetData(5, movement.WorkObject);

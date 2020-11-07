@@ -48,7 +48,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
             pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The external axis value as an External Joint Position");
+            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The positions of the external logical axes as an External Joint Position");
         }
    
         /// <summary>

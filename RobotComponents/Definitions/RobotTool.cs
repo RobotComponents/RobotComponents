@@ -4,21 +4,26 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Enumerations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// RobotTool class, defines the basic properties and methods for any Robot Tool.
+    /// Represents a Robot Tool.
     /// </summary>
-    public class RobotTool
+    [Serializable()]
+    public class RobotTool : ISerializable
     {
         #region fields
-        // Fields specific needed for constructors and visualization
+        private ReferenceType _referenceType; // reference type
         private string _name; // tool name
         private Mesh _mesh; // tool mesh
         private Plane _attachmentPlane; // mounting frame
@@ -32,14 +37,58 @@ namespace RobotComponents.Definitions
         private Vector3d _inertia;
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected RobotTool(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
+            _mesh = (Mesh)info.GetValue("Mesh", typeof(Mesh));
+            _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
+            _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
+            _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
+            _mass = (double)info.GetValue("Mass", typeof(double));
+            _centerOfGravity = (Vector3d)info.GetValue("Center Of Gravity", typeof(Vector3d));
+            _centerOfGravityOrientation = (Quaternion)info.GetValue("Center Of Gravity Orientation", typeof(Quaternion)); ;
+            _inertia = (Vector3d)info.GetValue("Inertia", typeof(Vector3d));
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Mesh", _mesh, typeof(Mesh));
+            info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
+            info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
+            info.AddValue("Robot Hold", _robotHold, typeof(bool));
+            info.AddValue("Mass", _mass, typeof(double));
+            info.AddValue("Center Of Gravity", _centerOfGravity, typeof(Vector3d));
+            info.AddValue("Center Of Gravity Orientation", _centerOfGravityOrientation, typeof(Quaternion));
+            info.AddValue("Inertia", _inertia, typeof(Vector3d));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// An empty constuctor that create the default robot tool tool0. 
-        /// The tool tool0 defines the wrist coordinate system, with the 
-        /// origin being the center of the mounting flange.
+        /// Initializes a new instance of the Robot Tool class with the default tool tool0.
         /// </summary>
         public RobotTool()
         {
+            _referenceType = ReferenceType.PERS;
             _name = "tool0";
             _mesh = new Mesh();
             _attachmentPlane = Plane.WorldXY;
@@ -55,7 +104,8 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from planes with load data as defined for the default tool tool0.
+        /// Initializes a new instance of the Robot Tool class from planes.
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
@@ -63,6 +113,7 @@ namespace RobotComponents.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -78,14 +129,16 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from planes with load data as defined for the default tool tool0.
+        /// Initializes a new instance of the Robot Tool class from planes.
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -102,8 +155,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
-        /// The attachment plane is set to WorldXY.
+        /// Initializes a new instance of the Robot Tool class from Euler data.
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
@@ -116,6 +170,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, Mesh mesh, double toolTransX, double toolTransY, 
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -136,11 +191,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from Euler data with load data as defined for the default tool tool0.
-        /// The attachment plane is set to WorldXY.
+        /// Initializes a new instance of the Robot Tool class from Euler data.
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh as a list with meshes. </param>
+        /// <param name="meshes"> The tool mesh. </param>
         /// <param name="toolTransX"> The tool center point translation in x-direction. </param>
         /// <param name="toolTransY"> The tool center point translation in y-direction. </param>
         /// <param name="toolTransZ"> The tool center point translation in z-direction. </param>
@@ -150,6 +206,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, List<Mesh> meshes, double toolTransX, double toolTransY,
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -171,12 +228,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
-        /// With load data as defined for the default tool tool0.
-        /// The attachment plane is set to WorldXY.
+        /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
+        /// <param name="mesh"> The tool mesh. </param>
         /// <param name="x"> The x coordinate of the TCP point. </param>
         /// <param name="y"> The y coordinate of the TCP point. </param>
         /// <param name="z"> The z coordinate of the TCP point.</param>
@@ -187,6 +244,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, Mesh mesh, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -203,12 +261,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
-        /// With load data as defined for the default tool tool0.
-        /// The attachment plane is set to WorldXY.
+        /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh defined in the tool coordinate space as a list with meshes </param>
+        /// <param name="meshes"> The tool mesh. </param>
         /// <param name="x"> The x coordinate of the TCP point. </param>
         /// <param name="y"> The y coordinate of the TCP point. </param>
         /// <param name="z"> The z coordinate of the TCP point.</param>
@@ -219,6 +277,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, List<Mesh> meshes, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -236,11 +295,11 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from the x, y and z coordinate and the four quarternion values. 
-        /// With load data as defined for the default tool tool0.
+        /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
-        /// <param name="meshes"> The tool mesh defined in the tool coordinate space as a list with meshes </param>
+        /// <param name="meshes"> The tool mesh. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
         /// <param name="x"> The x coordinate of the TCP point. </param>
         /// <param name="y"> The y coordinate of the TCP point. </param>
@@ -252,6 +311,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, double x, 
             double y, double z, double q1, double q2, double q3, double q4)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -269,16 +329,17 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool from the TCP point and the TCP orientation defined as a quatertion.
-        /// With load data as defined for the default tool tool0. 
-        /// The attachment plane is set to WorldXY.
+        /// Initializes a new instance of the Robot Tool class from a point and a quarternion.
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
-        /// <param name="point"> The point of the tool center as point </param>
-        /// <param name="quat"> The orientation of the tool center point as quarternion </param>
+        /// <param name="point"> The point of the TCP point. </param>
+        /// <param name="quat"> The orientation of TCP point. </param>
         public RobotTool(string name, Mesh mesh, Point3d point, Quaternion quat)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -297,13 +358,13 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines a robot tool with user defined load data. 
+        /// Initializes a new instance of the Robot Tool class.
         /// </summary>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
-        /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
-        /// <param name="robotHold"> Boolean that indicates if the robot is holding the tool or if the tool is stationary. </param>
+        /// <param name="toolPlane"> The tool center point and tool orientation. </param>
+        /// <param name="robotHold"> Specifies whether the robot is holding the tool. </param>
         /// <param name="mass"> The weight of the tool in kg. </param>
         /// <param name="centerOfGravity"> The center of gravity of the tool load. </param>
         /// <param name="centerOfGravityOrientation"> The orientation of the tool load coordinate system defined by the principal inertial axes of the 
@@ -312,6 +373,7 @@ namespace RobotComponents.Definitions
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, 
             double mass, Vector3d centerOfGravity, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
+            _referenceType = ReferenceType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -327,13 +389,13 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Creates a new robot tool by duplicating an existing robot tool.
-        /// This creates a deep copy of the existing robot tool.
+        /// Initializes a new instance of the Robot Tool class by duplicating an existing Robot Tool instance. 
         /// </summary>
-        /// <param name="robotTool"> The robot tool that should be duplicated. </param>
-        /// <param name="duplicateMesh"> A boolean that indicates if the mesh should be duplicated. </param>
+        /// <param name="robotTool"> The Robot Tool instance to duplicate. </param>
+        /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public RobotTool(RobotTool robotTool, bool duplicateMesh = true)
         {
+            _referenceType = robotTool.ReferenceType;
             _name = robotTool.Name;
             _attachmentPlane = new Plane(robotTool.AttachmentPlane);
             _toolPlane = new Plane(robotTool.ToolPlane);
@@ -353,18 +415,18 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method to duplicate the RobotTool object. 
+        /// Returns an exact duplicate of this Robot Tool instance.
         /// </summary>
-        /// <returns> Returns a deep copy for the RobotTool object. </returns>
+        /// <returns> A deep copy of the Robot Tool instance. </returns>
         public RobotTool Duplicate()
         {
             return new RobotTool(this);
         }
 
         /// <summary>
-        /// A method to duplicate the RobotTool object without duplicating the mesh. It will set an empty mesh. 
+        /// Returns an exact duplicate of this Robot Tool instance without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy for the RobotTool object without a mesh. </returns>
+        /// <returns> A deep copy of the Robot Tool instance without meshes. </returns>
         public RobotTool DuplicateWithoutMesh()
         {
             return new RobotTool(this, false);
@@ -389,16 +451,16 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// A method that calls all the other methods that are needed to initialize the data that is needed to construct a valid robot tool object. 
+        /// Initializes the fields and properties to construct a valid Robot Tool istance.
         /// </summary>
         private void Initialize()
         {
-            GetToolPosition();
-            GetToolOrientation();
+            CalculateToolPosition();
+            CalculateToolOrientation();
         }
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid robot tool object. 
+        /// Reinitializes the fields and properties to construct a valid Robot Tool instance. 
         /// </summary>
         public void ReInitialize()
         {
@@ -406,10 +468,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the local tool center point relative to the defined attachment plane. 
+        /// Calculates and returns the tool center point relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> Returns the local tool center point coordinates. </returns>
-        public Point3d GetToolPosition()
+        /// <returns> The tool center point. </returns>
+        public Point3d CalculateToolPosition()
         {
             Plane toolPlane = new Plane(_toolPlane);
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_attachmentPlane, Plane.WorldXY);
@@ -421,10 +483,10 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the tool center orientatin relative to the defined attachment plane. 
+        /// Calculates and returns the tool center orientation relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> Returns the quaternion orientation of the tool center plane. </returns>
-        public Quaternion GetToolOrientation()
+        /// <returns> The quaternion orientation of the tool center plane. </returns>
+        public Quaternion CalculateToolOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _toolPlane);
 
@@ -432,24 +494,14 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Method for creating the robot tool data for the system BASE code. 
+        /// Returns the RAPID declaration code line of the this Robot Tool.
         /// </summary>
-        /// <returns> Returns the robot tool BASE code as a string. </returns>
-        public string GetRSToolData()
-        {
-            string result;
-            result = CreateToolDataString();
-            return result;
-        }
-
-        /// <summary>
-        /// Private method for creating the robot tool data for the system BASE code. 
-        /// </summary>
-        /// <returns> Returns the robot tool BASE code as a string. </returns>
-        private string CreateToolDataString()
+        /// <returns> The RAPID code line. </returns>
+        public string ToRAPIDDeclaration()
         {
             // Add robot tool name
-            string result = "PERS tooldata " + _name + " := ";
+            string result = Enum.GetName(typeof(ReferenceType), _referenceType);
+            result += " tooldata " + _name + " := ";
 
             // Add robot hold < robhold of bool >
             if (_robotHold)
@@ -492,9 +544,9 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Clear / unset all the fields and properties of the object.
-        /// Used for constructing an empty Robot Tool object. 
-        /// Since the empty constructor creates the default Robot Tool tool0.
+        /// Clears all the fields and properties of the current instance.
+        /// Typically used for defining an empty Robot Tool instance 
+        /// (since the empty constructor creates the default Robot Tool tool0).
         /// </summary>
         public void Clear()
         {
@@ -514,7 +566,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Transforms the Robot Tool spatial properties (planes and meshes). 
         /// </summary>
-        /// <param name="xform"> Spatial deform. </param>
+        /// <param name="xform"> The spatial deform. </param>
         public void Transform(Transform xform)
         {
             _mesh.Transform(xform);
@@ -527,7 +579,7 @@ namespace RobotComponents.Definitions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Robot Tool object is valid. 
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public bool IsValid
         {
@@ -544,7 +596,17 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The tobot tool name, must be unique. 
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the tool name.
+        /// Each tool name has to be unique.
         /// </summary>
         public string Name
         {
@@ -553,7 +615,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The Robot Tool mesh
+        /// Gets or sets the mesh.
         /// </summary>
         public Mesh Mesh
         {
@@ -562,7 +624,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The robot tool attachment plane
+        /// Gets or sets the tool attachment plane.
         /// </summary>
         public Plane AttachmentPlane
         {
@@ -578,7 +640,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The robot tool center point and orientation defined as a plane
+        /// Gets or sets the position and orientaton of the tool center point. 
         /// </summary>
         public Plane ToolPlane
         {
@@ -594,7 +656,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Defines whether or not the robot is holding the tool.
+        /// Gets or sets a value indicating whether the robot is holding the tool.
         /// Use true if the robot is holding the tool. 
         /// Use false if the robot is not holding the tool (e.g. stationary tool).
         /// </summary>
@@ -605,8 +667,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The position of the the tool center point which is the offset between
-        /// the tool center plane and the attachment plane
+        /// Gets the position of the the tool center point which is the offset between the tool center plane and the attachment plane.
         /// </summary>
         public Point3d Position
         {
@@ -614,7 +675,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The orientation of the tool center point as a Quaternion
+        /// Gets the orientation of the tool center point as a Quaternion.
         /// </summary>
         public Quaternion Orientation
         {
@@ -622,7 +683,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The weight of the load in kg.
+        /// Gets or sets the weight of the load in kg.
         /// </summary>
         public double Mass
         {
@@ -631,7 +692,7 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The center of gravity of the tool load.
+        /// Gets or sets the center of gravity of the tool load.
         /// </summary>
         public Vector3d CenterOfGravity
         {
@@ -640,8 +701,8 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The orientation of the tool load coordinate system defined by the principal inertial axes of the 
-        /// tool load. Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).
+        /// Gets or sets the orientation of the tool load coordinate system defined by the principal inertial axes of the tool load. 
+        /// Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).
         /// </summary>
         public Quaternion CenterOfGravityOrientation
         {
@@ -650,39 +711,12 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// The moment of inertia of the load in kgm2.
+        /// Gets or set the moment of inertia of the load in kgm2.
         /// </summary>
         public Vector3d Inertia
         {
             get { return _inertia; }
             set { _inertia = value; }
-        }
-
-        /// <summary>
-        /// The moment of inertia of the load around the x-axis of the tool load or payload coordinate system in kgm2.
-        /// </summary>
-        public double InertiaX
-        {
-            get { return _inertia[0]; }
-            set { _inertia[0] = value; }
-        }
-
-        /// <summary>
-        /// The moment of inertia of the load around the y-axis of the tool load or payload coordinate system in kgm2.
-        /// </summary>
-        public double InertiaY
-        {
-            get { return _inertia[1]; }
-            set { _inertia[1] = value; }
-        }
-
-        /// <summary>
-        /// The moment of inertia of the load around the z-axis of the tool load or payload coordinate system in kgm2.
-        /// </summary>
-        public double InertiaZ
-        {
-            get { return _inertia[2]; }
-            set { _inertia[2] = value; }
         }
         #endregion
     }

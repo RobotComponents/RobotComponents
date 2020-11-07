@@ -4,18 +4,20 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Actions;
 using RobotComponents.Enumerations;
 
 namespace RobotComponents.Definitions
 {
     /// <summary>
-    /// External axis class, main Class for external axis.
-    /// An external axis (linear and rotational) can be attached to a robot or a workobject
+    /// Represents an abstract class for External Axes. 
     /// </summary>
+    [Serializable()]
     public abstract class ExternalAxis
     {
         #region fields
@@ -24,15 +26,22 @@ namespace RobotComponents.Definitions
 
         #region constructors
         /// <summary>
-        /// A method to duplicate the object as an ExternalAxis type
+        /// Initializes an empty instance of the External Axis class. 
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalAxis object. </returns>
+        public ExternalAxis()
+        {
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this External Axis.
+        /// </summary>
+        /// <returns> A deep copy of the External Axis. </returns>
         public abstract ExternalAxis DuplicateExternalAxis();
 
         /// <summary>
-        /// A method to duplicate the object as an ExternalAxis type with an empty mesh.
+        /// Returns an exact duplicate of this External Axis without meshes.
         /// </summary>
-        /// <returns> Returns a deep copy of the ExternalAxis object with empty meshes. </returns>
+        /// <returns> A deep copy of the External Axis without meshes. </returns>
         public abstract ExternalAxis DuplicateExternalAxisWithoutMesh();
         #endregion
 
@@ -62,112 +71,122 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method does not take into account the axis limits. 
+        /// Calculates the position of the attachment plane for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
-        public abstract Plane CalculatePosition(double axisValue, out bool inLimits);
+        public abstract Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
-        /// Calculates the the transformation matrix for a defined external axis value. 
-        /// This method does not take into account the axis limits. 
+        /// Calculates the the transformation matrix for a given External Joint Position.
+        /// This calculation does not take into account the axis limits. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
-        /// <param name="inLimits"> A boolean that indicates if the defined exernal axis value is inside its limits. </param>
-        /// <returns> The transformation matrix </returns>
-        public abstract Transform CalculateTransformationMatrix(double axisValue, out bool inLimits);
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <returns> The transformation matrix. </returns>
+        public abstract Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a defined external axis value.
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Calculates the position of the attachment plane for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used.  
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the attachment plane for. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed attachement plane. </returns>
-        public abstract Plane CalculatePositionSave(double axisValue);
+        public abstract Plane CalculatePositionSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
-        /// Calculates the the transformation matrix for a defined external axis value. 
-        /// This method takes into account the external axis limits. If the defined external
-        /// axis value is outside its limits the closest external axis limit will be used. 
+        /// Calculates the the transformation matrix for a given External Joint Position.
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used. 
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the transformation matrix for. </param>
-        /// <returns> Returns the transformation matrix. </returns>
-        public abstract Transform CalculateTransformationMatrixSave(double axisValue);
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <returns> The transformation matrix. </returns>
+        public abstract Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
-        /// A method that can be called to reinitialize all the data that is needed to construct a valid external axis. 
+        /// Reinitializes the fields and properties to construct valid External Axis instance. 
         /// </summary>
         public abstract void ReInitialize();
 
         /// <summary>
-        /// Calculates the position of the external axis mesh for a defined external axis value.
+        /// Calculates the position of the external axis meshes for a given External Joint Position.
         /// </summary>
-        /// <param name="axisValue"> The external axis value to calculate the position of the meshes for. </param>
-        public abstract void PoseMeshes(double axisValue);
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        /// <returns> The posed meshes. </returns>
+        public abstract List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition);
 
         /// <summary>
-        /// Transforms the linear axis spatial properties (planes and meshes). 
+        /// Transforms the external axis spatial properties (planes and meshes). 
         /// </summary>
-        /// <param name="xform"> Spatial deform. </param>
+        /// <param name="xform"> The spatial deform. </param>
         public abstract void Transform(Transform xform);
         #endregion
 
         #region properties
         /// <summary>
-        /// Boolearn that indicates if the External Axis instance is valid.
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public abstract bool IsValid { get; }
 
         /// <summary>
-        /// The name of the external axis
+        /// Gets or sets the external axis name. 
         /// </summary>
         public abstract string Name { get; set; }
 
         /// <summary>
-        /// Defines the axis limits as an interval
+        /// Gets or sets the axis limits.
         /// </summary>
         public abstract Interval AxisLimits { get; set; }
 
         /// <summary>
-        /// Defines the axis type (linear or rotational)
+        /// Gets the Axis Type.
         /// </summary>
         public abstract AxisType AxisType { get; }
 
         /// <summary>
-        /// Defines the plane where the robot or the work object is attached. 
+        /// Gets or sets the attachment plane to attach a robot or work object.
         /// </summary>
         public abstract Plane AttachmentPlane { get; set; }
 
         /// <summary>
-        /// Defines the axis plane. In case of a rotational axis the z-axis of the plane
-        /// defines the rotation center. In case of linear axis the z-axis of the plane defines 
-        /// the movement direction.
+        /// Gets or sets the axis plane.
+        /// In case of a rotational axis the z-axis of the plane defines the rotation center. 
+        /// In case of linear axis the z-axis of the plane defines the movement direction.
         /// </summary>
         public abstract Plane AxisPlane { get; set; }
 
         /// <summary>
-        /// The axis logic as number (0, 1, 2, 3, 4 or 5)
+        /// Gets or sets the axis logic as a number (-1, 0, 1, 2, 3, 4, 5).
         /// </summary>
-        public abstract int? AxisNumber { get; set; }
+        public abstract int AxisNumber { get; set; }
 
         /// <summary>
-        /// The fixed base mesh of the external axis. 
+        /// Gets the axis logic as a char (-, A, B, C, E, E, F).
+        /// </summary>
+        public abstract char AxisLogic { get; }
+
+        /// <summary>
+        /// Gets or sets the fixed base mesh of the external axis. 
         /// </summary>
         public abstract Mesh BaseMesh { get; set; }
 
         /// <summary>
-        /// The movable link mesh of the external axis posed for external axis value 0. 
+        /// Gets or sets the movable link mesh of the external axis posed for external axis value set to 0. 
         /// </summary>
         public abstract Mesh LinkMesh { get; set; }
 
         /// <summary>
-        /// The external axis mesh posed in a certain external axis value.
+        /// Gets latest calculated posed axis meshes.
         /// </summary>
         public abstract List<Mesh> PosedMeshes { get; }
-        #endregion
 
+        /// <summary>
+        /// Gets a value indicating whether or not this External Axis moves the Robot.
+        /// </summary>
+        public abstract bool MovesRobot { get; set; }
+        #endregion
     }
 }

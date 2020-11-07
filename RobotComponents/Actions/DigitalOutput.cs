@@ -5,34 +5,66 @@
 
 // System Libs
 using System;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.Definitions;
+using RobotComponents.Utils;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Digital Output class. Is used to change the value of a digital output signal.
+    /// Represents a Set Digital Output instruction. 
+    /// This action is used to set the value (state) of a digital output signal.
     /// </summary>
-    public class DigitalOutput : Action
+    [Serializable()]
+    public class DigitalOutput : Action, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
         private bool _isActive; // the desired value of the signal 0 or 1.
         #endregion
 
+        #region (de)serialization
+        /// <summary>
+        /// Protected constructor needed for deserialization of the object.  
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to extract the data from. </param>
+        /// <param name="context"> The context of this deserialization. </param>
+        protected DigitalOutput(SerializationInfo info, StreamingContext context)
+        {
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _name = (string)info.GetValue("Name", typeof(string));
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the object.
+        /// </summary>
+        /// <param name="info"> The SerializationInfo to populate with data. </param>
+        /// <param name="context"> The destination for this serialization. </param>
+        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Name", _name, typeof(string));
+            info.AddValue("Is Active", _isActive, typeof(bool));
+        }
+        #endregion
+
         #region constructors
         /// <summary>
-        /// Defines an empty DigitalOutput object.
+        /// Initializes an empty instance of the Digital Output class.
         /// </summary>
         public DigitalOutput()
         {
         }
 
         /// <summary>
-        /// Defines a digital ouput signal and the desired value / state.
+        /// Initializes a new instance of the Digital Output class.
         /// </summary>
-        /// <param name="Name">The name of the digital output signal to be changed.</param>
-        /// <param name="IsActive">The desired value / stage of the digital output signal 0 (false) or 1 (true).</param>
+        /// <param name="Name"> The name of the Digital Output signal. </param>
+        /// <param name="IsActive"> Specifies whether the Digital Output is active. </param>
         public DigitalOutput(string Name, bool IsActive)
         {
             _name = Name;
@@ -40,10 +72,9 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Creates a new digital output by duplicating an existing digital output. 
-        /// This creates a deep copy of the existing digital output. 
+        /// Initializes a new instance of the Digital Output class by duplicating an existing Digital Output instance. 
         /// </summary>
-        /// <param name="digitalOutput"> The digital output that should be duplicated. </param>
+        /// <param name="digitalOutput"> The Digital Output instance to duplicate. </param>
         public DigitalOutput(DigitalOutput digitalOutput)
         {
             _name = digitalOutput.Name;
@@ -51,18 +82,18 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// A method to duplicate the DigitalOutput object.
+        /// Returns an exact duplicate of this Digital Output instance.
         /// </summary>
-        /// <returns> Returns a deep copy of the DigitalOutput object. </returns>
+        /// <returns> A deep copy of the Digital Output instance. </returns>
         public DigitalOutput Duplicate()
         {
             return new DigitalOutput(this);
         }
 
         /// <summary>
-        /// A method to duplicate the DigitalOutput object to an Action object. 
+        /// Returns an exact duplicate of this Digital Output instance as an Action. 
         /// </summary>
-        /// <returns> Returns a deep copy of the DigitalOutput object as an Action object. </returns>
+        /// <returns> A deep copy of the Digital Output instance as an Action. </returns>
         public override Action DuplicateAction()
         {
             return new DigitalOutput(this) as Action;
@@ -87,20 +118,20 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             if (_isActive == true)
@@ -114,17 +145,19 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
         }
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
@@ -133,7 +166,7 @@ namespace RobotComponents.Actions
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the DigitalOutput object is valid. 
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public override bool IsValid
         {
@@ -146,7 +179,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The name of the digital output signal to be changed.
+        /// Gets or sets the name of the Digital Output signal.
         /// </summary>
         public string Name
         {
@@ -155,7 +188,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// The desired value / stage of the digital output signal 0 (false) or 1 (true).
+        /// Gets or sets a value indicating whether the Digital Output is active.
         /// </summary>
         public bool IsActive
         {

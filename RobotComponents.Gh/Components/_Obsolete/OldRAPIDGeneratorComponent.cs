@@ -86,7 +86,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         // Fields
         private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
-        private bool _firstMovementIsMoveAbs = true;
+        private bool _firstMovementIsMoveAbsJ = true;
         private string _BASECode = "";
         private string _MAINCode = "";
 
@@ -154,7 +154,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 _BASECode = _rapidGenerator.SystemCode;
 
                 // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbs = _rapidGenerator.FirstMovementIsMoveAbs;
+                _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
 
                 // Saved file
                 updated = true; // Avoids saving the file two times in one run
@@ -169,7 +169,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Checks if first Movement is MoveAbsJ
-            if (_firstMovementIsMoveAbs == false)
+            if (_firstMovementIsMoveAbsJ == false)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
             }

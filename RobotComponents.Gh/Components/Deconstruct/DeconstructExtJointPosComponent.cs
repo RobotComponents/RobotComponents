@@ -45,12 +45,12 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_DoubleParam("External Axis Value A", "EAa", "Defines the first external axis value");
-            pManager.Register_DoubleParam("External Axis Value B", "EAb", "Defines the second external axis value");
-            pManager.Register_DoubleParam("External Axis Value C", "EAc", "Defines the third external axis value");
-            pManager.Register_DoubleParam("External Axis Value D", "EAd", "Defines the fourth external axis value");
-            pManager.Register_DoubleParam("External Axis Value E", "EAe", "Defines the fifth external axis value");
-            pManager.Register_DoubleParam("External Axis Value F", "EAf", "Defines the sixth external axis value");
+            pManager.Register_DoubleParam("External axis position A", "EAa", "Defines the position of the external logical axis A");
+            pManager.Register_DoubleParam("External axis position B", "EAb", "Defines the position of the external logical axis B");
+            pManager.Register_DoubleParam("External axis position C", "EAc", "Defines the position of the external logical axis C");
+            pManager.Register_DoubleParam("External axis position D", "EAd", "Defines the position of the external logical axis D");
+            pManager.Register_DoubleParam("External axis position E", "EAe", "Defines the position of the external logical axis E");
+            pManager.Register_DoubleParam("External axis position F", "EAf", "Defines the position of the external logical axis F");
         }
 
         /// <summary>

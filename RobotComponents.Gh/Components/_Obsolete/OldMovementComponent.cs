@@ -13,6 +13,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Enumerations;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -219,7 +220,7 @@ namespace RobotComponents.Gh.Components.Obsolete
                     precision = precisions[precisionCounter];
                 }
 
-                Movement movement = new Movement(targetGoo.Value, speedDataGoo.Value, movementType, precision);
+                Movement movement = new Movement((MovementType)movementType, targetGoo.Value, speedDataGoo.Value, new ZoneData(precision));
                 movements.Add(movement);
             }
 

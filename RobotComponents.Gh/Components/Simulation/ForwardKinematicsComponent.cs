@@ -50,8 +50,8 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Internal Axis Values as Robot Joint Position", GH_ParamAccess.item);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "External Axis Values as External Joint Position", GH_ParamAccess.item);
+            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The positions of the Robot Axes as Robot Joint Position", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The positions of the external logical axes as External Joint Position", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;

@@ -19,7 +19,7 @@ using RobotComponents.Gh.Utils;
 namespace RobotComponents.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot component. An inherent from the GH_Component Class.
     /// </summary>
     public class RobotComponent : GH_Component
     {

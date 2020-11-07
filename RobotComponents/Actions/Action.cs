@@ -3,14 +3,17 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Action class, abstract main class for all actions.
+    /// Represents a base class for all robot actions (declarations and instructions).
     /// </summary>
+    [Serializable()]
     public abstract class Action
     {
         #region fields
@@ -19,16 +22,16 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Empty constructor
+        /// Initializes an empty instance of the Action class. 
         /// </summary>
         public Action()
         {
         }
 
         /// <summary>
-        /// A method to duplicate the object as an Action type
+        /// Returns an exact duplicate of this Action.
         /// </summary>
-        /// <returns> Returns a deep copy of the Action object. </returns>
+        /// <returns> The exact copy of this Action. </returns>
         public abstract Action DuplicateAction();
         #endregion
 
@@ -106,35 +109,37 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Used to create variable definition code of this action. 
+        /// Returns the RAPID declaration code line of the this action.
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public abstract string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
-        /// Used to create action instruction code line. 
+        /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
-        /// <param name="robot"> Defines the Robot were the code is generated for. </param>
-        /// <returns> Returns the RAPID code line as a string. </returns>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
         public abstract string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
-        /// Used to create variable definitions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public abstract void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
 
         /// <summary>
-        /// Used to create action instructions in the RAPID Code. It is typically called inside the CreateRAPIDCode() method of the RAPIDGenerator class.
+        /// Creates instructions in the RAPID program module inside the RAPID Generator.
+        /// This method is called inside the RAPID generator.
         /// </summary>
-        /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public abstract void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties
         /// <summary>
-        /// A boolean that indicates if the Action object is valid. 
+        /// Gets a value indicating whether or not the object is valid.
         /// </summary>
         public abstract bool IsValid { get; }
         #endregion

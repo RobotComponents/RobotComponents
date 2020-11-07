@@ -45,12 +45,12 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_DoubleParam("Robot axis value 1", "RA1", "Defines the position of robot axis 1 in degrees.");
-            pManager.Register_DoubleParam("Robot axis value 2", "RA2", "Defines the position of robot axis 2 in degrees.");
-            pManager.Register_DoubleParam("Robot axis value 3", "RA3", "Defines the position of robot axis 3 in degrees.");
-            pManager.Register_DoubleParam("Robot axis value 4", "RA4", "Defines the position of robot axis 4 in degrees.");
-            pManager.Register_DoubleParam("Robot axis value 5", "RA5", "Defines the position of robot axis 5 in degrees.");
-            pManager.Register_DoubleParam("Robot axis value 6", "RA6", "Defines the position of robot axis 6 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 1", "RA1", "Defines the position of robot axis 1 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 2", "RA2", "Defines the position of robot axis 2 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 3", "RA3", "Defines the position of robot axis 3 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 4", "RA4", "Defines the position of robot axis 4 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 5", "RA5", "Defines the position of robot axis 5 in degrees.");
+            pManager.Register_DoubleParam("Robot axis position 6", "RA6", "Defines the position of robot axis 6 in degrees.");
         }
 
         /// <summary>

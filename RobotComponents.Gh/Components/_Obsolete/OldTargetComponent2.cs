@@ -100,7 +100,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private string _lastName = "";
         private bool _namesUnique;
         private ObjectManager _objectManager;
-        private List<RobotTarget> _targets = new List<RobotTarget>();
+        private readonly List<RobotTarget> _targets = new List<RobotTarget>();
         
         private bool _setReferencePlane = false;
         private bool _overrideExternalAxisValues = false;
@@ -362,7 +362,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     axisValues[5] = externalAxisValueF[externalAxisValueCounterF];
                 }
 
-                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, axisValues);
+                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, new ExternalJointPosition(axisValues));
                 _targets.Add(target);
             }
 

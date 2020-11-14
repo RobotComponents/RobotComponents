@@ -81,6 +81,8 @@
     <Compile Include="Components\Deconstruct\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotTargetComponent.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_475_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_58_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_11_0_90_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_10_1_15_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_7_1_40_Component.cs" />
@@ -604,6 +606,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1300_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

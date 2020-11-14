@@ -97,7 +97,6 @@ namespace RobotComponents.Gh.Utils
             { typeof(IRB1100_4_0_475_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(IRB1100_4_0_58_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(IRB120_3_0_58_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB120_3_0_58_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(IRB1200_5_90_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(IRB1200_7_70_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(IRB1300_10_1_15_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },

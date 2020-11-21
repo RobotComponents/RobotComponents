@@ -238,22 +238,22 @@
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\ObjectManager.cs" />
-    <Compile Include="Resources\PickControllerForm.cs">
+    <Compile Include="Forms\PickControllerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickControllerForm.designer.cs">
+    <Compile Include="Forms\PickControllerForm.designer.cs">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PickDIForm.cs">
+    <Compile Include="Forms\PickDIForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickDIForm.designer.cs">
+    <Compile Include="Forms\PickDIForm.designer.cs">
       <DependentUpon>PickDIForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PickDOForm.cs">
+    <Compile Include="Forms\PickDOForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickDOForm.designer.cs">
+    <Compile Include="Forms\PickDOForm.designer.cs">
       <DependentUpon>PickDOForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -263,13 +263,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickDOForm.resx">
+    <EmbeddedResource Include="Forms\PickDOForm.resx">
       <DependentUpon>PickDOForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickDIForm.resx">
+    <EmbeddedResource Include="Forms\PickDIForm.resx">
       <DependentUpon>PickDIForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickControllerForm.resx">
+    <EmbeddedResource Include="Forms\PickControllerForm.resx">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

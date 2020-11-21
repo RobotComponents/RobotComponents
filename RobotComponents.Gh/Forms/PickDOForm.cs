@@ -1,14 +1,20 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/RobotComponents/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+// Robot Components Libs
 using RobotComponents.Gh.Components.ControllerUtility;
 
-namespace RobotComponents.Gh.Resources
+namespace RobotComponents.Gh.Forms
 {
     public partial class PickDOForm : Form
     {
-        public static int stationIndex = 0;
+        public static int SignalIndex = 0;
 
         public PickDOForm()
         {
@@ -24,7 +30,7 @@ namespace RobotComponents.Gh.Resources
             }
         }
 
-        private void PicController_Load(object sender, EventArgs e)
+        private void PickDO_Load(object sender, EventArgs e)
         {
 
         }
@@ -40,18 +46,8 @@ namespace RobotComponents.Gh.Resources
 
         private void button1_Click(object sender, EventArgs e)
         {
-            stationIndex = comboBox1.SelectedIndex;
+            SignalIndex = comboBox1.SelectedIndex;
             this.Close();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelTypeInfo_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

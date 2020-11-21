@@ -1,14 +1,20 @@
-﻿using System;
+﻿// This file is part of RobotComponents. RobotComponents is licensed 
+// under the terms of GNU General Public License as published by the 
+// Free Software Foundation. For more information and the LICENSE file, 
+// see <https://github.com/RobotComponents/RobotComponents>.
+
+// System Libs
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+// RobotComponents Libs
 using RobotComponents.Gh.Components.ControllerUtility;
 
-namespace RobotComponents.Gh.Resources
+namespace RobotComponents.Gh.Forms
 {
     public partial class PickControllerForm : Form
     {
-        public static int stationIndex = 0;
+        public static int StationIndex = 0;
 
         public PickControllerForm()
         {
@@ -24,20 +30,15 @@ namespace RobotComponents.Gh.Resources
             }
         }
 
-        private void PicController_Load(object sender, EventArgs e)
+        private void PickController_Load(object sender, EventArgs e)
         {
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            stationIndex = comboBox1.SelectedIndex;
+            StationIndex = comboBox1.SelectedIndex;
             this.Close();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)

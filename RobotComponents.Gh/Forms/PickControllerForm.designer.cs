@@ -3,7 +3,7 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponents.Gh.Resources
+namespace RobotComponents.Gh.Forms
 {
     partial class PickControllerForm
     {
@@ -68,18 +68,17 @@ namespace RobotComponents.Gh.Resources
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(421, 31);
+            this.label1.Size = new System.Drawing.Size(234, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Choose a Station to Connect to";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBox1
             // 
             this.comboBox1.DropDownWidth = 476;
             this.comboBox1.Location = new System.Drawing.Point(12, 60);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(474, 33);
+            this.comboBox1.Size = new System.Drawing.Size(474, 21);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
             // 
@@ -88,7 +87,7 @@ namespace RobotComponents.Gh.Resources
             this.labelOperationMode.AutoSize = true;
             this.labelOperationMode.Location = new System.Drawing.Point(7, 240);
             this.labelOperationMode.Name = "labelOperationMode";
-            this.labelOperationMode.Size = new System.Drawing.Size(166, 25);
+            this.labelOperationMode.Size = new System.Drawing.Size(83, 13);
             this.labelOperationMode.TabIndex = 17;
             this.labelOperationMode.Text = "Operation Mode";
             // 
@@ -97,7 +96,7 @@ namespace RobotComponents.Gh.Resources
             this.labelIsVirtual.AutoSize = true;
             this.labelIsVirtual.Location = new System.Drawing.Point(7, 215);
             this.labelIsVirtual.Name = "labelIsVirtual";
-            this.labelIsVirtual.Size = new System.Drawing.Size(73, 25);
+            this.labelIsVirtual.Size = new System.Drawing.Size(36, 13);
             this.labelIsVirtual.TabIndex = 16;
             this.labelIsVirtual.Text = "Virtual";
             // 
@@ -106,7 +105,7 @@ namespace RobotComponents.Gh.Resources
             this.labelIP.AutoSize = true;
             this.labelIP.Location = new System.Drawing.Point(7, 190);
             this.labelIP.Name = "labelIP";
-            this.labelIP.Size = new System.Drawing.Size(104, 25);
+            this.labelIP.Size = new System.Drawing.Size(52, 13);
             this.labelIP.TabIndex = 15;
             this.labelIP.Text = "IP Adress";
             // 
@@ -115,7 +114,7 @@ namespace RobotComponents.Gh.Resources
             this.labelSystemName.AutoSize = true;
             this.labelSystemName.Location = new System.Drawing.Point(7, 165);
             this.labelSystemName.Name = "labelSystemName";
-            this.labelSystemName.Size = new System.Drawing.Size(145, 25);
+            this.labelSystemName.Size = new System.Drawing.Size(72, 13);
             this.labelSystemName.TabIndex = 14;
             this.labelSystemName.Text = "System Name";
             // 
@@ -124,7 +123,7 @@ namespace RobotComponents.Gh.Resources
             this.labelName.AutoSize = true;
             this.labelName.Location = new System.Drawing.Point(6, 140);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(68, 25);
+            this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 13;
             this.labelName.Text = "Name";
             // 
@@ -179,7 +178,7 @@ namespace RobotComponents.Gh.Resources
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(6, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(161, 25);
+            this.label2.Size = new System.Drawing.Size(87, 13);
             this.label2.TabIndex = 23;
             this.label2.Text = "Controller Info";
             // 

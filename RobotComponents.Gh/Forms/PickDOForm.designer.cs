@@ -3,7 +3,7 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponents.Gh.Resources
+namespace RobotComponents.Gh.Forms
 {
     partial class PickDOForm
     {
@@ -63,21 +63,20 @@ namespace RobotComponents.Gh.Resources
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(212, 31);
+            this.label1.Size = new System.Drawing.Size(111, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Choose a Signal";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(12, 60);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(476, 33);
+            this.comboBox1.Size = new System.Drawing.Size(476, 21);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -86,7 +85,7 @@ namespace RobotComponents.Gh.Resources
             this.labelName.AutoSize = true;
             this.labelName.Location = new System.Drawing.Point(12, 140);
             this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(68, 25);
+            this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 4;
             this.labelName.Text = "Name";
             // 
@@ -95,7 +94,7 @@ namespace RobotComponents.Gh.Resources
             this.labelValue.AutoSize = true;
             this.labelValue.Location = new System.Drawing.Point(13, 165);
             this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(67, 25);
+            this.labelValue.Size = new System.Drawing.Size(34, 13);
             this.labelValue.TabIndex = 5;
             this.labelValue.Text = "Value";
             // 
@@ -126,7 +125,7 @@ namespace RobotComponents.Gh.Resources
             this.labelType.AutoSize = true;
             this.labelType.Location = new System.Drawing.Point(13, 190);
             this.labelType.Name = "labelType";
-            this.labelType.Size = new System.Drawing.Size(60, 25);
+            this.labelType.Size = new System.Drawing.Size(31, 13);
             this.labelType.TabIndex = 8;
             this.labelType.Text = "Type";
             // 
@@ -135,7 +134,7 @@ namespace RobotComponents.Gh.Resources
             this.labelMinValue.AutoSize = true;
             this.labelMinValue.Location = new System.Drawing.Point(13, 215);
             this.labelMinValue.Name = "labelMinValue";
-            this.labelMinValue.Size = new System.Drawing.Size(108, 25);
+            this.labelMinValue.Size = new System.Drawing.Size(54, 13);
             this.labelMinValue.TabIndex = 9;
             this.labelMinValue.Text = "Min Value";
             // 
@@ -148,7 +147,6 @@ namespace RobotComponents.Gh.Resources
             this.labelTypeInfo.Size = new System.Drawing.Size(322, 25);
             this.labelTypeInfo.TabIndex = 10;
             this.labelTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.labelTypeInfo.Click += new System.EventHandler(this.labelTypeInfo_Click);
             // 
             // labelMinValueInfo
             // 
@@ -165,7 +163,7 @@ namespace RobotComponents.Gh.Resources
             this.labelMaxValue.AutoSize = true;
             this.labelMaxValue.Location = new System.Drawing.Point(13, 240);
             this.labelMaxValue.Name = "labelMaxValue";
-            this.labelMaxValue.Size = new System.Drawing.Size(114, 25);
+            this.labelMaxValue.Size = new System.Drawing.Size(57, 13);
             this.labelMaxValue.TabIndex = 12;
             this.labelMaxValue.Text = "Max Value";
             // 
@@ -184,11 +182,11 @@ namespace RobotComponents.Gh.Resources
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(13, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 25);
+            this.label2.Size = new System.Drawing.Size(68, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "Signal Info";
             // 
-            // PickSignalForm
+            // PickDOForm
             // 
             this.ClientSize = new System.Drawing.Size(498, 348);
             this.ControlBox = false;
@@ -207,7 +205,7 @@ namespace RobotComponents.Gh.Resources
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "PickSignalForm";
+            this.Name = "PickDOForm";
             this.ResumeLayout(false);
             this.PerformLayout();
 

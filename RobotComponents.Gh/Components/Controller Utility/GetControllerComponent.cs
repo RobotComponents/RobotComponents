@@ -10,7 +10,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Resources;
+using RobotComponents.Gh.Forms;
 using RobotComponents.Gh.Goos;
 using RobotComponents.Gh.Utils;
 // ABB Libs
@@ -211,7 +211,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             frm.ShowDialog();
 
             // Return the index number of the picked controller
-            return PickControllerForm.stationIndex;
+            return PickControllerForm.StationIndex;
         }
 
         /// <summary>

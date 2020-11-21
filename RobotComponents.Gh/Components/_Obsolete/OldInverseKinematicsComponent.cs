@@ -88,15 +88,15 @@ namespace RobotComponents.Gh.Components.Simulation
                 "from the ribbon.");
 
             // Input variables
-            Robot robotInfo = null;
+            Robot robot = null;
             Movement Movement = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetData(1, ref Movement)) { return; }
 
             // Calculate the robot pose
-            InverseKinematics inverseKinematics = new InverseKinematics(Movement, robotInfo);
+            InverseKinematics inverseKinematics = new InverseKinematics(Movement, robot);
             inverseKinematics.Calculate();
 
             // Check the values

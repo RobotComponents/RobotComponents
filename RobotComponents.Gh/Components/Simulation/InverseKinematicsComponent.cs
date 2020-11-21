@@ -70,15 +70,15 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Robot robotInfo = null;
+            Robot robot = null;
             Movement Movement = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetData(1, ref Movement)) { return; }
 
             // Calculate the robot pose
-            _inverseKinematics = new InverseKinematics(Movement, robotInfo);
+            _inverseKinematics = new InverseKinematics(Movement, robot);
             _inverseKinematics.Calculate();
 
             // Check the values
@@ -88,7 +88,7 @@ namespace RobotComponents.Gh.Components.Simulation
             }
 
             // Set forward kinematics (for visualization)
-            _forwardKinematics = new ForwardKinematics(robotInfo);
+            _forwardKinematics = new ForwardKinematics(robot);
             
             // Output
             DA.SetData(0, _inverseKinematics.RobotJointPosition);

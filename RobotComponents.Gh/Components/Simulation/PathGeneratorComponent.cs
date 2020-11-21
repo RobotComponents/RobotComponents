@@ -67,7 +67,7 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         // Fields
-        private Robot _robotInfo;
+        private Robot _robot;
         private PathGenerator _pathGenerator = new PathGenerator();
         private ForwardKinematics _forwardKinematics = new ForwardKinematics();
         private List<Plane> _planes = new List<Plane>();
@@ -92,7 +92,7 @@ namespace RobotComponents.Gh.Components.Simulation
             bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref _robotInfo)) { return; }
+            if (!DA.GetData(0, ref _robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
@@ -102,10 +102,10 @@ namespace RobotComponents.Gh.Components.Simulation
             if (update == true || _lastInterpolations != interpolations)
             {
                 // Create forward kinematics for mesh display
-                _forwardKinematics = new ForwardKinematics(_robotInfo);
+                _forwardKinematics = new ForwardKinematics(_robot);
 
                 // Create the path generator
-                _pathGenerator = new PathGenerator(_robotInfo);
+                _pathGenerator = new PathGenerator(_robot);
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);

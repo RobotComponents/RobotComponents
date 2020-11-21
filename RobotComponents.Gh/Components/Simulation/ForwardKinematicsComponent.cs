@@ -80,17 +80,17 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Robot robotInfo = null;
+            Robot robot = null;
             RobotJointPosition robotJointPosition = new RobotJointPosition();
             ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetData(1, ref robotJointPosition)) { robotJointPosition = new RobotJointPosition(); }
             if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robotInfo, robotJointPosition, externalJointPosition, _hideMesh);
+            _fk = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
             _fk.Calculate();
 
             // Check the values

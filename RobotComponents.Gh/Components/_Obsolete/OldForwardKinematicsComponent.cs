@@ -97,12 +97,12 @@ namespace RobotComponents.Gh.Components.Obsolete
                 "from the ribbon.");
 
             // Input variables
-            GH_Robot robotInfoGoo = null;
+            GH_Robot robotGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 
             // Catch input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(0, ref robotGoo)) { return; }
             if (!DA.GetDataList(1, internalAxisValues)) { return; }
             if (!DA.GetDataList(2, externalAxisValues)) { return; }
 
@@ -119,7 +119,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues));
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotGoo.Value, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues));
             forwardKinematics.Calculate();
 
             // Check the values

@@ -24,7 +24,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
     public class DeconstructRobotComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotInfoComponent class.
+        /// Initializes a new instance of the DeconstructrobotComponent class.
         /// </summary>
         public DeconstructRobotComponent()
           : base("Deconstruct Robot", "DeRob", 
@@ -72,13 +72,13 @@ namespace RobotComponents.Gh.Components.Deconstruct
             _doc = this.OnPingDocument();
 
             // Input variables
-            Robot robotInfo = null;
+            Robot robot = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
 
             // Check if the input is valid
-            if (!robotInfo.IsValid)
+            if (!robot.IsValid)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Info is not Valid");
             }
@@ -88,30 +88,30 @@ namespace RobotComponents.Gh.Components.Deconstruct
 
             // Add display meshes
             _meshes.Clear();
-            if (robotInfo.Meshes != null)
+            if (robot.Meshes != null)
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    _meshes.Add(robotInfo.Meshes[i]);
-                    meshes.Add(robotInfo.Meshes[i]);
+                    _meshes.Add(robot.Meshes[i]);
+                    meshes.Add(robot.Meshes[i]);
                 }
             }
 
-            if (robotInfo.Tool.IsValid)
+            if (robot.Tool.IsValid)
             {
-                _meshes.Add(robotInfo.Tool.Mesh);
+                _meshes.Add(robot.Tool.Mesh);
             }
             else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
             }
 
-            for (int i = 0; i < robotInfo.ExternalAxes.Count; i++)
+            for (int i = 0; i < robot.ExternalAxes.Count; i++)
             {
-                if (robotInfo.ExternalAxes[i].IsValid)
+                if (robot.ExternalAxes[i].IsValid)
                 {
-                    _meshes.Add(robotInfo.ExternalAxes[i].BaseMesh);
-                    _meshes.Add(robotInfo.ExternalAxes[i].LinkMesh);
+                    _meshes.Add(robot.ExternalAxes[i].BaseMesh);
+                    _meshes.Add(robot.ExternalAxes[i].LinkMesh);
                 }
                 else
                 {
@@ -120,14 +120,14 @@ namespace RobotComponents.Gh.Components.Deconstruct
             }
            
             // Output
-            DA.SetData(0, robotInfo.Name);
+            DA.SetData(0, robot.Name);
             DA.SetDataList(1, meshes);
-            DA.SetDataList(2, robotInfo.InternalAxisPlanes);
-            DA.SetDataList(3, robotInfo.InternalAxisLimits);
-            DA.SetData(4, robotInfo.BasePlane);
-            DA.SetData(5, robotInfo.MountingFrame);
-            DA.SetData(6, robotInfo.Tool);
-            DA.SetDataList(7, robotInfo.ExternalAxes);
+            DA.SetDataList(2, robot.InternalAxisPlanes);
+            DA.SetDataList(3, robot.InternalAxisLimits);
+            DA.SetData(4, robot.BasePlane);
+            DA.SetData(5, robot.MountingFrame);
+            DA.SetData(6, robot.Tool);
+            DA.SetDataList(7, robot.ExternalAxes);
         }
 
         #region menu item

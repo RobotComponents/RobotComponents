@@ -80,19 +80,18 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
             if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
-            string name = "IRB7600-340/2.8";
-            Robot robotInfo = new Robot();
+            Robot robot = new Robot();
 
             try
             {
-                robotInfo = IRB7600_340_280.GetRobot(name, positionPlane, tool, externalAxis);
+                robot = IRB7600_340_280.GetRobot(positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
             }
 
-            DA.SetData(0, robotInfo);
+            DA.SetData(0, robot);
         }
 
         #region menu item

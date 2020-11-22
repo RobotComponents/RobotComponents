@@ -21,13 +21,13 @@ namespace RobotComponents.Definitions.Presets
         /// <summary>
         /// Returns a new IRB6650-200/2.75 Robot instance.
         /// </summary>
-        /// <param name="name"> The name of the Robot. </param>
         /// <param name="positionPlane"> The position and orientation of the Robot in world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns> The Robot preset. </returns>
-        public static Robot GetRobot(string name, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxes = null)
+        public static Robot GetRobot(Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxes = null)
         {
+            string name = "IRB6650-200/2.75";
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
             List<Interval> axisLimits = GetAxisLimits();

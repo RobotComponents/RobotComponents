@@ -88,6 +88,7 @@ namespace RobotComponents.Gh.Utils
             { typeof(ExternalLinearAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/External%20Linear%20Axis/" },
             { typeof(ExternalRotationalAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/External%20Rotational%20Axis/" },
             { typeof(RobotComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot/" },
+            { typeof(RobotPresetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO: make page...
             { typeof(RobotToolFromPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool%20from%20Planes/" },
             { typeof(RobotToolFromQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool%20from%20Quaternions/" },
             { typeof(WorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Work%20Object/" },

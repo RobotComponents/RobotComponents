@@ -86,6 +86,7 @@
     <Compile Include="Components\Definitions\Presets\IRB1300_11_0_90_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_10_1_15_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_7_1_40_Component.cs" />
+    <Compile Include="Components\Definitions\RobotPresetComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
@@ -203,6 +204,12 @@
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
+    <Compile Include="Forms\PickRobotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickRobotForm.designer.cs">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Goos\GH_Controller.cs" />
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
@@ -258,6 +265,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickRobotForm.resx">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -611,6 +621,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1100_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotPreset_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

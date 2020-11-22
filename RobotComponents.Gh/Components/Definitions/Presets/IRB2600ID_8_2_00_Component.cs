@@ -42,7 +42,7 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.secondary | GH_Exposure.obscure; }
         }
 
         /// <summary>
@@ -80,19 +80,18 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
             if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
 
-            string name = "IRB2600ID-8/2.0";
-            Robot robotInfo = new Robot();
+            Robot robot = new Robot();
 
             try
             {
-                robotInfo = IRB2600ID_8_200.GetRobot(name, positionPlane, tool, externalAxis);
+                robot = IRB2600ID_8_200.GetRobot(positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, ex.Message);
             }
 
-            DA.SetData(0, robotInfo);
+            DA.SetData(0, robot);
         }
 
         #region menu item

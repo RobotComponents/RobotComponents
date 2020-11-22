@@ -224,5 +224,23 @@ namespace RobotComponents.Utils
             Quaternion quat = Quaternion.Rotation(refPlane, plane);
             return quat;
         }
+
+        /// <summary>
+        /// Replaces the first occurence in a string with a new text. 
+        /// </summary>
+        /// <param name="text"> The text the search and replace in. </param>
+        /// <param name="search"> The text to search for. </param>
+        /// <param name="replace"> The new text. </param>
+        /// <returns> Returns a new string with replaced text. </returns>
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            int position = text.IndexOf(search);
+
+            if (position < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, position) + replace + text.Substring(position + search.Length);
+        }
     }
 }

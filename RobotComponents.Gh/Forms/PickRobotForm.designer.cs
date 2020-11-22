@@ -44,7 +44,7 @@ namespace RobotComponents.Gh.Forms
             // button1
             // 
             this.button1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button1.Location = new System.Drawing.Point(12, 300);
+            this.button1.Location = new System.Drawing.Point(12, 303);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(476, 33);
             this.button1.TabIndex = 1;
@@ -58,9 +58,9 @@ namespace RobotComponents.Gh.Forms
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(149, 17);
+            this.label1.Size = new System.Drawing.Size(170, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a Robot preset";
+            this.label1.Text = "Choose a robot preset";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
@@ -104,7 +104,7 @@ namespace RobotComponents.Gh.Forms
             // 
             // PickRobotForm
             // 
-            this.ClientSize = new System.Drawing.Size(498, 348);
+            this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.labelNameInfo);

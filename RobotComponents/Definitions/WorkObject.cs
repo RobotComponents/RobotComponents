@@ -240,9 +240,22 @@ namespace RobotComponents.Definitions
 
             // Set to a movable frame if an exernal axes is coupled
             if (_externalAxis != null)
+            {
                 _fixedFrame = false;
+            }
             else
+            {
                 _fixedFrame = true;
+            }
+
+            // Check if the external axis moves the robot
+            if (_externalAxis != null)
+            {
+                if (_externalAxis.MovesRobot == true)
+                {
+                    throw new Exception("An external axis that moves the robot cannot move a work object.");
+                }
+            }
         }
 
         /// <summary>

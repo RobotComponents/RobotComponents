@@ -63,6 +63,7 @@ namespace RobotComponents.Gh.Utils
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent2> _oldToolsQuaternionByGuid2;
         private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
+        private Dictionary<Guid, OldWorkObjectComponent2> _oldWorkObjectsByGuid2;
         #endregion
 
         #endregion
@@ -108,6 +109,7 @@ namespace RobotComponents.Gh.Utils
             _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
             _oldToolsQuaternionByGuid2 = new Dictionary<Guid, OldRobotToolFromQuaternionComponent2>();
             _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
+            _oldWorkObjectsByGuid2 = new Dictionary<Guid, OldWorkObjectComponent2>();
             #endregion
         }
         #endregion
@@ -193,6 +195,12 @@ namespace RobotComponents.Gh.Utils
 
             // Add all the work objects from old component
             foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in _oldWorkObjectsByGuid)
+            {
+                workObjects.AddRange(entry.Value.WorkObjects);
+            }
+
+            // Add all the work objects from old component 2
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent2> entry in _oldWorkObjectsByGuid2)
             {
                 workObjects.AddRange(entry.Value.WorkObjects);
             }
@@ -521,6 +529,16 @@ namespace RobotComponents.Gh.Utils
                     entry.Value.ExpireSolution(true);
                 }
             }
+
+            // Run SolveInstance on other obsolete Work Objects with no unique Name to check if their name is now available
+            // --- remove in version 0.1.000
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent2> entry in OldWorkObjectsByGuid2)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
         }
 
         /// <summary>
@@ -763,7 +781,13 @@ namespace RobotComponents.Gh.Utils
             get { return _oldWorkObjectsByGuid; }
         }
 
-
+        /// <summary>
+        /// OBSOLETE: Used for old Work Object component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldWorkObjectComponent2> OldWorkObjectsByGuid2
+        {
+            get { return _oldWorkObjectsByGuid2; }
+        }
         #endregion
 
         #endregion

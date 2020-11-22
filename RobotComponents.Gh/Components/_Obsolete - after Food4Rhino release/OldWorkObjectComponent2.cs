@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -16,14 +15,18 @@ using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.13.000
+// It is replaced with a new component. 
+
 namespace RobotComponents.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class WorkObjectComponent : GH_Component
+    public class OldWorkObjectComponent2 : GH_Component
     {
-        public WorkObjectComponent()
+        public OldWorkObjectComponent2()
           : base("Work Object", "WorkObj",
               "Defines a new work object."
                + System.Environment.NewLine + System.Environment.NewLine +
@@ -34,11 +37,19 @@ namespace RobotComponents.Gh.Components.Definitions
 
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -48,7 +59,7 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Work Object Name as Text", GH_ParamAccess.list, "default_wo");
             pManager.AddPlaneParameter("Plane", "WP", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
-            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as an External Axis", GH_ParamAccess.list);
+            pManager.AddParameter(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -82,12 +93,12 @@ namespace RobotComponents.Gh.Components.Definitions
             // Input variables
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
-            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
+            List<ExternalRotationalAxis> externalAxes = new List<ExternalRotationalAxis>();
 
             // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, planes)) { return; }
-            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalAxis>() { null }; }
+            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalRotationalAxis>() { null }; }
 
             // Replace spaces
             names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
@@ -112,7 +123,7 @@ namespace RobotComponents.Gh.Components.Definitions
             {
                 string name = "";
                 Plane plane = new Plane();
-                ExternalAxis externalAxis = null;
+                ExternalRotationalAxis externalAxis = null;
 
                 // Names counter
                 if (i < sizeValues[0])
@@ -174,9 +185,9 @@ namespace RobotComponents.Gh.Components.Definitions
             }
 
             // Adds Component to WorkObjectsByGuid Dictionary
-            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
+            if (!_objectManager.OldWorkObjectsByGuid2.ContainsKey(this.InstanceGuid))
             {
-                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
+                _objectManager.OldWorkObjectsByGuid2.Add(this.InstanceGuid, this);
             }
 
             // Checks if the work object name is already in use and counts duplicates
@@ -228,29 +239,6 @@ namespace RobotComponents.Gh.Components.Definitions
             #endregion
         }
 
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
         /// <summary>
         /// Detect if the components gets removed from the canvas and deletes the 
         /// objects created with this components from the object manager. 
@@ -268,7 +256,7 @@ namespace RobotComponents.Gh.Components.Definitions
                         _objectManager.WorkObjectNames.Remove(_woNames[i]);
                     }
                 }
-                _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
+                _objectManager.OldWorkObjectsByGuid2.Remove(this.InstanceGuid);
 
                 // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
                 _objectManager.UpdateWorkObjects();
@@ -299,7 +287,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F892733B-3633-48A6-AAC7-1A244441A774"); }
+            get { return new Guid("E76C475E-0C31-484D-A45D-690F45BD154C"); }
         }
 
         public string LastName { get => _lastName; }

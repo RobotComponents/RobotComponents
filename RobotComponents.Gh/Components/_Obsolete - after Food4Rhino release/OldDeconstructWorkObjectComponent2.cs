@@ -5,31 +5,50 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.13.000
+// It is replaced with a new component. 
 
 namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct Work Object component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructWorkObjectComponent : GH_Component
+    public class OldDeconstructWorkObjectComponent2 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructWorkObject class.
         /// </summary>
-        public DeconstructWorkObjectComponent()
-          : base("Deconstruct Work Object", "DeConWobj", 
+        public OldDeconstructWorkObjectComponent2()
+          : base("Deconstruct Work Object", "DeConTar", 
               "Deconstructs a Work Object into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -47,7 +66,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
-            pManager.RegisterParam(new ExternalAxisParameter(), "ExternalAxis", "EA", "External Axis as External Axis");
+            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
         }
 
         /// <summary>
@@ -74,38 +93,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(2, workObject.ExternalAxis);
         }
 
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
         /// <summary>
         /// Provides an Icon for the component
         /// </summary>
@@ -119,7 +106,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1E29AF75-A85C-465C-AA44-561570CCD0AE"); }
+            get { return new Guid("2EF73719-3E07-431E-8729-AB0C99848D0A"); }
         }
     }
 }

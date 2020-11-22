@@ -54,7 +54,7 @@ namespace RobotComponents.Gh.Forms
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(12, 324);
+            this.button1.Location = new System.Drawing.Point(12, 303);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(476, 33);
             this.button1.TabIndex = 1;
@@ -68,9 +68,9 @@ namespace RobotComponents.Gh.Forms
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(234, 17);
+            this.label1.Size = new System.Drawing.Size(250, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a Station to Connect to";
+            this.label1.Text = "Choose a controller to connect to";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
@@ -85,7 +85,7 @@ namespace RobotComponents.Gh.Forms
             // labelOperationMode
             // 
             this.labelOperationMode.AutoSize = true;
-            this.labelOperationMode.Location = new System.Drawing.Point(7, 240);
+            this.labelOperationMode.Location = new System.Drawing.Point(13, 240);
             this.labelOperationMode.Name = "labelOperationMode";
             this.labelOperationMode.Size = new System.Drawing.Size(83, 13);
             this.labelOperationMode.TabIndex = 17;
@@ -94,7 +94,7 @@ namespace RobotComponents.Gh.Forms
             // labelIsVirtual
             // 
             this.labelIsVirtual.AutoSize = true;
-            this.labelIsVirtual.Location = new System.Drawing.Point(7, 215);
+            this.labelIsVirtual.Location = new System.Drawing.Point(13, 215);
             this.labelIsVirtual.Name = "labelIsVirtual";
             this.labelIsVirtual.Size = new System.Drawing.Size(36, 13);
             this.labelIsVirtual.TabIndex = 16;
@@ -103,7 +103,7 @@ namespace RobotComponents.Gh.Forms
             // labelIP
             // 
             this.labelIP.AutoSize = true;
-            this.labelIP.Location = new System.Drawing.Point(7, 190);
+            this.labelIP.Location = new System.Drawing.Point(13, 190);
             this.labelIP.Name = "labelIP";
             this.labelIP.Size = new System.Drawing.Size(52, 13);
             this.labelIP.TabIndex = 15;
@@ -112,7 +112,7 @@ namespace RobotComponents.Gh.Forms
             // labelSystemName
             // 
             this.labelSystemName.AutoSize = true;
-            this.labelSystemName.Location = new System.Drawing.Point(7, 165);
+            this.labelSystemName.Location = new System.Drawing.Point(13, 165);
             this.labelSystemName.Name = "labelSystemName";
             this.labelSystemName.Size = new System.Drawing.Size(72, 13);
             this.labelSystemName.TabIndex = 14;
@@ -121,7 +121,7 @@ namespace RobotComponents.Gh.Forms
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(6, 140);
+            this.labelName.Location = new System.Drawing.Point(12, 140);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 13;
@@ -176,18 +176,17 @@ namespace RobotComponents.Gh.Forms
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 115);
+            this.label2.Location = new System.Drawing.Point(12, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 13);
+            this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 23;
-            this.label2.Text = "Controller Info";
+            this.label2.Text = "Controller info";
             // 
             // PickControllerForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(498, 378);
+            this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.labelOperationModeInfo);
             this.Controls.Add(this.labelIsVirtualInfo);
             this.Controls.Add(this.labelIPInfo);

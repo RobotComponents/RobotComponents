@@ -97,7 +97,7 @@ namespace RobotComponents.Gh.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed in the future.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed in the future.");
 
             // Input variables
             string name = "default_tool";

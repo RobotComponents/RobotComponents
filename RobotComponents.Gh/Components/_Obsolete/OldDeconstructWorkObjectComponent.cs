@@ -76,7 +76,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 

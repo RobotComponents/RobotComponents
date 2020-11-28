@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
+    <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\SpeedDataValueList.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Goos\GH_Controller.cs" />
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
+    <Compile Include="Parameters\Actions\AnalogOutputParam.cs" />
     <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
     <Compile Include="Parameters\Actions\JointTargetParam.cs" />
     <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />

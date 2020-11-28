@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AbsoluteJointMovement.cs" />
+    <Compile Include="Actions\AnalogOutput.cs" />
     <Compile Include="Actions\ITarget.cs" />
     <Compile Include="Actions\JointTarget.cs" />
     <Compile Include="Actions\RobotJointPosition.cs" />

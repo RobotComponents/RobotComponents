@@ -5,31 +5,50 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.13.000
+// It is replaced with a new component. 
 
 namespace RobotComponents.Gh.Components.Deconstruct
 {
     /// <summary>
     /// RobotComponents Deconstruct External Linear Axis Component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructExternalLinearAxisComponent : GH_Component
+    public class OldDeconstructExternalLinearAxisComponent2 : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
-        public DeconstructExternalLinearAxisComponent()
+        public OldDeconstructExternalLinearAxisComponent2()
           : base("Deconstruct External Linear Axis", "DeConELA", 
               "Deconstructs an External Linear Axis component into its parameters."
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -51,8 +70,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
-            pManager.AddTextParameter("Axis Logic Number", "AL", "Axis Logic Number as Text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Moves Robot", "MR", "Moves Robot as Boolean", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -80,40 +97,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(3, externalLinearAxis.AxisLimits);
             DA.SetData(4, externalLinearAxis.BaseMesh);
             DA.SetData(5, externalLinearAxis.LinkMesh);
-            DA.SetData(6, externalLinearAxis.AxisLogic);
-            DA.SetData(7, externalLinearAxis.MovesRobot);
-        }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -129,7 +112,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6A7ABCC2-2EC1-4D9A-8DD4-57F0DD1BE681"); }
+            get { return new Guid("2CB287BA-4FD1-44E6-B540-8C423B6CC4B6"); }
         }
     }
 

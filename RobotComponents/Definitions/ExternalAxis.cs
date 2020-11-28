@@ -166,7 +166,7 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Gets the axis logic as a char (-, A, B, C, E, E, F).
         /// </summary>
-        public abstract char AxisLogic { get; }
+        public abstract char AxisLogic { get; set; }
 
         /// <summary>
         /// Gets or sets the fixed base mesh of the external axis. 

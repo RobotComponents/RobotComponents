@@ -469,6 +469,13 @@ namespace RobotComponents.Definitions
                 _externalAxisLimits[_externalAxes[i].AxisNumber] = _externalAxes[i].AxisLimits;
                 _externalAxisPlanes[_externalAxes[i].AxisNumber] = _externalAxes[i].AxisPlane;
             }
+
+            // Check for duplicate axis logic numbers
+            List<int> duplicates = _externalAxes.GroupBy(x => x.AxisNumber).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
+            if (duplicates.Count > 0)
+            {
+                throw new ArgumentException("Some of the axis logic numbers are used multiple times");
+            }
         }
 
         /// <summary>

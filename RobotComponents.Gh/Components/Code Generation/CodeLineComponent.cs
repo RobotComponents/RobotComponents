@@ -95,16 +95,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref code)) { return; }
             if (!DA.GetData(1, ref type)) { return; }
 
+            // Check if a right value is used for the code line type
+            if (type != 0 && type != 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Code Line type value <" + type + "> is invalid. " +
+                    "In can only be set to 0 or 1. Use 0 for creating instructions and 1 for creating a declarations.");
+            }
+
             // Create the action
             CodeLine codeLine = new CodeLine(code, (CodeType)type);
-
-            // Check if a right value is used for the code line type
-                if (type != 0 && type != 1)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Code Line type value <" + type + "> is invalid. " +
-                        "In can only be set to 0 or 1. Use 0 for creating an instructions and 1 for creating a declarations." +
-                        "Code Line type was automatically set to 0"); // This is happening in the constructor of the code line base class
-            }
 
             // Sets Output
             DA.SetData(0, codeLine);

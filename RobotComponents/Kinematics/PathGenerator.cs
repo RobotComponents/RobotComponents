@@ -35,7 +35,8 @@ namespace RobotComponents.Kinematics
         private RobotJointPosition _lastRobotJointPosition; // Defines the last Robot Joint Position
         private ExternalJointPosition _lastExternalJointPosition; // Defines the last External Joint Position
         private RobotTool _currentTool; // Defines the default robot tool
-        private bool _autoAxisConfig; // Defines if hte auto axis configuration is active
+        private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
+        private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private int _interpolations; // Defines the number of interpolations between two targets
         #endregion
 
@@ -93,7 +94,8 @@ namespace RobotComponents.Kinematics
 
             // Reinitiate starting values
             _currentTool = _initialTool;
-            _autoAxisConfig = false;
+            _linearConfigurationControl = true;
+            _jointConfigurationControl = true;
             _firstMovementIsMoveAbsJ = false;
             _lastRobotJointPosition = new RobotJointPosition();
             _lastExternalJointPosition = new ExternalJointPosition();
@@ -129,7 +131,8 @@ namespace RobotComponents.Kinematics
 
                 else if (actions[i] is AutoAxisConfig autoAxisConfig)
                 {
-                    _autoAxisConfig = autoAxisConfig.IsActive;
+                    _linearConfigurationControl = !autoAxisConfig.IsActive;
+                    _jointConfigurationControl = !autoAxisConfig.IsActive;
                 }
 
                 else if (actions[i] is Movement movement)
@@ -249,7 +252,7 @@ namespace RobotComponents.Kinematics
             _robot.InverseKinematics.Calculate();
 
             // Auto Axis Config
-            if (_autoAxisConfig == true && movement.MovementType != MovementType.MoveAbsJ)
+            if (_jointConfigurationControl == false && movement.MovementType != MovementType.MoveAbsJ)
             {
                 _robot.InverseKinematics.CalculateClosestRobotJointPosition(_lastRobotJointPosition);
             }
@@ -340,7 +343,7 @@ namespace RobotComponents.Kinematics
                 _robot.InverseKinematics.Calculate();
 
                 // Auto Axis Config
-                if (_autoAxisConfig == true)
+                if (_linearConfigurationControl == false)
                 {
                     if (i == 0)
                     {
@@ -401,7 +404,7 @@ namespace RobotComponents.Kinematics
             _robot.InverseKinematics.Calculate();
 
             // Auto Axis Config
-            if (_autoAxisConfig == true)
+            if (_linearConfigurationControl == false)
             {
                 _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
             }

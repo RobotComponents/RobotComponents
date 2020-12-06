@@ -69,6 +69,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldPathGeneratorComponent3.cs" />
     <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
     <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementTypeValueList.cs" />

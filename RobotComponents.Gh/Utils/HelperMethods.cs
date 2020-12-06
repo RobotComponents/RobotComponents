@@ -219,6 +219,33 @@ namespace RobotComponents.Gh.Utils
 
             return result;
         }
+
+        /// <summary>
+        /// Compares are string with an other string and checks if these are equal. 
+        /// </summary>
+        /// <param name="text1"> The first string to compare with. </param>
+        /// <param name="text2"> The second string to compare with. </param>
+        /// <returns> Specifies wethers the two strings are equal </returns>
+        public static bool Equality(this string text1, string text2)
+        {
+            char[] chars1 = text1.ToCharArray();
+            char[] chars2 = text2.ToCharArray();
+
+            if (chars1.Length != chars2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < chars1.Length; i++)
+            {
+                if (chars1[i] != chars2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         #endregion
 
         #region properties

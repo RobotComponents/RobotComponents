@@ -60,11 +60,11 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            AddParameter(7);
+            AddParameter(8);
         }
 
         // Create an array with the variable input parameters
-        readonly IGH_Param[] outputParameters = new IGH_Param[8]
+        readonly IGH_Param[] outputParameters = new IGH_Param[9]
         {
             new Param_Plane() { Name = "Robot End Plane", NickName = "EP", Description = "The current position and orientation of tool TCP", Access = GH_ParamAccess.item},
             new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
@@ -73,6 +73,7 @@ namespace RobotComponents.Gh.Components.Simulation
             new Param_Plane() { Name = "External Axis Planes", NickName = "EAP", Description = "The current position and orientation of the external axes", Access = GH_ParamAccess.list},
             new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The current External Joint Position", Access = GH_ParamAccess.item},
             new ExternalJointPositionParameter() { Name = "External Joint Positions", NickName = "EJs", Description = "The External Joint Positions of the whole path", Access = GH_ParamAccess.list},
+            new Param_String() { Name = "Error messages", NickName = "E", Description = "The error messages collected during the generation of the path", Access = GH_ParamAccess.list},
             new Param_Curve() { Name = "Path", NickName = "P", Description = "The whole tool path as list with curves", Access = GH_ParamAccess.list},
         };
 
@@ -87,6 +88,7 @@ namespace RobotComponents.Gh.Components.Simulation
         private bool _outputExternalAxisPlanes = false;
         private bool _outputExternalJointPosition = false;
         private bool _outputExternalJointPositions = false;
+        private bool _outputErrorMessages = false;
         private bool _previewMesh = true;
 
         /// <summary>
@@ -176,7 +178,12 @@ namespace RobotComponents.Gh.Components.Simulation
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[6].NickName));
                 DA.SetDataList(ind, _pathGenerator.ExternalJointPositions);
             }
-            DA.SetDataList(outputParameters[7].Name, _pathGenerator.Paths);
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[7].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[7].NickName));
+                DA.SetDataList(ind, _pathGenerator.ErrorText);
+            }
+            DA.SetDataList(outputParameters[8].Name, _pathGenerator.Paths);
         }
 
         #region menu item
@@ -195,6 +202,7 @@ namespace RobotComponents.Gh.Components.Simulation
             writer.SetBoolean("Output External Axis Planes", _outputExternalAxisPlanes);
             writer.SetBoolean("Output External Joint Position", _outputExternalJointPosition);
             writer.SetBoolean("Output External Joint Positions", _outputExternalJointPositions);
+            writer.SetBoolean("Output Error Messages", _outputErrorMessages);
             return base.Write(writer);
         }
 
@@ -213,6 +221,7 @@ namespace RobotComponents.Gh.Components.Simulation
             _outputExternalAxisPlanes = reader.GetBoolean("Output External Axis Planes");
             _outputExternalJointPosition = reader.GetBoolean("Output External Joint Position");
             _outputExternalJointPositions = reader.GetBoolean("Output External Joint Positions");
+            _outputErrorMessages = reader.GetBoolean("Output Error Messages");
             return base.Read(reader);
         }
 
@@ -232,6 +241,7 @@ namespace RobotComponents.Gh.Components.Simulation
             Menu_AppendItem(menu, "Output current External Axis Planes", MenuItemClickOutputExternalAxisPlanes, true, _outputExternalAxisPlanes);
             Menu_AppendItem(menu, "Output current External Joint Position", MenuItemClickOutputExternalJointPosition, true, _outputExternalJointPosition);
             Menu_AppendItem(menu, "Output all External Joint Positions", MenuItemClickOutputExternalJointPositions, true, _outputExternalJointPositions);
+            Menu_AppendItem(menu, "Output all Error Messages", MenuItemClickOutputErrorMessages, true, _outputErrorMessages);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -330,6 +340,18 @@ namespace RobotComponents.Gh.Components.Simulation
             RecordUndoEvent("Output all External Joint Positions");
             _outputExternalJointPositions = !_outputExternalJointPositions;
             AddParameter(6);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Error Messages" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputErrorMessages(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output all Error Messages");
+            _outputErrorMessages = !_outputErrorMessages;
+            AddParameter(7);
         }
 
         /// <summary>

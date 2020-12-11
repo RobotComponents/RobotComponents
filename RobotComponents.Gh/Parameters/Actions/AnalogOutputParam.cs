@@ -50,8 +50,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            //get { return Properties.Resources.AnalogOutput_Parameter_Icon; }
-            get { return null; } // TODO
+            get { return Properties.Resources.AnalogOutput_Parameter_Icon; }
         }
 
         /// <summary>

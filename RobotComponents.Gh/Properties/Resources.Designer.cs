@@ -93,6 +93,26 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AnalogOutput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AnalogOutput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AnalogOutput_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AnalogOutput_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Auto_Icon {
             get {
                 object obj = ResourceManager.GetObject("Auto_Icon", resourceCulture);
@@ -1136,6 +1156,26 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap ToolQuaternion_Icon {
             get {
                 object obj = ResourceManager.GetObject("ToolQuaternion_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WaitAO_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WaitAO_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WaitAO_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WaitAO_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

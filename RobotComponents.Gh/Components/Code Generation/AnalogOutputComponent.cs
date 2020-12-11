@@ -126,8 +126,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            // get { return RobotComponents.Gh.Properties.Resources.AnalogOutput_Icon; }
-            get { return null; }
+            get { return RobotComponents.Gh.Properties.Resources.AnalogOutput_Icon; }
         }
 
         /// <summary>

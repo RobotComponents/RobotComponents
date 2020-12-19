@@ -90,6 +90,7 @@ namespace RobotComponents.Gh.Components.Simulation
         private bool _outputExternalJointPositions = false;
         private bool _outputErrorMessages = false;
         private bool _previewMesh = true;
+        private bool _calculated = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -112,7 +113,7 @@ namespace RobotComponents.Gh.Components.Simulation
             if (!DA.GetData(4, ref update)) { return; }
 
             // Update the path
-            if (update == true)
+            if (update == true | _calculated == false)
             {
                 // Create forward kinematics for mesh display
                 _forwardKinematics = new ForwardKinematics(_robot);
@@ -122,6 +123,9 @@ namespace RobotComponents.Gh.Components.Simulation
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
+
+                // Makes sure that there is always a calculated solution
+                _calculated = true;
             }
 
             // Get the index number of the current target

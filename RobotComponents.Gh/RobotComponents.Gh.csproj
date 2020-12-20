@@ -69,7 +69,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldPathGeneratorComponent3.cs" />
     <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
+    <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\SpeedDataValueList.cs" />
@@ -77,10 +79,22 @@
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldExternalLinearAxisComponent2.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldExternalRotationalAxisComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructExternalLinearAxisComponent2.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructRobotTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructWorkObjectComponent2.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_475_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_58_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1300_11_0_90_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1300_10_1_15_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1300_7_1_40_Component.cs" />
+    <Compile Include="Components\Definitions\RobotPresetComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldWorkObjectComponent2.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent2.cs" />
@@ -108,28 +122,28 @@
     <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
     <Compile Include="Components\_Obsolete\OldDeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructZoneDataComponent.cs" />
-    <Compile Include="Components\Definitions\IRB6640_185_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6650S_200_3_00_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6650S_125_3_50_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_300_2_70_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_245_3_00_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_205_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_200_2_60_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_175_3_05_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_155_2_85_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_150_3_20_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6790_205_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6700_235_2_65_Component.cs" />
-    <Compile Include="Components\Definitions\IRB7600_150_3_50_Component.cs" />
-    <Compile Include="Components\Definitions\IRB7600_340_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6790_235_2_65_Component.cs" />
-    <Compile Include="Components\Definitions\IRB7600_500_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\IRB7600_400_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\IRB7600_325_3_10_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6650S_90_3_90_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6640_235_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6620_150_2_20_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6650_200_2_75_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6640_185_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6650S_200_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6650S_125_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_300_2_70_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_245_3_00_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_200_2_60_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_175_3_05_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_155_2_85_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_150_3_20_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6790_205_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6700_235_2_65_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB7600_150_3_50_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB7600_340_2_80_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6790_235_2_65_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB7600_500_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB7600_400_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB7600_325_3_10_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6650S_90_3_90_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6640_235_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6620_150_2_20_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6650_200_2_75_Component.cs" />
     <Compile Include="Components\Definitions\RobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\GetObjectManager.cs" />
     <Compile Include="Components\_Obsolete\OldPlaneToQuaternion2.cs" />
@@ -171,21 +185,21 @@
     <Compile Include="Components\Deconstruct\DeconstructRobotToolComponent.cs" />
     <Compile Include="Components\Deconstruct\DeconstructSpeedDataComponent.cs" />
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
-    <Compile Include="Components\Definitions\IRB1200_5_90_Component.cs" />
-    <Compile Include="Components\Definitions\IRB1200_7_70_Component.cs" />
-    <Compile Include="Components\Definitions\IRB120_3_0_58_Component.cs" />
-    <Compile Include="Components\Definitions\IRB140_6_0_81_Component.cs" />
-    <Compile Include="Components\Definitions\IRB1600_X_1_20_Component.cs" />
-    <Compile Include="Components\Definitions\IRB1600_X_1_45_Component.cs" />
-    <Compile Include="Components\Definitions\IRB1660ID_Component.cs" />
-    <Compile Include="Components\Definitions\IRB2600ID_15_1_85_Component.cs" />
-    <Compile Include="Components\Definitions\IRB2600ID_8_2_00_Component.cs" />
-    <Compile Include="Components\Definitions\IRB2600_12_1_85_Component.cs" />
-    <Compile Include="Components\Definitions\IRB2600_X_1_65_Component.cs" />
-    <Compile Include="Components\Definitions\IRB4600_20_2_50_Component.cs" />
-    <Compile Include="Components\Definitions\IRB4600_40_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\IRB4600_X_2_05_Component.cs" />
-    <Compile Include="Components\Definitions\IRB6650_125_3_20_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1200_5_90_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1200_7_70_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB120_3_0_58_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB140_6_0_81_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1600_X_1_20_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1600_X_1_45_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1660ID_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB2600ID_15_1_85_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB2600ID_8_2_00_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB2600_12_1_85_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB2600_X_1_65_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB4600_20_2_50_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB4600_40_2_55_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB4600_X_2_05_Component.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB6650_125_3_20_Component.cs" />
     <Compile Include="Components\Definitions\RobotComponent.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromDataEulerComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
@@ -198,9 +212,16 @@
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
+    <Compile Include="Forms\PickRobotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickRobotForm.designer.cs">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Goos\GH_Controller.cs" />
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
+    <Compile Include="Parameters\Actions\AnalogOutputParam.cs" />
     <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
     <Compile Include="Parameters\Actions\JointTargetParam.cs" />
     <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />
@@ -233,39 +254,44 @@
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\ObjectManager.cs" />
-    <Compile Include="Resources\PickControllerForm.cs">
+    <Compile Include="Forms\PickControllerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickControllerForm.designer.cs">
+    <Compile Include="Forms\PickControllerForm.designer.cs">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PickDIForm.cs">
+    <Compile Include="Forms\PickDIForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickDIForm.designer.cs">
+    <Compile Include="Forms\PickDIForm.designer.cs">
       <DependentUpon>PickDIForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PickDOForm.cs">
+    <Compile Include="Forms\PickDOForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Resources\PickDOForm.designer.cs">
+    <Compile Include="Forms\PickDOForm.designer.cs">
       <DependentUpon>PickDOForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickRobotForm.resx">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickDOForm.resx">
+    <EmbeddedResource Include="Forms\PickDOForm.resx">
       <DependentUpon>PickDOForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickDIForm.resx">
+    <EmbeddedResource Include="Forms\PickDIForm.resx">
       <DependentUpon>PickDIForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PickControllerForm.resx">
+    <EmbeddedResource Include="Forms\PickControllerForm.resx">
       <DependentUpon>PickControllerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -598,6 +624,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MovementTypeValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RobotPreset_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitAO_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AnalogOutput_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AnalogOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitAO_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

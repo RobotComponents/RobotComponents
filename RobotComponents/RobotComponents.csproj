@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AbsoluteJointMovement.cs" />
+    <Compile Include="Actions\AnalogOutput.cs" />
     <Compile Include="Actions\ITarget.cs" />
     <Compile Include="Actions\JointTarget.cs" />
     <Compile Include="Actions\RobotJointPosition.cs" />
@@ -73,6 +74,11 @@
     <Compile Include="Actions\Comment.cs" />
     <Compile Include="Actions\Movement.cs" />
     <Compile Include="Actions\RAPIDGenerator.cs" />
+    <Compile Include="Definitions\Presets\IRB1100_4_0475.cs" />
+    <Compile Include="Definitions\Presets\IRB1100_4_058.cs" />
+    <Compile Include="Definitions\Presets\IRB1300_11_090.cs" />
+    <Compile Include="Definitions\Presets\IRB1300_7_140.cs" />
+    <Compile Include="Definitions\Presets\IRB1300_10_115.cs" />
     <Compile Include="Definitions\Presets\IRB4600_X_205.cs" />
     <Compile Include="Definitions\Presets\IRB4600_40_255.cs" />
     <Compile Include="Definitions\Presets\IRB4600_20_250.cs" />
@@ -917,6 +923,111 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB6700_300_2_70_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_7_1_40_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_10_1_15_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1300_11_0_90_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_475_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1100_4_0_58_link_3.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

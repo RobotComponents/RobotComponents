@@ -48,7 +48,7 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Work Object Name as Text", GH_ParamAccess.list, "default_wo");
             pManager.AddPlaneParameter("Plane", "WP", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
-            pManager.AddParameter(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as an External Rotational Axis", GH_ParamAccess.list);
+            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as an External Axis", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -82,12 +82,12 @@ namespace RobotComponents.Gh.Components.Definitions
             // Input variables
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
-            List<ExternalRotationalAxis> externalAxes = new List<ExternalRotationalAxis>();
+            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
 
             // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, planes)) { return; }
-            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalRotationalAxis>() { null }; }
+            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalAxis>() { null }; }
 
             // Replace spaces
             names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
@@ -112,7 +112,7 @@ namespace RobotComponents.Gh.Components.Definitions
             {
                 string name = "";
                 Plane plane = new Plane();
-                ExternalRotationalAxis externalAxis = null;
+                ExternalAxis externalAxis = null;
 
                 // Names counter
                 if (i < sizeValues[0])
@@ -299,7 +299,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E76C475E-0C31-484D-A45D-690F45BD154C"); }
+            get { return new Guid("F892733B-3633-48A6-AAC7-1A244441A774"); }
         }
 
         public string LastName { get => _lastName; }

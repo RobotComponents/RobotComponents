@@ -54,6 +54,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\GH_AnalogOutput.cs" />
     <Compile Include="Actions\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\GH_JointTarget.cs" />
     <Compile Include="Actions\GH_RobotJointPosition.cs" />

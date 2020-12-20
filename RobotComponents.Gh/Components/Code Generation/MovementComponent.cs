@@ -318,6 +318,17 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 }
             }
 
+            // Check target and movement combination
+            for (int i = 0; i < movements.Count; i++)
+            {
+                if (movements[i].MovementType == MovementType.MoveAbsJ && movements[i].Target is RobotTarget)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "An Absolute Joint Movement instruction is combined with " +
+                        "a Robot Target. The Robot Target will be converted to a Joint Target.");
+                    break;
+                }
+            }
+
             // Output
             DA.SetDataList(0, movements);
         }

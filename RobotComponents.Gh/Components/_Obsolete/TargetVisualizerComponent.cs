@@ -95,7 +95,7 @@ namespace RobotComponents.Gh.Components.Utilities
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed in the future.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed in the future.");
 
             // Variable for catchint the datatree 
             GH_Structure<IGH_Goo> actions;

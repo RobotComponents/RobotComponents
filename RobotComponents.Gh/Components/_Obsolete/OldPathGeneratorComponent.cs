@@ -99,12 +99,12 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
             // Input variables
-            Robot robotInfo = new Robot();
+            Robot robot = new Robot();
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
@@ -112,7 +112,7 @@ namespace RobotComponents.Gh.Components.Simulation
             bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
@@ -124,7 +124,7 @@ namespace RobotComponents.Gh.Components.Simulation
             if (update == true || _lastInterpolations != interpolations)
             {
                 // Create the path generator
-                _pathGenerator = new PathGenerator(robotInfo);
+                _pathGenerator = new PathGenerator(robot);
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);

@@ -93,6 +93,26 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AnalogOutput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AnalogOutput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AnalogOutput_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AnalogOutput_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Auto_Icon {
             get {
                 object obj = ResourceManager.GetObject("Auto_Icon", resourceCulture);
@@ -523,6 +543,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IRB1100_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB1100_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IRB120_Icon {
             get {
                 object obj = ResourceManager.GetObject("IRB120_Icon", resourceCulture);
@@ -556,6 +586,16 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap IRB1200_Icon {
             get {
                 object obj = ResourceManager.GetObject("IRB1200_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IRB1300_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB1300_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -831,231 +871,6 @@ namespace RobotComponents.Gh.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///using System.Collections.Generic;
-        ///using System.Windows.Forms;
-        ///
-        ///using RobotComponents.Gh.Components.ControllerUtility;
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    public partial class PickControllerForm : Form
-        ///    {
-        ///        public static int stationIndex = 0;
-        ///
-        ///        public PickControllerForm()
-        ///        {
-        ///            InitializeComponent();
-        ///        }
-        ///
-        ///        public PickControllerForm(List&lt;string&gt; items)
-        ///        {
-        ///            InitializeComponent();
-        ///            for (int i =  [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickControllerForm {
-            get {
-                return ResourceManager.GetString("PickControllerForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
-        ///// under the terms of GNU General Public License as published by the 
-        ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    partial class PickControllerForm
-        ///    {
-        ///        /// &lt;summary&gt;
-        ///        /// Required designer variable.
-        ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer compone [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickControllerForm_designer {
-            get {
-                return ResourceManager.GetString("PickControllerForm_designer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;root&gt;
-        ///  &lt;!-- 
-        ///    Microsoft ResX Schema 
-        ///    
-        ///    Version 2.0
-        ///    
-        ///    The primary goals of this format is to allow a simple XML format 
-        ///    that is mostly human readable. The generation and parsing of the 
-        ///    various data types are done through the TypeConverter classes 
-        ///    associated with the data types.
-        ///    
-        ///    Example:
-        ///    
-        ///    ... ado.net/XML headers &amp; schema ...
-        ///    &lt;resheader name=&quot;resmimetype&quot;&gt;text/microsoft-resx&lt;/resheader&gt;
-        ///    &lt;resheader n [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickControllerForm1 {
-            get {
-                return ResourceManager.GetString("PickControllerForm1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///using System.Collections.Generic;
-        ///using System.Windows.Forms;
-        ///
-        ///using RobotComponents.Gh.Components.ControllerUtility;
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    public partial class PickDIForm : Form
-        ///    {
-        ///        public static int stationIndex = 0;
-        ///
-        ///        public PickDIForm()
-        ///        {
-        ///            InitializeComponent();
-        ///        }
-        ///
-        ///        public PickDIForm(List&lt;string&gt; items)
-        ///        {
-        ///            InitializeComponent();
-        ///            for (int i = 0; i &lt; items.Count; i++) [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDIForm {
-            get {
-                return ResourceManager.GetString("PickDIForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
-        ///// under the terms of GNU General Public License as published by the 
-        ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    partial class PickDIForm
-        ///    {
-        ///        /// &lt;summary&gt;
-        ///        /// Required designer variable.
-        ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = nu [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDIForm_designer {
-            get {
-                return ResourceManager.GetString("PickDIForm_designer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;root&gt;
-        ///  &lt;!-- 
-        ///    Microsoft ResX Schema 
-        ///    
-        ///    Version 2.0
-        ///    
-        ///    The primary goals of this format is to allow a simple XML format 
-        ///    that is mostly human readable. The generation and parsing of the 
-        ///    various data types are done through the TypeConverter classes 
-        ///    associated with the data types.
-        ///    
-        ///    Example:
-        ///    
-        ///    ... ado.net/XML headers &amp; schema ...
-        ///    &lt;resheader name=&quot;resmimetype&quot;&gt;text/microsoft-resx&lt;/resheader&gt;
-        ///    &lt;resheader n [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDIForm1 {
-            get {
-                return ResourceManager.GetString("PickDIForm1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///using System.Collections.Generic;
-        ///using System.Windows.Forms;
-        ///
-        ///using RobotComponents.Gh.Components.ControllerUtility;
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    public partial class PickDOForm : Form
-        ///    {
-        ///        public static int stationIndex = 0;
-        ///
-        ///        public PickDOForm()
-        ///        {
-        ///            InitializeComponent();
-        ///        }
-        ///
-        ///        public PickDOForm(List&lt;string&gt; items)
-        ///        {
-        ///            InitializeComponent();
-        ///            for (int i = 0; i &lt; items.Count; i++) [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDOForm {
-            get {
-                return ResourceManager.GetString("PickDOForm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to // This file is part of RobotComponents. RobotComponents is licensed 
-        ///// under the terms of GNU General Public License as published by the 
-        ///// Free Software Foundation. For more information and the LICENSE file, 
-        ///// see &lt;https://github.com/RobotComponents/RobotComponents&gt;.
-        ///
-        ///namespace RobotComponents.Gh.Resources
-        ///{
-        ///    partial class PickDOForm
-        ///    {
-        ///        /// &lt;summary&gt;
-        ///        /// Required designer variable.
-        ///        /// &lt;/summary&gt;
-        ///        private System.ComponentModel.IContainer components = nu [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDOForm_designer {
-            get {
-                return ResourceManager.GetString("PickDOForm_designer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;root&gt;
-        ///  &lt;!-- 
-        ///    Microsoft ResX Schema 
-        ///    
-        ///    Version 2.0
-        ///    
-        ///    The primary goals of this format is to allow a simple XML format 
-        ///    that is mostly human readable. The generation and parsing of the 
-        ///    various data types are done through the TypeConverter classes 
-        ///    associated with the data types.
-        ///    
-        ///    Example:
-        ///    
-        ///    ... ado.net/XML headers &amp; schema ...
-        ///    &lt;resheader name=&quot;resmimetype&quot;&gt;text/microsoft-resx&lt;/resheader&gt;
-        ///    &lt;resheader n [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string PickDOForm1 {
-            get {
-                return ResourceManager.GetString("PickDOForm1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Plane_Visualizer_Icon {
@@ -1161,6 +976,16 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap RobotJointPosition_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("RobotJointPosition_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RobotPreset_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RobotPreset_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1331,6 +1156,26 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap ToolQuaternion_Icon {
             get {
                 object obj = ResourceManager.GetObject("ToolQuaternion_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WaitAO_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WaitAO_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WaitAO_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("WaitAO_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

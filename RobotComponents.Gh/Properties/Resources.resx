@@ -127,6 +127,12 @@
   <data name="Action_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Action_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AnalogOutput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AnalogOutput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AnalogOutput_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AnalogOutput_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Auto_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Auto_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -256,6 +262,9 @@
   <data name="InverseKinematics_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\InverseKinematics_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IRB1100_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1100_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="IRB1200_5_90_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB1200_5_90_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -267,6 +276,9 @@
   </data>
   <data name="IRB120_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB120_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IRB1300_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IRB1300_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IRB140_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IRB140_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -349,33 +361,6 @@
   <data name="PathGen_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PathGen_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="PickControllerForm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickControllerForm.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickControllerForm1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickControllerForm.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickControllerForm_designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickControllerForm.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDIForm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDIForm.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDIForm1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDIForm.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDIForm_designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDIForm.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDOForm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDOForm.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDOForm1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDOForm.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="PickDOForm_designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PickDOForm.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="PlaneToQuat_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PlaneToQuat_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -408,6 +393,9 @@
   </data>
   <data name="RobotJointPosition_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobotJointPosition_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RobotPreset_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RobotPreset_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RobTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -459,6 +447,12 @@
   </data>
   <data name="Tool_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WaitAO_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WaitAO_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WaitAO_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WaitAO_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WaitDI_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WaitDI_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

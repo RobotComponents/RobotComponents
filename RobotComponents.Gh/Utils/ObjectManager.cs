@@ -58,11 +58,14 @@ namespace RobotComponents.Gh.Utils
         private Dictionary<Guid, OldAbsoluteJointMovementComponent2> _oldJointTargetsByGuid2;
         private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, OldTargetComponent2> _oldTargetsByGuid2;
+        private Dictionary<Guid, OldExternalLinearAxisComponent2> _oldExternalLinearAxesByGuid2;
+        private Dictionary<Guid, OldExternalRotationalAxisComponent> _oldExternalRotationalAxesByGuid;
         private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
         private Dictionary<Guid, OldRobotToolFromPlanesComponent> _oldRobotToolFromPlanesGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent2> _oldToolsQuaternionByGuid2;
         private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
+        private Dictionary<Guid, OldWorkObjectComponent2> _oldWorkObjectsByGuid2;
         #endregion
 
         #endregion
@@ -103,11 +106,14 @@ namespace RobotComponents.Gh.Utils
             _oldJointTargetsByGuid2 = new Dictionary<Guid, OldAbsoluteJointMovementComponent2>();
             _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _oldTargetsByGuid2 = new Dictionary<Guid, OldTargetComponent2>();
+            _oldExternalLinearAxesByGuid2 = new Dictionary<Guid, OldExternalLinearAxisComponent2>();
+            _oldExternalRotationalAxesByGuid = new Dictionary<Guid, OldExternalRotationalAxisComponent>();
             _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
             _oldRobotToolFromPlanesGuid = new Dictionary<Guid, OldRobotToolFromPlanesComponent>();
             _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
             _oldToolsQuaternionByGuid2 = new Dictionary<Guid, OldRobotToolFromQuaternionComponent2>();
             _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
+            _oldWorkObjectsByGuid2 = new Dictionary<Guid, OldWorkObjectComponent2>();
             #endregion
         }
         #endregion
@@ -197,6 +203,12 @@ namespace RobotComponents.Gh.Utils
                 workObjects.AddRange(entry.Value.WorkObjects);
             }
 
+            // Add all the work objects from old component 2
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent2> entry in _oldWorkObjectsByGuid2)
+            {
+                workObjects.AddRange(entry.Value.WorkObjects);
+            }
+
             // Sort based on name
             workObjects = workObjects.OrderBy(x => x.Name).ToList();
 
@@ -224,6 +236,20 @@ namespace RobotComponents.Gh.Utils
             {
                 externalAxes.Add(entry.Value.ExternalAxis);
             }
+
+            #region OBSOLETE components
+            // Adds all the external linear axes as external axis
+            foreach (KeyValuePair<Guid, OldExternalLinearAxisComponent2> entry in _oldExternalLinearAxesByGuid2)
+            {
+                externalAxes.Add(entry.Value.ExternalAxis);
+            }
+
+            // Adds all the external rotational axes as external axis
+            foreach (KeyValuePair<Guid, OldExternalRotationalAxisComponent> entry in _oldExternalRotationalAxesByGuid)
+            {
+                externalAxes.Add(entry.Value.ExternalAxis);
+            }
+            #endregion
 
             // Sort based on name
             externalAxes = externalAxes.OrderBy(x => x.Name).ToList();
@@ -392,7 +418,6 @@ namespace RobotComponents.Gh.Utils
             }
 
             // Run SolveInstance on other obsolete Tools with no unique Name to check if their name is now available
-            // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldRobotToolFromDataEulerComponent> entry in OldToolsEulerByGuid)
             {
                 if (entry.Value.LastName == "")
@@ -449,7 +474,6 @@ namespace RobotComponents.Gh.Utils
             }
 
             // Run SolveInstance on other obsolete Targets with no unique Name to check if their name is now available
-            // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldTargetComponent> entry in OldTargetsByGuid)
             {
                 if (entry.Value.LastName == "")
@@ -513,8 +537,16 @@ namespace RobotComponents.Gh.Utils
             }
 
             // Run SolveInstance on other obsolete Work Objects with no unique Name to check if their name is now available
-            // --- remove in version 0.1.000
             foreach (KeyValuePair<Guid, OldWorkObjectComponent> entry in OldWorkObjectsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete Work Objects with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, OldWorkObjectComponent2> entry in OldWorkObjectsByGuid2)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -552,6 +584,22 @@ namespace RobotComponents.Gh.Utils
                 }
             }
             foreach (KeyValuePair<Guid, ExternalRotationalAxisComponent> entry in ExternalRotationalAxesByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other obsolete External Axes with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, OldExternalLinearAxisComponent2> entry in OldExternalLinearAxesByGuid2)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+            foreach (KeyValuePair<Guid, OldExternalRotationalAxisComponent> entry in OldExternalRotationalAxesByGuid)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -733,7 +781,23 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
-        /// OBSOLETE: Used for old Tool components.Will be removed in the future.
+        /// OBSOLETE: Used for old External Linear Axis component. Will be removed in the future. 
+        /// </summary>
+        public Dictionary<Guid, OldExternalLinearAxisComponent2> OldExternalLinearAxesByGuid2
+        {
+            get { return _oldExternalLinearAxesByGuid2; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old External Rotational Axis component. Will be removed in the future. 
+        /// </summary>
+        public Dictionary<Guid, OldExternalRotationalAxisComponent> OldExternalRotationalAxesByGuid
+        {
+            get { return _oldExternalRotationalAxesByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Tool components. Will be removed in the future.
         /// </summary>
         public Dictionary<Guid, OldRobotToolFromDataEulerComponent> OldToolsEulerByGuid
         {
@@ -763,7 +827,13 @@ namespace RobotComponents.Gh.Utils
             get { return _oldWorkObjectsByGuid; }
         }
 
-
+        /// <summary>
+        /// OBSOLETE: Used for old Work Object component.Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldWorkObjectComponent2> OldWorkObjectsByGuid2
+        {
+            get { return _oldWorkObjectsByGuid2; }
+        }
         #endregion
 
         #endregion

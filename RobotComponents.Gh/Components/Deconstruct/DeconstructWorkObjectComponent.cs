@@ -24,7 +24,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// Initializes a new instance of the DeconstructWorkObject class.
         /// </summary>
         public DeconstructWorkObjectComponent()
-          : base("Deconstruct Work Object", "DeConTar", 
+          : base("Deconstruct Work Object", "DeConWobj", 
               "Deconstructs a Work Object into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
@@ -47,7 +47,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
-            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
+            pManager.RegisterParam(new ExternalAxisParameter(), "ExternalAxis", "EA", "External Axis as External Axis");
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2EF73719-3E07-431E-8729-AB0C99848D0A"); }
+            get { return new Guid("1E29AF75-A85C-465C-AA44-561570CCD0AE"); }
         }
     }
 }

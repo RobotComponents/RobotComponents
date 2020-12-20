@@ -5,16 +5,15 @@
 
 // System Libs
 using System;
+using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
@@ -26,7 +25,7 @@ namespace RobotComponents.Gh.Components.Simulation
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PathGeneratorComponent : GH_Component
+    public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
@@ -40,6 +39,8 @@ namespace RobotComponents.Gh.Components.Simulation
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
+            // Create the component label with a message
+            Message = "EXTENDABLE";
         }
 
         /// <summary>
@@ -59,24 +60,37 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_PlaneParam("Plane", "EP", "Current End Plane as a Plane");
-            pManager.Register_PlaneParam("External Axis Planes", "EAP", "Current Exernal Axis Planes as a list with Planes");
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The current Robot Joint Position");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The current External Joint Position");
-            pManager.Register_CurveParam("Tool Path", "TP", "Tool Path as a list with Curves");
+            AddParameter(8);
         }
 
+        // Create an array with the variable input parameters
+        readonly IGH_Param[] outputParameters = new IGH_Param[9]
+        {
+            new Param_Plane() { Name = "Robot End Plane", NickName = "EP", Description = "The current position and orientation of tool TCP", Access = GH_ParamAccess.item},
+            new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
+            new RobotJointPositionParameter() { Name = "Robot Joint Position", NickName = "RJ", Description = "The current Robot Joint Position", Access = GH_ParamAccess.item},
+            new RobotJointPositionParameter() { Name = "Robot Joint Positions", NickName = "RJs", Description = "The Robot Joint Positions of the whole path", Access = GH_ParamAccess.list},
+            new Param_Plane() { Name = "External Axis Planes", NickName = "EAP", Description = "The current position and orientation of the external axes", Access = GH_ParamAccess.list},
+            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The current External Joint Position", Access = GH_ParamAccess.item},
+            new ExternalJointPositionParameter() { Name = "External Joint Positions", NickName = "EJs", Description = "The External Joint Positions of the whole path", Access = GH_ParamAccess.list},
+            new Param_String() { Name = "Error messages", NickName = "E", Description = "The error messages collected during the generation of the path", Access = GH_ParamAccess.list},
+            new Param_Curve() { Name = "Path", NickName = "P", Description = "The whole tool path as list with curves", Access = GH_ParamAccess.list},
+        };
+
         // Fields
-        private Robot _robotInfo;
+        private Robot _robot;
         private PathGenerator _pathGenerator = new PathGenerator();
         private ForwardKinematics _forwardKinematics = new ForwardKinematics();
-        private List<Plane> _planes = new List<Plane>();
-        private List<Curve> _paths = new List<Curve>();
-        private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
-        private List<ExternalJointPosition> _externalJointPositions = new List<ExternalJointPosition>();
-        private int _lastInterpolations = 0;
+        private bool _outputRobotEndPlane = false;
+        private bool _outputRobotEndPlanes = false;
+        private bool _outputRobotJointPosition = false;
+        private bool _outputRobotJointPositions = false;
+        private bool _outputExternalAxisPlanes = false;
+        private bool _outputExternalJointPosition = false;
+        private bool _outputExternalJointPositions = false;
+        private bool _outputErrorMessages = false;
         private bool _previewMesh = true;
-        private bool _previewCurve = true;
+        private bool _calculated = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -92,50 +106,34 @@ namespace RobotComponents.Gh.Components.Simulation
             bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref _robotInfo)) { return; }
+            if (!DA.GetData(0, ref _robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
             if (!DA.GetData(4, ref update)) { return; }
 
             // Update the path
-            if (update == true || _lastInterpolations != interpolations)
+            if (update == true | _calculated == false)
             {
                 // Create forward kinematics for mesh display
-                _forwardKinematics = new ForwardKinematics(_robotInfo);
+                _forwardKinematics = new ForwardKinematics(_robot);
 
                 // Create the path generator
-                _pathGenerator = new PathGenerator(_robotInfo);
+                _pathGenerator = new PathGenerator(_robot);
 
                 // Re-calculate the path
                 _pathGenerator.Calculate(actions, interpolations);
 
-                // Get all the targets
-                _planes.Clear();
-                _planes = _pathGenerator.Planes;
-
-                // Get the new path curve
-                _paths.Clear();
-                _paths = _pathGenerator.Paths;
-
-                // Clear the lists
-                _robotJointPositions.Clear();
-                _externalJointPositions.Clear();
-
-                // Get new lists
-                _robotJointPositions = _pathGenerator.RobotJointPositions;
-                _externalJointPositions = _pathGenerator.ExternalJointPositions;
-
-                // Store the number of interpolations that are used, to check if this value is changed. 
-                _lastInterpolations = interpolations;
+                // Makes sure that there is always a calculated solution
+                _calculated = true;
             }
 
             // Get the index number of the current target
-            int index = (int)(((_planes.Count - 1) * interpolationSlider));
+            int index = (int)(((_pathGenerator.Planes.Count - 1) * interpolationSlider));
 
             // Calculate foward kinematics
             _forwardKinematics.HideMesh = !_previewMesh;
-            _forwardKinematics.Calculate(_robotJointPositions[index], _externalJointPositions[index]);
+            _forwardKinematics.Calculate(_pathGenerator.RobotJointPositions[index], _pathGenerator.ExternalJointPositions[index]);
 
             // Show error messages
             if (_pathGenerator.ErrorText.Count != 0)
@@ -147,34 +145,52 @@ namespace RobotComponents.Gh.Components.Simulation
                 }
             }
 
-            // Output
-            DA.SetData(0, _forwardKinematics.TCPPlane);
-            DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
-            DA.SetData(2, _forwardKinematics.RobotJointPosition);
-            DA.SetData(3, _forwardKinematics.ExternalJointPosition);
-            if (_previewCurve == true) { DA.SetDataList(4, _paths); }
-            else { DA.SetDataList(4, null); }
+            // Output Parameters
+            int ind;
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[0].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[0].NickName));
+                DA.SetData(ind, _pathGenerator.Planes[index]);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[1].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[1].NickName));
+                DA.SetDataList(ind, _pathGenerator.Planes);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[2].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[2].NickName));
+                DA.SetData(ind, _pathGenerator.RobotJointPositions[index]);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[3].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[3].NickName));
+                DA.SetDataList(ind, _pathGenerator.RobotJointPositions);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[4].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[4].NickName));
+                DA.SetDataList(ind, _forwardKinematics.PosedExternalAxisPlanes);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[5].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[5].NickName));
+                DA.SetData(ind, _pathGenerator.ExternalJointPositions[index]);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[6].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[6].NickName));
+                DA.SetDataList(ind, _pathGenerator.ExternalJointPositions);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[7].NickName)))
+            {
+                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[7].NickName));
+                DA.SetDataList(ind, _pathGenerator.ErrorText);
+            }
+            DA.SetDataList(outputParameters[8].Name, _pathGenerator.Paths);
         }
 
         #region menu item
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for hiding the robot mesh is checked
-        /// </summary>
-        public bool SetPreviewCurve
-        {
-            get { return _previewCurve; }
-            set { _previewCurve = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for hiding the robot mesh is checked
-        /// </summary>
-        public bool SetPreviewMesh
-        {
-            get { return _previewMesh; }
-            set { _previewMesh = value; }
-        }
-
         /// <summary>
         /// Add our own fields. Needed for (de)serialization of the variable input parameters.
         /// </summary>
@@ -182,11 +198,17 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Set Preview Curve", SetPreviewCurve);
-            writer.SetBoolean("Set Preview Mesh", SetPreviewMesh);
+            writer.SetBoolean("Set Preview Mesh", _previewMesh);
+            writer.SetBoolean("Output Robot End Plane", _outputRobotEndPlane);
+            writer.SetBoolean("Output Robot End Planes", _outputRobotEndPlanes);
+            writer.SetBoolean("Output Robot Joint Position", _outputRobotJointPosition);
+            writer.SetBoolean("Output Robot Joint Positions", _outputRobotJointPositions);
+            writer.SetBoolean("Output External Axis Planes", _outputExternalAxisPlanes);
+            writer.SetBoolean("Output External Joint Position", _outputExternalJointPosition);
+            writer.SetBoolean("Output External Joint Positions", _outputExternalJointPositions);
+            writer.SetBoolean("Output Error Messages", _outputErrorMessages);
             return base.Write(writer);
         }
-
 
         /// <summary>
         /// Read our own fields. Needed for (de)serialization of the variable input parameters.
@@ -195,8 +217,15 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            SetPreviewCurve = reader.GetBoolean("Set Preview Curve");
-            SetPreviewMesh = reader.GetBoolean("Set Preview Mesh");
+            _previewMesh = reader.GetBoolean("Set Preview Mesh");
+            _outputRobotEndPlane = reader.GetBoolean("Output Robot End Plane");
+            _outputRobotEndPlanes = reader.GetBoolean("Output Robot End Planes");
+            _outputRobotJointPosition = reader.GetBoolean("Output Robot Joint Position");
+            _outputRobotJointPositions = reader.GetBoolean("Output Robot Joint Positions");
+            _outputExternalAxisPlanes = reader.GetBoolean("Output External Axis Planes");
+            _outputExternalJointPosition = reader.GetBoolean("Output External Joint Position");
+            _outputExternalJointPositions = reader.GetBoolean("Output External Joint Positions");
+            _outputErrorMessages = reader.GetBoolean("Output Error Messages");
             return base.Read(reader);
         }
 
@@ -207,22 +236,18 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Curve", MenuItemClickPreviewCurve, true, SetPreviewCurve);
-            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickPreviewMesh, true, SetPreviewMesh);
+            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickPreviewMesh, true, _previewMesh);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Output current Robot End Plane", MenuItemClickOutputRobotEndPlane, true, _outputRobotEndPlane);
+            Menu_AppendItem(menu, "Output all Robot End Planes", MenuItemClickOutputRobotEndPlanes, true, _outputRobotEndPlanes);
+            Menu_AppendItem(menu, "Output current Robot Joint Position", MenuItemClickOutputRobotJointPosition, true, _outputRobotJointPosition);
+            Menu_AppendItem(menu, "Output all Robot Joint Positions", MenuItemClickOutputRobotJointPositions, true, _outputRobotJointPositions);
+            Menu_AppendItem(menu, "Output current External Axis Planes", MenuItemClickOutputExternalAxisPlanes, true, _outputExternalAxisPlanes);
+            Menu_AppendItem(menu, "Output current External Joint Position", MenuItemClickOutputExternalJointPosition, true, _outputExternalJointPosition);
+            Menu_AppendItem(menu, "Output all External Joint Positions", MenuItemClickOutputExternalJointPositions, true, _outputExternalJointPositions);
+            Menu_AppendItem(menu, "Output all Error Messages", MenuItemClickOutputErrorMessages, true, _outputErrorMessages);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Preview Curve" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickPreviewCurve(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Set Preview Curve");
-            _previewCurve = !_previewCurve;
-            ExpireSolution(true);
         }
 
         /// <summary>
@@ -238,6 +263,102 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
+        /// Handles the event when the custom menu item "Output Robot End Plane" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputRobotEndPlane(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output current Robot End Plane");
+            _outputRobotEndPlane = !_outputRobotEndPlane;
+            AddParameter(0);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Robot End Planes" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputRobotEndPlanes(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output all Robot End Planes");
+            _outputRobotEndPlanes = !_outputRobotEndPlanes;
+            AddParameter(1);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Robot Joint Position" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputRobotJointPosition(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output current Robot Joint Position");
+            _outputRobotJointPosition = !_outputRobotJointPosition;
+            AddParameter(2);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Robot Joint Positions" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputRobotJointPositions(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output all Robot Joint Positions");
+            _outputRobotJointPositions = !_outputRobotJointPositions;
+            AddParameter(3);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output External Axis Planes" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputExternalAxisPlanes(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output current External Axis Planes");
+            _outputExternalAxisPlanes = !_outputExternalAxisPlanes;
+            AddParameter(4);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output External Joint Position" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputExternalJointPosition(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output current External Joint Position");
+            _outputExternalJointPosition = !_outputExternalJointPosition;
+            AddParameter(5);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output External Joint Positions" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputExternalJointPositions(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output all External Joint Positions");
+            _outputExternalJointPositions = !_outputExternalJointPositions;
+            AddParameter(6);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Error Messages" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputErrorMessages(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output all Error Messages");
+            _outputErrorMessages = !_outputErrorMessages;
+            AddParameter(7);
+        }
+
+        /// <summary>
         /// Handles the event when the custom menu item "Documentation" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -246,6 +367,46 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Adds or destroys the output parameter to the component.
+        /// </summary>
+        /// <param name="index"> The index number of the parameter that needs to be added. </param>
+        private void AddParameter(int index)
+        {
+            // Pick the parameter
+            IGH_Param parameter = outputParameters[index];
+            string name = outputParameters[index].NickName;
+
+            // If the parameter already exist: remove it
+            if (Params.Output.Any(x => x.NickName.Equality(parameter.NickName)))
+            {
+                Params.UnregisterOutputParameter(Params.Output.First(x => x.NickName.Equality(parameter.NickName)), true);
+            }
+
+            // Else remove the variable input parameter
+            else
+            {
+                // The index where the parameter should be added
+                int insertIndex = 0;
+
+                // Check if other parameters are already added and correct the insert index
+                for (int i = 0; i < index; i++)
+                {
+                    if (Params.Output.Any(x => x.NickName.Equality(outputParameters[i].NickName)))
+                    {
+                        insertIndex += 1;
+                    }
+                }
+
+                // Register the input parameter
+                Params.RegisterOutputParam(parameter, insertIndex);
+            }
+
+            // Expire solution and refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
         }
         #endregion
 
@@ -291,6 +452,70 @@ namespace RobotComponents.Gh.Components.Simulation
             }
         }
 
+        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        #region variable input parameters
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location </returns>
+        bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location. </returns>
+        bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will be called when a new parameter is about to be inserted. 
+        /// You must provide a valid parameter or insertion will be skipped. 
+        /// You do not, repeat not, need to insert the parameter yourself.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> A valid IGH_Param instance to be inserted. In our case a null value. </returns>
+        IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// This function will be called when a parameter is about to be removed. 
+        /// You do not need to do anything, but this would be a good time to remove 
+        /// any event handlers that might be attached to the parameter in question.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if the parameter in question can indeed be removed. Note, this is only in emergencies, 
+        /// typically the CanRemoveParameter function should return false if the parameter in question is not removable. </returns>
+        bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This method will be called when a closely related set of variable parameter operations completes. 
+        /// This would be a good time to ensure all Nicknames and parameter properties are correct. 
+        /// This method will also be called upon IO operations such as Open, Paste, Undo and Redo.
+        /// </summary>
+        void IGH_VariableParameterComponent.VariableParameterMaintenance()
+        {
+
+        }
+        #endregion
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -307,7 +532,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("32B682C9-E301-4372-A341-7AB0A97716CF"); }
+            get { return new Guid("3274D235-082A-445A-BA77-75CD3A7926E0"); }
         }
     }
 }

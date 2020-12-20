@@ -94,6 +94,13 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref text)) { return; }
             if (!DA.GetData(1, ref type)) { return; }
 
+            // Check if a right value is used for the comment type
+            if (type != 0 && type != 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Comment type value <" + type + "> is invalid. " +
+                    "In can only be set to 0 or 1. Use 0 for commenting on instructions and 1 for commenting on declarations.");
+            }
+
             // Split input if enter is used
             string[] lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 
@@ -104,14 +111,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 Comment comment = new Comment(lines[i], (CodeType)type);
                 comments.Add(comment);
             }
-
-            // Check if a right value is used for the comment type
-                if (type != 0 && type != 1)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Comment type value <" + type + "> is invalid. " +
-                        "In can only be set to 0 or 1. Use 0 for commenting on instructions and 1 for commenting on declarations." + 
-                        "Comment type was automatically set to 0"); // This is happening in the constructor of the comment base class
-                }
 
             // Sets Output
             DA.SetDataList(0, comments);

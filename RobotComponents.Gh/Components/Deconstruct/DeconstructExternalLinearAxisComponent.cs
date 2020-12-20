@@ -51,6 +51,8 @@ namespace RobotComponents.Gh.Components.Deconstruct
             pManager.AddIntervalParameter("Axis Limits", "AL", "Axis Limits as Domain", GH_ParamAccess.item);
             pManager.AddMeshParameter("Base Mesh", "BM", "Base Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddMeshParameter("Link Mesh", "LM", "Link Mesh as Mesh", GH_ParamAccess.item);
+            pManager.AddTextParameter("Axis Logic Number", "AL", "Axis Logic Number as Text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Moves Robot", "MR", "Moves Robot as Boolean", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -78,6 +80,8 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(3, externalLinearAxis.AxisLimits);
             DA.SetData(4, externalLinearAxis.BaseMesh);
             DA.SetData(5, externalLinearAxis.LinkMesh);
+            DA.SetData(6, externalLinearAxis.AxisLogic);
+            DA.SetData(7, externalLinearAxis.MovesRobot);
         }
 
         #region menu item
@@ -125,7 +129,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2CB287BA-4FD1-44E6-B540-8C423B6CC4B6"); }
+            get { return new Guid("6A7ABCC2-2EC1-4D9A-8DD4-57F0DD1BE681"); }
         }
     }
 

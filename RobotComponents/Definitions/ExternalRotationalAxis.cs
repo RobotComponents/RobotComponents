@@ -94,108 +94,12 @@ namespace RobotComponents.Definitions
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class with empty meshes.
         /// </summary>
-        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
-        /// <param name="axisLimits"> The motion limits. </param>
-        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits)
-        {
-            _name = "";
-            _attachmentPlane = attachmentPlane;
-            _axisPlane = axisPlane;
-            _axisLimits = axisLimits;
-            _axisNumber = -1;
-            _movesRobot = false;
-            _baseMesh = new Mesh();
-            _linkMesh = new Mesh();
-            _posedMeshes = new List<Mesh>();
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Rotational Axis class.
-        /// </summary>
-        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
-        /// <param name="axisLimits"> The motion limits. </param>
-        /// <param name="baseMesh"> The base mesh. </param>
-        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
-        {
-            _name = "";
-            _attachmentPlane = attachmentPlane;
-            _axisPlane = axisPlane;
-            _axisLimits = axisLimits;
-            _axisNumber = -1;
-            _movesRobot = false;
-            _baseMesh = baseMesh;
-            _linkMesh = linkMesh;
-            _posedMeshes = new List<Mesh>();
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Rotational Axis class.
-        /// </summary>
-        /// <param name="name"> The axis name. </param>
-        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
-        /// <param name="axisLimits"> The motion limits. </param>
-        /// <param name="baseMesh"> The base mesh. </param>
-        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh)
-        {
-            _name = name;
-            _attachmentPlane = attachmentPlane;
-            _axisPlane = axisPlane;
-            _axisLimits = axisLimits;
-            _axisNumber = -1;
-            _movesRobot = false;
-            _baseMesh = baseMesh;
-            _linkMesh = linkMesh;
-            _posedMeshes = new List<Mesh>();
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Rotational Axis class. 
-        /// </summary>
-        /// <param name="name"> The axis name. </param>
-        /// <param name="attachmentPlane" > The attachment plane posed at the location for axis value 0. </param>
-        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
-        /// <param name="axisLimits"> The motion limits. </param>
-        /// <param name="baseMeshes"> The base mesh. </param>
-        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalRotationalAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
-        {
-            _name = name;
-            _attachmentPlane = attachmentPlane;
-            _axisPlane = axisPlane;
-            _axisLimits = axisLimits;
-            _axisNumber = -1;
-            _movesRobot = false;
-            _baseMesh = new Mesh();
-            _linkMesh = new Mesh();
-            _posedMeshes = new List<Mesh>();
-
-            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
-            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Rotational Axis class with empty meshes.
-        /// Sets the attachment plane equal to the axis plane.
-        /// </summary>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
         /// <param name="axisLimits"> The motion limits. </param>
         public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits)
         {
             _name = "";
-            _attachmentPlane = new Plane(axisPlane);
+            _attachmentPlane = axisPlane;
             _axisPlane = axisPlane;
             _axisLimits = axisLimits;
             _axisNumber = -1;
@@ -209,7 +113,6 @@ namespace RobotComponents.Definitions
 
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class.
-        /// Sets the attachment plane equal to the axis plane.
         /// </summary>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
         /// <param name="axisLimits"> The motion limits. </param>
@@ -232,7 +135,6 @@ namespace RobotComponents.Definitions
 
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class.
-        /// Sets the attachment plane equal to the axis plane.
         /// </summary>
         /// <param name="name"> The axis name. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
@@ -256,7 +158,6 @@ namespace RobotComponents.Definitions
 
         /// <summary>
         /// Initializes a new instance of the External Rotational Axis class. 
-        /// Sets the attachment plane equal to the axis plane.
         /// </summary>
         /// <param name="name"> The axis name. </param>
         /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
@@ -271,6 +172,208 @@ namespace RobotComponents.Definitions
             _axisLimits = axisLimits;
             _axisNumber = -1;
             _movesRobot = false;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class with empty meshes.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, string axisLogic, bool movesRobot = false)
+        {
+            _name = "";
+            _attachmentPlane = axisPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = movesRobot;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            SetAxisNumberFromString(axisLogic);
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh, string axisLogic, bool movesRobot = false)
+        {
+            _name = "";
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = movesRobot;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            SetAxisNumberFromString(axisLogic);
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh, string axisLogic, bool movesRobot = false)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = movesRobot;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            SetAxisNumberFromString(axisLogic);
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class. 
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMeshes"> The base mesh. </param>
+        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, string axisLogic, bool movesRobot = false)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = -1;
+            _movesRobot = movesRobot;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            for (int i = 0; i < baseMeshes.Count; i++) { _baseMesh.Append(baseMeshes[i]); }
+            for (int i = 0; i < linkMeshes.Count; i++) { _linkMesh.Append(linkMeshes[i]); }
+
+            SetAxisNumberFromString(axisLogic);
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class with empty meshes.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, int axisLogic, bool movesRobot = false)
+        {
+            _name = "";
+            _attachmentPlane = axisPlane;
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = axisLogic;
+            _movesRobot = movesRobot;
+            _baseMesh = new Mesh();
+            _linkMesh = new Mesh();
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// </summary>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh, int axisLogic, bool movesRobot = false)
+        {
+            _name = "";
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = axisLogic;
+            _movesRobot = movesRobot;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class.
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation center. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMesh"> The base mesh. </param>
+        /// <param name="linkMesh"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, Mesh baseMesh, Mesh linkMesh, int axisLogic, bool movesRobot = false)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = axisLogic;
+            _movesRobot = movesRobot;
+            _baseMesh = baseMesh;
+            _linkMesh = linkMesh;
+            _posedMeshes = new List<Mesh>();
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Rotational Axis class. 
+        /// </summary>
+        /// <param name="name"> The axis name. </param>
+        /// <param name="axisPlane"> The axis plane. The z-axis of the plane defines the rotation vector. </param>
+        /// <param name="axisLimits"> The motion limits. </param>
+        /// <param name="baseMeshes"> The base mesh. </param>
+        /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
+        /// <param name="axisLogic"> The axis logic number. </param>
+        /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
+        public ExternalRotationalAxis(string name, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, int axisLogic, bool movesRobot = false)
+        {
+            _name = name;
+            _attachmentPlane = new Plane(axisPlane);
+            _axisPlane = axisPlane;
+            _axisLimits = axisLimits;
+            _axisNumber = axisLogic;
+            _movesRobot = movesRobot;
             _baseMesh = new Mesh();
             _linkMesh = new Mesh();
             _posedMeshes = new List<Mesh>();
@@ -359,6 +462,52 @@ namespace RobotComponents.Definitions
             else
             {
                 return "External Rotational Axis (" + this.Name + ")";
+            }
+        }
+
+        /// <summary>
+        /// Sets the axis logic number from a string. 
+        /// Only used in constructors.
+        /// </summary>
+        /// <param name="text"> The string with the axis logic number. </param>
+        private void SetAxisNumberFromString(string text)
+        {
+            text = text.Replace(" ", "");
+            text = text.Replace("\t", "");
+            text = text.Replace("\n", "");
+            text = text.Replace("\r", "");
+
+            List<string> validNumbers = new List<string> { "-1", "0", "1", "2", "3", "4", "5" };
+            List<string> validCharacters = new List<string> { "a", "b", "c", "d", "e", "f", "A", "B", "C", "D", "E", "F" };
+
+            if (validNumbers.Contains(text))
+            {
+                _axisNumber = Convert.ToInt32(text);
+            }
+            else if (validCharacters.Contains(text))
+            {
+                switch (text)
+                {
+                    case "a": _axisNumber = 0; break;
+                    case "b": _axisNumber = 1; break;
+                    case "c": _axisNumber = 2; break;
+                    case "d": _axisNumber = 3; break;
+                    case "e": _axisNumber = 4; break;
+                    case "f": _axisNumber = 5; break;
+
+                    case "A": _axisNumber = 0; break;
+                    case "B": _axisNumber = 1; break;
+                    case "C": _axisNumber = 2; break;
+                    case "D": _axisNumber = 3; break;
+                    case "E": _axisNumber = 4; break;
+                    case "F": _axisNumber = 5; break;
+
+                    default: _axisNumber = -1; break;
+                }
+            }
+            else
+            {
+                throw new Exception("Invalid Axis Logic Number: Allowed values are -1, 0, 1, 2, 3, 4, 5, a, b, c, d, e, f, A, B, C, D, E and F.");
             }
         }
 
@@ -552,6 +701,7 @@ namespace RobotComponents.Definitions
             set 
             { 
                 _attachmentPlane = value;
+                _axisPlane = value;
                 ReInitialize();
             }
         }
@@ -568,6 +718,7 @@ namespace RobotComponents.Definitions
             set 
             { 
                 _axisPlane = value;
+                _attachmentPlane = value;
                 ReInitialize();
             }
         }
@@ -614,6 +765,27 @@ namespace RobotComponents.Definitions
                     case 4: return 'E';
                     case 5: return 'F';
                     default: return '-';
+                }
+            }
+            set
+            {
+                switch (value)
+                {
+                    case 'a': _axisNumber = 0; break;
+                    case 'b': _axisNumber = 1; break;
+                    case 'c': _axisNumber = 2; break;
+                    case 'd': _axisNumber = 3; break;
+                    case 'e': _axisNumber = 4; break;
+                    case 'f': _axisNumber = 5; break;
+
+                    case 'A': _axisNumber = 0; break;
+                    case 'B': _axisNumber = 1; break;
+                    case 'C': _axisNumber = 2; break;
+                    case 'D': _axisNumber = 3; break;
+                    case 'E': _axisNumber = 4; break;
+                    case 'F': _axisNumber = 5; break;
+
+                    default: _axisNumber = -1; break;
                 }
             }
         }

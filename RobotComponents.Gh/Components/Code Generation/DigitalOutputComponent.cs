@@ -75,6 +75,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref isActive)) { return; }
 
+            // Check variable name
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+
             // Checks if Digital Output Name exceeds max character limit for RAPID Code
             if (HelperMethods.VariableExeedsCharacterLimit32(name))
             {

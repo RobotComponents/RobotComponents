@@ -10,7 +10,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Resources;
+using RobotComponents.Gh.Forms;
 using RobotComponents.Gh.Goos;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
@@ -91,7 +91,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
@@ -314,7 +314,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             frm.ShowDialog();
 
             // Returns the index of the picked item
-            return PickDIForm.stationIndex;
+            return PickDIForm.SignalIndex;
         }
 
         /// <summary>

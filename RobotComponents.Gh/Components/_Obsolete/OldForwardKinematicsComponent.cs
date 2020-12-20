@@ -92,17 +92,17 @@ namespace RobotComponents.Gh.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Warning that this component is OBSOLETE
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This component is OBSOLETE and will be removed " +
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is OBSOLETE and will be removed " +
                 "in the future. Remove this component from your canvas and replace it by picking the new component " +
                 "from the ribbon.");
 
             // Input variables
-            GH_Robot robotInfoGoo = null;
+            GH_Robot robotGoo = null;
             List<double> internalAxisValues = new List<double>();
             List<double> externalAxisValues = new List<double>();
 
             // Catch input data
-            if (!DA.GetData(0, ref robotInfoGoo)) { return; }
+            if (!DA.GetData(0, ref robotGoo)) { return; }
             if (!DA.GetDataList(1, internalAxisValues)) { return; }
             if (!DA.GetDataList(2, externalAxisValues)) { return; }
 
@@ -119,7 +119,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robotInfoGoo.Value, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues));
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robotGoo.Value, new RobotJointPosition(internalAxisValues), new ExternalJointPosition(externalAxisValues));
             forwardKinematics.Calculate();
 
             // Check the values

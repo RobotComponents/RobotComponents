@@ -16,7 +16,7 @@
 
 Robot Components is a plugin for intuitive robot programming for ABB robots inside of Rhinoceros Grasshopper. Robot Components offers a wide set of tools to create toolpaths, simulate robotic motion and generate RAPID code within Grasshopper. Some of the main features include:
 
-- 30+ predefined ABB robot models
+- 40+ predefined ABB robot models
 - Possibility to add your own robot models
 - Support for external axes (both linear and rotational)
 - Possibility to define custom strategies for all external axis values
@@ -24,7 +24,7 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - Efficient forward and inverse kinematics
 - Possibility to add your own custom code lines
 - Real-time connection with IRC5 controllers
-- Robot Components API to develop your custom components using either Python or C# (w.i.p, documentation coming soon)
+- Robot Components API to develop your custom components using either Python or C# (w.i.p)
 
 ## Getting Started
 You can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!

@@ -9,19 +9,20 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Actions;
+using RobotComponents.Gh.Goos.Obsolete;
 
-namespace RobotComponents.Gh.Parameters.Actions
+namespace RobotComponents.Gh.Parameters.Obsolete
 {
     /// <summary>
     /// Absolute Joint Movement parameter
     /// </summary>
-    public class AbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>
+    [Obsolete("This parameter is obsolete and will be removed in the future.", false)]
+    public class OldAbsoluteJointMovementParameter : GH_PersistentParam<GH_AbsoluteJointMovement>
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentParam<AbsoluteJoinMovementGoo> class
         /// </summary>
-        public AbsoluteJointMovementParameter()
+        public OldAbsoluteJointMovementParameter()
           : base(new GH_InstanceDescription("Absolute Joint Movement", "AJM",
                 "Contains the data of an Absolute Joint Movement instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +

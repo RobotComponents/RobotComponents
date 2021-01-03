@@ -13,7 +13,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Utilities
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.
@@ -23,6 +23,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Initializes a new instance of the Plane to Quarternion
         /// </summary>
+        [Obsolete("This component is obsolete and will be removed in the future.", false)]
         public PlaneToQuaternion3()
           : base("Plane to Quaternion", "PtoQ",
               "Calculates the four coefficient values in a quarternion. "

@@ -16,11 +16,12 @@ using RobotComponents.Gh.Utils;
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 
-namespace RobotComponents.Gh.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldDeconstructTargetComponent : GH_Component
     {
         /// <summary>

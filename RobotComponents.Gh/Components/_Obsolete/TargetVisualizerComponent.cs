@@ -18,11 +18,12 @@ using RobotComponents.Gh.Goos.Actions;
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.08.000
 
-namespace RobotComponents.Gh.Components.Utilities
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Target visualization component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class TargetVisualizerComponent : GH_Component
     {
         /// <summary>

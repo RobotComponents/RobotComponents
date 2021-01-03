@@ -23,11 +23,12 @@ using RobotComponents.Gh.Utils;
 // It is OBSOLETE since version 0.10.000
 // It is replaced with the new Robot Target component. 
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldTargetComponent2 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>

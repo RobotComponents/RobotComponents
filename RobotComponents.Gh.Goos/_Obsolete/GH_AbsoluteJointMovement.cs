@@ -3,17 +3,21 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Goos.Definitions;
 using RobotComponents.Actions;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.Gh.Goos.Obsolete
 {
     /// <summary>
     /// Absolute Joint Movement Goo wrapper class, makes sure the Absolute Joint Movement class can be used in Grasshopper.
     /// </summary>
+    [Obsolete("This class is obsolete and will be removed in the future.", false)]
     public class GH_AbsoluteJointMovement : GH_Goo<AbsoluteJointMovement>
     {
         #region constructors
@@ -139,7 +143,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; }
@@ -244,7 +248,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is AbsoluteJointMovement action)
                 {

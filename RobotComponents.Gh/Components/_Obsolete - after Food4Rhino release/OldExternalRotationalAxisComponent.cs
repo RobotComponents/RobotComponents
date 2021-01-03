@@ -19,11 +19,12 @@ using RobotComponents.Gh.Utils;
 // It is OBSOLETE since version 0.13.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents External Rotational Axis component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldExternalRotationalAxisComponent : GH_Component
     {
         /// <summary>

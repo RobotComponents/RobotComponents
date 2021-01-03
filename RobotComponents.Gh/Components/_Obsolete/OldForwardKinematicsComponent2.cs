@@ -25,11 +25,12 @@ using RobotComponents.Gh.Parameters.Definitions;
 // It is OBSOLETE since version 0.10.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldForwardKinematicsComponent2 : GH_Component 
     {
         /// <summary>

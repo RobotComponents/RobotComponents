@@ -16,6 +16,7 @@ using GH_IO.Serialization;
 // Robot Components Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
+using RobotComponents.Gh.Parameters.Obsolete;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -23,11 +24,12 @@ using RobotComponents.Gh.Utils;
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Absolute Joint Movement component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldAbsoluteJointMovementComponent2 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
@@ -93,7 +95,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement instruction", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new OldAbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Resulting Absolute Joint Movement instruction", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields

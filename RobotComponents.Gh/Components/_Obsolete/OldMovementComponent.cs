@@ -27,6 +27,7 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// <summary>
     /// OBSOLETE: RobotComponents Action : Momvement component. Will be removed in the future. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldMovementComponent : GH_Component
     {
         /// <summary>

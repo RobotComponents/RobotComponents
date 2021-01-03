@@ -22,11 +22,12 @@ using ABB.Robotics.Controllers.MotionDomain;
 // It is OBSOLETE since version 0.10.000
 // This component is replaced with a new component
 
-namespace RobotComponents.Gh.Components.ControllerUtility
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldGetAxisValuesComponent : GH_Component
     {
         /// <summary>

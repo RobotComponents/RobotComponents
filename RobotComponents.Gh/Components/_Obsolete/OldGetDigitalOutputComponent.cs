@@ -20,11 +20,12 @@ using ABB.Robotics.Controllers.IOSystemDomain;
 // It is OBSOLETE since version 0.07.000 (March 2020)
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.ControllerUtility
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldGetDigitalOutputComponent : GH_Component
     {
         /// <summary>

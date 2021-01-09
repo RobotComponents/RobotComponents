@@ -20,7 +20,7 @@ namespace RobotComponents.Actions
     /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </summary>
     [Serializable()]
-    public class JointTarget : Action, ITarget, ISerializable
+    public class JointTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -75,7 +75,7 @@ namespace RobotComponents.Actions
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
-            _referenceType = ReferenceType.CONST;
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
@@ -90,7 +90,7 @@ namespace RobotComponents.Actions
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.CONST;
+            _referenceType = ReferenceType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
@@ -124,6 +124,15 @@ namespace RobotComponents.Actions
         public ITarget DuplicateTarget()
         {
             return new JointTarget(this) as ITarget;
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Joint Target instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the Joint Target instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new JointTarget(this) as IDeclaration;
         }
 
         /// <summary>

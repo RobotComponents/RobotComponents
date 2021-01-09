@@ -4,60 +4,74 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
-// RobotComponentsLibs
+// Rhino Libs
+using Rhino.Geometry;
+// RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
 
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Code Line Goo wrapper class, makes sure the Code Line class can be used in Grasshopper.
+    /// Dynamic Goo wrapper class, makes sure the Dynamic class can be used in Grasshopper.
     /// </summary>
-    public class GH_CodeLine : GH_Goo<CodeLine>, GH_ISerializable
+    public class GH_Dynamic : GH_GeometricGoo<IDynamic>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_CodeLine()
+        public GH_Dynamic()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Create a Code Line Goo instance from a Code Line instance.
+        /// Data constructor: Creates an Dynamic Goo instance from an Dynamic instance.
         /// </summary>
-        /// <param name="codeLine"> Code Line Value to store inside this Goo instance. </param>
-        public GH_CodeLine(CodeLine codeLine)
+        /// <param name="dynamic"> Dynamic Value to store inside this Goo instance. </param>
+        public GH_Dynamic(IDynamic dynamic)
         {
-            this.Value = codeLine;
+            this.Value = dynamic;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Code Line Goo instance from another Code Line Goo instance.
-        /// This creates a shallow copy of the passed Code Line Goo instance. 
+        /// Data constructor: Creates a Dynamic Goo instance from another Dynamic Goo instance.
+        /// This creates a shallow copy of the passed Dynamic Goo instance. 
         /// </summary>
-        /// <param name="codeLineGoo"> Code Line Goo instance to copy. </param>
-        public GH_CodeLine(GH_CodeLine codeLineGoo)
+        /// <param name="dynamicGoo"> Dynamic Goo instance to copy. </param>
+        public GH_Dynamic(GH_Dynamic dynamicGoo)
         {
-            if (codeLineGoo == null)
+            if (dynamicGoo == null)
             {
-                codeLineGoo = new GH_CodeLine();
+                dynamicGoo = new GH_Dynamic();
             }
 
-            this.Value = codeLineGoo.Value;
+            this.Value = dynamicGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the CodeLineGoo. </returns>
-        public override IGH_Goo Duplicate()
+        /// <returns> A duplicate of the Dynamic Goo. </returns>
+        public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return new GH_CodeLine(Value == null ? new CodeLine() : Value.Duplicate());
+            return DuplicateDynamicGoo();
+        }
+
+        /// <summary>
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
+        /// </summary>
+        /// <returns> A duplicate of the Dynamic Goo. </returns>
+        public GH_Dynamic DuplicateDynamicGoo()
+        {
+            if (Value == null) { return null; }
+            else if (Value is IDynamic) { return new GH_Dynamic(Value.DuplicateDynamic()); }
+            else { return null; }
         }
         #endregion
 
@@ -82,9 +96,9 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Code Line instance"; }
+                if (Value == null) { return "No internal Dynamic instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Code Line instance: Did you define a Text?";
+                return "Invalid Dynamic instance";
             }
         }
 
@@ -94,7 +108,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Code Line"; }
+            if (Value == null) { return "Null Dynamic"; }
             else { return Value.ToString(); }
         }
 
@@ -103,7 +117,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Code Line"; }
+            get { return "Dynamic"; }
         }
 
         /// <summary>
@@ -111,7 +125,25 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Code Line."; }
+            get { return "Defines a Dynamic."; }
+        }
+
+        /// <summary>
+        /// Gets the boundingbox for this geometry.
+        /// </summary>
+        public override BoundingBox Boundingbox
+        {
+            get { return BoundingBox.Empty; }
+        }
+
+        /// <summary>
+        /// Compute an aligned boundingbox.
+        /// </summary>
+        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
+        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
+        public override BoundingBox GetBoundingBox(Transform xform)
+        {
+            return Boundingbox;
         }
         #endregion
 
@@ -119,27 +151,11 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(ref Q target)
+        public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Code Line
-            if (typeof(Q).IsAssignableFrom(typeof(CodeLine)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Code Line Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_CodeLine)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_CodeLine(Value); }
-                return true;
-            }
-
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
@@ -152,7 +168,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Action(Value); }
+                else { target = (Q)(object)new GH_Action(Value as Action); }
                 return true;
             }
 
@@ -168,7 +184,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Dynamic)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Dynamic(Value); }
+                else { target = (Q)(object)new GH_Dynamic(Value as IDynamic); }
                 return true;
             }
 
@@ -185,60 +201,18 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Code Line
-            if (typeof(CodeLine).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as CodeLine;
-                return true;
-            }
-
-            //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
-            {
-                if (source is CodeLine action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
-            //Cast from Action Goo
-            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
-            {
-                GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is CodeLine action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
             //Cast from Dynamic
             if (typeof(IDynamic).IsAssignableFrom(source.GetType()))
             {
-                if (source is CodeLine codeline)
-                {
-                    Value = codeline;
-                    return true;
-                }
+                Value = source as IDynamic;
+                return true;
             }
 
-            //Cast from Action Goo
+            //Cast from Dynamic Goo
             if (typeof(GH_Dynamic).IsAssignableFrom(source.GetType()))
             {
                 GH_Dynamic dynamicGoo = source as GH_Dynamic;
-                if (dynamicGoo.Value is CodeLine codeline)
-                {
-                    Value = codeline;
-                    return true;
-                }
-            }
-
-            // Cast from Text
-            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
-            {
-                GH_String ghString = (GH_String)source;
-                Value = new CodeLine(ghString.Value);
+                Value = dynamicGoo.Value as IDynamic;
                 return true;
             }
 
@@ -246,11 +220,62 @@ namespace RobotComponents.Gh.Goos.Actions
         }
         #endregion
 
+        #region transformation methods
+        /// <summary>
+        /// Transforms the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xform"> Transformation matrix. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Transform(Transform xform)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Morph the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xmorph"> Spatial deform. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
+        {
+            return null;
+        }
+        #endregion
+
+        #region drawing methods
+        /// <summary>
+        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
+        /// </summary>
+        public BoundingBox ClippingBox
+        {
+            get { return Boundingbox; }
+        }
+
+        /// <summary>
+        /// Implement this function to draw all shaded meshes. 
+        /// If the viewport does not support shading, this function will not be called.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+        {
+
+        }
+
+        /// <summary>
+        /// Implement this function to draw all wire and point previews.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportWires(GH_PreviewWireArgs args)
+        {
+
+        }
+        #endregion
+
         #region (de)serialisation
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Code Line";
+        private const string IoKey = "Dynamic";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -282,7 +307,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (CodeLine)HelperMethods.ByteArrayToObject(array);
+            this.Value = (IDynamic)HelperMethods.ByteArrayToObject(array);
 
             return true;
         }

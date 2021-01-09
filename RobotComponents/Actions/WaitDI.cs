@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// This action is used to wait until a digital input is set.
     /// </summary>
     [Serializable()]
-    public class WaitDI : Action, ISerializable
+    public class WaitDI : Action, IInstruction, ISerializable
     {
         #region fields
         private string _DIName; // The name of the digital input signal
@@ -88,6 +88,15 @@ namespace RobotComponents.Actions
         public WaitDI Duplicate()
         {
             return new WaitDI(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Wait DI instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Wait DI instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new WaitDI(this) as IInstruction;
         }
 
         /// <summary>

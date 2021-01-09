@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// This action is used to set the value of an analog output signal.
     /// </summary>
     [Serializable()]
-    public class AnalogOutput : Action, ISerializable
+    public class AnalogOutput : Action, IInstruction, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
@@ -88,6 +88,15 @@ namespace RobotComponents.Actions
         public AnalogOutput Duplicate()
         {
             return new AnalogOutput(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Analog Output instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Analog Output instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new AnalogOutput(this) as IInstruction;
         }
 
         /// <summary>

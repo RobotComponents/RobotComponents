@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// This action is used to set the value (state) of a digital output signal.
     /// </summary>
     [Serializable()]
-    public class DigitalOutput : Action, ISerializable
+    public class DigitalOutput : Action, IInstruction, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
@@ -88,6 +88,15 @@ namespace RobotComponents.Actions
         public DigitalOutput Duplicate()
         {
             return new DigitalOutput(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Digital Output instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Digital Output instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new DigitalOutput(this) as IInstruction;
         }
 
         /// <summary>

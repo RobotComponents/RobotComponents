@@ -21,7 +21,7 @@ namespace RobotComponents.Actions
     /// Represents several Move instructions (MoveAbsJ, MoveL, MoveJ, MoveLDO and MoveJDO). 
     /// </summary>
     [Serializable()]
-    public class Movement : Action, ISerializable
+    public class Movement : Action, IInstruction, ISerializable
     {
         #region fields
         // Fixed fields
@@ -308,6 +308,15 @@ namespace RobotComponents.Actions
         public Movement Duplicate()
         {
             return new Movement(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Movement instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Movement instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new Movement(this) as IInstruction;
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace RobotComponents.Actions
     /// It has no effect on the execution of the program.
     /// </summary>
     [Serializable()]
-    public class Comment : Action, ISerializable
+    public class Comment : Action, IDynamic, ISerializable
     {
         #region fields
         private string _comment; // the comment as a string
@@ -100,6 +100,15 @@ namespace RobotComponents.Actions
         public Comment Duplicate()
         {
             return new Comment(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Comment instance as IDynamic. 
+        /// </summary>
+        /// <returns> A deep copy of the Comment instance as an IDynamic. </returns>
+        public IDynamic DuplicateDynamic()
+        {
+            return new Comment(this) as IDynamic;
         }
 
         /// <summary>

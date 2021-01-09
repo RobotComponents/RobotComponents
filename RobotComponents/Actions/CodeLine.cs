@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// Represents a custom (user definied) RAPID Code Line.
     /// </summary>
     [Serializable()]
-    public class CodeLine : Action, ISerializable
+    public class CodeLine : Action, IDynamic, ISerializable
     {
         #region fields
         private string _code; // the code line as a string
@@ -98,6 +98,15 @@ namespace RobotComponents.Actions
         public CodeLine Duplicate()
         {
             return new CodeLine(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Code Line instance as IDynamic. 
+        /// </summary>
+        /// <returns> A deep copy of the Code Line instance as an IDynamic. </returns>
+        public IDynamic DuplicateDynamic()
+        {
+            return new CodeLine(this) as IDynamic;
         }
 
         /// <summary>

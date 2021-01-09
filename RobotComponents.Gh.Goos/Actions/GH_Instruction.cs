@@ -4,9 +4,12 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
+// Rhino Libs
+using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
@@ -14,50 +17,61 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Digital Output Goo wrapper class, makes sure the Digital Output class can be used in Grasshopper.
+    /// Instruction Goo wrapper class, makes sure the Instruction class can be used in Grasshopper.
     /// </summary>
-    public class GH_DigitalOutput : GH_Goo<DigitalOutput>, GH_ISerializable
+    public class GH_Instruction : GH_GeometricGoo<IInstruction>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_DigitalOutput()
+        public GH_Instruction()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Digital Output Goo instance from Digital Ouput instance.
+        /// Data constructor: Creates an Instruction Goo instance from an Instruction instance.
         /// </summary>
-        /// <param name="digitalOutput"> Digital Output Value to store inside this Goo instance. </param>
-        public GH_DigitalOutput(DigitalOutput digitalOutput)
+        /// <param name="instruction"> Instruction Value to store inside this Goo instance. </param>
+        public GH_Instruction(IInstruction instruction)
         {
-            this.Value = digitalOutput;
+            this.Value = instruction;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Digital Output Goo instance from another Digital Output Goo instance.
-        /// This creates a shallow copy of the passed Digital Output Goo instance. 
+        /// Data constructor: Creates a Instruction Goo instance from another Instruction Goo instance.
+        /// This creates a shallow copy of the passed Instruction Goo instance. 
         /// </summary>
-        /// <param name="digitalOutputGoo"> Digital Output Goo instance to copy. </param>
-        public GH_DigitalOutput(GH_DigitalOutput digitalOutputGoo)
+        /// <param name="instructionGoo"> Instruction Goo instance to copy. </param>
+        public GH_Instruction(GH_Instruction instructionGoo)
         {
-            if (digitalOutputGoo == null)
+            if (instructionGoo == null)
             {
-                digitalOutputGoo = new GH_DigitalOutput();
+                instructionGoo = new GH_Instruction();
             }
 
-            this.Value = digitalOutputGoo.Value;
+            this.Value = instructionGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Digital Output Goo. </returns>
-        public override IGH_Goo Duplicate()
+        /// <returns> A duplicate of the Instruction Goo. </returns>
+        public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return new GH_DigitalOutput(Value == null ? new DigitalOutput() : Value.Duplicate());
+            return DuplicateInstructionGoo();
+        }
+
+        /// <summary>
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
+        /// </summary>
+        /// <returns> A duplicate of the Instruction Goo. </returns>
+        public GH_Instruction DuplicateInstructionGoo()
+        {
+            if (Value == null) { return null; }
+            else if (Value is IInstruction) { return new GH_Instruction(Value.DuplicateInstruction()); }
+            else { return null; }
         }
         #endregion
 
@@ -82,19 +96,19 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Digital Output instance"; }
+                if (Value == null) { return "No internal Instruction instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Digital Output instance: Did you define the digital output name and state?";
+                return "Invalid Instruction instance";
             }
         }
 
         /// <summary>
-        /// Creates a string description of the current instance value.
+        /// Creates a string description of the current instance value
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Digital Output"; }
+            if (Value == null) { return "Null Instruction"; }
             else { return Value.ToString(); }
         }
 
@@ -103,7 +117,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Digital Output"; }
+            get { return "Instruction"; }
         }
 
         /// <summary>
@@ -111,7 +125,25 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Digital Output"; }
+            get { return "Defines a Instruction."; }
+        }
+
+        /// <summary>
+        /// Gets the boundingbox for this geometry.
+        /// </summary>
+        public override BoundingBox Boundingbox
+        {
+            get { return BoundingBox.Empty; }
+        }
+
+        /// <summary>
+        /// Compute an aligned boundingbox.
+        /// </summary>
+        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
+        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
+        public override BoundingBox GetBoundingBox(Transform xform)
+        {
+            return Boundingbox;
         }
         #endregion
 
@@ -119,27 +151,11 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(ref Q target)
+        public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Digital Output Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_DigitalOutput(Value); }
-                return true;
-            }
-
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
@@ -152,7 +168,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Action(Value); }
+                else { target = (Q)(object)new GH_Action(Value as Action); }
                 return true;
             }
 
@@ -168,15 +184,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
                 if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Instruction(Value); }
-                return true;
-            }
-
-            //Cast to Boolean
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Boolean(Value.IsActive); }
+                else { target = (Q)(object)new GH_Instruction(Value as IInstruction); }
                 return true;
             }
 
@@ -193,56 +201,73 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Digital Output
-            if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as DigitalOutput;
-                return true;
-            }
-
-            //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
-            {
-                if (source is DigitalOutput action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
-            //Cast from Action Goo
-            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
-            {
-                GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is DigitalOutput action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
             //Cast from Instruction
             if (typeof(IInstruction).IsAssignableFrom(source.GetType()))
             {
-                if (source is DigitalOutput instruction)
-                {
-                    Value = instruction;
-                    return true;
-                }
+                Value = source as IInstruction;
+                return true;
             }
 
             //Cast from Instruction Goo
             if (typeof(GH_Instruction).IsAssignableFrom(source.GetType()))
             {
                 GH_Instruction instructionGoo = source as GH_Instruction;
-                if (instructionGoo.Value is DigitalOutput instruction)
-                {
-                    Value = instruction;
-                    return true;
-                }
+                Value = instructionGoo.Value as IInstruction;
+                return true;
             }
 
             return false;
+        }
+        #endregion
+
+        #region transformation methods
+        /// <summary>
+        /// Transforms the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xform"> Transformation matrix. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Transform(Transform xform)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Morph the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xmorph"> Spatial deform. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
+        {
+            return null;
+        }
+        #endregion
+
+        #region drawing methods
+        /// <summary>
+        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
+        /// </summary>
+        public BoundingBox ClippingBox
+        {
+            get { return Boundingbox; }
+        }
+
+        /// <summary>
+        /// Implement this function to draw all shaded meshes. 
+        /// If the viewport does not support shading, this function will not be called.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+        {
+
+        }
+
+        /// <summary>
+        /// Implement this function to draw all wire and point previews.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportWires(GH_PreviewWireArgs args)
+        {
+
         }
         #endregion
 
@@ -250,7 +275,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Digital Output";
+        private const string IoKey = "Instruction";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -282,7 +307,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (DigitalOutput)HelperMethods.ByteArrayToObject(array);
+            this.Value = (IInstruction)HelperMethods.ByteArrayToObject(array);
 
             return true;
         }

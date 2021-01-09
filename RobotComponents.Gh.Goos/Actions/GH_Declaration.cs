@@ -4,9 +4,12 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // Grasshopper Libs
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
+// Rhino Libs
+using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
@@ -14,50 +17,61 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Target Goo wrapper class, makes sure the Target class can be used in Grasshopper.
+    /// Declaration Goo wrapper class, makes sure the Declaration class can be used in Grasshopper.
     /// </summary>
-    public class GH_Target : GH_Goo<ITarget>, GH_ISerializable
+    public class GH_Declaration : GH_GeometricGoo<IDeclaration>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_Target() 
+        public GH_Declaration()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Create a Target Goo instance from a Target instance.
+        /// Data constructor: Creates an Declaration Goo instance from an Declaration instance.
         /// </summary>
-        /// <param name="target"> Target Value to store inside this Goo instance. </param>
-        public GH_Target(ITarget target)
+        /// <param name="declaration"> Declaration Value to store inside this Goo instance. </param>
+        public GH_Declaration(IDeclaration declaration)
         {
-            this.Value = target;
+            this.Value = declaration;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Target Goo instance from another Target Goo instance.
-        /// This creates a shallow copy of the passed Target Goo instance. 
+        /// Data constructor: Creates a Declaration Goo instance from another Declaration Goo instance.
+        /// This creates a shallow copy of the passed Declaration Goo instance. 
         /// </summary>
-        /// <param name="targetGoo"> Target Goo to copy. </param>
-        public GH_Target(GH_Target targetGoo)
+        /// <param name="declarationGoo"> Declaration Goo instance to copy. </param>
+        public GH_Declaration(GH_Declaration declarationGoo)
         {
-            if (targetGoo == null)
+            if (declarationGoo == null)
             {
-                targetGoo = new GH_Target();
+                declarationGoo = new GH_Declaration();
             }
 
-            this.Value = targetGoo.Value;
+            this.Value = declarationGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Target Goo. </returns>
-        public override IGH_Goo Duplicate()
+        /// <returns> A duplicate of the Declaration Goo. </returns>
+        public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return new GH_Target(Value == null ? new RobotTarget() : Value.DuplicateTarget());
+            return DuplicateDeclarationGoo();
+        }
+
+        /// <summary>
+        /// Make a complete duplicate of this Goo instance. No shallow copies.
+        /// </summary>
+        /// <returns> A duplicate of the Declaration Goo. </returns>
+        public GH_Declaration DuplicateDeclarationGoo()
+        {
+            if (Value == null) { return null; }
+            else if (Value is IDeclaration) { return new GH_Declaration(Value.DuplicateDeclaration()); }
+            else { return null; }
         }
         #endregion
 
@@ -82,9 +96,9 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Target instance"; }
+                if (Value == null) { return "No internal Declaration instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Target instance: Did you define a name?";
+                return "Invalid Declaration instance";
             }
         }
 
@@ -94,7 +108,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Target"; }
+            if (Value == null) { return "Null Declaration"; }
             else { return Value.ToString(); }
         }
 
@@ -103,7 +117,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Target"; }
+            get { return "Declaration"; }
         }
 
         /// <summary>
@@ -111,7 +125,25 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Target"; }
+            get { return "Defines a Declaration."; }
+        }
+
+        /// <summary>
+        /// Gets the boundingbox for this geometry.
+        /// </summary>
+        public override BoundingBox Boundingbox
+        {
+            get { return BoundingBox.Empty; }
+        }
+
+        /// <summary>
+        /// Compute an aligned boundingbox.
+        /// </summary>
+        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
+        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
+        public override BoundingBox GetBoundingBox(Transform xform)
+        {
+            return Boundingbox;
         }
         #endregion
 
@@ -119,43 +151,11 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(ref Q target)
+        public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Target Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_Target(Value); }
-                return true;
-            }
-
-            //Cast to Target
-            if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Joint Target
-            if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_JointTarget(Value as JointTarget); }
-                return true;
-            }
-
-            //Cast to Robot Target
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
-            {
-                if (Value == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_RobotTarget(Value as RobotTarget); }
-                return true;
-            }
-
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
@@ -188,15 +188,6 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
-            //Cast to External Joint Position Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
-            {
-                if (Value == null) { target = default(Q); }
-                else if (Value.ExternalJointPosition == null) { target = default(Q); }
-                else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
-                return true;
-            }
-
             target = default(Q);
             return false;
         }
@@ -210,66 +201,73 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Target
-            if (typeof(ITarget).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as ITarget;
-                return true;
-            }
-
-            //Cast from Target Goo
-            if (typeof(ITarget).IsAssignableFrom(source.GetType()))
-            {
-                GH_Target targetGoo = source as GH_Target;
-                if (targetGoo.Value is ITarget target)
-                {
-                    Value = target;
-                    return true;
-                }
-            }
-
-            //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
-            {
-                if (source is ITarget action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
-            //Cast from Action Goo
-            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
-            {
-                GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is ITarget action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
             //Cast from Declaration
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
             {
-                if (source is ITarget target)
-                {
-                    Value = target;
-                    return true;
-                }
+                Value = source as IDeclaration;
+                return true;
             }
 
             //Cast from Declaration Goo
             if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
             {
                 GH_Declaration declarationGoo = source as GH_Declaration;
-                if (declarationGoo.Value is ITarget target)
-                {
-                    Value = target;
-                    return true;
-                }
+                Value = declarationGoo.Value as IDeclaration;
+                return true;
             }
+
             return false;
+        }
+        #endregion
+
+        #region transformation methods
+        /// <summary>
+        /// Transforms the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xform"> Transformation matrix. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Transform(Transform xform)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Morph the object or a deformable representation of the object.
+        /// </summary>
+        /// <param name="xmorph"> Spatial deform. </param>
+        /// <returns> Returns a null item since this goo instance has no geometry. </returns>
+        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
+        {
+            return null;
+        }
+        #endregion
+
+        #region drawing methods
+        /// <summary>
+        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
+        /// </summary>
+        public BoundingBox ClippingBox
+        {
+            get { return Boundingbox; }
+        }
+
+        /// <summary>
+        /// Implement this function to draw all shaded meshes. 
+        /// If the viewport does not support shading, this function will not be called.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportMeshes(GH_PreviewMeshArgs args)
+        {
+
+        }
+
+        /// <summary>
+        /// Implement this function to draw all wire and point previews.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportWires(GH_PreviewWireArgs args)
+        {
+
         }
         #endregion
 
@@ -277,7 +275,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Target";
+        private const string IoKey = "Declaration";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -309,7 +307,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (ITarget)HelperMethods.ByteArrayToObject(array);
+            this.Value = (IDeclaration)HelperMethods.ByteArrayToObject(array);
 
             return true;
         }

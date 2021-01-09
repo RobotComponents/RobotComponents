@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// This action is used to set a new default Robot Tool from this action. 
     /// </summary>
     [Serializable()]
-    public class OverrideRobotTool : Action, ISerializable
+    public class OverrideRobotTool : Action, IInstruction, ISerializable
     {
         #region fields
         private RobotTool _robotTool; // The robot that should be used
@@ -82,6 +82,15 @@ namespace RobotComponents.Actions
         public OverrideRobotTool Duplicate()
         {
             return new OverrideRobotTool(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Override Robot Tool instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Override Robot Tool instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new OverrideRobotTool(this) as IInstruction;
         }
 
         /// <summary>

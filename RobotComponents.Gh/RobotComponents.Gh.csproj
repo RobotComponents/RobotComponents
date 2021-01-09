@@ -69,6 +69,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldSpeedDataComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldZoneDataComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldJointTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldRobotTargetComponent.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldPathGeneratorComponent3.cs" />
     <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
     <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />

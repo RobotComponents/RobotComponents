@@ -16,7 +16,7 @@
 
 Robot Components is a plugin for intuitive robot programming for ABB robots inside of Rhinoceros Grasshopper. Robot Components offers a wide set of tools to create toolpaths, simulate robotic motion and generate RAPID code within Grasshopper. Some of the main features include:
 
-- 30+ predefined ABB robot models
+- 40+ predefined ABB robot models
 - Possibility to add your own robot models
 - Support for external axes (both linear and rotational)
 - Possibility to define custom strategies for all external axis values
@@ -24,7 +24,7 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - Efficient forward and inverse kinematics
 - Possibility to add your own custom code lines
 - Real-time connection with IRC5 controllers
-- Robot Components API to develop your custom components using either Python or C# (w.i.p, documentation coming soon)
+- Robot Components API to develop your custom components using either Python or C# (w.i.p)
 
 ## Getting Started
 You can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go!
@@ -86,6 +86,32 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 
 ### Workshops
 [Robot Wood Printing Workshop at the Design Modeling Symposium 2019](https://design-modelling-symposium.de/workshops/robotic-wood-printing-workshop/)
+
+### Video's 
+
+[EDEK Studio Project - Digital Timber 2018 - Batwing](https://vimeo.com/327693644)
+
+[EDEK Studio Project - Digital Timber 2018 - Wood Joints](https://vimeo.com/322739944)
+
+[EDEK Studio Project - Digital Timber 2018 - Incremental Growth](https://vimeo.com/321705721)
+
+[EDEK Studio Project - Digital Timber 2018 - Stütze](https://vimeo.com/285854379)
+
+[EDEK Research Project - TETHOK at Ligna Fair 2019 - Hannover](https://vimeo.com/338414933)
+
+[EDEK Studio Project - Robotic Wood Printing 2019 - Wiggle wiggle](https://vimeo.com/327694859)
+
+[EDEK Studio Project - Robotic Wood Printing 2019 - Six Times Curvy](https://vimeo.com/327692999)
+
+[EDEK Studio Project - Robotic Wood Printing 2019 - Multi extruder](https://vimeo.com/326358808)
+
+[EDEK Studio Project - Robotic Additive Manufacturing 2019 - Wiggle Wiggle 2.0](https://vimeo.com/353989807)
+
+[EDEK Studio Project - Robotic Additive Manufacturing 2019 - Komorebi](https://vimeo.com/348365601)
+
+[EDEK Studio Project - Robotic Additive Manufacturing 2019 - From Flat](https://vimeo.com/348344799)
+
+[EDEK Master Thesis Project - Wood Printing: The Possibility Of Printing Wood In 3D Space](https://vimeo.com/371587446)
 
 ## License
 Robot Components

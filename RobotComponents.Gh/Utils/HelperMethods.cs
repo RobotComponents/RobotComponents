@@ -4,6 +4,7 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel.Data;
@@ -32,6 +33,7 @@ namespace RobotComponents.Gh.Utils
         /// <param name="name"> The name that should be used. </param>
         /// <param name="data"> The tree structure. </param>
         /// <returns> The datatree filled with unique names. </returns>
+        [Obsolete("This method is obsolete and will be removed in the future.", false)]
         public static GH_Structure<GH_String> DataTreeNaming(string name, GH_Structure<IGH_Goo> data)
         {
             // Output

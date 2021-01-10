@@ -216,7 +216,7 @@
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
-    <Compile Include="Components\Utilities\NameGeneratorComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldNameGeneratorComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />

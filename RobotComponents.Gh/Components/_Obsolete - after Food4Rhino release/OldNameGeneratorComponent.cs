@@ -13,22 +13,44 @@ using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Utilities
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.14.000
+// It is replaced with a new component. 
+
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Naming component. An inherent from the GH_Component Class.
     /// </summary>
-    public class NameGeneratorComponent : GH_Component
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
+    public class OldNameGeneratorComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        public NameGeneratorComponent()
+        public OldNameGeneratorComponent()
           : base("Name Generator", "NG",
               "This components can be used to generate the datatree for the target, speed data and zone data names if datatrees are used."
                 + System.Environment.NewLine + System.Environment.NewLine  + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -68,29 +90,6 @@ namespace RobotComponents.Gh.Components.Utilities
             // Output
             DA.SetDataTree(0, names);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for the component.

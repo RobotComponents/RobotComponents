@@ -150,7 +150,6 @@ namespace RobotComponents.Gh.Utils
             { typeof(FlipPlaneXComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20Y/" },
             { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, 
-            { typeof(NameGeneratorComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Name%20Generator/" },
             { typeof(PlaneToQuaternion), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlane), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },

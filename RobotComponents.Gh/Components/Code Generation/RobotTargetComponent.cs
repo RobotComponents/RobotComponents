@@ -10,12 +10,15 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -56,9 +59,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.list, 0);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, "defaultTar");
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.tree, 0);
         }
 
         // Register the number of fixed input parameters
@@ -67,8 +70,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         // Create an array with the variable input parameters
         readonly IGH_Param[] parameters = new IGH_Param[2]
         {
-            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.list, Optional = true },
-            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.list, Optional = true }
+            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.tree, Optional = true },
+            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.tree, Optional = true }
     };
 
         /// <summary>
@@ -83,8 +86,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private readonly List<string> _targetNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
+        private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
+        private List<GH_RobotTarget> _list = new List<GH_RobotTarget>();
         private ObjectManager _objectManager;
-        private List<RobotTarget> _targets = new List<RobotTarget>();
 
         private bool _setReferencePlane = false;
         private bool _setExternalJointPosition = false;
@@ -96,139 +100,71 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Sets inputs and creates target
-            List<string> names = new List<string>();
-            List<Plane> planes = new List<Plane>();
-            List<Plane> referencePlanes = new List<Plane>();
-            List<int> axisConfigs = new List<int>();
-            List<ExternalJointPosition> externalJointPositions = new List<ExternalJointPosition>();
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Plane> planes;
+            GH_Structure<GH_Plane> referencePlanes = new GH_Structure<GH_Plane>();
+            GH_Structure<GH_Integer> axisConfigs = new GH_Structure<GH_Integer>();
+            GH_Structure<GH_ExternalJointPosition> externalJointPositions = new GH_Structure<GH_ExternalJointPosition>();
 
-            // Catch name input
-            if (!DA.GetDataList(0, names)) { return; } // Fixed index
-
-            // Catch target planes input
-            if (!DA.GetDataList(1, planes)) { return; } // Fixed index
-
-            // Catch reference plane input
-            if (Params.Input.Any(x => x.Name == "Reference Plane"))
-            {
-                if (!DA.GetDataList("Reference Plane", referencePlanes))
-                {
-                    referencePlanes = new List<Plane>() { Plane.WorldXY };
-                }
+            // Catch inputs
+            if (!DA.GetDataTree(0, out names)) { return; } // Fixed index
+            if (!DA.GetDataTree(1, out planes)) { return; } // Fixed index
+            if (Params.Input.Any(x => x.Name == parameters[0].Name)) 
+            {            
+                if (!DA.GetDataTree(parameters[0].Name, out referencePlanes)) { return; }
             }
-
-            // Catch axis configuration input
             if (Params.Input.Any(x => x.Name == "Axis Configuration"))
             {
-                if (!DA.GetDataList("Axis Configuration", axisConfigs)) return;
+                if (!DA.GetDataTree("Axis Configuration", out axisConfigs)) { return; }
             }
-
-            // Catch input data for setting the external joint position
             if (Params.Input.Any(x => x.Name == parameters[1].Name))
             {
-                if (!DA.GetDataList(parameters[1].Name, externalJointPositions))
-                {
-                    externalJointPositions = new List<ExternalJointPosition>() { new ExternalJointPosition() };
-                }
+                if (!DA.GetDataTree(parameters[1].Name, out externalJointPositions)) { return; }
             }
 
-            // Make sure variable input has a default value
-            if (referencePlanes.Count == 0) { referencePlanes.Add(Plane.WorldXY); }
-            if (externalJointPositions.Count == 0) { externalJointPositions.Add(new ExternalJointPosition()); }
-
-            // Replace spaces
-            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
-
-            // Get longest Input List
-            int[] sizeValues = new int[5];
-            sizeValues[0] = names.Count;
-            sizeValues[1] = planes.Count;
-            sizeValues[2] = referencePlanes.Count;
-            sizeValues[3] = axisConfigs.Count;
-            sizeValues[4] = externalJointPositions.Count;
-
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
-
-            // Keeps track of used indicies
-            int nameCounter = -1;
-            int planesCounter = -1;
-            int referencePlaneCounter = -1;
-            int axisConfigCounter = -1;
-            int externalJointPositionCounter = -1;
-
-            // Clear list
-            _targets.Clear();
-
-            // Creates targets
-            for (int i = 0; i < biggestSize; i++)
+            // Inputs shoud not be empty
+            if (referencePlanes.Branches.Count == 0)
             {
-                string name = "";
-                Plane plane = new Plane();
-                Plane referencePlane = new Plane();
-                int axisConfig = 0;
-                ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+                referencePlanes.Append(new GH_Plane(Plane.WorldXY), new GH_Path(0));
+            }
+            if (axisConfigs.Branches.Count == 0)
+            {
+                axisConfigs.Append(new GH_Integer(0), new GH_Path(0));
+            }
+            if (externalJointPositions.Branches.Count == 0)
+            {
+                externalJointPositions.Append(new GH_ExternalJointPosition(new ExternalJointPosition()), new GH_Path(0));
+            }
 
-                // Names counter
-                if (i < sizeValues[0])
-                {
-                    name = names[i];
-                    nameCounter++;
-                }
-                else
-                {
-                    name = names[nameCounter] + "_" + (i - nameCounter);
-                }
+            // Clear tree and list
+            _tree = new GH_Structure<GH_RobotTarget>();
+            _list = new List<GH_RobotTarget>();
 
-                // Target planes counter
-                if (i < sizeValues[1])
-                {
-                    plane = planes[i];
-                    planesCounter++;
-                }
-                else
-                {
-                    plane = planes[planesCounter];
-                }
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            RobotTargetComponentDataTreeGenerator component = new RobotTargetComponentDataTreeGenerator();
 
-                // Reference plane counter
-                if (i < sizeValues[2])
-                {
-                    referencePlane = referencePlanes[i];
-                    referencePlaneCounter++;
-                }
-                else
-                {
-                    referencePlane = referencePlanes[referencePlaneCounter];
-                }
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(planes);
+            component.Params.Input[2].AddVolatileDataTree(referencePlanes);
+            component.Params.Input[3].AddVolatileDataTree(axisConfigs);
+            component.Params.Input[4].AddVolatileDataTree(externalJointPositions);
 
-                // Axis configuration counter
-                if (i < sizeValues[3])
-                {
-                    axisConfig = axisConfigs[i];
-                    axisConfigCounter++;
-                }
-                else
-                {
-                    axisConfig = axisConfigs[axisConfigCounter];
-                }
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
 
-                // External Joint Position
-                if (i < sizeValues[4])
-                {
-                    externalJointPosition = externalJointPositions[i];
-                    externalJointPositionCounter++;
-                }
-                else
-                {
-                    externalJointPosition = externalJointPositions[externalJointPositionCounter];
-                }
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
 
-                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
-                _targets.Add(target);
+            // Update the variable names in the data trees
+            UpdateVariableNames();
+
+            // Make a list
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                _list.AddRange(_tree.Branches[i]);
             }
 
             // Sets Output
-            DA.SetDataList(0, _targets);
+            DA.SetDataTree(0, _tree);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -256,9 +192,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Checks if target name is already in use and counts duplicates
             #region Check name in object manager
             _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
-                if (_objectManager.TargetNames.Contains(names[i]))
+                if (_objectManager.TargetNames.Contains(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
                     _namesUnique = false;
@@ -268,24 +204,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 else
                 {
                     // Adds Target Name to list
-                    _targetNames.Add(names[i]);
-                    _objectManager.TargetNames.Add(names[i]);
+                    _targetNames.Add(_list[i].Value.Name);
+                    _objectManager.TargetNames.Add(_list[i].Value.Name);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
                     _objectManager.UpdateTargets();
 
-                    _lastName = names[i];
+                    _lastName = _list[i].Value.Name;
                 }
 
                 // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
                     break;
                 }
 
                 // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
                     break;
@@ -326,12 +262,91 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
+
+        /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// The Targets created by this component
         /// </summary>
         public List<RobotTarget> RobotTargets
         {
-            get { return _targets; }
+            get { return _list.ConvertAll(item => item.Value); }
         }
 
         /// <summary>
@@ -569,7 +584,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("78A98F12-EDAF-44C8-ABB0-67D70F8CA391"); }
+            get { return new Guid("EA79575D-5AED-46F2-8E50-A00BF5B65620"); }
         }
 
     }

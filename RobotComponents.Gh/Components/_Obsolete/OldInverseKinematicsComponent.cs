@@ -19,11 +19,12 @@ using RobotComponents.Kinematics;
 // It is OBSOLETE since version 0.10.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldInverseKinematicsComponent : GH_Component
     {
         /// <summary>

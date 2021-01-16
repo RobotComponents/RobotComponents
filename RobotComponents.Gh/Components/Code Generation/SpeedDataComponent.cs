@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -49,11 +52,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.list, "default_speed");
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.list, 500);
-            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.list, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.list, 1000);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, "default_speed");
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.tree, 500);
+            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.tree, 5000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.tree, 1000);
         }
 
         /// <summary>
@@ -68,7 +71,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private readonly List<string> _speedDataNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
-        private List<SpeedData> _speedDatas = new List<SpeedData>();
+        private GH_Structure<GH_SpeedData> _tree = new GH_Structure<GH_SpeedData>();
+        private List<GH_SpeedData> _list = new List<GH_SpeedData>();
         private ObjectManager _objectManager;
 
         /// <summary>
@@ -77,113 +81,49 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs and creates target
-            List<string> names = new List<string>();
-            List<double> v_tcps = new List<double>();
-            List<double> v_oris = new List<double>();
-            List<double> v_leaxs = new List<double>();
-            List<double> v_reaxs = new List<double>();
+            // Sets inputs and creates speeddatas
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Number> v_tcps;
+            GH_Structure<GH_Number> v_oris;
+            GH_Structure<GH_Number> v_leaxs;
+            GH_Structure<GH_Number> v_reaxs;
 
             // Catch the input data
-            if (!DA.GetDataList(0, names)) { return; }
-            if (!DA.GetDataList(1, v_tcps)) { return; }
-            if (!DA.GetDataList(2, v_oris)) { return; }
-            if (!DA.GetDataList(3, v_leaxs)) { return; }
-            if (!DA.GetDataList(4, v_reaxs)) { return; }
+            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetDataTree(1, out v_tcps)) { return; }
+            if (!DA.GetDataTree(2, out v_oris)) { return; }
+            if (!DA.GetDataTree(3, out v_leaxs)) { return; }
+            if (!DA.GetDataTree(4, out v_reaxs)) { return; }
 
-            // Replace spaces
-            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+            // Clear tree and list
+            _tree = new GH_Structure<GH_SpeedData>();
+            _list = new List<GH_SpeedData>();
 
-            // Get longest Input List
-            int[] sizeValues = new int[5];
-            sizeValues[0] = names.Count;
-            sizeValues[1] = v_tcps.Count;
-            sizeValues[2] = v_oris.Count;
-            sizeValues[3] = v_leaxs.Count;
-            sizeValues[4] = v_reaxs.Count;
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            SpeedDataComponentDataTreeGenerator component = new SpeedDataComponentDataTreeGenerator();
 
-            // Keeps track of used indicies
-            int nameCounter = -1;
-            int v_tcpCounter = -1;
-            int v_oriCounter = -1;
-            int v_leaxCounter = -1;
-            int v_reaxCounter = -1;
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(v_tcps);
+            component.Params.Input[2].AddVolatileDataTree(v_oris);
+            component.Params.Input[3].AddVolatileDataTree(v_leaxs);
+            component.Params.Input[4].AddVolatileDataTree(v_reaxs);
 
-            // Clear list
-            _speedDatas.Clear();
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
 
-            // Creates speed Datas
-            for (int i = 0; i < biggestSize; i++)
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
+
+            // Update the variable names in the data trees
+            UpdateVariableNames();
+
+            // Make a list
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                string name = "";
-                double v_tcp = 0;
-                double v_ori = 0;
-                double v_leax = 0;
-                double v_reax = 0;
-
-                // Names counter
-                if (i < sizeValues[0])
-                {
-                    name = names[i];
-                    nameCounter++;
-                }
-                else
-                {
-                    name = names[nameCounter] + "_" + (i - nameCounter);
-                }
-
-                // TCP speed counter
-                if (i < sizeValues[1])
-                {
-                    v_tcp = v_tcps[i];
-                    v_tcpCounter++;
-                }
-                else
-                {
-                    v_tcp = v_tcps[v_tcpCounter];
-                }
-
-                // Re-orientation speed counter
-                if (i < sizeValues[2])
-                {
-                    v_ori = v_oris[i];
-                    v_oriCounter++;
-                }
-                else
-                {
-                    v_ori = v_oris[v_oriCounter];
-                }
-
-                // External linear axis speed counter
-                if (i < sizeValues[3])
-                {
-                    v_leax = v_leaxs[i];
-                    v_leaxCounter++;
-                }
-                else
-                {
-                    v_leax = v_leaxs[v_leaxCounter];
-                }
-
-                // External revolving axis counter
-                if (i < sizeValues[4])
-                {
-                    v_reax = v_reaxs[i];
-                    v_reaxCounter++;
-                }
-                else
-                {
-                    v_reax = v_reaxs[v_reaxCounter];
-                }
-
-                // Construct speed data
-                SpeedData speedData = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
-                _speedDatas.Add(speedData);
+                _list.AddRange(_tree.Branches[i]);
             }
 
             // Sets Output
-            DA.SetDataList(0, _speedDatas);
+            DA.SetDataTree(0, _tree);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -209,11 +149,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Checks if speed Data name is already in use and counts duplicates
-            #region Check name in object manager
+            #region Check name in the object manager
             _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
-                if (_objectManager.SpeedDataNames.Contains(names[i]))
+                if (_objectManager.SpeedDataNames.Contains(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
                     _namesUnique = false;
@@ -222,24 +162,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 else
                 {
                     // Adds Speed Data Name to list
-                    _speedDataNames.Add(names[i]);
-                    _objectManager.SpeedDataNames.Add(names[i]);
+                    _speedDataNames.Add(_list[i].Value.Name);
+                    _objectManager.SpeedDataNames.Add(_list[i].Value.Name);
 
                     // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
                     _objectManager.UpdateSpeedDatas();
 
-                    _lastName = names[i];
+                    _lastName = _list[i].Value.Name;
                 }
 
                 // Check variable name: character limit
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name exceeds character limit of 32 characters.");
                     break;
                 }
 
                 // Check variable name: start with number is not allowed
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
                     break;
@@ -281,11 +221,89 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// The Speed Datas created by this component
         /// </summary>
         public List<SpeedData> SpeedDatas
         {
-            get { return _speedDatas; }
+            get { return _list.ConvertAll(item => item.Value); }
         }
 
         /// <summary>
@@ -325,8 +343,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            { return Properties.Resources.SpeedData_Icon; }
+            get { return Properties.Resources.SpeedData_Icon; }
         }
 
         /// <summary>
@@ -336,7 +353,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5F900CB8-86D0-4429-992A-CC2422BBFBDE"); }
+            get { return new Guid("91296EEB-3DA3-4F9F-8516-398BD369795E"); }
         }
     }
 }

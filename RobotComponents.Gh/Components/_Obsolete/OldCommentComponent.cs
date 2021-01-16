@@ -18,11 +18,12 @@ using RobotComponents.Gh.Utils;
 // It is OBSOLETE since version 0.09.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Comment component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldCommentComponent : GH_Component
     {
         /// <summary>

@@ -58,6 +58,10 @@ namespace RobotComponents.Gh.Utils
         private Dictionary<Guid, OldAbsoluteJointMovementComponent2> _oldJointTargetsByGuid2;
         private Dictionary<Guid, OldTargetComponent> _oldTargetsByGuid;
         private Dictionary<Guid, OldTargetComponent2> _oldTargetsByGuid2;
+        private Dictionary<Guid, OldJointTargetComponent> _oldJointTargetsByGuid3;
+        private Dictionary<Guid, OldRobotTargetComponent> _oldRobotTargetsByGuid;
+        private Dictionary<Guid, OldSpeedDataComponent> _oldSpeedDatasByGuid;
+        private Dictionary<Guid, OldZoneDataComponent> _oldZoneDatasByGuid;
         private Dictionary<Guid, OldExternalLinearAxisComponent2> _oldExternalLinearAxesByGuid2;
         private Dictionary<Guid, OldExternalRotationalAxisComponent> _oldExternalRotationalAxesByGuid;
         private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
@@ -106,6 +110,10 @@ namespace RobotComponents.Gh.Utils
             _oldJointTargetsByGuid2 = new Dictionary<Guid, OldAbsoluteJointMovementComponent2>();
             _oldTargetsByGuid = new Dictionary<Guid, OldTargetComponent>();
             _oldTargetsByGuid2 = new Dictionary<Guid, OldTargetComponent2>();
+            _oldJointTargetsByGuid3 = new Dictionary<Guid, OldJointTargetComponent>();
+            _oldRobotTargetsByGuid = new Dictionary<Guid, OldRobotTargetComponent>();
+            _oldSpeedDatasByGuid = new Dictionary<Guid, OldSpeedDataComponent>();
+            _oldZoneDatasByGuid = new Dictionary<Guid, OldZoneDataComponent>();
             _oldExternalLinearAxesByGuid2 = new Dictionary<Guid, OldExternalLinearAxisComponent2>();
             _oldExternalRotationalAxesByGuid = new Dictionary<Guid, OldExternalRotationalAxisComponent>();
             _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
@@ -303,6 +311,12 @@ namespace RobotComponents.Gh.Utils
             {
                 targets.AddRange(entry.Value.Targets);
             }
+
+            // Add all the robot targets
+            foreach (KeyValuePair<Guid, OldRobotTargetComponent> entry in _oldRobotTargetsByGuid)
+            {
+                targets.AddRange(entry.Value.RobotTargets);
+            }
             #endregion
 
             // Sort based on name
@@ -343,6 +357,11 @@ namespace RobotComponents.Gh.Utils
                     targets.Add(entry.Value.AbsoluteJointMovements[i].ConvertToJointTarget());
                 }
             }
+
+            foreach (KeyValuePair<Guid, OldJointTargetComponent> entry in _oldJointTargetsByGuid3)
+            {
+                targets.AddRange(entry.Value.JointTargets);
+            }
             #endregion
 
             // Sort based on name
@@ -367,6 +386,13 @@ namespace RobotComponents.Gh.Utils
                 speeddatas.AddRange(entry.Value.SpeedDatas);
             }
 
+            #region OBSOLETE components
+            foreach (KeyValuePair<Guid, OldSpeedDataComponent> entry in _oldSpeedDatasByGuid)
+            {
+                speeddatas.AddRange(entry.Value.SpeedDatas);
+            }
+            #endregion
+
             // Sort based on name
             speeddatas = speeddatas.OrderBy(x => x.Name).ToList();
 
@@ -388,6 +414,13 @@ namespace RobotComponents.Gh.Utils
             {
                 zonedatas.AddRange(entry.Value.ZoneDatas);
             }
+
+            #region OBSOLETE components
+            foreach (KeyValuePair<Guid, OldZoneDataComponent> entry in _oldZoneDatasByGuid)
+            {
+                zonedatas.AddRange(entry.Value.ZoneDatas);
+            }
+            #endregion
 
             // Sort based on name
             zonedatas = zonedatas.OrderBy(x => x.Name).ToList();
@@ -505,6 +538,22 @@ namespace RobotComponents.Gh.Utils
                     entry.Value.ExpireSolution(true);
                 }
             }
+
+            foreach (KeyValuePair<Guid, OldRobotTargetComponent> entry in OldRobotTargetsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldJointTargetComponent> entry in OldJointTargetsByGuid3)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
         }
 
         /// <summary>
@@ -514,6 +563,14 @@ namespace RobotComponents.Gh.Utils
         {
             // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
             foreach (KeyValuePair<Guid, SpeedDataComponent> entry in SpeedDatasByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldSpeedDataComponent> entry in OldSpeedDatasByGuid)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -564,6 +621,14 @@ namespace RobotComponents.Gh.Utils
             foreach (KeyValuePair<Guid, ZoneDataComponent> entry in ZoneDatasByGuid)
             {
                 if (entry.Value.LastName == "") 
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldZoneDataComponent> entry in OldZoneDatasByGuid)
+            {
+                if (entry.Value.LastName == "")
                 {
                     entry.Value.ExpireSolution(true);
                 }
@@ -778,6 +843,38 @@ namespace RobotComponents.Gh.Utils
         public Dictionary<Guid, OldTargetComponent2> OldTargetsByGuid2
         {
             get { return _oldTargetsByGuid2; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Robot Target component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldRobotTargetComponent> OldRobotTargetsByGuid
+        {
+            get { return _oldRobotTargetsByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Joint Target component. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldJointTargetComponent> OldJointTargetsByGuid3
+        {
+            get { return _oldJointTargetsByGuid3; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Speed Data component. Will be removed in the future
+        /// </summary>
+        public Dictionary<Guid, OldSpeedDataComponent> OldSpeedDatasByGuid
+        {
+            get { return _oldSpeedDatasByGuid; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Zone Data component. Will be removed in the future
+        /// </summary>
+        public Dictionary<Guid, OldZoneDataComponent> OldZoneDatasByGuid
+        {
+            get { return _oldZoneDatasByGuid; }
         }
 
         /// <summary>

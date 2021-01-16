@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -49,14 +52,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.list, "default_zone");
-            pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.list, false);
-            pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.list, 0);
-            pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.list, 0);
-            pManager.AddNumberParameter("Path Zone External Axes", "pzEA", "The zone size (the radius) for external axes in mm as a number.", GH_ParamAccess.list, 0);
-            pManager.AddNumberParameter("Zone Reorientation", "zORI", "The zone size for the tool reorientation in degrees as a number.", GH_ParamAccess.list, 0);
-            pManager.AddNumberParameter("Zone External Linear Axes", "zELA", "The zone size for linear external axes in mm as a number.", GH_ParamAccess.list, 0);
-            pManager.AddNumberParameter("Zone External Rotational Axes", "zERA", "The zone size for rotating external axes in degrees as a number.", GH_ParamAccess.list, 0);
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.tree, "default_zone");
+            pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.tree, false);
+            pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("Path Zone External Axes", "pzEA", "The zone size (the radius) for external axes in mm as a number.", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("Zone Reorientation", "zORI", "The zone size for the tool reorientation in degrees as a number.", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("Zone External Linear Axes", "zELA", "The zone size for linear external axes in mm as a number.", GH_ParamAccess.tree, 0);
+            pManager.AddNumberParameter("Zone External Rotational Axes", "zERA", "The zone size for rotating external axes in degrees as a number.", GH_ParamAccess.tree, 0);
         }
 
         /// <summary>
@@ -71,7 +74,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private readonly List<string> _zoneDataNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
-        private List<ZoneData> _zoneDatas = new List<ZoneData>();
+        private GH_Structure<GH_ZoneData> _tree = new GH_Structure<GH_ZoneData>();
+        private List<GH_ZoneData> _list = new List<GH_ZoneData>();
         private ObjectManager _objectManager;
 
         /// <summary>
@@ -80,161 +84,58 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs and creates target
-            List<string> names = new List<string>();
-            List<bool> fineps = new List<bool>();
-            List<double> pzone_tcps = new List<double>();
-            List<double> pzone_oris = new List<double>();
-            List<double> pzone_eaxs = new List<double>();
-            List<double> zone_oris = new List<double>();
-            List<double> zone_leaxs = new List<double>();
-            List<double> zone_reaxs = new List<double>();
+            // Sets inputs
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Boolean> fineps;
+            GH_Structure<GH_Number> pzone_tcps;
+            GH_Structure<GH_Number> pzone_oris;
+            GH_Structure<GH_Number> pzone_eaxs;
+            GH_Structure<GH_Number> zone_oris;
+            GH_Structure<GH_Number> zone_leaxs;
+            GH_Structure<GH_Number> zone_reaxs;
 
             // Catch the input data
-            if (!DA.GetDataList(0, names)) { return; }
-            if (!DA.GetDataList(1, fineps)) { return; }
-            if (!DA.GetDataList(2, pzone_tcps)) { return; }
-            if (!DA.GetDataList(3, pzone_oris)) { return; }
-            if (!DA.GetDataList(4, pzone_eaxs)) { return; }
-            if (!DA.GetDataList(5, zone_oris)) { return; }
-            if (!DA.GetDataList(6, zone_leaxs)) { return; }
-            if (!DA.GetDataList(7, zone_reaxs)) { return; }
+            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetDataTree(1, out fineps)) { return; }
+            if (!DA.GetDataTree(2, out pzone_tcps)) { return; }
+            if (!DA.GetDataTree(3, out pzone_oris)) { return; }
+            if (!DA.GetDataTree(4, out pzone_eaxs)) { return; }
+            if (!DA.GetDataTree(5, out zone_oris)) { return; }
+            if (!DA.GetDataTree(6, out zone_leaxs)) { return; }
+            if (!DA.GetDataTree(7, out zone_reaxs)) { return; }
 
-            // Replace spaces
-            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+            // Clear tree and list
+            _tree = new GH_Structure<GH_ZoneData>();
+            _list = new List<GH_ZoneData>();
 
-            // Get longest Input List
-            int[] sizeValues = new int[8];
-            sizeValues[0] = names.Count;
-            sizeValues[1] = fineps.Count;
-            sizeValues[2] = pzone_tcps.Count;
-            sizeValues[3] = pzone_oris.Count;
-            sizeValues[4] = pzone_eaxs.Count;
-            sizeValues[5] = zone_oris.Count;
-            sizeValues[6] = zone_leaxs.Count;
-            sizeValues[7] = zone_reaxs.Count;
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            ZoneDataComponentDataTreeGenerator component = new ZoneDataComponentDataTreeGenerator();
 
-            // Keeps track of used indicies
-            int nameCounter = -1;
-            int finepCounter = -1;
-            int pzone_tcpCounter = -1;
-            int pzone_oriCounter = -1;
-            int pzone_eaxCounter = -1;
-            int zone_oriCounter = -1;
-            int zone_leaxCounter = -1;
-            int zone_reaxCounter = -1;
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(fineps);
+            component.Params.Input[2].AddVolatileDataTree(pzone_tcps);
+            component.Params.Input[3].AddVolatileDataTree(pzone_oris);
+            component.Params.Input[4].AddVolatileDataTree(pzone_eaxs);
+            component.Params.Input[5].AddVolatileDataTree(zone_oris);
+            component.Params.Input[6].AddVolatileDataTree(zone_leaxs);
+            component.Params.Input[7].AddVolatileDataTree(zone_reaxs);
 
-            // Clear list
-            _zoneDatas.Clear();
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
 
-            // Creates Zone Datas
-            for (int i = 0; i < biggestSize; i++)
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ZoneData>;
+
+            // Update the variable names in the data trees
+            UpdateVariableNames();
+
+            // Make a list
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                string name = "";
-                bool finep = false;
-                double pzone_tcp = 0;
-                double pzone_ori = 0;
-                double pzone_eax = 0;
-                double zone_ori = 0;
-                double zone_leax = 0;
-                double zone_reax = 0;
-
-                // Names counter
-                if (i < sizeValues[0])
-                {
-                    name = names[i];
-                    nameCounter++;
-                }
-                else
-                {
-                    name = names[nameCounter] + "_" + (i - nameCounter);
-                }
-
-                // finep
-                if (i < sizeValues[1])
-                {
-                    finep = fineps[i];
-                    finepCounter++;
-                }
-                else
-                {
-                    finep = fineps[finepCounter];
-                }
-
-                // pzone_tcp
-                if (i < sizeValues[2])
-                {
-                    pzone_tcp = pzone_tcps[i];
-                    pzone_tcpCounter++;
-                }
-                else
-                {
-                    pzone_tcp = pzone_tcps[pzone_tcpCounter];
-                }
-
-                // pzone_ori
-                if (i < sizeValues[3])
-                {
-                    pzone_ori = pzone_oris[i];
-                    pzone_oriCounter++;
-                }
-                else
-                {
-                    pzone_ori = pzone_oris[pzone_oriCounter];
-                }
-
-                // pzone_eax
-                if (i < sizeValues[4])
-                {
-                    pzone_eax = pzone_eaxs[i];
-                    pzone_eaxCounter++;
-                }
-                else
-                {
-                    pzone_eax = pzone_eaxs[pzone_eaxCounter];
-                }
-
-                // zone_ori
-                if (i < sizeValues[5])
-                {
-                    zone_ori = zone_oris[i];
-                    zone_oriCounter++;
-                }
-                else
-                {
-                    zone_ori = zone_oris[zone_oriCounter];
-                }
-
-                // zone_leax
-                if (i < sizeValues[6])
-                {
-                    zone_leax = zone_leaxs[i];
-                    zone_leaxCounter++;
-                }
-                else
-                {
-                    zone_leax = zone_leaxs[zone_leaxCounter];
-                }
-
-                // zone_reax
-                if (i < sizeValues[7])
-                {
-                    zone_reax = zone_reaxs[i];
-                    zone_reaxCounter++;
-                }
-                else
-                {
-                    zone_reax = zone_reaxs[zone_reaxCounter];
-                }
-
-                // Construct zone data
-                ZoneData zoneData = new ZoneData(name, finep, pzone_tcp, pzone_ori, pzone_eax, zone_ori, zone_leax, zone_reax);
-                _zoneDatas.Add(zoneData);
+                _list.AddRange(_tree.Branches[i]);
             }
 
             // Sets Output
-            DA.SetDataList(0, _zoneDatas);
+            DA.SetDataTree(0, _tree);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -262,9 +163,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Checks if Zone Data name is already in use and counts duplicates
             #region Check name in object manager
             _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
-                if (_objectManager.ZoneDataNames.Contains(names[i]))
+                if (_objectManager.ZoneDataNames.Contains(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name already in use.");
                     _namesUnique = false;
@@ -273,8 +174,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 else
                 {
                     // Adds Zone Data Name to list
-                    _zoneDataNames.Add(names[i]);
-                    _objectManager.ZoneDataNames.Add(names[i]);
+                    _zoneDataNames.Add(_list[i].Value.Name);
+                    _objectManager.ZoneDataNames.Add(_list[i].Value.Name);
 
                     // Run SolveInstance on other Zone Data with no unique Name to check if their name is now available
                     foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _objectManager.ZoneDatasByGuid)
@@ -284,18 +185,18 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                             entry.Value.ExpireSolution(true);
                         }
                     }
-                    _lastName = names[i];
+                    _lastName = _list[i].Value.Name;
                 }
 
                 // Check variable name: character limit
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name exceeds character limit of 32 characters.");
                     break;
                 }
 
                 // Check variable name: start with number is not allowed
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name starts with a number which is not allowed in RAPID Code.");
                     break;
@@ -336,12 +237,91 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
+
+        /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// The Zone Datas created by this component
         /// </summary>
         public List<ZoneData> ZoneDatas
         {
-            get { return _zoneDatas; }
+            get { return _list.ConvertAll(item => item.Value); }
         }
 
         /// <summary>
@@ -392,7 +372,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7C167248-772C-4DF4-B7A9-09A54046B38E"); }
+            get { return new Guid("E332392C-8C73-418A-9E52-A0DA5EE19377"); }
         }
     }
 }

@@ -172,6 +172,22 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Declaration Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Declaration(Value as IDeclaration); }
+                return true;
+            }
+
             //Cast to External Joint Position Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
@@ -233,6 +249,26 @@ namespace RobotComponents.Gh.Goos.Actions
                 }
             }
 
+            //Cast from Declaration
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is ITarget target)
+                {
+                    Value = target;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration Goo
+            if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
+            {
+                GH_Declaration declarationGoo = source as GH_Declaration;
+                if (declarationGoo.Value is ITarget target)
+                {
+                    Value = target;
+                    return true;
+                }
+            }
             return false;
         }
         #endregion

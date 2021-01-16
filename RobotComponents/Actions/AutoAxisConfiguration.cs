@@ -18,7 +18,8 @@ namespace RobotComponents.Actions
     /// This action is used to switch on or off the monitoring of movements.  
     /// </summary>
     [Serializable()]
-    public class AutoAxisConfig : Action, ISerializable
+    [Obsolete("The Auto Axis Config class will be removed in the future. Instead, use the Joint Configuration Control and / or the Set Linear Configuration Control class.", false)]
+    public class AutoAxisConfig : Action, IInstruction, ISerializable
     {
         #region fields
         private bool _isActive; // boolean that indicates if the auto axis configuration is active
@@ -82,6 +83,15 @@ namespace RobotComponents.Actions
         public AutoAxisConfig Duplicate()
         {
             return new AutoAxisConfig(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Auto Axis Configuration instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Auto Axis Configuration instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new AutoAxisConfig(this) as IInstruction;
         }
 
         /// <summary>

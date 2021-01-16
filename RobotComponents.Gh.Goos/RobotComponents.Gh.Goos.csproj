@@ -54,12 +54,17 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\GH_LinearConfigurationControl.cs" />
+    <Compile Include="Actions\GH_JointConfigurationControl.cs" />
+    <Compile Include="Actions\GH_Instruction.cs" />
+    <Compile Include="Actions\GH_Dynamic.cs" />
+    <Compile Include="Actions\GH_Declaration.cs" />
     <Compile Include="Actions\GH_AnalogOutput.cs" />
     <Compile Include="Actions\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\GH_JointTarget.cs" />
     <Compile Include="Actions\GH_RobotJointPosition.cs" />
-    <Compile Include="Actions\GH_AbsoluteJointMovement.cs" />
-    <Compile Include="Actions\GH_AutoAxisConfig.cs" />
+    <Compile Include="_Obsolete\GH_AbsoluteJointMovement.cs" />
+    <Compile Include="_Obsolete\GH_AutoAxisConfig.cs" />
     <Compile Include="Actions\GH_CodeLine.cs" />
     <Compile Include="Actions\GH_Comment.cs" />
     <Compile Include="Actions\GH_DigitalOutput.cs" />

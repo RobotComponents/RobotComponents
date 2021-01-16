@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Parameters.Obsolete;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -17,11 +18,12 @@ using RobotComponents.Gh.Utils;
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.10.000
 
-namespace RobotComponents.Gh.Components.Deconstruct
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Absolute Joint Movement component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldDeconstructAbsoluteJointMovementComponent2 : GH_Component
     {
         /// <summary>
@@ -58,7 +60,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new AbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Movement as Absolute Joint Movement", GH_ParamAccess.item);
+            pManager.AddParameter(new OldAbsoluteJointMovementParameter(), "Absolute Joint Movement", "AJM", "Movement as Absolute Joint Movement", GH_ParamAccess.item);
         }
 
         /// <summary>

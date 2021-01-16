@@ -172,6 +172,22 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Declaration Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Declaration(Value); }
+                return true;
+            }
+
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
@@ -267,6 +283,27 @@ namespace RobotComponents.Gh.Goos.Actions
                 GH_RobotTarget targetGoo = source as GH_RobotTarget;
                 Value = targetGoo.Value as RobotTarget;
                 return true;
+            }
+
+            //Cast from Declaration
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
+            {
+                if (source is RobotTarget target)
+                {
+                    Value = target;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration Goo
+            if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
+            {
+                GH_Declaration declarationGoo = source as GH_Declaration;
+                if (declarationGoo.Value is RobotTarget target)
+                {
+                    Value = target;
+                    return true;
+                }
             }
 
             return false;

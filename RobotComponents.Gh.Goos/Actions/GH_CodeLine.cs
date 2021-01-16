@@ -156,6 +156,22 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Dynamic
+            if (typeof(Q).IsAssignableFrom(typeof(IDynamic)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Dynamic Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Dynamic)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Dynamic(Value); }
+                return true;
+            }
+
             target = default(Q);
             return false;
         }
@@ -193,6 +209,27 @@ namespace RobotComponents.Gh.Goos.Actions
                 if (actionGoo.Value is CodeLine action)
                 {
                     Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from Dynamic
+            if (typeof(IDynamic).IsAssignableFrom(source.GetType()))
+            {
+                if (source is CodeLine codeline)
+                {
+                    Value = codeline;
+                    return true;
+                }
+            }
+
+            //Cast from Action Goo
+            if (typeof(GH_Dynamic).IsAssignableFrom(source.GetType()))
+            {
+                GH_Dynamic dynamicGoo = source as GH_Dynamic;
+                if (dynamicGoo.Value is CodeLine codeline)
+                {
+                    Value = codeline;
                     return true;
                 }
             }

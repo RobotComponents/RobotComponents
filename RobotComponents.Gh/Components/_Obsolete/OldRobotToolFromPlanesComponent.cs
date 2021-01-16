@@ -15,11 +15,12 @@ using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Robot Tool from Planes component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldRobotToolFromPlanesComponent : GH_Component
     {
         /// <summary>

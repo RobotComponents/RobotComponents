@@ -22,7 +22,7 @@ namespace RobotComponents.Actions
     /// This action is used to define the pose of the robot and the external axes.
     /// </summary>
     [Serializable()]
-    public class RobotTarget : Action, ITarget, ISerializable
+    public class RobotTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -199,6 +199,15 @@ namespace RobotComponents.Actions
         public ITarget DuplicateTarget()
         {
             return new RobotTarget(this) as ITarget;
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Robot Target instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the Robot Target instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new RobotTarget(this) as IDeclaration;
         }
 
         /// <summary>

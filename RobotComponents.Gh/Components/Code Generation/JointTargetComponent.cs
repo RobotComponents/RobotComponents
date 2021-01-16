@@ -9,8 +9,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -49,9 +52,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.list);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, "defaultTar");
+            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.tree);
+            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.tree);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -69,8 +72,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private readonly List<string> _targetNames = new List<string>();
         private string _lastName = "";
         private bool _namesUnique;
+        private GH_Structure<GH_JointTarget> _tree = new GH_Structure<GH_JointTarget>();
+        private List<GH_JointTarget> _list = new List<GH_JointTarget>();
         private ObjectManager _objectManager;
-        private List<JointTarget> _jointTargets = new List<JointTarget>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -79,80 +83,42 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variables
-            List<string> names = new List<string>();
-            List<RobotJointPosition> robotJointPositions = new List<RobotJointPosition>();
-            List<ExternalJointPosition> externalJointPositions = new List<ExternalJointPosition>();
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_RobotJointPosition> robotJointPositions;
+            GH_Structure<GH_ExternalJointPosition> externalJointPositions;
 
             // Catch input data
-            if (!DA.GetDataList(0, names)) { return; }
-            if (!DA.GetDataList(1, robotJointPositions)) { robotJointPositions = new List<RobotJointPosition>() { new RobotJointPosition() }; }
-            if (!DA.GetDataList(2, externalJointPositions)) { externalJointPositions = new List<ExternalJointPosition>() { new ExternalJointPosition() }; }
+            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetDataTree(1, out robotJointPositions)) { robotJointPositions = new GH_Structure<GH_RobotJointPosition>(); }
+            if (!DA.GetDataTree(2, out externalJointPositions)) { externalJointPositions = new GH_Structure<GH_ExternalJointPosition>(); }
 
-            // Replace spaces
-            names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
+            // Clear tree and list
+            _tree = new GH_Structure<GH_JointTarget>();
+            _list = new List<GH_JointTarget>();
 
-            // Get longest input List
-            int[] sizeValues = new int[3];
-            sizeValues[0] = names.Count;
-            sizeValues[1] = robotJointPositions.Count;
-            sizeValues[2] = externalJointPositions.Count;
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            JointTargetComponentDataTreeGenerator component = new JointTargetComponentDataTreeGenerator();
 
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(robotJointPositions);
+            component.Params.Input[2].AddVolatileDataTree(externalJointPositions);
 
-            // Keeps track of used indicies
-            int nameCounter = -1;
-            int robPosCounter = -1;
-            int extPosCounter = -1;
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
 
-            // Clear list
-            _jointTargets.Clear();
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_JointTarget>;
 
-            // Creates the joint targets
-            for (int i = 0; i < biggestSize; i++)
+            // Update the variable names in the data trees
+            UpdateVariableNames();
+
+            // Make a list
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                string name;
-                RobotJointPosition robotJointPosition;
-                ExternalJointPosition externalJointPosition;
-
-                // Names counter
-                if (i < sizeValues[0])
-                {
-                    name = names[i];
-                    nameCounter++;
-                }
-                else
-                {
-                    name = names[nameCounter] + "_" + (i - nameCounter);
-                }
-
-                // Robot Joint Position counter
-                if (i < sizeValues[1])
-                {
-                    robotJointPosition = robotJointPositions[i];
-                    robPosCounter++;
-                }
-                else
-                {
-                    robotJointPosition = robotJointPositions[robPosCounter];
-                }
-
-                // External Joint Position counter
-                if (i < sizeValues[2])
-                {
-                    externalJointPosition = externalJointPositions[i];
-                    extPosCounter++;
-                }
-                else
-                {
-                    externalJointPosition = externalJointPositions[extPosCounter];
-                }
-
-                JointTarget jointTarget = new JointTarget(name, robotJointPosition, externalJointPosition);
-                _jointTargets.Add(jointTarget);
+                _list.AddRange(_tree.Branches[i]);
             }
 
             // Sets Output
-            DA.SetDataList(0, _jointTargets);
+            DA.SetDataTree(0, _tree);
 
             #region Object manager
             // Gets ObjectManager of this document
@@ -180,9 +146,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Checks if target name is already in use and counts duplicates
             #region Check name in object manager
             _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
-                if (_objectManager.TargetNames.Contains(names[i]))
+                if (_objectManager.TargetNames.Contains(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
                     _namesUnique = false;
@@ -192,24 +158,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 else
                 {
                     // Adds Target Name to list
-                    _targetNames.Add(names[i]);
-                    _objectManager.TargetNames.Add(names[i]);
+                    _targetNames.Add(_list[i].Value.Name);
+                    _objectManager.TargetNames.Add(_list[i].Value.Name);
 
                     // Run SolveInstance on other Targets with no unique Name to check if their name is now available
                     _objectManager.UpdateTargets();
 
-                    _lastName = names[i];
+                    _lastName = _list[i].Value.Name;
                 }
 
                 // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
+                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
                     break;
                 }
 
                 // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
+                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
                     break;
@@ -251,12 +217,91 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
+
+        /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// The Targets created by this component
         /// </summary>
         public List<JointTarget> JointTargets
         {
-            get { return _jointTargets; }
+            get { return _list.ConvertAll(item => item.Value); }
         }
 
         /// <summary>
@@ -307,7 +352,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("6C77792A-AC5B-4199-8CD2-A36B79D5AA87"); }
+            get { return new Guid("AC253421-ADB3-4FAA-AC55-E24BDF86F110"); }
         }
 
     }

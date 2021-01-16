@@ -21,11 +21,12 @@ using RobotComponents.Gh.Parameters.Actions;
 // It is OBSOLETE since version 0.08.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldPathGeneratorComponent : GH_Component
     {
         /// <summary>

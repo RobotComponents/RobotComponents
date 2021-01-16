@@ -18,7 +18,7 @@ namespace RobotComponents.Actions
     /// This action is used to wait a given amount of time between two actions.
     /// </summary>
     [Serializable()]
-    public class WaitTime : Action, ISerializable
+    public class WaitTime : Action, IInstruction, ISerializable
     {
         #region fields
         private double _duration; // the time expressed in seconds
@@ -82,6 +82,15 @@ namespace RobotComponents.Actions
         public WaitTime Duplicate()
         {
             return new WaitTime(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Wait Time instance as IInstruction.
+        /// </summary>
+        /// <returns> A deep copy of the Wait Time instance as an IInstruction. </returns>
+        public IInstruction DuplicateInstruction()
+        {
+            return new WaitTime(this) as IInstruction;
         }
 
         /// <summary>

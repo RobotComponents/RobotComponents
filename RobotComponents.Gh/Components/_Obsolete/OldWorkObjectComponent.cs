@@ -19,11 +19,12 @@ using RobotComponents.Gh.Utils;
 // It is OBSOLETE since version 0.06.000 (January 2020)
 // It is replaced with a new component.
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldWorkObjectComponent : GH_Component
     {
         public OldWorkObjectComponent()

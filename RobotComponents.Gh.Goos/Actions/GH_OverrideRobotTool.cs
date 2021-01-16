@@ -157,6 +157,22 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Instruction
+            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Instruction Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Instruction(Value); }
+                return true;
+            }
+
             //Cast to Robot Tool Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
@@ -211,6 +227,27 @@ namespace RobotComponents.Gh.Goos.Actions
                 if (actionGoo.Value is OverrideRobotTool action)
                 {
                     Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from Instruction
+            if (typeof(IInstruction).IsAssignableFrom(source.GetType()))
+            {
+                if (source is OverrideRobotTool instruction)
+                {
+                    Value = instruction;
+                    return true;
+                }
+            }
+
+            //Cast from Instruction Goo
+            if (typeof(GH_Instruction).IsAssignableFrom(source.GetType()))
+            {
+                GH_Instruction instructionGoo = source as GH_Instruction;
+                if (instructionGoo.Value is OverrideRobotTool instruction)
+                {
+                    Value = instruction;
                     return true;
                 }
             }

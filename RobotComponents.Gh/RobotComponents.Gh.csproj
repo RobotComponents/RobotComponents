@@ -69,6 +69,16 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
+    <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
+    <Compile Include="Components\Code Generation\JointTargetComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\Code Generation\RobotTargetComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\Code Generation\SpeedDataComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\Code Generation\ZoneDataComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldSpeedDataComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldZoneDataComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldJointTargetComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldRobotTargetComponent.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldPathGeneratorComponent3.cs" />
     <Compile Include="Components\Code Generation\CodeTypeValueList.cs" />
     <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
@@ -113,7 +123,7 @@
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
-    <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldAutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
@@ -208,7 +218,7 @@
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
-    <Compile Include="Components\Utilities\NameGeneratorComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldNameGeneratorComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternion.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
@@ -222,6 +232,8 @@
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
     <Compile Include="Parameters\Actions\AnalogOutputParam.cs" />
+    <Compile Include="Parameters\Actions\LinearConfigurationControlParam.cs" />
+    <Compile Include="Parameters\Actions\JointConfigurationControlParam.cs" />
     <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
     <Compile Include="Parameters\Actions\JointTargetParam.cs" />
     <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />
@@ -231,7 +243,7 @@
     <Compile Include="Parameters\Actions\SpeedDataParam.cs" />
     <Compile Include="Parameters\_Obsolete\AbsoluteJointMovementParam.cs" />
     <Compile Include="Parameters\Definitions\WorkObjectParam.cs" />
-    <Compile Include="Parameters\Actions\AutoAxisConfigParam.cs" />
+    <Compile Include="Parameters\_Obsolete\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\Actions\CodeLineParam.cs" />
     <Compile Include="Parameters\Actions\CommentParam.cs" />
     <Compile Include="Parameters\Actions\DigitalOutputParam.cs" />
@@ -645,6 +657,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WaitAO_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConfJ_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConfL_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointConfigurationControl_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LinearConfigurationControl_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

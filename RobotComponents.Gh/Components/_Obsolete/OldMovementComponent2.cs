@@ -27,11 +27,12 @@ using RobotComponents.Gh.Goos.Actions;
 // It is OBSOLETE since version 0.08.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
     public class OldMovementComponent2 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>

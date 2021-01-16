@@ -20,7 +20,7 @@ namespace RobotComponents.Actions
     /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </summary>
     [Serializable()]
-    public class SpeedData : Action, ISerializable
+    public class SpeedData : Action, IDeclaration, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -186,6 +186,15 @@ namespace RobotComponents.Actions
         public SpeedData Duplicate()
         {
             return new SpeedData(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Speed Data instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the SpeedData instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new SpeedData(this) as IDeclaration;
         }
 
         /// <summary>

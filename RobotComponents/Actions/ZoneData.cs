@@ -20,7 +20,7 @@ namespace RobotComponents.Actions
     /// This action is used to specify how a position is to be terminated.
     /// </summary>
     [Serializable()]
-    public class ZoneData : Action, ISerializable
+    public class ZoneData : Action, IDeclaration, ISerializable
     {
         #region fields
         private ReferenceType _referenceType; // reference type
@@ -269,6 +269,15 @@ namespace RobotComponents.Actions
         public ZoneData Duplicate()
         {
             return new ZoneData(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Zone Data instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the Zone Data instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new ZoneData(this) as IDeclaration;
         }
 
         /// <summary>

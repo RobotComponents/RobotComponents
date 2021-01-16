@@ -203,6 +203,26 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConfJ_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfJ_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConfL_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfL_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructAbsoluteJointMovement_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructAbsoluteJointMovement_Icon", resourceCulture);
@@ -743,6 +763,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap JointConfigurationControl_Icon {
+            get {
+                object obj = ResourceManager.GetObject("JointConfigurationControl_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap JointTarget_Icon {
             get {
                 object obj = ResourceManager.GetObject("JointTarget_Icon", resourceCulture);
@@ -756,6 +786,16 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap JointTarget_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("JointTarget_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LinearConfigurationControl_Icon {
+            get {
+                object obj = ResourceManager.GetObject("LinearConfigurationControl_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

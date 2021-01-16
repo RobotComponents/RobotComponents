@@ -135,6 +135,16 @@ namespace RobotComponents.Kinematics
                     _jointConfigurationControl = !autoAxisConfig.IsActive;
                 }
 
+                else if (actions[i] is JointConfigurationControl jointConfigurationControl)
+                {
+                    _jointConfigurationControl = jointConfigurationControl.IsActive;
+                }
+
+                else if (actions[i] is LinearConfigurationControl linearConfigurationControl)
+                {
+                    _linearConfigurationControl = linearConfigurationControl.IsActive;
+                }
+
                 else if (actions[i] is Movement movement)
                 {
                     if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveAbsJ)

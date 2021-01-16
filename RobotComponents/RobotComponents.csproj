@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Actions\AbsoluteJointMovement.cs" />
     <Compile Include="Actions\AnalogOutput.cs" />
+    <Compile Include="Actions\LinearConfigurationControl.cs" />
+    <Compile Include="Actions\JointConfigurationControl.cs" />
     <Compile Include="Actions\IInstruction.cs" />
     <Compile Include="Actions\IDeclaration.cs" />
     <Compile Include="Actions\IDynamic.cs" />

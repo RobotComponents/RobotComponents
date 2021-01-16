@@ -54,6 +54,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\GH_LinearConfigurationControl.cs" />
+    <Compile Include="Actions\GH_JointConfigurationControl.cs" />
     <Compile Include="Actions\GH_Instruction.cs" />
     <Compile Include="Actions\GH_Dynamic.cs" />
     <Compile Include="Actions\GH_Declaration.cs" />

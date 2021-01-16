@@ -69,6 +69,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
+    <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\RobotTargetComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponentDataTreeGenerator.cs" />
@@ -230,6 +232,8 @@
     <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\ActionParam.cs" />
     <Compile Include="Parameters\Actions\AnalogOutputParam.cs" />
+    <Compile Include="Parameters\Actions\LinearConfigurationControlParam.cs" />
+    <Compile Include="Parameters\Actions\JointConfigurationControlParam.cs" />
     <Compile Include="Parameters\Actions\ExternalJointPositionParam.cs" />
     <Compile Include="Parameters\Actions\JointTargetParam.cs" />
     <Compile Include="Parameters\Actions\RobotJointPositionParam.cs" />
@@ -653,6 +657,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WaitAO_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConfJ_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConfL_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JointConfigurationControl_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LinearConfigurationControl_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

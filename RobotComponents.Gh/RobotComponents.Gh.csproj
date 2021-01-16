@@ -123,7 +123,7 @@
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent2.cs" />
     <Compile Include="Components\_Obsolete\OldRobotToolFromQuaternionComponent.cs" />
     <Compile Include="Components\_Obsolete\OldAbsoluteJointMovementComponent.cs" />
-    <Compile Include="Components\Code Generation\AutoAxisConfigComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldAutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
@@ -243,7 +243,7 @@
     <Compile Include="Parameters\Actions\SpeedDataParam.cs" />
     <Compile Include="Parameters\_Obsolete\AbsoluteJointMovementParam.cs" />
     <Compile Include="Parameters\Definitions\WorkObjectParam.cs" />
-    <Compile Include="Parameters\Actions\AutoAxisConfigParam.cs" />
+    <Compile Include="Parameters\_Obsolete\AutoAxisConfigParam.cs" />
     <Compile Include="Parameters\Actions\CodeLineParam.cs" />
     <Compile Include="Parameters\Actions\CommentParam.cs" />
     <Compile Include="Parameters\Actions\DigitalOutputParam.cs" />

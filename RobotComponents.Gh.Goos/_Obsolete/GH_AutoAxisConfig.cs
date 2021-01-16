@@ -3,6 +3,8 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
@@ -10,12 +12,14 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
+using RobotComponents.Gh.Goos.Actions;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.Gh.Goos.Obsolete
 {
     /// <summary>
     /// Auto Axis Configuration Goo wrapper class, makes sure the Auto Axis Configuration class can be used in Grasshopper.
     /// </summary>
+    [Obsolete("This class is obsolete and will be removed in the future.", false)]
     public class GH_AutoAxisConfig : GH_Goo<AutoAxisConfig>, GH_ISerializable
     {
         #region constructors
@@ -141,7 +145,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; }
@@ -209,7 +213,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is AutoAxisConfig action)
                 {

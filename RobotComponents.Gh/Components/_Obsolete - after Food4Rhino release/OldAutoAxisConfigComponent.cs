@@ -10,22 +10,27 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Parameters.Obsolete;
 using RobotComponents.Gh.Utils;
+
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.14.000
+// It is replaced with a new component. 
 
 namespace RobotComponents.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Auto Axis Configuration component. An inherent from the GH_Component Class.
     /// </summary>
-    public class AutoAxisConfigComponent : GH_Component
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
+    public class OldAutoAxisConfigComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public AutoAxisConfigComponent()
+        public OldAutoAxisConfigComponent()
           : base("Set Auto Axis Configuration", "SAAC",
               "Defines an instruction to activate or deactivate auto axis configuration for all following instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -40,7 +45,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>

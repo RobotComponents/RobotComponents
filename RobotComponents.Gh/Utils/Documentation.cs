@@ -43,7 +43,6 @@ namespace RobotComponents.Gh.Utils
             { typeof(ZoneDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Declarative%20Actions/Zone%20Data/" },
             // Instructions
             { typeof(AnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Set%20Analog%20Output/" },
-            { typeof(AutoAxisConfigComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Set%20Auto%20Axis%20Configuration/" },
             { typeof(JointConfigurationControlComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Set%20Joint%20Configuration%20Control/" },
             { typeof(LinearConfigurationControlComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Set%20Linear%20Configuration%20Control/" },
             { typeof(DigitalOutputComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Set%20Digital%20Output/" },
@@ -166,7 +165,8 @@ namespace RobotComponents.Gh.Utils
             { typeof(ExternalJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
             { typeof(ActionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
             { typeof(AnalogOutputParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
-            { typeof(AutoAxisConfigParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Auto%20Axis%20Configurator/"},
+            { typeof(LinearConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
+            { typeof(JointConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},
             { typeof(CodeLineParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Code%20Line/"},
             { typeof(CommentParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Comment/"},
             { typeof(DigitalOutputParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Digital%20Output/"},

@@ -9,13 +9,14 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Actions;
+using RobotComponents.Gh.Goos.Obsolete;
 
-namespace RobotComponents.Gh.Parameters.Actions
+namespace RobotComponents.Gh.Parameters.Obsolete
 {
     /// <summary>
     /// Auto Axis Configuration parameter
     /// </summary>
+    [Obsolete("This parameter is obsolete and will be removed in the future.", false)]
     public class AutoAxisConfigParameter : GH_PersistentParam<GH_AutoAxisConfig>
     {
         /// <summary>
@@ -58,7 +59,15 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>

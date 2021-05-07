@@ -53,9 +53,9 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             //TODO: Replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connect to as Robot Controller", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller as bool", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item, false);
             pManager.AddTextParameter("Program Module", "PM", "Program Module code as text", GH_ParamAccess.list);
             pManager.AddTextParameter("System Module", "SM", "System Module code as text", GH_ParamAccess.list);
 

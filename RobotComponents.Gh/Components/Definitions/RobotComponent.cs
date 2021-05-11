@@ -163,10 +163,5 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             get { return new Guid("D62D3E73-6D93-4E80-9892-591DBEA648BE"); }
         }
-
-        public override string ToString()
-        {
-            return "Robot";
-        }
     }
 }

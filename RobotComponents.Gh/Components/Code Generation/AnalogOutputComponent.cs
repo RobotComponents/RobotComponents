@@ -48,7 +48,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the analog output signl as text", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the analog output signal as text", GH_ParamAccess.item);
             pManager.AddNumberParameter("Value", "V", "Value of the analg output signal as number", GH_ParamAccess.item);
         }
 

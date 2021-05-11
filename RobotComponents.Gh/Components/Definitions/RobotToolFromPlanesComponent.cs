@@ -29,7 +29,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public RobotToolFromPlanesComponent()
-          : base("Robot Tool From Planes", "RobToool",
+          : base("Robot Tool From Planes", "RobTool",
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

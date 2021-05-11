@@ -249,6 +249,17 @@ namespace RobotComponents.Kinematics
         }
 
         /// <summary>
+        /// Calculates the forward kinematics solution with the given Robot Joint Positions and a default External Joint Position (9e9).
+        /// </summary>
+        /// <param name="robotJointPosition"> The  Robot Joint Position. </param>
+        public void Calculate(RobotJointPosition robotJointPosition)
+        {
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = new ExternalJointPosition();
+            Calculate();
+        }
+
+        /// <summary>
         /// Calculates the forward kinematics solution with the given Joint Positions.
         /// </summary>
         /// <param name="robotJointPosition"> The  Robot Joint Position. </param>

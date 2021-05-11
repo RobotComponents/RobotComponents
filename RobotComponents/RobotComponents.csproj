@@ -122,6 +122,7 @@
     <Compile Include="Definitions\Presets\IRB1200_7_070.cs" />
     <Compile Include="Definitions\Presets\IRB1200_5_090.cs" />
     <Compile Include="Definitions\RobotTool.cs" />
+    <Compile Include="Definitions\RobotToolCalibration.cs" />
     <Compile Include="Definitions\WorkObject.cs" />
     <Compile Include="Definitions\ExternalLinearAxis.cs" />
     <Compile Include="Definitions\ExternalRotationalAxis.cs" />

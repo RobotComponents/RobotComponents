@@ -299,7 +299,7 @@ namespace RobotComponents.Gh.Components.Definitions
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Set Mass", MenuItemClickSetMass, true, SetMass);
             Menu_AppendItem(menu, "Set Center of Gravity", MenuItemClickSetCenterOfGravity, true, SetCenterOfGravity);
-            Menu_AppendItem(menu, "Set Momenet of Interia", MenuItemClickSetMomentOfInertia, true, SetMomentOfInertia);
+            Menu_AppendItem(menu, "Set Moment of Interia", MenuItemClickSetMomentOfInertia, true, SetMomentOfInertia);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }

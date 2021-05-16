@@ -16,16 +16,16 @@ using RobotComponents.Gh.Utils;
 namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
-    /// RobotComponents convert quarternion to plane component. An inherent from the GH_Component Class.
+    /// RobotComponents convert plane orientation to quarternion component. An inherent from the GH_Component Class.
     /// </summary>
-    public class QuaternionToPlane : GH_Component
+    public class PlaneToQuaternionComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the QuarernionToPlane class
+        /// Initializes a new instance of the Plane to Quarternion
         /// </summary>
-        public QuaternionToPlane()
-          : base("Quaternion to Plane", "QtoP",
-              "Converts quaternion values to a plane."
+        public PlaneToQuaternionComponent()
+          : base("Plane to Quaternion", "PtoQ",
+              "Converts a plane to quaternion values."
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
@@ -35,17 +35,22 @@ namespace RobotComponents.Gh.Components.Utilities
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Coord X", "X", "The x-coordinate of the plane origin.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Coord Y", "Y", "The y-coordinate of the plane origin.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Coord Z", "Z", "The z-coordinate of the plane origin.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Quaternion A", "A", "The real part of the quaternion.", GH_ParamAccess.item, 1.0);
-            pManager.AddNumberParameter("Quaternion B", "B", "The first imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Quaternion C", "C", "The second imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
-            pManager.AddNumberParameter("Quaternion D", "D", "The third imaginary coefficient of the quaternion.", GH_ParamAccess.item, 0.0);
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Reference Plane", "RP", "The Reference Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -53,7 +58,13 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_PlaneParam("Plane", "P", "Plane as a Plane.");
+            pManager.Register_DoubleParam("Coord X", "X", "The x-coordinate of the plane origin.");
+            pManager.Register_DoubleParam("Coord Y", "Y", "The y-coordinate of the plane origin.");
+            pManager.Register_DoubleParam("Coord Z", "Z", "The z-coordinate of the plane origin.");
+            pManager.Register_DoubleParam("Quaternion A", "A", "The real part of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion B", "B", "The first imaginary coefficient of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion C", "C", "The second imaginary coefficient of the quaternion.");
+            pManager.Register_DoubleParam("Quaternion D", "D", "The third imaginary coefficient of the quaternion.");
         }
 
         /// <summary>
@@ -63,28 +74,24 @@ namespace RobotComponents.Gh.Components.Utilities
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            double x = 0.0;
-            double y = 0.0;
-            double z = 0.0;
-            double A = 1.0;
-            double B = 0.0;
-            double C = 0.0;
-            double D = 0.0;
+            Plane plane = Plane.WorldXY;
+            Plane refPlane = Plane.WorldXY;
 
             // Catch the input data
-            if (!DA.GetData(0, ref x)) { return; }
-            if (!DA.GetData(1, ref y)) { return; }
-            if (!DA.GetData(2, ref z)) { return; }
-            if (!DA.GetData(3, ref A)) { return; }
-            if (!DA.GetData(4, ref B)) { return; }
-            if (!DA.GetData(5, ref C)) { return; }
-            if (!DA.GetData(6, ref D)) { return; }
+            if (!DA.GetData(0, ref plane)) { return; }
+            if (!DA.GetData(1, ref refPlane)) { refPlane = Plane.WorldXY; }
 
-            // Get plane
-            Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(x, y, z, A, B, C, D);
+            // Get the quarternion
+            Quaternion quat = RobotComponents.Utils.HelperMethods.PlaneToQuaternion(refPlane, plane, out Point3d origin);
 
             // Output
-            DA.SetData(0, plane);
+            DA.SetData(0, origin.X);
+            DA.SetData(1, origin.Y);
+            DA.SetData(2, origin.Z);
+            DA.SetData(3, quat.A);
+            DA.SetData(4, quat.B);
+            DA.SetData(5, quat.C);
+            DA.SetData(6, quat.D);
         }
 
         #region menu item
@@ -108,14 +115,14 @@ namespace RobotComponents.Gh.Components.Utilities
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
         }
-
         #endregion
+
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.QuatToPlane_Icon; }
+            get { return Properties.Resources.PlaneToQuat_Icon; }
         }
 
         /// <summary>
@@ -123,7 +130,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3AFD4001-E0F2-46E7-A885-19ADB3118D50"); }
+            get { return new Guid("310F7FA9-6591-4BC3-901B-1DD924D0E5C3"); }
         }
     }
 }

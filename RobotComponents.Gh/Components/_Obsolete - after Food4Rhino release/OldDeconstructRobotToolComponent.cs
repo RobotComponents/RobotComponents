@@ -13,23 +13,45 @@ using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Deconstruct
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.15.000
+// It is replaced with a new component. 
+
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Robot Tool component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotToolComponent : GH_Component
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
+    public class OldDeconstructRobotToolComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
-        public DeconstructRobotToolComponent()
+        public OldDeconstructRobotToolComponent()
           : base("Deconstruct Robot Tool", "DeRobTool",
               "Deconstructs a Robot Tool component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -49,9 +71,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Center of Gravity", "CG", "The center of gravity of the toal load as a Plane.", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Moment of Inertia", "MI", "Moment of intertia of the load in kgm2 as a Vector.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -77,9 +96,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
             DA.SetData(1, robotTool.Mesh);
             DA.SetData(2, robotTool.AttachmentPlane);
             DA.SetData(3, robotTool.ToolPlane);
-            DA.SetData(4, robotTool.Mass);
-            DA.SetData(5, robotTool.CenterOfGravity);
-            DA.SetData(6, robotTool.Inertia);
         }
 
         #region menu item
@@ -106,15 +122,6 @@ namespace RobotComponents.Gh.Components.Deconstruct
         #endregion
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
-        /// <summary>
         /// Provides an Icon for the component
         /// </summary>
         protected override System.Drawing.Bitmap Icon
@@ -126,8 +133,8 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
-        { 
-            get { return new Guid("830CC56C-ACEB-448D-A513-89AAA5414145"); }
+        {
+            get { return new Guid("786e8c00-f24e-4dda-953d-cc8cffefa131"); }
         }
     }
 }

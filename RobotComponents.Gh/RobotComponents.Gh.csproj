@@ -75,6 +75,7 @@
     <Compile Include="Components\Code Generation\RobotTargetComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\ZoneDataComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructRobotToolComponent.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldRobotToolFromPlanesComponent2.cs" />
     <Compile Include="Components\Utilities\RobotToolCalibrationComponent.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldSpeedDataComponent.cs" />

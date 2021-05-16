@@ -154,7 +154,7 @@ namespace RobotComponents.Gh.Utils
             { typeof(PlaneToQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },
-            { typeof(RobotToolCalibrationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, //TODO: make page
+            { typeof(RobotToolCalibrationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Robot%20Tool%20Calibration/" },
             { typeof(InfoComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"},
             #endregion
 

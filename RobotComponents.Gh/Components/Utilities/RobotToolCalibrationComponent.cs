@@ -17,7 +17,7 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Robot Tool Calibration component. An inherent from the GH_Component Class.

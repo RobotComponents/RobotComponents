@@ -66,6 +66,7 @@ namespace RobotComponents.Gh.Utils
         private Dictionary<Guid, OldExternalRotationalAxisComponent> _oldExternalRotationalAxesByGuid;
         private Dictionary<Guid, OldRobotToolFromDataEulerComponent> _oldToolsEulerByGuid;
         private Dictionary<Guid, OldRobotToolFromPlanesComponent> _oldRobotToolFromPlanesGuid;
+        private Dictionary<Guid, OldRobotToolFromPlanesComponent2> _oldRobotToolFromPlanesGuid2;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent> _oldToolsQuaternionByGuid;
         private Dictionary<Guid, OldRobotToolFromQuaternionComponent2> _oldToolsQuaternionByGuid2;
         private Dictionary<Guid, OldWorkObjectComponent> _oldWorkObjectsByGuid;
@@ -118,6 +119,7 @@ namespace RobotComponents.Gh.Utils
             _oldExternalRotationalAxesByGuid = new Dictionary<Guid, OldExternalRotationalAxisComponent>();
             _oldToolsEulerByGuid = new Dictionary<Guid, OldRobotToolFromDataEulerComponent>();
             _oldRobotToolFromPlanesGuid = new Dictionary<Guid, OldRobotToolFromPlanesComponent>();
+            _oldRobotToolFromPlanesGuid2 = new Dictionary<Guid, OldRobotToolFromPlanesComponent2>();
             _oldToolsQuaternionByGuid = new Dictionary<Guid, OldRobotToolFromQuaternionComponent>();
             _oldToolsQuaternionByGuid2 = new Dictionary<Guid, OldRobotToolFromQuaternionComponent2>();
             _oldWorkObjectsByGuid = new Dictionary<Guid, OldWorkObjectComponent>();
@@ -166,6 +168,12 @@ namespace RobotComponents.Gh.Utils
 
             // Add robot tools that are created from Planes
             foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent> entry in _oldRobotToolFromPlanesGuid)
+            {
+                robotTools.Add(entry.Value.RobotTool);
+            }
+
+            // Add robot tools that are created from Planes
+            foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent2> entry in _oldRobotToolFromPlanesGuid2)
             {
                 robotTools.Add(entry.Value.RobotTool);
             }
@@ -460,6 +468,14 @@ namespace RobotComponents.Gh.Utils
             }
 
             foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent> entry in OldRobotToolFromPlanesGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            foreach (KeyValuePair<Guid, OldRobotToolFromPlanesComponent2> entry in OldRobotToolFromPlanesGuid2)
             {
                 if (entry.Value.LastName == "")
                 {
@@ -901,16 +917,33 @@ namespace RobotComponents.Gh.Utils
             get { return _oldToolsEulerByGuid; }
         }
 
+        /// <summary>
+        /// OBSOLETE: Used for old Tool components. Will be removed in the future.
+        /// </summary>
         public Dictionary<Guid, OldRobotToolFromPlanesComponent> OldRobotToolFromPlanesGuid
         {
             get { return _oldRobotToolFromPlanesGuid; }
         }
 
+        /// <summary>
+        /// OBSOLETE: Used for old Tool components. Will be removed in the future.
+        /// </summary>
+        public Dictionary<Guid, OldRobotToolFromPlanesComponent2> OldRobotToolFromPlanesGuid2
+        {
+            get { return _oldRobotToolFromPlanesGuid2; }
+        }
+
+        /// <summary>
+        /// OBSOLETE: Used for old Tool components. Will be removed in the future.
+        /// </summary>
         public Dictionary<Guid, OldRobotToolFromQuaternionComponent> OldToolsQuaternionByGuid
         {
             get { return _oldToolsQuaternionByGuid; }
         }
 
+        /// <summary>
+        /// OBSOLETE: Used for old Tool components. Will be removed in the future.
+        /// </summary>
         public Dictionary<Guid, OldRobotToolFromQuaternionComponent2> OldToolsQuaternionByGuid2 
         {
             get { return _oldToolsQuaternionByGuid2; }

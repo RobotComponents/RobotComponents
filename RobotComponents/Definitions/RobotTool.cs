@@ -32,7 +32,8 @@ namespace RobotComponents.Definitions
         private Point3d _position;
         private Quaternion _orientation;
         private double _mass;
-        private Vector3d _centerOfGravity;
+        private Plane _centerOfGravity;
+        private Point3d _centerOfGravityPosition;
         private Quaternion _centerOfGravityOrientation;
         private Vector3d _inertia;
         #endregion
@@ -53,7 +54,8 @@ namespace RobotComponents.Definitions
             _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
             _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
             _mass = (double)info.GetValue("Mass", typeof(double));
-            _centerOfGravity = (Vector3d)info.GetValue("Center Of Gravity", typeof(Vector3d));
+            _centerOfGravity = (Plane)info.GetValue("Center Of Gravity", typeof(Plane));
+            _centerOfGravityPosition = (Point3d)info.GetValue("Center Of Gravity Position", typeof(Point3d));
             _centerOfGravityOrientation = (Quaternion)info.GetValue("Center Of Gravity Orientation", typeof(Quaternion)); ;
             _inertia = (Vector3d)info.GetValue("Inertia", typeof(Vector3d));
 
@@ -76,7 +78,8 @@ namespace RobotComponents.Definitions
             info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
             info.AddValue("Robot Hold", _robotHold, typeof(bool));
             info.AddValue("Mass", _mass, typeof(double));
-            info.AddValue("Center Of Gravity", _centerOfGravity, typeof(Vector3d));
+            info.AddValue("Center Of Gravity", _centerOfGravity, typeof(Plane));
+            info.AddValue("Center Of Gravity Position", _centerOfGravityPosition, typeof(Point3d));
             info.AddValue("Center Of Gravity Orientation", _centerOfGravityOrientation, typeof(Quaternion));
             info.AddValue("Inertia", _inertia, typeof(Vector3d));
         }
@@ -96,8 +99,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             Initialize();
@@ -121,8 +123,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             Initialize();
@@ -147,8 +148,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             Initialize();
@@ -183,8 +183,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             Initialize();
@@ -220,8 +219,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             Initialize();
@@ -251,8 +249,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             _toolPlane = HelperMethods.QuaternionToPlane(x, y, z, q1, q2, q3, q4);
@@ -285,8 +282,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             _toolPlane = HelperMethods.QuaternionToPlane(x, y, z, q1, q2, q3, q4);
@@ -319,8 +315,7 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
             _toolPlane = HelperMethods.QuaternionToPlane(_attachmentPlane, x, y, z, q1, q2, q3, q4);
@@ -346,13 +341,10 @@ namespace RobotComponents.Definitions
 
             _robotHold = true;
             _mass = 0.001;
-            _centerOfGravity = new Vector3d(0, 0, 0.001);
-            _centerOfGravityOrientation = new Quaternion(1, 0, 0, 0);
+            _centerOfGravity = new Plane(new Point3d(0, 0, 0.001), new Vector3d(1, 0, 0), new Vector3d(0, 1, 0));
             _inertia = new Vector3d(0, 0, 0);
 
-            // Get tool plane from point and quarternion
-            quat.GetRotation(out Plane plane);
-            _toolPlane = new Plane(point, plane.XAxis, plane.YAxis);
+            _toolPlane = HelperMethods.QuaternionToPlane(_attachmentPlane, point, quat);
 
             Initialize();
         }
@@ -366,12 +358,76 @@ namespace RobotComponents.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation. </param>
         /// <param name="robotHold"> Specifies whether the robot is holding the tool. </param>
         /// <param name="mass"> The weight of the tool in kg. </param>
-        /// <param name="centerOfGravity"> The center of gravity of the tool load. </param>
+        /// <param name="centerOfGravityPosition"> The position of the  center of gravity of the tool load. </param>
         /// <param name="centerOfGravityOrientation"> The orientation of the tool load coordinate system defined by the principal inertial axes of the 
         /// tool load. Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4). </param>
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, 
-            double mass, Vector3d centerOfGravity, Quaternion centerOfGravityOrientation, Vector3d inertia)
+            double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
+        {
+            _referenceType = ReferenceType.PERS;
+            _name = name;
+            _mesh = mesh;
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+
+            _robotHold = robotHold;
+            _mass = mass;
+            _centerOfGravityPosition = centerOfGravityPosition;
+            _centerOfGravityOrientation = centerOfGravityOrientation;
+            _inertia = inertia;
+
+            _centerOfGravity = HelperMethods.QuaternionToPlane(_attachmentPlane, _centerOfGravityPosition, _centerOfGravityOrientation);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Tool class.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh. </param>
+        /// <param name="attachmentPlane"> The attachement plane. </param>
+        /// <param name="toolPlane"> The tool center point and tool orientation. </param>
+        /// <param name="robotHold"> Specifies whether the robot is holding the tool. </param>
+        /// <param name="mass"> The weight of the tool in kg. </param>
+        /// <param name="centerOfGravityPosition"> The position of the center of gravity of the tool load. </param>
+        /// <param name="centerOfGravityOrientation"> The orientation of the tool load coordinate system defined by the principal inertial axes of the 
+        /// tool load. Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4). </param>
+        /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
+        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold,
+            double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
+        {
+            _referenceType = ReferenceType.PERS;
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+
+            _robotHold = robotHold;
+            _mass = mass;
+            _centerOfGravityPosition = centerOfGravityPosition;
+            _centerOfGravityOrientation = centerOfGravityOrientation;
+            _inertia = inertia;
+
+            _centerOfGravity = HelperMethods.QuaternionToPlane(_attachmentPlane, _centerOfGravityPosition, _centerOfGravityOrientation);
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Tool class.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="mesh"> The tool mesh. </param>
+        /// <param name="attachmentPlane"> The attachement plane. </param>
+        /// <param name="toolPlane"> The tool center point and tool orientation. </param>
+        /// <param name="robotHold"> Specifies whether the robot is holding the tool. </param>
+        /// <param name="mass"> The weight of the tool in kg. </param>
+        /// <param name="centerOfGravity"> The position and orientation of the center of gravity of the tool load. </param>
+        /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
+        public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
             _referenceType = ReferenceType.PERS;
             _name = name;
@@ -382,7 +438,34 @@ namespace RobotComponents.Definitions
             _robotHold = robotHold;
             _mass = mass;
             _centerOfGravity = centerOfGravity;
-            _centerOfGravityOrientation = centerOfGravityOrientation;
+            _inertia = inertia;
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Tool class.
+        /// </summary>
+        /// <param name="name"> The tool name, must be unique. </param>
+        /// <param name="meshes"> The tool mesh. </param>
+        /// <param name="attachmentPlane"> The attachement plane. </param>
+        /// <param name="toolPlane"> The tool center point and tool orientation. </param>
+        /// <param name="robotHold"> Specifies whether the robot is holding the tool. </param>
+        /// <param name="mass"> The weight of the tool in kg. </param>
+        /// <param name="centerOfGravity"> The position and orientation of the center of gravity of the tool load. </param>
+        /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
+        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
+        {
+            _referenceType = ReferenceType.PERS;
+            _name = name;
+            _mesh = new Mesh();
+            for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+
+            _robotHold = robotHold;
+            _mass = mass;
+            _centerOfGravity = centerOfGravity;
             _inertia = inertia;
 
             Initialize();
@@ -402,7 +485,8 @@ namespace RobotComponents.Definitions
 
             _robotHold = robotTool.RobotHold;
             _mass = robotTool.Mass;
-            _centerOfGravity = new Vector3d(robotTool.CenterOfGravity);
+            _centerOfGravity = new Plane(robotTool.CenterOfGravity);
+            _centerOfGravityPosition = new Point3d(robotTool.CenterOfGravityPosition);
             _centerOfGravityOrientation = robotTool.CenterOfGravityOrientation;
             _inertia = new Vector3d(robotTool.Inertia);
 
@@ -457,6 +541,8 @@ namespace RobotComponents.Definitions
         {
             CalculateToolPosition();
             CalculateToolOrientation();
+            CalculateCenterOfGravityPosition();
+            CalculateCenterOfGravityOrientation();
         }
 
         /// <summary>
@@ -494,6 +580,32 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
+        /// Calculates and returns the tool center of gravity relative to the defined attachment plane. 
+        /// </summary>
+        /// <returns> The center of gravity point. </returns>
+        public Point3d CalculateCenterOfGravityPosition()
+        {
+            Plane centerOfGravity = new Plane(_centerOfGravity);
+            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_attachmentPlane, Plane.WorldXY);
+            centerOfGravity.Transform(orient);
+
+            _centerOfGravityPosition = new Point3d(centerOfGravity.Origin);
+
+            return _centerOfGravityPosition;
+        }
+
+        /// <summary>
+        /// Calculates and returns the tool center of gravity orientation relative to the defined attachment plane. 
+        /// </summary>
+        /// <returns> The quaternion orientation of the tool center of gravity. </returns>
+        public Quaternion CalculateCenterOfGravityOrientation()
+        {
+            _centerOfGravityOrientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _centerOfGravity);
+
+            return _centerOfGravityOrientation;
+        }
+
+        /// <summary>
         /// Returns the RAPID declaration code line of the this Robot Tool.
         /// </summary>
         /// <returns> The RAPID code line. </returns>
@@ -527,9 +639,9 @@ namespace RobotComponents.Definitions
             // Add tool load < tload of loaddata >
             result += _mass.ToString("0.######") + ", [" 
 
-                + _centerOfGravity.X.ToString("0.######") + ", " 
-                + _centerOfGravity.Y.ToString("0.######") + ", " 
-                + _centerOfGravity.Z.ToString("0.######") + "], ["
+                + _centerOfGravityPosition.X.ToString("0.######") + ", " 
+                + _centerOfGravityPosition.Y.ToString("0.######") + ", " 
+                + _centerOfGravityPosition.Z.ToString("0.######") + "], ["
 
                 + _centerOfGravityOrientation.A.ToString("0.######") + ", " 
                 + _centerOfGravityOrientation.B.ToString("0.######") + ", " 
@@ -557,8 +669,9 @@ namespace RobotComponents.Definitions
             _robotHold = false;
             _position = Point3d.Unset;
             _orientation = Quaternion.Zero;
-            _mass = 0; 
-            _centerOfGravity = Vector3d.Unset;
+            _mass = 0;
+            _centerOfGravity = Plane.Unset;
+            _centerOfGravityPosition = Point3d.Unset;
             _centerOfGravityOrientation = Quaternion.Zero;
             _inertia = Vector3d.Unset;
         }
@@ -572,6 +685,7 @@ namespace RobotComponents.Definitions
             _mesh.Transform(xform);
             _attachmentPlane.Transform(xform);
             _toolPlane.Transform(xform);
+            _centerOfGravity.Transform(xform);
 
             ReInitialize();
         }
@@ -591,6 +705,9 @@ namespace RobotComponents.Definitions
                 if (AttachmentPlane == Plane.Unset) { return false; }
                 if (ToolPlane == null) { return false; }
                 if (ToolPlane == Plane.Unset) { return false; }
+                if (CenterOfGravity == null) { return false; }
+                if (CenterOfGravity == Plane.Unset) { return false; }
+                if (Mass < 0.0) { return false; }
                 return true;
             }
         }
@@ -692,22 +809,36 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the center of gravity of the tool load.
+        /// Gets or sets the position and orientation of the center of gravity of the tool load as a plane.
         /// </summary>
-        public Vector3d CenterOfGravity
+        public Plane CenterOfGravity
         {
-            get { return _centerOfGravity; }
-            set { _centerOfGravity = value; }
+            get 
+            { 
+                return _centerOfGravity; 
+            }
+            set 
+            { 
+                _centerOfGravity = value;
+                ReInitialize();
+            }
         }
 
         /// <summary>
-        /// Gets or sets the orientation of the tool load coordinate system defined by the principal inertial axes of the tool load. 
+        /// Gets the position of the center of gravity of the tool load.
+        /// </summary>
+        public Point3d CenterOfGravityPosition
+        {
+            get { return _centerOfGravityPosition; }
+        }
+
+        /// <summary>
+        /// Gets the orientation of the tool load coordinate system defined by the principal inertial axes of the tool load. 
         /// Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).
         /// </summary>
         public Quaternion CenterOfGravityOrientation
         {
             get { return _centerOfGravityOrientation; }
-            set { _centerOfGravityOrientation = value; }
         }
 
         /// <summary>

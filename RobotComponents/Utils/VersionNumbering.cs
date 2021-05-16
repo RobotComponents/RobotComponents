@@ -17,7 +17,7 @@ namespace RobotComponents.Utils
         /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
         /// X.XX.000 ---> bug fixes and small improvements
         /// </summary>
-        public const string CurrentVersion = "0.14.000";
+        public const string CurrentVersion = "0.15.000";
       
         /// <summary>
         /// Gets the current version of the Robot Components plugin as an int. 
@@ -27,6 +27,6 @@ namespace RobotComponents.Utils
         /// "0.11.003" ----> 11003
         /// "1.01.000" ----> 101000
         /// </summary>
-        public const int CurrentVersionAsInt = 14000;
+        public const int CurrentVersionAsInt = 15000;
     }
 }

@@ -11,8 +11,9 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Definitions;
 
-namespace RobotComponents.Definitions
+namespace RobotComponents.Utils
 {
 	/// <summary>
 	/// Represents the Robot Tool Calibration class.
@@ -34,8 +35,8 @@ namespace RobotComponents.Definitions
 		private double _xInitial = 0.0;
 		private double _yInitial = 0.0;
 		private double _zInitial = 0.0;
-		private int _iterations = 20000;
-		private double _precision = 1e-12;
+		private int _iterations = 400000;
+		private double _precision = 1e-2;
 		private double _delta = 1e-12;
 		private double _damping = 0.01;
 		private double[] _errorsX;
@@ -181,7 +182,7 @@ namespace RobotComponents.Definitions
 
 			for (int i = 0; i < _robotJointPositions.Count; i++)
             {
-				JointTarget jointTarget = new JointTarget("Joint Positions " + (i+1).ToString(), _robotJointPositions[i], _externalJointPositions[i]);
+				JointTarget jointTarget = new JointTarget((i+1).ToString(), _robotJointPositions[i], _externalJointPositions[i]);
 				errors.AddRange(jointTarget.CheckAxisLimits(_robot));
 			}
 
@@ -489,6 +490,14 @@ namespace RobotComponents.Definitions
 		{
 			get { return _errorsZ; }
 		}
+
+		/// <summary>
+		/// Gets the maximum errors in the x, y and z direction as a vector. 
+		/// </summary>
+		public Vector3d MaximumError
+        {
+            get { return new Vector3d(_errorsX.Max(), _errorsY.Max(), _errorsZ.Max()); }
+        }
 		#endregion
 	}
 }

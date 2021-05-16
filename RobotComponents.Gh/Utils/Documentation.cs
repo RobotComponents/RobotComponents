@@ -93,6 +93,7 @@ namespace RobotComponents.Gh.Utils
             { typeof(RobotPresetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             { typeof(RobotToolFromPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool%20from%20Planes/" },
             { typeof(RobotToolFromQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool%20from%20Quaternions/" },
+            { typeof(RobotToolCalibrationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, //TODO: make page
             { typeof(WorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Work%20Object/" },
             #endregion
 

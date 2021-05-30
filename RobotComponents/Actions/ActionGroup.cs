@@ -244,6 +244,25 @@ namespace RobotComponents.Actions
             get { return _actions; }
             set { _actions = value; }
         }
+
+        /// <summary>
+        /// Gets the number of Actions that are grouped. 
+        /// </summary>
+        public int Count
+        {
+            get { return _actions.Count; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Actions through the indexer. 
+        /// </summary>
+        /// <param name="index"> The index number. </param>
+        /// <returns> The Action located at the given index. </returns>
+        public Action this[int index]
+        {
+            get { return _actions[index]; }
+            set { _actions[index] = value; }
+        }
         #endregion
     }
 }

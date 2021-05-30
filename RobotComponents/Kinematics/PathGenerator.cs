@@ -110,7 +110,7 @@ namespace RobotComponents.Kinematics
         /// Calculates the path from a list with Actions.
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
-        /// <param name="interpolations"> The amount of interpolatins between two targets. </param>
+        /// <param name="interpolations"> The amount of interpolations between two targets. </param>
         public void Calculate(List<Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
@@ -118,34 +118,43 @@ namespace RobotComponents.Kinematics
             int counter = 0;
             Reset();
 
-            // Check fist movement
-            _firstMovementIsMoveAbsJ = CheckFirstMovement(actions);
+            // Ungroup actions
+            List<Action> ungrouped = new List<Action>() { };
 
-            // Get path from the list with actions
             for (int i = 0; i < actions.Count; i++)
             {
-                if (actions[i] is OverrideRobotTool overrideRobotTool)
+                if (actions[i] is ActionGroup group)
+                {
+                    ungrouped.AddRange(group.Actions);
+                }
+                else
+                {
+                    ungrouped.Add(actions[i]);
+                }
+            }
+
+            // Check fist movement
+            _firstMovementIsMoveAbsJ = CheckFirstMovement(ungrouped);
+
+            // Get path from the list with actions
+            for (int i = 0; i < ungrouped.Count; i++)
+            {
+                if (ungrouped[i] is OverrideRobotTool overrideRobotTool)
                 {
                     _currentTool = overrideRobotTool.RobotTool.DuplicateWithoutMesh();
                 }
 
-                else if (actions[i] is AutoAxisConfig autoAxisConfig)
-                {
-                    _linearConfigurationControl = !autoAxisConfig.IsActive;
-                    _jointConfigurationControl = !autoAxisConfig.IsActive;
-                }
-
-                else if (actions[i] is JointConfigurationControl jointConfigurationControl)
+                else if (ungrouped[i] is JointConfigurationControl jointConfigurationControl)
                 {
                     _jointConfigurationControl = jointConfigurationControl.IsActive;
                 }
 
-                else if (actions[i] is LinearConfigurationControl linearConfigurationControl)
+                else if (ungrouped[i] is LinearConfigurationControl linearConfigurationControl)
                 {
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
                 }
 
-                else if (actions[i] is Movement movement)
+                else if (ungrouped[i] is Movement movement)
                 {
                     if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
@@ -173,7 +182,14 @@ namespace RobotComponents.Kinematics
                 }
 
                 // OBSOLETE
-                else if (actions[i] is AbsoluteJointMovement absoluteJointMovement)
+                else if (ungrouped[i] is AutoAxisConfig autoAxisConfig)
+                {
+                    _linearConfigurationControl = !autoAxisConfig.IsActive;
+                    _jointConfigurationControl = !autoAxisConfig.IsActive;
+                }
+
+                // OBSOLETE
+                else if (ungrouped[i] is AbsoluteJointMovement absoluteJointMovement)
                 {
                     JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
                     counter++;

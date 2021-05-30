@@ -93,6 +93,36 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ActionGroup_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ActionGroup_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ActionGroup_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ActionGroup_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ActionUnGroup_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ActionUnGroup_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AnalogOutput_Icon {
             get {
                 object obj = ResourceManager.GetObject("AnalogOutput_Icon", resourceCulture);

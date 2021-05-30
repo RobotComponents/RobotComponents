@@ -155,6 +155,8 @@ namespace RobotComponents.Gh.Utils
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },
             { typeof(RobotToolCalibrationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Robot%20Tool%20Calibration/" },
+            { typeof(GroupActionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Group%20Actions/" },
+            { typeof(UngroupActionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Ungroup%20Actions/" },
             { typeof(InfoComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"},
             #endregion
 
@@ -165,6 +167,7 @@ namespace RobotComponents.Gh.Utils
             { typeof(RobotJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Robot%20Joint%20Position/" },
             { typeof(ExternalJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
             { typeof(ActionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
+            { typeof(ActionGroupParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action%20Group/"},
             { typeof(AnalogOutputParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
             { typeof(LinearConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
             { typeof(JointConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},

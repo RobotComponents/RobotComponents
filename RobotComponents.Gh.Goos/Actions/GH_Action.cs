@@ -242,7 +242,35 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
+            if (this.Value is Movement movement1)
+            {
+                Plane plane = movement1.GetGlobalTargetPlane();
 
+                if (plane != Plane.Unset)
+                {
+                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+                }
+            }
+
+            else if (this.Value is ActionGroup group)
+            {
+                for (int i = 0; i < group.Actions.Count; i++)
+                {
+                    if (group.Actions[i] is Movement movement2)
+                    {
+                        Plane plane = movement2.GetGlobalTargetPlane();
+
+                        if (plane != Plane.Unset)
+                        {
+                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

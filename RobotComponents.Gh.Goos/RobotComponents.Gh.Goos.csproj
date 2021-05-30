@@ -54,6 +54,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\GH_Action.cs" />
     <Compile Include="Actions\GH_LinearConfigurationControl.cs" />
     <Compile Include="Actions\GH_JointConfigurationControl.cs" />
     <Compile Include="Actions\GH_Instruction.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Actions\GH_RobotTarget.cs" />
     <Compile Include="Actions\GH_ZoneData.cs" />
     <Compile Include="Actions\GH_WaitDI.cs" />
-    <Compile Include="Actions\GH_Action.cs" />
+    <Compile Include="Actions\GH_ActionGroup.cs" />
     <Compile Include="Definitions\GH_ExternalAxis.cs" />
     <Compile Include="Definitions\GH_ExternalLinearAxis.cs" />
     <Compile Include="Definitions\GH_ExternalRotationalAxis.cs" />

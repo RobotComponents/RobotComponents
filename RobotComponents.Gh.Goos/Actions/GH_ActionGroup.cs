@@ -17,15 +17,15 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Action Goo wrapper class, makes sure the Action class can be used in Grasshopper.
+    /// Action Goo wrapper class, makes sure the Action Group class can be used in Grasshopper.
     /// </summary>
-    public class GH_Action : GH_GeometricGoo<Action>, IGH_PreviewData, GH_ISerializable
+    public class GH_ActionGroup : GH_GeometricGoo<ActionGroup>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_Action()
+        public GH_ActionGroup()
         {
             this.Value = null;
         }
@@ -33,44 +33,44 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// Data constructor: Creates an Action Goo instance from an Action instance.
         /// </summary>
-        /// <param name="action"> Action Value to store inside this Goo instance. </param>
-        public GH_Action(Action action)
+        /// <param name="group"> Action Group Value to store inside this Goo instance. </param>
+        public GH_ActionGroup(ActionGroup group)
         {
-            this.Value = action;
+            this.Value = group;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Action Goo instance from another Action Goo instance.
+        /// Data constructor: Creates a Action Group Goo instance from another Action Group Goo instance.
         /// This creates a shallow copy of the passed Action Goo instance. 
         /// </summary>
-        /// <param name="actionGoo"> Action Goo instance to copy. </param>
-        public GH_Action(GH_Action actionGoo)
+        /// <param name="groupGoo"> Action Group Goo instance to copy. </param>
+        public GH_ActionGroup(GH_ActionGroup groupGoo)
         {
-            if (actionGoo == null)
+            if (groupGoo == null)
             {
-                actionGoo = new GH_Action();
+                groupGoo = new GH_ActionGroup();
             }
 
-            this.Value = actionGoo.Value;
+            this.Value = groupGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Action Goo. </returns>
+        /// <returns> A duplicate of the Action Group Goo. </returns>
         public override IGH_GeometricGoo DuplicateGeometry()
         {
-            return DuplicateActionGoo();
+            return DuplicateActionGroupGoo();
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Action Goo. </returns>
-        public GH_Action DuplicateActionGoo()
+        /// <returns> A duplicate of the Action Group Goo. </returns>
+        public GH_ActionGroup DuplicateActionGroupGoo()
         {
             if (Value == null) { return null; }
-            else if (Value is Action) { return new GH_Action(Value.DuplicateAction()); }
+            else if (Value is ActionGroup) { return new GH_ActionGroup(Value.Duplicate()); }
             else { return null; }
         }
         #endregion
@@ -96,9 +96,9 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Action instance"; }
+                if (Value == null) { return "No internal Action Group instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Action instance";
+                return "Invalid Action Group instance";
             }
         }
 
@@ -108,7 +108,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Action"; }
+            if (Value == null) { return "Null Action Group"; }
             else { return Value.ToString(); }
         }
 
@@ -117,7 +117,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Action"; }
+            get { return "Action Group"; }
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines an Action."; }
+            get { return "Defines an Action Group."; }
         }
 
         /// <summary>
@@ -156,6 +156,22 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
+            //Cast to Action Group
+            if (typeof(Q).IsAssignableFrom(typeof(ActionGroup)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Action Group Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ActionGroup)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_ActionGroup(Value); }
+                return true;
+            }
+
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
@@ -185,19 +201,40 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             if (source == null) { return false; }
 
+            //Cast from Action Group
+            if (typeof(ActionGroup).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ActionGroup;
+                return true;
+            }
+
+            //Cast from Action Goo
+            if (typeof(GH_ActionGroup).IsAssignableFrom(source.GetType()))
+            {
+                GH_ActionGroup groupGoo = source as GH_ActionGroup;
+                Value = groupGoo.Value as ActionGroup;
+                return true;
+            }
+
             //Cast from Action
             if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                Value = source as Action;
-                return true;
+                if (source is ActionGroup action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                Value = actionGoo.Value as Action;
-                return true;
+                if (actionGoo.Value is ActionGroup action)
+                {
+                    Value = action;
+                    return true;
+                }
             }
 
             return false;
@@ -242,32 +279,17 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (this.Value is Movement movement1)
+            for (int i = 0; i < this.Value.Actions.Count; i++)
             {
-                Plane plane = movement1.GetGlobalTargetPlane();
-
-                if (plane != Plane.Unset)
+                if (this.Value.Actions[i] is Movement movement)
                 {
-                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-                    args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
-                }
-            }
+                    Plane plane = movement.GetGlobalTargetPlane();
 
-            else if (this.Value is ActionGroup group)
-            {
-                for (int i = 0; i < group.Actions.Count; i++)
-                {
-                    if (group.Actions[i] is Movement movement2)
+                    if (plane != Plane.Unset)
                     {
-                        Plane plane = movement2.GetGlobalTargetPlane();
-
-                        if (plane != Plane.Unset)
-                        {
-                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-                            args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
-                        }
+                        args.Pipeline.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                        args.Pipeline.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                        args.Pipeline.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
                     }
                 }
             }
@@ -287,7 +309,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Action";
+        private const string IoKey = "ActionGroup";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -319,7 +341,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (Action)HelperMethods.ByteArrayToObject(array);
+            this.Value = (ActionGroup)HelperMethods.ByteArrayToObject(array);
 
             return true;
         }

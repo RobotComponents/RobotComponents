@@ -52,7 +52,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, "defaultTar");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, String.Empty);
             pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.tree);
             pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.tree);
 
@@ -108,8 +108,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_JointTarget>;
 
-            // Update the variable names in the data trees
-            UpdateVariableNames();
+            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Make a list
             for (int i = 0; i < _tree.Branches.Count; i++)
@@ -155,6 +158,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     _lastName = "";
                     break;
                 }
+                else if (_list[i].Value.Name == String.Empty)
+                {
+                    _namesUnique = false;
+                    _lastName = "";
+                }
                 else
                 {
                     // Adds Target Name to list
@@ -190,7 +198,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 doc.ObjectsDeleted += DocumentObjectsDeleted;
             }
             #endregion
-
         }
 
         /// <summary>

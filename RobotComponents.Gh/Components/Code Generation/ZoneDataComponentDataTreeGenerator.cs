@@ -49,7 +49,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, "default_zone");
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, String.Empty);
             pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.item, false);
             pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.item, 0);
             pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.item, 0);
@@ -74,7 +74,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Sets inputs
-            string name = "";
+            string name = String.Empty;
             bool finep = false;
             double pzone_tcp = 0;
             double pzone_ori = 0;

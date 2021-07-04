@@ -51,7 +51,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, "defaultTar");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, String.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Reference Plane", "RP", "Reference Plane as a Plane", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
@@ -73,7 +73,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Sets inputs and creates target
-            string name = "defaultTar";
+            string name = String.Empty;
             Plane plane = Plane.WorldXY;
             Plane referencePlane = Plane.WorldXY;
             int axisConfig = 0;

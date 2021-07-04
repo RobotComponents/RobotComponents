@@ -52,7 +52,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.tree, "default_zone");
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.tree, String.Empty);
             pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.tree, false);
             pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.tree, 0);
             pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.tree, 0);
@@ -125,8 +125,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ZoneData>;
 
-            // Update the variable names in the data trees
-            UpdateVariableNames();
+            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Make a list
             for (int i = 0; i < _tree.Branches.Count; i++)
@@ -171,6 +174,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     _namesUnique = false;
                     _lastName = "";
                 }
+                else if (_list[i].Value.Name == String.Empty)
+                {
+                    _namesUnique = false;
+                    _lastName = "";
+                }
                 else
                 {
                     // Adds Zone Data Name to list
@@ -178,13 +186,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     _objectManager.ZoneDataNames.Add(_list[i].Value.Name);
 
                     // Run SolveInstance on other Zone Data with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, ZoneDataComponent> entry in _objectManager.ZoneDatasByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
+                    _objectManager.UpdateZoneDatas();
+
                     _lastName = _list[i].Value.Name;
                 }
 

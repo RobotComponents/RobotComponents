@@ -59,7 +59,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, "defaultTar");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, String.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.tree, 0);
         }
@@ -72,7 +72,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.tree, Optional = true },
             new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.tree, Optional = true }
-    };
+        };
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -154,8 +154,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
 
-            // Update the variable names in the data trees
-            UpdateVariableNames();
+            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Make a list
             for (int i = 0; i < _tree.Branches.Count; i++)
@@ -200,6 +203,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     _namesUnique = false;
                     _lastName = "";
                     break;
+                }
+                else if (_list[i].Value.Name == String.Empty)
+                {
+                    _namesUnique = false;
+                    _lastName = "";
                 }
                 else
                 {
@@ -261,7 +269,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 _objectManager.UpdateTargets();
             }
         }
-
 
         /// <summary>
         /// Updates the variable names in the data tree

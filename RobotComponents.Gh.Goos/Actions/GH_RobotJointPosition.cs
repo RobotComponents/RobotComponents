@@ -158,6 +158,22 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Declaration Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
+            {
+                if (Value == null) { target = default(Q); }
+                else { target = (Q)(object)new GH_Declaration(Value); }
+                return true;
+            }
+
             target = default(Q);
             return false;
         }
@@ -221,6 +237,27 @@ namespace RobotComponents.Gh.Goos.Actions
                 if (actionGoo.Value is RobotJointPosition action)
                 {
                     Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
+            {
+                if (source is RobotJointPosition jointPosition)
+                {
+                    Value = jointPosition;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration Goo
+            if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
+            {
+                GH_Declaration declarationGoo = source as GH_Declaration;
+                if (declarationGoo.Value is RobotJointPosition jointPosition)
+                {
+                    Value = jointPosition;
                     return true;
                 }
             }

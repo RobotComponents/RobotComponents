@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
+using RobotComponents.Enumerations;
 using RobotComponents.Definitions;
 using RobotComponents.Utils;
 
@@ -19,9 +20,11 @@ namespace RobotComponents.Actions
     /// This action is used to define the robot axis positions in degrees.
     /// </summary>
     [Serializable()]
-    public class RobotJointPosition : Action, IJointPosition, ISerializable
+    public class RobotJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType;
+        private string _name;
         private double _val1;
         private double _val2;
         private double _val3;
@@ -40,7 +43,19 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+
+            if (version <= 16000)
+            {
+                _referenceType = ReferenceType.CONST;
+                _name = String.Empty;
+            }
+            else
+            {
+                _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+                _name = (string)info.GetValue("Name", typeof(string));
+            }
+
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
             _val3 = (double)info.GetValue("Axis value 3", typeof(double));
@@ -58,6 +73,8 @@ namespace RobotComponents.Actions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
             info.AddValue("Axis value 1", _val1, typeof(double));
             info.AddValue("Axis value 2", _val2, typeof(double));
             info.AddValue("Axis value 3", _val3, typeof(double));
@@ -69,10 +86,90 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class with all axis values set to zero.
+        /// Initializes a new instance of the Robot Joint Position class with an empty name an all axis values set to zero. 
         /// </summary>
         public RobotJointPosition()
         {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            _val1 = _defaultValue;
+            _val2 = _defaultValue;
+            _val3 = _defaultValue;
+            _val4 = _defaultValue;
+            _val5 = _defaultValue;
+            _val6 = _defaultValue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class with an empty name.
+        /// </summary>
+        /// <param name="rax_1"> The position of robot axis 1 in degrees from the calibration position. </param>
+        /// <param name="rax_2"> The position of robot axis 2 in degrees from the calibration position.</param>
+        /// <param name="rax_3"> The position of robot axis 3 in degrees from the calibration position.</param>
+        /// <param name="rax_4"> The position of robot axis 4 in degrees from the calibration position.</param>
+        /// <param name="rax_5"> The position of robot axis 5 in degrees from the calibration position.</param>
+        /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
+        public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            _val1 = rax_1;
+            _val2 = rax_2;
+            _val3 = rax_3;
+            _val4 = rax_4;
+            _val5 = rax_5;
+            _val6 = rax_6;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class with an empty name from a list with values 
+        /// </summary>
+        /// <param name="internalAxisValues"> The user defined internal axis values as a list.</param>
+        public RobotJointPosition(List<double> internalAxisValues)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            double[] values = CheckAxisValues(internalAxisValues.ToArray());
+
+            _val1 = values[0];
+            _val2 = values[1];
+            _val3 = values[2];
+            _val4 = values[3];
+            _val5 = values[4];
+            _val6 = values[5];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class with an empty name from an array. 
+        /// </summary>
+        /// <param name="internalAxisValues">The user defined internal axis values as an array.</param>
+        public RobotJointPosition(double[] internalAxisValues)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            double[] values = CheckAxisValues(internalAxisValues);
+
+            _val1 = values[0];
+            _val2 = values[1];
+            _val3 = values[2];
+            _val4 = values[3];
+            _val5 = values[4];
+            _val6 = values[5];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class with all axis values set to zero.
+        /// </summary>
+        /// <param name="name"> The robot joint position name, must be unique. </param>
+        public RobotJointPosition(string name)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -84,14 +181,18 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Robot Joint Position class.
         /// </summary>
+        /// <param name="name"> The robot joint position name, must be unique. </param>
         /// <param name="rax_1"> The position of robot axis 1 in degrees from the calibration position. </param>
         /// <param name="rax_2"> The position of robot axis 2 in degrees from the calibration position.</param>
         /// <param name="rax_3"> The position of robot axis 3 in degrees from the calibration position.</param>
         /// <param name="rax_4"> The position of robot axis 4 in degrees from the calibration position.</param>
         /// <param name="rax_5"> The position of robot axis 5 in degrees from the calibration position.</param>
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
-        public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
+        public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             _val1 = rax_1;
             _val2 = rax_2;
             _val3 = rax_3;
@@ -103,9 +204,13 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Robot Joint Position class from a list with values.
         /// </summary>
+        /// <param name="name"> The robot joint position name, must be unique. </param>
         /// <param name="internalAxisValues"> The user defined internal axis values as a list.</param>
-        public RobotJointPosition(List<double> internalAxisValues)
+        public RobotJointPosition(string name, List<double> internalAxisValues)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             double[] values = CheckAxisValues(internalAxisValues.ToArray());
 
             _val1 = values[0];
@@ -119,9 +224,13 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Robot Joint Position class from an array.
         /// </summary>
+        /// <param name="name"> The robot joint position name, must be unique. </param>
         /// <param name="internalAxisValues">The user defined internal axis values as an array.</param>
-        public RobotJointPosition(double[] internalAxisValues)
+        public RobotJointPosition(string name, double[] internalAxisValues)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             double[] values = CheckAxisValues(internalAxisValues);
 
             _val1 = values[0];
@@ -138,6 +247,8 @@ namespace RobotComponents.Actions
         /// <param name="robotJointPosition"> The Robot Joint Position instance to duplicate. </param>
         public RobotJointPosition(RobotJointPosition robotJointPosition)
         {
+            _referenceType = robotJointPosition.ReferenceType;
+            _name = robotJointPosition.Name;
             _val1 = robotJointPosition[0];
             _val2 = robotJointPosition[1];
             _val3 = robotJointPosition[2];
@@ -162,6 +273,15 @@ namespace RobotComponents.Actions
         public override Action DuplicateAction()
         {
             return new RobotJointPosition(this) as Action;
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Robot Joint Position instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the Robot Joint Position instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new RobotJointPosition(this) as IDeclaration;
         }
         #endregion
 
@@ -411,6 +531,18 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
+            if (_name != String.Empty)
+            {
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " robjoint ";
+                code += _name;
+                code += " := ";
+                code += this.ToRAPID();
+                code += ";";
+
+                return code;
+            }
+
             return String.Empty;
         }
 
@@ -431,6 +563,14 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            if (_name != String.Empty)
+            {
+                if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
+                {
+                    RAPIDGenerator.JointPositions.Add(_name, this);
+                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
+            }
         }
 
         /// <summary>
@@ -450,6 +590,25 @@ namespace RobotComponents.Actions
         public override bool IsValid
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Robot Joint Position variable name.
+        /// Each Robot Joint Position variable name has to be unique.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>
@@ -533,7 +692,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="p"> The Robot Joint Position. </param>
         /// <param name="num"> The value to multiply by. </param>
-        /// <returns> The Robot Joint Position with multuplied values. </returns>
+        /// <returns> The Robot Joint Position with multiplied values. </returns>
         public static RobotJointPosition operator *(RobotJointPosition p, double num)
         {
             return new RobotJointPosition(p[0] * num, p[1] * num, p[2] * num, p[3] * num, p[4] * num, p[5] * num);

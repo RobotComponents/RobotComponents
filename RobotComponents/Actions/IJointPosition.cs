@@ -5,6 +5,8 @@
 
 // System lib
 using System.Collections.Generic;
+// Robot Components Libs
+using RobotComponents.Enumerations;
 
 namespace RobotComponents.Actions
 {
@@ -39,6 +41,17 @@ namespace RobotComponents.Actions
         #endregion
 
         #region properties
+        /// <summary>
+        /// Gets or sets the Joint Position variable name.
+        /// Each Joint Position variable name has to be unique.
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        ReferenceType ReferenceType { get; set;  }
+
         /// <summary>
         /// Gets the number of elements in the joint position.
         /// </summary>

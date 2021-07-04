@@ -26,6 +26,7 @@ namespace RobotComponents.Actions
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
+        private readonly Dictionary<string, IJointPosition> _jointPositions = new Dictionary<string, IJointPosition>(); // Dictionary that stores all the unique joint positions used by the RAPIDGenerator
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
         private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); // Dictionary that stores all the unique robo ttools used by the RAPIDGenerator
         private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>(); // Dictionary that stores all the unique work objects used by the RAPIDGenerator
@@ -121,6 +122,7 @@ namespace RobotComponents.Actions
         {
             // Reset fields
             _speedDatas.Clear();
+            _jointPositions.Clear();
             _targets.Clear();
             _zoneDatas.Clear();
             _robotTools.Clear();
@@ -533,6 +535,14 @@ namespace RobotComponents.Actions
         public Dictionary<string, ZoneData> ZoneDatas
         {
             get { return _zoneDatas; }
+        }
+
+        /// <summary>
+        /// Gets the collection with unique Joint Positions used to create the RAPID program module. 
+        /// </summary>
+        public Dictionary<string, IJointPosition> JointPositions
+        {
+            get { return _jointPositions; }
         }
 
         /// <summary>

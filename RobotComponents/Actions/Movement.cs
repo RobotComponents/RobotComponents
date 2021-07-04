@@ -489,6 +489,21 @@ namespace RobotComponents.Actions
                 toolName = _robotTool.Name; 
             }
 
+            // Declaration RAPID code
+            string speedData = _speedData.Name;
+            string zoneData = _zoneData.Name;
+
+            if (speedData == String.Empty)
+            {
+                speedData = _speedData.ToRAPID();
+            }
+
+            if (zoneData == String.Empty)
+            {
+                zoneData = _zoneData.ToRAPID();
+            }
+
+
             // A movement not combined with a digital output
             if (_digitalOutput.IsValid == false)
             {
@@ -512,8 +527,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
 
@@ -532,8 +547,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
 
@@ -552,8 +567,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ";";
 
@@ -591,8 +606,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + "; ";
                     code += _digitalOutput.ToRAPIDInstruction(robot);
@@ -612,8 +627,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code += toolName;
                     code += "\\WObj:=" + _workObject.Name + ", ";
                     code += _digitalOutput.Name + ", ";
@@ -634,8 +649,8 @@ namespace RobotComponents.Actions
                     }
 
                     code += ", ";
-                    code += _speedData.Name + ", ";
-                    code += _zoneData.Name + ", ";
+                    code += speedData + ", ";
+                    code += zoneData + ", ";
                     code +=  toolName;
                     code += "\\WObj:=" + _workObject.Name + ", ";
                     code += _digitalOutput.Name + ", ";

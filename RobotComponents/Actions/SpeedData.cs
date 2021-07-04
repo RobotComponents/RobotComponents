@@ -146,6 +146,25 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Speed Data class with custom values.
         /// </summary>
+        /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
+        /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
+        /// <param name="v_leax"> The velocity of linear external axes in mm/s. </param>
+        /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
+        public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _v_tcp = v_tcp;
+            _v_ori = v_ori;
+            _v_leax = v_leax;
+            _v_reax = v_reax;
+            _predefined = false;
+            _exactPredefinedValue = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Speed Data class with custom values.
+        /// </summary>
         /// <param name="name"> The Speed Data variable name, must be unique. </param>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>
         /// <param name="v_ori"> The reorientation velocity of the TCP expressed in degrees/s. </param>
@@ -222,10 +241,23 @@ namespace RobotComponents.Actions
             {
                 return "Predefined Speed Data ("+ _name + ")";
             }
-            else
+            else if (this.Name != String.Empty)
             {
                 return "Custom Speed Data (" + _name + ")";
             }
+            else
+            {
+                return "Custom Speed Data";
+            }
+        }
+
+        /// <summary>
+        /// Returns the Speed Data in RAPID code format, e.g. "[200, 500, 5000, 1000]".
+        /// </summary>
+        /// <returns> The string with speed data values. </returns>
+        public string ToRAPID()
+        {
+            return "[" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "]";
         }
 
         /// <summary>
@@ -235,9 +267,9 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false)
+            if (_predefined == false & _name != String.Empty)
             {
-                return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := [" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "];";
+                return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := " + this.ToRAPID() + ";";
             }
             else
             {
@@ -264,11 +296,13 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                // Only adds speedData Variable if not already in RAPID Code
-                if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
+                if (_name != String.Empty)
                 {
-                    RAPIDGenerator.SpeedDatas.Add(this.Name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
+                    {
+                        RAPIDGenerator.SpeedDatas.Add(this.Name, this);
+                        RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    }
                 }
             }
         }
@@ -291,8 +325,6 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == "") { return false; }
-                if (Name == null) { return false; }
                 if (V_TCP <= 0) { return false; }
                 if (V_ORI <= 0) { return false; }
                 if (V_LEAX <= 0) { return false; }

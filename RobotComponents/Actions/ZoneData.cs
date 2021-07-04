@@ -217,6 +217,32 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Zone Data class with with custom values. 
+        /// </summary>
+        /// <param name="finep"> Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point. </param>
+        /// <param name="pzone_tcp"> The size (the radius) of the TCP zone in mm. </param>
+        /// <param name="pzone_ori"> The zone size (the radius) for the tool reorientation. </param>
+        /// <param name="pzone_eax"> The zone size (the radius) for external axes. </param>
+        /// <param name="zone_ori"> The zone size for the tool reorientation in degrees. </param>
+        /// <param name="zone_leax"> The zone size for linear external axes in mm. </param>
+        /// <param name="zone_reax"> he zone size for rotating external axes in degrees. </param>
+        public ZoneData(bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
+            double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _finep = finep;
+            _pzone_tcp = pzone_tcp;
+            _pzone_ori = pzone_ori;
+            _pzone_eax = pzone_eax;
+            _zone_ori = zone_ori;
+            _zone_leax = zone_leax;
+            _zone_reax = zone_reax;
+            _predefined = false;
+            _exactPredefinedValue = false;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Zone Data class with custom values.
         /// </summary>
         /// <param name="name"> The Zone Data variable name, must be unique. </param>
@@ -305,10 +331,35 @@ namespace RobotComponents.Actions
             {
                 return "Predefined Zone Data (" + _name + ")";
             }
-            else
+            else if (_name != String.Empty)
             {
                 return "Custom Zone Data (" + _name + ")";
             }
+            else
+            {
+                return "Custom Zone Data";
+            }
+        }
+
+        /// <summary>
+        /// Returns the Zone Data in RAPID code format, e.g. "[FALSE, 0, 0.3, 0.3, 0.3, 0.3, 0.03]".
+        /// </summary>
+        /// <returns> The string with zone data values. </returns>
+        public string ToRAPID()
+        {
+            string code = "[";
+
+            if (_finep == false) { code += "FALSE, "; }
+            else { code += "TRUE, "; }
+
+            code += _pzone_tcp + ", ";
+            code += _pzone_ori + ", ";
+            code += _pzone_eax + ", ";
+            code += _zone_ori + ", ";
+            code += _zone_leax + ", ";
+            code += _zone_reax + "]";
+
+            return code;
         }
 
         /// <summary>
@@ -318,21 +369,13 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false)
+            if (_predefined == false & _name != String.Empty)
             {
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " zonedata ";
-                code += _name + " := [";
-                
-                if (_finep == false) { code +=  "FALSE, "; }
-                else  { code += "TRUE, "; }
-
-                code += _pzone_tcp + ", ";
-                code += _pzone_ori + ", ";
-                code += _pzone_eax + ", ";
-                code += _zone_ori + ", ";
-                code += _zone_leax + ", ";
-                code += _zone_reax + "];";
+                code += _name + " := ";
+                code += this.ToRAPID();
+                code += ";";
 
                 return code;
             }
@@ -361,11 +404,13 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                // Only adds speedData Variable if not already in RAPID Code
-                if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
+                if (_name != String.Empty)
                 {
-                    RAPIDGenerator.ZoneDatas.Add(this.Name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
+                    {
+                        RAPIDGenerator.ZoneDatas.Add(this.Name, this);
+                        RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    }
                 }
             }
         }
@@ -388,8 +433,6 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == "") { return false; }
-                if (Name == null) { return false; }
                 if (PathZoneTCP < 0) { return false; }
                 if (PathZoneOrientation < 0) { return false; }
                 if (PathZoneExternalAxes < 0) { return false; }

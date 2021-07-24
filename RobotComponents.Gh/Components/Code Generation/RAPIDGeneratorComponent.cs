@@ -71,8 +71,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module"); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module"); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
         }
 
         // Fields
@@ -80,8 +80,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbsJ = true;
         private bool _raiseWarnings = false;
-        private string _programCode = "";
-        private string _systemCode = "";
+        private List<string> _programModule = new List<string>();
+        private List<string> _systemModule =  new List<string>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -136,10 +136,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo);
 
                 // Generator code
-                _rapidGenerator.CreateProgramCode();
-                _rapidGenerator.CreateSystemCode(customCodeLines);
-                _programCode = _rapidGenerator.ProgramCode;
-                _systemCode = _rapidGenerator.SystemCode;
+                _rapidGenerator.CreateProgramModule();
+                _rapidGenerator.CreateSystemModule(customCodeLines);
+                _programModule = _rapidGenerator.ProgramModule;
+                _systemModule = _rapidGenerator.SystemModule;
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
@@ -174,8 +174,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Output
-            DA.SetData(0, _programCode);
-            DA.SetData(1, _systemCode);
+            DA.SetDataList(0, _programModule);
+            DA.SetDataList(1, _systemModule);
         }
 
         #region custom menu items
@@ -245,7 +245,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     // Write RAPID code to file
                     using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
                     {
-                        writer.WriteLine(_programCode);
+                        for (int i = 0; i != _programModule.Count; i++)
+                        {
+                            writer.WriteLine(_programModule[i]);
+                        }
                     }
                 }
             }
@@ -273,7 +276,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     // Write RAPID code to file
                     using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
                     {
-                        writer.WriteLine(_systemCode);
+                        for (int i = 0; i != _systemModule.Count; i++)
+                        {
+                            writer.WriteLine(_systemModule[i]);
+                        }
                     }
                 }
             }

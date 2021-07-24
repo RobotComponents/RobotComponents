@@ -179,7 +179,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + _code);
             }
         }
 
@@ -192,7 +192,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Instruction)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + _code);
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + _code);
             }
         }
         #endregion

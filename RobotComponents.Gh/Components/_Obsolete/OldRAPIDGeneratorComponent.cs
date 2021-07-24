@@ -80,16 +80,16 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Main Code", "Main", "Robot Instructions in RAPID Code");  //Todo: beef this up to be more informative.
-            pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code");  //Todo: beef this up to be more informative.
+            pManager.Register_StringParam("Main Code", "Main", "Robot Instructions in RAPID Code", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
+            pManager.Register_StringParam("Base Code", "Base", "Basic defined system data in RAPID Code", GH_ParamAccess.list);  //Todo: beef this up to be more informative.
         }
 
         // Fields
         private RAPIDGenerator _rapidGenerator;
         private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbsJ = true;
-        private string _BASECode = "";
-        private string _MAINCode = "";
+        private List<string> _BASECode = new List<string>();
+        private List<string> _MAINCode = new List<string>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -149,10 +149,10 @@ namespace RobotComponents.Gh.Components.Obsolete
                 List<string> customCode = new List<string>() { };
 
                 // Generator code
-                _rapidGenerator.CreateSystemCode(robotTools, workObjects, customCode);
-                _rapidGenerator.CreateProgramCode();
-                _MAINCode = _rapidGenerator.ProgramCode;
-                _BASECode = _rapidGenerator.SystemCode;
+                _rapidGenerator.CreateSystemModule(robotTools, workObjects, customCode);
+                _rapidGenerator.CreateProgramModule();
+                _MAINCode = _rapidGenerator.ProgramModule;
+                _BASECode = _rapidGenerator.SystemModule;
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
@@ -176,8 +176,8 @@ namespace RobotComponents.Gh.Components.Obsolete
             }
 
             // Output
-            DA.SetData(0, _MAINCode);
-            DA.SetData(1, _BASECode);
+            DA.SetDataList(0, _MAINCode);
+            DA.SetDataList(1, _BASECode);
         }
 
         /// <summary>

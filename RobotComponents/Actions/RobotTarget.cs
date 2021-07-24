@@ -406,7 +406,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {
                     RAPIDGenerator.Targets.Add(_name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

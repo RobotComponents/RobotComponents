@@ -568,7 +568,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
                 {
                     RAPIDGenerator.JointPositions.Add(_name, this);
-                    RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

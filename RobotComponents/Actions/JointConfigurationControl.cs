@@ -169,11 +169,11 @@ namespace RobotComponents.Actions
         {
             if (_isActive == true)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "ConfJ\\on;");
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\on;");
             }
             else
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "ConfJ\\off;");
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\off;");
             }
         }
         #endregion

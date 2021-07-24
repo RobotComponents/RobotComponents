@@ -58,8 +58,18 @@ namespace RobotComponents.Actions
         /// </summary>
         public ActionGroup()
         {
-            _name = "";
+            _name = String.Empty;
             _actions = new List<Action>() { };
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Action Group class with an empty name.
+        /// </summary>
+        /// <param name="actions"> The list with actions. </param>
+        public ActionGroup(List<Action> actions)
+        {
+            _name = String.Empty;
+            _actions = actions;
         }
 
         /// <summary>
@@ -113,9 +123,13 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Action Group";
             }
-            else
+            else if (_name != String.Empty)
             {
                 return "Action Group (" + this.Name + ")";
+            }
+            else
+            {
+                return "Action Group";
             }
         }
 
@@ -201,14 +215,20 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! Start of group: " + _name);
+            if (_name != String.Empty)
+            {
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! Start of group: " + _name);
+            }
 
             for (int i = 0; i < _actions.Count; i++)
             {
                 _actions[i].ToRAPIDInstruction(RAPIDGenerator);
             }
 
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! End of group: " + _name);
+            if (_name != String.Empty)
+            {
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! End of group: " + _name);
+            }
         }
         #endregion
 
@@ -221,7 +241,6 @@ namespace RobotComponents.Actions
             get
             {
                 if (Name == null) { return false; }
-                if (Name == "") { return false; }
                 if (Actions == null) { return false; }
                 return true;
             }

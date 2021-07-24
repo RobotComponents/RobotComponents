@@ -71,6 +71,18 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Joint Target class with an undefined External Joint Position.
         /// </summary>
+        /// <param name="robotJointPosition"> The robot joint position. </param>
+        public JointTarget(RobotJointPosition robotJointPosition)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = new ExternalJointPosition();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Joint Target class with an undefined External Joint Position.
+        /// </summary>
         /// <param name="name"> The target name, must be unique. </param>
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
@@ -81,6 +93,18 @@ namespace RobotComponents.Actions
             _externalJointPosition = new ExternalJointPosition();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the Joint Target class.
+        /// </summary>
+        /// <param name="robotJointPosition"> The Robot Joint Position</param>
+        /// <param name="externalJointPosition"> The External Joint Position</param>
+        public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = externalJointPosition;
+        }
 
         /// <summary>
         /// Initializes a new instance of the Joint Target class.
@@ -156,9 +180,13 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Joint Target";
             }
-            else
+            else if (this.Name != String.Empty)
             {
                 return "Joint Target (" + this.Name + ")";
+            }
+            else
+            {
+                return "Joint Target";
             }
         }
 
@@ -230,22 +258,53 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// Returns the Joint Target in RAPID code format, e.g. "[[0, 0, 0, 0, 45, 0], [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]".
+        /// </summary>
+        /// <returns> The string with joint target values. </returns>
+        public string ToRAPID()
+        {
+            string robotJointPosition = _robotJointPosition.Name;
+            string externalJointPosition = _externalJointPosition.Name;
+
+            if (robotJointPosition == String.Empty)
+            {
+                robotJointPosition = _robotJointPosition.ToRAPID();
+            }
+
+            if (externalJointPosition == String.Empty)
+            {
+                externalJointPosition = _externalJointPosition.ToRAPID();
+            }
+
+            string code = "[";
+            code += robotJointPosition;
+            code += ", ";
+            code += externalJointPosition;
+            code += "]";
+
+            return code;
+        }
+
+        /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-            code += " jointtarget ";
-            code += _name;
-            code += " := [";
-            code += _robotJointPosition.ToRAPID();
-            code += ", ";
-            code += _externalJointPosition.ToRAPID();
-            code += "];";
+            if (_name != String.Empty)
+            {
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " jointtarget ";
+                code += _name;
+                code += " := ";
+                code += this.ToRAPID();
+                code += ";";
 
-            return code;
+                return code;
+            }
+
+            return String.Empty;
         }
 
         /// <summary>
@@ -265,10 +324,16 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (!RAPIDGenerator.Targets.ContainsKey(_name))
+            _robotJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
+            _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
+
+            if (_name != String.Empty)
             {
-                RAPIDGenerator.Targets.Add(_name, this);
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                if (!RAPIDGenerator.Targets.ContainsKey(_name))
+                {
+                    RAPIDGenerator.Targets.Add(_name, this);
+                    RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
             }
         }
 
@@ -290,8 +355,6 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == null) { return false; }
-                if (Name == "") { return false; }
                 if (RobotJointPosition == null) { return false; }
                 if (RobotJointPosition.IsValid == false) { return false; }
                 if (ExternalJointPosition == null) { return false; }

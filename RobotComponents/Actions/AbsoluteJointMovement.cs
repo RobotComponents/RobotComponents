@@ -393,7 +393,7 @@ namespace RobotComponents.Actions
             if (!RAPIDGenerator.Targets.ContainsKey(_name))
             {
                 RAPIDGenerator.Targets.Add(_name, this.ConvertToJointTarget());
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 RAPIDGenerator.ErrorText.AddRange(this.CheckForAxisLimits(RAPIDGenerator.Robot));
             }
         }
@@ -404,7 +404,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> Defines the RAPIDGenerator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+            RAPIDGenerator.ProgramModule.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 

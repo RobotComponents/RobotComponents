@@ -250,7 +250,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast from Declaration
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
             {
                 if (source is ITarget target)
                 {
@@ -269,6 +269,7 @@ namespace RobotComponents.Gh.Goos.Actions
                     return true;
                 }
             }
+
             return false;
         }
         #endregion

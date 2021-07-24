@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
+using RobotComponents.Enumerations;
 using RobotComponents.Definitions;
 using RobotComponents.Utils;
 
@@ -19,9 +20,11 @@ namespace RobotComponents.Actions
     /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators. 
     /// </summary>
     [Serializable()]
-    public class ExternalJointPosition : Action, IJointPosition, ISerializable
+    public class ExternalJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
+        private ReferenceType _referenceType;
+        private string _name;
         private double _val1;
         private double _val2;
         private double _val3;
@@ -40,7 +43,19 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization.</param>
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+
+            if (version <= 16000)
+            {
+                _referenceType = ReferenceType.CONST;
+                _name = String.Empty;
+            }
+            else
+            {
+                _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+                _name = (string)info.GetValue("Name", typeof(string));
+            }
+
             _val1 = (double)info.GetValue("Value 1", typeof(double));
             _val2 = (double)info.GetValue("Value 2", typeof(double));
             _val3 = (double)info.GetValue("Value 3", typeof(double));
@@ -58,6 +73,8 @@ namespace RobotComponents.Actions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value 1", _val1, typeof(double));
             info.AddValue("Value 2", _val2, typeof(double));
             info.AddValue("Value 3", _val3, typeof(double));
@@ -69,10 +86,91 @@ namespace RobotComponents.Actions
 
         #region constructors
         /// <summary>
-        /// Initializes a new instance of the External Joint Position class with undefinied positions of the external logical axes.
+        /// Initializes a new instance of the External Joint Position class with an empty name and undefinied positions of the external logical axes.
         /// </summary>
         public ExternalJointPosition()
         {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            _val1 = _defaultValue;
+            _val2 = _defaultValue;
+            _val3 = _defaultValue;
+            _val4 = _defaultValue;
+            _val5 = _defaultValue;
+            _val6 = _defaultValue;
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the External Joint Position class with an empty name.
+        /// </summary>
+        /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
+        /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
+        /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
+        /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
+        /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm. </param>
+        /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
+        public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            _val1 = Eax_a;
+            _val2 = Eax_b;
+            _val3 = Eax_c;
+            _val4 = Eax_d;
+            _val5 = Eax_e;
+            _val6 = Eax_f;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Joint Position class with an empty name from a list with values.
+        /// </summary>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
+        public ExternalJointPosition(List<double> externalAxisValues)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            double[] values = CheckAxisValues(externalAxisValues.ToArray());
+
+            _val1 = values[0];
+            _val2 = values[1];
+            _val3 = values[2];
+            _val4 = values[3];
+            _val5 = values[4];
+            _val6 = values[5];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Joint Position class with an empty name from an array with values.
+        /// </summary>
+        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
+        public ExternalJointPosition(double[] externalAxisValues)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = string.Empty;
+
+            double[] values = CheckAxisValues(externalAxisValues);
+
+            _val1 = values[0];
+            _val2 = values[1];
+            _val3 = values[2];
+            _val4 = values[3];
+            _val5 = values[4];
+            _val6 = values[5];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the External Joint Position class with undefinied positions of the external logical axes.
+        /// </summary>
+        /// <param name="name"> The external joint position name, must be unique. </param>
+        public ExternalJointPosition(string name)
+        {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -85,14 +183,18 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class.
         /// </summary>
+        /// <param name="name"> The external joint position name, must be unique. </param>
         /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
         /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
         /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
         /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
         /// <param name="Eax_e"> The position of the external logical axis “3” expressed in degrees or mm. </param>
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
-        public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
+        public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             _val1 = Eax_a;
             _val2 = Eax_b;
             _val3 = Eax_c;
@@ -104,9 +206,13 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class from a list with values.
         /// </summary>
+        /// <param name="name"> The external joint position name, must be unique. </param>
         /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(List<double> externalAxisValues)
+        public ExternalJointPosition(string name, List<double> externalAxisValues)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             double[] values = CheckAxisValues(externalAxisValues.ToArray());
 
             _val1 = values[0];
@@ -120,9 +226,13 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class from an array with values.
         /// </summary>
+        /// <param name="name"> The external joint position name, must be unique. </param>
         /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(double[] externalAxisValues)
+        public ExternalJointPosition(string name, double[] externalAxisValues)
         {
+            _referenceType = ReferenceType.CONST;
+            _name = name;
+
             double[] values = CheckAxisValues(externalAxisValues);
 
             _val1 = values[0];
@@ -139,6 +249,8 @@ namespace RobotComponents.Actions
         /// <param name="externalJointPosition"> The External Joint Position instance to duplicate. </param>
         public ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
+            _referenceType = externalJointPosition.ReferenceType;
+            _name = externalJointPosition.Name;
             _val1 = externalJointPosition[0];
             _val2 = externalJointPosition[1];
             _val3 = externalJointPosition[2];
@@ -163,6 +275,15 @@ namespace RobotComponents.Actions
         public override Action DuplicateAction()
         {
             return new ExternalJointPosition(this) as Action;
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this External Joint Position instance as an IDeclaration.
+        /// </summary>
+        /// <returns> A deep copy of the External Joint Position instance as an IDeclaration. </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new ExternalJointPosition(this) as IDeclaration;
         }
         #endregion
 
@@ -461,6 +582,18 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
+            if (_name != String.Empty)
+            {
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " extjoint ";
+                code += _name;
+                code += " := ";
+                code += this.ToRAPID();
+                code += ";";
+
+                return code;
+            }
+
             return String.Empty;
         }
 
@@ -481,6 +614,14 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            if (_name != String.Empty)
+            {
+                if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
+                {
+                    RAPIDGenerator.JointPositions.Add(_name, this);
+                    RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
+            }
         }
 
         /// <summary>
@@ -500,6 +641,25 @@ namespace RobotComponents.Actions
         public override bool IsValid
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets or sets the External Joint Position variable name.
+        /// Each External Joint Position variable name has to be unique.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Reference Type. 
+        /// </summary>
+        public ReferenceType ReferenceType
+        {
+            get { return _referenceType; }
+            set { _referenceType = value; }
         }
 
         /// <summary>

@@ -74,7 +74,8 @@ namespace RobotComponents.Gh.Utils
             {
                 return false;
             }
-            else return true;
+
+            return true;
         }
 
         /// <summary>
@@ -84,8 +85,13 @@ namespace RobotComponents.Gh.Utils
         /// <returns> Returns a boolean that defines if the string starts with a digit. </returns>
         public static bool VariableStartsWithNumber(string variable)
         {
-            bool isDigit = char.IsNumber(variable[0]); ;
-            return isDigit;
+            if (variable.Length > 0)
+            {
+                bool isDigit = char.IsNumber(variable[0]); ;
+                return isDigit;
+            }
+
+            return false;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, "defaultTar");
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, String.Empty);
             pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.item);
             pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.item);
 
@@ -72,7 +72,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variables
-            string name = "";
+            string name = String.Empty;
             RobotJointPosition robotJointPosition = new RobotJointPosition();
             ExternalJointPosition externalJointPosition = new ExternalJointPosition(); 
 

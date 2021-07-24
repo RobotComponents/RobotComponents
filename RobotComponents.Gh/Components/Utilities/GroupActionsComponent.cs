@@ -46,7 +46,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the group with Actions.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the group with Actions.", GH_ParamAccess.item, String.Empty);
             pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions to group.", GH_ParamAccess.list);
         }
 

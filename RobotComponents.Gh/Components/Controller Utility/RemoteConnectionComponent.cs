@@ -56,8 +56,8 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item, false);
             pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item, false);
             pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item, false);
-            pManager.AddTextParameter("Program Module", "PM", "Program Module code as text", GH_ParamAccess.list);
-            pManager.AddTextParameter("System Module", "SM", "System Module code as text", GH_ParamAccess.list);
+            pManager.AddTextParameter("Program Module", "PM", "Program Module code as a list with code lines", GH_ParamAccess.list);
+            pManager.AddTextParameter("System Module", "SM", "System Module code as as list with code lines", GH_ParamAccess.list);
 
             pManager[5].Optional = true;
             pManager[6].Optional = true;
@@ -189,14 +189,14 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                         _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
                         // Load the new program from the created file
-                        for (int i = 0; i < systemCode.Count; i++)
+                        if (systemCode.Count != 0)
                         {
-                            filePathSystem = Path.Combine(directory, "SystemModule_" + i.ToString() + ".sys");
+                            filePathSystem = Path.Combine(directory, "SystemModule.sys");
                             task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
                         }
-                        for (int i = 0; i < programCode.Count; i++)
+                        if (programCode.Count != 0)
                         {
-                            filePathProgram = Path.Combine(directory, "ProgramModule_" + i.ToString() + ".mod");
+                            filePathProgram = Path.Combine(directory, "ProgramModule.mod");
                             task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
                         }
 
@@ -401,27 +401,34 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// Save to the RAPID program and sytem modules to the given file path.
         /// </summary>
         /// <param name="path"> The directory where to save the RAPID modules. </param>
-        /// <param name="programModules"> The RAPID program module as a list with strings (each complete module is one list item). </param>
-        /// <param name="systemModules"> The RAPID system module as a string (each complete module is one list item). </param>
-        private void SaveModulesToFile(string path, List<string> programModules, List<string> systemModules)
+        /// <param name="programModule"> The RAPID program module as a list with code lines. </param>
+        /// <param name="systemModule"> The RAPID system module as a list with code lines </param>
+        private void SaveModulesToFile(string path, List<string> programModule, List<string> systemModule)
         {
             // Save the program modules
-            for (int i = 0; i < programModules.Count; i++)
+            if (programModule.Count != 0)
             {
-                string programFilePath = Path.Combine(path, "ProgramModule_" + i.ToString() + ".mod");
+                string programFilePath = Path.Combine(path, "ProgramModule.mod");
                 using (StreamWriter writer = new StreamWriter(programFilePath, false))
                 {
-                    writer.WriteLine(programModules[i]);
+                    for (int i = 0; i < programModule.Count; i++)
+                    {
+                        writer.WriteLine(programModule[i]);
+                    }
                 }
+
             }
 
             // Save the system module
-            for (int i = 0; i < systemModules.Count; i++)
-            {
-                string systemFilePath = Path.Combine(path, "SystemModule_" + i.ToString() +".sys");
+            if (systemModule.Count != 0)
+            { 
+                string systemFilePath = Path.Combine(path, "SystemModule.sys");
                 using (StreamWriter writer = new StreamWriter(systemFilePath, false))
                 {
-                    writer.WriteLine(systemModules[i]);
+                    for (int i = 0; i < systemModule.Count; i++)
+                    {
+                        writer.WriteLine(systemModule[i]);
+                    }
                 }
             }
         }

@@ -79,6 +79,20 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Robot Target class with an axis conguration set to zero and an undefined External Joint Position.
         /// </summary>
+        /// <param name="plane"> The target plane. </param>
+        public RobotTarget(Plane plane)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _plane = plane;
+            _axisConfig = 0;
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an axis conguration set to zero and an undefined External Joint Position.
+        /// </summary>
         /// <param name="name"> The target name, must be unique. </param>
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(string name, Plane plane)
@@ -87,6 +101,21 @@ namespace RobotComponents.Actions
             _name = name;
             _plane = plane;
             _axisConfig = 0;
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
+        /// </summary>
+        /// <param name="plane"> Thr target plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        public RobotTarget(Plane plane, int axisConfig)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _plane = plane;
+            _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
             _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
@@ -105,6 +134,27 @@ namespace RobotComponents.Actions
             _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
             _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="plane"> The target plane. </param>
+        /// <param name="referencePlane"> The reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _plane = plane;
+            _axisConfig = axisConfig;
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
         }
 
         /// <summary>
@@ -132,6 +182,22 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Robot Target class.
         /// </summary>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _plane = plane;
+            _axisConfig = axisConfig;
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// </summary>
         /// <param name="name"> The target name, must be unique. </param>
         /// <param name="plane"> The target plane.</param>
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
@@ -144,6 +210,28 @@ namespace RobotComponents.Actions
             _axisConfig = axisConfig;
             _externalJointPosition = externalJointPosition;
             _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="referencePlane"> The Reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = String.Empty;
+            _plane = plane;
+            _axisConfig = axisConfig;
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
         }
 
         /// <summary>
@@ -231,24 +319,31 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Robot Target";
             }
-            else
+            else if (this.Name != String.Empty)
             {
                 return "Robot Target (" + this.Name + ")";
+            }
+            else
+            {
+                return "Robot Target";
             }
         }
 
         /// <summary>
-        /// Returns the RAPID declaration code line of the this action.
+        /// Returns the Robot Target in RAPID code format, e.g. "[[300, 600, 250], [1, 0, 0, 0], [0, 0, 0, 1] [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]".
         /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <returns> The string with robot target values. </returns>
+        public string ToRAPID()
         {
-            string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-            code += " robtarget "; 
-            code += _name;
-            code += " := [";
-            code += "[" + _plane.Origin.X.ToString("0.##") + ", ";           
+            string externalJointPosition = _externalJointPosition.Name;
+
+            if (externalJointPosition == String.Empty)
+            {
+                externalJointPosition = _externalJointPosition.ToRAPID();
+            }
+
+            string code = "[";
+            code += "[" + _plane.Origin.X.ToString("0.##") + ", ";
             code += _plane.Origin.Y.ToString("0.##") + ", ";
             code += _plane.Origin.Z.ToString("0.##") + "]";
             code += ", ";
@@ -259,10 +354,32 @@ namespace RobotComponents.Actions
             code += ", ";
             code += "[0,0,0," + _axisConfig + "]";
             code += ", ";
-            code += _externalJointPosition.ToRAPID(); //TODO: Use the external axis values one from the IK of the robot? 
-            code += "];";
+            code += externalJointPosition;
+            code += "]";
 
             return code;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this action.
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> The RAPID code line. </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            if (_name != String.Empty)
+            {
+                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
+                code += " robtarget ";
+                code += _name;
+                code += " := ";
+                code += this.ToRAPID();
+                code += ";";
+
+                return code;
+            }
+
+            return String.Empty;
         }
 
         /// <summary>
@@ -282,33 +399,15 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            // Only adds target code if target is not already defined
-            if (!RAPIDGenerator.Targets.ContainsKey(_name))
+            _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
+
+            if (_name != String.Empty)
             {
-                // Add to dictionary
-                RAPIDGenerator.Targets.Add(_name, this);
-
-                // Generate code
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " robtarget ";
-                code += _name;
-                code += " := [";
-                code += "[" + _plane.Origin.X.ToString("0.##") + ", ";
-                code += _plane.Origin.Y.ToString("0.##") + ", ";
-                code += _plane.Origin.Z.ToString("0.##") + "]";
-                code += ", ";
-                code += "[" + _quat.A.ToString("0.######") + ", ";
-                code += _quat.B.ToString("0.######") + ", ";
-                code += _quat.C.ToString("0.######") + ", ";
-                code += _quat.D.ToString("0.######") + "]";
-                code += ", ";
-                code += "[0,0,0," + _axisConfig + "]";
-                code += ", ";
-                code += RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.ToRAPID();
-                code += "];";
-
-                // Add to stringbuilder
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t" + code);
+                if (!RAPIDGenerator.Targets.ContainsKey(_name))
+                {
+                    RAPIDGenerator.Targets.Add(_name, this);
+                    RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
             }
         }
 
@@ -330,12 +429,8 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == null) { return false; }
-                if (Name == "") { return false; }
                 if (Plane == null) { return false; }
                 if (Plane == Plane.Unset) { return false; }
-                if (Name == null) { return false; }
-                if (Name == "") { return false; }
                 if (AxisConfig < 0) { return false; }
                 if (AxisConfig > 7) { return false; }
                 if (ExternalJointPosition.IsValid == false) { return false; }

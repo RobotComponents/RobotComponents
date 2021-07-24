@@ -52,8 +52,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, "default_speed");
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree, 5);
             pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.tree, 500);
             pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.tree, 5000);
             pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.tree, 1000);
@@ -113,8 +113,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
 
-            // Update the variable names in the data trees
-            UpdateVariableNames();
+            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Make a list
             for (int i = 0; i < _tree.Branches.Count; i++)
@@ -156,6 +159,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 if (_objectManager.SpeedDataNames.Contains(_list[i].Value.Name))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
+                    _namesUnique = false;
+                    _lastName = "";
+                }
+                else if (_list[i].Value.Name == String.Empty)
+                {
                     _namesUnique = false;
                     _lastName = "";
                 }

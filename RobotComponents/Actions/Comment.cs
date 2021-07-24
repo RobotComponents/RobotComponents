@@ -181,7 +181,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
             }
         }
 
@@ -194,7 +194,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Instruction)
             {
-                RAPIDGenerator.StringBuilder.Append(Environment.NewLine + "\t\t" + "! " + _comment);
+                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
             }
         }
         #endregion

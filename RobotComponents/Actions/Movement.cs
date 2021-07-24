@@ -32,9 +32,12 @@ namespace RobotComponents.Actions
         private ZoneData _zoneData;
 
         // Variable fields
-        RobotTool _robotTool;
-        WorkObject _workObject;
-        DigitalOutput _digitalOutput;
+        private RobotTool _robotTool;
+        private WorkObject _workObject;
+        private DigitalOutput _digitalOutput;
+
+        // For RAPID generator
+        private ITarget _convertedTarget;
         #endregion
 
         #region (de)serialization
@@ -288,6 +291,7 @@ namespace RobotComponents.Actions
             _speedData = movement.SpeedData.Duplicate();
             _zoneData = movement.ZoneData.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
+            _convertedTarget = _target.DuplicateTarget();
 
             if (duplicateMesh == true)
             {
@@ -423,7 +427,6 @@ namespace RobotComponents.Actions
             {
                 return Plane.Unset;
             }
-
         } 
 
         /// <summary>
@@ -450,6 +453,61 @@ namespace RobotComponents.Actions
             else
             {
                 return Plane.Unset;
+            }
+        }
+
+        /// <summary>
+        /// Converts the target for the RAPID generator.
+        /// </summary>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
+        private void ConvertTarget(RAPIDGenerator RAPIDGenerator)
+        {
+            // Duplicate original target
+            _convertedTarget = _target.DuplicateTarget();
+
+            // Robot target
+            if (_convertedTarget is RobotTarget robotTarget)
+            {
+                // Duplicate original target
+                _convertedTarget = _target.DuplicateTarget();
+
+                // Update the movement of the inverse kinematics
+                RAPIDGenerator.Robot.InverseKinematics.Movement = this;
+
+                // Calculate the external joint position for the robot target
+                if (_movementType == MovementType.MoveL || _movementType == MovementType.MoveJ)
+                {
+                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
+                    _convertedTarget.ExternalJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
+                    _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
+                    _convertedTarget.Name = robotTarget.Name;
+                    _convertedTarget.ReferenceType = _target.ReferenceType;
+                }
+
+                // Convert the robot target to a joint target
+                else
+                {
+                    // Calculate the axis values from the robot target
+                    RAPIDGenerator.Robot.InverseKinematics.Calculate();
+                    RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
+
+                    // Create a joint target from the axis values
+                    _convertedTarget = new JointTarget(RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate(), RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate());
+                    _convertedTarget.Name = robotTarget.Name;
+                    _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
+                    _convertedTarget.ReferenceType = _target.ReferenceType;
+
+                    if (_convertedTarget.Name != String.Empty)
+                    {
+                        _convertedTarget.Name += "_jt";
+                    }    
+                }
+            }
+
+            // Joint target
+            else if (_convertedTarget is JointTarget jointTarget)
+            {
+                RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckAxisLimits(RAPIDGenerator.Robot));
             }
         }
 
@@ -490,9 +548,14 @@ namespace RobotComponents.Actions
             }
 
             // Declaration RAPID code
+            string target = _convertedTarget.Name;
             string speedData = _speedData.Name;
             string zoneData = _zoneData.Name;
 
+            if (target == String.Empty)
+            {
+                target = _convertedTarget.ToRAPID();
+            }
             if (speedData == String.Empty)
             {
                 speedData = _speedData.ToRAPID();
@@ -510,16 +573,8 @@ namespace RobotComponents.Actions
                 // MoveAbsJ
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
-                    string name = _target.Name;
-
-                    if (_target is RobotTarget)
-                    {
-                        name += "_jt";
-                    }
-
                     string code = "MoveAbsJ ";
-                    code += name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -539,7 +594,7 @@ namespace RobotComponents.Actions
                 else if (_movementType == MovementType.MoveL && _target is RobotTarget)
                 {
                     string code = "MoveL ";
-                    code += _target.Name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -559,7 +614,7 @@ namespace RobotComponents.Actions
                 else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
                 {
                     string code = "MoveJ ";
-                    code += _target.Name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -589,16 +644,8 @@ namespace RobotComponents.Actions
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    // If a robot target is converted to a joint target we add the suffix _jt to the target name.
-                    string name = _target.Name;
-
-                    if (_target is RobotTarget) 
-                    { 
-                        name += "_jt"; 
-                    }
-
                     string code = "MoveAbsJ ";
-                    code += name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -619,7 +666,7 @@ namespace RobotComponents.Actions
                 else if (_movementType == MovementType.MoveL && _target is RobotTarget)
                 {
                     string code = "MoveLDO ";
-                    code += _target.Name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -641,7 +688,7 @@ namespace RobotComponents.Actions
                 else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
                 {
                     string code = "MoveJDO ";
-                    code += _target.Name;
+                    code += target;
 
                     if (_id > -1)
                     {
@@ -674,60 +721,11 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            // Generate the code for the zone and speeddata
+            ConvertTarget(RAPIDGenerator);
+
+            _convertedTarget.ToRAPIDDeclaration(RAPIDGenerator);
             _speedData.ToRAPIDDeclaration(RAPIDGenerator);
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
-
-            // Generate code from robot targets
-            if (_target is RobotTarget robotTarget)
-            {
-                // Update the movement of the inverse kinematics
-                RAPIDGenerator.Robot.InverseKinematics.Movement = this;
-
-                // Generates the robot target variable for a MoveL or MoveJ instruction
-                if (_movementType == MovementType.MoveL || _movementType == MovementType.MoveJ)
-                {
-                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
-                    robotTarget.ToRAPIDDeclaration(RAPIDGenerator);
-                }
-
-                // Generates the joint target variable from a robot target for a MoveAbsJ instruction
-                else
-                {
-                    if (!RAPIDGenerator.Targets.ContainsKey(robotTarget.Name + "_jt"))
-                    {
-                        // Calculate the axis values from the robot target
-                        RAPIDGenerator.Robot.InverseKinematics.Calculate();
-                        RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
-
-                        // Create a joint target from the axis values
-                        RobotJointPosition robJointPosition = RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate();
-                        ExternalJointPosition extJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
-                        JointTarget jointTarget = new JointTarget(robotTarget.Name + "_jt", robJointPosition, extJointPosition);
-                        jointTarget.ReferenceType = _target.ReferenceType;
-
-                        // Create the RAPID code
-                        jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
-                    }
-                }
-            }
-
-            // Generate code from joint targets
-            else if (_target is JointTarget jointTarget)
-            {
-                // JointTarget with MoveAbsJ
-                if (_movementType == MovementType.MoveAbsJ)
-                {
-                    jointTarget.ToRAPIDDeclaration(RAPIDGenerator);
-                    RAPIDGenerator.ErrorText.AddRange(jointTarget.CheckAxisLimits(RAPIDGenerator.Robot));
-                }
-
-                // Joint Target combined with MoveL or MoveJ
-                else
-                {
-                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
-                }
-            }
         }
 
         /// <summary>

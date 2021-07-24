@@ -39,25 +39,11 @@ namespace RobotComponents.Actions
         string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
-        /// Returns the RAPID instruction code line of the this action. 
-        /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
-        string ToRAPIDInstruction(Robot robot);
-
-        /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
         /// This method is called inside the RAPID generator.
         /// </summary>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
        void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
-        /// </summary>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties

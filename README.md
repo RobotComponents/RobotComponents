@@ -64,7 +64,7 @@ Robot Components is a free to use Grasshopper plugin and does not legally bind y
 
 ```
 EDEK Uni Kassel (2021).  
-Robot Components v0.16.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+Robot Components v0.17.001: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 

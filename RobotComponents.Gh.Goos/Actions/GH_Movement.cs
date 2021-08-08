@@ -3,6 +3,8 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -172,7 +174,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default(Q); }
                 else { target = (Q)(object)Value; }
@@ -361,7 +363,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is Movement action)
                 {
@@ -399,6 +401,64 @@ namespace RobotComponents.Gh.Goos.Actions
                 {
                     Value = instruction;
                     return true;
+                }
+            }
+
+            //Cast from Plane
+            if (typeof(Plane).IsAssignableFrom(source.GetType()))
+            {
+                Plane plane = (Plane)source;
+                Value = new Movement(plane);
+                return true;
+            }
+
+            //Cast from Plane Goo
+            if (typeof(GH_Plane).IsAssignableFrom(source.GetType()))
+            {
+                GH_Plane planeGoo = (GH_Plane)source;
+                Value = new Movement(planeGoo.Value);
+                return true;
+            }
+
+            //Cast from Robot Joint Position
+            if (typeof(RobotJointPosition).IsAssignableFrom(source.GetType()))
+            {
+                RobotJointPosition jointPosition = (RobotJointPosition)source;
+                Value = new Movement(new JointTarget(jointPosition));
+                return true;
+            }
+
+            //Cast from Robot Joint Position Goo
+            if (typeof(GH_RobotJointPosition).IsAssignableFrom(source.GetType()))
+            {
+                GH_RobotJointPosition jointPositionGoo = (GH_RobotJointPosition)source;
+                Value = new Movement(new JointTarget(jointPositionGoo.Value));
+                return true;
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                string[] values = text.Split(',');
+
+                try
+                {
+                    RobotJointPosition robotJointPosition = new RobotJointPosition();
+
+                    for (int i = 0; i < Math.Min(values.Length, 6); i++)
+                    {
+                        robotJointPosition[i] = System.Convert.ToDouble(values[i]);
+                    }
+
+                    Value = new Movement(new JointTarget(robotJointPosition));
+                    return true;
+                }
+
+                catch
+                {
+                    return false;
                 }
             }
 

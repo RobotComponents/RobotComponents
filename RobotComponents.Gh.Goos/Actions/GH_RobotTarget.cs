@@ -7,6 +7,8 @@
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
+// Rhino Libs
+using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
@@ -304,6 +306,22 @@ namespace RobotComponents.Gh.Goos.Actions
                     Value = target;
                     return true;
                 }
+            }
+
+            //Cast from Plane
+            if (typeof(Plane).IsAssignableFrom(source.GetType()))
+            {
+                Plane plane = (Plane)source;
+                Value = new RobotTarget(plane);
+                return true;
+            }
+
+            //Cast from Plane Goo
+            if (typeof(GH_Plane).IsAssignableFrom(source.GetType()))
+            {
+                GH_Plane planeGoo = (GH_Plane)source;
+                Value = new RobotTarget(planeGoo.Value);
+                return true;
             }
 
             return false;

@@ -181,7 +181,14 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
+                if (_comment != String.Empty)
+                {
+                    RAPIDGenerator.ProgramModule.Add("    " + "! " + _comment);
+                }
+                else
+                {
+                    RAPIDGenerator.ProgramModule.Add("    ");
+                }
             }
         }
 
@@ -194,7 +201,14 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Instruction)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
+                if (_comment != String.Empty)
+                {
+                    RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
+                }
+                else
+                {
+                    RAPIDGenerator.ProgramModule.Add("    " + "    ");
+                }
             }
         }
         #endregion

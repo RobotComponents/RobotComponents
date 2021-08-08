@@ -179,7 +179,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + _code);
+                RAPIDGenerator.ProgramModule.Add("    " + _code);
             }
         }
 

@@ -89,6 +89,24 @@ namespace RobotComponents.Actions
 
         /// <summary>
         /// Initializes a new instance of the Movement class.
+        /// This constructor is typically used to cast a Plane to a movement. 
+        /// </summary>
+        /// <param name="plane"> The target plan. </param>
+        public Movement(Plane plane)
+        {
+            _movementType = 0;
+            _target = new RobotTarget(plane);
+            _id = -1;
+            _speedData = new SpeedData(5); // Slowest predefined tcp speed
+            _zoneData = new ZoneData(0);
+            _robotTool = new RobotTool(); // Default Robot Tool tool0
+            _robotTool.Clear(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Movement class.
         /// This constructor is typically used to cast a Robot Target to a movement. 
         /// </summary>
         /// <param name="target"> The Target. </param>

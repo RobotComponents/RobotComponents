@@ -5,19 +5,17 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Obsolete;
-using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.14.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Auto Axis Configuration component. An inherent from the GH_Component Class.
@@ -91,29 +89,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Output
             DA.SetData(0, autoAxisConfig);
         }
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
 
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.

@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public SpeedDataComponentDataTreeGenerator()
-          : base("Speed Data 2", "SD2", 
+          : base("Speed Data", "SD", 
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,

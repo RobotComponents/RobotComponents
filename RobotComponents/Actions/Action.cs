@@ -46,9 +46,13 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Action";
             }
-            else if (this is AbsoluteJointMovement absoluteJointMovement)
+            if (this is ActionGroup group)
             {
-                return absoluteJointMovement.ToString();
+                return group.ToString();
+            }
+            else if (this is AnalogOutput analogOutput)
+            {
+                return analogOutput.ToString();
             }
             else if (this is AutoAxisConfig autoAxisConfig)
             {

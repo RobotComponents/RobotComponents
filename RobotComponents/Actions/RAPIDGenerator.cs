@@ -393,11 +393,6 @@ namespace RobotComponents.Actions
                         return false;
                     }
                 }
-
-                else if (_actions[i] is AbsoluteJointMovement)
-                {
-                    return true;
-                }
             }
 
             // Returns true if no movements were defined

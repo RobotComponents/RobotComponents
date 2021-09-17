@@ -187,13 +187,6 @@ namespace RobotComponents.Kinematics
                     _linearConfigurationControl = !autoAxisConfig.IsActive;
                     _jointConfigurationControl = !autoAxisConfig.IsActive;
                 }
-
-                // OBSOLETE
-                else if (ungrouped[i] is AbsoluteJointMovement absoluteJointMovement)
-                {
-                    JointMovementFromJointTarget(absoluteJointMovement.ConvertToMovement());
-                    counter++;
-                }
             }
 
             // Add joint positions and plane from last movement
@@ -524,11 +517,6 @@ namespace RobotComponents.Kinematics
                         _errorText.Add("The first movement is not set as an absolute joint movement.");
                         return false;
                     }
-                }
-
-                else if (actions[i] is AbsoluteJointMovement)
-                {
-                    return true;
                 }
             }
 

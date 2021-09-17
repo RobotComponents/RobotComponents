@@ -64,8 +64,7 @@
     <Compile Include="Actions\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\GH_JointTarget.cs" />
     <Compile Include="Actions\GH_RobotJointPosition.cs" />
-    <Compile Include="_Obsolete\GH_AbsoluteJointMovement.cs" />
-    <Compile Include="_Obsolete\GH_AutoAxisConfig.cs" />
+    <Compile Include="Obsolete\GH_AutoAxisConfig.cs" />
     <Compile Include="Actions\GH_CodeLine.cs" />
     <Compile Include="Actions\GH_Comment.cs" />
     <Compile Include="Actions\GH_DigitalOutput.cs" />

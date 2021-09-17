@@ -23,8 +23,15 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// RobotComponents Action : Zone Data component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is obsolete and will be removed in the future.", false)]
-    public class OldZoneDataComponent : GH_Component
+    public class OldZoneDataComponent : GH_Component, IObjectManager
     {
+        // Fields
+        private List<string> _registered = new List<string>();
+        private List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -79,13 +86,6 @@ namespace RobotComponents.Gh.Components.Obsolete
             pManager.RegisterParam(new ZoneDataParameter(), "Zone Data", "ZD", "Resulting Zone Data declaration");
         }
 
-        // Fields
-        private readonly List<string> _zoneDataNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private List<ZoneData> _zoneDatas = new List<ZoneData>();
-        private ObjectManager _objectManager;
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -137,8 +137,8 @@ namespace RobotComponents.Gh.Components.Obsolete
             int zone_leaxCounter = -1;
             int zone_reaxCounter = -1;
 
-            // Clear list
-            _zoneDatas.Clear();
+            // Initialize list
+            List<ZoneData> zoneDatas = new List<ZoneData>();
 
             // Creates Zone Datas
             for (int i = 0; i < biggestSize; i++)
@@ -242,84 +242,23 @@ namespace RobotComponents.Gh.Components.Obsolete
 
                 // Construct zone data
                 ZoneData zoneData = new ZoneData(name, finep, pzone_tcp, pzone_ori, pzone_eax, zone_ori, zone_leax, zone_reax);
-                _zoneDatas.Add(zoneData);
+                zoneDatas.Add(zoneData);
             }
 
             // Sets Output
-            DA.SetDataList(0, _zoneDatas);
+            DA.SetDataList(0, zoneDatas);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister = zoneDatas.ConvertAll(item => item.Name);
 
-            // Clears zoneDataNames
-            for (int i = 0; i < _zoneDataNames.Count; i++)
-            {
-                _objectManager.ZoneDataNames.Remove(_zoneDataNames[i]);
-            }
-            _zoneDataNames.Clear();
-
-            // Removes lastName from zoneDataNameList
-            if (_objectManager.ZoneDataNames.Contains(_lastName))
-            {
-                _objectManager.ZoneDataNames.Remove(_lastName);
-            }
-
-            // Adds Component to ZoneDataByGuid Dictionary
-            if (!_objectManager.OldZoneDatasByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.OldZoneDatasByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if Zone Data name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
-            {
-                if (_objectManager.ZoneDataNames.Contains(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else
-                {
-                    // Adds Zone Data Name to list
-                    _zoneDataNames.Add(names[i]);
-                    _objectManager.ZoneDataNames.Add(names[i]);
-
-                    // Run SolveInstance on other Zone Data with no unique Name to check if their name is now available
-                    foreach (KeyValuePair<Guid, OldZoneDataComponent> entry in _objectManager.OldZoneDatasByGuid)
-                    {
-                        if (entry.Value.LastName == "")
-                        {
-                            entry.Value.ExpireSolution(true);
-                        }
-                    }
-                    _lastName = names[i];
-                }
-
-                // Check variable name: character limit
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Check variable name: start with number is not allowed
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Zone Data Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers Zone Data and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -330,38 +269,12 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _zoneDataNames.Count; i++)
-                    {
-                        _objectManager.ZoneDataNames.Remove(_zoneDataNames[i]);
-                    }
-                }
-                _objectManager.OldZoneDatasByGuid.Remove(this.InstanceGuid);
-
-                // Run SolveInstance on other Zone Data instances with no unique Name to check if their name is now available
-                _objectManager.UpdateZoneDatas();
+                _objectManager.DeleteManagedData(this);
             }
-        }
-
-        /// <summary>
-        /// The Zone Datas created by this component
-        /// </summary>
-        public List<ZoneData> ZoneDatas
-        {
-            get { return _zoneDatas; }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
         }
 
         /// <summary>
@@ -382,6 +295,41 @@ namespace RobotComponents.Gh.Components.Obsolete
         public override Guid ComponentGuid
         {
             get { return new Guid("7C167248-772C-4DF4-B7A9-09A54046B38E"); }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
         }
     }
 }

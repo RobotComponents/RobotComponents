@@ -6,14 +6,12 @@
 // System Libs
 using System;
 using System.Linq;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.18.000

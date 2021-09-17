@@ -21,8 +21,16 @@ namespace RobotComponents.Gh.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class WorkObjectComponent : GH_Component
+    public class WorkObjectComponent : GH_Component, IObjectManager
     {
+        #region fields
+        private List<string> _registered = new List<string>();
+        private List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        #endregion
+
         public WorkObjectComponent()
           : base("Work Object", "WorkObj",
               "Defines a new work object."
@@ -30,15 +38,6 @@ namespace RobotComponents.Gh.Components.Definitions
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -62,13 +61,6 @@ namespace RobotComponents.Gh.Components.Definitions
             pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Resulting Work Object");  //Todo: beef this up to be more informative.
         }
 
-        // Fields
-        private List<string> _woNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private ObjectManager _objectManager;
-        private List<WorkObject> _workObjects = new List<WorkObject>();
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -76,9 +68,6 @@ namespace RobotComponents.Gh.Components.Definitions
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Clears Work Objects List
-            _workObjects.Clear();
-
             // Input variables
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
@@ -153,77 +142,19 @@ namespace RobotComponents.Gh.Components.Definitions
             }
 
             // Output
-            _workObjects = workObjects;
             DA.SetDataList(0, workObjects);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister = workObjects.ConvertAll(item => item.Name);
 
-            // Clears Work Object Name
-            for (int i = 0; i < _woNames.Count; i++)
-            {
-                _objectManager.WorkObjectNames.Remove(_woNames[i]);
-            }
-            _woNames.Clear();
-
-            // Removes lastName from WorkObjectNameList
-            if (_objectManager.WorkObjectNames.Contains(_lastName))
-            {
-                _objectManager.WorkObjectNames.Remove(_lastName);
-            }
-
-            // Adds Component to WorkObjectsByGuid Dictionary
-            if (!_objectManager.WorkObjectsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.WorkObjectsByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if the work object name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
-            {
-                if (_objectManager.WorkObjectNames.Contains(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                    break;
-                }
-                else
-                {
-                    // Adds Work Object Name to list
-                    _woNames.Add(names[i]);
-                    _objectManager.WorkObjectNames.Add(names[i]);
-
-                    // Run SolveInstance on other Work Objects with no unique Name to check if their name is now available
-                    _objectManager.UpdateWorkObjects();
-
-                    _lastName = names[i];
-                }
-
-                // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Work Object Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -257,30 +188,30 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _woNames.Count; i++)
-                    {
-                        _objectManager.WorkObjectNames.Remove(_woNames[i]);
-                    }
-                }
-                _objectManager.WorkObjectsByGuid.Remove(this.InstanceGuid);
-
-                // Runs SolveInstance on all other WorkObjects to check if robot tool names are unique.
-                _objectManager.UpdateWorkObjects();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
+        #region properties
         /// <summary>
-        /// The work object created by this component
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        public List<WorkObject> WorkObjects
+        public override GH_Exposure Exposure
         {
-            get { return _workObjects; }
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
         }
 
         /// <summary>
@@ -302,6 +233,40 @@ namespace RobotComponents.Gh.Components.Definitions
             get { return new Guid("F892733B-3633-48A6-AAC7-1A244441A774"); }
         }
 
-        public string LastName { get => _lastName; }
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
     }
 }

@@ -27,8 +27,19 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent
+    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
+        #region fields
+        private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
+        private List<string> _registered = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        private bool _setReferencePlane = false;
+        private bool _setExternalJointPosition = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -43,15 +54,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -81,17 +83,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             pManager.RegisterParam(new RobotTargetParameter(), "Robot Target", "RT", "Resulting Robot Target");
         }
-
-        // Fields
-        private readonly List<string> _targetNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
-        private List<GH_RobotTarget> _list = new List<GH_RobotTarget>();
-        private ObjectManager _objectManager;
-
-        private bool _setReferencePlane = false;
-        private bool _setExternalJointPosition = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -138,7 +129,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             // Clear tree and list
             _tree = new GH_Structure<GH_RobotTarget>();
-            _list = new List<GH_RobotTarget>();
 
             // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
             RobotTargetComponentDataTreeGenerator component = new RobotTargetComponentDataTreeGenerator();
@@ -160,88 +150,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 UpdateVariableNames();
             }
 
-            // Make a list
-            for (int i = 0; i < _tree.Branches.Count; i++)
-            {
-                _list.AddRange(_tree.Branches[i]);
-            }
-
             // Sets Output
             DA.SetDataTree(0, _tree);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
 
-            // Clears targetNames
-            for (int i = 0; i < _targetNames.Count; i++)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                _objectManager.TargetNames.Remove(_targetNames[i]);
-            }
-            _targetNames.Clear();
-
-            // Removes lastName from targetNameList
-            if (_objectManager.TargetNames.Contains(_lastName))
-            {
-                _objectManager.TargetNames.Remove(_lastName);
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
 
-            // Adds Component to TargetByGuid Dictionary
-            if (!_objectManager.RobotTargetsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.RobotTargetsByGuid.Add(this.InstanceGuid, this); //TODO
-            }
-
-            // Checks if target name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < _list.Count; i++)
-            {
-                if (_objectManager.TargetNames.Contains(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                    break;
-                }
-                else if (_list[i].Value.Name == String.Empty)
-                {
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else
-                {
-                    // Adds Target Name to list
-                    _targetNames.Add(_list[i].Value.Name);
-                    _objectManager.TargetNames.Add(_list[i].Value.Name);
-
-                    // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    _objectManager.UpdateTargets();
-
-                    _lastName = _list[i].Value.Name;
-                }
-
-                // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -252,21 +178,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _targetNames.Count; i++)
-                    {
-                        _objectManager.TargetNames.Remove(_targetNames[i]);
-                    }
-                }
-                _objectManager.RobotTargetsByGuid.Remove(this.InstanceGuid);
-
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                _objectManager.UpdateTargets();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
@@ -348,42 +264,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
-        /// <summary>
-        /// The Targets created by this component
-        /// </summary>
-        public List<RobotTarget> RobotTargets
-        {
-            get { return _list.ConvertAll(item => item.Value); }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
-        }
-
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting the Reference Plane is checked
-        /// </summary>
-        public bool SetReferencePlane
-        {
-            get { return _setReferencePlane; }
-            set { _setReferencePlane = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting the External Joint Position
-        /// </summary>
-        public bool SetExternalJointPosition
-        {
-            get { return _setExternalJointPosition; }
-            set { _setExternalJointPosition = value; }
-        }
-
         /// <summary>
         /// Add our own fields. Needed for (de)serialization of the variable input parameters.
         /// </summary>
@@ -391,8 +273,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Set Reference Plane", SetReferencePlane);
-            writer.SetBoolean("Set External Joint Position", SetExternalJointPosition);
+            writer.SetBoolean("Set Reference Plane", _setReferencePlane);
+            writer.SetBoolean("Set External Joint Position", _setExternalJointPosition);
             return base.Write(writer);
         }
 
@@ -403,8 +285,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            SetReferencePlane = reader.GetBoolean("Set Reference Plane");
-            SetExternalJointPosition = reader.GetBoolean("Set External Joint Position");
+            _setReferencePlane = reader.GetBoolean("Set Reference Plane");
+            _setExternalJointPosition = reader.GetBoolean("Set External Joint Position");
             return base.Read(reader);
         }
 
@@ -415,8 +297,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, SetReferencePlane);
-            Menu_AppendItem(menu, "External Joint Position", MenuItemClickExternalJointPosition, true, SetExternalJointPosition);
+            Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, _setReferencePlane);
+            Menu_AppendItem(menu, "External Joint Position", MenuItemClickExternalJointPosition, true, _setExternalJointPosition);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -441,7 +323,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             // Change bool
             RecordUndoEvent("Set Reference Plane");
-            SetReferencePlane = !SetReferencePlane;
+            _setReferencePlane = !_setReferencePlane;
 
             // Input parameter
             IGH_Param parameter = parameters[0];
@@ -477,7 +359,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             // Change bool
             RecordUndoEvent("Set External Joint Position");
-            SetExternalJointPosition = !SetExternalJointPosition;
+            _setExternalJointPosition = !_setExternalJointPosition;
 
             // Input parameter
             IGH_Param parameter = parameters[1];
@@ -575,6 +457,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
         #endregion
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -594,5 +494,40 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             get { return new Guid("EA79575D-5AED-46F2-8E50-A00BF5B65620"); }
         }
 
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
     }
 }

@@ -12,7 +12,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -22,8 +21,17 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// <summary>
     /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotJointPositionComponent : GH_Component
+    public class RobotJointPositionComponent : GH_Component, IObjectManager
     {
+        #region fields
+        private GH_Structure<GH_RobotJointPosition> _tree = new GH_Structure<GH_RobotJointPosition>();
+        private List<string> _registered = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -36,15 +44,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -68,14 +67,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The resulting robot joint position");
         }
-
-        // Fields
-        private readonly List<string> _jointPositionNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private GH_Structure<GH_RobotJointPosition> _tree = new GH_Structure<GH_RobotJointPosition>();
-        private List<GH_RobotJointPosition> _list = new List<GH_RobotJointPosition>();
-        private ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -101,9 +92,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetDataTree(5, out internalAxisValues5)) { return; }
             if (!DA.GetDataTree(6, out internalAxisValues6)) { return; }
 
-            // Clear tree and list
+            // Clear tree 
             _tree = new GH_Structure<GH_RobotJointPosition>();
-            _list = new List<GH_RobotJointPosition>();
 
             // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
             RobotJointPositionComponentDataTreeGenerator component = new RobotJointPositionComponentDataTreeGenerator();
@@ -127,88 +117,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 UpdateVariableNames();
             }
 
-            // Make a list
-            for (int i = 0; i < _tree.Branches.Count; i++)
-            {
-                _list.AddRange(_tree.Branches[i]);
-            }
-
             // Sets Output
             DA.SetDataTree(0, _tree);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
 
-            // Clears jointPositionNames
-            for (int i = 0; i < _jointPositionNames.Count; i++)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                _objectManager.JointPositionNames.Remove(_jointPositionNames[i]);
-            }
-            _jointPositionNames.Clear();
-
-            // Removes lastName from jointPositionNameList
-            if (_objectManager.JointPositionNames.Contains(_lastName))
-            {
-                _objectManager.JointPositionNames.Remove(_lastName);
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
 
-            // Adds Component to JointPositionsByGuid Dictionary
-            if (!_objectManager.RobotJointPositionsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.RobotJointPositionsByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if joint position name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < _list.Count; i++)
-            {
-                if (_objectManager.JointPositionNames.Contains(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                    break;
-                }
-                else if (_list[i].Value.Name == String.Empty)
-                {
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else
-                {
-                    // Adds Joint Position Name to list
-                    _jointPositionNames.Add(_list[i].Value.Name);
-                    _objectManager.JointPositionNames.Add(_list[i].Value.Name);
-
-                    // Run SolveInstance on other Joint Positions with no unique Name to check if their name is now available
-                    _objectManager.UpdateJointPositions();
-
-                    _lastName = _list[i].Value.Name;
-                }
-
-                // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers joint position and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -219,21 +145,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _jointPositionNames.Count; i++)
-                    {
-                        _objectManager.JointPositionNames.Remove(_jointPositionNames[i]);
-                    }
-                }
-                _objectManager.RobotJointPositionsByGuid.Remove(this.InstanceGuid);
-
-                // Runs SolveInstance on all other Joint Positions to check if the names are unique.
-                _objectManager.UpdateJointPositions();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
@@ -315,21 +231,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
-        /// <summary>
-        /// The robot joint positions created by this component
-        /// </summary>
-        public List<RobotJointPosition> RobotJointPositions
-        {
-            get { return _list.ConvertAll(item => item.Value); }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
-        }
 
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
@@ -355,6 +256,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
         #endregion
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -374,5 +293,40 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             get { return new Guid("9EC1CBB1-3D33-4DF0-9335-651AD30BC0F6"); }
         }
 
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
     }
 }

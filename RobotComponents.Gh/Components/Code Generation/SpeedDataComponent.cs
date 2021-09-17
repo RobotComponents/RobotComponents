@@ -12,7 +12,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -22,8 +21,17 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// <summary>
     /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class SpeedDataComponent : GH_Component
+    public class SpeedDataComponent : GH_Component, IObjectManager
     {
+        #region fields
+        private GH_Structure<GH_SpeedData> _tree = new GH_Structure<GH_SpeedData>();
+        private List<string> _registered = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -36,15 +44,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -67,14 +66,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
 
-        // Fields
-        private readonly List<string> _speedDataNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private GH_Structure<GH_SpeedData> _tree = new GH_Structure<GH_SpeedData>();
-        private List<GH_SpeedData> _list = new List<GH_SpeedData>();
-        private ObjectManager _objectManager;
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -95,9 +86,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetDataTree(3, out v_leaxs)) { return; }
             if (!DA.GetDataTree(4, out v_reaxs)) { return; }
 
-            // Clear tree and list
+            // Clear tree 
             _tree = new GH_Structure<GH_SpeedData>();
-            _list = new List<GH_SpeedData>();
 
             // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
             SpeedDataComponentDataTreeGenerator component = new SpeedDataComponentDataTreeGenerator();
@@ -119,87 +109,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 UpdateVariableNames();
             }
 
-            // Make a list
-            for (int i = 0; i < _tree.Branches.Count; i++)
-            {
-                _list.AddRange(_tree.Branches[i]);
-            }
-
             // Sets Output
             DA.SetDataTree(0, _tree);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
 
-            // Clears speedDataNames
-            for (int i = 0; i < _speedDataNames.Count; i++)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-            }
-            _speedDataNames.Clear();
-
-            // Removes lastName from speedDataNameList
-            if (_objectManager.SpeedDataNames.Contains(_lastName))
-            {
-                _objectManager.SpeedDataNames.Remove(_lastName);
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
 
-            // Adds Component to SpeedDataByGuid Dictionary
-            if (!_objectManager.SpeedDatasByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.SpeedDatasByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if speed Data name is already in use and counts duplicates
-            #region Check name in the object manager
-            _namesUnique = true;
-            for (int i = 0; i < _list.Count; i++)
-            {
-                if (_objectManager.SpeedDataNames.Contains(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else if (_list[i].Value.Name == String.Empty)
-                {
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else
-                {
-                    // Adds Speed Data Name to list
-                    _speedDataNames.Add(_list[i].Value.Name);
-                    _objectManager.SpeedDataNames.Add(_list[i].Value.Name);
-
-                    // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
-                    _objectManager.UpdateSpeedDatas();
-
-                    _lastName = _list[i].Value.Name;
-                }
-
-                // Check variable name: character limit
-                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Check variable name: start with number is not allowed
-                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers speed Data and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -210,21 +137,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _speedDataNames.Count; i++)
-                    {
-                        _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-                    }
-                }
-                _objectManager.SpeedDatasByGuid.Remove(this.InstanceGuid);
-
-                // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
-                _objectManager.UpdateSpeedDatas();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
@@ -306,22 +223,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
 
-        /// <summary>
-        /// The Speed Datas created by this component
-        /// </summary>
-        public List<SpeedData> SpeedDatas
-        {
-            get { return _list.ConvertAll(item => item.Value); }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
-        }
-
         #region menu item methods
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
@@ -345,6 +246,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
         #endregion
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -363,6 +282,42 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             get { return new Guid("91296EEB-3DA3-4F9F-8516-398BD369795E"); }
         }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
     }
 }
 

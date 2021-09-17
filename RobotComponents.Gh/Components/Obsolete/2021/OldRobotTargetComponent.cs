@@ -29,8 +29,17 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is obsolete and will be removed in the future.", false)]
-    public class OldRobotTargetComponent : GH_Component, IGH_VariableParameterComponent
+    public class OldRobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
+        // Fields
+        private List<string> _registered = new List<string>();
+        private List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        private bool _setReferencePlane = false;
+        private bool _setExternalJointPosition = false;
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -82,7 +91,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.list, Optional = true },
             new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.list, Optional = true }
-    };
+        };
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -91,16 +100,6 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             pManager.RegisterParam(new RobotTargetParameter(), "Robot Target", "RT", "Resulting Robot Target");
         }
-
-        // Fields
-        private readonly List<string> _targetNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private ObjectManager _objectManager;
-        private List<RobotTarget> _targets = new List<RobotTarget>();
-
-        private bool _setReferencePlane = false;
-        private bool _setExternalJointPosition = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -169,8 +168,8 @@ namespace RobotComponents.Gh.Components.Obsolete
             int axisConfigCounter = -1;
             int externalJointPositionCounter = -1;
 
-            // Clear list
-            _targets.Clear();
+            // Initiate list
+            List<RobotTarget> targets = new List<RobotTarget>();
 
             // Creates targets
             for (int i = 0; i < biggestSize; i++)
@@ -237,80 +236,23 @@ namespace RobotComponents.Gh.Components.Obsolete
                 }
 
                 RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
-                _targets.Add(target);
+                targets.Add(target);
             }
 
             // Sets Output
-            DA.SetDataList(0, _targets);
+            DA.SetDataList(0, targets);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister = targets.ConvertAll(item => item.Name);
 
-            // Clears targetNames
-            for (int i = 0; i < _targetNames.Count; i++)
-            {
-                _objectManager.TargetNames.Remove(_targetNames[i]);
-            }
-            _targetNames.Clear();
-
-            // Removes lastName from targetNameList
-            if (_objectManager.TargetNames.Contains(_lastName))
-            {
-                _objectManager.TargetNames.Remove(_lastName);
-            }
-
-            // Adds Component to TargetByGuid Dictionary
-            if (!_objectManager.OldRobotTargetsByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.OldRobotTargetsByGuid.Add(this.InstanceGuid, this); //TODO
-            }
-
-            // Checks if target name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
-            {
-                if (_objectManager.TargetNames.Contains(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                    break;
-                }
-                else
-                {
-                    // Adds Target Name to list
-                    _targetNames.Add(names[i]);
-                    _objectManager.TargetNames.Add(names[i]);
-
-                    // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                    _objectManager.UpdateTargets();
-
-                    _lastName = names[i];
-                }
-
-                // Checks if variable name exceeds max character limit for RAPID Code
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Checks if variable name starts with a number
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Target Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers target and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -321,38 +263,12 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _targetNames.Count; i++)
-                    {
-                        _objectManager.TargetNames.Remove(_targetNames[i]);
-                    }
-                }
-                _objectManager.OldRobotTargetsByGuid.Remove(this.InstanceGuid);
-
-                // Run SolveInstance on other Targets with no unique Name to check if their name is now available
-                _objectManager.UpdateTargets();
+                _objectManager.DeleteManagedData(this);
             }
-        }
-
-        /// <summary>
-        /// The Targets created by this component
-        /// </summary>
-        public List<RobotTarget> RobotTargets
-        {
-            get { return _targets; }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
         }
 
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked
@@ -572,5 +488,39 @@ namespace RobotComponents.Gh.Components.Obsolete
             get { return new Guid("78A98F12-EDAF-44C8-ABB0-67D70F8CA391"); }
         }
 
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
     }
 }

@@ -23,8 +23,15 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is obsolete and will be removed in the future.", false)]
-    public class OldSpeedDataComponent : GH_Component
+    public class OldSpeedDataComponent : GH_Component, IObjectManager
     {
+        // Fields
+        private List<string> _registered = new List<string>();
+        private List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -76,13 +83,6 @@ namespace RobotComponents.Gh.Components.Obsolete
             pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
 
-        // Fields
-        private readonly List<string> _speedDataNames = new List<string>();
-        private string _lastName = "";
-        private bool _namesUnique;
-        private List<SpeedData> _speedDatas = new List<SpeedData>();
-        private ObjectManager _objectManager;
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -123,7 +123,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             int v_reaxCounter = -1;
 
             // Clear list
-            _speedDatas.Clear();
+            List<SpeedData> speedDatas = new List<SpeedData>();
 
             // Creates speed Datas
             for (int i = 0; i < biggestSize; i++)
@@ -191,79 +191,23 @@ namespace RobotComponents.Gh.Components.Obsolete
 
                 // Construct speed data
                 SpeedData speedData = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
-                _speedDatas.Add(speedData);
+                speedDatas.Add(speedData);
             }
 
             // Sets Output
-            DA.SetDataList(0, _speedDatas);
+            DA.SetDataList(0, speedDatas);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister = speedDatas.ConvertAll(item => item.Name);
 
-            // Clears speedDataNames
-            for (int i = 0; i < _speedDataNames.Count; i++)
-            {
-                _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-            }
-            _speedDataNames.Clear();
-
-            // Removes lastName from speedDataNameList
-            if (_objectManager.SpeedDataNames.Contains(_lastName))
-            {
-                _objectManager.SpeedDataNames.Remove(_lastName);
-            }
-
-            // Adds Component to SpeedDataByGuid Dictionary
-            if (!_objectManager.OldSpeedDatasByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.OldSpeedDatasByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if speed Data name is already in use and counts duplicates
-            #region Check name in object manager
-            _namesUnique = true;
-            for (int i = 0; i < names.Count; i++)
-            {
-                if (_objectManager.SpeedDataNames.Contains(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name already in use.");
-                    _namesUnique = false;
-                    _lastName = "";
-                }
-                else
-                {
-                    // Adds Speed Data Name to list
-                    _speedDataNames.Add(names[i]);
-                    _objectManager.SpeedDataNames.Add(names[i]);
-
-                    // Run SolveInstance on other Speed Data with no unique Name to check if their name is now available
-                    _objectManager.UpdateSpeedDatas();
-
-                    _lastName = names[i];
-                }
-
-                // Check variable name: character limit
-                if (HelperMethods.VariableExeedsCharacterLimit32(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name exceeds character limit of 32 characters.");
-                    break;
-                }
-
-                // Check variable name: start with number is not allowed
-                if (HelperMethods.VariableStartsWithNumber(names[i]))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Speed Data Name starts with a number which is not allowed in RAPID Code.");
-                    break;
-                }
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers speed Data and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -274,38 +218,12 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_namesUnique == true)
-                {
-                    for (int i = 0; i < _speedDataNames.Count; i++)
-                    {
-                        _objectManager.SpeedDataNames.Remove(_speedDataNames[i]);
-                    }
-                }
-                _objectManager.OldSpeedDatasByGuid.Remove(this.InstanceGuid);
-
-                // Run SolveInstance on other Speed Data instances with no unique Name to check if their name is now available
-                _objectManager.UpdateSpeedDatas();
+                _objectManager.DeleteManagedData(this);
             }
-        }
-
-        /// <summary>
-        /// The Speed Datas created by this component
-        /// </summary>
-        public List<SpeedData> SpeedDatas
-        {
-            get { return _speedDatas; }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
         }
 
         /// <summary>
@@ -326,6 +244,41 @@ namespace RobotComponents.Gh.Components.Obsolete
         public override Guid ComponentGuid
         {
             get { return new Guid("5F900CB8-86D0-4429-992A-CC2422BBFBDE"); }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
         }
     }
 }

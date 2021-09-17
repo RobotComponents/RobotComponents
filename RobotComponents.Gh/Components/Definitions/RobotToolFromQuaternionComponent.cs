@@ -21,8 +21,16 @@ namespace RobotComponents.Gh.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromQuaternionComponent : GH_Component
+    public class RobotToolFromQuaternionComponent : GH_Component, IObjectManager
     {
+        #region fields
+        private List<string> _registered = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -35,15 +43,6 @@ namespace RobotComponents.Gh.Components.Definitions
               "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -72,13 +71,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
-
-        // Fields
-        private string _toolName = String.Empty;
-        private string _lastName = "";
-        private bool _nameUnique;
-        private RobotTool _robotTool = new RobotTool();
-        private ObjectManager _objectManager;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -114,71 +106,22 @@ namespace RobotComponents.Gh.Components.Definitions
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the robot tool
-            _robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);
+            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);
 
             // Outputs
-            DA.SetData(0, _robotTool);
+            DA.SetData(0, robotTool);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister.Add(name);
 
-            // Clears toolNames
-            _objectManager.ToolNames.Remove(_toolName);
-            _toolName = String.Empty;
-
-
-            // Removes lastName from toolNameList
-            if (_objectManager.ToolNames.Contains(_lastName))
-            {
-                _objectManager.ToolNames.Remove(_lastName);
-            }
-
-            // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsQuaternionByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.ToolsQuaternionByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if tool name is already in use and counts duplicates
-            #region Check name in object manager
-            if (_objectManager.ToolNames.Contains(_robotTool.Name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tool Name already in use.");
-                _nameUnique = false;
-                _lastName = "";
-            }
-            else
-            {
-                // Adds Robot Tool Name to list
-                _toolName = _robotTool.Name;
-                _objectManager.ToolNames.Add(_robotTool.Name);
-
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                _objectManager.UpdateRobotTools();
-
-                _lastName = _robotTool.Name;
-                _nameUnique = true;
-            }
-
-            // Checks if variable name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Robot Tool Name exceeds character limit of 32 characters.");
-            }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Robot Tool Name starts with a number which is not allowed in RAPID Code.");
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
@@ -207,39 +150,35 @@ namespace RobotComponents.Gh.Components.Definitions
         #endregion
 
         /// <summary>
-        /// This method detects if the user deletes the component from the Grasshopper canvas. 
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
         /// </summary>
-        /// <param name="sender"> </param>
-        /// <param name="e"> </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_nameUnique == true)
-                {
-                    _objectManager.ToolNames.Remove(_toolName);
-                }
-                _objectManager.ToolsQuaternionByGuid.Remove(this.InstanceGuid);
-
-                // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
-                _objectManager.UpdateRobotTools();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
+        #region properties
         /// <summary>
-        /// The robot tool created by this component
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        public RobotTool RobotTool
+        public override GH_Exposure Exposure
         {
-            get { return _robotTool; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
-        /// Last name
+        /// Gets whether this object is obsolete.
         /// </summary>
-        public string LastName
+        public override bool Obsolete
         {
-            get { return _lastName; }
+            get { return false; }
         }
 
         /// <summary>
@@ -260,5 +199,41 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             get { return new Guid("333DC18E-7669-47BA-A13D-718402E59FB1"); }
         }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
     }
 }

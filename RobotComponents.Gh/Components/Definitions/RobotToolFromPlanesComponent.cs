@@ -24,8 +24,19 @@ namespace RobotComponents.Gh.Components.Definitions
     /// <summary>
     /// RobotComponents Robot Tool from Planes component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromPlanesComponent : GH_Component, IGH_VariableParameterComponent
+    public class RobotToolFromPlanesComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
+        #region fields
+        private List<string> _registered = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
+        private ObjectManager _objectManager;
+        private string _lastName = "";
+        private bool _isUnique = true;
+        private bool _setMass = false;
+        private bool _setCenterOfGravity = false;
+        private bool _setMomentOfInertia = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear,  Subcategory the panel. 
@@ -40,15 +51,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -82,16 +84,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
-
-        // Fields
-        private string _toolName = String.Empty;
-        private string _lastName = ""; 
-        private bool _nameUnique;
-        private RobotTool _robotTool = new RobotTool();
-        private ObjectManager _objectManager;
-        private bool _setMass = false;
-        private bool _setCenterOfGravity = false;
-        private bool _setMomentOfInertia = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -148,122 +140,41 @@ namespace RobotComponents.Gh.Components.Definitions
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the Robot Tool
-            _robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, true, mass, centerOfGravity, momentOfInertia);
+            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, true, mass, centerOfGravity, momentOfInertia);
 
             // Outputs
-            DA.SetData(0, _robotTool);
+            DA.SetData(0, robotTool);
 
             #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+            _toRegister.Clear();
+            _toRegister.Add(name);
 
-            // Clears tool name
-            _objectManager.ToolNames.Remove(_toolName);
-            _toolName = String.Empty;
-
-            // Removes lastName from toolNameList
-            if (_objectManager.ToolNames.Contains(_lastName))
-            {
-                _objectManager.ToolNames.Remove(_lastName);
-            }
-
-            // Adds Component to ToolsByGuid Dictionary
-            if (!_objectManager.ToolsPlanesByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.ToolsPlanesByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if the tool name is already in use and counts duplicates
-            #region Check name in object manager
-            if (_objectManager.ToolNames.Contains(_robotTool.Name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Tool Name already in use.");
-                _nameUnique = false;
-                _lastName = "";
-            }
-            else
-            {
-                // Adds Robot Tool Name to list
-                _toolName = _robotTool.Name;
-                _objectManager.ToolNames.Add(_robotTool.Name);
-
-                // Run SolveInstance on other Tools with no unique Name to check if their name is now available
-                _objectManager.UpdateRobotTools();
-
-                _lastName = _robotTool.Name;
-                _nameUnique = true;
-            }
-
-            // Checks if variable name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Robot Tool Name exceeds character limit of 32 characters.");
-            }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Robot Tool Name starts with a number which is not allowed in RAPID Code.");
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers tool and name list
             GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
             if (doc != null)
             {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }
 
         /// <summary>
-        /// This method detects if the user deletes the component from the Grasshopper canvas. 
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
         /// </summary>
-        /// <param name="sender"> </param>
-        /// <param name="e"> </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
         {
             if (e.Objects.Contains(this))
             {
-                if (_nameUnique == true)
-                {
-                    _objectManager.ToolNames.Remove(_toolName);
-                }
-                _objectManager.ToolsPlanesByGuid.Remove(this.InstanceGuid);
-
-                // Runs SolveInstance on all other Robot Tools to check if robot tool names are unique.
-                _objectManager.UpdateRobotTools();
+                _objectManager.DeleteManagedData(this);
             }
         }
 
         #region menu item
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting the Mass is checked
-        /// </summary>
-        public bool SetMass
-        {
-            get { return _setMass; }
-            set { _setMass = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting the Center of Gravity is checked
-        /// </summary>
-        public bool SetCenterOfGravity
-        {
-            get { return _setCenterOfGravity; }
-            set { _setCenterOfGravity = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting the Moment of Interia is checked
-        /// </summary>
-        public bool SetMomentOfInertia
-        {
-            get { return _setMomentOfInertia; }
-            set { _setMomentOfInertia = value; }
-        }
-
         /// <summary>
         /// Add our own fields. Needed for (de)serialization of the variable input parameters.
         /// </summary>
@@ -271,9 +182,9 @@ namespace RobotComponents.Gh.Components.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Set Mass", SetMass);
-            writer.SetBoolean("Set Center of Gravity", SetCenterOfGravity);
-            writer.SetBoolean("Set Moment of Inertia", SetMomentOfInertia);
+            writer.SetBoolean("Set Mass", _setMass);
+            writer.SetBoolean("Set Center of Gravity", _setCenterOfGravity);
+            writer.SetBoolean("Set Moment of Inertia", _setMomentOfInertia);
             return base.Write(writer);
         }
 
@@ -284,9 +195,9 @@ namespace RobotComponents.Gh.Components.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            SetMass = reader.GetBoolean("Set Mass");
-            SetCenterOfGravity = reader.GetBoolean("Set Center of Gravity");
-            SetMomentOfInertia = reader.GetBoolean("Set Moment of Inertia");
+            _setMass = reader.GetBoolean("Set Mass");
+            _setCenterOfGravity = reader.GetBoolean("Set Center of Gravity");
+            _setMomentOfInertia = reader.GetBoolean("Set Moment of Inertia");
             return base.Read(reader);
         }
 
@@ -297,9 +208,9 @@ namespace RobotComponents.Gh.Components.Definitions
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Set Mass", MenuItemClickSetMass, true, SetMass);
-            Menu_AppendItem(menu, "Set Center of Gravity", MenuItemClickSetCenterOfGravity, true, SetCenterOfGravity);
-            Menu_AppendItem(menu, "Set Moment of Interia", MenuItemClickSetMomentOfInertia, true, SetMomentOfInertia);
+            Menu_AppendItem(menu, "Set Mass", MenuItemClickSetMass, true, _setMass);
+            Menu_AppendItem(menu, "Set Center of Gravity", MenuItemClickSetCenterOfGravity, true, _setCenterOfGravity);
+            Menu_AppendItem(menu, "Set Moment of Interia", MenuItemClickSetMomentOfInertia, true, _setMomentOfInertia);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -323,7 +234,7 @@ namespace RobotComponents.Gh.Components.Definitions
         private void MenuItemClickSetMass(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Mass");
-            SetMass = !SetMass;
+            _setMass = !_setMass;
             AddParameter(0);
         }
 
@@ -335,7 +246,7 @@ namespace RobotComponents.Gh.Components.Definitions
         private void MenuItemClickSetCenterOfGravity(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Center of Gravity");
-            SetCenterOfGravity = !SetCenterOfGravity;
+            _setCenterOfGravity = !_setCenterOfGravity;
             AddParameter(1);
         }
 
@@ -347,7 +258,7 @@ namespace RobotComponents.Gh.Components.Definitions
         private void MenuItemClickSetMomentOfInertia(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Moment of Inertia");
-            SetMomentOfInertia = !SetMomentOfInertia;
+            _setMomentOfInertia = !_setMomentOfInertia;
             AddParameter(2);
         }
 
@@ -456,20 +367,22 @@ namespace RobotComponents.Gh.Components.Definitions
         }
         #endregion
 
+        #region properties
         /// <summary>
-        /// The robot tool created by this component
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        public RobotTool RobotTool
+        public override GH_Exposure Exposure
         {
-            get { return _robotTool; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
-        /// Last name
+        /// Gets whether this object is obsolete.
         /// </summary>
-        public string LastName
+        public override bool Obsolete
         {
-            get { return _lastName; }
+            get { return false; }
         }
 
         /// <summary>
@@ -490,6 +403,41 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             get { return new Guid("D803F4BC-3F29-440F-A5F5-196D4CCBE610"); }
         }
-    }
 
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
+    }
 }

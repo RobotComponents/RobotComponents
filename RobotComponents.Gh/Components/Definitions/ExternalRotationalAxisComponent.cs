@@ -26,6 +26,11 @@ namespace RobotComponents.Gh.Components.Definitions
     /// </summary>
     public class ExternalRotationalAxisComponent : GH_Component, IGH_VariableParameterComponent
     {
+        #region fields
+        private bool _axisLogicNumber = false;
+        private bool _movesRobot = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -40,15 +45,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -83,15 +79,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");  //Todo: beef this up to be more informative.
         }
-
-        // Fields
-        private string _axisName = String.Empty;
-        private string _lastName = "";
-        private bool _nameUnique;
-        private ObjectManager _objectManager;
-        private ExternalRotationalAxis _externalRotationalAxis;
-        private bool _axisLogicNumber = false;
-        private bool _movesRobot = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -132,104 +119,10 @@ namespace RobotComponents.Gh.Components.Definitions
             }
 
             // Create the external rotational axis
-            _externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMeshes, linkMeshes, axisLogic, movesRobot);
+            ExternalRotationalAxis externalRotationalAxis = new ExternalRotationalAxis(name, axisPlane, limits, baseMeshes, linkMeshes, axisLogic, movesRobot);
 
             // Output
-            DA.SetData(0, _externalRotationalAxis);
-
-            #region Object manager
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
-
-            // Clears ExternalAxisNames
-            _objectManager.ExternalAxisNames.Remove(_axisName);
-            _axisName = String.Empty;
-
-            // Removes lastName from ExternalAxisNames List
-            if (_objectManager.ExternalAxisNames.Contains(_lastName))
-            {
-                _objectManager.ExternalAxisNames.Remove(_lastName);
-            }
-
-            // Adds Component to ExternalLinarAxesByGuid Dictionary
-            if (!_objectManager.ExternalRotationalAxesByGuid.ContainsKey(this.InstanceGuid))
-            {
-                _objectManager.ExternalRotationalAxesByGuid.Add(this.InstanceGuid, this);
-            }
-
-            // Checks if axis name is already in use and counts duplicates
-            #region Check name in object manager
-            if (_objectManager.ExternalAxisNames.Contains(_externalRotationalAxis.Name))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "External Axis Name already in use.");
-                _nameUnique = false;
-                _lastName = "";
-            }
-            else
-            {
-                // Adds Robot Axis Name to list
-                _axisName = _externalRotationalAxis.Name;
-                _objectManager.ExternalAxisNames.Add(_externalRotationalAxis.Name);
-
-                // Run SolveInstance on other External Axes with no unique Name to check if their name is now available
-                _objectManager.UpdateExternalAxis();
-
-                _lastName = _externalRotationalAxis.Name;
-                _nameUnique = true;
-            }
-            #endregion
-
-            // Recognizes if Component is Deleted and removes it from Object Managers axis and name list
-            GH_Document doc = this.OnPingDocument();
-            if (doc != null)
-            {
-                doc.ObjectsDeleted += DocumentObjectsDeleted;
-            }
-            #endregion
-        }
-
-        /// <summary>
-        /// This method detects if the user deletes the component from the Grasshopper canvas. 
-        /// </summary>
-        /// <param name="sender"> </param>
-        /// <param name="e"> </param>
-        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
-        {
-            if (e.Objects.Contains(this))
-            {
-                if (_nameUnique == true)
-                {
-                    _objectManager.ExternalAxisNames.Remove(_axisName);
-                }
-                _objectManager.ExternalRotationalAxesByGuid.Remove(this.InstanceGuid);
-
-                // Runs SolveInstance on all other ExternalAxis components to check if external axis names are unique.
-                _objectManager.UpdateExternalAxis();
-            }
-        }
-
-        /// <summary>
-        /// The external rotational axis created by this component
-        /// </summary>
-        public ExternalRotationalAxis ExternalRotationalAxis
-        {
-            get { return _externalRotationalAxis; }
-        }
-
-        /// <summary>
-        /// The external rotational axis created by this component as External Axis
-        /// </summary>
-        public ExternalAxis ExternalAxis
-        {
-            get { return _externalRotationalAxis as ExternalAxis; }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
+            DA.SetData(0, externalRotationalAxis);
         }
 
         #region menu item
@@ -346,7 +239,6 @@ namespace RobotComponents.Gh.Components.Definitions
         }
         #endregion
 
-
         // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
         #region variable input parameters
         /// <summary>
@@ -409,8 +301,26 @@ namespace RobotComponents.Gh.Components.Definitions
         {
 
         }
-
         #endregion
+
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
         /// <summary>
         /// Provides an Icon for every component that will be visible in the User Interface.
         /// Icons need to be 24x24 pixels.
@@ -429,5 +339,6 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             get { return new Guid("81B3F16F-1E26-4E30-BC5B-1FEA030D837F"); }
         }
+        #endregion
     }
 }

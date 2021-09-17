@@ -1,7 +1,7 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
 // under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/EDEK-UniKassel/RobotComponents>.
+// see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -13,19 +13,24 @@ using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Deconstruct
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.18.000
+// It is replaced with a new component. 
+
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Deconstruct Rob Joint Position component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct External Joint Position component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobJointPosComponent : GH_Component
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
+    public class OldDeconstructExtJointPosComponent : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructExtJointPos class.
         /// </summary>
-        public DeconstructRobJointPosComponent()
-          : base("Deconstruct Robot Joint Position", "DeConRobJoint",
-              "Deconstructs a Robot Joint Position Component into its parameters."
+        public OldDeconstructExtJointPosComponent()
+          : base("Deconstruct External Joint Position", "DeConExtJoint",
+              "Deconstructs an External Joint Position Component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
@@ -33,11 +38,28 @@ namespace RobotComponents.Gh.Components.Deconstruct
         }
 
         /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The Robot Joint Position.", GH_ParamAccess.item);
+            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The External Joint Position.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,13 +67,12 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Name", "N", "Robot joint position variable name as text");
-            pManager.Register_DoubleParam("Robot joint position 1", "RJ1", "Defines the position of robot joint 1 in degrees.");
-            pManager.Register_DoubleParam("Robot joint position 2", "RJ2", "Defines the position of robot joint 2 in degrees.");
-            pManager.Register_DoubleParam("Robot joint position 3", "RJ3", "Defines the position of robot joint 3 in degrees.");
-            pManager.Register_DoubleParam("Robot joint position 4", "RJ4", "Defines the position of robot joint 4 in degrees.");
-            pManager.Register_DoubleParam("Robot joint position 5", "RJ5", "Defines the position of robot joint 5 in degrees.");
-            pManager.Register_DoubleParam("Robot joint position 6", "RJ6", "Defines the position of robot joint 6 in degrees.");
+            pManager.Register_DoubleParam("External axis position A", "EAa", "Defines the position of the external logical axis A");
+            pManager.Register_DoubleParam("External axis position B", "EAb", "Defines the position of the external logical axis B");
+            pManager.Register_DoubleParam("External axis position C", "EAc", "Defines the position of the external logical axis C");
+            pManager.Register_DoubleParam("External axis position D", "EAd", "Defines the position of the external logical axis D");
+            pManager.Register_DoubleParam("External axis position E", "EAe", "Defines the position of the external logical axis E");
+            pManager.Register_DoubleParam("External axis position F", "EAf", "Defines the position of the external logical axis F");
         }
 
         /// <summary>
@@ -61,25 +82,24 @@ namespace RobotComponents.Gh.Components.Deconstruct
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotJointPosition robJointPosition = null;
+            ExternalJointPosition extJointPosition = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robJointPosition)) { return; }
+            if (!DA.GetData(0, ref extJointPosition)) { return; }
 
             // Check if the object is valid
-            if (!robJointPosition.IsValid)
+            if (!extJointPosition.IsValid)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Joint Position is not valid");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Joint Position is not valid");
             }
 
             // Output
-            DA.SetData(0, robJointPosition.Name);
-            DA.SetData(1, robJointPosition[0]);
-            DA.SetData(2, robJointPosition[1]);
-            DA.SetData(3, robJointPosition[2]);
-            DA.SetData(4, robJointPosition[3]);
-            DA.SetData(5, robJointPosition[4]);
-            DA.SetData(6, robJointPosition[5]);
+            DA.SetData(0, extJointPosition[0]);
+            DA.SetData(1, extJointPosition[1]);
+            DA.SetData(2, extJointPosition[2]);
+            DA.SetData(3, extJointPosition[3]);
+            DA.SetData(4, extJointPosition[4]);
+            DA.SetData(5, extJointPosition[5]);
         }
 
         #region menu item
@@ -110,7 +130,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructRobotJointPosition_Icon; } 
+            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; } 
         }
 
         /// <summary>
@@ -118,7 +138,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F1308FD1-F3E3-43EC-8ACA-54990B1664FF"); }
+            get { return new Guid("8461CEC9-AADE-4818-A657-09A51C38882F"); }
         }
     }
 }

@@ -45,12 +45,13 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.Register_DoubleParam("External axis position A", "EAa", "Defines the position of the external logical axis A");
-            pManager.Register_DoubleParam("External axis position B", "EAb", "Defines the position of the external logical axis B");
-            pManager.Register_DoubleParam("External axis position C", "EAc", "Defines the position of the external logical axis C");
-            pManager.Register_DoubleParam("External axis position D", "EAd", "Defines the position of the external logical axis D");
-            pManager.Register_DoubleParam("External axis position E", "EAe", "Defines the position of the external logical axis E");
-            pManager.Register_DoubleParam("External axis position F", "EAf", "Defines the position of the external logical axis F");
+            pManager.Register_StringParam("Name", "N", "External joint position variable name as text");
+            pManager.Register_DoubleParam("External joint position A", "EJa", "Defines the position of the external logical axis A");
+            pManager.Register_DoubleParam("External joint position B", "EJb", "Defines the position of the external logical axis B");
+            pManager.Register_DoubleParam("External joint position C", "EJc", "Defines the position of the external logical axis C");
+            pManager.Register_DoubleParam("External joint position D", "EJd", "Defines the position of the external logical axis D");
+            pManager.Register_DoubleParam("External joint position E", "EJe", "Defines the position of the external logical axis E");
+            pManager.Register_DoubleParam("External joint position F", "EJf", "Defines the position of the external logical axis F");
         }
 
         /// <summary>
@@ -72,12 +73,13 @@ namespace RobotComponents.Gh.Components.Deconstruct
             }
 
             // Output
-            DA.SetData(0, extJointPosition[0]);
-            DA.SetData(1, extJointPosition[1]);
-            DA.SetData(2, extJointPosition[2]);
-            DA.SetData(3, extJointPosition[3]);
-            DA.SetData(4, extJointPosition[4]);
-            DA.SetData(5, extJointPosition[5]);
+            DA.SetData(0, extJointPosition.Name);
+            DA.SetData(1, extJointPosition[0]);
+            DA.SetData(2, extJointPosition[1]);
+            DA.SetData(3, extJointPosition[2]);
+            DA.SetData(4, extJointPosition[3]);
+            DA.SetData(5, extJointPosition[4]);
+            DA.SetData(6, extJointPosition[5]);
         }
 
         #region menu item
@@ -116,7 +118,7 @@ namespace RobotComponents.Gh.Components.Deconstruct
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8461CEC9-AADE-4818-A657-09A51C38882F"); }
+            get { return new Guid("DF0B0707-E0A1-4978-8FFD-FF7FE916AF6E"); }
         }
     }
 }

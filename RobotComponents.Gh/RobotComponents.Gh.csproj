@@ -69,9 +69,15 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\ExternalJointPositionComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\Code Generation\RobotJointPositionComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructExtJointPosComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructRobJointPosComponent.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldRobotJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\RobotTargetComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\ZoneDataComponentDataTreeGenerator.cs" />

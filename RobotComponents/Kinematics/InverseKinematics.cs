@@ -495,7 +495,7 @@ namespace RobotComponents.Kinematics
                 // NOTE: Only works for a robot with one external axis that moves the robot.
                 double count = 0; // Counts the number of external axes that move the robot.
 
-                // Calcualtes the position of the external axes for each external axis
+                // Calculates the position of the external axes for each external axis
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
                     ExternalAxis externalAxis = _robot.ExternalAxes[i];
@@ -565,6 +565,9 @@ namespace RobotComponents.Kinematics
                         }
                     }
                 }
+
+                // Copy name
+                _externalJointPosition.Name = _target.ExternalJointPosition.Name;
             }
 
             // Joint Target

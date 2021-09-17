@@ -26,6 +26,11 @@ namespace RobotComponents.Gh.Utils
         // RC document id
         private readonly string _id;
 
+        // contains information on all joint positions in file to notify user about duplicates
+        private Dictionary<Guid, RobotJointPositionComponent> _robotJointPositionsByGuid;
+        private Dictionary<Guid, ExternalJointPositionComponent> _externalJointPositionsByGuid;
+        private List<string> _jointPositionNames;
+
         // contains information on all targets in file to notify user about duplicates
         private Dictionary<Guid, JointTargetComponent> _jointTargetsByGuid;
         private Dictionary<Guid, RobotTargetComponent> _robotTargetsByGuid;
@@ -82,6 +87,10 @@ namespace RobotComponents.Gh.Utils
         public ObjectManager(string id)
         {
             _id = id;
+
+            _robotJointPositionsByGuid = new Dictionary<Guid, RobotJointPositionComponent>();
+            _externalJointPositionsByGuid = new Dictionary<Guid, ExternalJointPositionComponent>();
+            _jointPositionNames = new List<string>();
 
             _jointTargetsByGuid = new Dictionary<Guid, JointTargetComponent>();
             _robotTargetsByGuid = new Dictionary<Guid, RobotTargetComponent>();
@@ -335,9 +344,9 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
-        /// Gets all the robot targets that are stored in the object mananger
+        /// Gets all the joint targets that are stored in the object mananger
         /// </summary>
-        /// <returns> A list with all the robot targets that are stored in the object mananger. </returns>
+        /// <returns> A list with all the joint targets that are stored in the object mananger. </returns>
         public List<JointTarget> GetJointTargets()
         {
             // Empty list
@@ -377,6 +386,69 @@ namespace RobotComponents.Gh.Utils
 
             // Return
             return targets;
+        }
+
+        /// <summary>
+        /// Gets all the joint positions that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the joint Positions that are stored in the object mananger. </returns>
+        public List<IJointPosition> GetJointPositions()
+        {
+            // Empty list
+            List<IJointPosition> jointPositions = new List<IJointPosition>();
+
+            // Add alltargets
+            jointPositions.AddRange(this.GetRobotJointPositions());
+            jointPositions.AddRange(this.GetExternalJointPositions());
+
+            // Sort based on name
+            jointPositions = jointPositions.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return jointPositions;
+        }
+
+        /// <summary>
+        /// Gets all the robot joint positions that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the robot joint positions that are stored in the object mananger. </returns>
+        public List<RobotJointPosition> GetRobotJointPositions()
+        {
+            // Empty list
+            List<RobotJointPosition> robotJointPositions = new List<RobotJointPosition>();
+
+            // Add all the robot targets
+            foreach (KeyValuePair<Guid, RobotJointPositionComponent> entry in _robotJointPositionsByGuid)
+            {
+                robotJointPositions.AddRange(entry.Value.RobotJointPositions);
+            }
+
+            // Sort based on name
+            robotJointPositions = robotJointPositions.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return robotJointPositions;
+        }
+
+        /// <summary>
+        /// Gets all the external joint positions that are stored in the object mananger
+        /// </summary>
+        /// <returns> A list with all the external joint positions that are stored in the object mananger. </returns>
+        public List<ExternalJointPosition> GetExternalJointPositions()
+        {
+            // Empty list
+            List<ExternalJointPosition> externalJointPositions = new List<ExternalJointPosition>();
+
+            // Add all the joint targets
+            foreach (KeyValuePair<Guid, ExternalJointPositionComponent> entry in _externalJointPositionsByGuid)
+            {
+                externalJointPositions.AddRange(entry.Value.ExternalJointPositions);
+            }
+            // Sort based on name
+            externalJointPositions = externalJointPositions.OrderBy(x => x.Name).ToList();
+
+            // Return
+            return externalJointPositions;
         }
 
         /// <summary>
@@ -573,6 +645,30 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
+        /// Runs SolveInstance on all other Joint Positions to check if joint position names are unique.
+        /// </summary>
+        public void UpdateJointPositions()
+        {
+            // Run SolveInstance on other joint positions with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, RobotJointPositionComponent> entry in RobotJointPositionsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+
+            // Run SolveInstance on other joint positions with no unique Name to check if their name is now available
+            foreach (KeyValuePair<Guid, ExternalJointPositionComponent> entry in ExternalJointPositionsByGuid)
+            {
+                if (entry.Value.LastName == "")
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+
+        /// <summary>
         /// Runs SolveInstance on all other Speed Datas to check if speed data names are unique.
         /// </summary>
         public void UpdateSpeedDatas()
@@ -718,11 +814,37 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
-        /// A list with all the unique 'Target names in this object manager
+        /// A list with all the unique Target names in this object manager
         /// </summary>
         public List<string> TargetNames
         {
             get { return _targetNames; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the Robot Joint Position components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, RobotJointPositionComponent> RobotJointPositionsByGuid
+        {
+            get { return _robotJointPositionsByGuid; }
+        }
+
+        /// <summary>
+        /// Dictionary with all the Robot Joint Position components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, ExternalJointPositionComponent> ExternalJointPositionsByGuid
+        {
+            get { return _externalJointPositionsByGuid; }
+        }
+
+        /// <summary>
+        /// A list with all the unique Joint Position names in this object manager
+        /// </summary>
+        public List<string> JointPositionNames
+        {
+            get { return _jointPositionNames; }
         }
 
         /// <summary>

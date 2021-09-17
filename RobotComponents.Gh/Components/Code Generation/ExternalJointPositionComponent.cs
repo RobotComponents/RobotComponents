@@ -6,12 +6,16 @@
 // System Libs
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -52,22 +56,23 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter(externalAxisParameters[0].Name, externalAxisParameters[0].NickName, externalAxisParameters[0].Description, GH_ParamAccess.item, 9e9);
-            pManager.AddNumberParameter(externalAxisParameters[1].Name, externalAxisParameters[1].NickName, externalAxisParameters[1].Description, GH_ParamAccess.item, 9e9);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddNumberParameter(externalAxisParameters[0].Name, externalAxisParameters[0].NickName, externalAxisParameters[0].Description, externalAxisParameters[0].Access, 9e9);
+            pManager.AddNumberParameter(externalAxisParameters[1].Name, externalAxisParameters[1].NickName, externalAxisParameters[1].Description, externalAxisParameters[0].Access, 9e9);
 
-            pManager[0].Optional = externalAxisParameters[0].Optional;
-            pManager[1].Optional = externalAxisParameters[1].Optional;
+            pManager[1].Optional = externalAxisParameters[0].Optional;
+            pManager[2].Optional = externalAxisParameters[1].Optional;
         }
 
         // Create an array with the parameters for the positions of the external logical axes
         readonly IGH_Param[] externalAxisParameters = new IGH_Param[6]
         {
-            new Param_Number() { Name = "External axis position A", NickName = "EAa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.item, Optional = true }, // fixed
-            new Param_Number() { Name = "External axis position B", NickName = "EAb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.item, Optional = true }, // fixed
-            new Param_Number() { Name = "External axis position C", NickName = "EAc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External axis position D", NickName = "EAd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External axis position E", NickName = "EAe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.item, Optional = true }, // variable
-            new Param_Number() { Name = "External axis position F", NickName = "EAf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.item, Optional = true } // variable
+            new Param_Number() { Name = "External joint position A", NickName = "EJa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.tree, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position B", NickName = "EJb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.tree, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position C", NickName = "EJc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position D", NickName = "EJd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position E", NickName = "EJe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position F", NickName = "EJf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.tree, Optional = true } // variable
         };
 
         /// <summary>
@@ -78,56 +83,316 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The resulting external joint position");
         }
 
+        // Fields
+        private readonly List<string> _jointPositionNames = new List<string>();
+        private string _lastName = "";
+        private bool _namesUnique;
+        private GH_Structure<GH_ExternalJointPosition> _tree = new GH_Structure<GH_ExternalJointPosition>();
+        private List<GH_ExternalJointPosition> _list = new List<GH_ExternalJointPosition>();
+        private ObjectManager _objectManager;
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare variables
-            double externalAxisValueA = 9e9;
-            double externalAxisValueB = 9e9;
-            double externalAxisValueC = 9e9;
-            double externalAxisValueD = 9e9;
-            double externalAxisValueE = 9e9;
-            double externalAxisValueF = 9e9;
+            // Variables
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Number> externalAxisValuesA = new GH_Structure<GH_Number>(); 
+            GH_Structure<GH_Number> externalAxisValuesB = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesC = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesD = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesE = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesF = new GH_Structure<GH_Number>();
+
+            // Catch input data
+            // Name
+            if (!DA.GetDataTree(0, out names)) { return; }
 
             // External axis A
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
-                if (!DA.GetData(externalAxisParameters[0].Name, ref externalAxisValueA)) { externalAxisValueA = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[0].Name, out externalAxisValuesA)) 
+                {
+                    externalAxisValuesA = new GH_Structure<GH_Number>();
+                    externalAxisValuesA.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
             // External axis B
             if (Params.Input.Any(x => x.Name == externalAxisParameters[1].Name))
             {
-                if (!DA.GetData(externalAxisParameters[1].Name, ref externalAxisValueB)) { externalAxisValueB = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[1].Name, out externalAxisValuesB))
+                {
+                    externalAxisValuesB = new GH_Structure<GH_Number>();
+                    externalAxisValuesB.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
             // External axis C
             if (Params.Input.Any(x => x.Name == externalAxisParameters[2].Name))
             {
-                if (!DA.GetData(externalAxisParameters[2].Name, ref externalAxisValueC)) { externalAxisValueC = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[2].Name, out externalAxisValuesC))
+                {
+                    externalAxisValuesC = new GH_Structure<GH_Number>();
+                    externalAxisValuesC.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
             // External axis D
             if (Params.Input.Any(x => x.Name == externalAxisParameters[3].Name))
             {
-                if (!DA.GetData(externalAxisParameters[3].Name, ref externalAxisValueD)) { externalAxisValueD = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[3].Name, out externalAxisValuesD))
+                {
+                    externalAxisValuesD = new GH_Structure<GH_Number>();
+                    externalAxisValuesD.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
             // External axis E
             if (Params.Input.Any(x => x.Name == externalAxisParameters[4].Name))
             {
-                if (!DA.GetData(externalAxisParameters[4].Name, ref externalAxisValueE)) { externalAxisValueE = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[4].Name, out externalAxisValuesE))
+                {
+                    externalAxisValuesE = new GH_Structure<GH_Number>();
+                    externalAxisValuesE.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
             // External axis F
             if (Params.Input.Any(x => x.Name == externalAxisParameters[5].Name))
             {
-                if (!DA.GetData(externalAxisParameters[5].Name, ref externalAxisValueF)) { externalAxisValueF = 9e9; }
+                if (!DA.GetDataTree(externalAxisParameters[5].Name, out externalAxisValuesF))
+                {
+                    externalAxisValuesF = new GH_Structure<GH_Number>();
+                    externalAxisValuesF.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
 
-            // Create external joint position
-            ExternalJointPosition extJointPosition = new ExternalJointPosition(externalAxisValueA, externalAxisValueB, externalAxisValueC, externalAxisValueD, externalAxisValueE, externalAxisValueF);
+            // Clear tree and list
+            _tree = new GH_Structure<GH_ExternalJointPosition>();
+            _list = new List<GH_ExternalJointPosition>();
+
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            ExternalJointPositionComponentDataTreeGenerator component = new ExternalJointPositionComponentDataTreeGenerator();
+
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(externalAxisValuesA);
+            component.Params.Input[2].AddVolatileDataTree(externalAxisValuesB);
+            component.Params.Input[3].AddVolatileDataTree(externalAxisValuesC);
+            component.Params.Input[4].AddVolatileDataTree(externalAxisValuesD);
+            component.Params.Input[5].AddVolatileDataTree(externalAxisValuesE);
+            component.Params.Input[6].AddVolatileDataTree(externalAxisValuesF);
+
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
+
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ExternalJointPosition>;
+
+            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
+
+            // Make a list
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                _list.AddRange(_tree.Branches[i]);
+            }
 
             // Sets Output
-            DA.SetData(0, extJointPosition);
+            DA.SetDataTree(0, _tree);
+
+            #region Object manager
+            // Gets ObjectManager of this document
+            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
+
+            // Clears jointPositionNames
+            for (int i = 0; i < _jointPositionNames.Count; i++)
+            {
+                _objectManager.JointPositionNames.Remove(_jointPositionNames[i]);
+            }
+            _jointPositionNames.Clear();
+
+            // Removes lastName from jointPositionNameList
+            if (_objectManager.JointPositionNames.Contains(_lastName))
+            {
+                _objectManager.JointPositionNames.Remove(_lastName);
+            }
+
+            // Adds Component to JointPositionsByGuid Dictionary
+            if (!_objectManager.ExternalJointPositionsByGuid.ContainsKey(this.InstanceGuid))
+            {
+                _objectManager.ExternalJointPositionsByGuid.Add(this.InstanceGuid, this);
+            }
+
+            // Checks if joint position name is already in use and counts duplicates
+            #region Check name in object manager
+            _namesUnique = true;
+            for (int i = 0; i < _list.Count; i++)
+            {
+                if (_objectManager.JointPositionNames.Contains(_list[i].Value.Name))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name already in use.");
+                    _namesUnique = false;
+                    _lastName = "";
+                    break;
+                }
+                else if (_list[i].Value.Name == String.Empty)
+                {
+                    _namesUnique = false;
+                    _lastName = "";
+                }
+                else
+                {
+                    // Adds Joint Position Name to list
+                    _jointPositionNames.Add(_list[i].Value.Name);
+                    _objectManager.JointPositionNames.Add(_list[i].Value.Name);
+
+                    // Run SolveInstance on other Joint Positions with no unique Name to check if their name is now available
+                    _objectManager.UpdateJointPositions();
+
+                    _lastName = _list[i].Value.Name;
+                }
+
+                // Checks if variable name exceeds max character limit for RAPID Code
+                if (HelperMethods.VariableExeedsCharacterLimit32(_list[i].Value.Name))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name exceeds character limit of 32 characters.");
+                    break;
+                }
+
+                // Checks if variable name starts with a number
+                if (HelperMethods.VariableStartsWithNumber(_list[i].Value.Name))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Joint Position Name starts with a number which is not allowed in RAPID Code.");
+                    break;
+                }
+            }
+            #endregion
+
+            // Recognizes if Component is Deleted and removes it from Object Managers joint position and name list
+            GH_Document doc = this.OnPingDocument();
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+            #endregion
+        }
+
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                if (_namesUnique == true)
+                {
+                    for (int i = 0; i < _jointPositionNames.Count; i++)
+                    {
+                        _objectManager.JointPositionNames.Remove(_jointPositionNames[i]);
+                    }
+                }
+                _objectManager.ExternalJointPositionsByGuid.Remove(this.InstanceGuid);
+
+                // Runs SolveInstance on all other Joint Positions to check if the names are unique.
+                _objectManager.UpdateJointPositions();
+            }
+        }
+
+        /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The joint positions created by this component
+        /// </summary>
+        public List<ExternalJointPosition> ExternalJointPositions
+        {
+            get { return _list.ConvertAll(item => item.Value); }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
         }
 
         // Methods for creating custom menu items and event handlers when the custom menu items are clicked
@@ -164,7 +429,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void AddExternalAxisValueParameter(int index)
         {
             // Pick the parameter that needs to be added
-            IGH_Param parameter = externalAxisParameters[index];
+            IGH_Param parameter = externalAxisParameters[index - 1];
 
             // Register the input parameter
             Params.RegisterInputParam(parameter, index);
@@ -184,12 +449,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
         {
             // Don't allow for insert before or in between the fixed input parameters
-            if (side == GH_ParameterSide.Input && index < 2)
+            if (side == GH_ParameterSide.Input && index < 3)
             {
                 return false;
             }
             // Don't allow for insert if all variable input parameters are already added
-            else if (side == GH_ParameterSide.Input && index == (externalAxisParameters.Length))
+            else if (side == GH_ParameterSide.Input && index == (externalAxisParameters.Length + 1))
             {
                 return false;
             }
@@ -218,7 +483,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
                 // Makes it impossible to remove the fixed input parameters
-                if (side == GH_ParameterSide.Input && index < 2)
+                if (side == GH_ParameterSide.Input && index < 3)
                 {
                     return false;
                 }
@@ -272,7 +537,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
                 // Makes it impossible to detroy the fixed input parameters
-                if (side == GH_ParameterSide.Input && index < 2)
+                if (side == GH_ParameterSide.Input && index < 3)
                 {
                     return false;
                 }
@@ -323,7 +588,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4013FF60-6EBB-4882-A7D4-48A0ADF9170B"); }
+            get { return new Guid("5317F39D-738E-4849-BDCA-FD9131D9E5E1"); }
         }
 
     }

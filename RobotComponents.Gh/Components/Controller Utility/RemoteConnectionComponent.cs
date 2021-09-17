@@ -179,51 +179,59 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                     {
                         // Get task
                         Task[] tasks = _controller.Rapid.GetTasks();
-                        Task task = tasks[0];
 
-                        // TODO: Make a pick task form? As for pick controller? 
-                        // TODO: This can be a solution for multi move with multiple tasks
-                        // Task task = controller.Rapid.GetTask(tasks[0].Name) // Get task with specified name
-
-                        // Grant acces
-                        _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
-
-                        // Load the new program from the created file
-                        if (systemCode.Count != 0)
+                        if (tasks.Length == 1)
                         {
-                            filePathSystem = Path.Combine(directory, "SystemModule.sys");
-                            task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
-                        }
-                        if (programCode.Count != 0)
-                        {
-                            filePathProgram = Path.Combine(directory, "ProgramModule.mod");
-                            task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
-                        }
+                            Task task = tasks[0];
 
-                        // Resets the program pointer of this task to the main entry point.
-                        if (_controller.OperatingMode == ControllerOperatingMode.Auto)
-                        {
-                            _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
+                            // TODO: Make a pick task form? As for pick controller? 
+                            // TODO: This can be a solution for multi move with multiple tasks
+                            // Task task = controller.Rapid.GetTask(tasks[0].Name) // Get task with specified name
 
-                            try
+                            // Grant acces
+                            _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
+
+                            // Load the new program from the created file
+                            if (systemCode.Count != 0)
                             {
-                                task.ResetProgramPointer(); // Requires auto mode and execute rapid
-                                _programPointerWarning = false;
+                                filePathSystem = Path.Combine(directory, "SystemModule.sys");
+                                task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
                             }
-                            catch
+                            if (programCode.Count != 0)
                             {
-                                _programPointerWarning = true;
+                                filePathProgram = Path.Combine(directory, "ProgramModule.mod");
+                                task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
                             }
-                        }
 
-                        // Update action status message
-                        if (programCode != null || systemCode != null)
-                        {
-                            _uStatus = "The RAPID code is succesfully uploaded.";
+                            // Resets the program pointer of this task to the main entry point.
+                            if (_controller.OperatingMode == ControllerOperatingMode.Auto)
+                            {
+                                _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
+
+                                try
+                                {
+                                    task.ResetProgramPointer(); // Requires auto mode and execute rapid
+                                    _programPointerWarning = false;
+                                }
+                                catch
+                                {
+                                    _programPointerWarning = true;
+                                }
+                            }
+
+                            // Update action status message
+                            if (programCode.Count != 0 || systemCode.Count != 0)
+                            {
+                                _uStatus = "The RAPID code is succesfully uploaded.";
+                            }
+                            else
+                            {
+                                _uStatus = "The RAPID is not uploaded since there is no code defined.";
+                            }
                         }
                         else
                         {
-                            _uStatus = "The RAPID is not uploaded since there is no code defined.";
+                            _uStatus = "The RAPID is not uploaded since there is more than one task defined in the controller. Upload your programs manually.";
                         }
 
                         // Give back the mastership

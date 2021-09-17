@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Drawing;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper;
@@ -21,19 +22,24 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+// This component is OBSOLETE!
+// It is OBSOLETE since version 0.18.000
+// It is replaced with a new component. 
+
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class MovementComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is obsolete and will be removed in the future.", false)]
+    public class OldMovementComponent4 : GH_Component, IGH_VariableParameterComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MovementComponent()
+        public OldMovementComponent4()
           : base("Move", "M",
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
@@ -51,7 +57,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -59,10 +73,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.item);
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.item, 0);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.item);
+            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
+            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
 
             pManager[3].Optional = true;
         }
@@ -73,9 +87,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         // Create an array with the variable input parameters
         readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
-            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
-            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
+            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.list, Optional = true},
+            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.list, Optional = true },
+            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
         /// <summary>
@@ -109,84 +123,227 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Input variables
-            ITarget target = new RobotTarget();
-            SpeedData speedData = new SpeedData();
-            int movementType = 0;
-            ZoneData zoneData = new ZoneData();
-            RobotTool robotTool = new RobotTool();
-            WorkObject workObject = new WorkObject();
-            DigitalOutput digitalOutput = new DigitalOutput();
+            List<ITarget> targets = new List<ITarget>();
+            List<SpeedData> speedDatas = new List<SpeedData>();
+            List<int> movementTypes = new List<int>();
+            List<ZoneData> zoneDatas = new List<ZoneData>();
+            List<RobotTool> robotTools = new List<RobotTool>();
+            List<WorkObject> workObjects = new List<WorkObject>();
+            List<DigitalOutput> digitalOutputs = new List<DigitalOutput>();
 
             // Create an empty Robot Tool
             RobotTool emptyRobotTool = new RobotTool();
             emptyRobotTool.Clear();
 
             // Catch the input data from the fixed parameters
-            if (!DA.GetData(0, ref target)) { return; }
-            if (!DA.GetData(1, ref speedData)) { return; }
-            if (!DA.GetData(2, ref movementType)) { return; }
-            if (!DA.GetData(3, ref zoneData)) { zoneData = new ZoneData(0); }
+            if (!DA.GetDataList(0, targets)) { return; }
+            if (!DA.GetDataList(1, speedDatas)) { return; }
+            if (!DA.GetDataList(2, movementTypes)) { return; }
+            if (!DA.GetDataList(3, zoneDatas)) { zoneDatas = new List<ZoneData>() { new ZoneData(0) }; }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetData(variableInputParameters[0].Name, ref robotTool))
+                if (!DA.GetDataList(variableInputParameters[0].Name, robotTools))
                 {
-                    robotTool = new RobotTool(emptyRobotTool);
+                    robotTools = new List<RobotTool>() { new RobotTool(emptyRobotTool) };
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetData(variableInputParameters[1].Name, ref workObject))
+                if (!DA.GetDataList(variableInputParameters[1].Name, workObjects))
                 {
-                    workObject = new WorkObject();
+                    workObjects = new List<WorkObject>() { new WorkObject() };
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetData(variableInputParameters[2].Name, ref digitalOutput))
+                if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputs))
                 {
-                    digitalOutput = new DigitalOutput();
+                    digitalOutputs = new List<DigitalOutput>() { new DigitalOutput() };
                 }
             }
 
-            // Movement constructor
+            // Make sure variable input parameters have a default value
+            if (robotTools.Count == 0)
+            {
+                robotTools.Add(new RobotTool(emptyRobotTool)); // Empty Robot Tool
+            }
+            if (workObjects.Count == 0)
+            {
+                workObjects.Add(new WorkObject()); // Makes a default WorkObject (wobj0)
+            }
+            if (digitalOutputs.Count == 0)
+            {
+                digitalOutputs.Add(new DigitalOutput()); // InValid / empty DO
+            }
+
+            // Get longest Input List
+            int[] sizeValues = new int[7];
+            sizeValues[0] = targets.Count;
+            sizeValues[1] = speedDatas.Count;
+            sizeValues[2] = movementTypes.Count;
+            sizeValues[3] = zoneDatas.Count;
+            sizeValues[4] = robotTools.Count;
+            sizeValues[5] = workObjects.Count;
+            sizeValues[6] = digitalOutputs.Count;
+
+            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+
+            // Keeps track of used indicies
+            int targetGooCounter = -1;
+            int speedDataCounter = -1;
+            int movementTypeCounter = -1;
+            int zoneDataCounter = -1;
+            int robotToolGooCounter = -1;
+            int workObjectGooCounter = -1;
+            int digitalOutputGooCounter = -1;
+
+            // Creates movements
+            List<Movement> movements = new List<Movement>();
+
+            for (int i = 0; i < biggestSize; i++)
+            {
+                ITarget target;
+                SpeedData speedData;
+                int movementType;
+                ZoneData zoneData;
+                RobotTool robotTool;
+                WorkObject workObject;
+                DigitalOutput digitalOutput;
+
+                // Target counter
+                if (i < sizeValues[0])
+                {
+                    target = targets[i];
+                    targetGooCounter++;
+                }
+                else
+                {
+                    target = targets[targetGooCounter];
+                }
+
+                // Workobject counter
+                if (i < sizeValues[1])
+                {
+                    speedData = speedDatas[i];
+                    speedDataCounter++;
+                }
+                else
+                {
+                    speedData = speedDatas[speedDataCounter];
+                }
+
+                // Movement type counter
+                if (i < sizeValues[2])
+                {
+                    movementType = movementTypes[i];
+                    movementTypeCounter++;
+                }
+                else
+                {
+                    movementType = movementTypes[movementTypeCounter];
+                }
+
+                // Precision counter
+                if (i < sizeValues[3])
+                {
+                    zoneData = zoneDatas[i];
+                    zoneDataCounter++;
+                }
+                else
+                {
+                    zoneData = zoneDatas[zoneDataCounter];
+                }
+
+                // Robot tool counter
+                if (i < sizeValues[4])
+                {
+                    robotTool = robotTools[i];
+                    robotToolGooCounter++;
+                }
+                else
+                {
+                    robotTool = robotTools[robotToolGooCounter];
+                }
+
+                // Work Object counter
+                if (i < sizeValues[5])
+                {
+                    workObject = workObjects[i];
+                    workObjectGooCounter++;
+                }
+                else
+                {
+                    workObject = workObjects[workObjectGooCounter];
+                }
+
+                // Digital Output counter
+                if (i < sizeValues[6])
+                {
+                    digitalOutput = digitalOutputs[i];
+                    digitalOutputGooCounter++;
+                }
+                else
+                {
+                    digitalOutput = digitalOutputs[digitalOutputGooCounter];
+                }
+
+                // Movement constructor
                 Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
+                movements.Add(movement);
+            }
 
             // Check if a right value is used for the movement type
-            if (movementType != 0 && movementType != 1 && movementType != 2)
+            for (int i = 0; i < movementTypes.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value is invalid. " +
-                    "In can only be set to 0, 1 and 2. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.");
+                if (movementTypes[i] != 0 && movementTypes[i] != 1 && movementTypes[i] != 2)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value <" + i + "> is invalid. " +
+                        "In can only be set to 0, 1 and 2. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.");
+                    break;
+                }
             }
 
             // Check if an exact predefined zonedata value is used
-            if (zoneData.ExactPredefinedValue == false & zoneData.PreDefinied == true)
+            for (int i = 0; i < zoneDatas.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value is invalid. " +
-                    "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
-                    "0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
-                    "A value of -1 will be interpreted as fine movement in RAPID Code.");
+                if (zoneDatas[i].ExactPredefinedValue == false & zoneDatas[i].PreDefinied == true)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value <" + i + "> is invalid. " +
+                        "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
+                        "0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150 or 200. " +
+                        "A value of -1 will be interpreted as fine movement in RAPID Code.");
+                    break;
+                }
             }
 
             // Check if an exact predefined speeddata value is used
-            if (speedData.ExactPredefinedValue == false & speedData.PreDefinied == true)
+            for (int i = 0; i < speedDatas.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value is invalid. " +
-                    "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +
-                    "20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, " +
-                    "5000, 6000 and 7000.");
+                if (speedDatas[i].ExactPredefinedValue == false & speedDatas[i].PreDefinied == true)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value <" + i + "> is invalid. " +
+                        "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +
+                        "20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, " +
+                        "5000, 6000 and 7000.");
+                    break;
+                }
             }
 
             // Check target and movement combination
-            if (movement.MovementType == MovementType.MoveAbsJ && movement.Target is RobotTarget)
+            for (int i = 0; i < movements.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "An Absolute Joint Movement instruction is combined with " +
-                    "a Robot Target. The Robot Target will be converted to a Joint Target.");
+                if (movements[i].MovementType == MovementType.MoveAbsJ && movements[i].Target is RobotTarget)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "An Absolute Joint Movement instruction is combined with " +
+                        "a Robot Target. The Robot Target will be converted to a Joint Target.");
+                    break;
+                }
             }
 
             // Output
-            DA.SetData(0, movement);
+            DA.SetDataList(0, movements);
         }
 
         // Method for creating the value list with movement types
@@ -455,7 +612,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            
+
         }
         #endregion
 
@@ -475,7 +632,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("A478CB0C-5AAB-4AD5-8259-062B844A7006"); }
+            get { return new Guid("AB744C95-E6A0-4ABD-B62D-14B558BEEDF8"); }
         }
+
     }
+
 }

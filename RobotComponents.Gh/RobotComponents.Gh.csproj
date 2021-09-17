@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\Code Generation\ExternalJointPositionComponentDataTreeGenerator.cs" />
+    <Compile Include="Components\_Obsolete - after Food4Rhino release\OldMovementComponent4.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\_Obsolete - after Food4Rhino release\OldDeconstructRobJointPosComponent.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Components\Utilities\PlaneToQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Components\_Obsolete\TargetVisualizerComponent.cs" />
+    <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Forms\PickRobotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,7 +277,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Documentation.cs" />
-    <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\ObjectManager.cs" />
     <Compile Include="Forms\PickControllerForm.cs">

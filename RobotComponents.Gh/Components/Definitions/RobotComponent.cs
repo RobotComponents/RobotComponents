@@ -100,9 +100,7 @@ namespace RobotComponents.Gh.Components.Definitions
             // Construct the robot
             try
             {
-                robot = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxis);
-                Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-                robot.Transfom(trans);
+                robot = new Robot(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, tool, externalAxis);
             }
             catch (Exception ex)
             {

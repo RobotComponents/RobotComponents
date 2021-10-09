@@ -30,6 +30,12 @@ namespace RobotComponents.Gh.Components.Simulation
     /// </summary>
     public class ForwardKinematicsComponent : GH_Component 
     {
+        #region fields
+        private ForwardKinematics _fk = new ForwardKinematics();
+        private bool _hideMesh = false;
+        private GH_Structure<GH_Mesh> _meshes = new GH_Structure<GH_Mesh>();
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -49,9 +55,9 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The positions of the Robot Axes as Robot Joint Position", GH_ParamAccess.item);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The positions of the external logical axes as External Joint Position", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The positions of the Robot Axes as Robot Joint Position", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The positions of the external logical axes as External Joint Position", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -66,11 +72,6 @@ namespace RobotComponents.Gh.Components.Simulation
             pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
-
-        // Fields
-        private ForwardKinematics _fk = new ForwardKinematics();
-        private bool _hideMesh = false;
-        private GH_Structure<GH_Mesh> _meshes = new GH_Structure<GH_Mesh>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -111,50 +112,104 @@ namespace RobotComponents.Gh.Components.Simulation
             DA.SetDataList(2, _fk.PosedExternalAxisPlanes);
         }
 
+        #region properties
         /// <summary>
-        /// Transform the posed meshes rom the forward kinematics to a datatree
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        /// <param name="forwardKinematics"> The forward kinematics the posed meshes will be extracted from. </param>
-        /// <returns> The data tree structure with all the posed meshes. </returns>
-        public GH_Structure<GH_Mesh> GetPosedMeshesDataTree(ForwardKinematics forwardKinematics)
+        public override GH_Exposure Exposure
         {
-            // Create data tree for output of alle posed meshes
-            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
-
-            {
-                // Robot pose meshes
-                List<Mesh> posedInternalAxisMeshes = forwardKinematics.PosedInternalAxisMeshes;
-
-                // Data tree path
-                GH_Path path = new GH_Path(0);
-
-                // Save the posed meshes
-                for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
-                {
-                    meshes.Append(new GH_Mesh(posedInternalAxisMeshes[i]), path);
-                }
-
-                // Extenal axis meshes
-                List<List<Mesh>> posedExternalAxisMeshes = forwardKinematics.PosedExternalAxisMeshes;
-
-                // Loop over all the external axes
-                for (int i = 0; i < posedExternalAxisMeshes.Count; i++)
-                {
-                    // Data tree path
-                    path = new GH_Path(i + 1);
-
-                    // Save the posed meshes
-                    for (int j = 0; j < posedExternalAxisMeshes[i].Count; j++)
-                    {
-                        meshes.Append(new GH_Mesh(posedExternalAxisMeshes[i][j]), path);
-                    }
-                }
-            }
-            
-            // Return the data tree stucture
-            return meshes;
+            get { return GH_Exposure.primary; }
         }
 
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.ForwardKinematics_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("438679CC-2135-48B3-B818-F7E3A65503C2"); }
+        }
+        #endregion
+
+        #region menu items
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !_hideMesh);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Hide Mesh" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickHideMesh(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Set Hide Mesh");
+            _hideMesh = !_hideMesh;
+            ExpireSolution(true);
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Set Hide Mesh", _hideMesh);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _hideMesh = reader.GetBoolean("Set Hide Mesh");
+            return base.Read(reader);
+        }
+        #endregion
+
+        #region custom preview method
         /// <summary>
         /// This method displays the robot pose for the given axis values. 
         /// </summary>
@@ -196,94 +251,52 @@ namespace RobotComponents.Gh.Components.Simulation
                 }
             }
         }
-
-        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
-        #region menu items
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for hding the robot mesh is checked
-        /// </summary>
-        public bool SetHideMesh
-        {
-            get { return _hideMesh; }
-            set { _hideMesh = value; }
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Hide Mesh", SetHideMesh);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            SetHideMesh = reader.GetBoolean("Set Hide Mesh");
-            return base.Read(reader);
-        }
-
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !SetHideMesh);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Hide Mesh" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickHideMesh(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Set Hide Mesh");
-            _hideMesh = !_hideMesh;
-            ExpireSolution(true);
-        }
         #endregion
 
+        #region additional methods
         /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
+        /// Transform the posed meshes rom the forward kinematics to a datatree
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
+        /// <param name="forwardKinematics"> The forward kinematics the posed meshes will be extracted from. </param>
+        /// <returns> The data tree structure with all the posed meshes. </returns>
+        public GH_Structure<GH_Mesh> GetPosedMeshesDataTree(ForwardKinematics forwardKinematics)
         {
-            get { return Properties.Resources.ForwardKinematics_Icon; }
-        }
+            // Create data tree for output of alle posed meshes
+            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("438679CC-2135-48B3-B818-F7E3A65503C2"); }
-        }
+            {
+                // Robot pose meshes
+                List<Mesh> posedInternalAxisMeshes = forwardKinematics.PosedInternalAxisMeshes;
 
+                // Data tree path
+                GH_Path path = new GH_Path(0);
+
+                // Save the posed meshes
+                for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
+                {
+                    meshes.Append(new GH_Mesh(posedInternalAxisMeshes[i]), path);
+                }
+
+                // Extenal axis meshes
+                List<List<Mesh>> posedExternalAxisMeshes = forwardKinematics.PosedExternalAxisMeshes;
+
+                // Loop over all the external axes
+                for (int i = 0; i < posedExternalAxisMeshes.Count; i++)
+                {
+                    // Data tree path
+                    path = new GH_Path(i + 1);
+
+                    // Save the posed meshes
+                    for (int j = 0; j < posedExternalAxisMeshes[i].Count; j++)
+                    {
+                        meshes.Append(new GH_Mesh(posedExternalAxisMeshes[i][j]), path);
+                    }
+                }
+            }
+
+            // Return the data tree stucture
+            return meshes;
+        }
+        #endregion
     }
 }

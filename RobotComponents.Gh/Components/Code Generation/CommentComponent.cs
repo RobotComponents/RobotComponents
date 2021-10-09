@@ -7,11 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Drawing;
 // Grasshopper Libs
-using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Special;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Enumerations;
@@ -25,6 +22,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// </summary>
     public class CommentComponent : GH_Component
     {
+        #region fields
+        private bool _expire = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -37,15 +38,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -64,11 +56,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new CommentParameter(), "Comment", "C", "Resulting Comment");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment");   
         }
-
-        // Fields
-        private bool _expire = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -77,7 +66,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            CreateValueList();
+            _expire = HelperMethods.CreateValueList(this, typeof(CodeType), 1);
 
             // Expire solution of this component
             if (_expire == true)
@@ -116,51 +105,41 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             DA.SetDataList(0, comments);
         }
 
-        // Method for creating the value list with comment types
-        #region valuelist
+        #region properties
         /// <summary>
-        /// Creates the value list for the motion type and connects it the input parameter is other source is connected
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
-        private void CreateValueList()
+        public override GH_Exposure Exposure
         {
-            if (this.Params.Input[1].SourceCount == 0)
-            {
-                // Gets the input parameter
-                var parameter = Params.Input[1];
+            get { return GH_Exposure.tertiary; }
+        }
 
-                // Creates the empty value list
-                GH_ValueList obj = new GH_ValueList();
-                obj.CreateAttributes();
-                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-                obj.ListItems.Clear();
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
 
-                // Add the items to the value list
-                string[] names = Enum.GetNames(typeof(CodeType));
-                int[] values = (int[])Enum.GetValues(typeof(CodeType));
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.Comment_Icon; }
+        }
 
-                for (int i = 0; i < names.Length; i++)
-                {
-                    obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
-                }
-
-                // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
-
-                // Add the value list to the active canvas
-                Instances.ActiveCanvas.Document.AddObject(obj, false);
-
-                // Connect the value list to the input parameter
-                parameter.AddSource(obj);
-
-                // Collect data
-                parameter.CollectData();
-
-                // Set bool for expire solution of this component
-                _expire = true;
-
-                // First expire the solution of the value list
-                obj.ExpireSolution(true);
-            }
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("00C290AE-7946-4245-ABFD-EF71616B1C35"); }
         }
         #endregion
 
@@ -186,25 +165,5 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             Documentation.OpenBrowser(url);
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.Comment_Icon; }
-        }
-
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("00C290AE-7946-4245-ABFD-EF71616B1C35"); }
-        }
-
     }
 }

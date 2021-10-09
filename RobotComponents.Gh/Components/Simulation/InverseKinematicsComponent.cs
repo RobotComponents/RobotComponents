@@ -25,6 +25,12 @@ namespace RobotComponents.Gh.Components.Simulation
     /// </summary>
     public class InverseKinematicsComponent : GH_Component
     {
+        #region fields
+        private InverseKinematics _inverseKinematics = new InverseKinematics();
+        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
+        private bool _hideMesh = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -44,8 +50,8 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new MovementParameter(), "Movement", "M", "Movement or target input. A target will automatically be casted to a movement.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Movement(), "Movement", "M", "Movement or target input. A target will automatically be casted to a movement.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,14 +59,9 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The calculated Robot Joint Position");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The calculated External Joint Position");
+            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The calculated Robot Joint Position");
+            pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The calculated External Joint Position");
         }
-
-        // Fields
-        private InverseKinematics _inverseKinematics = new InverseKinematics();
-        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
-        private bool _hideMesh = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -95,38 +96,45 @@ namespace RobotComponents.Gh.Components.Simulation
             DA.SetData(1, _inverseKinematics.ExternalJointPosition);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.InverseKinematics_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("EAC8F3EF-CA07-49A5-8E90-64BA6D9BDE2E"); }
+        }
+        #endregion
+
         #region menu item
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for hding the robot mesh is checked
-        /// </summary>
-        public bool SetHideMesh
-        {
-            get { return _hideMesh; }
-            set { _hideMesh = value; }
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Hide Mesh", SetHideMesh);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            SetHideMesh = reader.GetBoolean("Set Hide Mesh");
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -134,7 +142,7 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !SetHideMesh);
+            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !_hideMesh);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -161,8 +169,31 @@ namespace RobotComponents.Gh.Components.Simulation
             _hideMesh = !_hideMesh;
             ExpireSolution(true);
         }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Set Hide Mesh", _hideMesh);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _hideMesh = reader.GetBoolean("Set Hide Mesh");
+            return base.Read(reader);
+        }
         #endregion
 
+        #region custem preview method
         /// <summary>
         /// This method displays the robot pose for the given axis values. 
         /// </summary>
@@ -208,25 +239,6 @@ namespace RobotComponents.Gh.Components.Simulation
                 }
             }
         }
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.InverseKinematics_Icon; }
-        }
-
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("EAC8F3EF-CA07-49A5-8E90-64BA6D9BDE2E"); }
-        }
+        #endregion
     }
-
 }

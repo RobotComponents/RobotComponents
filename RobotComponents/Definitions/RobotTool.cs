@@ -689,6 +689,25 @@ namespace RobotComponents.Definitions
 
             ReInitialize();
         }
+
+        /// <summary>
+        /// Returns the Bounding Box of the object.
+        /// </summary>
+        /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
+        /// <returns> The Bounding Box. </returns>
+        public BoundingBox GetBoundingBox(bool accurate)
+        {
+            {
+                BoundingBox boundingBox = BoundingBox.Empty;
+
+                if (_mesh != null)
+                {
+                    boundingBox.Union(_mesh.GetBoundingBox(accurate));
+                }
+
+                return boundingBox;
+            }
+        }
         #endregion
 
         #region properties

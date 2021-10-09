@@ -84,7 +84,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
 
         /// <summary>

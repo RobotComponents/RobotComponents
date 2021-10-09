@@ -74,9 +74,17 @@ namespace RobotComponents.Actions
             {
                 return extJointPosition.ToString();
             }
+            else if (this is JointConfigurationControl jointConfigurationControl)
+            {
+                return jointConfigurationControl.ToString();
+            }
             else if (this is JointTarget jointTarget)
             {
                 return jointTarget.ToString();
+            }
+            else if (this is LinearConfigurationControl linearConfigurationControl)
+            {
+                return linearConfigurationControl.ToString();
             }
             else if (this is Movement movement)
             {

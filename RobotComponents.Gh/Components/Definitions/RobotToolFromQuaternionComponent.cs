@@ -69,7 +69,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
 
         /// <summary>
@@ -126,43 +126,6 @@ namespace RobotComponents.Gh.Components.Definitions
             #endregion
         }
 
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        /// <summary>
-        /// Detect if the components gets removed from the canvas and deletes the 
-        /// objects created with this components from the object manager. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
-        {
-            if (e.Objects.Contains(this))
-            {
-                _objectManager.DeleteManagedData(this);
-            }
-        }
-
         #region properties
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
@@ -198,6 +161,45 @@ namespace RobotComponents.Gh.Components.Definitions
         public override Guid ComponentGuid
         {
             get { return new Guid("333DC18E-7669-47BA-A13D-718402E59FB1"); }
+        }
+        #endregion
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+        #endregion
+
+        #region object manager
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                _objectManager.DeleteManagedData(this);
+            }
         }
 
         /// <summary>

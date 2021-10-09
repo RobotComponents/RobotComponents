@@ -7,8 +7,6 @@
 using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
-// Rhino Libs
-using Rhino.Geometry;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers.IOSystemDomain;
 
@@ -17,7 +15,7 @@ namespace RobotComponents.Gh.Goos
     /// <summary>
     /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.
     /// </summary>
-    public class GH_Signal : GH_GeometricGoo<DigitalSignal>
+    public class GH_Signal : GH_Goo<DigitalSignal>
     {
         #region constructors
         /// <summary>
@@ -44,15 +42,6 @@ namespace RobotComponents.Gh.Goos
         public GH_Signal(GH_Signal signalGoo)
         {
             this.Value = signalGoo.Value;
-        }
-
-        /// <summary>
-        /// Make a complete duplicate of this geometry. No shallow copies.
-        /// </summary>
-        /// <returns> A duplicate of the SignalGoo. </returns>
-        public override IGH_GeometricGoo DuplicateGeometry()
-        {
-            return DuplicateSignalGoo();
         }
 
         /// <summary>
@@ -118,24 +107,6 @@ namespace RobotComponents.Gh.Goos
         {
             get { return "Defines an ABB Signal"; }
         }
-
-        /// <summary>
-        /// Gets the boundingbox for this geometry.
-        /// </summary>
-        public override BoundingBox Boundingbox
-        {
-            get { return BoundingBox.Empty; }
-        }
-
-        /// <summary>
-        /// Compute an aligned boundingbox.
-        /// </summary>
-        /// <param name="xform"> Transformation to apply to geometry for BoundingBox computation. </param>
-        /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
-        public override BoundingBox GetBoundingBox(Transform xform)
-        {
-            return BoundingBox.Empty;
-        }
         #endregion
 
         #region casting methods
@@ -145,7 +116,7 @@ namespace RobotComponents.Gh.Goos
         /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
-        public override bool CastTo<Q>(out Q target)
+        public override bool CastTo<Q>(ref Q target)
         {
             //Cast to bool
             if (typeof(Q).IsAssignableFrom(typeof(bool)))
@@ -209,34 +180,6 @@ namespace RobotComponents.Gh.Goos
 
             target = default(Q);
             return false;
-        }
-        #endregion
-
-        #region transformation methods
-        /// <summary>
-        /// Transforms the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xform"> Transformation matrix. </param>
-        /// <returns> Transformed geometry. If the local geometry can be transformed accurately, 
-        /// then the returned instance equals this instance. Not all geometry types can be accurately 
-        /// transformed under all circumstances though, if this is the case, this function will 
-        /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
-        public override IGH_GeometricGoo Transform(Transform xform)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Morph the object or a deformable representation of the object.
-        /// </summary>
-        /// <param name="xmorph"> Spatial deform. </param>
-        /// <returns> Deformed geometry. If the local geometry can be deformed accurately, then the returned 
-        /// instance equals this instance. Not all geometry types can be accurately deformed though, if 
-        /// this is the case, this function will return an instance of another IGH_GeometricGoo derived 
-        /// type which can be deformed.</returns>
-        public override IGH_GeometricGoo Morph(SpaceMorph xmorph)
-        {
-            return null;
         }
         #endregion
     }

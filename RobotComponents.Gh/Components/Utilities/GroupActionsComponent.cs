@@ -33,21 +33,12 @@ namespace RobotComponents.Gh.Components.Utilities
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.tertiary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name of the group with Actions.", GH_ParamAccess.item, String.Empty);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions to group.", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions to group.", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -55,7 +46,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ActionGroupParameter(), "Group", "G", "Group with Actions", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_ActionGroup(), "Group", "G", "Group with Actions", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -79,6 +70,41 @@ namespace RobotComponents.Gh.Components.Utilities
             DA.SetData(0, group);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.tertiary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.ActionGroup_Icon; ; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("A40D2131-B378-4B06-BCB3-4FBD9DEA0FC8"); }
+        }
+        #endregion
+
         #region menu item
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
@@ -101,21 +127,5 @@ namespace RobotComponents.Gh.Components.Utilities
             Documentation.OpenBrowser(url);
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.ActionGroup_Icon; ; }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("A40D2131-B378-4B06-BCB3-4FBD9DEA0FC8"); }
-        }
     }
 }

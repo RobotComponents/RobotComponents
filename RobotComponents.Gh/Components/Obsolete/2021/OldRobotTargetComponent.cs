@@ -90,7 +90,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         readonly IGH_Param[] parameters = new IGH_Param[2]
         {
             new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.list, Optional = true },
-            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.list, Optional = true }
+            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.list, Optional = true }
         };
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotTargetParameter(), "Robot Target", "RT", "Resulting Robot Target");
+            pManager.RegisterParam(new Param_RobotTarget(), "Robot Target", "RT", "Resulting Robot Target");
         }
 
         /// <summary>

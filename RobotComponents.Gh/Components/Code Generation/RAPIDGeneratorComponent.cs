@@ -24,6 +24,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// </summary>
     public class RAPIDGeneratorComponent : GH_Component
     {
+        #region fields
+        private RAPIDGenerator _rapidGenerator;
+        private ObjectManager _objectManager;
+        private bool _firstMovementIsMoveAbsJ = true;
+        private bool _raiseWarnings = false;
+        private List<string> _programModule = new List<string>();
+        private List<string> _systemModule = new List<string>();
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -39,22 +48,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            // Always place the rapid generator in the last sub category
-            get { return GH_Exposure.septenary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot that is used as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as list of instructive and declarative Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions", GH_ParamAccess.list);
             pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule", GH_ParamAccess.item, "MainModule");
             pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE", GH_ParamAccess.item, "BASE");
             pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list of text", GH_ParamAccess.list);
@@ -74,14 +73,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
             pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
         }
-
-        // Fields
-        private RAPIDGenerator _rapidGenerator;
-        private ObjectManager _objectManager;
-        private bool _firstMovementIsMoveAbsJ = true;
-        private bool _raiseWarnings = false;
-        private List<string> _programModule = new List<string>();
-        private List<string> _systemModule =  new List<string>();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -178,7 +169,46 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             DA.SetDataList(1, _systemModule);
         }
 
-        #region custom menu items
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            // Always place the RAPID generator in the last sub category
+            get { return GH_Exposure.septenary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return RobotComponents.Gh.Properties.Resources.RAPID_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("00E6B125-6B7F-4FAA-91B3-F01A45EC7B58"); }
+        }
+        #endregion
+
+        #region menu items
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -285,24 +315,5 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return RobotComponents.Gh.Properties.Resources.RAPID_Icon; }
-        }
-
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("00E6B125-6B7F-4FAA-91B3-F01A45EC7B58"); }
-        }
     }
 }

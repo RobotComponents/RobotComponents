@@ -18,6 +18,7 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -38,6 +39,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private bool _isUnique = true;
         private bool _setReferencePlane = false;
         private bool _setExternalJointPosition = false;
+        private readonly int fixedParamNumInput = 3;
         #endregion
 
         /// <summary>
@@ -57,6 +59,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
+        /// Stores the variable input parameters in an array.
+        /// </summary>
+        private readonly IGH_Param[] parameters = new IGH_Param[2]
+        {
+            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.tree, Optional = true },
+            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.tree, Optional = true }
+        };
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -66,22 +77,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.tree, 0);
         }
 
-        // Register the number of fixed input parameters
-        private readonly int fixedParamNumInput = 3;
-
-        // Create an array with the variable input parameters
-        readonly IGH_Param[] parameters = new IGH_Param[2]
-        {
-            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.tree, Optional = true },
-            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.tree, Optional = true }
-        };
-
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotTargetParameter(), "Robot Target", "RT", "Resulting Robot Target");
+            pManager.RegisterParam(new Param_RobotTarget(), "Robot Target", "RT", "Resulting Robot Target");
         }
 
         /// <summary>
@@ -172,124 +173,45 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             #endregion
         }
 
+        #region properties
         /// <summary>
-        /// Detect if the components gets removed from the canvas and deletes the 
-        /// objects created with this components from the object manager. 
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public override GH_Exposure Exposure
         {
-            if (e.Objects.Contains(this))
-            {
-                _objectManager.DeleteManagedData(this);
-            }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
-        /// Updates the variable names in the data tree
+        /// Gets whether this object is obsolete.
         /// </summary>
-        private void UpdateVariableNames()
+        public override bool Obsolete
         {
-            // Check if it is a datatree with multiple branches that have one item
-            bool check = true;
-            for (int i = 0; i < _tree.Branches.Count; i++)
-            {
-                if (_tree.Branches[i].Count != 1)
-                {
-                    check = false;
-                    break;
-                }
-            }
-
-            if (_tree.Branches.Count == 1)
-            {
-                if (_tree.Branches[0].Count == 1)
-                {
-                    // Do nothing: there is only one item in the whole datatree
-                }
-                else
-                {
-                    // Only rename the items in this single branche with + "_0", "_1" etc...
-                    for (int i = 0; i < _tree.Branches[0].Count; i++)
-                    {
-                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
-                    }
-                }
-
-            }
-
-            else if (check == true)
-            {
-                // Multiple branches with only one item per branch
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
-                }
-            }
-
-            else
-            {
-                // Rename everything. There are multiple branches with branches that have multiple items. 
-                List<GH_Path> originalPaths = new List<GH_Path>();
-                for (int i = 0; i < _tree.Paths.Count; i++)
-                {
-                    originalPaths.Add(_tree.Paths[i]);
-                }
-
-                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
-
-                List<GH_Path> simplifiedPaths = new List<GH_Path>();
-                for (int i = 0; i < _tree.Paths.Count; i++)
-                {
-                    simplifiedPaths.Add(_tree.Paths[i]);
-                }
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
-                }
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    GH_Path iPath = simplifiedPaths[i];
-                    string pathString = iPath.ToString();
-                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
-
-                    for (int j = 0; j < _tree.Branches[i].Count; j++)
-                    {
-                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
-                    }
-                }
-            }
+            get { return false; }
         }
 
-        // Methods for creating custom menu items and event handlers when the custom menu items are clicked
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.RobTarget_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("EA79575D-5AED-46F2-8E50-A00BF5B65620"); }
+        }
+        #endregion
+
         #region menu items
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Reference Plane", _setReferencePlane);
-            writer.SetBoolean("Set External Joint Position", _setExternalJointPosition);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            _setReferencePlane = reader.GetBoolean("Set Reference Plane");
-            _setExternalJointPosition = reader.GetBoolean("Set External Joint Position");
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -391,9 +313,83 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             Params.OnParametersChanged();
             ExpireSolution(true);
         }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Set Reference Plane", _setReferencePlane);
+            writer.SetBoolean("Set External Joint Position", _setExternalJointPosition);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _setReferencePlane = reader.GetBoolean("Set Reference Plane");
+            _setExternalJointPosition = reader.GetBoolean("Set External Joint Position");
+            return base.Read(reader);
+        }
         #endregion
 
-        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        #region object manager
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                _objectManager.DeleteManagedData(this);
+            }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
+
         #region variable input parameters
         /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
@@ -457,76 +453,83 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
         #endregion
 
-        #region properties
+        #region additional methods
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// Updates the variable names in the data tree
         /// </summary>
-        public override GH_Exposure Exposure
+        private void UpdateVariableNames()
         {
-            get { return GH_Exposure.primary; }
-        }
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
 
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return false; }
-        }
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
+                    }
+                }
 
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.RobTarget_Icon; }
-        }
+            }
 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("EA79575D-5AED-46F2-8E50-A00BF5B65620"); }
-        }
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
+                }
+            }
 
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; }
-        }
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
 
-        /// <summary>
-        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
-        /// </summary>
-        public bool IsUnique
-        {
-            get { return _isUnique; }
-            set { _isUnique = value; }
-        }
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
 
-        /// <summary>
-        /// Gets or sets the current registered names.
-        /// </summary>
-        public List<string> Registered
-        {
-            get { return _registered; }
-            set { _registered = value; }
-        }
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
 
-        /// <summary>
-        /// Gets the variables names that need to be registered by the object manager.
-        /// </summary>
-        public List<string> ToRegister
-        {
-            get { return _toRegister; }
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
+                    }
+                }
+            }
         }
         #endregion
     }

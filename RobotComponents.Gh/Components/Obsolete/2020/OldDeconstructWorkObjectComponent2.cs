@@ -57,7 +57,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new WorkObjectParameter(), "Work Object", "WO", "Work Object as Work Object", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_WorkObject(), "Work Object", "WO", "Work Object as Work Object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "WP", "Work Object Plane as a Plane");
-            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
+            pManager.RegisterParam(new Param_ExternalRotationalAxis(), "External Rotational Axis", "ERA", "External Rotational Axis as External Rotational Axis");
         }
 
         /// <summary>

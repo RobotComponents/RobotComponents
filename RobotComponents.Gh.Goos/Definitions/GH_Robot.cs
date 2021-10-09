@@ -131,49 +131,7 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                if (Value == null) 
-                { 
-                    return BoundingBox.Empty; 
-                }
-                
-                else if (Value.Meshes == null) 
-                { 
-                    return BoundingBox.Empty; 
-                }
-
-                else
-                {
-                    // Make an empty bounding box
-                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
-
-                    // Make the bounding box of the robot meshes
-                    for (int i = 0; i != Value.Meshes.Count; i++)
-                    {
-                        MeshBoundingBox.Union(Value.Meshes[i].GetBoundingBox(true));
-                    }
-
-                    // Make the bounding box of the external axes
-                    for (int i = 0; i != Value.ExternalAxes.Count; i++)
-                    {
-                        if (Value.ExternalAxes[i].IsValid == true)
-                        {
-                            if (Value.ExternalAxes[i].BaseMesh != null)
-                            {
-                                MeshBoundingBox.Union(Value.ExternalAxes[i].BaseMesh.GetBoundingBox(true));
-                            }
-
-                            if (Value.ExternalAxes[i].LinkMesh != null)
-                            {
-                                MeshBoundingBox.Union(Value.ExternalAxes[i].LinkMesh.GetBoundingBox(true));
-                            }
-                        }
-                    }
-                    
-                    return MeshBoundingBox;
-                }
-            }
+            get { return GetBoundingBox(new Transform()); }            
         }
 
         /// <summary>
@@ -183,7 +141,8 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return Boundingbox;
+            if (Value == null) { return BoundingBox.Empty; }
+            else { return Value.GetBoundingBox(true); }
         }
         #endregion
 

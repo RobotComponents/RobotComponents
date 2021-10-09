@@ -47,7 +47,7 @@ namespace RobotComponents.Gh.Components.Definitions
         {
             pManager.AddTextParameter("Name", "N", "Work Object Name as Text", GH_ParamAccess.list, "default_wo");
             pManager.AddPlaneParameter("Plane", "WP", "Plane of the Work Object as Plane", GH_ParamAccess.list, Plane.WorldXY);
-            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as an External Axis", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_ExternalAxis(), "External Axis", "EA", "External Axis as an External Axis", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -58,7 +58,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new WorkObjectParameter(), "Work Object", "WO", "Resulting Work Object");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Resulting Work Object");   
         }
 
         /// <summary>
@@ -159,43 +159,6 @@ namespace RobotComponents.Gh.Components.Definitions
             #endregion
         }
 
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        /// <summary>
-        /// Detect if the components gets removed from the canvas and deletes the 
-        /// objects created with this components from the object manager. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
-        {
-            if (e.Objects.Contains(this))
-            {
-                _objectManager.DeleteManagedData(this);
-            }
-        }
-
         #region properties
         /// <summary>
         /// Override the component exposure (makes the tab subcategory).
@@ -231,6 +194,45 @@ namespace RobotComponents.Gh.Components.Definitions
         public override Guid ComponentGuid
         {
             get { return new Guid("F892733B-3633-48A6-AAC7-1A244441A774"); }
+        }
+        #endregion
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+        #endregion
+
+        #region object manager
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                _objectManager.DeleteManagedData(this);
+            }
         }
 
         /// <summary>

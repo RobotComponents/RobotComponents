@@ -86,7 +86,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The resulting external joint position");
+            pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The resulting external joint position");
         }
 
         /// <summary>

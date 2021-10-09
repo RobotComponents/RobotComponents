@@ -528,6 +528,45 @@ namespace RobotComponents.Definitions
 
             CalculateAttachedToolPlane();
         }
+
+        /// <summary>
+        /// Returns the Bounding Box of the object.
+        /// </summary>
+        /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
+        /// <returns> The Bounding Box. </returns>
+        public BoundingBox GetBoundingBox(bool accurate)
+        {
+            if (_meshes == null)
+            {
+                return BoundingBox.Empty;
+            }
+
+            else
+            {
+                // Make an empty bounding box
+                BoundingBox boundingBox = BoundingBox.Empty;
+
+                // Make the bounding box of the robot meshes
+                for (int i = 0; i != _meshes.Count; i++)
+                {
+                    boundingBox.Union(_meshes[i].GetBoundingBox(accurate));
+                }
+
+                // Make the bounding box of the external axes
+                for (int i = 0; i != _externalAxes.Count; i++)
+                {
+                    if (_externalAxes[i].IsValid == true)
+                    {
+                        boundingBox.Union(_externalAxes[i].GetBoundingBox(accurate));
+                    }
+                }
+
+                // Make the bounding box of the robot tool
+                boundingBox.Union(_tool.GetBoundingBox(accurate));
+
+                return boundingBox;
+            }
+        }
         #endregion
 
         #region properties

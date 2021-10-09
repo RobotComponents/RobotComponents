@@ -123,7 +123,7 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an External Rotational Axis."); }
+            get { return "Defines an External Rotational Axis."; }
         }
 
         /// <summary>
@@ -131,32 +131,7 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                if (Value == null)
-                {
-                    return BoundingBox.Empty;
-                }
-
-                else
-                {
-                    BoundingBox MeshBoundingBox = BoundingBox.Empty;
-
-                    // Base mesh
-                    if (Value.BaseMesh != null)
-                    {
-                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                    }
-
-                    // Link mesh
-                    if (Value.LinkMesh != null)
-                    {
-                        MeshBoundingBox.Union(Value.BaseMesh.GetBoundingBox(true));
-                    }
-
-                    return MeshBoundingBox;
-                }
-            }
+            get { return GetBoundingBox(new Transform()); }
         }
 
         /// <summary>
@@ -166,7 +141,8 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return Boundingbox;
+            if (Value == null) { return BoundingBox.Empty; }
+            else { return Value.GetBoundingBox(true); }
         }
         #endregion
 

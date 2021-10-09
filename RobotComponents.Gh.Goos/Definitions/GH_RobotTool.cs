@@ -132,12 +132,7 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get
-            {
-                if (Value == null) { return BoundingBox.Empty; }
-                else if (Value.Mesh == null) { return BoundingBox.Empty; }
-                else { return Value.Mesh.GetBoundingBox(true); }
-            }
+            get { return GetBoundingBox(new Transform()); }
         }
 
         /// <summary>
@@ -147,7 +142,8 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return Boundingbox;
+            if (Value == null) { return BoundingBox.Empty; }
+            else { return Value.GetBoundingBox(true); }
         }
         #endregion
 

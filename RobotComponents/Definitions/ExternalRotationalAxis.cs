@@ -661,6 +661,32 @@ namespace RobotComponents.Definitions
                 _posedMeshes[i].Transform(xform);
             }
         }
+
+        /// <summary>
+        /// Returns the Bounding Box of the object.
+        /// </summary>
+        /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
+        /// <returns> The Bounding Box. </returns>
+        public override BoundingBox GetBoundingBox(bool accurate)
+        {
+            {
+                BoundingBox boundingBox = BoundingBox.Empty;
+
+                // Base mesh
+                if (_baseMesh != null)
+                {
+                    boundingBox.Union(_baseMesh.GetBoundingBox(accurate));
+                }
+
+                // Link mesh
+                if (_linkMesh != null)
+                {
+                    boundingBox.Union(_baseMesh.GetBoundingBox(accurate));
+                }
+
+                return boundingBox;
+            }
+        }
         #endregion
 
         #region properties

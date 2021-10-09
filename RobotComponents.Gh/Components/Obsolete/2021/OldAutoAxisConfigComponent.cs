@@ -9,7 +9,7 @@ using System;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Actions;
-using RobotComponents.Gh.Parameters.Obsolete;
+using RobotComponents.Gh.Parameters.Actions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.14.000
@@ -67,7 +67,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new AutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new AutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");   
         }
 
         /// <summary>

@@ -123,6 +123,13 @@ namespace RobotComponents.Definitions
         /// </summary>
         /// <param name="xform"> The spatial deform. </param>
         public abstract void Transform(Transform xform);
+
+        /// <summary>
+        /// Returns the Bounding Box of the object.
+        /// </summary>
+        /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
+        /// <returns> The Bounding Box. </returns>
+        public abstract BoundingBox GetBoundingBox(bool accurate);
         #endregion
 
         #region properties

@@ -84,7 +84,7 @@ namespace RobotComponents.Gh.Goos.Actions
             {
                 if (Value == null) { return "No internal Joint Configuration Control instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Joint Configuration Control instance: Did you set a bool?"; //Todo: beef this up to be more informative.
+                return "Invalid Joint Configuration Control instance: Did you set a bool?";  
             }
         }
 

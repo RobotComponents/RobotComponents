@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// RobotComponents Libs
+using RobotComponents.Actions;
 
 namespace RobotComponents.Gh.Utils
 {
@@ -31,7 +33,10 @@ namespace RobotComponents.Gh.Utils
         {
             _id = id;
             _components = new Dictionary<Guid, GH_Component>();
-            _names = new List<string>();
+            _names = new List<string>() { "tool0", "wobj0", "load0" };
+
+            _names.AddRange(SpeedData.ValidPredefinedNames);
+            _names.AddRange(ZoneData.ValidPredefinedNames);
         }
         #endregion
 

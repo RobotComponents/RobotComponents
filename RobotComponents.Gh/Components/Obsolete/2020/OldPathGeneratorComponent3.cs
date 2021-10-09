@@ -68,8 +68,8 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
             pManager.AddBooleanParameter("Update", "U", "If set to true, path will be constantly recalculated.", GH_ParamAccess.item, true);
@@ -82,8 +82,8 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             pManager.Register_PlaneParam("Plane", "EP", "Current End Plane as a Plane");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Current Exernal Axis Planes as a list with Planes");
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The current Robot Joint Position");
-            pManager.RegisterParam(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "The current External Joint Position");
+            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The current Robot Joint Position");
+            pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The current External Joint Position");
             pManager.Register_CurveParam("Tool Path", "TP", "Tool Path as a list with Curves");
         }
 

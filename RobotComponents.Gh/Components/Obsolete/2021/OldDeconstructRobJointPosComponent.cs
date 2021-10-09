@@ -57,7 +57,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "The Robot Joint Position.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The Robot Joint Position.", GH_ParamAccess.item);
         }
 
         /// <summary>

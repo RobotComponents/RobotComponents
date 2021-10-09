@@ -28,6 +28,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// </summary>
     public class MovementComponent : GH_Component, IGH_VariableParameterComponent
     {
+        #region fields
+        private bool _expire = false;
+        private bool _overrideRobotTool = false;
+        private bool _overrideWorkObject = false;
+        private bool _setDigitalOutput = false;
+        private readonly int fixedParamNumInput = 4;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
@@ -46,51 +54,35 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// Stores the variable input parameters in an array.
         /// </summary>
-        public override GH_Exposure Exposure
+        private readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            get { return GH_Exposure.secondary; }
-        }
+            new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
+            new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
+            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
+        };
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.item);
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Target(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.item, 0);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.item);
 
             pManager[3].Optional = true;
         }
-
-        // Register the number of fixed input parameters
-        private readonly int fixedParamNumInput = 4;
-
-        // Create an array with the variable input parameters
-        readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
-        {
-            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
-            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
-            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
-        };
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Move instruction");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");   
         }
-
-        // Fields
-        private bool _expire = false;
-        private bool _overrideRobotTool = false;
-        private bool _overrideWorkObject = false;
-        private bool _setDigitalOutput = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -99,7 +91,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            CreateValueList();
+            _expire = HelperMethods.CreateValueList(this, typeof(MovementType), 2);
 
             // Expire solution of this component
             if (_expire == true)
@@ -189,110 +181,45 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             DA.SetData(0, movement);
         }
 
-        // Method for creating the value list with movement types
-        #region valuelist
+        #region properties
         /// <summary>
-        /// Creates the value list for the motion type and connects it the input parameter is other source is connected
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
-        private void CreateValueList()
+        public override GH_Exposure Exposure
         {
-            if (this.Params.Input[2].SourceCount == 0)
-            {
-                // Gets the input parameter
-                var parameter = Params.Input[2];
+            get { return GH_Exposure.secondary; }
+        }
 
-                // Creates the empty value list
-                GH_ValueList obj = new GH_ValueList();
-                obj.CreateAttributes();
-                obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
-                obj.ListItems.Clear();
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
 
-                // Add the items to the value list
-                // Add the items to the value list
-                string[] names = Enum.GetNames(typeof(MovementType));
-                int[] values = (int[])Enum.GetValues(typeof(MovementType));
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return RobotComponents.Gh.Properties.Resources.Movement_Icon; }
+        }
 
-                for (int i = 0; i < names.Length; i++)
-                {
-                    obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
-                }
-
-                // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
-
-                // Add the value list to the active canvas
-                Instances.ActiveCanvas.Document.AddObject(obj, false);
-
-                // Connect the value list to the input parameter
-                parameter.AddSource(obj);
-
-                // Collect data
-                parameter.CollectData();
-
-                // Set bool for expire solution of this component
-                _expire = true;
-
-                // First expire the solution of the value list
-                obj.ExpireSolution(true);
-            }
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("A478CB0C-5AAB-4AD5-8259-062B844A7006"); }
         }
         #endregion
 
-        // Methods and properties for creating custom menu items and event handlers when the custom menu items are clicked
         #region menu items
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for overriding the Robot Tool is checked
-        /// </summary>
-        public bool OverrideRobotTool
-        {
-            get { return _overrideRobotTool; }
-            set { _overrideRobotTool = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for overriding the Work Object is checked
-        /// </summary>
-        public bool OverrideWorkObject
-        {
-            get { return _overrideWorkObject; }
-            set { _overrideWorkObject = value; }
-        }
-
-        /// <summary>
-        /// Boolean that indicates if the custom menu item for setting a Digital Output is is checked
-        /// </summary>
-        public bool SetDigitalOutput
-        {
-            get { return _setDigitalOutput; }
-            set { _setDigitalOutput = value; }
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Override Robot Tool", OverrideRobotTool);
-            writer.SetBoolean("Override Work Object", OverrideWorkObject);
-            writer.SetBoolean("Set Digital Output", SetDigitalOutput);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            OverrideRobotTool = reader.GetBoolean("Override Robot Tool");
-            OverrideWorkObject = reader.GetBoolean("Override Work Object");
-            SetDigitalOutput = reader.GetBoolean("Set Digital Output");
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -300,9 +227,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, OverrideRobotTool);
-            Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, OverrideWorkObject);
-            Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, SetDigitalOutput);
+            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, _overrideRobotTool);
+            Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, _overrideWorkObject);
+            Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, _setDigitalOutput);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -326,7 +253,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
             RecordUndoEvent("Override Robot Tool");
-            OverrideRobotTool = !OverrideRobotTool;
+            _overrideRobotTool = !_overrideRobotTool;
             AddParameter(0);
         }
 
@@ -338,7 +265,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void MenuItemClickWorkObject(object sender, EventArgs e)
         {
             RecordUndoEvent("Override Work Object");
-            OverrideWorkObject = !OverrideWorkObject;
+            _overrideWorkObject = !_overrideWorkObject;
             AddParameter(1);
         }
 
@@ -350,8 +277,34 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void MenuItemClickDigitalOutput(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Digital Output");
-            SetDigitalOutput = !SetDigitalOutput;
+            _setDigitalOutput = !_setDigitalOutput;
             AddParameter(2);
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Override Robot Tool", _overrideRobotTool);
+            writer.SetBoolean("Override Work Object", _overrideWorkObject);
+            writer.SetBoolean("Set Digital Output", _setDigitalOutput);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _overrideRobotTool = reader.GetBoolean("Override Robot Tool");
+            _overrideWorkObject = reader.GetBoolean("Override Work Object");
+            _setDigitalOutput = reader.GetBoolean("Set Digital Output");
+            return base.Read(reader);
         }
 
         /// <summary>
@@ -395,7 +348,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
         #endregion
 
-        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
         #region variable input parameters
         /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
@@ -455,27 +407,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
-            
+
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return RobotComponents.Gh.Properties.Resources.Movement_Icon; }
-        }
-
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("A478CB0C-5AAB-4AD5-8259-062B844A7006"); }
-        }
     }
 }

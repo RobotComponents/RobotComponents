@@ -23,6 +23,10 @@ namespace RobotComponents.Gh.Components.Utilities
     /// </summary>
     public class PlaneVisualizerComponent : GH_Component
     {
+        #region fields
+        private List<Plane> _planes = new List<Plane>();
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -53,9 +57,6 @@ namespace RobotComponents.Gh.Components.Utilities
             // This component has no ouput parameters. It only visualizes the plane orientation.
         }
 
-        // Fields
-        private List<Plane> _planes = new List<Plane>();
-
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
@@ -84,27 +85,43 @@ namespace RobotComponents.Gh.Components.Utilities
             }
         }
 
+        #region properties
         /// <summary>
-        /// This methods displays the three vectors of all the planes in the list.
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
-        public override void DrawViewportMeshes(IGH_PreviewArgs args)
+        public override GH_Exposure Exposure
         {
-            for (int i = 0; i < _planes.Count; i++)
-            {
-                Plane plane = _planes[i];
-
-                if (plane != null)
-                {
-                    if (plane.IsValid == true)
-                    {
-                        args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
-                        args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
-                        args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
-                    }
-                }
-            }
+            get { return GH_Exposure.primary; }
         }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.Plane_Visualizer_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("F861C697-DE9D-483E-9651-C53649775412"); }
+        }
+        #endregion
 
         #region menu item
         /// <summary>
@@ -129,24 +146,28 @@ namespace RobotComponents.Gh.Components.Utilities
         }
         #endregion
 
+        #region custom preview method
         /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
+        /// This methods displays the three vectors of all the planes in the list.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
+        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            get { return Properties.Resources.Plane_Visualizer_Icon; }
-        }
+            for (int i = 0; i < _planes.Count; i++)
+            {
+                Plane plane = _planes[i];
 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("F861C697-DE9D-483E-9651-C53649775412"); }
+                if (plane != null)
+                {
+                    if (plane.IsValid == true)
+                    {
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.ZAxis, System.Drawing.Color.Blue);
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.XAxis, System.Drawing.Color.Red);
+                        args.Display.DrawDirectionArrow(plane.Origin, plane.YAxis, System.Drawing.Color.Green);
+                    }
+                }
+            }
         }
-
+        #endregion
     }
 }

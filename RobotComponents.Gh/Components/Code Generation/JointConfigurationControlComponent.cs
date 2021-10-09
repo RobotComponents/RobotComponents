@@ -35,15 +35,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -56,7 +47,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new JointConfigurationControlParameter(), "Set Joint Configuration Control", "SJCC", "Resulting Set Joint Configuration Control instruction");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_JointConfigurationControl(), "Set Joint Configuration Control", "SJCC", "Resulting Set Joint Configuration Control instruction");   
         }
 
         /// <summary>
@@ -78,6 +69,44 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Output
             DA.SetData(0, jointConfigurationControl);
         }
+
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.JointConfigurationControl_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("6DA6CA09-E903-4008-BA1A-C3259BFC6E42"); }
+        }
+        #endregion
 
         #region menu item
         /// <summary>
@@ -101,25 +130,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             Documentation.OpenBrowser(url);
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.JointConfigurationControl_Icon; }
-        }
-
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("6DA6CA09-E903-4008-BA1A-C3259BFC6E42"); }
-        }
     }
 
 }

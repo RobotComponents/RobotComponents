@@ -80,7 +80,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new SpeedDataParameter(), "Speed Data", "SD", "Resulting Speed Data declaration");
+            pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
 
         /// <summary>

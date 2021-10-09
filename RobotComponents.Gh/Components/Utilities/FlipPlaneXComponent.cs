@@ -70,6 +70,41 @@ namespace RobotComponents.Gh.Components.Utilities
             DA.SetDataList(0, planes);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.FlipPlaneX_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("0f01736f-7dfd-4a52-9cc5-ebe8fa783731"); }
+        }
+        #endregion
+
         #region menu item
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
@@ -92,21 +127,5 @@ namespace RobotComponents.Gh.Components.Utilities
             Documentation.OpenBrowser(url);
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.FlipPlaneX_Icon; }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("0f01736f-7dfd-4a52-9cc5-ebe8fa783731"); }
-        }
     }
 }

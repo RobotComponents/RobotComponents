@@ -10,7 +10,8 @@ using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.Gh.Components.CodeGeneration;
 using RobotComponents.Gh.Components.ControllerUtility;
-using RobotComponents.Gh.Components.Deconstruct;
+using RobotComponents.Gh.Components.Deconstruct.CodeGeneration;
+using RobotComponents.Gh.Components.Deconstruct.Definitions;
 using RobotComponents.Gh.Components.Simulation;
 using RobotComponents.Gh.Components.Definitions;
 using RobotComponents.Gh.Components.Definitions.Presets;
@@ -162,32 +163,32 @@ namespace RobotComponents.Gh.Utils
 
             #region Parameters
             // Actions
-            { typeof(JointTargetParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Joint%20Target/" },
-            { typeof(RobotTargetParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Robot%20Target/" },
-            { typeof(RobotJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Robot%20Joint%20Position/" },
-            { typeof(ExternalJointPositionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
-            { typeof(ActionParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
-            { typeof(ActionGroupParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action%20Group/"},
-            { typeof(AnalogOutputParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
-            { typeof(LinearConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
-            { typeof(JointConfigurationControlParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},
-            { typeof(CodeLineParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Code%20Line/"},
-            { typeof(CommentParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Comment/"},
-            { typeof(DigitalOutputParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Digital%20Output/"},
-            { typeof(MovementParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Move/"},
-            { typeof(OverrideRobotToolParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Override%20Robot%20Tool/"},
-            { typeof(SpeedDataParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Speed%20Data/"},
-            { typeof(TargetParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Target/"},
-            { typeof(WaitTimeParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Time/"},
-            { typeof(WaitDIParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Digital%20Input/"},
-            { typeof(ZoneDataParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
+            { typeof(Param_JointTarget), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Joint%20Target/" },
+            { typeof(Param_RobotTarget), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Robot%20Target/" },
+            { typeof(Param_RobotJointPosition), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Robot%20Joint%20Position/" },
+            { typeof(Param_ExternalJointPosition), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
+            { typeof(Param_Action), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
+            { typeof(Param_ActionGroup), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action%20Group/"},
+            { typeof(Param_AnalogOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
+            { typeof(Param_LinearConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
+            { typeof(Param_JointConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},
+            { typeof(Param_CodeLine), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Code%20Line/"},
+            { typeof(Param_Comment), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Comment/"},
+            { typeof(Param_DigitalOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Digital%20Output/"},
+            { typeof(Param_Movement), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Move/"},
+            { typeof(Param_OverrideRobotTool), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Override%20Robot%20Tool/"},
+            { typeof(Param_SpeedData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Speed%20Data/"},
+            { typeof(Param_Target), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Target/"},
+            { typeof(Param_WaitTime), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Time/"},
+            { typeof(Param_WaitDI), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Digital%20Input/"},
+            { typeof(Param_ZoneData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
             // Definitions
-            { typeof(ExternalAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Axis/"},
-            { typeof(ExternalLinearAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Linear%20Axis/"},
-            { typeof(ExternalRotationalAxisParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Rotational%20Axis/"},
-            { typeof(RobotParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Robot/"},
-            { typeof(RobotToolParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Robot%20Tool/"},
-            { typeof(WorkObjectParameter), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Work%20Object/"},
+            { typeof(Param_ExternalAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Axis/"},
+            { typeof(Param_ExternalLinearAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Linear%20Axis/"},
+            { typeof(Param_ExternalRotationalAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Rotational%20Axis/"},
+            { typeof(Param_Robot), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Robot/"},
+            { typeof(Param_RobotTool), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Robot%20Tool/"},
+            { typeof(Param_WorkObject), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/Work%20Object/"},
             #endregion
         };
 

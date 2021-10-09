@@ -61,7 +61,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
+            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
             pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
         }
 

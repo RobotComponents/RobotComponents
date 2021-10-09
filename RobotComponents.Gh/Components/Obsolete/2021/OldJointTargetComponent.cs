@@ -69,8 +69,8 @@ namespace RobotComponents.Gh.Components.Obsolete
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.list);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -81,7 +81,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new JointTargetParameter(), "Joint Target", "JT", "The resulting Joint Target");
+            pManager.RegisterParam(new Param_JointTarget(), "Joint Target", "JT", "The resulting Joint Target");
         }
 
         /// <summary>

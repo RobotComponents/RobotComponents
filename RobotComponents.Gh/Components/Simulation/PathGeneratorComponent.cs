@@ -27,6 +27,22 @@ namespace RobotComponents.Gh.Components.Simulation
     /// </summary>
     public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
+        #region fields
+        private Robot _robot;
+        private PathGenerator _pathGenerator = new PathGenerator();
+        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
+        private bool _outputRobotEndPlane = false;
+        private bool _outputRobotEndPlanes = false;
+        private bool _outputRobotJointPosition = false;
+        private bool _outputRobotJointPositions = false;
+        private bool _outputExternalAxisPlanes = false;
+        private bool _outputExternalJointPosition = false;
+        private bool _outputExternalJointPositions = false;
+        private bool _outputErrorMessages = false;
+        private bool _previewMesh = true;
+        private bool _calculated = false;
+        #endregion
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -48,12 +64,28 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new ActionParameter(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as a list with Actions", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Interpolations", "I", "Interpolations as Int", GH_ParamAccess.item, 5);
             pManager.AddNumberParameter("Animation Slider", "AS", "Animation Slider as number (0.0 - 1.0)", GH_ParamAccess.item, 0.0);
             pManager.AddBooleanParameter("Update", "U", "If set to true, path will be constantly recalculated.", GH_ParamAccess.item, true);
         }
+
+        /// <summary>
+        /// Stores the variable output parameters in an array.
+        /// </summary>
+        private readonly IGH_Param[] outputParameters = new IGH_Param[9]
+        {
+            new Param_Plane() { Name = "Robot End Plane", NickName = "EP", Description = "The current position and orientation of tool TCP", Access = GH_ParamAccess.item},
+            new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
+            new Param_RobotJointPosition() { Name = "Robot Joint Position", NickName = "RJ", Description = "The current Robot Joint Position", Access = GH_ParamAccess.item},
+            new Param_RobotJointPosition() { Name = "Robot Joint Positions", NickName = "RJs", Description = "The Robot Joint Positions of the whole path", Access = GH_ParamAccess.list},
+            new Param_Plane() { Name = "External Axis Planes", NickName = "EAP", Description = "The current position and orientation of the external axes", Access = GH_ParamAccess.list},
+            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The current External Joint Position", Access = GH_ParamAccess.item},
+            new Param_ExternalJointPosition() { Name = "External Joint Positions", NickName = "EJs", Description = "The External Joint Positions of the whole path", Access = GH_ParamAccess.list},
+            new Param_String() { Name = "Error messages", NickName = "E", Description = "The error messages collected during the generation of the path", Access = GH_ParamAccess.list},
+            new Param_Curve() { Name = "Path", NickName = "P", Description = "The whole tool path as list with curves", Access = GH_ParamAccess.list},
+        };
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -62,35 +94,6 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             AddParameter(8);
         }
-
-        // Create an array with the variable input parameters
-        readonly IGH_Param[] outputParameters = new IGH_Param[9]
-        {
-            new Param_Plane() { Name = "Robot End Plane", NickName = "EP", Description = "The current position and orientation of tool TCP", Access = GH_ParamAccess.item},
-            new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
-            new RobotJointPositionParameter() { Name = "Robot Joint Position", NickName = "RJ", Description = "The current Robot Joint Position", Access = GH_ParamAccess.item},
-            new RobotJointPositionParameter() { Name = "Robot Joint Positions", NickName = "RJs", Description = "The Robot Joint Positions of the whole path", Access = GH_ParamAccess.list},
-            new Param_Plane() { Name = "External Axis Planes", NickName = "EAP", Description = "The current position and orientation of the external axes", Access = GH_ParamAccess.list},
-            new ExternalJointPositionParameter() { Name = "External Joint Position", NickName = "EJ", Description = "The current External Joint Position", Access = GH_ParamAccess.item},
-            new ExternalJointPositionParameter() { Name = "External Joint Positions", NickName = "EJs", Description = "The External Joint Positions of the whole path", Access = GH_ParamAccess.list},
-            new Param_String() { Name = "Error messages", NickName = "E", Description = "The error messages collected during the generation of the path", Access = GH_ParamAccess.list},
-            new Param_Curve() { Name = "Path", NickName = "P", Description = "The whole tool path as list with curves", Access = GH_ParamAccess.list},
-        };
-
-        // Fields
-        private Robot _robot;
-        private PathGenerator _pathGenerator = new PathGenerator();
-        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
-        private bool _outputRobotEndPlane = false;
-        private bool _outputRobotEndPlanes = false;
-        private bool _outputRobotJointPosition = false;
-        private bool _outputRobotJointPositions = false;
-        private bool _outputExternalAxisPlanes = false;
-        private bool _outputExternalJointPosition = false;
-        private bool _outputExternalJointPositions = false;
-        private bool _outputErrorMessages = false;
-        private bool _previewMesh = true;
-        private bool _calculated = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -190,45 +193,45 @@ namespace RobotComponents.Gh.Components.Simulation
             DA.SetDataList(outputParameters[8].Name, _pathGenerator.Paths);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.PathGen_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("3274D235-082A-445A-BA77-75CD3A7926E0"); }
+        }
+        #endregion
+
         #region menu item
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Preview Mesh", _previewMesh);
-            writer.SetBoolean("Output Robot End Plane", _outputRobotEndPlane);
-            writer.SetBoolean("Output Robot End Planes", _outputRobotEndPlanes);
-            writer.SetBoolean("Output Robot Joint Position", _outputRobotJointPosition);
-            writer.SetBoolean("Output Robot Joint Positions", _outputRobotJointPositions);
-            writer.SetBoolean("Output External Axis Planes", _outputExternalAxisPlanes);
-            writer.SetBoolean("Output External Joint Position", _outputExternalJointPosition);
-            writer.SetBoolean("Output External Joint Positions", _outputExternalJointPositions);
-            writer.SetBoolean("Output Error Messages", _outputErrorMessages);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            _previewMesh = reader.GetBoolean("Set Preview Mesh");
-            _outputRobotEndPlane = reader.GetBoolean("Output Robot End Plane");
-            _outputRobotEndPlanes = reader.GetBoolean("Output Robot End Planes");
-            _outputRobotJointPosition = reader.GetBoolean("Output Robot Joint Position");
-            _outputRobotJointPositions = reader.GetBoolean("Output Robot Joint Positions");
-            _outputExternalAxisPlanes = reader.GetBoolean("Output External Axis Planes");
-            _outputExternalJointPosition = reader.GetBoolean("Output External Joint Position");
-            _outputExternalJointPositions = reader.GetBoolean("Output External Joint Positions");
-            _outputErrorMessages = reader.GetBoolean("Output Error Messages");
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -370,6 +373,44 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Set Preview Mesh", _previewMesh);
+            writer.SetBoolean("Output Robot End Plane", _outputRobotEndPlane);
+            writer.SetBoolean("Output Robot End Planes", _outputRobotEndPlanes);
+            writer.SetBoolean("Output Robot Joint Position", _outputRobotJointPosition);
+            writer.SetBoolean("Output Robot Joint Positions", _outputRobotJointPositions);
+            writer.SetBoolean("Output External Axis Planes", _outputExternalAxisPlanes);
+            writer.SetBoolean("Output External Joint Position", _outputExternalJointPosition);
+            writer.SetBoolean("Output External Joint Positions", _outputExternalJointPositions);
+            writer.SetBoolean("Output Error Messages", _outputErrorMessages);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _previewMesh = reader.GetBoolean("Set Preview Mesh");
+            _outputRobotEndPlane = reader.GetBoolean("Output Robot End Plane");
+            _outputRobotEndPlanes = reader.GetBoolean("Output Robot End Planes");
+            _outputRobotJointPosition = reader.GetBoolean("Output Robot Joint Position");
+            _outputRobotJointPositions = reader.GetBoolean("Output Robot Joint Positions");
+            _outputExternalAxisPlanes = reader.GetBoolean("Output External Axis Planes");
+            _outputExternalJointPosition = reader.GetBoolean("Output External Joint Position");
+            _outputExternalJointPositions = reader.GetBoolean("Output External Joint Positions");
+            _outputErrorMessages = reader.GetBoolean("Output Error Messages");
+            return base.Read(reader);
+        }
+
+        /// <summary>
         /// Adds or destroys the output parameter to the component.
         /// </summary>
         /// <param name="index"> The index number of the parameter that needs to be added. </param>
@@ -410,49 +451,6 @@ namespace RobotComponents.Gh.Components.Simulation
         }
         #endregion
 
-        /// <summary>
-        /// This method displays the robot pose for the given axis values. 
-        /// </summary>
-        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
-        public override void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_forwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
-            {
-                // Initiate the display color and transparancy of the robot mesh
-                Color color;
-                double trans;
-
-                // Set the display color and transparancy of the robot mesh
-                if (_forwardKinematics.InLimits == true)
-                {
-                    color = Color.FromArgb(225, 225, 225);
-                    trans = 0.0;
-                }
-                else
-                {
-                    color = Color.FromArgb(150, 0, 0);
-                    trans = 0.5;
-                }
-
-                // Display the internal axes of the robot
-                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
-                {
-                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
-                }
-
-                // Display the external axes
-                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
-                {
-                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
-                    {
-                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
-                    }
-                }
-            }
-        }
-
-        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
         #region variable input parameters
         /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
@@ -516,23 +514,48 @@ namespace RobotComponents.Gh.Components.Simulation
         }
         #endregion
 
+        #region custom preview method
         /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
+        /// This method displays the robot pose for the given axis values. 
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
+        /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
+        public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            get { return Properties.Resources.PathGen_Icon; }
-        }
+            // Check if there is a mesh available to display and the onlyTCP function not active
+            if (_forwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
+            {
+                // Initiate the display color and transparancy of the robot mesh
+                Color color;
+                double trans;
 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("3274D235-082A-445A-BA77-75CD3A7926E0"); }
+                // Set the display color and transparancy of the robot mesh
+                if (_forwardKinematics.InLimits == true)
+                {
+                    color = Color.FromArgb(225, 225, 225);
+                    trans = 0.0;
+                }
+                else
+                {
+                    color = Color.FromArgb(150, 0, 0);
+                    trans = 0.5;
+                }
+
+                // Display the internal axes of the robot
+                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
+                {
+                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                }
+
+                // Display the external axes
+                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
+                {
+                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
+                    {
+                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                    }
+                }
+            }
         }
+        #endregion
     }
 }

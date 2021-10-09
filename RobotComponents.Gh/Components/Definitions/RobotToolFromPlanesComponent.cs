@@ -35,6 +35,7 @@ namespace RobotComponents.Gh.Components.Definitions
         private bool _setMass = false;
         private bool _setCenterOfGravity = false;
         private bool _setMomentOfInertia = false;
+        private readonly int fixedParamNumInput = 4;
         #endregion
 
         /// <summary>
@@ -54,6 +55,16 @@ namespace RobotComponents.Gh.Components.Definitions
         }
 
         /// <summary>
+        /// Stores the variable input parameters in an array.
+        /// </summary>
+        readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
+        {
+            new Param_Number() { Name = "Mass", NickName = "M", Description = "The weight of the load in kg as a Number", Access = GH_ParamAccess.item, Optional = true},
+            new Param_Plane() { Name = "Center of Gravity", NickName = "CG", Description = "The center of gravity of the toal load as a Plane.", Access = GH_ParamAccess.item, Optional = true },
+            new Param_Vector() { Name = "Moment of Inertia", NickName = "MI", Description = "Moment of intertia of the load in kgm2 as a Vector.", Access = GH_ParamAccess.item, Optional = true }
+        };
+
+        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -66,23 +77,12 @@ namespace RobotComponents.Gh.Components.Definitions
             pManager[1].Optional = true;
         }
 
-        // Register the number of fixed input parameters
-        private readonly int fixedParamNumInput = 4;
-
-        // Create an array with the variable input parameters
-        readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
-        {
-            new Param_Number() { Name = "Mass", NickName = "M", Description = "The weight of the load in kg as a Number", Access = GH_ParamAccess.item, Optional = true},
-            new Param_Plane() { Name = "Center of Gravity", NickName = "CG", Description = "The center of gravity of the toal load as a Plane.", Access = GH_ParamAccess.item, Optional = true },
-            new Param_Vector() { Name = "Moment of Inertia", NickName = "MI", Description = "Moment of intertia of the load in kgm2 as a Vector.", Access = GH_ParamAccess.item, Optional = true }
-        };
-
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotToolParameter(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
         }
 
         /// <summary>
@@ -160,47 +160,45 @@ namespace RobotComponents.Gh.Components.Definitions
             #endregion
         }
 
+        #region properties
         /// <summary>
-        /// Detect if the components gets removed from the canvas and deletes the 
-        /// objects created with this components from the object manager. 
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        public override GH_Exposure Exposure
         {
-            if (e.Objects.Contains(this))
-            {
-                _objectManager.DeleteManagedData(this);
-            }
+            get { return GH_Exposure.primary; }
         }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.ToolPlane_Icon; }
+        }
+
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("D803F4BC-3F29-440F-A5F5-196D4CCBE610"); }
+        }
+        #endregion
 
         #region menu item
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Mass", _setMass);
-            writer.SetBoolean("Set Center of Gravity", _setCenterOfGravity);
-            writer.SetBoolean("Set Moment of Inertia", _setMomentOfInertia);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            _setMass = reader.GetBoolean("Set Mass");
-            _setCenterOfGravity = reader.GetBoolean("Set Center of Gravity");
-            _setMomentOfInertia = reader.GetBoolean("Set Moment of Inertia");
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -263,6 +261,32 @@ namespace RobotComponents.Gh.Components.Definitions
         }
 
         /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Set Mass", _setMass);
+            writer.SetBoolean("Set Center of Gravity", _setCenterOfGravity);
+            writer.SetBoolean("Set Moment of Inertia", _setMomentOfInertia);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _setMass = reader.GetBoolean("Set Mass");
+            _setCenterOfGravity = reader.GetBoolean("Set Center of Gravity");
+            _setMomentOfInertia = reader.GetBoolean("Set Moment of Inertia");
+            return base.Read(reader);
+        }
+
+        /// <summary>
         /// Adds or destroys the input parameter to the component.
         /// </summary>
         /// <param name="index"> The index number of the parameter that needs to be added. </param>
@@ -303,7 +327,57 @@ namespace RobotComponents.Gh.Components.Definitions
         }
         #endregion
 
-        // Methods of variable parameter interface which handles (de)serialization of the variable input parameters
+        #region object manager
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                _objectManager.DeleteManagedData(this);
+            }
+        }
+
+        /// <summary>
+        /// Last name
+        /// </summary>
+        public string LastName
+        {
+            get { return _lastName; }
+            set { _lastName = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
+        /// </summary>
+        public bool IsUnique
+        {
+            get { return _isUnique; }
+            set { _isUnique = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the current registered names.
+        /// </summary>
+        public List<string> Registered
+        {
+            get { return _registered; }
+            set { _registered = value; }
+        }
+
+        /// <summary>
+        /// Gets the variables names that need to be registered by the object manager.
+        /// </summary>
+        public List<string> ToRegister
+        {
+            get { return _toRegister; }
+        }
+        #endregion
+
         #region variable input parameters
         /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
@@ -364,79 +438,6 @@ namespace RobotComponents.Gh.Components.Definitions
         void IGH_VariableParameterComponent.VariableParameterMaintenance()
         {
 
-        }
-        #endregion
-
-        #region properties
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
-        }
-
-        /// <summary>
-        /// Gets whether this object is obsolete.
-        /// </summary>
-        public override bool Obsolete
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.ToolPlane_Icon; }
-        }
- 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("D803F4BC-3F29-440F-A5F5-196D4CCBE610"); }
-        }
-
-        /// <summary>
-        /// Last name
-        /// </summary>
-        public string LastName
-        {
-            get { return _lastName; }
-            set { _lastName = value; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether or not the variable names that are generated by this component are unique.
-        /// </summary>
-        public bool IsUnique
-        {
-            get { return _isUnique; }
-            set { _isUnique = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the current registered names.
-        /// </summary>
-        public List<string> Registered
-        {
-            get { return _registered; }
-            set { _registered = value; }
-        }
-
-        /// <summary>
-        /// Gets the variables names that need to be registered by the object manager.
-        /// </summary>
-        public List<string> ToRegister
-        {
-            get { return _toRegister; }
         }
         #endregion
     }

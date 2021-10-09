@@ -73,10 +73,10 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new TargetParameter(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.list);
-            pManager.AddParameter(new SpeedDataParameter(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Target(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.list);
             pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.list, 0);
-            pManager.AddParameter(new ZoneDataParameter(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.list);
 
             pManager[3].Optional = true;
         }
@@ -87,9 +87,9 @@ namespace RobotComponents.Gh.Components.Obsolete
         // Create an array with the variable input parameters
         readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            new RobotToolParameter() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.list, Optional = true},
-            new WorkObjectParameter() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.list, Optional = true },
-            new DigitalOutputParameter() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
+            new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.list, Optional = true},
+            new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.list, Optional = true },
+            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new MovementParameter(), "Movement", "M", "Resulting Move instruction");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");   
         }
 
         // Fields

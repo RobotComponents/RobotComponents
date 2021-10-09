@@ -84,7 +84,7 @@ namespace RobotComponents.Gh.Goos.Actions
             {
                 if (Value == null) { return "No internal Linear Configuration Control instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Linear Configuration Control instance: Did you set a bool?"; //Todo: beef this up to be more informative.
+                return "Invalid Linear Configuration Control instance: Did you set a bool?";  
             }
         }
 

@@ -27,6 +27,11 @@ namespace RobotComponents.Gh.Components.Definitions
     /// </summary>
     public class RobotPresetComponent : GH_Component
     {
+        #region fields
+        private RobotPreset _robotPreset = RobotPreset.EMPTY;
+        private bool _fromMenu = false;
+        #endregion
+
         public RobotPresetComponent()
           : base("Robot Preset", "RobPres",
               "Defines a robot which is needed for Code Generation and Simulation"
@@ -38,22 +43,13 @@ namespace RobotComponents.Gh.Components.Definitions
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddPlaneParameter("Position Plane", "PP", "Position Plane of the Robot as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddParameter(new RobotToolParameter(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
-            pManager.AddParameter(new ExternalAxisParameter(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool Parameter", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_ExternalAxis(), "External Axis", "EA", "External Axis as External Axis Parameter", GH_ParamAccess.list);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -64,12 +60,8 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new RobotParameter(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);
+            pManager.RegisterParam(new Param_Robot(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);
         }
-
-        // fields
-        private RobotPreset _robotPreset = RobotPreset.EMPTY;
-        private bool _fromMenu = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -117,60 +109,42 @@ namespace RobotComponents.Gh.Components.Definitions
             DA.SetData(0, robot);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.RobotPreset_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("CF1004D8-9598-4B2B-8F8A-5A3E43614579"); }
+        }
+        #endregion
+
         #region menu item
-        /// <summary>
-        /// Gets the Robot preset
-        /// </summary>
-        /// <returns> The picked Robot preset. </returns>
-        private RobotPreset GetRobotPreset()
-        {
-            // Create the form with all the available robot presets
-            List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
-            robotPresets.Remove(RobotPreset.EMPTY);
-            PickRobotForm frm = new PickRobotForm(robotPresets);
-
-            // Display the form
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
-            frm.ShowDialog();
-
-            // Return the index number of the picked controller
-            int index = frm.RobotIndex;
-
-            // Return a null value when the picked index is incorrect. 
-            if (index < 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
-                return RobotPreset.EMPTY;
-            }
-
-            // Select the picked robot
-            return robotPresets[index];
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
-            writer.SetByteArray("Robot Preset", array);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            byte[] array = reader.GetByteArray("Robot Preset");
-            _robotPreset = (RobotPreset)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
-            return base.Read(reader);
-        }
-
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
         /// </summary>
@@ -205,22 +179,61 @@ namespace RobotComponents.Gh.Components.Definitions
             ExpireSolution(true);
             _fromMenu = false;
         }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
+            writer.SetByteArray("Robot Preset", array);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            byte[] array = reader.GetByteArray("Robot Preset");
+            _robotPreset = (RobotPreset)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
+            return base.Read(reader);
+        }
         #endregion
 
+        #region additional methods
         /// <summary>
-        /// Provides an Icon for the component.
+        /// Gets the Robot preset
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
+        /// <returns> The picked Robot preset. </returns>
+        private RobotPreset GetRobotPreset()
         {
-            get { return Properties.Resources.RobotPreset_Icon; }
-        }
+            // Create the form with all the available robot presets
+            List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
+            robotPresets.Remove(RobotPreset.EMPTY);
+            PickRobotForm frm = new PickRobotForm(robotPresets);
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("CF1004D8-9598-4B2B-8F8A-5A3E43614579"); }
+            // Display the form
+            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+            frm.ShowDialog();
+
+            // Return the index number of the picked controller
+            int index = frm.RobotIndex;
+
+            // Return a null value when the picked index is incorrect. 
+            if (index < 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
+                return RobotPreset.EMPTY;
+            }
+
+            // Select the picked robot
+            return robotPresets[index];
         }
+        #endregion
     }
 }

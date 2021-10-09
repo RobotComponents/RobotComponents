@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Enumerations;
@@ -568,6 +569,14 @@ namespace RobotComponents.Actions
         public static double[] ValidPredefinedValues
         {
             get { return _validPredefinedValues; }
+        }
+
+        /// <summary>
+        /// Gets the valid predefined data as a dictionary.
+        /// </summary>
+        public static Dictionary<string, double> ValidPredefinedData
+        {
+            get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
         }
         #endregion
     }

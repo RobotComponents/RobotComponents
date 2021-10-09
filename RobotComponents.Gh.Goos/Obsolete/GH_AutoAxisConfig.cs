@@ -12,9 +12,8 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Utils;
-using RobotComponents.Gh.Goos.Actions;
 
-namespace RobotComponents.Gh.Goos.Obsolete
+namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
     /// Auto Axis Configuration Goo wrapper class, makes sure the Auto Axis Configuration class can be used in Grasshopper.
@@ -88,7 +87,7 @@ namespace RobotComponents.Gh.Goos.Obsolete
             {
                 if (Value == null) { return "No internal Auto Axis Configuration instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Auto Axis Configuration instance: Did you set a bool?"; //Todo: beef this up to be more informative.
+                return "Invalid Auto Axis Configuration instance: Did you set a bool?";  
             }
         }
 

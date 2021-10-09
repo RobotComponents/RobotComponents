@@ -6,9 +6,13 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 // Grasshopper Libs
-using Grasshopper.Kernel.Data;
+using Grasshopper;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Special;
 
 namespace RobotComponents.Gh.Utils
 {
@@ -18,11 +22,6 @@ namespace RobotComponents.Gh.Utils
     public static class HelperMethods
     {
         #region fields
-        /// <summary>
-        /// OBSOLETE: Is only uaed in obsolete components. Use the ZoneData base class to acces this data. 
-        /// List with the pre-defined precision values that can be used for defining the precision of a robot movement. 
-        /// </summary>
-        private static readonly int[] _validPrecisionValues = new int[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
         #endregion
 
         #region methods
@@ -33,7 +32,7 @@ namespace RobotComponents.Gh.Utils
         /// <param name="name"> The name that should be used. </param>
         /// <param name="data"> The tree structure. </param>
         /// <returns> The datatree filled with unique names. </returns>
-        [Obsolete("This method is obsolete and will be removed in the future.", false)]
+        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
         public static GH_Structure<GH_String> DataTreeNaming(string name, GH_Structure<IGH_Goo> data)
         {
             // Output
@@ -92,27 +91,6 @@ namespace RobotComponents.Gh.Utils
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// OBSOLETE: Is only used in obsolete components. Use the ZoneData base class to acces predefined values.
-        /// A method to check if the precision value is valid to use a pre-defined precision value (zonedata). 
-        /// </summary>
-        /// <param name="value"> The precision value (double) to check for. </param>
-        /// <returns> Returns if the precision value (zonedata) is valid. </returns>
-        public static bool PrecisionValueIsValid(int value)
-        {
-            bool isValid = false;
-
-            for (int i = 0; i < _validPrecisionValues.Length; i++)
-            {
-                if (value == _validPrecisionValues[i])
-                {
-                    isValid = true;
-                    break;
-                }
-            }
-            return isValid;
         }
 
         /// <summary>
@@ -253,6 +231,137 @@ namespace RobotComponents.Gh.Utils
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Creates a Grasshopper value list from an enum and connects it to an input parameter.  
+        /// Returns true if it's created.
+        /// </summary>
+        /// <param name="component"> Component to connect to. </param>
+        /// <param name="enumType"> Enumeration to take values from. </param>
+        /// <param name="inputIndex"> Index of the input to connect the value list to. </param>
+        /// <returns> True, if created. </returns>
+        public static bool CreateValueList(GH_Component component, Type enumType, int inputIndex)
+        {
+            if (component.Params.Input[inputIndex].SourceCount == 0)
+            {
+                var parameter = component.Params.Input[inputIndex];
+
+                // Create the value list
+                GH_ValueList obj = CreateValueList(enumType);
+
+                // Make point where the valuelist should be created on the canvas
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
+
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
+
+                // Collect data
+                parameter.CollectData();
+
+                // Expire value list
+                obj.ExpireSolution(true);
+
+                //Return that it's created
+                return true; 
+            }
+            else
+            {
+                //Return that it isn't created
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return a value list populated with data from an enum.
+        /// </summary>
+        /// <param name="enumType"> Enumeration to take values from. </param>
+        /// <returns> The value list with data. </returns>
+        private static GH_ValueList CreateValueList(Type enumType)
+        {
+            // Creates the empty value list
+            GH_ValueList obj = new GH_ValueList();
+            obj.CreateAttributes();
+            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListItems.Clear();
+
+            // Add the items to the value list
+            string[] names = Enum.GetNames(enumType);
+            int[] values = (int[])Enum.GetValues(enumType);
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                obj.ListItems.Add(new GH_ValueListItem(names[i], values[i].ToString()));
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Places a value list on a given location on the canvas. 
+        /// Returns true if it's created.
+        /// </summary>
+        /// <param name="obj"> Value list to place on the canvas. </param>
+        /// <param name="location"> Location on the canvas. </param>
+        /// <returns> True, if created. </returns>
+        private static bool CreateValueList(GH_ValueList obj, PointF location)
+        {
+            // Make point where the valuelist should be created on the canvas
+            obj.Attributes.Pivot = new PointF(location.X - obj.Attributes.Bounds.Width / 4, location.Y - obj.Attributes.Bounds.Height / 2);
+
+            // Add the value list to the active canvas
+            Instances.ActiveCanvas.Document.AddObject(obj, false);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns a value list populated with data from a dictionary.
+        /// </summary>
+        /// <param name="data"> Data to populate the valuelist with. </param>
+        /// <returns> The value list with data. </returns>
+        private static GH_ValueList CreateValueList(Dictionary<string, double> data)
+        {
+            // Creates the empty value list
+            GH_ValueList obj = new GH_ValueList();
+            obj.CreateAttributes();
+            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListItems.Clear();
+
+            // Add the items to the value list
+            foreach (KeyValuePair<string, double> entry in data)
+            {
+                obj.ListItems.Add(new GH_ValueListItem(entry.Key, entry.Value.ToString()));
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Creates a Grasshopper value list from an enum and places it on the given location on the canvas. 
+        /// Returns true if it's created.
+        /// </summary>
+        /// <param name="enumType"> Enumeration to take values from. </param>
+        /// <param name="location"> Location on the canvas. </param>
+        /// <returns> True, if created. </returns>
+        public static bool CreateValueList(Type enumType, PointF location)
+        {
+            return CreateValueList(CreateValueList(enumType), location);
+        }
+
+        /// <summary>
+        /// Creates a Grasshopper value list from a dictionary and places it on the given location on the canvas. 
+        /// Returns true if it's created.
+        /// </summary>
+        /// <param name="data"> Data to populate the valuelist with. </param>
+        /// <param name="location"> Location on the canvas. </param>
+        /// <returns> True, if created. </returns>
+        public static bool CreateValueList(Dictionary<string, double> data, PointF location)
+        {
+            return CreateValueList(CreateValueList(data), location);
         }
         #endregion
 

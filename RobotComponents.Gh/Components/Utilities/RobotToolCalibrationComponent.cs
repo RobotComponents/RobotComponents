@@ -39,22 +39,13 @@ namespace RobotComponents.Gh.Components.Utilities
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new RobotParameter(), "Robot", "R", "Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new RobotJointPositionParameter(), "Robot Joint Positions", "RJ", "Robot Joint Positions", GH_ParamAccess.list);
-            pManager.AddParameter(new ExternalJointPositionParameter(), "External Joint Positions", "EJ", "External Joint Positions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Positions", "RJ", "Robot Joint Positions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Positions", "EJ", "External Joint Positions", GH_ParamAccess.list);
 
             pManager[2].Optional = true;
         }
@@ -110,6 +101,44 @@ namespace RobotComponents.Gh.Components.Utilities
             DA.SetData(1, calibration.MaximumError);
         }
 
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for every component that will be visible in the User Interface.
+        /// Icons need to be 24x24 pixels.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.ToolCalibration_Icon; }
+        }
+ 
+        /// <summary>
+        /// Each component must have a unique Guid to identify it. 
+        /// It is vital this Guid doesn't change otherwise old ghx files 
+        /// that use the old ID will partially fail during loading.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("72FB2BFD-9A28-4CBE-9586-242CD29DE1E1"); }
+        }
+        #endregion
+
         #region menu item
         /// <summary>
         /// Adds the additional items to the context menu of the component. 
@@ -132,25 +161,5 @@ namespace RobotComponents.Gh.Components.Utilities
             Documentation.OpenBrowser(url);
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for every component that will be visible in the User Interface.
-        /// Icons need to be 24x24 pixels.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.ToolCalibration_Icon; }
-        }
- 
-        /// <summary>
-        /// Each component must have a unique Guid to identify it. 
-        /// It is vital this Guid doesn't change otherwise old ghx files 
-        /// that use the old ID will partially fail during loading.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("72FB2BFD-9A28-4CBE-9586-242CD29DE1E1"); }
-        }
     }
-
 }

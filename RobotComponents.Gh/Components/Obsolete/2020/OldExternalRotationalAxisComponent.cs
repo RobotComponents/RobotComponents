@@ -77,7 +77,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new ExternalRotationalAxisParameter(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");  //Todo: beef this up to be more informative.
+            pManager.RegisterParam(new Param_ExternalRotationalAxis(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");   
         }
 
         /// <summary>

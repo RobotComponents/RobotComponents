@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using RobotComponents.Gh.Utils;
 
 // This component is OBSOLETE!
-// It is OBSOLETE since version 1.00.000
+// It is OBSOLETE since version 1.0.0
 // It is replaced with a new component. 
 
 namespace RobotComponents.Gh.Components.Obsolete

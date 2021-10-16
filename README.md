@@ -64,18 +64,19 @@ Robot Components is a free to use Grasshopper plugin and does not legally bind y
 
 ```
 EDEK Uni Kassel (2021).  
-Robot Components v1.00.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+Robot Components v1.0.0: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 
 Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of Robot Components used. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
 
 ## Version numbering
-Robot Components uses the following version numbering scheme: 
+Robot Components uses the following [Semantic Versioning](https://semver.org/) scheme: 
+
 ```
-0.xx.xxx ---> major release  
-x.00.xxx ---> minor release (e.g. new functions, new components etc. )  
-x.xx.000 ---> bug fixes and small improvements
+0.x.x ---> major release  
+x.0.x ---> minor release (e.g. new functions, new components etc. )  
+x.x.0 ---> bug fixes and small improvements
 ```
 Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/robot-components) are marked as pre-release. 
 

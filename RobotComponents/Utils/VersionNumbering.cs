@@ -13,20 +13,20 @@ namespace RobotComponents.Utils
         /// <summary>
         /// Gets the current version of the Robot Component Plugin. 
         /// Has to be manually updated each time. 
-        /// 0.XX.XXX ---> mature release
-        /// X.00.XXX ---> minor release (for example new functions, new components...etc.)
-        /// X.XX.000 ---> bug fixes and small improvements
+        /// 0.X.X ---> mature release
+        /// X.0.X ---> minor release (for example new functions, new components...etc.)
+        /// X.X.0 ---> bug fixes and small improvements
         /// </summary>
-        public const string CurrentVersion = "1.00.000";
-      
+        public const string CurrentVersion = "1.0.0";
+
         /// <summary>
         /// Gets the current version of the Robot Components plugin as an int. 
-        /// Has to be manually updated each time. 
-        /// Remove the points and the zeros in front of the number. 
+        /// Typically used to check the version number inside the code.
+        /// For internal use only. Not recommended to use. 
         /// Examples:
-        /// "0.11.003" ----> 11003
-        /// "1.01.000" ----> 101000
+        /// before v0: "0.11.003" ---> remove dots ---> 11003
+        /// after v0: "1.2.3" ---> major*10^6 + minor*10^3 + fix --->  1*10^6 + 2*10^3 + 3
         /// </summary>
-        public const int CurrentVersionAsInt = 100000;
+        public const int CurrentVersionAsInt = 1*10^6 + 0*10^3 + 0;
     }
 }

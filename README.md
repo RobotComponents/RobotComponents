@@ -38,7 +38,7 @@ For easy sharing of the download link and the documentation (with e.g. students)
 ## Credits
 ![EDEK_logo](/Utility/181101_EDEK-LOGO-01.png)
 
-Robot Components is an open source project developed and initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://edek.uni-kassel.de/) led by Prof. Eversmann. The technical development is initiated and executed by the research associates and student assistants who are listed [here](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md).
+Robot Components is an open source project initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://www.uni-kassel.de/fb06/institute/architektur/fachgebiete/experimentelles-und-digitales-entwerfen-und-konstruieren/home). The developers and contributors are listed [here](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md).
 
 Robot Components uses the ABB PC SDK for real-time connection to ABB Robots, you can find the SDK used in this project [here](https://developercenter.robotstudio.com/pc-sdk).
 
@@ -64,7 +64,7 @@ Robot Components is a free to use Grasshopper plugin and does not legally bind y
 
 ```
 EDEK Uni Kassel (2021).  
-Robot Components v0.17.002: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
+Robot Components v1.00.000: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper. 
 URL https://github.com/RobotComponents/RobotComponents
 ```
 

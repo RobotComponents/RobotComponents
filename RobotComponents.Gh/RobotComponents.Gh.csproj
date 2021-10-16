@@ -71,28 +71,28 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldMovementComponent4.cs" />
+    <Compile Include="Obsolete\v0\OldMovementComponent4.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\RobotJointPositionComponentDataTreeGenerator.cs" />
-    <Compile Include="Components\Obsolete\2021\OldDeconstructExtJointPosComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldDeconstructRobJointPosComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldExternalJointPositionComponent.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructExtJointPosComponent.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructRobJointPosComponent.cs" />
+    <Compile Include="Obsolete\v0\OldExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\JointTargetComponentDataTreeGenerator.cs" />
-    <Compile Include="Components\Obsolete\2021\OldRobotJointPositionComponent.cs" />
+    <Compile Include="Obsolete\v0\OldRobotJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\RobotTargetComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\SpeedDataComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\ZoneDataComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Utilities\UngroupActionsComponent.cs" />
     <Compile Include="Components\Utilities\GroupActionsComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldDeconstructRobotToolComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldRobotToolFromPlanesComponent2.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructRobotToolComponent.cs" />
+    <Compile Include="Obsolete\v0\OldRobotToolFromPlanesComponent2.cs" />
     <Compile Include="Components\Utilities\RobotToolCalibrationComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldSpeedDataComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldZoneDataComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldJointTargetComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldRobotTargetComponent.cs" />
-    <Compile Include="Components\Obsolete\2020\OldPathGeneratorComponent3.cs" />
+    <Compile Include="Obsolete\v0\OldSpeedDataComponent.cs" />
+    <Compile Include="Obsolete\v0\OldZoneDataComponent.cs" />
+    <Compile Include="Obsolete\v0\OldJointTargetComponent.cs" />
+    <Compile Include="Obsolete\v0\OldRobotTargetComponent.cs" />
+    <Compile Include="Obsolete\v0\OldPathGeneratorComponent3.cs" />
     <Compile Include="Components\Code Generation\Value Lists\CodeTypeValueList.cs" />
     <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\MovementTypeValueList.cs" />
@@ -101,25 +101,25 @@
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
-    <Compile Include="Components\Obsolete\2020\OldExternalLinearAxisComponent2.cs" />
-    <Compile Include="Components\Obsolete\2020\OldExternalRotationalAxisComponent.cs" />
-    <Compile Include="Components\Obsolete\2020\OldDeconstructExternalLinearAxisComponent2.cs" />
-    <Compile Include="Components\Obsolete\2020\OldDeconstructExternalRotationalAxisComponent.cs" />
+    <Compile Include="Obsolete\v0\OldExternalLinearAxisComponent2.cs" />
+    <Compile Include="Obsolete\v0\OldExternalRotationalAxisComponent.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructExternalLinearAxisComponent2.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructExtJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobJointPosComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobotTargetComponent.cs" />
-    <Compile Include="Components\Obsolete\2020\OldDeconstructWorkObjectComponent2.cs" />
+    <Compile Include="Obsolete\v0\OldDeconstructWorkObjectComponent2.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1100_4_0_475_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1100_4_0_58_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_11_0_90_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_10_1_15_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1300_7_1_40_Component.cs" />
     <Compile Include="Components\Definitions\RobotPresetComponent.cs" />
-    <Compile Include="Components\Obsolete\2020\OldWorkObjectComponent2.cs" />
+    <Compile Include="Obsolete\v0\OldWorkObjectComponent2.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldAutoAxisConfigComponent.cs" />
+    <Compile Include="Obsolete\v0\OldAutoAxisConfigComponent.cs" />
     <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
@@ -195,14 +195,14 @@
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
     <Compile Include="Components\Utilities\InfoComponent.cs" />
-    <Compile Include="Components\Obsolete\2021\OldNameGeneratorComponent.cs" />
+    <Compile Include="Obsolete\v0\OldNameGeneratorComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
-    <Compile Include="Parameters\Obsolete\ExternalAxisParameter.cs" />
-    <Compile Include="Parameters\Obsolete\RobotToolParameter.cs" />
-    <Compile Include="Parameters\Obsolete\ExternalLinearAxisParameter.cs" />
-    <Compile Include="Parameters\Obsolete\ExternalRotationalAxisParameter.cs" />
-    <Compile Include="Parameters\Obsolete\RobotParameter.cs" />
+    <Compile Include="Obsolete\v0\ExternalAxisParameter.cs" />
+    <Compile Include="Obsolete\v0\RobotToolParameter.cs" />
+    <Compile Include="Obsolete\v0\ExternalLinearAxisParameter.cs" />
+    <Compile Include="Obsolete\v0\ExternalRotationalAxisParameter.cs" />
+    <Compile Include="Obsolete\v0\RobotParameter.cs" />
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Forms\PickRobotForm.cs">
       <SubType>Form</SubType>
@@ -225,7 +225,7 @@
     <Compile Include="Parameters\Definitions\Param_ExternalAxis.cs" />
     <Compile Include="Parameters\Actions\Param_SpeedData.cs" />
     <Compile Include="Parameters\Definitions\Param_WorkObject.cs" />
-    <Compile Include="Parameters\Obsolete\AutoAxisConfigParameter.cs" />
+    <Compile Include="Obsolete\v0\AutoAxisConfigParameter.cs" />
     <Compile Include="Parameters\Actions\Param_CodeLine.cs" />
     <Compile Include="Parameters\Actions\Param_Comment.cs" />
     <Compile Include="Parameters\Actions\Param_DigitalOutput.cs" />
@@ -664,6 +664,7 @@
   <ItemGroup>
     <None Include="Resources\ActionUnGroup_Icon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

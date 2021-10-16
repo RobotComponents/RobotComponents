@@ -145,7 +145,7 @@ namespace RobotComponents.Gh.Utils
         /// <summary>
         /// Runs Solve Instance on all other components to check if the variable names are unique.
         /// </summary>
-        public void UpdateComponents()
+        private void UpdateComponents()
         {
             foreach (KeyValuePair<Guid, GH_Component> entry in _components)
             {
@@ -157,6 +157,25 @@ namespace RobotComponents.Gh.Utils
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns a list with the registered variable names. 
+        /// </summary>
+        /// <returns> List with registered variable names. </returns>
+        public List<string> GetRegisteredVariableNames()
+        {
+            List<string> result = new List<string>() { };
+
+            foreach (KeyValuePair<Guid, GH_Component> entry in _components)
+            {
+                if (entry.Value is IObjectManager component)
+                {
+                    result.AddRange(component.Registered);
+                }   
+            }
+
+            return result;
         }
         #endregion
 

@@ -60,7 +60,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

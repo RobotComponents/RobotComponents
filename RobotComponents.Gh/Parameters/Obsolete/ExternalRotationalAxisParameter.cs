@@ -69,6 +69,14 @@ namespace RobotComponents.Gh.Parameters.Definitions
         }
 
         /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Returns a consistent ID for this object type. 
         /// Every object must supply a unique and unchanging ID that is used to identify objects of the same type.
         /// </summary>

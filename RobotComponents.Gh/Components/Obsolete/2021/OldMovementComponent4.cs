@@ -131,10 +131,6 @@ namespace RobotComponents.Gh.Components.Obsolete
             List<WorkObject> workObjects = new List<WorkObject>();
             List<DigitalOutput> digitalOutputs = new List<DigitalOutput>();
 
-            // Create an empty Robot Tool
-            RobotTool emptyRobotTool = new RobotTool();
-            emptyRobotTool.Clear();
-
             // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targets)) { return; }
             if (!DA.GetDataList(1, speedDatas)) { return; }
@@ -146,7 +142,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             {
                 if (!DA.GetDataList(variableInputParameters[0].Name, robotTools))
                 {
-                    robotTools = new List<RobotTool>() { new RobotTool(emptyRobotTool) };
+                    robotTools = new List<RobotTool>() { RobotTool.GetEmptyRobotTool() };
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
@@ -167,7 +163,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             // Make sure variable input parameters have a default value
             if (robotTools.Count == 0)
             {
-                robotTools.Add(new RobotTool(emptyRobotTool)); // Empty Robot Tool
+                robotTools.Add(RobotTool.GetEmptyRobotTool()); // Empty Robot Tool
             }
             if (workObjects.Count == 0)
             {

@@ -105,13 +105,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             SpeedData speedData = new SpeedData();
             int movementType = 0;
             ZoneData zoneData = new ZoneData();
-            RobotTool robotTool = new RobotTool();
+            RobotTool robotTool = RobotTool.GetEmptyRobotTool();
             WorkObject workObject = new WorkObject();
             DigitalOutput digitalOutput = new DigitalOutput();
-
-            // Create an empty Robot Tool
-            RobotTool emptyRobotTool = new RobotTool();
-            emptyRobotTool.Clear();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetData(0, ref target)) { return; }
@@ -124,7 +120,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             {
                 if (!DA.GetData(variableInputParameters[0].Name, ref robotTool))
                 {
-                    robotTool = new RobotTool(emptyRobotTool);
+                    robotTool = RobotTool.GetEmptyRobotTool();
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))

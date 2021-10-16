@@ -515,6 +515,18 @@ namespace RobotComponents.Definitions
         {
             return new RobotTool(this, false);
         }
+
+        /// <summary>
+        /// Returns an empty Robot Tool instance.
+        /// </summary>
+        /// <returns> The empty Robot Tool. </returns>
+        public static RobotTool GetEmptyRobotTool()
+        {
+            RobotTool robotTool = new RobotTool();
+            robotTool.Clear();
+
+            return robotTool;
+        }
         #endregion
 
         #region methods
@@ -660,7 +672,7 @@ namespace RobotComponents.Definitions
         /// Typically used for defining an empty Robot Tool instance 
         /// (since the empty constructor creates the default Robot Tool tool0).
         /// </summary>
-        public void Clear()
+        private void Clear()
         {
             _name = "";
             _mesh = new Mesh();

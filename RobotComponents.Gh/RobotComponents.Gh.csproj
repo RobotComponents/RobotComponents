@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v0\OldInfoComponent.cs" />
     <Compile Include="Obsolete\v0\OldMovementComponent4.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\RobotJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructExtJointPosComponent.cs" />

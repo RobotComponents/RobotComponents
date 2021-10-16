@@ -11,21 +11,62 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Utilities
+// This component is OBSOLETE!
+// It is OBSOLETE since version 1.00.000
+// It is replaced with a new component. 
+
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Info component. An inherent from the GH_Component Class.
     /// </summary>
-    public class InfoComponent : GH_Component
+    public class OldInfoComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InfoComponent()
+        [Obsolete("This component is obsolete and will be removed in the future.", false)]
+        public OldInfoComponent()
           : base("Info", "I",
-              "Gives info about the plugin.",
+              "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinoceros Grasshopper. " 
+                + "This open source project is initiated by the chair of Experimental and Digital Design and Construction "
+                + "of the University of Kassel led by Prof. Eversmann. The technical development is initiated and executed "
+                + "by the research associates and student assistants."
+                + Environment.NewLine 
+                + Environment.NewLine 
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Copyright (c) 2018-2021 The Robot Components authors and / or their affiliations"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components is free software; you can redistribute it and/or modify it under "
+                + "the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; " 
+                + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+                + "See the GNU General Public License for more details."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "You should have received a copy of the GNU General Public License along with Robot Components; "
+                + "If not, see http://www.gnu.org/licenses/."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "More information can be found here: " 
+                + Environment.NewLine 
+                + "https://github.com/RobotComponents/RobotComponents/"
+                + System.Environment.NewLine 
+                + System.Environment.NewLine
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -43,7 +84,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Info", "I", "Authors and license information.", GH_ParamAccess.item);
+            // This component has no output parameters
         }
 
         /// <summary>
@@ -53,47 +94,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare info
-            string text = "Robot Components is a plugin for intuitive robot programming for ABB robots inside Rhinoceros Grasshopper. "
-                + "This open source project is initiated by the chair of Experimental and Digital Design and Construction (EDEK) "
-                + "of the University of Kassel. The technical development is executed by Benedikt Wannemacher, Gabriel Rumpf, Arjen Deetman, " 
-                + "Andrea Rossi, Mohamed Dawod, and Zuardin Akbar."
-                + Environment.NewLine
-                + Environment.NewLine
-                + "----------"
-                + Environment.NewLine
-                + Environment.NewLine
-                + "Copyright (c) 2018-2021 The Robot Components authors and / or their affiliations"
-                + Environment.NewLine
-                + Environment.NewLine
-                + "Robot Components is free software; you can redistribute it and/or modify it under "
-                + "the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation."
-                + Environment.NewLine
-                + Environment.NewLine
-                + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; "
-                + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-                + "See the GNU General Public License for more details."
-                + Environment.NewLine
-                + Environment.NewLine
-                + "You should have received a copy of the GNU General Public License along with Robot Components; "
-                + "If not, see http://www.gnu.org/licenses/."
-                + Environment.NewLine
-                + Environment.NewLine
-                + "----------"
-                + Environment.NewLine
-                + Environment.NewLine
-                + "More information can be found here: "
-                + Environment.NewLine
-                + "https://github.com/RobotComponents/RobotComponents/"
-                + System.Environment.NewLine
-                + System.Environment.NewLine
-                + "----------"
-                + Environment.NewLine
-                + Environment.NewLine
-                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion;
-
-            // Assign the output parameters
-            DA.SetData(0, text);
+        
         }
 
         #region properties
@@ -103,7 +104,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.septenary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("68D70A89-92B6-4DAB-BBA5-12C57793971E"); }
+            get { return new Guid("4FEC796B-E6F3-4996-84FD-FB6E85FDA16B"); }
         }
         #endregion
 

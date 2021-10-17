@@ -22,8 +22,8 @@ using System.Runtime.InteropServices;
 [assembly: Guid("2f1a80cd-231a-4479-82bc-3b1a1382a7ad")]
 
 // Version information for an assembly
-// 0.XX.XXX ---> mature release
-// X.00.XXX ---> minor release (for example new functions, new components...etc.)
-// X.XX.000 ---> bug fixes and small improvements
+/// 0.x.x ---> MAJOR version when you make incompatible API changes
+/// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
+/// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
 [assembly: AssemblyVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]
 [assembly: AssemblyFileVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]

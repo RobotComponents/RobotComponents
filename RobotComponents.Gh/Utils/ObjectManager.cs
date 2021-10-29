@@ -14,7 +14,7 @@ using RobotComponents.Actions;
 namespace RobotComponents.Gh.Utils
 {
     /// <summary>
-    /// The Object Manager keeps track of different variables to enable global funcionalities inside Grashopper
+    /// The Object Manager keeps track of different variables to enable global funcionalities inside Grasshopper
     /// </summary>
 
     public class ObjectManager

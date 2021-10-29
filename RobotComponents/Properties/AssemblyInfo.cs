@@ -22,8 +22,8 @@ using System.Runtime.InteropServices;
 [assembly: Guid("496ba2ce-d067-42b3-bd7f-d1bb429a4987")] // This will also be the Guid of the Rhino plug-in
 
 // Version information for an assembly
-/// 0.x.x ---> MAJOR version when you make incompatible API changes
-/// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
-/// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
+// 0.x.x ---> MAJOR version when you make incompatible API changes
+// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner
+// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
 [assembly: AssemblyVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]
 [assembly: AssemblyFileVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]

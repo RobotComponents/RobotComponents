@@ -19,12 +19,12 @@ namespace RobotComponents.Gh.Parameters.Definitions
     /// External Axis parameter
     /// </summary>
     [Obsolete("This parameter is OBSOLETE and will be removed in the future. Use Param_ExternalAxis instead.", false)]
-    public class Param_ExternalAxis : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
+    public class ExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalAxis> class
         /// </summary>
-        public Param_ExternalAxis()
+        public ExternalAxisParameter()
           : base(new GH_InstanceDescription("External Axis", "EA",
                 "Contains the data of any External Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -78,7 +78,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1FD9D403-B0BC-4A16-AE53-ACB477A1645C"); }
+            get { return new Guid("EEBEF7BC-50CC-419D-BC7F-AC978A7B0006"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.

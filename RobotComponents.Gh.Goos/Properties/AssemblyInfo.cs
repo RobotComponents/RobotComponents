@@ -22,8 +22,8 @@ using System.Runtime.InteropServices;
 [assembly: Guid("4853e4fa-0246-486c-9f1a-0620896690c3")]
 
 // Version information for an assembly
-/// 0.x.x ---> MAJOR version when you make incompatible API changes
-/// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
-/// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
+// 0.x.x ---> MAJOR version when you make incompatible API changes
+// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner
+// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
 [assembly: AssemblyVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]
 [assembly: AssemblyFileVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]

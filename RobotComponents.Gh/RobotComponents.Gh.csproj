@@ -210,6 +210,8 @@
     <Compile Include="Obsolete\v0\ExternalLinearAxisParameter.cs" />
     <Compile Include="Obsolete\v0\ExternalRotationalAxisParameter.cs" />
     <Compile Include="Obsolete\v0\RobotParameter.cs" />
+    <Compile Include="RobotComponentsIcon.cs" />
+    <Compile Include="RobotComponentsInfo.cs" />
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Forms\PickRobotForm.cs">
       <SubType>Form</SubType>
@@ -454,6 +456,7 @@
     <None Include="Resources\Remote_ON_Icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\RobotComponents_Icon24.png" />
     <None Include="Resources\RobotInfo_Icon.png" />
   </ItemGroup>
   <ItemGroup>

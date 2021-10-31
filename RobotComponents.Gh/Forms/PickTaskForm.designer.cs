@@ -5,7 +5,7 @@
 
 namespace RobotComponents.Gh.Forms
 {
-    partial class PickRobotForm
+    partial class PickTaskForm
     {
         /// <summary>
         /// Required designer variable.
@@ -26,7 +26,6 @@ namespace RobotComponents.Gh.Forms
         }
 
         #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -36,14 +35,20 @@ namespace RobotComponents.Gh.Forms
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.labelTaskType = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
             this.labelNameInfo = new System.Windows.Forms.Label();
+            this.labelTaskTypeInfo = new System.Windows.Forms.Label();
+            this.labelEnabledInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.labelEnabled = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Location = new System.Drawing.Point(12, 303);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(476, 33);
@@ -55,22 +60,31 @@ namespace RobotComponents.Gh.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 17);
+            this.label1.Size = new System.Drawing.Size(203, 17);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a robot preset";
+            this.label1.Text = "Choose a task to upload to";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.DropDownWidth = 476;
             this.comboBox1.Location = new System.Drawing.Point(12, 60);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(476, 21);
+            this.comboBox1.Size = new System.Drawing.Size(474, 21);
             this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged_1);
+            // 
+            // labelTaskType
+            // 
+            this.labelTaskType.AutoSize = true;
+            this.labelTaskType.Location = new System.Drawing.Point(13, 165);
+            this.labelTaskType.Name = "labelTaskType";
+            this.labelTaskType.Size = new System.Drawing.Size(72, 13);
+            this.labelTaskType.TabIndex = 14;
+            this.labelTaskType.Text = "Task Type";
             // 
             // labelName
             // 
@@ -78,42 +92,73 @@ namespace RobotComponents.Gh.Forms
             this.labelName.Location = new System.Drawing.Point(12, 140);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(35, 13);
-            this.labelName.TabIndex = 4;
+            this.labelName.TabIndex = 13;
             this.labelName.Text = "Name";
             // 
             // labelNameInfo
             // 
             this.labelNameInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelNameInfo.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-            this.labelNameInfo.Location = new System.Drawing.Point(164, 140);
+            this.labelNameInfo.Location = new System.Drawing.Point(198, 140);
             this.labelNameInfo.Name = "labelNameInfo";
-            this.labelNameInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelNameInfo.Size = new System.Drawing.Size(322, 32);
-            this.labelNameInfo.TabIndex = 6;
-            this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelNameInfo.Size = new System.Drawing.Size(287, 25);
+            this.labelNameInfo.TabIndex = 18;
+            this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelSystemNameInfo
+            // 
+            this.labelTaskTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTaskTypeInfo.Location = new System.Drawing.Point(203, 165);
+            this.labelTaskTypeInfo.Name = "labelTaskTypeInfo";
+            this.labelTaskTypeInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelTaskTypeInfo.TabIndex = 19;
+            this.labelTaskTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelEnabledInfo
+            // 
+            this.labelEnabledInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelEnabledInfo.Location = new System.Drawing.Point(203, 190);
+            this.labelEnabledInfo.Name = "labelEnabledInfo";
+            this.labelEnabledInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelEnabledInfo.TabIndex = 20;
+            this.labelEnabledInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 115);
+            this.label2.Location = new System.Drawing.Point(12, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Robot info";
+            this.label2.Size = new System.Drawing.Size(86, 13);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Task info";
             // 
-            // PickRobotForm
+            // labelEnabled
             // 
+            this.labelEnabled.AutoSize = true;
+            this.labelEnabled.Location = new System.Drawing.Point(13, 190);
+            this.labelEnabled.Name = "labelEnabled";
+            this.labelEnabled.Size = new System.Drawing.Size(52, 13);
+            this.labelEnabled.TabIndex = 15;
+            this.labelEnabled.Text = "Enabled";
+            // 
+            // PickTaskForm
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelEnabledInfo);
+            this.Controls.Add(this.labelTaskTypeInfo);
             this.Controls.Add(this.labelNameInfo);
+            this.Controls.Add(this.labelEnabled);
+            this.Controls.Add(this.labelTaskType);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
+            this.Controls.Add(this.label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "PickRobotForm";
+            this.Name = "PickTaskForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -122,8 +167,12 @@ namespace RobotComponents.Gh.Forms
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label labelTaskType;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelNameInfo;
+        private System.Windows.Forms.Label labelTaskTypeInfo;
+        private System.Windows.Forms.Label labelEnabledInfo;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelEnabled;
     }
 }

@@ -6,13 +6,16 @@
 // System Libs
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Gh.Goos;
 using RobotComponents.Gh.Utils;
+using RobotComponents.Gh.Forms;
 // ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
@@ -24,6 +27,20 @@ namespace RobotComponents.Gh.Components.ControllerUtility
     /// </summary>
     public class RemoteConnectionComponent : GH_Component
     {
+        #region fields  
+        private Controller _controller;
+        private bool _ctr = true;
+        private string _msg;
+        private string _cStatus = "Not connected.";
+        private string _uStatus = "No actions.";
+        private int _count = 0;
+        private bool _programPointerWarning = false;
+        private static Task[] _tasks = new Task[0];
+        private Task _task;
+        private int _pickedIndex = -1;
+        private bool _fromMenu = false;
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the RemoteConnection class.
         /// </summary>
@@ -34,6 +51,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
               "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
+            this.Message = "-";
         }
 
         /// <summary>
@@ -50,7 +68,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //TODO: Replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connect to as Robot Controller", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller as bool", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item, false);
@@ -70,15 +87,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         {
             pManager.AddTextParameter("Status", "S", "Status of the ABB IRC5 robot controller", GH_ParamAccess.item);
         }
-
-        // Fields
-        private Controller _controller;
-        private bool _ctr = true;
-        private string _msg;
-        private string _cStatus = "Not connected.";
-        private string _uStatus = "No actions.";
-        private int _count = 0;
-        private bool _programPointerWarning = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -108,6 +116,27 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             // Get controller value
             _controller = controllerGoo.Value;
 
+            // Get task (from serialized index)
+            if (_task == null & _pickedIndex >= 0 & connect == true)
+            {
+                _tasks = _controller.Rapid.GetTasks();
+
+                if (_tasks.Length > _pickedIndex)
+                {
+                    _task = _tasks[_pickedIndex];
+                    this.Message = _task.Name;
+                    this.ExpirePreview(true);
+                }
+            }
+
+            // Pick task from form
+            if ((_task == null & connect == true) | _fromMenu)
+            {
+                _task = GetTask();
+                this.Message = _task.Name;
+                this.ExpirePreview(true);
+            }
+
             // Connect
             if (connect)
             {
@@ -129,7 +158,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                 // Upload the code when toggled
                 if (upload)
                 {
-
                     // Reset program pointer warning
                     _programPointerWarning = false;
 
@@ -177,61 +205,45 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                     // The real upload
                     using (Mastership master = Mastership.Request(_controller))
                     {
-                        // Get task
-                        Task[] tasks = _controller.Rapid.GetTasks();
+                        // Grant acces
+                        _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
 
-                        if (tasks.Length == 1)
+                        // Load the new program from the created file
+                        if (systemCode.Count != 0)
                         {
-                            Task task = tasks[0];
+                            filePathSystem = Path.Combine(directory, "SystemModule.sys");
+                            _task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+                        }
+                        if (programCode.Count != 0)
+                        {
+                            filePathProgram = Path.Combine(directory, "ProgramModule.mod");
+                            _task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
+                        }
 
-                            // TODO: Make a pick task form? As for pick controller? 
-                            // TODO: This can be a solution for multi move with multiple tasks
-                            // Task task = controller.Rapid.GetTask(tasks[0].Name) // Get task with specified name
+                        // Resets the program pointer of this task to the main entry point.
+                        if (_controller.OperatingMode == ControllerOperatingMode.Auto)
+                        {
+                            _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
 
-                            // Grant acces
-                            _controller.AuthenticationSystem.DemandGrant(Grant.LoadRapidProgram);
-
-                            // Load the new program from the created file
-                            if (systemCode.Count != 0)
+                            try
                             {
-                                filePathSystem = Path.Combine(directory, "SystemModule.sys");
-                                task.LoadModuleFromFile(filePathSystem, RapidLoadMode.Replace);
+                                _task.ResetProgramPointer(); // Requires auto mode and execute rapid
+                                _programPointerWarning = false;
                             }
-                            if (programCode.Count != 0)
+                            catch
                             {
-                                filePathProgram = Path.Combine(directory, "ProgramModule.mod");
-                                task.LoadModuleFromFile(filePathProgram, RapidLoadMode.Replace);
+                                _programPointerWarning = true;
                             }
+                        }
 
-                            // Resets the program pointer of this task to the main entry point.
-                            if (_controller.OperatingMode == ControllerOperatingMode.Auto)
-                            {
-                                _controller.AuthenticationSystem.DemandGrant(Grant.ExecuteRapid);
-
-                                try
-                                {
-                                    task.ResetProgramPointer(); // Requires auto mode and execute rapid
-                                    _programPointerWarning = false;
-                                }
-                                catch
-                                {
-                                    _programPointerWarning = true;
-                                }
-                            }
-
-                            // Update action status message
-                            if (programCode.Count != 0 || systemCode.Count != 0)
-                            {
-                                _uStatus = "The RAPID code is succesfully uploaded.";
-                            }
-                            else
-                            {
-                                _uStatus = "The RAPID is not uploaded since there is no code defined.";
-                            }
+                        // Update action status message
+                        if (programCode.Count != 0 || systemCode.Count != 0)
+                        {
+                            _uStatus = "The RAPID code is succesfully uploaded.";
                         }
                         else
                         {
-                            _uStatus = "The RAPID is not uploaded since there is more than one task defined in the controller. Upload your programs manually.";
+                            _uStatus = "The RAPID is not uploaded since there is no code defined.";
                         }
 
                         // Give back the mastership
@@ -272,7 +284,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             DA.SetData(0, _msg);
         }
 
-        //  Addtional methods
         #region additional methods
         /// <summary>
         /// Method to connect to the controller. 
@@ -342,13 +353,13 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             // Check the mode of the controller
             if (_controller.OperatingMode != ControllerOperatingMode.Auto)
             {
-                return ("Controller not set in automatic.");
+                return "Controller not set in automatic.";
             }
 
             // Check if the motors are enabled
             if (_controller.State != ControllerState.MotorsOn)
             {
-                return ("Motors not on.");
+                return "Motors not on.";
             }
 
             // Execute the program
@@ -361,7 +372,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
 
             // Return status message
-            return ("Program started.");
+            return "Program started.";
         }
 
         /// <summary>
@@ -450,6 +461,8 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Pick Task", MenuItemClick);
+            Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -462,6 +475,18 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Registers the event when the custom menu item is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            _fromMenu = true;
+            ExpireSolution(true);
+            _fromMenu = false;
         }
         #endregion
 
@@ -490,5 +515,108 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         {
             get { return new Guid("8bfb75d4-9122-45a3-9f11-8d01fb7ea069"); }
         }
+
+        #region pick task
+        /// <summary>
+        /// Get the task
+        /// </summary>
+        /// <returns> The picked task. </returns>
+        private Task GetTask()
+        {
+            // Initiate and clear variables
+            _tasks = _controller.Rapid.GetTasks();
+
+            // Automatically pick the first task when one task is available. 
+            if (_tasks.Length == 1)
+            {
+                _pickedIndex = 0;
+            }
+
+            // Display the form and let the user pick a task when more then one task is available. 
+            else if (_tasks.Length > 1)
+            {
+                // Display the form and return the index of the picked controller. 
+                _pickedIndex = DisplayForm(_tasks);
+
+                // Return a null value when the picked index is incorrect. 
+                if (_pickedIndex < 0)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from menu!");
+                    return null;
+                }
+            }
+
+            // Return a null value when no task was found
+            else
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task found!");
+                return null;
+            }
+
+            // Select the picked task
+            return _tasks[_pickedIndex];
+        }
+
+        /// <summary>
+        /// This method displays the form and returns the index number of the picked task.
+        /// </summary>
+        /// <param name="tasks"> A list with task names. </param>
+        /// <returns> The index number of the picked task. </returns>
+        private int DisplayForm(Task[] tasks)
+        {
+            // Create the form with all the available task names
+            PickTaskForm frm = new PickTaskForm(tasks.ToList().ConvertAll(item => item.Name));
+
+            // Display the form
+            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+            frm.ShowDialog();
+
+            // Return the index number of the picked task
+            return PickTaskForm.TaskIndex;
+        }
+
+        /// <summary>
+        /// List with all the ABB tasks in the controller
+        /// </summary>
+        public static Task[] Tasks
+        {
+            get { return _tasks; }
+        }
+        #endregion
+
+        #region serialization
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_pickedIndex);
+            writer.SetByteArray("Picked Task Index", array);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            try
+            { 
+                byte[] array = reader.GetByteArray("Picked Task Index");
+                _pickedIndex = (int)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
+            }
+            catch 
+            { 
+                _pickedIndex = -1; 
+            }
+
+            return base.Read(reader);
+        }
+        #endregion
+
     }
 }

@@ -208,9 +208,7 @@ namespace RobotComponents.Gh.Forms
             this.Name = "PickDIForm";
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
         #endregion
 
         private System.Windows.Forms.Button button1;

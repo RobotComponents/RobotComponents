@@ -159,7 +159,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,7 +167,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Action(Value as Action); }
                 return true;
             }
@@ -175,7 +175,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Dynamic
             if (typeof(Q).IsAssignableFrom(typeof(IDynamic)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -183,12 +183,12 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Dynamic Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Dynamic)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Dynamic(Value as IDynamic); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

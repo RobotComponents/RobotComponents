@@ -86,17 +86,23 @@ namespace RobotComponents.Gh.Parameters.Actions
 
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
         {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem();
-            item.Text = "Not available";
-            item.Visible = false;
+            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
+            {
+                Text = "Not available",
+                Visible = false
+            };
+
             return item;
         }
 
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
         {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem();
-            item.Text = "Not available";
-            item.Visible = false;
+            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
+            {
+                Text = "Not available",
+                Visible = false
+            };
+
             return item;
         }
         #endregion

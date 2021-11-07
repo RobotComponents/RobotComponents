@@ -159,7 +159,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,12 +167,12 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

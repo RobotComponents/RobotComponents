@@ -157,7 +157,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Work Object
             if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -165,7 +165,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Plane(Value.GlobalWorkObjectPlane); }
                 return true;
             }
@@ -173,7 +173,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Point(Value.GlobalWorkObjectPlane.Origin); }
                 return true;
             }
@@ -181,13 +181,13 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

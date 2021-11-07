@@ -127,7 +127,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Linear Configuration Control
             if (typeof(Q).IsAssignableFrom(typeof(LinearConfigurationControl)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -135,7 +135,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Linear Configuration Control Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_LinearConfigurationControl)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_LinearConfigurationControl(Value); }
                 return true;
             }
@@ -143,7 +143,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -151,7 +151,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
@@ -159,7 +159,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Instruction
             if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,7 +167,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Instruction Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Instruction(Value); }
                 return true;
             }
@@ -175,12 +175,12 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Boolean
             if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Boolean(Value.IsActive); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

@@ -174,7 +174,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Speed Data
             if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -182,7 +182,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Speed Data Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_SpeedData(Value); }
                 return true;
             }
@@ -190,7 +190,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -198,7 +198,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
@@ -206,7 +206,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Declaration
             if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -214,12 +214,12 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Declaration Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Declaration(Value); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

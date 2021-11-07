@@ -158,8 +158,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Linear Axis
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,8 +167,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Linear Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalLinearAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalLinearAxis(Value); }
                 return true;
             }
@@ -176,8 +176,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalAxis(Value); }
                 return true;
             }
@@ -185,8 +185,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.AttachmentPlane == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.AttachmentPlane == null) { target = default; }
                 else { target = (Q)(object)new GH_Plane(Value.AttachmentPlane); }
                 return true;
             }
@@ -194,8 +194,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.AttachmentPlane == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.AttachmentPlane == null) { target = default; }
                 else { target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin); }
                 return true;
             }
@@ -203,8 +203,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Interval
             if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.AxisLimits == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.AxisLimits == null) { target = default; }
                 else { target = (Q)(object)new GH_Interval(Value.AxisLimits); }
                 return true;
             }
@@ -212,8 +212,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Axis vector (positive movement direction)
             if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
             { 
-                if (Value == null) { target = default(Q); }
-                else if (Value.AxisPlane == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.AxisPlane == null) { target = default; }
                 else { target = (Q)(object)new GH_Vector(Value.AxisPlane.ZAxis); }
                 return true;
             }
@@ -223,11 +223,11 @@ namespace RobotComponents.Gh.Goos.Definitions
             {
                 if (Value == null)
                 {
-                    target = default(Q);
+                    target = default;
                 }
                 else if (Value.AxisCurve == null)
                 {
-                    target = default(Q);
+                    target = default;
                 }
                 else
                 {
@@ -238,7 +238,7 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

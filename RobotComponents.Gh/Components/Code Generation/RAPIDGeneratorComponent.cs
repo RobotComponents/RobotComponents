@@ -255,12 +255,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void SaveProgramModule()
         {
             // Create save file dialog
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.CheckFileExists = false;
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.DefaultExt = "mod";
-            saveFileDialog.Filter = "RAPID Program Module|*.mod";
-            saveFileDialog.Title = "Save a RAPID Program Module";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                CheckFileExists = false,
+                CheckPathExists = true,
+                DefaultExt = "mod",
+                Filter = "RAPID Program Module|*.mod",
+                Title = "Save a RAPID Program Module"
+            };
 
             // If result of dialog is OK the file can be saved
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -286,12 +288,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private void SaveSystemModule()
         {
             // Create save file dialog
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.CheckFileExists = false;
-            saveFileDialog.CheckPathExists = true;
-            saveFileDialog.DefaultExt = "sys";
-            saveFileDialog.Filter = "RAPID System Module|*.sys";
-            saveFileDialog.Title = "Save a RAPID System Module";
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                CheckFileExists = false,
+                CheckPathExists = true,
+                DefaultExt = "sys",
+                Filter = "RAPID System Module|*.sys",
+                Title = "Save a RAPID System Module"
+            };
 
             // If result of dialog is OK the file can be saved
             if (saveFileDialog.ShowDialog() == DialogResult.OK)

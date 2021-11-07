@@ -122,7 +122,7 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(bool)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)(Value.Value != 0);
                 return true;
@@ -132,7 +132,7 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)new GH_Boolean((Value.Value != 0));
                 return true;
@@ -142,7 +142,7 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(int)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)Convert.ToInt32(Value.Value);
                 return true;
@@ -152,7 +152,7 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(GH_Integer)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)new GH_Integer(Convert.ToInt32(Value.Value));
                 return true;
@@ -162,7 +162,7 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(double)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)Value.Value;
                 return true;
@@ -172,13 +172,13 @@ namespace RobotComponents.Gh.Goos
             if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
             {
                 if (Value == null)
-                    target = default(Q);
+                    target = default;
                 else
                     target = (Q)(object)new GH_Number(Value.Value);
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
         #endregion

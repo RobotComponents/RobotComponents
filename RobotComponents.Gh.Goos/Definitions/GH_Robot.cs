@@ -158,7 +158,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Robot
             if (typeof(Q).IsAssignableFrom(typeof(Robot)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -166,13 +166,13 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.Tool == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.Tool == null) { target = default; }
                 else { target = (Q)(object)new GH_RobotTool(Value.Tool); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

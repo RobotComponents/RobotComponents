@@ -159,7 +159,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Axis
             if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,7 +167,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Linear Axis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -175,12 +175,12 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Rotational Axis.
             if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
-                if (Value == null) { target = default(Q); }
+                if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

@@ -158,8 +158,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Rotational Axis
             if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,8 +167,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Rotational Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalRotationalAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalRotationalAxis(Value); }
                 return true;
             }
@@ -176,8 +176,8 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.IsValid == false) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalAxis(Value); }
                 return true;
             }
@@ -185,13 +185,13 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to Interval
             if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
             {
-                if (Value == null) { target = default(Q); }
-                else if (Value.AxisLimits == null) { target = default(Q); }
+                if (Value == null) { target = default; }
+                else if (Value.AxisLimits == null) { target = default; }
                 else { target = (Q)(object)new GH_Interval(Value.AxisLimits); }
                 return true;
             }
 
-            target = default(Q);
+            target = default;
             return false;
         }
 

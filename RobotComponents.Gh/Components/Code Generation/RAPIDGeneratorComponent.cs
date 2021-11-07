@@ -26,7 +26,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     {
         #region fields
         private RAPIDGenerator _rapidGenerator;
-        private ObjectManager _objectManager;
         private bool _firstMovementIsMoveAbsJ = true;
         private bool _raiseWarnings = false;
         private List<string> _programModule = new List<string>();
@@ -81,9 +80,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Gets ObjectManager of this document
-            _objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
-
             // Input variables
             Robot robInfo = new Robot();
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();

@@ -24,7 +24,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
     public class DeconstructRobotComponent : GH_Component
     {
         #region fields
-        private List<Mesh> _meshes = new List<Mesh>() { };
+        private readonly List<Mesh> _meshes = new List<Mesh>() { };
         private GH_Document _doc;
         #endregion
 

@@ -55,15 +55,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -146,13 +137,13 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                 // Run the program when toggled
                 if (run)
                 {
-                    Run();
+                    _uStatus = StartCommand();
                 }
 
                 // Stop the program when toggled
                 if (stop)
                 {
-                    Stop();
+                    _uStatus = StopCommand();
                 }
 
                 // Upload the code when toggled
@@ -162,7 +153,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                     _programPointerWarning = false;
 
                     // First stop the current program
-                    Stop();
+                    _uStatus = StopCommand();
 
                     // Get path for temporary saving of the module files on the local harddrive of the user
                     // NOTE: This is not a path on the controller, but on the pc of the user
@@ -284,172 +275,48 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             DA.SetData(0, _msg);
         }
 
-        #region additional methods
+        #region properties
         /// <summary>
-        /// Method to connect to the controller. 
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
         /// </summary>
-        private void Connect()
+        public override GH_Exposure Exposure
         {
-            // Log on 
-            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
-
-            // Update controller status message
-            _cStatus = "You are connected.";
-
-            // Update controller connection status
-            _ctr = true;
-
-            // Update action status message
-            if (_count == 0)
-            {
-                _uStatus = "All set to go.";
-                _count = 1;
-            }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
-        /// Method to disconnect the current controller
+        /// Gets whether this object is obsolete.
         /// </summary>
-        private void Disconnect()
+        public override bool Obsolete
         {
-            // Only disconnect when there is a connection
-            if (_controller != null)
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get
             {
-                // Logoff
-                _controller.Logoff();
-
-                // Set a null controller
-                _controller = null;
-
-                // Update controller status message
-                _cStatus = "You are disconnected.";
-                
-                // Update controller connection status
-                _ctr = false;
-
-                // Update action message
-                if (_count == 1)
+                if (_ctr)
                 {
-                    _uStatus = "Try to reconnect first.";
-                    _count = 0;
+                    return Properties.Resources.Remote_ON_Icon;
+                }
+                else
+                {
+                    return Properties.Resources.Remote_OFF_Icon;
                 }
             }
         }
 
         /// <summary>
-        /// Method to start the program.
+        /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        private void Run()
+        public override Guid ComponentGuid
         {
-            _uStatus = StartCommand();
-        }
-
-        /// <summary>
-        /// Method to run the program and returns the action message. 
-        /// </summary>
-        /// <returns> The action message / status. </returns>
-        private string StartCommand()
-        {
-            // Check the mode of the controller
-            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
-            {
-                return "Controller not set in automatic.";
-            }
-
-            // Check if the motors are enabled
-            if (_controller.State != ControllerState.MotorsOn)
-            {
-                return "Motors not on.";
-            }
-
-            // Execute the program
-            using (Mastership master = Mastership.Request(_controller))
-            {
-                _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
-
-                // Give back the mastership
-                master.Release();
-            }
-
-            // Return status message
-            return "Program started.";
-        }
-
-        /// <summary>
-        /// Method to stop the program.
-        /// </summary>
-        private void Stop()
-        {
-            _uStatus = StopCommand();
-        }
-
-        /// <summary>
-        /// Method to stop the program and returns the action message. 
-        /// </summary>
-        /// <returns> The action message / status. </returns>
-        private string StopCommand()
-        {
-            // Check the mode of the controller
-            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
-            {
-                return "Controller not set in automatic mode.";
-            }
-
-            // Stop the program
-            using (Mastership master = Mastership.Request(_controller))
-            {
-                _controller.Rapid.Stop(StopMode.Instruction);
-
-                // Give back the mastership
-                master.Release();
-            }
-
-            // Return status message
-            return "Program stopped.";
-        }
-
-        /// <summary>
-        /// Gets the local documents folder of the user
-        /// </summary>
-        private static string DocumentsFolderPath()
-        {
-            return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-        }
-
-        /// <summary>
-        /// Save to the RAPID program and sytem modules to the given file path.
-        /// </summary>
-        /// <param name="path"> The directory where to save the RAPID modules. </param>
-        /// <param name="programModule"> The RAPID program module as a list with code lines. </param>
-        /// <param name="systemModule"> The RAPID system module as a list with code lines </param>
-        private void SaveModulesToFile(string path, List<string> programModule, List<string> systemModule)
-        {
-            // Save the program modules
-            if (programModule.Count != 0)
-            {
-                string programFilePath = Path.Combine(path, "ProgramModule.mod");
-                using (StreamWriter writer = new StreamWriter(programFilePath, false))
-                {
-                    for (int i = 0; i < programModule.Count; i++)
-                    {
-                        writer.WriteLine(programModule[i]);
-                    }
-                }
-
-            }
-
-            // Save the system module
-            if (systemModule.Count != 0)
-            { 
-                string systemFilePath = Path.Combine(path, "SystemModule.sys");
-                using (StreamWriter writer = new StreamWriter(systemFilePath, false))
-                {
-                    for (int i = 0; i < systemModule.Count; i++)
-                    {
-                        writer.WriteLine(systemModule[i]);
-                    }
-                }
-            }
+            get { return new Guid("8bfb75d4-9122-45a3-9f11-8d01fb7ea069"); }
         }
         #endregion
 
@@ -489,32 +356,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             _fromMenu = false;
         }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                if (_ctr)
-                {
-                    return Properties.Resources.Remote_ON_Icon;
-                }
-                else
-                {
-                    return Properties.Resources.Remote_OFF_Icon;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("8bfb75d4-9122-45a3-9f11-8d01fb7ea069"); }
-        }
 
         #region pick task
         /// <summary>
@@ -615,6 +456,159 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
 
             return base.Read(reader);
+        }
+        #endregion
+
+        #region additional methods
+        /// <summary>
+        /// Method to connect to the controller. 
+        /// </summary>
+        private void Connect()
+        {
+            // Log on 
+            _controller.Logon(UserInfo.DefaultUser); //TODO: Make user login
+
+            // Update controller status message
+            _cStatus = "You are connected.";
+
+            // Update controller connection status
+            _ctr = true;
+
+            // Update action status message
+            if (_count == 0)
+            {
+                _uStatus = "All set to go.";
+                _count = 1;
+            }
+        }
+
+        /// <summary>
+        /// Method to disconnect the current controller
+        /// </summary>
+        private void Disconnect()
+        {
+            // Only disconnect when there is a connection
+            if (_controller != null)
+            {
+                // Logoff
+                _controller.Logoff();
+
+                // Set a null controller
+                _controller = null;
+
+                // Update controller status message
+                _cStatus = "You are disconnected.";
+
+                // Update controller connection status
+                _ctr = false;
+
+                // Update action message
+                if (_count == 1)
+                {
+                    _uStatus = "Try to reconnect first.";
+                    _count = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to run the program and returns the action message. 
+        /// </summary>
+        /// <returns> The action message / status. </returns>
+        private string StartCommand()
+        {
+            // Check the mode of the controller
+            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
+            {
+                return "Controller not set in automatic.";
+            }
+
+            // Check if the motors are enabled
+            if (_controller.State != ControllerState.MotorsOn)
+            {
+                return "Motors not on.";
+            }
+
+            // Execute the program
+            using (Mastership master = Mastership.Request(_controller))
+            {
+                _controller.Rapid.Start(RegainMode.Continue, ExecutionMode.Continuous, ExecutionCycle.Once, StartCheck.CallChain);
+
+                // Give back the mastership
+                master.Release();
+            }
+
+            // Return status message
+            return "Program started.";
+        }
+
+        /// <summary>
+        /// Method to stop the program and returns the action message. 
+        /// </summary>
+        /// <returns> The action message / status. </returns>
+        private string StopCommand()
+        {
+            // Check the mode of the controller
+            if (_controller.OperatingMode != ControllerOperatingMode.Auto)
+            {
+                return "Controller not set in automatic mode.";
+            }
+
+            // Stop the program
+            using (Mastership master = Mastership.Request(_controller))
+            {
+                _controller.Rapid.Stop(StopMode.Instruction);
+
+                // Give back the mastership
+                master.Release();
+            }
+
+            // Return status message
+            return "Program stopped.";
+        }
+
+        /// <summary>
+        /// Gets the local documents folder of the user
+        /// </summary>
+        private static string DocumentsFolderPath()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        }
+
+        /// <summary>
+        /// Save to the RAPID program and sytem modules to the given file path.
+        /// </summary>
+        /// <param name="path"> The directory where to save the RAPID modules. </param>
+        /// <param name="programModule"> The RAPID program module as a list with code lines. </param>
+        /// <param name="systemModule"> The RAPID system module as a list with code lines </param>
+        private void SaveModulesToFile(string path, List<string> programModule, List<string> systemModule)
+        {
+            // Save the program modules
+            if (programModule.Count != 0)
+            {
+                string programFilePath = Path.Combine(path, "ProgramModule.mod");
+                using (StreamWriter writer = new StreamWriter(programFilePath, false))
+                {
+                    for (int i = 0; i < programModule.Count; i++)
+                    {
+                        writer.WriteLine(programModule[i]);
+                    }
+                }
+
+            }
+
+            // Save the system module
+            if (systemModule.Count != 0)
+            {
+                string systemFilePath = Path.Combine(path, "SystemModule.sys");
+                using (StreamWriter writer = new StreamWriter(systemFilePath, false))
+                {
+                    for (int i = 0; i < systemModule.Count; i++)
+                    {
+                        writer.WriteLine(systemModule[i]);
+                    }
+                }
+            }
         }
         #endregion
 

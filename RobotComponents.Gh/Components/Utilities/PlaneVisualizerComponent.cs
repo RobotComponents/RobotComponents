@@ -24,7 +24,7 @@ namespace RobotComponents.Gh.Components.Utilities
     public class PlaneVisualizerComponent : GH_Component
     {
         #region fields
-        private List<Plane> _planes = new List<Plane>();
+        private readonly List<Plane> _planes = new List<Plane>();
         #endregion
 
         /// <summary>
@@ -67,11 +67,8 @@ namespace RobotComponents.Gh.Components.Utilities
             // Clear the list with plans before catching the input data
             _planes.Clear();
 
-            // Create an empty datatree structure for catching the input data
-            GH_Structure<GH_Plane> inputPlanes;
-
             // Catch input data
-            if (!DA.GetDataTree(0, out inputPlanes)) { return; }
+            if (!DA.GetDataTree(0, out GH_Structure<GH_Plane> inputPlanes)) { return; }
 
             // Flatten the datatree to a list
             for (int i = 0; i < inputPlanes.Branches.Count; i++)

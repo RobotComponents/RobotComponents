@@ -21,8 +21,8 @@ namespace RobotComponents.Gh.Utils
     {
         #region fields
         private readonly string _id;
-        private Dictionary<Guid, GH_Component> _components;
-        private List<string> _names;
+        private readonly Dictionary<Guid, GH_Component> _components;
+        private readonly List<string> _names;
         #endregion
 
         #region constructors

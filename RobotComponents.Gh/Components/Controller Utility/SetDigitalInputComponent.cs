@@ -24,6 +24,15 @@ namespace RobotComponents.Gh.Components.ControllerUtility
     /// </summary>
     public class SetDigitalInputComponent : GH_Component
     {
+        #region fields
+        private int _pickedIndex = 0;
+        private static readonly List<GH_Signal> _signalGooList = new List<GH_Signal>();
+        private Controller _controller = null;
+        private GH_Signal _signalGoo;
+        private string _currentSignalName = "";
+        private Guid _currentGuid = Guid.Empty;
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the SetDigitalInput class.
         /// </summary>
@@ -37,20 +46,10 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.tertiary; }
-
-        }
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //TODO: Replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to be connected to as Robot Controller", GH_ParamAccess.item);
             pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input as text", GH_ParamAccess.item);
             pManager.AddBooleanParameter("State", "S", "State of the Digital Input as bool", GH_ParamAccess.item, false);
@@ -64,17 +63,8 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Input", GH_ParamAccess.item);
         }
-
-        // Fields
-        private int _pickedIndex = 0;
-        private static List<GH_Signal> _signalGooList = new List<GH_Signal>();
-        private Controller _controller = null;
-        private GH_Signal _signalGoo;
-        private string _currentSignalName = "";
-        private Guid _currentGuid = Guid.Empty;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -137,7 +127,79 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             DA.SetData(0, _signalGoo);
         }
 
-        // Additional methods
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.tertiary; }
+
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.SetDigitalInput_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("0A9FE8FD-C56F-4AD4-BCAF-46CBFA609394"); }
+        }
+        #endregion
+
+
+        #region menu-items
+        /// <summary>
+        /// Adds the additional item "Pick Signal" to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Pick Signal", MenuItemClick);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Registers the event when the custom menu item is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            this.Params.Input[1].RemoveAllSources();
+            ExpireSolution(true);
+        }
+        #endregion
+
         #region additional methods
         /// <summary>
         /// Pick a signal
@@ -316,56 +378,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             // Returns the index of the picked item
             return PickDIForm.SignalIndex;
         }
-
-        /// <summary>
-        /// Adds the additional item "Pick Signal" to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Pick Signal", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-
-        /// <summary>
-        /// Registers the event when the custom menu item is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClick(object sender, EventArgs e)
-        {
-            this.Params.Input[1].RemoveAllSources();
-            ExpireSolution(true);
-        }
         #endregion
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.SetDigitalInput_Icon; }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("0A9FE8FD-C56F-4AD4-BCAF-46CBFA609394"); }
-        }
     }
 }

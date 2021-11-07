@@ -24,6 +24,13 @@ namespace RobotComponents.Gh.Components.ControllerUtility
     /// </summary>
     public class GetControllerComponent : GH_Component
     {
+        #region fields
+        private int _pickedIndex = 0;
+        private static readonly List<Controller> _controllerInstance = new List<Controller>();
+        private GH_Controller _controllerGoo;
+        private bool _fromMenu = false;
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the GetController class.
         /// </summary>
@@ -34,15 +41,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
-        }
-
-        /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -58,15 +56,8 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Resulting Robot Controller", GH_ParamAccess.item);
         }
-
-        // Fields
-        private int _pickedIndex = 0;
-        private static List<Controller> _controllerInstance = new List<Controller>();
-        private GH_Controller _controllerGoo;
-        private bool _fromMenu = false;
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -105,6 +96,87 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
         }
 
+        #region properties
+        /// <summary>
+        /// List with all the ABB controllers in the network
+        /// </summary>
+        public static List<Controller> ControllerInstance
+        {
+            get { return _controllerInstance; }
+        }
+
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.primary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.GetController_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("6fd61c34-c262-4d10-b6e5-5c1762411aac"); }
+        }
+        #endregion
+
+        #region menu items
+        /// <summary>
+        /// Adds the additional item "Pick controller" to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Pick Controller", MenuItemClick);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Registers the event when the custom menu item is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            _fromMenu = true;
+            ExpireSolution(true);
+            _fromMenu = false;
+        }
+        #endregion
+
+        #region additional methods
         /// <summary>
         /// Detect if the components gets removed from the canvase and disposes the controller
         /// </summary>
@@ -124,15 +196,13 @@ namespace RobotComponents.Gh.Components.ControllerUtility
                         {
                             controller.Logoff();
                         }
-                        
+
                         controller.Dispose();
                     }
                 }
             }
         }
 
-        //  Additional methods
-        #region additional methods
         /// <summary>
         /// Get the controller
         /// </summary>
@@ -158,7 +228,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             {
                 controllers = null;
             }
-            
+
             // Get the names of all the controllers in the scanned network
             for (int i = 0; i < controllers.Length; i++)
             {
@@ -213,65 +283,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             // Return the index number of the picked controller
             return PickControllerForm.StationIndex;
         }
-
-        /// <summary>
-        /// Adds the additional item "Pick controller" to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Pick Controller", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-
-        /// <summary>
-        /// Registers the event when the custom menu item is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClick(object sender, EventArgs e)
-        {
-            _fromMenu = true;
-            ExpireSolution(true);
-            _fromMenu = false;
-        }
         #endregion
-
-        /// <summary>
-        /// List with all the ABB controllers in the network
-        /// </summary>
-        public static List<Controller> ControllerInstance
-        {
-            get { return _controllerInstance; }
-        }
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return Properties.Resources.GetController_Icon; }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("6fd61c34-c262-4d10-b6e5-5c1762411aac"); }
-        }
     }
 }

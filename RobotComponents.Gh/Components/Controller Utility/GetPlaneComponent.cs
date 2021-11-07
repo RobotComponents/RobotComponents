@@ -28,6 +28,12 @@ namespace RobotComponents.Gh.Components.ControllerUtility
     /// </summary>
     public class GetPlaneComponent : GH_Component
     {
+        #region fields
+        private bool _expire = false;
+        private Point3d _point = new Point3d(0, 0, 0);
+        private Quaternion _quat = new Quaternion();
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
@@ -41,20 +47,10 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         }
 
         /// <summary>
-        /// Override the component exposure (makes the tab subcategory).
-        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
-        /// </summary>
-        public override GH_Exposure Exposure
-        {
-            get { return GH_Exposure.secondary; }
-        }
-
-        /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            // To do: replace generic parameter with an RobotComponents Parameter
             pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to extract the position from as Robot Controller", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
@@ -67,11 +63,6 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             pManager.AddPlaneParameter("Plane", "P", "Position Plane of the mechanical unit", GH_ParamAccess.list);
             pManager.AddTextParameter("Name", "N", "Names of the mechanical units", GH_ParamAccess.list);
         }
-
-        // Fields
-        private bool _expire = false;
-        private Point3d _point = new Point3d(0, 0, 0);
-        private Quaternion _quat = new Quaternion();
 
         /// <summary>
         /// This is the method that actually does the work.
@@ -156,7 +147,64 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             DA.SetDataList(1, mechanicalUnitnames);
         }
 
-        // Method for creating the value list with coordinate system types
+        #region properties
+        /// <summary>
+        /// Override the component exposure (makes the tab subcategory).
+        /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary and obscure
+        /// </summary>
+        public override GH_Exposure Exposure
+        {
+            get { return GH_Exposure.secondary; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return RobotComponents.Gh.Properties.Resources.GetPlane_Icon; }
+        }
+
+        /// <summary>
+        /// Gets the unique ID for this component. Do not change this ID after release.
+        /// </summary>
+        public override Guid ComponentGuid
+        {
+            get { return new Guid("3090E331-FF16-4D17-ACAC-513D288B37C4"); }
+        }
+        #endregion
+
+        #region menu item
+        /// <summary>
+        /// Adds the additional items to the context menu of the component. 
+        /// </summary>
+        /// <param name="menu"> The context menu of the component. </param>
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Documentation" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickComponentDoc(object sender, EventArgs e)
+        {
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
+        }
+        #endregion
+
         #region valuelist
         /// <summary>
         /// Creates the value list for the motion type and connects it the input parameter is other source is connected
@@ -201,44 +249,5 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             }
         }
         #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return RobotComponents.Gh.Properties.Resources.GetPlane_Icon; }
-        }
-
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("3090E331-FF16-4D17-ACAC-513D288B37C4"); }
-        }
     }
 }

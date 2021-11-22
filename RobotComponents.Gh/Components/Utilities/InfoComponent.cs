@@ -56,8 +56,8 @@ namespace RobotComponents.Gh.Components.Utilities
             // Declare info
             string text = "Robot Components is a plugin for intuitive robot programming for ABB robots inside Rhinoceros Grasshopper. "
                 + "This open source project is initiated by the chair of Experimental and Digital Design and Construction (EDEK) "
-                + "of the University of Kassel. The technical development is executed by Benedikt Wannemacher, Gabriel Rumpf, Arjen Deetman, " 
-                + "Andrea Rossi, Mohamed Dawod, and Zuardin Akbar."
+                + "of the University of Kassel. The technical development is executed by Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, "
+                + "Mohamed Dawod, Zuardin Akbar, and Andrea Rossi."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"

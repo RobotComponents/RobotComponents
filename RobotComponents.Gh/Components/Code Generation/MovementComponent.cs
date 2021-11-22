@@ -91,7 +91,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            _expire = HelperMethods.CreateValueList(this, typeof(MovementType), 2);
+            if (this.Params.Input[2].SourceCount == 0)
+            {
+                _expire = true;
+                HelperMethods.CreateValueList(this, typeof(MovementType), 2);
+            }
 
             // Expire solution of this component
             if (_expire == true)

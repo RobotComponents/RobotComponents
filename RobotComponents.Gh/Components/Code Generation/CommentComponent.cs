@@ -56,7 +56,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment");   
+            pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment", GH_ParamAccess.list);   
         }
 
         /// <summary>
@@ -66,7 +66,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            _expire = HelperMethods.CreateValueList(this, typeof(CodeType), 1);
+            if (this.Params.Input[1].SourceCount == 0)
+            {
+                _expire = true;
+                HelperMethods.CreateValueList(this, typeof(CodeType), 1);
+            }
 
             // Expire solution of this component
             if (_expire == true)
@@ -95,10 +99,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             // Create output
             List<Comment> comments = new List<Comment>();
+
             for (int i = 0; i < lines.Length; i++)
             {
-                Comment comment = new Comment(lines[i], (CodeType)type);
-                comments.Add(comment);
+                comments.Add(new Comment(lines[i], (CodeType)type));
             }
 
             // Sets Output

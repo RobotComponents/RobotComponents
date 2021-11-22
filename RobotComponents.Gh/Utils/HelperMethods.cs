@@ -243,7 +243,7 @@ namespace RobotComponents.Gh.Utils
         /// <returns> True, if created. </returns>
         public static bool CreateValueList(GH_Component component, Type enumType, int inputIndex)
         {
-            if (component.Params.Input[inputIndex].SourceCount == 0)
+            try
             {
                 var parameter = component.Params.Input[inputIndex];
 
@@ -268,7 +268,7 @@ namespace RobotComponents.Gh.Utils
                 //Return that it's created
                 return true; 
             }
-            else
+            catch
             {
                 //Return that it isn't created
                 return false;
@@ -309,13 +309,17 @@ namespace RobotComponents.Gh.Utils
         /// <returns> True, if created. </returns>
         private static bool CreateValueList(GH_ValueList obj, PointF location)
         {
-            // Make point where the valuelist should be created on the canvas
-            obj.Attributes.Pivot = new PointF(location.X - obj.Attributes.Bounds.Width / 4, location.Y - obj.Attributes.Bounds.Height / 2);
+            try
+            {
+                obj.Attributes.Pivot = new PointF(location.X - obj.Attributes.Bounds.Width / 4, location.Y - obj.Attributes.Bounds.Height / 2);
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
 
-            // Add the value list to the active canvas
-            Instances.ActiveCanvas.Document.AddObject(obj, false);
-
-            return true;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>

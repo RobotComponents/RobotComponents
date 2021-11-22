@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -55,7 +56,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_CodeLine(), "Code", "C", "Resulting Code");   
+            pManager.RegisterParam(new Param_CodeLine(), "Code", "C", "Resulting Code", GH_ParamAccess.list);   
         }
 
         /// <summary>
@@ -66,7 +67,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            _expire = HelperMethods.CreateValueList(this, typeof(CodeType), 1);
+            if (this.Params.Input[1].SourceCount == 0)
+            {
+                _expire = true;
+                HelperMethods.CreateValueList(this, typeof(CodeType), 1);
+            }
 
             // Expire solution of this component
             if (_expire == true)
@@ -76,11 +81,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Input variables
-            string code = null;
+            string text = null;
             int type = 0;
 
             // Catch the input data
-            if (!DA.GetData(0, ref code)) { return; }
+            if (!DA.GetData(0, ref text)) { return; }
             if (!DA.GetData(1, ref type)) { return; }
 
             // Check if a right value is used for the code line type
@@ -90,11 +95,19 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     "In can only be set to 0 or 1. Use 0 for creating instructions and 1 for creating a declarations.");
             }
 
-            // Create the action
-            CodeLine codeLine = new CodeLine(code, (CodeType)type);
+            // Split input if enter is used
+            string[] lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+            // Create output
+            List<CodeLine> codeLines = new List<CodeLine>();
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                codeLines.Add(new CodeLine(lines[i], (CodeType)type));
+            }
 
             // Sets Output
-            DA.SetData(0, codeLine);
+            DA.SetDataList(0, codeLines);
         }
 
         #region properties

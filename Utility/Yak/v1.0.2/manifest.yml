@@ -1,0 +1,19 @@
+name: Robot-Components
+version: 1.0.2
+authors:
+  - Arjen Deetman
+  - Gabriel Rumpf
+  - Benedikt Wannemacher
+  - Mohamed Dawod
+  - Zuardin Akbar
+  - Andrea Rossi
+description: >
+  A Grasshopper plugin for intuitive robot programming.
+url: "https://github.com/RobotComponents/RobotComponents"
+keywords:
+- Manufacturing
+- Simulation
+- Fabrication
+- Robots
+- ABB
+icon_url: "https://raw.githubusercontent.com/RobotComponents/RobotComponents/master/Utility/Yak/yak_logo_32x32.png"

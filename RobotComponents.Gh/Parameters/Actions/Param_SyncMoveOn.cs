@@ -14,16 +14,16 @@ using RobotComponents.Gh.Goos.Actions;
 namespace RobotComponents.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Code Line parameter
+    /// Sync Move On parameter
     /// </summary>
-    public class Param_CodeLine : GH_PersistentParam<GH_CodeLine>
+    public class Param_SyncMoveOn : GH_PersistentParam<GH_SyncMoveOn>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_CodeLine> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_SyncMoveOn> class
         /// </summary>
-        public Param_CodeLine()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP",
-                "Contains the data of a Code Line."
+        public Param_SyncMoveOn()
+          : base(new GH_InstanceDescription("Sync Move On", "SMOn",
+                "Contains the data of a Sync Move On synchronization point."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Code Line";
+            return "Sync Move On";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Code Line"; set => base.Name = value; }
+        public override string Name { get => "Sync Move On"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.CodeLine_Parameter_Icon; }
+            get { return Properties.Resources.Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quarternary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2154A09B-BC1F-40B5-BD5B-58ABEC37B2E2"); }
+            get { return new Guid("3E5F3E71-7582-4801-B24C-6F510410D2AF"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_CodeLine> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SyncMoveOn> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_CodeLine value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SyncMoveOn value)
         {
             return GH_GetterResult.cancel;
         }

@@ -14,16 +14,16 @@ using RobotComponents.Gh.Goos.Actions;
 namespace RobotComponents.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Code Line parameter
+    /// Task List parameter
     /// </summary>
-    public class Param_CodeLine : GH_PersistentParam<GH_CodeLine>
+    public class Param_TaskList : GH_PersistentParam<GH_TaskList>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_CodeLine> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_TaskList> class
         /// </summary>
-        public Param_CodeLine()
-          : base(new GH_InstanceDescription("Code Line Parameter", "CLP",
-                "Contains the data of a Code Line."
+        public Param_TaskList()
+          : base(new GH_InstanceDescription("Task List", "TL",
+                "Contains the data of a Task List declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Code Line";
+            return "Task List";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Code Line"; set => base.Name = value; }
+        public override string Name { get => "Task List"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.CodeLine_Parameter_Icon; }
+            get { return Properties.Resources.Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quarternary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2154A09B-BC1F-40B5-BD5B-58ABEC37B2E2"); }
+            get { return new Guid("C8D213BC-4DFF-4DD7-9703-7ACB0A5FC165"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_CodeLine> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_TaskList> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_CodeLine value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_TaskList value)
         {
             return GH_GetterResult.cancel;
         }

@@ -15,6 +15,7 @@ using RobotComponents.Gh.Components.Deconstruct.Definitions;
 using RobotComponents.Gh.Components.Simulation;
 using RobotComponents.Gh.Components.Definitions;
 using RobotComponents.Gh.Components.Definitions.Presets;
+using RobotComponents.Gh.Components.MultiMove;
 using RobotComponents.Gh.Components.Utilities;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
@@ -31,7 +32,6 @@ namespace RobotComponents.Gh.Utils
         /// </summary>
         public readonly static Dictionary<Type, string> ComponentWeblinks = new Dictionary<Type, string>()
         {
-
             { typeof(Documentation), "https://robotcomponents.github.io/RobotComponents-Documentation/" },
 
             #region Code generation
@@ -142,6 +142,13 @@ namespace RobotComponents.Gh.Utils
             { typeof(IRB7600_500_2_55_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
             #endregion
 
+            #region Multi Move
+            { typeof(TaskListComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(WaitSyncTaskComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(SyncMoveOnComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(SyncMoveOffComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            #endregion
+
             #region Simulation
             { typeof(ForwardKinematicsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Simulation/Forward%20Kinematics/" },
             { typeof(InverseKinematicsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Simulation/Inverse%20Kinematics/" },
@@ -182,6 +189,11 @@ namespace RobotComponents.Gh.Utils
             { typeof(Param_WaitTime), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Time/"},
             { typeof(Param_WaitDI), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(Param_ZoneData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
+            // Multi Move
+            { typeof(Param_TaskList), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(Param_WaitSyncTask), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(Param_SyncMoveOn), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(Param_SyncMoveOff), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
             // Definitions
             { typeof(Param_ExternalAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Axis/"},
             { typeof(Param_ExternalLinearAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Linear%20Axis/"},

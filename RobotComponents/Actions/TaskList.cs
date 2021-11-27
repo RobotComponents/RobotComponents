@@ -80,7 +80,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Tasks class.
         /// </summary>
-        /// <param name="name"> The name of the set with tasks. </param>
+        /// <param name="name"> The name of the collection with tasks. </param>
         /// <param name="tasks"> The tasks names as an array with strings. </param>
         public TaskList(string name, string[] tasks)
         {
@@ -210,7 +210,7 @@ namespace RobotComponents.Actions
             if (!RAPIDGenerator.TaskLists.ContainsKey(_name))
             {
                 RAPIDGenerator.TaskLists.Add(_name, this);
-                RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }
 

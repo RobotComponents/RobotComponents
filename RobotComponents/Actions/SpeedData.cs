@@ -302,7 +302,7 @@ namespace RobotComponents.Actions
                     if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
                     {
                         RAPIDGenerator.SpeedDatas.Add(this.Name, this);
-                        RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                        RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }
             }

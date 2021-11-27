@@ -185,7 +185,7 @@ namespace RobotComponents.Actions
             if (!RAPIDGenerator.Syncidents.ContainsKey(_syncident))
             {
                 RAPIDGenerator.Syncidents.Add(_syncident, this);
-                RAPIDGenerator.ProgramModule.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }
 
@@ -196,7 +196,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramModule.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 

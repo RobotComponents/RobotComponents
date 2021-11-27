@@ -217,7 +217,7 @@ namespace RobotComponents.Actions
         {
             if (_name != String.Empty)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! Start of group: " + _name);
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! Start of group: " + _name);
             }
 
             for (int i = 0; i < _actions.Count; i++)
@@ -227,7 +227,7 @@ namespace RobotComponents.Actions
 
             if (_name != String.Empty)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "! End of group: " + _name);
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! End of group: " + _name);
             }
         }
         #endregion

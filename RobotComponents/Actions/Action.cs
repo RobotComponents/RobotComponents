@@ -102,17 +102,33 @@ namespace RobotComponents.Actions
             { 
                 return speedData.ToString();
             }
+            else if (this is SyncMoveOff syncMoveOff)
+            {
+                return syncMoveOff.ToString();
+            }
+            else if (this is SyncMoveOn syncMoveOn)
+            {
+                return syncMoveOn.ToString();
+            }
             else if (this is RobotTarget robotTarget)
             {
                 return robotTarget.ToString();
             }
-            else if (this is WaitTime timer)
+            else if (this is TaskList tasks)
             {
-                return timer.ToString();
+                return tasks.ToString();
             }
             else if (this is WaitDI waitDI)
             {
                 return waitDI.ToString();
+            }
+            else if (this is WaitSyncTask waitSyncTask)
+            {
+                return waitSyncTask.ToString();
+            }
+            else if (this is WaitTime timer)
+            {
+                return timer.ToString();
             }
             else
             {

@@ -4,10 +4,8 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Text;
 // RobotComponents Libs
 using RobotComponents.Utils;
 using RobotComponents.Definitions;
@@ -30,6 +28,8 @@ namespace RobotComponents.Actions
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
         private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); // Dictionary that stores all the unique robo ttools used by the RAPIDGenerator
         private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>(); // Dictionary that stores all the unique work objects used by the RAPIDGenerator
+        private readonly Dictionary<string, TaskList> _taskLists = new Dictionary<string, TaskList>(); // Dictionary that stores all the unique task lists used by the RAPIDGenerator
+        private readonly Dictionary<string, ISyncident> _syncidents = new Dictionary<string, ISyncident>(); // Dictionary that stores all the unique sync ids used by the RAPIDGenerator
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programModuleName; // The module name of the rapid program code
@@ -127,6 +127,8 @@ namespace RobotComponents.Actions
             _zoneDatas.Clear();
             _robotTools.Clear();
             _workObjects.Clear();
+            _taskLists.Clear();
+            _syncidents.Clear();
             _errorText.Clear();
 
             // Save initial tool and add to used tools
@@ -538,6 +540,22 @@ namespace RobotComponents.Actions
         public Dictionary<string, WorkObject> WorkObjects
         {
             get { return _workObjects; }
+        }
+
+        /// <summary>
+        /// Gets the collection with unique Task Lists used to create the RAPID program module. 
+        /// </summary>
+        public Dictionary<string, TaskList> TaskLists
+        {
+            get { return _taskLists; }
+        }
+
+        /// <summary>
+        /// Gets the collection with unique syncidents used to create the RAPID program module. 
+        /// </summary>
+        public Dictionary<string, ISyncident> Syncidents
+        {
+            get { return _syncidents; }
         }
 
         /// <summary>

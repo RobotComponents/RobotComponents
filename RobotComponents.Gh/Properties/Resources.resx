@@ -448,8 +448,14 @@
   <data name="SyncMoveOff_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SyncMoveOff_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SyncMoveOff_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SyncMoveOff_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SyncMoveOn_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SyncMoveOn_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SyncMoveOn_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SyncMoveOn_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Target_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Target_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -465,6 +471,9 @@
   </data>
   <data name="TaskList_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TaskList_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TaskList_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TaskList_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Timer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Timer_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -500,7 +509,10 @@
     <value>..\Resources\WaitDI_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WaitSyncTask_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\WaitSynTask_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\WaitSyncTask_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WaitSyncTask_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WaitSyncTask_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WikiPage_MenuItem_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WikiPage_MenuItem_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

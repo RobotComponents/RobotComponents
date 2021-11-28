@@ -686,9 +686,7 @@
   <ItemGroup>
     <None Include="Resources\ActionUnGroup_Icon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components\MultiMove\DataTreeGenerators\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\SyncMoveOff_Icon.png" />
   </ItemGroup>
@@ -703,6 +701,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SyncMoveOn_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TaskList_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitSyncTask_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SyncMoveOff_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitSyncTask_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

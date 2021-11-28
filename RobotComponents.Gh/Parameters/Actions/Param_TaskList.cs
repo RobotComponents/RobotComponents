@@ -50,7 +50,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Parameter_Icon; }
+            get { return Properties.Resources.TaskList_Parameter_Icon; }
         }
 
         /// <summary>

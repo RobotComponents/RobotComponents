@@ -170,13 +170,13 @@ namespace RobotComponents.Actions
         {
             if (_isActive == true)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\off;");
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfL\\off;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\off;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfL\\off;");
             }
             else
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\on;");
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfL\\on;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\on;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfL\\on;");
             }
         }
         #endregion

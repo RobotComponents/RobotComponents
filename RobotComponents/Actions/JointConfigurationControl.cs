@@ -169,11 +169,11 @@ namespace RobotComponents.Actions
         {
             if (_isActive == true)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\on;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\on;");
             }
             else
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + "ConfJ\\off;");
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\off;");
             }
         }
         #endregion

@@ -62,8 +62,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
         {
             get
             {
-                // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.secondary; 
+                return GH_Exposure.senary; 
             }
         }
 

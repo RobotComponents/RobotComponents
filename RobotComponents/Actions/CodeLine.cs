@@ -179,7 +179,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + _code);
+                RAPIDGenerator.ProgramDeclarationCustomCodeLines.Add("    " + _code);
             }
         }
 
@@ -192,7 +192,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Instruction)
             {
-                RAPIDGenerator.ProgramModule.Add("    " + "    " + _code);
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + _code);
             }
         }
         #endregion

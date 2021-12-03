@@ -183,11 +183,11 @@ namespace RobotComponents.Actions
             {
                 if (_comment != String.Empty)
                 {
-                    RAPIDGenerator.ProgramModule.Add("    " + "! " + _comment);
+                    RAPIDGenerator.ProgramDeclarationComments.Add("    " + "! " + _comment);
                 }
                 else
                 {
-                    RAPIDGenerator.ProgramModule.Add("    ");
+                    RAPIDGenerator.ProgramDeclarationComments.Add("    ");
                 }
             }
         }
@@ -203,11 +203,11 @@ namespace RobotComponents.Actions
             {
                 if (_comment != String.Empty)
                 {
-                    RAPIDGenerator.ProgramModule.Add("    " + "    " + "! " + _comment);
+                    RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! " + _comment);
                 }
                 else
                 {
-                    RAPIDGenerator.ProgramModule.Add("    " + "    ");
+                    RAPIDGenerator.ProgramInstructions.Add("    " + "    ");
                 }
             }
         }

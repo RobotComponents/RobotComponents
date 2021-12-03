@@ -55,6 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\GH_Action.cs" />
+    <Compile Include="Actions\GH_SyncMoveOn.cs" />
+    <Compile Include="Actions\GH_SyncMoveOff.cs" />
+    <Compile Include="Actions\GH_WaitSyncTask.cs" />
+    <Compile Include="Actions\GH_TaskList.cs" />
     <Compile Include="Actions\GH_LinearConfigurationControl.cs" />
     <Compile Include="Actions\GH_JointConfigurationControl.cs" />
     <Compile Include="Actions\GH_Instruction.cs" />

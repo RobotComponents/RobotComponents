@@ -57,7 +57,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddBooleanParameter("Is Active", "A", "Defines if the axis configuration of the robot is set automatically based on a boolean value.", GH_ParamAccess.item, true);
         }
@@ -65,7 +65,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new AutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");   
         }

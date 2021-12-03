@@ -37,9 +37,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddNumberParameter("External axis position A", "EAa", "Defines the position of external logical axis A.", GH_ParamAccess.item, 9e9);
             pManager.AddNumberParameter("External axis position B", "EAb", "Defines the position of external logical axis B.", GH_ParamAccess.item, 9e9);
             pManager.AddNumberParameter("External axis position C", "EAc", "Defines the position of external logical axis C.", GH_ParamAccess.item, 9e9);
@@ -51,7 +51,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The resulting external joint position");
         }
@@ -63,7 +63,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Declare variables
-            string name = String.Empty;
+            string name = string.Empty;
             double externalAxisValueA = 9e9;
             double externalAxisValueB = 9e9;
             double externalAxisValueC = 9e9;

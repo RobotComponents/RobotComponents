@@ -231,7 +231,7 @@ namespace RobotComponents.Actions
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _finep = finep;
             _pzone_tcp = pzone_tcp;
             _pzone_ori = pzone_ori;
@@ -304,7 +304,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Zone Data instance as an IDeclaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new ZoneData(this) as IDeclaration;
+            return new ZoneData(this);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Zone Data instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new ZoneData(this) as Action;
+            return new ZoneData(this);
         }
         #endregion
 
@@ -332,7 +332,7 @@ namespace RobotComponents.Actions
             {
                 return "Predefined Zone Data (" + _name + ")";
             }
-            else if (_name != String.Empty)
+            else if (_name != string.Empty)
             {
                 return "Custom Zone Data (" + _name + ")";
             }
@@ -370,7 +370,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != String.Empty)
+            if (_predefined == false & _name != string.Empty)
             {
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " zonedata ";
@@ -405,7 +405,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                if (_name != String.Empty)
+                if (_name != string.Empty)
                 {
                     if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
                     {

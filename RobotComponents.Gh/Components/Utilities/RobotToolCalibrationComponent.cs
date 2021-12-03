@@ -41,7 +41,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot", GH_ParamAccess.item);
             pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Positions", "RJ", "Robot Joint Positions", GH_ParamAccess.list);
@@ -53,7 +53,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("TCP", "P", "Tool Center Point as a point", GH_ParamAccess.item);
             pManager.AddVectorParameter("Errors", "E", "Maximum calibration errors in x, y and z direction as a vector.", GH_ParamAccess.item);

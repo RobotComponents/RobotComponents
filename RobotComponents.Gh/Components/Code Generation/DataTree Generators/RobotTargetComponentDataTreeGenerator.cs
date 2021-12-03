@@ -40,9 +40,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Reference Plane", "RP", "Reference Plane as a Plane", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
@@ -52,7 +52,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_RobotTarget(), "Robot Target", "RT", "Resulting Robot Target");
         }
@@ -64,7 +64,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Sets inputs and creates target
-            string name = String.Empty;
+            string name = string.Empty;
             Plane plane = Plane.WorldXY;
             Plane referencePlane = Plane.WorldXY;
             int axisConfig = 0;

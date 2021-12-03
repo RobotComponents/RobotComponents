@@ -90,7 +90,7 @@ namespace RobotComponents.Gh.Goos.Actions
 
         /// <summary>
         /// Gets a string describing the state of "invalidness". 
-        /// If the instance is valid, then this property should return Nothing or String.Empty.
+        /// If the instance is valid, then this property should return Nothing or string.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
@@ -196,7 +196,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                Value = actionGoo.Value as Action;
+                Value = actionGoo.Value;
                 return true;
             }
 

@@ -38,9 +38,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.item);
             pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.item);
 
@@ -51,7 +51,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_JointTarget(), "Joint Target", "JT", "The resulting Joint Target");
         }
@@ -63,7 +63,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variables
-            string name = String.Empty;
+            string name = string.Empty;
             RobotJointPosition robotJointPosition = new RobotJointPosition();
             ExternalJointPosition externalJointPosition = new ExternalJointPosition(); 
 

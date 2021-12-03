@@ -96,7 +96,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Analog Output instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new AnalogOutput(this) as IInstruction;
+            return new AnalogOutput(this);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Analog Output instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new AnalogOutput(this) as Action;
+            return new AnalogOutput(this);
         }
         #endregion
 

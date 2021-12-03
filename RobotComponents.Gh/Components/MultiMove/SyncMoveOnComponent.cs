@@ -46,7 +46,7 @@ namespace RobotComponents.Gh.Components.MultiMove
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Sync ID", "ID", "The name of the synchronization point.", GH_ParamAccess.item);
             pManager.AddParameter(new Param_TaskList(), "Task List", "TL", "The RAPID program tasks to synchronize as a Task List.", GH_ParamAccess.item);
@@ -55,7 +55,7 @@ namespace RobotComponents.Gh.Components.MultiMove
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_SyncMoveOn(), "Sync Move On", "SMON", "Resulting Sync Move On instruction.");   
         }

@@ -95,7 +95,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the SyncMoveOff instance as an IDeclaration. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new SyncMoveOff(this) as IInstruction;
+            return new SyncMoveOff(this);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the SyncMoveOff instance as an ISyncident. </returns>
         public ISyncident DuplicateSyncident()
         {
-            return new SyncMoveOff(this) as ISyncident;
+            return new SyncMoveOff(this);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Tasks instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new SyncMoveOff(this) as Action;
+            return new SyncMoveOff(this);
         }
         #endregion
 

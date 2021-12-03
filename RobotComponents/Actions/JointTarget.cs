@@ -75,7 +75,7 @@ namespace RobotComponents.Actions
         public JointTarget(RobotJointPosition robotJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
         }
@@ -101,7 +101,7 @@ namespace RobotComponents.Actions
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
         }
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Joint Target instance as an ITarget. </returns>
         public ITarget DuplicateTarget()
         {
-            return new JointTarget(this) as ITarget;
+            return new JointTarget(this);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Joint Target instance as an IDeclaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new JointTarget(this) as IDeclaration;
+            return new JointTarget(this);
         }
 
         /// <summary>
@@ -165,7 +165,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Joint Target instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new JointTarget(this) as Action;
+            return new JointTarget(this);
         }
         #endregion
 
@@ -180,7 +180,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Joint Target";
             }
-            else if (this.Name != String.Empty)
+            else if (this.Name != string.Empty)
             {
                 return "Joint Target (" + this.Name + ")";
             }
@@ -266,12 +266,12 @@ namespace RobotComponents.Actions
             string robotJointPosition = _robotJointPosition.Name;
             string externalJointPosition = _externalJointPosition.Name;
 
-            if (robotJointPosition == String.Empty)
+            if (robotJointPosition == string.Empty)
             {
                 robotJointPosition = _robotJointPosition.ToRAPID();
             }
 
-            if (externalJointPosition == String.Empty)
+            if (externalJointPosition == string.Empty)
             {
                 externalJointPosition = _externalJointPosition.ToRAPID();
             }
@@ -292,7 +292,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " jointtarget ";
@@ -304,7 +304,7 @@ namespace RobotComponents.Actions
                 return code;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace RobotComponents.Actions
             _robotJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
             _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
 
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {

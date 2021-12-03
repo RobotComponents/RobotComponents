@@ -83,7 +83,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _plane = plane;
             _axisConfig = 0;
             _externalJointPosition = new ExternalJointPosition();
@@ -113,7 +113,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
@@ -146,7 +146,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
@@ -188,7 +188,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = externalJointPosition;
@@ -223,7 +223,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = externalJointPosition;
@@ -286,7 +286,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Robot Target instance as an ITarget. </returns>
         public ITarget DuplicateTarget()
         {
-            return new RobotTarget(this) as ITarget;
+            return new RobotTarget(this);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Robot Target instance as an IDeclaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new RobotTarget(this) as IDeclaration;
+            return new RobotTarget(this);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Robot Target instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new RobotTarget(this) as Action;
+            return new RobotTarget(this);
         }
         #endregion
 
@@ -319,7 +319,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Robot Target";
             }
-            else if (this.Name != String.Empty)
+            else if (this.Name != string.Empty)
             {
                 return "Robot Target (" + this.Name + ")";
             }
@@ -337,7 +337,7 @@ namespace RobotComponents.Actions
         {
             string externalJointPosition = _externalJointPosition.Name;
 
-            if (externalJointPosition == String.Empty)
+            if (externalJointPosition == string.Empty)
             {
                 externalJointPosition = _externalJointPosition.ToRAPID();
             }
@@ -367,7 +367,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " robtarget ";
@@ -379,7 +379,7 @@ namespace RobotComponents.Actions
                 return code;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace RobotComponents.Actions
         {
             _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
 
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {

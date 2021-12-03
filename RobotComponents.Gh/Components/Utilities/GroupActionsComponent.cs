@@ -35,16 +35,16 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the group with Actions.", GH_ParamAccess.item, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name of the group with Actions.", GH_ParamAccess.item, string.Empty);
             pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions to group.", GH_ParamAccess.list);
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_ActionGroup(), "Group", "G", "Group with Actions", GH_ParamAccess.item);
         }

@@ -66,7 +66,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.list, "defaultTar");
             pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.list);
@@ -79,7 +79,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_JointTarget(), "Joint Target", "JT", "The resulting Joint Target");
         }

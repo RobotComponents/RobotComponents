@@ -70,9 +70,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.tree);
             pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.tree, 0);
         }
@@ -80,7 +80,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_RobotTarget(), "Robot Target", "RT", "Resulting Robot Target");
         }
@@ -145,7 +145,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
 
-            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
             {
                 // Update the variable names in the data trees
                 UpdateVariableNames();

@@ -90,7 +90,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Joint Configuration Control instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new JointConfigurationControl(this) as IInstruction;
+            return new JointConfigurationControl(this);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Joint Configuration Control instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new JointConfigurationControl(this) as Action;
+            return new JointConfigurationControl(this);
         }
         #endregion
 

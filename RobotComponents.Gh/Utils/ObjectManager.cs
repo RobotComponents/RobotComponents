@@ -89,7 +89,7 @@ namespace RobotComponents.Gh.Utils
                     }
 
                     // Empty variable name
-                    else if (managedComponent.ToRegister[i] == String.Empty)
+                    else if (managedComponent.ToRegister[i] == string.Empty)
                     {
                         managedComponent.LastName = "";
                         break;

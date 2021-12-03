@@ -35,7 +35,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number", GH_ParamAccess.item);
         }
@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_BooleanParam("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.");

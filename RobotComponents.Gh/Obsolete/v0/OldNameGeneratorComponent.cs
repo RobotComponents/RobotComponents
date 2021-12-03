@@ -56,7 +56,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, "defaultName");
             pManager.AddGenericParameter("DT", "DT", "The data tree structure", GH_ParamAccess.tree);
@@ -65,7 +65,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_StringParam("Name", "N", "Name as string stored in the data tree structure");
         }
@@ -78,7 +78,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             // Input variables
             GH_Structure<IGH_Goo> data;
-            string name = String.Empty;
+            string name = string.Empty;
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }

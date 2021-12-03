@@ -49,7 +49,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions", GH_ParamAccess.list);
@@ -67,7 +67,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
             pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 

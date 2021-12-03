@@ -50,9 +50,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
             pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.tree);
             pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.tree);
 
@@ -63,7 +63,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_JointTarget(), "Joint Target", "JT", "The resulting Joint Target");
         }
@@ -99,7 +99,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_JointTarget>;
 
-            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
             {
                 UpdateVariableNames();
             }

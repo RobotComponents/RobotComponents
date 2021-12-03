@@ -108,7 +108,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Comment instance as an IDynamic. </returns>
         public IDynamic DuplicateDynamic()
         {
-            return new Comment(this) as IDynamic;
+            return new Comment(this);
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Comment instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new Comment(this) as Action;
+            return new Comment(this);
         }
         #endregion
 
@@ -181,7 +181,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Declaration)
             {
-                if (_comment != String.Empty)
+                if (_comment != string.Empty)
                 {
                     RAPIDGenerator.ProgramDeclarationComments.Add("    " + "! " + _comment);
                 }
@@ -201,7 +201,7 @@ namespace RobotComponents.Actions
         {
             if (_type == CodeType.Instruction)
             {
-                if (_comment != String.Empty)
+                if (_comment != string.Empty)
                 {
                     RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! " + _comment);
                 }

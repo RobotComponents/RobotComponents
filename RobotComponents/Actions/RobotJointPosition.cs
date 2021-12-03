@@ -48,7 +48,7 @@ namespace RobotComponents.Actions
             if (version <= 16000)
             {
                 _referenceType = ReferenceType.CONST;
-                _name = String.Empty;
+                _name = string.Empty;
             }
             else
             {
@@ -272,7 +272,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Robot Joint Position instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new RobotJointPosition(this) as Action;
+            return new RobotJointPosition(this);
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Robot Joint Position instance as an IDeclaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new RobotJointPosition(this) as IDeclaration;
+            return new RobotJointPosition(this);
         }
         #endregion
 
@@ -531,7 +531,7 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " robjoint ";
@@ -543,7 +543,7 @@ namespace RobotComponents.Actions
                 return code;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         /// <summary>
@@ -563,7 +563,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
                 {

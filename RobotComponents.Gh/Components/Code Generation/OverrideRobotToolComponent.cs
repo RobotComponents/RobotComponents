@@ -39,7 +39,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool, uses tool0 as default Robot Tool", GH_ParamAccess.item);
             pManager[0].Optional = true;
@@ -48,7 +48,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_OverrideRobotTool(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool instruction");   
         }

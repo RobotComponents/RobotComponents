@@ -80,7 +80,7 @@ namespace RobotComponents.Gh.Goos.Actions
 
         /// <summary>
         /// Gets a string describing the state of "invalidness". 
-        /// If the instance is valid, then this property should return Nothing or String.Empty.
+        /// If the instance is valid, then this property should return Nothing or string.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {

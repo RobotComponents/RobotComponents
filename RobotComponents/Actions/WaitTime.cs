@@ -90,7 +90,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Wait Time instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new WaitTime(this) as IInstruction;
+            return new WaitTime(this);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Wait Time instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new WaitTime(this) as Action;
+            return new WaitTime(this);
         }
         #endregion
 

@@ -96,7 +96,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Wait DI instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new WaitDI(this) as IInstruction;
+            return new WaitDI(this);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Wait Di instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new WaitDI(this) as Action;
+            return new WaitDI(this);
         }
         #endregion
 

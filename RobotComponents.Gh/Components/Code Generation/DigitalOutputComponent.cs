@@ -37,7 +37,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Name", "N", "Name of the digital output as text", GH_ParamAccess.item);
             pManager.AddBooleanParameter("State", "S", "State of the digital output as boolean", GH_ParamAccess.item);
@@ -46,7 +46,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_DigitalOutput(), "Set Digital Output", "SDO", "Resulting Set Digital Output instruction");   
         }

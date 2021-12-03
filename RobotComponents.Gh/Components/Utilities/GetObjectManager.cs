@@ -32,7 +32,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             // This components has no input parameters.
         }
@@ -40,7 +40,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_GenericParam("Object Manager", "OM", "The object manager of the this document");
         }

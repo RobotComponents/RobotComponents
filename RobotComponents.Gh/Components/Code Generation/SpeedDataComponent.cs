@@ -1,5 +1,6 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License as published by the 
+// under the terms of GNU General Public License
+// published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -50,9 +51,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, string.Empty);
             pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree, 5);
             pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.tree, 500);
             pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.tree, 5000);
@@ -62,7 +63,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
@@ -104,7 +105,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
 
-            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
             {
                 // Update the variable names in the data trees
                 UpdateVariableNames();

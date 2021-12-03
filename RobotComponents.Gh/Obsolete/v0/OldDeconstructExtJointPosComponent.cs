@@ -55,7 +55,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The External Joint Position.", GH_ParamAccess.item);
         }
@@ -63,7 +63,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_DoubleParam("External axis position A", "EAa", "Defines the position of the external logical axis A");
             pManager.Register_DoubleParam("External axis position B", "EAb", "Defines the position of the external logical axis B");

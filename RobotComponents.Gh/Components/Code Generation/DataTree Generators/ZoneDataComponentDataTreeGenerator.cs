@@ -1,5 +1,6 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License as published by the 
+// under the terms of GNU General Public License
+// published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -38,9 +39,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, string.Empty);
             pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.item, false);
             pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.item, 0);
             pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.item, 0);
@@ -53,7 +54,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Resulting Zone Data declaration");
         }
@@ -65,7 +66,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Sets inputs
-            string name = String.Empty;
+            string name = string.Empty;
             bool finep = false;
             double pzone_tcp = 0;
             double pzone_ori = 0;

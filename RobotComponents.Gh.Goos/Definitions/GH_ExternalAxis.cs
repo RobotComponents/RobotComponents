@@ -89,7 +89,7 @@ namespace RobotComponents.Gh.Goos.Definitions
 
         /// <summary>
         /// Gets a string describing the state of "invalidness". 
-        /// If the instance is valid, then this property should return Nothing or String.Empty.
+        /// If the instance is valid, then this property should return Nothing or string.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
@@ -204,7 +204,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;
-                Value = externalAxisGoo.Value as ExternalAxis;
+                Value = externalAxisGoo.Value;
                 return true;
             }
 
@@ -219,7 +219,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(GH_ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalLinearAxis externalLinearAxisGoo = source as GH_ExternalLinearAxis;
-                Value = externalLinearAxisGoo.Value as ExternalAxis;
+                Value = externalLinearAxisGoo.Value;
                 return true;
             }
 
@@ -234,7 +234,7 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(GH_ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalRotationalAxis externalRotationalAxisGoo = source as GH_ExternalRotationalAxis;
-                Value = externalRotationalAxisGoo.Value as ExternalAxis; 
+                Value = externalRotationalAxisGoo.Value; 
                 return true;
             }
 

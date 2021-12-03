@@ -91,7 +91,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Auto Axis Configuration instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new AutoAxisConfig(this) as IInstruction;
+            return new AutoAxisConfig(this);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Auto Axis Configuration instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new AutoAxisConfig(this) as Action;
+            return new AutoAxisConfig(this);
         }
         #endregion
 

@@ -90,7 +90,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Linear Configuration Control instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new LinearConfigurationControl(this) as IInstruction;
+            return new LinearConfigurationControl(this);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Linear Configuration Control instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new LinearConfigurationControl(this) as Action;
+            return new LinearConfigurationControl(this);
         }
         #endregion
 

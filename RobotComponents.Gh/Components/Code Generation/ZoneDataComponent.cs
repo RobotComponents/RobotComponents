@@ -1,5 +1,6 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License as published by the 
+// under the terms of GNU General Public License
+// published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -50,9 +51,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.tree, String.Empty);
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.tree, string.Empty);
             pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.tree, false);
             pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.tree, 0);
             pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.tree, 0);
@@ -65,7 +66,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Resulting Zone Data declaration");
         }
@@ -116,7 +117,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ZoneData>;
 
-            if (_tree.Branches[0][0].Value.Name != String.Empty)
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
             {
                 // Update the variable names in the data trees
                 UpdateVariableNames();

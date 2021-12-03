@@ -90,7 +90,7 @@ namespace RobotComponents.Gh.Goos.Actions
 
         /// <summary>
         /// Gets a string describing the state of "invalidness". 
-        /// If the instance is valid, then this property should return Nothing or String.Empty.
+        /// If the instance is valid, then this property should return Nothing or string.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
@@ -184,7 +184,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Declaration(Value as IDeclaration); }
+                else { target = (Q)(object)new GH_Declaration(Value); }
                 return true;
             }
 
@@ -212,7 +212,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
             {
                 GH_Declaration declarationGoo = source as GH_Declaration;
-                Value = declarationGoo.Value as IDeclaration;
+                Value = declarationGoo.Value;
                 return true;
             }
 

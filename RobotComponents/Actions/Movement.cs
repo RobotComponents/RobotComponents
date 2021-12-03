@@ -332,7 +332,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Movement instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new Movement(this) as IInstruction;
+            return new Movement(this);
         }
 
         /// <summary>
@@ -350,7 +350,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Movement instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new Movement(this) as Action;
+            return new Movement(this);
         }
         #endregion
 
@@ -509,7 +509,7 @@ namespace RobotComponents.Actions
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
                     _convertedTarget.ReferenceType = _target.ReferenceType;
 
-                    if (_convertedTarget.Name != String.Empty)
+                    if (_convertedTarget.Name != string.Empty)
                     {
                         _convertedTarget.Name += "_jt";
                     }    
@@ -530,7 +530,7 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            return String.Empty;
+            return string.Empty;
         }
 
         /// <summary>
@@ -564,16 +564,16 @@ namespace RobotComponents.Actions
             string speedData = _speedData.Name;
             string zoneData = _zoneData.Name;
 
-            if (target == String.Empty)
+            if (target == string.Empty)
             {
                 target = _convertedTarget.ToRAPID();
             }
-            if (speedData == String.Empty)
+            if (speedData == string.Empty)
             {
                 speedData = _speedData.ToRAPID();
             }
 
-            if (zoneData == String.Empty)
+            if (zoneData == string.Empty)
             {
                 zoneData = _zoneData.ToRAPID();
             }

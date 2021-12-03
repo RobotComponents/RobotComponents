@@ -107,7 +107,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the WaitSyncTask instance as an IDeclaration. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new WaitSyncTask(this) as IInstruction;
+            return new WaitSyncTask(this);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the WaitSyncTask instance as an ISyncident. </returns>
         public ISyncident DuplicateSyncident()
         {
-            return new WaitSyncTask(this) as ISyncident;
+            return new WaitSyncTask(this);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Tasks instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new WaitSyncTask(this) as Action;
+            return new WaitSyncTask(this);
         }
         #endregion
 

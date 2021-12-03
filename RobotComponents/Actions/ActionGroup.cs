@@ -58,7 +58,7 @@ namespace RobotComponents.Actions
         /// </summary>
         public ActionGroup()
         {
-            _name = String.Empty;
+            _name = string.Empty;
             _actions = new List<Action>() { };
         }
 
@@ -68,7 +68,7 @@ namespace RobotComponents.Actions
         /// <param name="actions"> The list with actions. </param>
         public ActionGroup(List<Action> actions)
         {
-            _name = String.Empty;
+            _name = string.Empty;
             _actions = actions;
         }
 
@@ -108,7 +108,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Action Group instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new ActionGroup(this) as Action;
+            return new ActionGroup(this);
         }
         #endregion
 
@@ -123,7 +123,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Action Group";
             }
-            else if (_name != String.Empty)
+            else if (_name != string.Empty)
             {
                 return "Action Group (" + this.Name + ")";
             }
@@ -164,7 +164,7 @@ namespace RobotComponents.Actions
             {
                 result += _actions[i].ToRAPIDDeclaration(robot);
 
-                if (_actions[i].ToRAPIDDeclaration(robot) != String.Empty)
+                if (_actions[i].ToRAPIDDeclaration(robot) != string.Empty)
                 {
                     result += Environment.NewLine;
                 }
@@ -186,7 +186,7 @@ namespace RobotComponents.Actions
             {
                 result += _actions[i].ToRAPIDInstruction(robot);
 
-                if (_actions[i].ToRAPIDInstruction(robot) != String.Empty)
+                if (_actions[i].ToRAPIDInstruction(robot) != string.Empty)
                 {
                     result += Environment.NewLine;
                 }
@@ -215,7 +215,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! Start of group: " + _name);
             }
@@ -225,7 +225,7 @@ namespace RobotComponents.Actions
                 _actions[i].ToRAPIDInstruction(RAPIDGenerator);
             }
 
-            if (_name != String.Empty)
+            if (_name != string.Empty)
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! End of group: " + _name);
             }

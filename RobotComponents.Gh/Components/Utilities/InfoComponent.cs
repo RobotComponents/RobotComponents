@@ -33,7 +33,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             // This component has no input parameters
         }
@@ -41,7 +41,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Info", "I", "Authors and license information.", GH_ParamAccess.item);
         }

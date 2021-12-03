@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Code", "C", "Content of the code as text.", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Type", "T", "Type of the code. Use 0 for adding the code as instruction. Use 1 for adding the code as declaration.", GH_ParamAccess.item, 0);
@@ -54,7 +54,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_CodeLine(), "Code", "C", "Resulting Code", GH_ParamAccess.list);   
         }

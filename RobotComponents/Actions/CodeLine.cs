@@ -106,7 +106,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Code Line instance as an IDynamic. </returns>
         public IDynamic DuplicateDynamic()
         {
-            return new CodeLine(this) as IDynamic;
+            return new CodeLine(this);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Code Line instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new CodeLine(this) as Action;
+            return new CodeLine(this);
         }
         #endregion
 

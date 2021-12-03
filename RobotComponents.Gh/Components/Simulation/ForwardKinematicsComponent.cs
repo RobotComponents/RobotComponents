@@ -53,7 +53,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot as Robot", GH_ParamAccess.item);
             pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The positions of the Robot Axes as Robot Joint Position", GH_ParamAccess.item);
@@ -66,7 +66,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");
             pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");

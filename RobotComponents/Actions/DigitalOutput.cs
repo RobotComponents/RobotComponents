@@ -96,7 +96,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Digital Output instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new DigitalOutput(this) as IInstruction;
+            return new DigitalOutput(this);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Digital Output instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new DigitalOutput(this) as Action;
+            return new DigitalOutput(this);
         }
         #endregion
 

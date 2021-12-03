@@ -119,7 +119,7 @@ namespace RobotComponents.Gh.Goos.Actions
 
         /// <summary>
         /// ets a string describing the state of "invalidness". 
-        /// If the instance is valid, then this property should return Nothing or String.Empty.
+        /// If the instance is valid, then this property should return Nothing or string.Empty.
         /// </summary>
         public override string IsValidWhyNot
         {
@@ -308,7 +308,7 @@ namespace RobotComponents.Gh.Goos.Actions
                     {
                         try
                         {
-                            text = text.Replace("z", String.Empty); // Changes z1 to 1, z5 to 5 etc. 
+                            text = text.Replace("z", string.Empty); // Changes z1 to 1, z5 to 5 etc. 
                             double number = System.Convert.ToDouble(text);
                             Value = new ZoneData(number);
                             return true;

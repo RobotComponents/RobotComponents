@@ -90,7 +90,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Override Robot Tool instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new OverrideRobotTool(this) as IInstruction;
+            return new OverrideRobotTool(this);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Override Robot Tool instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new OverrideRobotTool(this) as Action;
+            return new OverrideRobotTool(this);
         }
         #endregion
 
@@ -127,7 +127,7 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            return String.Empty; // We don't write a comment between our declarations.
+            return string.Empty; // We don't write a comment between our declarations.
         }
         
         /// <summary>

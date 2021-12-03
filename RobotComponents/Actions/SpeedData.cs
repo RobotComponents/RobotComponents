@@ -154,7 +154,7 @@ namespace RobotComponents.Actions
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
             _referenceType = ReferenceType.VAR;
-            _name = String.Empty;
+            _name = string.Empty;
             _v_tcp = v_tcp;
             _v_ori = v_ori;
             _v_leax = v_leax;
@@ -214,7 +214,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the SpeedData instance as an IDeclaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new SpeedData(this) as IDeclaration;
+            return new SpeedData(this);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Speed Data instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new SpeedData(this) as Action;
+            return new SpeedData(this);
         }
         #endregion
 
@@ -242,7 +242,7 @@ namespace RobotComponents.Actions
             {
                 return "Predefined Speed Data ("+ _name + ")";
             }
-            else if (this.Name != String.Empty)
+            else if (this.Name != string.Empty)
             {
                 return "Custom Speed Data (" + _name + ")";
             }
@@ -268,7 +268,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != String.Empty)
+            if (_predefined == false & _name != string.Empty)
             {
                 return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := " + this.ToRAPID() + ";";
             }
@@ -297,7 +297,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                if (_name != String.Empty)
+                if (_name != string.Empty)
                 {
                     if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
                     {

@@ -115,7 +115,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Tasks instance as an IDelcaration. </returns>
         public IDeclaration DuplicateDeclaration()
         {
-            return new TaskList(this) as IDeclaration;
+            return new TaskList(this);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace RobotComponents.Actions
         /// <returns> A deep copy of the Tasks instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new TaskList(this) as Action;
+            return new TaskList(this);
         }
         #endregion
 

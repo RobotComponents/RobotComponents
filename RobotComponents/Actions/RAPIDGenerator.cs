@@ -35,13 +35,13 @@ namespace RobotComponents.Actions
         private string _programModuleName; // The module name of the rapid program code
         private string _systemModuleName; // The module name of the rapod system code
         private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
-        private List<string> _programModule = new List<string>(); // Program module as a list with code lines
-        private List<string> _programDeclarations = new List<string>(); // List with RAPID code declarations
-        private List<string> _programDeclarationComments = new List<string>(); // List with RAPID code declarations
-        private List<string> _programDeclarationCustomCodeLines = new List<string>(); // List with RAPID code declarations
-        private List<string> _programDeclarationsMultiMove = new List<string>(); // List with multi move RAPID code declarations
-        private List<string> _programInstructions = new List<string>(); // List with RAPID code instructions
-        private List<string> _systemModule = new List<string>(); // System module as a list with code lines
+        private readonly List<string> _programModule = new List<string>(); // Program module as a list with code lines
+        private readonly List<string> _programDeclarations = new List<string>(); // List with RAPID code declarations
+        private readonly List<string> _programDeclarationComments = new List<string>(); // List with RAPID code declarations
+        private readonly List<string> _programDeclarationCustomCodeLines = new List<string>(); // List with RAPID code declarations
+        private readonly List<string> _programDeclarationsMultiMove = new List<string>(); // List with multi move RAPID code declarations
+        private readonly List<string> _programInstructions = new List<string>(); // List with RAPID code instructions
+        private readonly List<string> _systemModule = new List<string>(); // System module as a list with code lines
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         private bool _synchronizedMovements = false; // Indicates if the movements are synchronized
         #endregion

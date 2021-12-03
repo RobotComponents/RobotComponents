@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Text", "T", "Content of the Comment as text", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Type", "T", "Type of the Comment as integer. Use 0 for commenting on instructions, 1 for commenting on declarations", GH_ParamAccess.item, 0);
@@ -54,7 +54,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment", GH_ParamAccess.list);   
         }

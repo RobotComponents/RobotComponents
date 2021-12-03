@@ -37,7 +37,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Reference Plane", "RP", "The Reference Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
@@ -47,7 +47,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_DoubleParam("Coord X", "X", "The x-coordinate of the plane origin.");
             pManager.Register_DoubleParam("Coord Y", "Y", "The y-coordinate of the plane origin.");

@@ -143,10 +143,10 @@ namespace RobotComponents.Gh.Utils
             #endregion
 
             #region Multi Move
-            { typeof(TaskListComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(WaitSyncTaskComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(SyncMoveOnComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(SyncMoveOffComponent), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(TaskListComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Multi%20Move/Task%20List/"},
+            { typeof(WaitSyncTaskComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Multi%20Move/Sync%20Move%20On/"},
+            { typeof(SyncMoveOnComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Multi%20Move/Sync%20Move%20Off/"},
+            { typeof(SyncMoveOffComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Multi%20Move/Wait%20Sync%20Task/"},
             #endregion
 
             #region Simulation
@@ -190,10 +190,10 @@ namespace RobotComponents.Gh.Utils
             { typeof(Param_WaitDI), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(Param_ZoneData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
             // Multi Move
-            { typeof(Param_TaskList), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(Param_WaitSyncTask), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(Param_SyncMoveOn), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
-            { typeof(Param_SyncMoveOff), "https://robotcomponents.github.io/RobotComponents-Documentation"}, // TODO: make page
+            { typeof(Param_TaskList), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Task%20List/"},
+            { typeof(Param_WaitSyncTask), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20Sync%20Task/"},
+            { typeof(Param_SyncMoveOn), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Sync%20Move%20On/"},
+            { typeof(Param_SyncMoveOff), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Sync%20Move%20Off/"},
             // Definitions
             { typeof(Param_ExternalAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Axis/"},
             { typeof(Param_ExternalLinearAxis), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Definitions/External%20Linear%20Axis/"},

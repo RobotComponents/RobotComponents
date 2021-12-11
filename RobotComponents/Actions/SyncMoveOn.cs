@@ -15,7 +15,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Represents the SyncMoveOn instruction that starts sequence of synchronized movements.
+    /// Represents the SyncMoveOn instruction that starts a sequence of synchronized movements.
     /// </summary>
     [Serializable()]
     public class SyncMoveOn : Action, IInstruction, ISyncident, ISerializable

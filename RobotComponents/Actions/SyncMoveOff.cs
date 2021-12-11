@@ -15,7 +15,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Actions
 {
     /// <summary>
-    /// Represents the SyncMoveOff instruction that is used to end a sequence of synchronized movements.
+    /// Represents the SyncMoveOff instruction to end a sequence of synchronized movements.
     /// </summary>
     [Serializable()]
     public class SyncMoveOff : Action, IInstruction, ISyncident, ISerializable

@@ -69,10 +69,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\MultiMove\SyncMoveOffComponent.cs" />
-    <Compile Include="Components\MultiMove\SyncMoveOnComponent.cs" />
-    <Compile Include="Components\MultiMove\WaitSyncTaskComponent.cs" />
-    <Compile Include="Components\MultiMove\TaskListComponent.cs" />
+    <Compile Include="Components\Multi Move\SyncMoveOffComponent.cs" />
+    <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
+    <Compile Include="Components\Multi Move\WaitSyncTaskComponent.cs" />
+    <Compile Include="Components\Multi Move\TaskListComponent.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
     <Compile Include="Forms\PickTaskForm.cs">

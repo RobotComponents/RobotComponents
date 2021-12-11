@@ -506,6 +506,16 @@ namespace RobotComponents.Kinematics
         {
             for (int i = 0; i != actions.Count; i++)
             {
+                if (actions[i] is ActionGroup actionGroup)
+                {
+                    bool result = CheckActionGroup(actionGroup, out bool movements);
+
+                    if (movements == true)
+                    {
+                        return result;
+                    }
+                }
+
                 if (actions[i] is Movement movement)
                 {
                     if (movement.MovementType == MovementType.MoveAbsJ)
@@ -523,6 +533,49 @@ namespace RobotComponents.Kinematics
             // Returns true if no movements were defined
             return true;
         }
+
+        /// <summary>
+        /// Checks whether the first movement type is an absolute joint movement inside an action group.
+        /// </summary>
+        /// <param name="group"> The group with actions. </param>
+        /// <param name="movements"> Specifies whether a movement was stored inside the action group. </param>
+        /// <returns></returns>
+        private bool CheckActionGroup(ActionGroup group, out bool movements)
+        {
+            movements = false;
+
+            for (int i = 0; i != group.Count; i++)
+            {
+                if (group[i] is ActionGroup actionGroup)
+                {
+                    bool result = CheckActionGroup(actionGroup, out movements);
+
+                    if (movements == true)
+                    {
+                        return result;
+                    }
+                }
+
+                if (group[i] is Movement movement)
+                {
+                    movements = true;
+
+                    if (movement.MovementType == MovementType.MoveAbsJ)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        _errorText.Add("The first movement is not set as an absolute joint movement.");
+                        return false;
+                    }
+                }
+            }
+
+            // Returns true if no movements were defined
+            return true;
+        }
+
         #endregion
 
         #region properties

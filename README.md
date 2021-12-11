@@ -4,13 +4,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=stable&style=flat-square">
-  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=latest&include_prereleases&style=flat-square">
-  <img src="https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total?style=flat-square">
-  <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square">
-  <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square">
-  <img src="https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents?style=flat-square">
-  <a href="https://doi.org/10.5281/zenodo.5773815"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5773815.svg?style=flat-square" alt="DOI"></a>
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=stable">
+  <img src="https://img.shields.io/github/v/release/RobotComponents/RobotComponents?label=latest&include_prereleases">
+  <img src="https://img.shields.io/github/downloads/RobotComponents/RobotComponents/total">
+  <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents">
+  <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents">
+  <img src="https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents">
+  <a href="https://doi.org/10.5281/zenodo.5773815"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5773815.svg" alt="DOI"></a>
 </p>
 
 ---

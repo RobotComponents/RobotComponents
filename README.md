@@ -10,6 +10,7 @@
   <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents?style=flat-square">
   <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents?style=flat-square">
   <img src="https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents?style=flat-square">
+  <a href="https://doi.org/10.5281/zenodo.5773815"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5773815.svg?style=flat-square" alt="DOI"></a>
 </p>
 
 ---

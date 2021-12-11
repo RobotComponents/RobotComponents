@@ -60,7 +60,7 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 **Adding support for other brands**: Robot Components is developed to intuitive program ABB robots inside Grasshopper. At the moment we have no plans to implement the support for other robot brands. However, we have a few ideas about how to implement this and since we want to keep Robot Components as intuitive as possible we kindly ask you to contact one of the [developers](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md) first in case if you want to implement other robot brands. We are happy to contribute to and support this development.
 
 ## Cite Robot Components
-Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. To cite Robot Components in publications use:
+Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite Robot Components in publications use:
 
 ```
 Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2021). 

@@ -98,6 +98,37 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Zone Data clas from an enumeration.
+        /// </summary>
+        /// <param name="predefinedZoneData"> Predefined zonedata as an enumeration </param>
+        public ZoneData(PredefinedZoneData predefinedZoneData)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = Enum.GetName(typeof(PredefinedZoneData), predefinedZoneData);
+            _exactPredefinedValue = true;
+            _predefined = true;
+
+            // Check if it is a fly-by-point or a fine-point
+            if (_name == "fine")
+            {
+                _finep = true;
+            }
+            else
+            {
+                _finep = false;
+            }
+
+            // Check if pre-defined name is valid
+            int pos = Array.IndexOf(_validPredefinedNames, _name);
+            _pzone_tcp = _predefinedPathZoneTCP[pos];
+            _pzone_ori = _predefinedPathZoneOri[pos];
+            _pzone_eax = _predefinedPathZoneEax[pos];
+            _zone_ori = _predefinedZoneOri[pos];
+            _zone_leax = _predefinedZoneLeax[pos];
+            _zone_reax = _predefinedZoneReax[pos];
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
         /// Use -1 to define a fine point.
         /// </summary>

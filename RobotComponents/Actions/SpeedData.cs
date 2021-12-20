@@ -86,6 +86,22 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Speed Data clas from an enumeration.
+        /// </summary>
+        /// <param name="predefinedSpeedData"> Predefined speeddata as an enumeration </param>
+        public SpeedData(PredefinedSpeedData predefinedSpeedData)
+        {
+            _referenceType = ReferenceType.VAR;
+            _name = Enum.GetName(typeof(PredefinedSpeedData), predefinedSpeedData);
+            _v_tcp = (double)predefinedSpeedData;
+            _v_ori = 500;
+            _v_leax = 5000;
+            _v_reax = 1000;
+            _exactPredefinedValue = true;
+            _predefined = true;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Speed Data class with predefined values.
         /// </summary>
         /// <param name="v_tcp"> The velocity of the tool center point (TCP) in mm/s. </param>

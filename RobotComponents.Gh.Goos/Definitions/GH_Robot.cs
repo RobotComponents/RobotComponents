@@ -207,7 +207,27 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// return an instance of another IGH_GeometricGoo derived type which can be transformed.</returns>
         public override IGH_GeometricGoo Transform(Transform xform)
         {
-            return null;
+            if (Value == null)
+            {
+                return null;
+            }
+
+            else if (Value.IsValid == false)
+            {
+                return null;
+            }
+
+            else
+            {
+                // Duplicate value
+                Robot robot = Value.Duplicate();
+                // Transform
+                robot.Transform(xform);
+                // Make new Goo instance
+                GH_Robot robotGoo = new GH_Robot(robot);
+                // Return
+                return robotGoo;
+            }
         }
 
         /// <summary>

@@ -130,7 +130,7 @@ namespace RobotComponents.Definitions
             _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
 
             // Transform Robot Tool to Mounting Frame
-            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
 
             // Set kinematics
@@ -171,7 +171,7 @@ namespace RobotComponents.Definitions
             UpdateExternalAxisFields();
 
             // Transform Robot Tool to Mounting Frame
-            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _tool.Transform(trans);
 
             // Set kinematics
@@ -485,7 +485,7 @@ namespace RobotComponents.Definitions
         public Mesh GetAttachedToolMesh()
         {
             Mesh toolMesh = _tool.Mesh.DuplicateMesh();
-            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             toolMesh.Transform(trans);
             return toolMesh;
         }
@@ -497,7 +497,7 @@ namespace RobotComponents.Definitions
         public Plane CalculateAttachedToolPlane()
         {
             _toolPlane = new Plane(_tool.ToolPlane);
-            Transform trans = Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
+            Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _toolPlane.Transform(trans);
 
             return _toolPlane;
@@ -508,7 +508,7 @@ namespace RobotComponents.Definitions
         /// NOTE: The attached external axes will not be transformed. 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
-        public void Transfom(Transform xform)
+        public void Transform(Transform xform)
         {
             _basePlane.Transform(xform);
             _mountingFrame.Transform(xform);
@@ -722,6 +722,19 @@ namespace RobotComponents.Definitions
         public List<Interval> ExternalAxisLimits
         {
             get { return _externalAxisLimits; }
+        }
+        #endregion
+
+        #region OBSOLETE
+        /// <summary>
+        /// Transforms the robot spatial properties (planes and meshes).
+        /// NOTE: The attached external axes will not be transformed. 
+        /// </summary>
+        /// <param name="xform"> Spatial deform. </param>
+        [Obsolete("This method is OBSOLETE and will be removed in version 2.", false)]
+        public void Transfom(Transform xform)
+        {
+            this.Transform(xform);
         }
         #endregion
     }

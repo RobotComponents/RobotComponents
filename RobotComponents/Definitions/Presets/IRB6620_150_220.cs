@@ -43,11 +43,11 @@ namespace RobotComponents.Definitions.Presets
                 }
             }
 
-            Robot robotInfo = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxes);
+            Robot robot = new Robot(name, meshes, axisPlanes, axisLimits, Plane.WorldXY, mountingFrame, tool, externalAxes);
             Transform trans = Transform.PlaneToPlane(Plane.WorldXY, positionPlane);
-            robotInfo.Transfom(trans);
+            robot.Transform(trans);
 
-            return robotInfo;
+            return robot;
         }
 
         /// <summary>

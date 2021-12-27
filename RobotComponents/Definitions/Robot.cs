@@ -189,8 +189,8 @@ namespace RobotComponents.Definitions
             _name = robot.Name;
             _meshes = robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
 
-            _internalAxisPlanes = new List<Plane>(robot.InternalAxisPlanes);
-            _internalAxisLimits = new List<Interval>(robot.InternalAxisLimits);
+            _internalAxisPlanes = robot.InternalAxisPlanes.ConvertAll(item => new Plane(item));
+            _internalAxisLimits = robot.InternalAxisLimits.ConvertAll(item => new Interval(item));
             _basePlane = new Plane(robot.BasePlane);
             _mountingFrame = new Plane(robot.MountingFrame);
 
@@ -199,9 +199,9 @@ namespace RobotComponents.Definitions
             _toolPlane = new Plane(robot.ToolPlane);
 
             // External axis related fields
-            _externalAxes = new List<ExternalAxis>(robot.ExternalAxes); //TODO: make deep copy
-            _externalAxisPlanes = new List<Plane>(robot.ExternalAxisPlanes);
-            _externalAxisLimits = new List<Interval>(robot.ExternalAxisLimits);
+            _externalAxes = robot.ExternalAxes.ConvertAll(item => item.DuplicateExternalAxis());
+            _externalAxisPlanes = robot.ExternalAxisPlanes.ConvertAll(item => new Plane(item));
+            _externalAxisLimits = robot.ExternalAxisLimits.ConvertAll(item => new Interval(item));
 
             // Kinematics
             _inverseKinematics = new InverseKinematics(robot.InverseKinematics.Movement.Duplicate(), this);

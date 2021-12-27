@@ -26,7 +26,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         public FlipPlaneYComponent()
           : base("Flip Plane Y", "Flip Plane Y",
-              "Flips the plane to the oposite direction by setting it's y-Axis negative."
+              "Flips the plane to the oposite direction by setting it's y-axis negative."
               + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
@@ -37,7 +37,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item, Plane.WorldXY); 
         }
 
         /// <summary>
@@ -55,19 +55,17 @@ namespace RobotComponents.Gh.Components.Utilities
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            List<Plane> planes = new List<Plane>();
+            Plane plane = Plane.WorldXY;
 
             // Catch the input data
-            if (!DA.GetDataList(0, planes)) { return; }
+            if (!DA.GetData(0, ref plane)) { return; }
 
-            // Flips the planes
-            for (int i = 0; i < planes.Count; i++)
-            {
-                planes[i] = RobotComponents.Utils.HelperMethods.FlipPlaneY(planes[i]);
-            }
+            // Flip plane
+
+            plane = RobotComponents.Utils.HelperMethods.FlipPlaneY(plane);
 
             // Output
-            DA.SetDataList(0, planes);
+            DA.SetData(0, plane);
         }
 
         #region properties

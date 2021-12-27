@@ -70,7 +70,7 @@ namespace RobotComponents.Gh.Components.Definitions
             List<Mesh> meshes = new List<Mesh>();
             List<Plane> axisPlanes = new List<Plane>();
             List<Interval> axisLimits = new List<Interval>();
-            Plane positionPlane = Plane.WorldXY;
+            Plane userPositionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
             RobotTool tool = null;
             List<ExternalAxis> externalAxes = new List<ExternalAxis>();
@@ -80,13 +80,16 @@ namespace RobotComponents.Gh.Components.Definitions
             if (!DA.GetDataList(1, meshes)) { return; }
             if (!DA.GetDataList(2, axisPlanes)) { return; }
             if (!DA.GetDataList(3, axisLimits)) { return; }
-            if (!DA.GetData(4, ref positionPlane)) { return; }
+            if (!DA.GetData(4, ref userPositionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref tool)) { tool = new RobotTool(); }
             if (!DA.GetDataList(7, externalAxes)) { externalAxes = new List<ExternalAxis>() { }; }
 
             // Construct empty robot
             Robot robot = new Robot();
+
+            // Position plane
+            Plane positionPlane = new Plane(userPositionPlane);
 
             // Override the position plane when an external axis is coupled that moves the robot
             for (int i = 0; i < externalAxes.Count; i++)
@@ -101,7 +104,9 @@ namespace RobotComponents.Gh.Components.Definitions
             // Construct the robot
             try
             {
-                robot = new Robot(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, tool, externalAxes);
+                robot = new Robot(name, meshes, axisPlanes, axisLimits, userPositionPlane, mountingFrame, tool, externalAxes);
+                Transform trans = Transform.PlaneToPlane(userPositionPlane, positionPlane);
+                robot.Transform(trans);
             }
             catch (Exception ex)
             {

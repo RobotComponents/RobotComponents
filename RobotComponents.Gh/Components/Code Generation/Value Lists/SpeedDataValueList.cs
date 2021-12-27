@@ -10,7 +10,7 @@ using System.Drawing;
 using Grasshopper;
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.Enumerations;
 using RobotComponents.Gh.Utils;
 
 namespace RobotComponents.Gh.Components.CodeGeneration.ValueLists
@@ -68,7 +68,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.ValueLists
             if (_created == false)
             {
                 PointF location = new PointF(this.Attributes.Pivot.X, this.Attributes.Pivot.Y);
-                _created = HelperMethods.CreateValueList(SpeedData.ValidPredefinedData, location);
+                _created = HelperMethods.CreateValueList(typeof(PredefinedSpeedData), location);
             }
 
             // Removes this component from the canvas

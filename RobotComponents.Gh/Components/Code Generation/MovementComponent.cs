@@ -153,7 +153,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Check if an exact predefined zonedata value is used
-            if (zoneData.ExactPredefinedValue == false & zoneData.PreDefinied == true)
+            if (zoneData.ExactPredefinedValue == false & zoneData.PreDefined == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value is invalid. " +
                     "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
@@ -162,7 +162,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Check if an exact predefined speeddata value is used
-            if (speedData.ExactPredefinedValue == false & speedData.PreDefinied == true)
+            if (speedData.ExactPredefinedValue == false & speedData.PreDefined == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value is invalid. " +
                     "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +

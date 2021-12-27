@@ -30,7 +30,7 @@ namespace RobotComponents.Actions
         private double _v_ori; // Re-orientation speed
         private double _v_leax; // External linear axis speed
         private double _v_reax; // External rotational axis speed
-        private bool _predefined; // ABB predefinied data (e.g. v5, v10, v20, v30)?
+        private bool _predefined; // ABB predefined data (e.g. v5, v10, v20, v30)?
         private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
@@ -83,22 +83,6 @@ namespace RobotComponents.Actions
         /// </summary>
         public SpeedData()
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Speed Data clas from an enumeration.
-        /// </summary>
-        /// <param name="predefinedSpeedData"> Predefined speeddata as an enumeration </param>
-        public SpeedData(PredefinedSpeedData predefinedSpeedData)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = Enum.GetName(typeof(PredefinedSpeedData), predefinedSpeedData);
-            _v_tcp = (double)predefinedSpeedData;
-            _v_ori = 500;
-            _v_leax = 5000;
-            _v_reax = 1000;
-            _exactPredefinedValue = true;
-            _predefined = true;
         }
 
         /// <summary>
@@ -211,8 +195,17 @@ namespace RobotComponents.Actions
             _v_ori = speeddata.V_ORI;
             _v_leax = speeddata.V_LEAX;
             _v_reax = speeddata.V_REAX;
-            _predefined = speeddata.PreDefinied;
+            _predefined = speeddata.PreDefined;
             _exactPredefinedValue = speeddata.ExactPredefinedValue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Speed Data clas from an enumeration.
+        /// </summary>
+        /// <param name="predefinedSpeedData"> Predefined speeddata as an enumeration </param>
+        public static SpeedData GetPredefinedSpeedData(PredefinedSpeedData predefinedSpeedData)
+        {
+            return new SpeedData((double)predefinedSpeedData);
         }
 
         /// <summary>
@@ -254,7 +247,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Speed Data";
             }
-            else if (this.PreDefinied == true)
+            else if (this.PreDefined == true)
             {
                 return "Predefined Speed Data ("+ _name + ")";
             }
@@ -409,11 +402,12 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
         /// </summary>
-        public bool PreDefinied
+        public bool PreDefined
         {
             get { return _predefined; }
             set { _predefined = value; }
         }
+
 
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
@@ -458,5 +452,16 @@ namespace RobotComponents.Actions
         }
         #endregion
 
+        #region OBSOLETE
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in version 2.", false)]
+        public bool PreDefinied
+        {
+            get { return _predefined; }
+            set { _predefined = value; }
+        }
+        #endregion
     }
 }

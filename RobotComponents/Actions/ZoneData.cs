@@ -98,37 +98,6 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Initializes a new instance of the Zone Data clas from an enumeration.
-        /// </summary>
-        /// <param name="predefinedZoneData"> Predefined zonedata as an enumeration </param>
-        public ZoneData(PredefinedZoneData predefinedZoneData)
-        {
-            _referenceType = ReferenceType.VAR;
-            _name = Enum.GetName(typeof(PredefinedZoneData), predefinedZoneData);
-            _exactPredefinedValue = true;
-            _predefined = true;
-
-            // Check if it is a fly-by-point or a fine-point
-            if (_name == "fine")
-            {
-                _finep = true;
-            }
-            else
-            {
-                _finep = false;
-            }
-
-            // Check if pre-defined name is valid
-            int pos = Array.IndexOf(_validPredefinedNames, _name);
-            _pzone_tcp = _predefinedPathZoneTCP[pos];
-            _pzone_ori = _predefinedPathZoneOri[pos];
-            _pzone_eax = _predefinedPathZoneEax[pos];
-            _zone_ori = _predefinedZoneOri[pos];
-            _zone_leax = _predefinedZoneLeax[pos];
-            _zone_reax = _predefinedZoneReax[pos];
-        }
-
-        /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
         /// Use -1 to define a fine point.
         /// </summary>
@@ -316,8 +285,17 @@ namespace RobotComponents.Actions
             _zone_ori = zonedata.ZoneOrientation;
             _zone_leax = zonedata.ZoneExternalLinearAxes;
             _zone_reax = zonedata.ZoneExternalRotationalAxes;
-            _predefined = zonedata.PreDefinied;
+            _predefined = zonedata.PreDefined;
             _exactPredefinedValue = zonedata.ExactPredefinedValue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Zone Data clas from an enumeration.
+        /// </summary>
+        /// <param name="predefinedZoneData"> Predefined zonedata as an enumeration </param>
+        public static ZoneData GetPredefinedZoneData(PredefinedZoneData predefinedZoneData)
+        {
+            return new ZoneData((double)predefinedZoneData); ;
         }
 
         /// <summary>
@@ -359,7 +337,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Zone Data";
             }
-            else if (this.PreDefinied == true)
+            else if (this.PreDefined == true)
             {
                 return "Predefined Zone Data (" + _name + ")";
             }
@@ -562,7 +540,7 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
         /// </summary>
-        public bool PreDefinied
+        public bool PreDefined
         {
             get { return _predefined; }
             set { _predefined = value; }
@@ -608,6 +586,18 @@ namespace RobotComponents.Actions
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
+        }
+        #endregion
+
+        #region OBSOLETE
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in version 2.", false)]
+        public bool PreDefinied
+        {
+            get { return _predefined; }
+            set { _predefined = value; }
         }
         #endregion
     }

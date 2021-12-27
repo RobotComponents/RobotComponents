@@ -223,6 +223,14 @@ namespace RobotComponents.Gh.Goos.Definitions
                 Robot robot = Value.Duplicate();
                 // Transform
                 robot.Transform(xform);
+                // Transform external axes that move the robot
+                for (int i = 0; i < robot.ExternalAxes.Count; i++)
+                {
+                    if (robot.ExternalAxes[i].MovesRobot == true)
+                    {
+                        robot.ExternalAxes[i].Transform(xform);
+                    }
+                }
                 // Make new Goo instance
                 GH_Robot robotGoo = new GH_Robot(robot);
                 // Return

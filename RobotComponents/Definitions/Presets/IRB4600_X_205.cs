@@ -94,28 +94,28 @@ namespace RobotComponents.Definitions.Presets
 
             // Axis 1
             axisPlanes.Add(new Plane(
-                new Point3d(0.00, 0.00, 0.00),
-                new Vector3d(0.00, 0.00, 1.00)));
+                new Point3d(0, 0, 0),
+                new Vector3d(0, 0, 1)));
             // Axis 2
             axisPlanes.Add(new Plane(
-                new Point3d(175.0, 0.00, 495.00),
-                new Vector3d(0.00, 1.00, 0.00)));
+                new Point3d(175.0, 0, 495),
+                new Vector3d(0, 1, 0)));
             // Axis 3
             axisPlanes.Add(new Plane(
-                new Point3d(175.00, 0.00, 495.00 + 900.00),
-                new Vector3d(0.00, 1.00, 0.00)));
+                new Point3d(175, 0, 495.00 + 900),
+                new Vector3d(0, 1, 0)));
             // Axis 4
             axisPlanes.Add(new Plane(
-                new Point3d(505.60, 0.00, 495.00 + 900.00 + 175.00),
-                new Vector3d(1.00, 0.00, 0.00)));
+                new Point3d(505.60, 0, 495.00 + 900.00 + 175),
+                new Vector3d(1, 0, 0)));
             // Axis 5
             axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0, 0.00, 495.00 + 900.00 + 175.00),
-                new Vector3d(0.00, 1.00, 0.00)));
+                new Point3d(175.0 + 960.0, 0, 495.00 + 900.00 + 175),
+                new Vector3d(0, 1, 0)));
             // Axis 6
             axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0.00, 495.00 + 900.00 + 175.00),
-                new Vector3d(1.00, 0.00, 0.00)));
+                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
+                new Vector3d(1, 0, 0)));
 
             return axisPlanes;
         }
@@ -145,8 +145,8 @@ namespace RobotComponents.Definitions.Presets
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0.00, 495.00 + 900.00 + 175.00),
-                new Vector3d(1.00, 0.00, 0.00));
+                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
+                new Vector3d(1, 0, 0));
 
             mountingFrame.Rotate(Math.PI* -0.5, mountingFrame.Normal);
 

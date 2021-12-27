@@ -69,6 +69,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Definitions\Presets\IRB1520ID_4_1_50_Component.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOffComponent.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
     <Compile Include="Components\Multi Move\WaitSyncTaskComponent.cs" />

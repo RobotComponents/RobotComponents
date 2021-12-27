@@ -73,7 +73,7 @@ namespace RobotComponents.Gh.Components.Definitions
             Plane positionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
             RobotTool tool = null;
-            List<ExternalAxis> externalAxis = new List<ExternalAxis>();
+            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
@@ -83,24 +83,25 @@ namespace RobotComponents.Gh.Components.Definitions
             if (!DA.GetData(4, ref positionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref tool)) { tool = new RobotTool(); }
-            if (!DA.GetDataList(7, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
+            if (!DA.GetDataList(7, externalAxes)) { externalAxes = new List<ExternalAxis>() { }; }
 
             // Construct empty robot
             Robot robot = new Robot();
 
-            // Override position plane when an external axis is coupled
-            for (int i = 0; i < externalAxis.Count; i++)
+            // Override the position plane when an external axis is coupled that moves the robot
+            for (int i = 0; i < externalAxes.Count; i++)
             {
-                if (externalAxis[i] is ExternalLinearAxis)
+                if (externalAxes[i].MovesRobot == true)
                 {
-                    positionPlane = (externalAxis[i] as ExternalLinearAxis).AttachmentPlane;
+                    positionPlane = externalAxes[i].AttachmentPlane;
+                    break;
                 }
             }
 
             // Construct the robot
             try
             {
-                robot = new Robot(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, tool, externalAxis);
+                robot = new Robot(name, meshes, axisPlanes, axisLimits, positionPlane, mountingFrame, tool, externalAxes);
             }
             catch (Exception ex)
             {

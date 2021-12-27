@@ -135,6 +135,11 @@ namespace RobotComponents.Enumerations
         IRB140_6_081,
 
         /// <summary>
+        /// IRB1520ID-4/1.5
+        /// </summary>
+        IRB1520ID_4_150,
+
+        /// <summary>
         /// IRB1600-X/1.2
         /// </summary>
         IRB1600_X_120,

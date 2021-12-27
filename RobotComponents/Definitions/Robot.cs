@@ -281,6 +281,10 @@ namespace RobotComponents.Definitions
             {
                 return IRB140_6_081.GetRobot(positionPlane, tool, externalAxes);
             }
+            else if (preset == RobotPreset.IRB1520ID_4_150)
+            {
+                return IRB1520ID_4_150.GetRobot(positionPlane, tool, externalAxes);
+            }
             else if (preset == RobotPreset.IRB1600_X_120)
             {
                 return IRB1600_X_120.GetRobot(positionPlane, tool, externalAxes);

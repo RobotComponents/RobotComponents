@@ -98,15 +98,15 @@ namespace RobotComponents.Definitions.Presets
                 new Vector3d(0, 0, 1)));
             // Axis 2
             axisPlanes.Add(new Plane(
-                new Point3d(70.0, 0, 352.0),
+                new Point3d(70.0, 0, 352),
                 new Vector3d(0, 1, 0)));
             // Axis 3
             axisPlanes.Add(new Plane(
-                new Point3d(70.0, 0, 712.0),
+                new Point3d(70.0, 0, 712),
                 new Vector3d(0, 1, 0)));
             // Axis 4
             axisPlanes.Add(new Plane(
-                new Point3d(308.5, 0, 712.0),
+                new Point3d(308.5, 0, 712),
                 new Vector3d(1, 0, 0)));
             // Axis 5
             axisPlanes.Add(new Plane(
@@ -145,7 +145,7 @@ namespace RobotComponents.Definitions.Presets
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(
-                new Point3d(515, 0, 712.0),
+                new Point3d(515, 0, 712),
                 new Vector3d(1, 0, 0));
 
             mountingFrame.Rotate(Math.PI* -0.5, mountingFrame.Normal);

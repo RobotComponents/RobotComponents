@@ -182,12 +182,48 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Plane
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
+            {
+                if (Value == null) { target = default; }
+                else if (Value.AttachmentPlane == null) { target = default; }
+                else { target = (Q)(object)new GH_Plane(Value.AttachmentPlane); }
+                return true;
+            }
+
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null) { target = default; }
+                else if (Value.AttachmentPlane == null) { target = default; }
+                else { target = (Q)(object)new GH_Point(Value.AttachmentPlane.Origin); }
+                return true;
+            }
+
             //Cast to Interval
             if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
             {
                 if (Value == null) { target = default; }
                 else if (Value.AxisLimits == null) { target = default; }
                 else { target = (Q)(object)new GH_Interval(Value.AxisLimits); }
+                return true;
+            }
+
+            //Cast to Bool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null) { target = default; }
+                else if (Value.AxisLimits == null) { target = default; }
+                else { target = (Q)(object)new GH_Boolean(Value.MovesRobot); }
+                return true;
+            }
+
+            //Cast to Number
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            {
+                if (Value == null) { target = default; }
+                else if (Value.AxisLimits == null) { target = default; }
+                else { target = (Q)(object)new GH_Number(Value.AxisNumber); }
                 return true;
             }
 

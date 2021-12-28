@@ -108,7 +108,7 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.IRB1520ID_Icon; }
         }
 
         /// <summary>

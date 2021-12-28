@@ -687,7 +687,9 @@
   <ItemGroup>
     <None Include="Resources\ActionUnGroup_Icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\IRB1520ID_Icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SyncMoveOff_Icon.png" />
   </ItemGroup>

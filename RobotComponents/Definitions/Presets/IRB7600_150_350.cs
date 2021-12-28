@@ -33,6 +33,12 @@ namespace RobotComponents.Definitions.Presets
             List<Interval> axisLimits = GetAxisLimits();
             Plane mountingFrame = GetToolMountingFrame();
 
+            // Make empty list with external axes if the value is null
+            if (externalAxes == null)
+            {
+                externalAxes = new List<ExternalAxis>() { };
+            }
+
             // Override the position plane when an external axis is coupled that moves the robot
             for (int i = 0; i < externalAxes.Count; i++)
             {

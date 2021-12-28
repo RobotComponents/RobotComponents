@@ -68,9 +68,7 @@ Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```
-See our [Zenodo page](https://doi.org/10.5281/zenodo.5773814) to cite specific versions. If used in a project, please cite the version of the software that was used.
-
-Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of Robot Components used. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
+Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of Robot Components that is used. On our [Zenodo page](https://doi.org/10.5281/zenodo.5773814) you can find how to cite specific versions. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in depth discussion.
 
 ## Version numbering
 Robot Components uses the following [Semantic Versioning](https://semver.org/) scheme: 

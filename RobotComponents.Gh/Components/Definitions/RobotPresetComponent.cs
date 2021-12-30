@@ -215,6 +215,7 @@ namespace RobotComponents.Gh.Components.Definitions
             // Create the form with all the available robot presets
             List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
             robotPresets.Remove(RobotPreset.EMPTY);
+            robotPresets = robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
             PickRobotForm frm = new PickRobotForm(robotPresets);
 
             // Display the form

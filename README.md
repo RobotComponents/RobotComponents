@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/github/license/RobotComponents/RobotComponents">
   <img src="https://img.shields.io/github/issues-raw/RobotComponents/RobotComponents">
   <img src="https://img.shields.io/github/issues-closed-raw/RobotComponents/RobotComponents">
-  <a href="https://doi.org/10.5281/zenodo.5773815"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5773815.svg" alt="DOI"></a>
+  <a href="https://doi.org/10.5281/zenodo.5773814"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.5773814.svg" alt="DOI"></a>
 </p>
 
 ---

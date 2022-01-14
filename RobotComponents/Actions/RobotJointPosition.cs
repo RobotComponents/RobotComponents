@@ -124,29 +124,10 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class with an empty name from a list with values 
+        /// Initializes a new instance of the Robot Joint Position class with an empty name from a collection with values 
         /// </summary>
-        /// <param name="internalAxisValues"> The user defined internal axis values as a list.</param>
-        public RobotJointPosition(List<double> internalAxisValues)
-        {
-            _referenceType = ReferenceType.CONST;
-            _name = string.Empty;
-
-            double[] values = CheckAxisValues(internalAxisValues.ToArray());
-
-            _val1 = values[0];
-            _val2 = values[1];
-            _val3 = values[2];
-            _val4 = values[3];
-            _val5 = values[4];
-            _val6 = values[5];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class with an empty name from an array. 
-        /// </summary>
-        /// <param name="internalAxisValues">The user defined internal axis values as an array.</param>
-        public RobotJointPosition(double[] internalAxisValues)
+        /// <param name="internalAxisValues"> The user defined internal axis values as a collection.</param>
+        public RobotJointPosition(IList<double> internalAxisValues)
         {
             _referenceType = ReferenceType.CONST;
             _name = string.Empty;
@@ -202,31 +183,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class from a list with values.
+        /// Initializes a new instance of the Robot Joint Position class from a collection with values.
         /// </summary>
         /// <param name="name"> The robot joint position name, must be unique. </param>
-        /// <param name="internalAxisValues"> The user defined internal axis values as a list.</param>
-        public RobotJointPosition(string name, List<double> internalAxisValues)
-        {
-            _referenceType = ReferenceType.CONST;
-            _name = name;
-
-            double[] values = CheckAxisValues(internalAxisValues.ToArray());
-
-            _val1 = values[0];
-            _val2 = values[1];
-            _val3 = values[2];
-            _val4 = values[3];
-            _val5 = values[4];
-            _val6 = values[5];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class from an array.
-        /// </summary>
-        /// <param name="name"> The robot joint position name, must be unique. </param>
-        /// <param name="internalAxisValues">The user defined internal axis values as an array.</param>
-        public RobotJointPosition(string name, double[] internalAxisValues)
+        /// <param name="internalAxisValues"> The user defined internal axis values as a colection.</param>
+        public RobotJointPosition(string name, IList<double> internalAxisValues)
         {
             _referenceType = ReferenceType.CONST;
             _name = name;
@@ -344,7 +305,7 @@ namespace RobotComponents.Actions
         /// <returns> The norm of the joint position. </returns>
         public double Norm()
         {
-            return Math.Sqrt(this.NormSq());
+            return Math.Sqrt(NormSq());
         }
 
         /// <summary>
@@ -486,10 +447,10 @@ namespace RobotComponents.Actions
         /// For missing values 0.0 is used. 
         /// <param name="axisValues"> The list with the internal axis values. </param>
         /// <returns> The array with 6 axis values. </returns>
-        private double[] CheckAxisValues(double[] axisValues)
+        private double[] CheckAxisValues(IList<double> axisValues)
         {
             double[] result = new double[6];
-            int n = Math.Min(axisValues.Length, 6);
+            int n = Math.Min(axisValues.Count, 6);
 
             // Copy definied axis values
             for (int i = 0; i < n; i++)
@@ -673,7 +634,7 @@ namespace RobotComponents.Actions
         /// <returns> The Robot Joint Position with added values. </returns>
         public static RobotJointPosition operator +(RobotJointPosition p, double num)
         {
-            return new RobotJointPosition(p[0] + num, p[1] + num, p[2] + num, p[3] + num, p[4] + num, p[5] + num);
+            return new RobotJointPosition(p.Name, p[0] + num, p[1] + num, p[2] + num, p[3] + num, p[4] + num, p[5] + num);
         }
 
         /// <summary>
@@ -684,7 +645,7 @@ namespace RobotComponents.Actions
         /// <returns> The Robot Joint Position with divide values. </returns>
         public static RobotJointPosition operator -(RobotJointPosition p, double num)
         {
-            return new RobotJointPosition(p[0] - num, p[1] - num, p[2] - num, p[3] - num, p[4] - num, p[5] - num);
+            return new RobotJointPosition(p.Name, p[0] - num, p[1] - num, p[2] - num, p[3] - num, p[4] - num, p[5] - num);
         }
 
         /// <summary>
@@ -695,7 +656,7 @@ namespace RobotComponents.Actions
         /// <returns> The Robot Joint Position with multiplied values. </returns>
         public static RobotJointPosition operator *(RobotJointPosition p, double num)
         {
-            return new RobotJointPosition(p[0] * num, p[1] * num, p[2] * num, p[3] * num, p[4] * num, p[5] * num);
+            return new RobotJointPosition(p.Name, p[0] * num, p[1] * num, p[2] * num, p[3] * num, p[4] * num, p[5] * num);
         }
 
         /// <summary>
@@ -711,7 +672,7 @@ namespace RobotComponents.Actions
                 throw new DivideByZeroException();
             }
 
-            return new RobotJointPosition(p[0] / num, p[1] / num, p[2] / num, p[3] / num, p[4] / num, p[5] / num);
+            return new RobotJointPosition(p.Name, p[0] / num, p[1] / num, p[2] / num, p[3] / num, p[4] / num, p[5] / num);
         }
 
         /// <summary>

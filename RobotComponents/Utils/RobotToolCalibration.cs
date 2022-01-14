@@ -58,10 +58,10 @@ namespace RobotComponents.Utils
 		/// </summary>
 		/// <param name="robot"> The Robot the Joint Positions are given for. </param>
 		/// <param name="robotJointPositions"> The Robot Joint Positions as a list. </param>
-		public RobotToolCalibration(Robot robot, List<RobotJointPosition> robotJointPositions)
+		public RobotToolCalibration(Robot robot, IList<RobotJointPosition> robotJointPositions)
 		{
 			_robot = robot.Duplicate();
-			_robotJointPositions = robotJointPositions;
+			_robotJointPositions = new List<RobotJointPosition>(robotJointPositions);
 			_externalJointPositions = Enumerable.Repeat(new ExternalJointPosition(), _robotJointPositions.Count).ToList();
 
 			Initialize();
@@ -73,11 +73,11 @@ namespace RobotComponents.Utils
 		/// <param name="robot"> The Robot the Joint Positions are given for. </param>
 		/// <param name="robotJointPositions"> The Robot Joint Positions as a list. </param>
 		/// <param name="externalJointPositions"> The External Joint Positions as a list. </param>
-		public RobotToolCalibration(Robot robot, List<RobotJointPosition> robotJointPositions, List<ExternalJointPosition> externalJointPositions)
+		public RobotToolCalibration(Robot robot, IList<RobotJointPosition> robotJointPositions, IList<ExternalJointPosition> externalJointPositions)
         {
 			_robot = robot.Duplicate();
-			_robotJointPositions = robotJointPositions;
-			_externalJointPositions = externalJointPositions;
+			_robotJointPositions = new List<RobotJointPosition>(robotJointPositions);
+			_externalJointPositions = new List<ExternalJointPosition>(externalJointPositions);
 
 			Initialize();
         }

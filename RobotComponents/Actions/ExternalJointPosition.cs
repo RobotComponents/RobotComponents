@@ -127,32 +127,13 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the External Joint Position class with an empty name from a list with values.
         /// </summary>
-        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(List<double> externalAxisValues)
+        /// <param name="externalAxisValues"> The list with the position of the external logical axes. </param>
+        public ExternalJointPosition(IList<double> externalAxisValues)
         {
             _referenceType = ReferenceType.CONST;
             _name = string.Empty;
 
-            double[] values = CheckAxisValues(externalAxisValues.ToArray());
-
-            _val1 = values[0];
-            _val2 = values[1];
-            _val3 = values[2];
-            _val4 = values[3];
-            _val5 = values[4];
-            _val6 = values[5];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Joint Position class with an empty name from an array with values.
-        /// </summary>
-        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(double[] externalAxisValues)
-        {
-            _referenceType = ReferenceType.CONST;
-            _name = string.Empty;
-
-            double[] values = CheckAxisValues(externalAxisValues);
+            double[] values = CheckAxisValues(new List<double>(externalAxisValues).ToArray());
 
             _val1 = values[0];
             _val2 = values[1];
@@ -204,31 +185,11 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Initializes a new instance of the External Joint Position class from a list with values.
+        /// Initializes a new instance of the External Joint Position class from a collection with values.
         /// </summary>
         /// <param name="name"> The external joint position name, must be unique. </param>
-        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(string name, List<double> externalAxisValues)
-        {
-            _referenceType = ReferenceType.CONST;
-            _name = name;
-
-            double[] values = CheckAxisValues(externalAxisValues.ToArray());
-
-            _val1 = values[0];
-            _val2 = values[1];
-            _val3 = values[2];
-            _val4 = values[3];
-            _val5 = values[4];
-            _val6 = values[5];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the External Joint Position class from an array with values.
-        /// </summary>
-        /// <param name="name"> The external joint position name, must be unique. </param>
-        /// <param name="externalAxisValues"> The position of the external logical axes. </param>
-        public ExternalJointPosition(string name, double[] externalAxisValues)
+        /// <param name="externalAxisValues"> The collection with the position of the external logical axes. </param>
+        public ExternalJointPosition(string name, IList<double> externalAxisValues)
         {
             _referenceType = ReferenceType.CONST;
             _name = name;
@@ -526,10 +487,10 @@ namespace RobotComponents.Actions
         /// For missing values 9E9 (not connected) will be used. 
         /// <param name="axisValues"> The array with the positions of the external logical axes. </param>
         /// <returns> The array with the 6 positions of the external axes. </returns>
-        private double[] CheckAxisValues(double[] axisValues)
+        private double[] CheckAxisValues(IList<double> axisValues)
         {
             double[] result = new double[6];
-            int n = Math.Min(axisValues.Length, 6);
+            int n = Math.Min(axisValues.Count, 6);
 
             // Copy definied joint positions
             for (int i = 0; i < n; i++)
@@ -783,6 +744,8 @@ namespace RobotComponents.Actions
                 if (p[i] != _defaultValue) { externalJointPosition[i] = p[i] + num; }
             }
 
+            externalJointPosition.Name = p.Name;
+
             return externalJointPosition;
         }
 
@@ -801,6 +764,8 @@ namespace RobotComponents.Actions
                 if (p[i] != _defaultValue) { externalJointPosition[i] = p[i] - num; }
             }
 
+            externalJointPosition.Name = p.Name;
+
             return externalJointPosition;
         }
 
@@ -818,6 +783,8 @@ namespace RobotComponents.Actions
             {
                 if (p[i] != _defaultValue) { externalJointPosition[i] = p[i] * num; }
             }
+
+            externalJointPosition.Name = p.Name;
 
             return externalJointPosition;
         }
@@ -841,6 +808,8 @@ namespace RobotComponents.Actions
             {
                 if (p[i] != _defaultValue) { externalJointPosition[i] = p[i] / num; }
             }
+
+            externalJointPosition.Name = p.Name;
 
             return externalJointPosition;
         }

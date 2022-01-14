@@ -63,12 +63,12 @@ namespace RobotComponents.Actions
         /// <param name="filePath"> The path where the code files should be saved. </param>
         /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
         /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programModuleName, string systemModuleName, List<Action> actions, string filePath, bool saveToFile, Robot robot)
+        public RAPIDGenerator(string programModuleName, string systemModuleName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
         {
             _programModuleName = programModuleName;
             _systemModuleName = systemModuleName;
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
-            _actions = actions;
+            _actions = new List<Action>(actions);
             _filePath = filePath;
             _saveToFile = saveToFile;
         }
@@ -251,9 +251,9 @@ namespace RobotComponents.Actions
         /// For this you have to call the methode 'CreateProgamCode' first. 
         /// This method also overwrites or creates a file if the property 'SaveToFile' is set equal to true.
         /// </summary>
-        /// <param name="customCode"> Custom user definied base code as list with strings. </param>
+        /// <param name="customCode"> Custom user definied base code as a list with strings. </param>
         /// <returns> The RAPID system code as a list with code lines. </returns>
-        public List<string> CreateSystemModule(List<string> customCode)
+        public List<string> CreateSystemModule(IList<string> customCode)
         {
             _systemModule.Clear();
 
@@ -288,7 +288,7 @@ namespace RobotComponents.Actions
         /// <param name="workObjects"> The work objects that should be added to the system code as a list. </param>
         /// <param name="customCode"> Custom user definied base code as list with strings. </param>
         /// <returns> The RAPID system code as a list with code lines. </returns>
-        public List<string> CreateSystemModule(List<RobotTool> robotTools, List<WorkObject> workObjects, List<string> customCode)
+        public List<string> CreateSystemModule(IList<RobotTool> robotTools, IList<WorkObject> workObjects, IList<string> customCode)
         {
             _systemModule.Clear();
 
@@ -374,7 +374,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="robotTools"> The Robot Tools. </param>
         /// <returns> The robot tool system code as a list with code lines. </returns>
-        private List<string> CreateToolSystemCode(List<RobotTool> robotTools)
+        private List<string> CreateToolSystemCode(IList<RobotTool> robotTools)
         {
             List<string> result = new List<string>() { };
 
@@ -391,7 +391,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="workObjects"> The Work Objects. </param>
         /// <returns> The Work Object system code as a list with code lines. </returns>
-        private List<string> CreateWorkObjectSystemCode(List<WorkObject> workObjects)
+        private List<string> CreateWorkObjectSystemCode(IList<WorkObject> workObjects)
         {
             List<string> result = new List<string>() { };
 
@@ -441,64 +441,26 @@ namespace RobotComponents.Actions
         /// Checks whether the first movement type is an absolute joint movement.
         /// </summary>
         /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
-        private bool CheckFirstMovement(List<Action> actions)
+        private bool CheckFirstMovement(IList<Action> actions)
         {
+            List<Action> ungrouped = new List<Action>() { };
+
             for (int i = 0; i != actions.Count; i++)
             {
-                if (actions[i] is ActionGroup actionGroup)
+                if (actions[i] is ActionGroup group)
                 {
-                    bool result = CheckActionGroup(actionGroup, out bool movements);
-
-                    if (movements == true)
-                    {
-                        return result;
-                    }
+                    ungrouped.AddRange(group.Ungroup());
                 }
-
-                if (actions[i] is Movement movement)
+                else
                 {
-                    if (movement.MovementType == MovementType.MoveAbsJ)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        _errorText.Add("The first movement is not set as an absolute joint movement.");
-                        return false;
-                    }
+                    ungrouped.Add(actions[i]);
                 }
             }
 
-            // Returns true if no movements were defined
-            return true;
-        }
-
-        /// <summary>
-        /// Checks whether the first movement type is an absolute joint movement inside an action group.
-        /// </summary>
-        /// <param name="group"> The group with actions. </param>
-        /// <param name="movements"> Specifies whether a movement was stored inside the action group. </param>
-        /// <returns></returns>
-        private bool CheckActionGroup(ActionGroup group, out bool movements)
-        {
-            movements = false;
-
-            for (int i = 0; i != group.Count; i++)
+            for (int i = 0; i != ungrouped.Count; i++)
             {
-                if (group[i] is ActionGroup actionGroup)
+                if (ungrouped[i] is Movement movement)
                 {
-                    bool result = CheckActionGroup(actionGroup, out movements);
-
-                    if (movements == true)
-                    {
-                        return result;
-                    }
-                }
-
-                if (group[i] is Movement movement)
-                {
-                    movements = true;
-
                     if (movement.MovementType == MovementType.MoveAbsJ)
                     {
                         return true;

@@ -137,7 +137,7 @@ namespace RobotComponents.Definitions
         /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
-        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
+        public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
         {
             _referenceType = ReferenceType.PERS;
             _name = name;
@@ -202,7 +202,7 @@ namespace RobotComponents.Definitions
         /// <param name="toolRotX"> The orientation around the x-axis in radians. </param>
         /// <param name="toolRotY"> The orientation around the y-axis in radians. </param>
         /// <param name="toolRotZ"> The orientation around the y-axis in radians. </param>
-        public RobotTool(string name, List<Mesh> meshes, double toolTransX, double toolTransY,
+        public RobotTool(string name, IList<Mesh> meshes, double toolTransX, double toolTransY,
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
             _referenceType = ReferenceType.PERS;
@@ -271,7 +271,7 @@ namespace RobotComponents.Definitions
         /// <param name="q2"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="q3"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="q4"> The third imaginary coefficient of the quaternion. </param>
-        public RobotTool(string name, List<Mesh> meshes, double x, double y,
+        public RobotTool(string name, IList<Mesh> meshes, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
             _referenceType = ReferenceType.PERS;
@@ -304,7 +304,7 @@ namespace RobotComponents.Definitions
         /// <param name="q2"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="q3"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="q4"> The third imaginary coefficient of the quaternion. </param>
-        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, double x, 
+        public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, double x, 
             double y, double z, double q1, double q2, double q3, double q4)
         {
             _referenceType = ReferenceType.PERS;
@@ -395,7 +395,7 @@ namespace RobotComponents.Definitions
         /// <param name="centerOfGravityOrientation"> The orientation of the tool load coordinate system defined by the principal inertial axes of the 
         /// tool load. Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4). </param>
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
-        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold,
+        public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold,
             double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
             _referenceType = ReferenceType.PERS;
@@ -454,7 +454,7 @@ namespace RobotComponents.Definitions
         /// <param name="mass"> The weight of the tool in kg. </param>
         /// <param name="centerOfGravity"> The position and orientation of the center of gravity of the tool load. </param>
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
-        public RobotTool(string name, List<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
+        public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
             _referenceType = ReferenceType.PERS;
             _name = name;

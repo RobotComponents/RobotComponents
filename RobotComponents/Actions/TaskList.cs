@@ -69,24 +69,12 @@ namespace RobotComponents.Actions
         /// Initializes a new instance of the Tasks class.
         /// </summary>
         /// <param name="name"> The name of the set with tasks. </param>
-        /// <param name="tasks"> The tasks names as a list with strings. </param>
-        public TaskList(string name, List<string> tasks)
+        /// <param name="tasks"> The tasks names as a collection with strings. </param>
+        public TaskList(string name, IList<string> tasks)
         {
             _referenceType = ReferenceType.PERS;
             _name = name;
-            _taskNames = tasks;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Tasks class.
-        /// </summary>
-        /// <param name="name"> The name of the collection with tasks. </param>
-        /// <param name="tasks"> The tasks names as an array with strings. </param>
-        public TaskList(string name, string[] tasks)
-        {
-            _referenceType = ReferenceType.PERS;
-            _name = name;
-            _taskNames = tasks.ToList();
+            _taskNames = new List<string>(tasks);
         }
 
         /// <summary>

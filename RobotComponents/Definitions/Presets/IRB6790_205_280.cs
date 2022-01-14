@@ -25,7 +25,7 @@ namespace RobotComponents.Definitions.Presets
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns> The Robot preset. </returns>
-        public static Robot GetRobot(Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxes = null)
+        public static Robot GetRobot(Plane positionPlane, RobotTool tool, IList<ExternalAxis> externalAxes = null)
         {
             string name = "IRB6790-205/2.8";
             List<Mesh> meshes = GetMeshes();

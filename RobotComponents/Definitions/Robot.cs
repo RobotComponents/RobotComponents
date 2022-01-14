@@ -109,13 +109,13 @@ namespace RobotComponents.Definitions
         /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
         /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
-        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool)
         {
             // Update robot related fields
             _name = name;
-            _meshes = meshes;
-            _internalAxisPlanes = internalAxisPlanes;
-            _internalAxisLimits = internalAxisLimits;
+            _meshes = new List<Mesh>(meshes);
+            _internalAxisPlanes = new List<Plane>(internalAxisPlanes);
+            _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
 
@@ -149,13 +149,13 @@ namespace RobotComponents.Definitions
         /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The attached external axes. </param>
-        public Robot(string name, List<Mesh> meshes, List<Plane> internalAxisPlanes, List<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, List<ExternalAxis> externalAxes)
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, IList<ExternalAxis> externalAxes)
         {
             // Robot related fields
             _name = name;
-            _meshes = meshes;
-            _internalAxisPlanes = internalAxisPlanes;
-            _internalAxisLimits = internalAxisLimits;
+            _meshes = new List<Mesh>(meshes);
+            _internalAxisPlanes = new List<Plane>(internalAxisPlanes);
+            _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
 
@@ -165,7 +165,7 @@ namespace RobotComponents.Definitions
             CalculateAttachedToolPlane();
 
             // External axis related fields
-            _externalAxes = externalAxes;
+            _externalAxes = new List<ExternalAxis>(externalAxes);
             _externalAxisPlanes = new List<Plane>();
             _externalAxisLimits = new List<Interval>();
             UpdateExternalAxisFields();
@@ -227,7 +227,7 @@ namespace RobotComponents.Definitions
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns></returns>
-        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool, List<ExternalAxis> externalAxes = null)
+        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool, IList<ExternalAxis> externalAxes = null)
         {
             // Check Robot Tool data
             if (tool == null) 

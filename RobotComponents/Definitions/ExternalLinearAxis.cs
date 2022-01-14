@@ -199,7 +199,7 @@ namespace RobotComponents.Definitions
         /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
         /// <param name="baseMeshes"> The base mesh. </param>
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes)
         {
             axis.Unitize();
 
@@ -252,7 +252,7 @@ namespace RobotComponents.Definitions
         /// <param name="axisLimits"> The movement limits of the external linear axis. </param>
         /// <param name="baseMeshes"> The base mesh. </param>
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes)
         {
             _name = name;
             _attachmentPlane = attachmentPlane;
@@ -390,7 +390,7 @@ namespace RobotComponents.Definitions
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         /// <param name="axisLogic"> The axis logic number. </param>
         /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, string axisLogic, bool movesRobot = true)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes, string axisLogic, bool movesRobot = true)
         {
             axis.Unitize();
 
@@ -449,7 +449,7 @@ namespace RobotComponents.Definitions
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         /// <param name="axisLogic"> The axis logic number. </param>
         /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, string axisLogic, bool movesRobot = true)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes, string axisLogic, bool movesRobot = true)
         {
             _name = name;
             _attachmentPlane = attachmentPlane;
@@ -559,7 +559,7 @@ namespace RobotComponents.Definitions
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         /// <param name="axisLogic"> The axis logic number. </param>
         /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, int axisLogic, bool movesRobot = true)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Vector3d axis, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes, int axisLogic, bool movesRobot = true)
         {
             axis.Unitize();
 
@@ -616,7 +616,7 @@ namespace RobotComponents.Definitions
         /// <param name="linkMeshes"> The link mesh posed for an external axis value set to 0. </param>
         /// <param name="axisLogic"> The axis logic number. </param>
         /// <param name="movesRobot"> Specifies whether the external axis moves a robot. </param>
-        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, List<Mesh> baseMeshes, List<Mesh> linkMeshes, int axisLogic, bool movesRobot = true)
+        public ExternalLinearAxis(string name, Plane attachmentPlane, Plane axisPlane, Interval axisLimits, IList<Mesh> baseMeshes, IList<Mesh> linkMeshes, int axisLogic, bool movesRobot = true)
         {
             _name = name;
             _attachmentPlane = attachmentPlane;
@@ -687,7 +687,7 @@ namespace RobotComponents.Definitions
         /// <returns> A deep copy of the External Linear Axis instance as an External Axis. </returns>
         public override ExternalAxis DuplicateExternalAxis()
         {
-            return new ExternalLinearAxis(this) as ExternalAxis;
+            return new ExternalLinearAxis(this);
         }
 
         /// <summary>
@@ -696,7 +696,7 @@ namespace RobotComponents.Definitions
         /// <returns> A deep copy of the External Linear Axis instance as an External Axis without meshes. </returns>
         public override ExternalAxis DuplicateExternalAxisWithoutMesh()
         {
-            return new ExternalLinearAxis(this, false) as ExternalAxis;
+            return new ExternalLinearAxis(this, false);
         }
         #endregion
 

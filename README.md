@@ -117,7 +117,7 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 ## License
 Robot Components
 
-Copyright (c) 2018-2021 [The Robot Components authors and / or their affiliations](AUTHORS.md)
+Copyright (c) 2018-2022 [The Robot Components authors and / or their affiliations](AUTHORS.md)
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 

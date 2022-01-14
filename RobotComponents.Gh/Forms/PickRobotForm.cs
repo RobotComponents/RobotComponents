@@ -16,7 +16,7 @@ namespace RobotComponents.Gh.Forms
     public partial class PickRobotForm : Form
     {
         public int RobotIndex = 0;
-        private List<RobotPreset> robotPresets;
+        private readonly List<RobotPreset> _robotPresets;
 
         public PickRobotForm()
         {
@@ -32,7 +32,7 @@ namespace RobotComponents.Gh.Forms
                 comboBox1.Items.Add(PickRobotForm.GetRobotPresetName(items[i]));
             }
 
-            robotPresets = items;
+            _robotPresets = items;
         }
 
         private void PickRobot_Load(object sender, EventArgs e)
@@ -40,12 +40,12 @@ namespace RobotComponents.Gh.Forms
 
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = PickRobotForm.GetRobotPresetName(robotPresets[comboBox1.SelectedIndex]);
+            this.labelNameInfo.Text = PickRobotForm.GetRobotPresetName(_robotPresets[comboBox1.SelectedIndex]);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             RobotIndex = comboBox1.SelectedIndex;
             this.Close();

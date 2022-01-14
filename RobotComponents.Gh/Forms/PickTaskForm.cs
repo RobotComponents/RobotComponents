@@ -35,13 +35,13 @@ namespace RobotComponents.Gh.Forms
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
             TaskIndex = comboBox1.SelectedIndex;
             this.Close();
         }
 
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void ComboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             this.labelNameInfo.Text = RemoteConnectionComponent.Tasks[comboBox1.SelectedIndex].Name.ToString();
             this.labelTaskTypeInfo.Text = RemoteConnectionComponent.Tasks[comboBox1.SelectedIndex].TaskType.ToString();

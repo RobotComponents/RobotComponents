@@ -315,6 +315,35 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast from Movement Goo
+            if (typeof(GH_Movement).IsAssignableFrom(source.GetType()))
+            {
+                GH_Movement movementGoo = source as GH_Movement;
+                Value = movementGoo.Value;
+                return true;
+            }
+
+            //Cast from Action
+            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
+            {
+                if (source is Movement action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from Action Goo
+            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
+            {
+                GH_Action actionGoo = source as GH_Action;
+                if (actionGoo.Value is Movement action)
+                {
+                    Value = action;
+                    return true;
+                }
+            }
+
             //Cast from Target
             if (typeof(ITarget).IsAssignableFrom(source.GetType()))
             {
@@ -360,27 +389,6 @@ namespace RobotComponents.Gh.Goos.Actions
                 GH_JointTarget targetGoo = (GH_JointTarget)source;
                 Value = new Movement(targetGoo.Value);
                 return true;
-            }
-
-            //Cast from Action
-            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
-            {
-                if (source is Movement action)
-                {
-                    Value = action;
-                    return true;
-                }
-            }
-
-            //Cast from Action Goo
-            if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
-            {
-                GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is Movement action)
-                {
-                    Value = action;
-                    return true;
-                }
             }
 
             //Cast from Instruction

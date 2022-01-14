@@ -66,10 +66,10 @@ namespace RobotComponents.Actions
         /// Initializes a new instance of the Action Group class with an empty name.
         /// </summary>
         /// <param name="actions"> The list with actions. </param>
-        public ActionGroup(List<Action> actions)
+        public ActionGroup(IList<Action> actions)
         {
             _name = string.Empty;
-            _actions = actions;
+            _actions = new List<Action>(actions);
         }
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="name"> The name of the Action Group. </param>
         /// <param name="actions"> The list with actions. </param>
-        public ActionGroup(string name, List<Action> actions)
+        public ActionGroup(string name, IList<Action> actions)
         {
             _name = name;
-            _actions = actions;
+            _actions = new List<Action>(actions);
         }
 
         /// <summary>
@@ -149,6 +149,113 @@ namespace RobotComponents.Actions
         public Action[] DuplicateToArray()
         {
             return _actions.ConvertAll(action => action.DuplicateAction()).ToArray();
+        }
+
+        /// <summary>
+        /// Adds and action to the end of this action group.
+        /// </summary>
+        /// <param name="action"></param>
+        public void Add(Action action)
+        {
+            _actions.Add(action);
+        }
+
+        /// <summary>
+        /// Adds the elements of the specified collection with actions to the end of this action group.
+        /// </summary>
+        /// <param name="collection"> The colleciton with actions. </param>
+        public void AddRange(IList<Action> collection)
+        {
+            _actions.AddRange(new List<Action>(collection));
+        }
+
+        /// <summary>
+        /// Removes all elements from the action group.
+        /// </summary>
+        public void Clear()
+        {
+            _actions.Clear();
+        }
+
+        /// <summary>
+        /// Determines the index of a specific item in the list.
+        /// </summary>
+        /// <param name="action"> The object to locate in the list. </param>
+        /// <returns> The index of value if found in the list; otherwise, -1. </returns>
+        public int IndexOf(Action action)
+        {
+            return _actions.IndexOf(action);
+        }
+
+        /// <summary>
+        /// Inserts an item to the list at the specified index.
+        /// </summary>
+        /// <param name="index"> The zero-based index at which value should be inserted. </param>
+        /// <param name="action"> The object to insert into the list. </param>
+        public void Insert(int index, Action action)
+        {
+            _actions.Insert(index, action);
+        }
+
+        /// <summary>
+        /// Determines whether the list contains a specific value.
+        /// </summary>
+        /// <param name="action"> The object to locate in the List. </param>
+        /// <returns> True if the Action is found in the list; otherwise, false. </returns>
+        public bool Contains(Action action)
+        {
+            return _actions.Contains(action);
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a specific object from the List.
+        /// </summary>
+        /// <param name="action"> The object to remove from the IList. </param>
+        public void Remove(Action action)
+        {
+            _actions.Remove(action);
+        }
+
+        /// <summary>
+        /// Removes the list item at the specified index.
+        /// </summary>
+        /// <param name="index"> The zero-based index of the item to remove. </param>
+        public void RemoveAt(int index)
+        {
+            _actions.RemoveAt(index);
+        }
+
+        /// <summary>
+        /// Copies the elements of the ICollection to an Array, starting at a particular Array index.
+        /// </summary>
+        /// <param name="array"> The one-dimensional Array that is the destination of the elements copied from ICollection. The Array must have zero-based indexing. </param>
+        /// <param name="index"> The zero-based index in array at which copying begins. </param>
+        public void CopyTo(Action[] array, int index)
+        {
+            _actions.CopyTo(array, index);
+        }
+
+        /// <summary>
+        /// Returns the actions inside this group including the actions of the groups that are inside this group.
+        /// </summary>
+        /// <returns> List with Actions. </returns>
+        public List<Action> Ungroup()
+        {
+            List<Action> result = new List<Action>() { };
+
+            for (int i = 0; i < _actions.Count; i++)
+            {
+                if (_actions[i] is ActionGroup group)
+                {
+                    result.AddRange(group.Ungroup());
+                }
+                else
+                {
+                    result.Add(_actions[i]);
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -281,6 +388,22 @@ namespace RobotComponents.Actions
         {
             get { return _actions[index]; }
             set { _actions[index] = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the action collection has a fixed size.
+        /// </summary>
+        public bool IsFixedSize
+        {
+            get { return false; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the list is read-only.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return false; }
         }
         #endregion
     }

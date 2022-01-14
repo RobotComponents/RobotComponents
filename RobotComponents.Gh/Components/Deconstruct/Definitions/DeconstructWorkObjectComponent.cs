@@ -62,16 +62,19 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref workObject)) { return; }
 
-            // Check if the object is valid
-            if (!workObject.IsValid)
+            if (workObject != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is not valid");
-            }
+                // Check if the object is valid
+                if (!workObject.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Work Object is not valid");
+                }
 
-            // Output
-            DA.SetData(0, workObject.Name);
-            DA.SetData(1, workObject.Plane);
-            DA.SetData(2, workObject.ExternalAxis);
+                // Output
+                DA.SetData(0, workObject.Name);
+                DA.SetData(1, workObject.Plane);
+                DA.SetData(2, workObject.ExternalAxis);
+            }
         }
 
         #region properties

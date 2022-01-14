@@ -64,18 +64,21 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref speedData)) { return; }
 
-            // Check if the object is valid
-            if (!speedData.IsValid)
+            if (speedData != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Speed Data is not valid");
-            }
+                // Check if the object is valid
+                if (!speedData.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Speed Data is not valid");
+                }
 
-            // Output
-            DA.SetData(0, speedData.Name);
-            DA.SetData(1, speedData.V_TCP);
-            DA.SetData(2, speedData.V_ORI);
-            DA.SetData(3, speedData.V_LEAX);
-            DA.SetData(4, speedData.V_REAX);
+                // Output
+                DA.SetData(0, speedData.Name);
+                DA.SetData(1, speedData.V_TCP);
+                DA.SetData(2, speedData.V_ORI);
+                DA.SetData(3, speedData.V_LEAX);
+                DA.SetData(4, speedData.V_REAX);
+            }
         }
 
         #region properties

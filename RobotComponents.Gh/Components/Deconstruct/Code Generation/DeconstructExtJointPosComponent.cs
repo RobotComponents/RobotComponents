@@ -66,20 +66,23 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref extJointPosition)) { return; }
 
-            // Check if the object is valid
-            if (!extJointPosition.IsValid)
+            if (extJointPosition != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Joint Position is not valid");
-            }
+                // Check if the object is valid
+                if (!extJointPosition.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Joint Position is not valid");
+                }
 
-            // Output
-            DA.SetData(0, extJointPosition.Name);
-            DA.SetData(1, extJointPosition[0]);
-            DA.SetData(2, extJointPosition[1]);
-            DA.SetData(3, extJointPosition[2]);
-            DA.SetData(4, extJointPosition[3]);
-            DA.SetData(5, extJointPosition[4]);
-            DA.SetData(6, extJointPosition[5]);
+                // Output
+                DA.SetData(0, extJointPosition.Name);
+                DA.SetData(1, extJointPosition[0]);
+                DA.SetData(2, extJointPosition[1]);
+                DA.SetData(3, extJointPosition[2]);
+                DA.SetData(4, extJointPosition[3]);
+                DA.SetData(5, extJointPosition[4]);
+                DA.SetData(6, extJointPosition[5]);
+            }
         }
 
         #region properties

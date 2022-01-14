@@ -67,21 +67,24 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref externalLinearAxis)) { return; }
 
-            // Check if the object is valid
-            if (!externalLinearAxis.IsValid)
+            if (externalLinearAxis != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is not valid");
-            }
+                // Check if the object is valid
+                if (!externalLinearAxis.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Linear Axis is not valid");
+                }
 
-            // Output
-            DA.SetData(0, externalLinearAxis.Name);
-            DA.SetData(1, externalLinearAxis.AttachmentPlane);
-            DA.SetData(2, externalLinearAxis.AxisPlane.ZAxis);
-            DA.SetData(3, externalLinearAxis.AxisLimits);
-            DA.SetData(4, externalLinearAxis.BaseMesh);
-            DA.SetData(5, externalLinearAxis.LinkMesh);
-            DA.SetData(6, externalLinearAxis.AxisLogic);
-            DA.SetData(7, externalLinearAxis.MovesRobot);
+                // Output
+                DA.SetData(0, externalLinearAxis.Name);
+                DA.SetData(1, externalLinearAxis.AttachmentPlane);
+                DA.SetData(2, externalLinearAxis.AxisPlane.ZAxis);
+                DA.SetData(3, externalLinearAxis.AxisLimits);
+                DA.SetData(4, externalLinearAxis.BaseMesh);
+                DA.SetData(5, externalLinearAxis.LinkMesh);
+                DA.SetData(6, externalLinearAxis.AxisLogic);
+                DA.SetData(7, externalLinearAxis.MovesRobot);
+            }
         }
 
         #region properties

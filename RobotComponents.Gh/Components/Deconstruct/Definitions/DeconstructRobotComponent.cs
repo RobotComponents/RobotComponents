@@ -78,57 +78,60 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref robot)) { return; }
 
-            // Check if the input is valid
-            if (!robot.IsValid)
+            if (robot != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Info is not Valid");
-            }
-
-            // Output meshes (only link meshes, no robot tool)
-            List<Mesh> meshes = new List<Mesh>();
-
-            // Add display meshes
-            _meshes.Clear();
-            if (robot.Meshes != null)
-            {
-                for (int i = 0; i < 7; i++)
+                // Check if the input is valid
+                if (!robot.IsValid)
                 {
-                    _meshes.Add(robot.Meshes[i]);
-                    meshes.Add(robot.Meshes[i]);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot is not valid");
                 }
-            }
 
-            if (robot.Tool.IsValid)
-            {
-                _meshes.Add(robot.Tool.Mesh);
-            }
-            else
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
-            }
+                // Output meshes (only link meshes, no robot tool)
+                List<Mesh> meshes = new List<Mesh>();
 
-            for (int i = 0; i < robot.ExternalAxes.Count; i++)
-            {
-                if (robot.ExternalAxes[i].IsValid)
+                // Add display meshes
+                _meshes.Clear();
+                if (robot.Meshes != null)
                 {
-                    _meshes.Add(robot.ExternalAxes[i].BaseMesh);
-                    _meshes.Add(robot.ExternalAxes[i].LinkMesh);
+                    for (int i = 0; i < 7; i++)
+                    {
+                        _meshes.Add(robot.Meshes[i]);
+                        meshes.Add(robot.Meshes[i]);
+                    }
+                }
+
+                if (robot.Tool.IsValid)
+                {
+                    _meshes.Add(robot.Tool.Mesh);
                 }
                 else
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not Valid");
                 }
+
+                for (int i = 0; i < robot.ExternalAxes.Count; i++)
+                {
+                    if (robot.ExternalAxes[i].IsValid)
+                    {
+                        _meshes.Add(robot.ExternalAxes[i].BaseMesh);
+                        _meshes.Add(robot.ExternalAxes[i].LinkMesh);
+                    }
+                    else
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Axis is not Valid");
+                    }
+                }
+
+                // Output
+                DA.SetData(0, robot.Name);
+                DA.SetDataList(1, meshes);
+                DA.SetDataList(2, robot.InternalAxisPlanes);
+                DA.SetDataList(3, robot.InternalAxisLimits);
+                DA.SetData(4, robot.BasePlane);
+                DA.SetData(5, robot.MountingFrame);
+                DA.SetData(6, robot.Tool);
+                DA.SetDataList(7, robot.ExternalAxes);
             }
-           
-            // Output
-            DA.SetData(0, robot.Name);
-            DA.SetDataList(1, meshes);
-            DA.SetDataList(2, robot.InternalAxisPlanes);
-            DA.SetDataList(3, robot.InternalAxisLimits);
-            DA.SetData(4, robot.BasePlane);
-            DA.SetData(5, robot.MountingFrame);
-            DA.SetData(6, robot.Tool);
-            DA.SetDataList(7, robot.ExternalAxes);
         }
 
         #region properties

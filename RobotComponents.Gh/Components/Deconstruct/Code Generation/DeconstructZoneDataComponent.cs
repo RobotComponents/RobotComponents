@@ -67,21 +67,24 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref zoneData)) { return; }
 
-            // Check if the object is valid
-            if (!zoneData.IsValid)
+            if (zoneData != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Zone Data is not valid");
-            }
+                // Check if the object is valid
+                if (!zoneData.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Zone Data is not valid");
+                }
 
-            // Output
-            DA.SetData(0, zoneData.Name);
-            DA.SetData(1, zoneData.FinePoint);
-            DA.SetData(2, zoneData.PathZoneTCP);
-            DA.SetData(3, zoneData.PathZoneOrientation);
-            DA.SetData(4, zoneData.PathZoneExternalAxes);
-            DA.SetData(5, zoneData.ZoneOrientation);
-            DA.SetData(6, zoneData.ZoneExternalLinearAxes);
-            DA.SetData(7, zoneData.ZoneExternalRotationalAxes);
+                // Output
+                DA.SetData(0, zoneData.Name);
+                DA.SetData(1, zoneData.FinePoint);
+                DA.SetData(2, zoneData.PathZoneTCP);
+                DA.SetData(3, zoneData.PathZoneOrientation);
+                DA.SetData(4, zoneData.PathZoneExternalAxes);
+                DA.SetData(5, zoneData.ZoneOrientation);
+                DA.SetData(6, zoneData.ZoneExternalLinearAxes);
+                DA.SetData(7, zoneData.ZoneExternalRotationalAxes);
+            }
         }
 
         #region properties

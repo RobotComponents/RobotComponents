@@ -66,20 +66,23 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref externalRotationalAxis)) { return; }
 
-            // Check if the object is valid
-            if (!externalRotationalAxis.IsValid)
+            if (externalRotationalAxis != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is not valid");
-            }
+                // Check if the object is valid
+                if (!externalRotationalAxis.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The External Rotational Axis is not valid");
+                }
 
-            // Output
-            DA.SetData(0, externalRotationalAxis.Name);
-            DA.SetData(1, externalRotationalAxis.AxisPlane);
-            DA.SetData(2, externalRotationalAxis.AxisLimits);
-            DA.SetData(3, externalRotationalAxis.BaseMesh);
-            DA.SetData(4, externalRotationalAxis.LinkMesh);
-            DA.SetData(5, externalRotationalAxis.AxisLogic);
-            DA.SetData(6, externalRotationalAxis.MovesRobot);
+                // Output
+                DA.SetData(0, externalRotationalAxis.Name);
+                DA.SetData(1, externalRotationalAxis.AxisPlane);
+                DA.SetData(2, externalRotationalAxis.AxisLimits);
+                DA.SetData(3, externalRotationalAxis.BaseMesh);
+                DA.SetData(4, externalRotationalAxis.LinkMesh);
+                DA.SetData(5, externalRotationalAxis.AxisLogic);
+                DA.SetData(6, externalRotationalAxis.MovesRobot);
+            }
         }
 
         #region properties

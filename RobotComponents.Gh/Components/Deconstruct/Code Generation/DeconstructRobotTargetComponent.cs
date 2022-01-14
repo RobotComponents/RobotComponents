@@ -63,17 +63,20 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref target)) { return; }
 
-            // Check if the object is valid
-            if (!target.IsValid)
+            if (target != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is not valid");
-            }
+                // Is Valid?
+                if (!target.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Target is not valid");
+                }
 
-            // Output
-            DA.SetData(0, target.Name);
-            DA.SetData(1, target.Plane);
-            DA.SetData(2, target.AxisConfig);
-            DA.SetData(3, target.ExternalJointPosition);
+                // Output
+                DA.SetData(0, target.Name);
+                DA.SetData(1, target.Plane);
+                DA.SetData(2, target.AxisConfig);
+                DA.SetData(3, target.ExternalJointPosition);
+            }
         }
 
         #region properties

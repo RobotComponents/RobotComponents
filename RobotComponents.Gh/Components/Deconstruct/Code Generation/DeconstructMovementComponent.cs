@@ -67,20 +67,23 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref movement)) { return; }
 
-            // Check if the object is valid
-            if (!movement.IsValid)
+            if (movement != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
-            }
+                // Check if the object is valid
+                if (!movement.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Movement is not valid");
+                }
 
-            // Output
-            DA.SetData(0, movement.Target);
-            DA.SetData(1, movement.SpeedData);
-            DA.SetData(2, (int)movement.MovementType);
-            DA.SetData(3, movement.ZoneData);
-            DA.SetData(4, movement.RobotTool);
-            DA.SetData(5, movement.WorkObject);
-            DA.SetData(6, movement.DigitalOutput);
+                // Output
+                DA.SetData(0, movement.Target);
+                DA.SetData(1, movement.SpeedData);
+                DA.SetData(2, (int)movement.MovementType);
+                DA.SetData(3, movement.ZoneData);
+                DA.SetData(4, movement.RobotTool);
+                DA.SetData(5, movement.WorkObject);
+                DA.SetData(6, movement.DigitalOutput);
+            }
         }
 
         #region properties

@@ -62,16 +62,19 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref jointTarget)) { return; }
 
-            // Check if the object is valid
-            if (!jointTarget.IsValid)
+            if (jointTarget != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Joint Target is not valid");
-            }
+                // Check if the object is valid
+                if (!jointTarget.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Joint Target is not valid");
+                }
 
-            // Output
-            DA.SetData(0, jointTarget.Name);
-            DA.SetData(1, jointTarget.RobotJointPosition);
-            DA.SetData(2, jointTarget.ExternalJointPosition);
+                // Output
+                DA.SetData(0, jointTarget.Name);
+                DA.SetData(1, jointTarget.RobotJointPosition);
+                DA.SetData(2, jointTarget.ExternalJointPosition);
+            }
         }
 
         #region properties

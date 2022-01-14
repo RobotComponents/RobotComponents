@@ -66,20 +66,23 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
             // Catch the input data
             if (!DA.GetData(0, ref robJointPosition)) { return; }
 
-            // Check if the object is valid
-            if (!robJointPosition.IsValid)
+            if (robJointPosition != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Joint Position is not valid");
-            }
+                // Check if the object is valid
+                if (!robJointPosition.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Joint Position is not valid");
+                }
 
-            // Output
-            DA.SetData(0, robJointPosition.Name);
-            DA.SetData(1, robJointPosition[0]);
-            DA.SetData(2, robJointPosition[1]);
-            DA.SetData(3, robJointPosition[2]);
-            DA.SetData(4, robJointPosition[3]);
-            DA.SetData(5, robJointPosition[4]);
-            DA.SetData(6, robJointPosition[5]);
+                // Output
+                DA.SetData(0, robJointPosition.Name);
+                DA.SetData(1, robJointPosition[0]);
+                DA.SetData(2, robJointPosition[1]);
+                DA.SetData(3, robJointPosition[2]);
+                DA.SetData(4, robJointPosition[3]);
+                DA.SetData(5, robJointPosition[4]);
+                DA.SetData(6, robJointPosition[5]);
+            }
         }
 
         #region properties

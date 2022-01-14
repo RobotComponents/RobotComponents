@@ -66,20 +66,23 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref robotTool)) { return; }
 
-            // Check if the object is valid
-            if (!robotTool.IsValid)
+            if (robotTool != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
-            }
+                // Check if the object is valid
+                if (!robotTool.IsValid)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
+                }
 
-            // Output
-            DA.SetData(0, robotTool.Name);
-            DA.SetData(1, robotTool.Mesh);
-            DA.SetData(2, robotTool.AttachmentPlane);
-            DA.SetData(3, robotTool.ToolPlane);
-            DA.SetData(4, robotTool.Mass);
-            DA.SetData(5, robotTool.CenterOfGravity);
-            DA.SetData(6, robotTool.Inertia);
+                // Output
+                DA.SetData(0, robotTool.Name);
+                DA.SetData(1, robotTool.Mesh);
+                DA.SetData(2, robotTool.AttachmentPlane);
+                DA.SetData(3, robotTool.ToolPlane);
+                DA.SetData(4, robotTool.Mass);
+                DA.SetData(5, robotTool.CenterOfGravity);
+                DA.SetData(6, robotTool.Inertia);
+            }
         }
 
         #region properties

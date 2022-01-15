@@ -267,7 +267,7 @@ namespace RobotComponents.Actions
             _name = target.Name;
             _plane = new Plane(target.Plane);
             _axisConfig = target.AxisConfig;
-            _externalJointPosition = target.ExternalJointPosition;
+            _externalJointPosition = target.ExternalJointPosition.Duplicate();
             _quat = target.Quat;
         }
 

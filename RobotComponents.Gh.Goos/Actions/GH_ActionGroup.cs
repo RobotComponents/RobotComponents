@@ -3,6 +3,8 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -233,6 +235,38 @@ namespace RobotComponents.Gh.Goos.Actions
                 if (actionGoo.Value is ActionGroup action)
                 {
                     Value = action;
+                    return true;
+                }
+            }
+
+            //Cast from Geometry Group Goo
+            if (typeof(GH_GeometryGroup).IsAssignableFrom(source.GetType()))
+            {
+                GH_GeometryGroup groupGoo = source as GH_GeometryGroup;
+                List<IGH_GeometricGoo> goos = groupGoo.Objects;
+                List<Action> actions = new List<Action>() { };
+                bool nonAction = false;
+
+                for (int i = 0; i < goos.Count; i++)
+                {
+                    if (goos[i] is GH_GeometricGoo<Action> geometricGoo)
+                    {
+                        actions.Add(geometricGoo.Value);
+                    }
+                    else if (goos[i] is GH_Goo<Action> goo)
+                    {
+                        actions.Add(goo.Value);
+                    }
+                    else
+                    {
+                        nonAction = true;
+                        break;
+                    }
+                }
+
+                if (nonAction == false)
+                {
+                    Value = new ActionGroup(actions);
                     return true;
                 }
             }

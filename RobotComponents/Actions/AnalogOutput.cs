@@ -116,7 +116,11 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (_name == null)
+            {
+                return "Empty Analog Output";
+            }
+            else if (!this.IsValid)
             {
                 return "Invalid Analog Output";
             }

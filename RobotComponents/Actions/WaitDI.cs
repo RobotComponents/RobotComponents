@@ -21,7 +21,7 @@ namespace RobotComponents.Actions
     public class WaitDI : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _DIName; // The name of the digital input signal
+        private string _name; // The name of the digital input signal
         private bool _value; // The desired state / value of the digtal input signal
         #endregion
 
@@ -34,7 +34,7 @@ namespace RobotComponents.Actions
         protected WaitDI(SerializationInfo info, StreamingContext context)
         {
             // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _DIName = (string)info.GetValue("Name", typeof(string));
+            _name = (string)info.GetValue("Name", typeof(string));
             _value = (bool)info.GetValue("Value", typeof(bool));
         }
 
@@ -47,7 +47,7 @@ namespace RobotComponents.Actions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Name", _DIName, typeof(string));
+            info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(bool));
         }
         #endregion
@@ -67,7 +67,7 @@ namespace RobotComponents.Actions
         /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
         public WaitDI(string DIName, bool value)
         {
-            _DIName = DIName;
+            _name = DIName;
             Value = value;
         }
 
@@ -77,7 +77,7 @@ namespace RobotComponents.Actions
         /// <param name="waitDI"> The Wait DI instance to duplicate. </param>
         public WaitDI(WaitDI waitDI)
         {
-            _DIName = waitDI.DIName;
+            _name = waitDI.DIName;
             _value = waitDI.Value;
         }
 
@@ -116,6 +116,10 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
+            if (_name == null)
+            {
+                return "Empty Wait for Digital Input";
+            }
             if (!this.IsValid)
             {
                 return "Invalid Wait for Digital Input";
@@ -145,11 +149,11 @@ namespace RobotComponents.Actions
         {
             if (_value == true)
             {
-                return "WaitDI " + _DIName + ", 1;";
+                return "WaitDI " + _name + ", 1;";
             }
             else
             {
-                return "WaitDI " + _DIName + ", 0;";
+                return "WaitDI " + _name + ", 0;";
             }
         }
 
@@ -201,8 +205,8 @@ namespace RobotComponents.Actions
         /// </summary>
         public string DIName 
         { 
-            get { return _DIName; }
-            set { _DIName = value; }
+            get { return _name; }
+            set { _name = value; }
         }
         #endregion
     }

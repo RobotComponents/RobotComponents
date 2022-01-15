@@ -123,6 +123,10 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Action Group";
             }
+            if (_actions.Count == 0)
+            {
+                return "Empty Action Group";
+            }
             else if (_name != string.Empty)
             {
                 return "Action Group (" + this.Name + ")";

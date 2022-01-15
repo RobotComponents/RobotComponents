@@ -419,7 +419,7 @@ namespace RobotComponents.Actions
                     if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
                     {
                         RAPIDGenerator.ZoneDatas.Add(this.Name, this);
-                        RAPIDGenerator.ProgramInstructions.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                        RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }
             }

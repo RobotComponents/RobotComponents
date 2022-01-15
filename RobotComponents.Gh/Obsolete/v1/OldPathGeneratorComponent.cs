@@ -20,19 +20,18 @@ using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This parameter is OBSOLETE and will be removed in the future.", false)]
+    public class OldPathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private Robot _robot;
         private PathGenerator _pathGenerator = new PathGenerator();
         private ForwardKinematics _forwardKinematics = new ForwardKinematics();
-        private bool _outputMovement = false;
-        private bool _outputMovements = false;
         private bool _outputRobotEndPlane = false;
         private bool _outputRobotEndPlanes = false;
         private bool _outputRobotJointPosition = false;
@@ -50,7 +49,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public PathGeneratorComponent()
+        public OldPathGeneratorComponent()
           : base("Path Generator", "PG",
               "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -76,10 +75,8 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <summary>
         /// Stores the variable output parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] outputParameters = new IGH_Param[11]
+        private readonly IGH_Param[] outputParameters = new IGH_Param[9]
         {
-            new Param_Movement() { Name = "Movement", NickName = "M", Description = "The current move object.", Access = GH_ParamAccess.item},
-            new Param_Movement() { Name = "Movements", NickName = "Ms", Description = "The move objects of the whole path.", Access = GH_ParamAccess.list},
             new Param_Plane() { Name = "Robot End Plane", NickName = "EP", Description = "The current position and orientation of tool TCP", Access = GH_ParamAccess.item},
             new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
             new Param_RobotJointPosition() { Name = "Robot Joint Position", NickName = "RJ", Description = "The current Robot Joint Position", Access = GH_ParamAccess.item},
@@ -96,7 +93,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            AddParameter(10);
+            AddParameter(8);
         }
 
         /// <summary>
@@ -157,54 +154,44 @@ namespace RobotComponents.Gh.Components.Simulation
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[0].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[0].NickName));
-                DA.SetData(ind, _pathGenerator.Movements[index]);
+                DA.SetData(ind, _pathGenerator.Planes[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[1].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[1].NickName));
-                DA.SetDataList(ind, _pathGenerator.Movements);
+                DA.SetDataList(ind, _pathGenerator.Planes);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[2].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[2].NickName));
-                DA.SetData(ind, _pathGenerator.Planes[index]);
+                DA.SetData(ind, _pathGenerator.RobotJointPositions[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[3].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[3].NickName));
-                DA.SetDataList(ind, _pathGenerator.Planes);
+                DA.SetDataList(ind, _pathGenerator.RobotJointPositions);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[4].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[4].NickName));
-                DA.SetData(ind, _pathGenerator.RobotJointPositions[index]);
+                DA.SetDataList(ind, _forwardKinematics.PosedExternalAxisPlanes);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[5].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[5].NickName));
-                DA.SetDataList(ind, _pathGenerator.RobotJointPositions);
+                DA.SetData(ind, _pathGenerator.ExternalJointPositions[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[6].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[6].NickName));
-                DA.SetDataList(ind, _forwardKinematics.PosedExternalAxisPlanes);
+                DA.SetDataList(ind, _pathGenerator.ExternalJointPositions);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[7].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[7].NickName));
-                DA.SetData(ind, _pathGenerator.ExternalJointPositions[index]);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[8].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[8].NickName));
-                DA.SetDataList(ind, _pathGenerator.ExternalJointPositions);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(outputParameters[9].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[9].NickName));
                 DA.SetDataList(ind, _pathGenerator.ErrorText);
             }
-            DA.SetDataList(outputParameters[10].Name, _pathGenerator.Paths);
+            DA.SetDataList(outputParameters[8].Name, _pathGenerator.Paths);
         }
 
         #region properties
@@ -214,7 +201,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -222,7 +209,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -241,7 +228,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0B884DA3-BCB4-4CD5-A0EB-409864B34648"); }
+            get { return new Guid("3274D235-082A-445A-BA77-75CD3A7926E0"); }
         }
         #endregion
 
@@ -255,8 +242,6 @@ namespace RobotComponents.Gh.Components.Simulation
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Preview Mesh", MenuItemClickPreviewMesh, true, _previewMesh);
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Output current Movement", MenuItemClickOutputMovement, true, _outputMovement);
-            Menu_AppendItem(menu, "Output all Movements", MenuItemClickOutputMovements, true, _outputMovements);
             Menu_AppendItem(menu, "Output current Robot End Plane", MenuItemClickOutputRobotEndPlane, true, _outputRobotEndPlane);
             Menu_AppendItem(menu, "Output all Robot End Planes", MenuItemClickOutputRobotEndPlanes, true, _outputRobotEndPlanes);
             Menu_AppendItem(menu, "Output current Robot Joint Position", MenuItemClickOutputRobotJointPosition, true, _outputRobotJointPosition);
@@ -282,30 +267,6 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Output current Movement" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputMovement(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output current Movement");
-            _outputMovement = !_outputMovement;
-            AddParameter(0);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output all Movements" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputMovements(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output all Movements");
-            _outputMovements = !_outputMovements;
-            AddParameter(1);
-        }
-
-        /// <summary>
         /// Handles the event when the custom menu item "Output Robot End Plane" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -314,7 +275,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current Robot End Plane");
             _outputRobotEndPlane = !_outputRobotEndPlane;
-            AddParameter(2);
+            AddParameter(0);
         }
 
         /// <summary>
@@ -326,7 +287,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all Robot End Planes");
             _outputRobotEndPlanes = !_outputRobotEndPlanes;
-            AddParameter(3);
+            AddParameter(1);
         }
 
         /// <summary>
@@ -338,7 +299,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current Robot Joint Position");
             _outputRobotJointPosition = !_outputRobotJointPosition;
-            AddParameter(4);
+            AddParameter(2);
         }
 
         /// <summary>
@@ -350,7 +311,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all Robot Joint Positions");
             _outputRobotJointPositions = !_outputRobotJointPositions;
-            AddParameter(5);
+            AddParameter(3);
         }
 
         /// <summary>
@@ -362,7 +323,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current External Axis Planes");
             _outputExternalAxisPlanes = !_outputExternalAxisPlanes;
-            AddParameter(6);
+            AddParameter(4);
         }
 
         /// <summary>
@@ -374,7 +335,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current External Joint Position");
             _outputExternalJointPosition = !_outputExternalJointPosition;
-            AddParameter(7);
+            AddParameter(5);
         }
 
         /// <summary>
@@ -386,7 +347,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all External Joint Positions");
             _outputExternalJointPositions = !_outputExternalJointPositions;
-            AddParameter(8);
+            AddParameter(6);
         }
 
         /// <summary>
@@ -398,7 +359,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all Error Messages");
             _outputErrorMessages = !_outputErrorMessages;
-            AddParameter(9);
+            AddParameter(7);
         }
 
         /// <summary>
@@ -420,8 +381,6 @@ namespace RobotComponents.Gh.Components.Simulation
         public override bool Write(GH_IWriter writer)
         {
             writer.SetBoolean("Set Preview Mesh", _previewMesh);
-            writer.SetBoolean("Output Movement", _outputMovement);
-            writer.SetBoolean("Output Movements", _outputMovements);
             writer.SetBoolean("Output Robot End Plane", _outputRobotEndPlane);
             writer.SetBoolean("Output Robot End Planes", _outputRobotEndPlanes);
             writer.SetBoolean("Output Robot Joint Position", _outputRobotJointPosition);
@@ -441,8 +400,6 @@ namespace RobotComponents.Gh.Components.Simulation
         public override bool Read(GH_IReader reader)
         {
             _previewMesh = reader.GetBoolean("Set Preview Mesh");
-            _outputMovement = reader.GetBoolean("Output Movement");
-            _outputMovements = reader.GetBoolean("Output Movements");
             _outputRobotEndPlane = reader.GetBoolean("Output Robot End Plane");
             _outputRobotEndPlanes = reader.GetBoolean("Output Robot End Planes");
             _outputRobotJointPosition = reader.GetBoolean("Output Robot Joint Position");

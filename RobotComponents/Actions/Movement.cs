@@ -303,7 +303,7 @@ namespace RobotComponents.Actions
             _speedData = movement.SpeedData.Duplicate();
             _zoneData = movement.ZoneData.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
-            _convertedTarget = _target.DuplicateTarget();
+            _target = _target.DuplicateTarget();
 
             if (duplicateMesh == true)
             {

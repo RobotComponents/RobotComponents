@@ -58,27 +58,31 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string DIName = "";
-            bool DIValue = false;
+            string name = "";
+            bool value = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref DIName)) { return; }
-            if (!DA.GetData(1, ref DIValue)) { return; }
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref value)) { return; }
 
-            // Checks if Digital Output Name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(DIName))
+            // Check name
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+
+            if (HelperMethods.StringExeedsCharacterLimit32(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Input Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name exceeds character limit of 32 characters.");
             }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(DIName))
+            if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Input Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name starts with a number which is not allowed in RAPID Code.");
+            }
+            if (HelperMethods.StringStartsWithNumber(name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name constains special characters which is not allowed in RAPID Code.");
             }
 
             // Create the action
-            WaitDI waitDI = new WaitDI(DIName, DIValue);
+            WaitDI waitDI = new WaitDI(name, value);
 
             // Sets Output
             DA.SetData(0, waitDI);

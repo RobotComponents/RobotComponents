@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Drawing;
 // Grasshopper Libs
 using Grasshopper;
@@ -61,11 +62,11 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
-        /// Method to check if a string variable is longer then 32 characters. 
+        /// Method to check if a string is longer then 32 characters. 
         /// </summary>
         /// <param name="variable"> The string to check for its length. </param>
         /// <returns> Returns true if the string longer then 32 characters. Otherwise the return value is false. </returns>
-        public static bool VariableExeedsCharacterLimit32(string variable)
+        public static bool StringExeedsCharacterLimit32(string variable)
         {
             int length = variable.Length;
 
@@ -80,14 +81,30 @@ namespace RobotComponents.Gh.Utils
         /// <summary>
         /// A method to check if a string starts with a digit. 
         /// </summary>
-        /// <param name="variable"> The string variable to check for. </param>
+        /// <param name="variable"> The string to check for. </param>
         /// <returns> Returns a boolean that defines if the string starts with a digit. </returns>
-        public static bool VariableStartsWithNumber(string variable)
+        public static bool StringStartsWithNumber(string variable)
         {
             if (variable.Length > 0)
             {
                 bool isDigit = char.IsNumber(variable[0]); ;
                 return isDigit;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// A method to check if a string contains special characters.
+        /// </summary>
+        /// <param name="variable"> The string to check for. </param>
+        /// <returns> Returns a boolean that defines if the string has special characters. </returns>
+        public static bool StringHasSpecialCharacters(string variable)
+        {
+            if (variable.Length > 0)
+            {
+                Regex rgx = new Regex("[^A-Za-z0-9:_]");
+                return rgx.IsMatch(variable);
             }
 
             return false;

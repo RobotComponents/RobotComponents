@@ -105,16 +105,23 @@ namespace RobotComponents.Gh.Utils
                     }
 
                     // Checks if variable name exceeds max character limit for RAPID Code
-                    if (Utils.HelperMethods.VariableExeedsCharacterLimit32(managedComponent.ToRegister[i]))
+                    if (Utils.HelperMethods.StringExeedsCharacterLimit32(managedComponent.ToRegister[i]))
                     {
                         component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name exceeds character limit of 32 characters.");
                         break;
                     }
 
                     // Checks if variable name starts with a number
-                    if (Utils.HelperMethods.VariableStartsWithNumber(managedComponent.ToRegister[i]))
+                    if (Utils.HelperMethods.StringStartsWithNumber(managedComponent.ToRegister[i]))
                     {
                         component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with a number which is not allowed in RAPID Code.");
+                        break;
+                    }
+
+                    // Check for special characters
+                    if (Utils.HelperMethods.StringHasSpecialCharacters(managedComponent.ToRegister[i]))
+                    {
+                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name contains special characters which is not allowed in RAPID Code.");
                         break;
                     }
                 }

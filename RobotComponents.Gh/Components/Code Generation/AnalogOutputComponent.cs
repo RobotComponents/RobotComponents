@@ -68,19 +68,20 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetData(1, ref value)) { return; }
 
-            // Check variable name
+            // Check name
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
-
-            // Checks if Analog Output Name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(name))
+e
+            if (HelperMethods.StringExeedsCharacterLimit32(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog Output Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name exceeds character limit of 32 characters.");
             }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(name))
+            if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog Output Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name starts with a number which is not allowed in RAPID Code.");
+            }
+            if (HelperMethods.StringStartsWithNumber(name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name constains special characters which is not allowed in RAPID Code.");
             }
 
             // Create the action

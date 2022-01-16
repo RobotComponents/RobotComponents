@@ -97,25 +97,35 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(5, ref update)) { update = true; }
 
             // Checks if module name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(programName))
+            if (HelperMethods.StringExeedsCharacterLimit32(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program Module Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name exceeds character limit of 32 characters.");
             }
-            if (HelperMethods.VariableExeedsCharacterLimit32(systemName))
+            if (HelperMethods.StringExeedsCharacterLimit32(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System Module Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name exceeds character limit of 32 characters.");
             }
 
             // Checks if module name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(programName))
+            if (HelperMethods.StringStartsWithNumber(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program Module Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name starts with a number which is not allowed in RAPID Code.");
             }
-            if (HelperMethods.VariableStartsWithNumber(systemName))
+            if (HelperMethods.StringStartsWithNumber(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System Module Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name starts with a number which is not allowed in RAPID Code.");
             }
-          
+
+            // Check if module name contains special character
+            if (HelperMethods.StringStartsWithNumber(programName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name onstains special characters.");
+            }
+            if (HelperMethods.StringStartsWithNumber(systemName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name onstains special characters.");
+            }
+
             // Updates the rapid Progam and System code
             if (update == true)
             {

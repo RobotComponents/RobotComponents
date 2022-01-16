@@ -60,29 +60,30 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             // Input variables
             string name = "";
-            bool isActive = false;
+            bool value = false;
             
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref isActive)) { return; }
+            if (!DA.GetData(1, ref value)) { return; }
 
-            // Check variable name
+            // Check name
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            // Checks if Digital Output Name exceeds max character limit for RAPID Code
-            if (HelperMethods.VariableExeedsCharacterLimit32(name))
+            if (HelperMethods.StringExeedsCharacterLimit32(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Output Name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name exceeds character limit of 32 characters.");
             }
-
-            // Checks if variable name starts with a number
-            if (HelperMethods.VariableStartsWithNumber(name))
+            if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital Output Name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name starts with a number which is not allowed in RAPID Code.");
+            }
+            if (HelperMethods.StringStartsWithNumber(name))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name constains special characters which is not allowed in RAPID Code.");
             }
 
             // Create the action
-            DigitalOutput digitalOutput = new DigitalOutput(name, isActive);
+            DigitalOutput digitalOutput = new DigitalOutput(name, value);
 
             // Output
             DA.SetData(0, digitalOutput);

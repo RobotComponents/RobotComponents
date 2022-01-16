@@ -206,12 +206,11 @@ namespace RobotComponents.Kinematics
                 _robotJointPositions.RemoveRange(0, interpolations);
                 _externalJointPositions.RemoveRange(0, interpolations);
                 _planes.RemoveRange(0, interpolations);
-                _paths.RemoveAt(0);
             }
 
-            // Remove null
-            _paths.RemoveAll(val => val == null);
-
+            // Set first path as null
+            _paths[0] = null;
+            
             // Remove duplicates from error text
             _errorText = _errorText.Distinct().ToList();
         }

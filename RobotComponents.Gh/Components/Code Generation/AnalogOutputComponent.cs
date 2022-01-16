@@ -70,7 +70,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
             // Check name
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
-e
+
             if (HelperMethods.StringExeedsCharacterLimit32(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name exceeds character limit of 32 characters.");

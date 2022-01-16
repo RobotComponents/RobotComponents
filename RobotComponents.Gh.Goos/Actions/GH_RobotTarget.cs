@@ -194,7 +194,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Plane == null) { target = default; }
                 else { target = (Q)(object)new GH_Plane(Value.Plane); }
                 return true;
             }
@@ -203,7 +202,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Plane == null) { target = default; }
                 else { target = (Q)(object)new GH_Point(Value.Plane.Origin); }
                 return true;
             }
@@ -212,7 +210,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.ExternalJointPosition == null) { target = default; }
                 else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
                 return true;
             }

@@ -168,7 +168,6 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Mesh == null) { target = default; }
                 else { target = (Q)(object)new GH_Mesh(Value.Mesh); }
                 return true;
             }
@@ -177,7 +176,6 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.ToolPlane == null) { target = default; }
                 else { target = (Q)(object)new GH_Plane(Value.ToolPlane); }
                 return true;
             }

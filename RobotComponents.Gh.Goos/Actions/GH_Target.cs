@@ -140,7 +140,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
+                else { target = (Q)Value; }
                 return true;
             }
 
@@ -148,7 +148,9 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_JointTarget(Value as JointTarget); }
+                else if (Value is JointTarget) { target = (Q)(object)new GH_JointTarget(Value as JointTarget); }
+                else if (Value is RobotTarget) { { target = (Q)(object)new GH_JointTarget(); } }
+                else { target = default; }
                 return true;
             }
 
@@ -156,7 +158,9 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_RobotTarget(Value as RobotTarget); }
+                else if (Value is RobotTarget) { target = (Q)(object)new GH_RobotTarget(Value as RobotTarget); }
+                else if (Value is JointTarget) { target = (Q)(object)new GH_RobotTarget(); }
+                else { target = default; }
                 return true;
             }
 
@@ -164,7 +168,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
+                else { target = (Q)Value; }
                 return true;
             }
 
@@ -180,7 +184,7 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
+                else { target = (Q)Value; }
                 return true;
             }
 
@@ -196,7 +200,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.ExternalJointPosition == null) { target = default; }
                 else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
                 return true;
             }

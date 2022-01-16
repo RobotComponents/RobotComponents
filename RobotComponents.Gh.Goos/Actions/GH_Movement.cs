@@ -209,7 +209,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Target == null) { target = default; }
                 else { target = (Q)(object)new GH_Target(Value.Target); }
                 return true;
             }
@@ -218,18 +217,18 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Target == null) { target = default; }
-                else if (Value.Target is RobotTarget robotTarget) { target = (Q)(object)new GH_RobotTarget(robotTarget); }
+                else if (Value.Target is RobotTarget) { target = (Q)(object)new GH_RobotTarget(Value.Target as RobotTarget); }
+                else if (Value.Target is JointTarget) { target = (Q)(object)new GH_RobotTarget(); }
                 else { target = default; }
                 return true;
             }
 
-            //Cast to Robot Target Goo
+            //Cast to Joint Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Target == null) { target = default; }
-                else if (Value.Target is JointTarget jointTarget) { target = (Q)(object)new GH_JointTarget(jointTarget); }
+                else if (Value.Target is JointTarget) { target = (Q)(object)new GH_JointTarget(Value.Target as JointTarget); }
+                else if (Value.Target is RobotTarget) { { target = (Q)(object)new GH_JointTarget(); } }
                 else { target = default; }
                 return true;
             }
@@ -262,7 +261,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.SpeedData == null) { target = default; }
                 else { target = (Q)(object)new GH_SpeedData(Value.SpeedData); }
                 return true;
             }
@@ -271,7 +269,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.ZoneData == null) { target = default; }
                 else { target = (Q)(object)new GH_ZoneData(Value.ZoneData); }
                 return true;
             }
@@ -280,7 +277,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.RobotTool == null) { target = default; }
                 else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
                 return true;
             }
@@ -289,7 +285,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.WorkObject == null) { target = default; }
                 else { target = (Q)(object)new GH_WorkObject(Value.WorkObject); }
                 return true;
             }
@@ -298,7 +293,6 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.DigitalOutput == null) { target = default; }
                 else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
                 return true;
             }

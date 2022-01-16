@@ -167,7 +167,6 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.Tool == null) { target = default; }
                 else { target = (Q)(object)new GH_RobotTool(Value.Tool); }
                 return true;
             }

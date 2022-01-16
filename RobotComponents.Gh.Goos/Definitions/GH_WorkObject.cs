@@ -182,7 +182,6 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
                 if (Value == null) { target = default; }
-                else if (Value.IsValid == false) { target = default; }
                 else { target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis); }
                 return true;
             }

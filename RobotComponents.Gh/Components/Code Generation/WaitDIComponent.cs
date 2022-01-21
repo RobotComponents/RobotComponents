@@ -39,8 +39,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input as text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State of the Digital Input as bool", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the digital input signal as text.", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "Desired state of the digital input signal as bool.", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Definitions;
 using RobotComponents.Utils;
 using RobotComponents.Gh.Goos.Definitions;
 
@@ -157,26 +158,18 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Movement
-            if (typeof(Q).IsAssignableFrom(typeof(Movement)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Movement Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Movement)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Movement(); }
                 else { target = (Q)(object)new GH_Movement(Value); }
                 return true;
             }
 
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
+            //Cast to Movement
+            if (typeof(Q).IsAssignableFrom(typeof(Movement)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -184,15 +177,15 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            //Cast to Instruction
-            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -200,25 +193,51 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Instruction Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
                 else { target = (Q)(object)new GH_Instruction(Value); }
+                return true;
+            }
+
+            //Cast to Instruction
+            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Target(); }
                 else { target = (Q)(object)new GH_Target(Value.Target); }
+                return true;
+            }
+
+            //Cast to Target
+            if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value.Target; }
                 return true;
             }
 
             //Cast to Robot Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_RobotTarget(); }
                 else if (Value.Target is RobotTarget) { target = (Q)(object)new GH_RobotTarget(Value.Target as RobotTarget); }
                 else if (Value.Target is JointTarget) { target = (Q)(object)new GH_RobotTarget(); }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to Robot Target
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTarget)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value.Target is RobotTarget) { target = (Q)Value.Target; }
+                else if (Value.Target is JointTarget) { target = (Q)(object)null; }
                 else { target = default; }
                 return true;
             }
@@ -226,10 +245,116 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Joint Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_JointTarget(); }
                 else if (Value.Target is JointTarget) { target = (Q)(object)new GH_JointTarget(Value.Target as JointTarget); }
                 else if (Value.Target is RobotTarget) { { target = (Q)(object)new GH_JointTarget(); } }
                 else { target = default; }
+                return true;
+            }
+
+            //Cast to Joint Target
+            if (typeof(Q).IsAssignableFrom(typeof(JointTarget)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value.Target is JointTarget) { target = (Q)Value.Target; }
+                else if (Value.Target is RobotTarget) { { target = (Q)(object)null; } }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ExternalJointPosition(); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value.Target.ExternalJointPosition); }
+                return true;
+            }
+
+            //Cast to External Joint Position
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalJointPosition)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.Target.ExternalJointPosition; }
+                return true;
+            }
+
+            //Cast to Speed Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_SpeedData(); }
+                else { target = (Q)(object)new GH_SpeedData(Value.SpeedData); }
+                return true;
+            }
+
+            //Cast to Speed Data
+            if (typeof(Q).IsAssignableFrom(typeof(SpeedData)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.SpeedData; }
+                return true;
+            }
+
+            //Cast to Zone Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ZoneData(); }
+                else { target = (Q)(object)new GH_ZoneData(Value.ZoneData); }
+                return true;
+            }
+
+            //Cast to Zone Data
+            if (typeof(Q).IsAssignableFrom(typeof(ZoneData)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.ZoneData; }
+                return true;
+            }
+
+            //Cast to Robot Tool Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_RobotTool(); }
+                else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
+                return true;
+            }
+
+            //Cast to Robot Tool
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.RobotTool; }
+                return true;
+            }
+
+            //Cast to Work Object Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_WorkObject(); }
+                else { target = (Q)(object)new GH_WorkObject(Value.WorkObject); }
+                return true;
+            }
+
+            //Cast to Work Object
+            if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.WorkObject; }
+                return true;
+            }
+
+            //Cast to Digital Output Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_DigitalOutput(); }
+                else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
+                return true;
+            }
+
+            //Cast to Digital Output
+            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.DigitalOutput; }
                 return true;
             }
 
@@ -241,59 +366,11 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
-            //Cast to External Joint Position
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_ExternalJointPosition(Value.Target.ExternalJointPosition); }
-                return true;
-            }
-
             //Cast to Point
             if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Point(Value.GetGlobalTargetPlane().Origin); }
-                return true;
-            }
-
-            //Cast to Speed Data
-            if (typeof(Q).IsAssignableFrom(typeof(GH_SpeedData)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_SpeedData(Value.SpeedData); }
-                return true;
-            }
-
-            //Cast to Zone Data
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ZoneData)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_ZoneData(Value.ZoneData); }
-                return true;
-            }
-
-            //Cast to Robot Tool
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
-                return true;
-            }
-
-            //Cast to Work Object
-            if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_WorkObject(Value.WorkObject); }
-                return true;
-            }
-
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
                 return true;
             }
 

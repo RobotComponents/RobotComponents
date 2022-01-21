@@ -156,48 +156,38 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
                 else { target = (Q)(object)new GH_ExternalAxis(Value); }
                 return true;
             }
 
-            //Cast to External Linear Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
             {
-                if (Value == null) { target = default; }
-                else if (Value is ExternalLinearAxis) { target = (Q)(object)Value; }
-                else if (Value is ExternalRotationalAxis) { { target = (Q)(object)null; } }
-                else { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to External Linear Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalLinearAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalLinearAxis(); }
                 else if (Value is ExternalLinearAxis) { target = (Q)(object)new GH_ExternalLinearAxis(Value as ExternalLinearAxis); }
                 else if (Value is ExternalRotationalAxis) { { target = (Q)(object)new GH_ExternalLinearAxis(); } }
                 else { target = default; }
                 return true;
             }
 
-            //Cast to External Rotational Axis.
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
+            //Cast to External Linear Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
             {
-                if (Value == null) { target = default; }
-                else if (Value is ExternalRotationalAxis) { target = (Q)(object)Value; }
-                else if (Value is ExternalLinearAxis) { { target = (Q)(object)null; } }
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value is ExternalLinearAxis) { target = (Q)(object)Value; }
+                else if (Value is ExternalRotationalAxis) { { target = (Q)(object)null; } }
                 else { target = default; }
                 return true;
             }
@@ -205,9 +195,19 @@ namespace RobotComponents.Gh.Goos.Definitions
             //Cast to External Rotational Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalRotationalAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalRotationalAxis(); }
                 else if (Value is ExternalRotationalAxis) { target = (Q)(object)new GH_ExternalRotationalAxis(Value as ExternalRotationalAxis); }
                 else if (Value is ExternalLinearAxis) { { target = (Q)(object)new GH_ExternalRotationalAxis(); } }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to External Rotational Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value is ExternalRotationalAxis) { target = (Q)(object)Value; }
+                else if (Value is ExternalLinearAxis) { { target = (Q)(object)null; } }
                 else { target = default; }
                 return true;
             }
@@ -273,13 +273,6 @@ namespace RobotComponents.Gh.Goos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as ExternalAxis;
-                return true;
-            }
-
             //Cast from External Axis Goo
             if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
             {
@@ -288,8 +281,8 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast from External Linear Axis
-            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Axis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = source as ExternalAxis;
                 return true;
@@ -303,8 +296,8 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast from External Rotatioanl Axis
-            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Linear Axis
+            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
                 Value = source as ExternalAxis;
                 return true;
@@ -314,7 +307,14 @@ namespace RobotComponents.Gh.Goos.Definitions
             if (typeof(GH_ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
                 GH_ExternalRotationalAxis externalRotationalAxisGoo = source as GH_ExternalRotationalAxis;
-                Value = externalRotationalAxisGoo.Value; 
+                Value = externalRotationalAxisGoo.Value;
+                return true;
+            }
+
+            //Cast from External Rotatioanl Axis
+            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as ExternalAxis;
                 return true;
             }
 

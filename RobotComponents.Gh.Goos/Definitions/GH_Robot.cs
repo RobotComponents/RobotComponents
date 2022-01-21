@@ -155,19 +155,35 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
+            //Cast to Robot Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Robot)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_Robot(); }
+                else { target = (Q)(object)new GH_Robot(Value); }
+                return true;
+            }
+
             //Cast to Robot
             if (typeof(Q).IsAssignableFrom(typeof(Robot)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to Robot Tool Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_RobotTool(); }
+                else { target = (Q)(object)new GH_RobotTool(Value.Tool); }
                 return true;
             }
 
             //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_RobotTool(Value.Tool); }
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.Tool; }
                 return true;
             }
 
@@ -184,10 +200,18 @@ namespace RobotComponents.Gh.Goos.Definitions
         {
             if (source == null) { return false; }
 
+            //Cast from Robot Goo
+            if (typeof(GH_Robot).IsAssignableFrom(source.GetType()))
+            {
+                GH_Robot robotGoo = source as GH_Robot;
+                Value = robotGoo.Value;
+                return true;
+            }
+
             //Cast from Robot
             if (typeof(Robot).IsAssignableFrom(source.GetType()))
             {
-                Value = (Robot)source;
+                Value = source as Robot;
                 return true;
             }
 

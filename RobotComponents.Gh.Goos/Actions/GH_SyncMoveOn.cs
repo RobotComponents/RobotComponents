@@ -124,19 +124,27 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
+            //Cast to Sync Move On Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_SyncMoveOn)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_SyncMoveOn(); }
+                else { target = (Q)(object)new GH_SyncMoveOn(Value); }
+                return true;
+            }
+
             //Cast to Sync Move On
             if (typeof(Q).IsAssignableFrom(typeof(SyncMoveOn)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to Sync Move On Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_SyncMoveOn)))
+            //Cast to Action Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_SyncMoveOn(Value); }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
@@ -148,34 +156,26 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
-            //Cast to Action Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            //Cast to Instruction Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Action(Value); }
+                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
+                else { target = (Q)(object)new GH_Instruction(Value); }
                 return true;
             }
 
             //Cast to Instruction
             if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Instruction Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Instruction(Value); }
                 return true;
             }
 
             //Cast to Syncident
             if (typeof(Q).IsAssignableFrom(typeof(ISyncident)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }

@@ -155,27 +155,35 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to External Rotational Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to External Rotational Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalRotationalAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalRotationalAxis(); }
                 else { target = (Q)(object)new GH_ExternalRotationalAxis(Value); }
+                return true;
+            }
+
+            //Cast to External Rotational Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalRotationalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
                 else { target = (Q)(object)new GH_ExternalAxis(Value); }
+                return true;
+            }
+
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
@@ -232,14 +240,6 @@ namespace RobotComponents.Gh.Goos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from External Rotational Axis
-            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
-            {
-                ExternalRotationalAxis externalRotationalAxis = source as ExternalRotationalAxis;
-                Value = externalRotationalAxis;
-                return true;
-            }
-
             //Cast from External Rotational Axis Goo
             if (typeof(GH_ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
@@ -248,21 +248,28 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Rotational Axis
+            if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
-                if (source is ExternalRotationalAxis externalRotationalAxis)
+                Value = source as ExternalRotationalAxis;
+                return true;
+            }
+
+            //Cast from External Axis Goo
+            if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;
+                if (externalAxisGoo.Value is ExternalRotationalAxis externalRotationalAxis)
                 {
                     Value = externalRotationalAxis;
                     return true;
                 }
             }
 
-            //Cast from External Axis Goo
-            if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Axis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;                  
-                if (externalAxisGoo.Value is ExternalRotationalAxis externalRotationalAxis)
+                if (source is ExternalRotationalAxis externalRotationalAxis)
                 {
                     Value = externalRotationalAxis;
                     return true;

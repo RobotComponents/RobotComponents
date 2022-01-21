@@ -17,7 +17,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Instruction Goo wrapper class, makes sure the Instruction class can be used in Grasshopper.
+    /// Instruction Goo wrapper class, makes sure the Instruction interface can be used in Grasshopper.
     /// </summary>
     public class GH_Instruction : GH_GeometricGoo<IInstruction>, IGH_PreviewData, GH_ISerializable
     {
@@ -156,35 +156,35 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value as Action); }
                 return true;
             }
 
-            //Cast to Instruction
-            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 
             //Cast to Instruction Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
                 else { target = (Q)(object)new GH_Instruction(Value); }
+                return true;
+            }
+
+            //Cast to Instruction
+            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 

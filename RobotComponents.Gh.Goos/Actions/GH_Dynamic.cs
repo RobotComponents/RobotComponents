@@ -17,7 +17,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Dynamic Goo wrapper class, makes sure the Dynamic class can be used in Grasshopper.
+    /// Dynamic Goo wrapper class, makes sure the Dynamic interface can be used in Grasshopper.
     /// </summary>
     public class GH_Dynamic : GH_GeometricGoo<IDynamic>, IGH_PreviewData, GH_ISerializable
     {
@@ -156,35 +156,35 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value as Action); }
                 return true;
             }
 
-            //Cast to Dynamic
-            if (typeof(Q).IsAssignableFrom(typeof(IDynamic)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 
             //Cast to Dynamic Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Dynamic)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Dynamic(); }
                 else { target = (Q)(object)new GH_Dynamic(Value); }
+                return true;
+            }
+
+            //Cast to Dynamic
+            if (typeof(Q).IsAssignableFrom(typeof(IDynamic)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 

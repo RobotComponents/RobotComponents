@@ -154,11 +154,35 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
+            //Cast to Work Object Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_WorkObject)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_WorkObject(); }
+                else { target = (Q)(object)new GH_WorkObject(Value); }
+                return true;
+            }
+
             //Cast to Work Object
             if (typeof(Q).IsAssignableFrom(typeof(WorkObject)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to External Axis Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis); }
+                return true;
+            }
+
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.ExternalAxis; }
                 return true;
             }
 
@@ -178,14 +202,6 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast to External Axis Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_ExternalAxis(Value.ExternalAxis); }
-                return true;
-            }
-
             target = default;
             return false;
         }
@@ -198,6 +214,14 @@ namespace RobotComponents.Gh.Goos.Definitions
         public override bool CastFrom(object source)
         {
             if (source == null) { return false; }
+
+            //Cast from Work Object Goo
+            if (typeof(GH_WorkObject).IsAssignableFrom(source.GetType()))
+            {
+                GH_WorkObject workObjectGoo = source as GH_WorkObject;
+                Value = workObjectGoo.Value;
+                return true;
+            }
 
             //Cast from Work Object
             if (typeof(WorkObject).IsAssignableFrom(source.GetType()))

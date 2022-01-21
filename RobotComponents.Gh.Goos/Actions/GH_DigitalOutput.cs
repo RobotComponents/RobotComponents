@@ -124,26 +124,18 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Digital Output Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_DigitalOutput(); }
                 else { target = (Q)(object)new GH_DigitalOutput(Value); }
                 return true;
             }
 
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            //Cast to Digital Output
+            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -151,15 +143,15 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            //Cast to Instruction
-            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -167,8 +159,16 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Instruction Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
                 else { target = (Q)(object)new GH_Instruction(Value); }
+                return true;
+            }
+
+            //Cast to Instruction
+            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 

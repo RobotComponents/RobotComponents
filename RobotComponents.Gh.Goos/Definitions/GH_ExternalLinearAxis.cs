@@ -155,27 +155,35 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to External Linear Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to External Linear Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalLinearAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalLinearAxis(); }
                 else { target = (Q)(object)new GH_ExternalLinearAxis(Value); }
+                return true;
+            }
+
+            //Cast to External Linear Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalLinearAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
                 else { target = (Q)(object)new GH_ExternalAxis(Value); }
+                return true;
+            }
+
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
@@ -203,7 +211,7 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast to Axis vector (positive movement direction)
+            //Cast to Axis vector
             if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
             { 
                 if (Value == null) { target = default; }
@@ -260,14 +268,6 @@ namespace RobotComponents.Gh.Goos.Definitions
         {
             if (source == null) { return false; }
 
-            //Cast from External Linear Axis
-            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
-            {
-                ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
-                Value = externalLinearAxis;
-                return true;
-            }
-
             //Cast from External Linear Axis Goo
             if (typeof(GH_ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
@@ -276,21 +276,29 @@ namespace RobotComponents.Gh.Goos.Definitions
                 return true;
             }
 
-            //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Linear Axis
+            if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
-                if (source is ExternalLinearAxis externalLinearAxis)
+                ExternalLinearAxis externalLinearAxis = source as ExternalLinearAxis;
+                Value = externalLinearAxis;
+                return true;
+            }
+
+            //Cast from External Axis Goo
+            if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
+            {
+                GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;
+                if (externalAxisGoo.Value is ExternalLinearAxis externalLinearAxis)
                 {
                     Value = externalLinearAxis;
                     return true;
                 }
             }
 
-            //Cast from External Axis Goo
-            if (typeof(GH_ExternalAxis).IsAssignableFrom(source.GetType()))
+            //Cast from External Axis
+            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                GH_ExternalAxis externalAxisGoo = source as GH_ExternalAxis;                 
-                if (externalAxisGoo.Value is ExternalLinearAxis externalLinearAxis)
+                if (source is ExternalLinearAxis externalLinearAxis)
                 {
                     Value = externalLinearAxis;
                     return true;

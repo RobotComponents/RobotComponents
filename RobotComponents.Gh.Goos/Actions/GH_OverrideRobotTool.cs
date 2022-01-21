@@ -9,6 +9,7 @@ using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
+using RobotComponents.Definitions;
 using RobotComponents.Utils;
 using RobotComponents.Gh.Goos.Definitions;
 
@@ -125,26 +126,18 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to Override Robot Tool
-            if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Override Robot Tool Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_OverrideRobotTool)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_OverrideRobotTool(); }
                 else { target = (Q)(object)new GH_OverrideRobotTool(Value); }
                 return true;
             }
 
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            //Cast to Override Robot Tool
+            if (typeof(Q).IsAssignableFrom(typeof(OverrideRobotTool)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -152,15 +145,15 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
-            //Cast to Instruction
-            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -168,16 +161,32 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Instruction Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
                 else { target = (Q)(object)new GH_Instruction(Value); }
+                return true;
+            }
+
+            //Cast to Instruction
+            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to Robot Tool Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_RobotTool(); }
                 else { target = (Q)(object)new GH_RobotTool(Value.RobotTool); }
+                return true;
+            }
+
+            //Cast to Robot Tool
+            if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.RobotTool; }
                 return true;
             }
 

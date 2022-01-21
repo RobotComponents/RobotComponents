@@ -18,7 +18,7 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Target Goo wrapper class, makes sure the Target class can be used in Grasshopper.
+    /// Target Goo wrapper class, makes sure the Target interface can be used in Grasshopper.
     /// </summary>
     public class GH_Target : GH_Goo<ITarget>, GH_ISerializable
     {
@@ -61,7 +61,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> A duplicate of the Target Goo. </returns>
         public override IGH_Goo Duplicate()
         {
-            return new GH_Target(Value == null ? new RobotTarget() : Value.DuplicateTarget());
+            return new GH_Target(Value?.DuplicateTarget());
         }
         #endregion
 
@@ -131,7 +131,7 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Target(); }
                 else { target = (Q)(object)new GH_Target(Value); }
                 return true;
             }
@@ -139,51 +139,63 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Target
             if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)Value; }
                 return true;
             }
 
-            //Cast to Joint Target
+            //Cast to Joint Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_JointTarget)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_JointTarget(); }
                 else if (Value is JointTarget) { target = (Q)(object)new GH_JointTarget(Value as JointTarget); }
                 else if (Value is RobotTarget) { { target = (Q)(object)new GH_JointTarget(); } }
                 else { target = default; }
                 return true;
             }
 
-            //Cast to Robot Target
+            //Cast to Joint Target
+            if (typeof(Q).IsAssignableFrom(typeof(JointTarget)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value is JointTarget) { target = (Q)Value; }
+                else if (Value is RobotTarget) { { target = (Q)(object)null; } }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to Robot Target Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_RobotTarget(); ; }
                 else if (Value is RobotTarget) { target = (Q)(object)new GH_RobotTarget(Value as RobotTarget); }
                 else if (Value is JointTarget) { target = (Q)(object)new GH_RobotTarget(); }
                 else { target = default; }
                 return true;
             }
 
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
+            //Cast to Robot Target Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)Value; }
+                if (Value == null) { target = (Q)(object)null; ; }
+                else if (Value is RobotTarget) { target = (Q)Value; }
+                else if (Value is JointTarget) { target = (Q)(object)null; }
+                else { target = default; }
                 return true;
             }
 
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value as RobotComponents.Actions.Action); }
                 return true;
             }
 
-            //Cast to Declaration
-            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)Value; }
                 return true;
             }
@@ -191,16 +203,32 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Declaration Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Declaration(); }
                 else { target = (Q)(object)new GH_Declaration(Value as IDeclaration); }
+                return true;
+            }
+
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 
             //Cast to External Joint Position Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ExternalJointPosition(); }
                 else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
+                return true;
+            }
+
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalJointPosition)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.ExternalJointPosition; }
                 return true;
             }
 

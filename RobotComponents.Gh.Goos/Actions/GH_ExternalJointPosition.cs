@@ -126,51 +126,51 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to ExternalJointPosition
+            //Cast to External Joint Position Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ExternalJointPosition(); }
+                else { target = (Q)(object)new GH_ExternalJointPosition(Value); }
+                return true;
+            }
+
+            //Cast to External Joint Position
             if (typeof(Q).IsAssignableFrom(typeof(ExternalJointPosition)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
 
-            //Cast to ExternalJointPositionGoo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
+            //Cast to Action Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_ExternalJointPosition(Value); }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
+                else { target = (Q)(object)new GH_Action(Value); }
                 return true;
             }
 
             //Cast to Action
             if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; } 
-                return true;
-            }
-
-            //Cast to ActionGoo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Action(Value); }
-                return true;
-            }
-
-            //Cast to Declaration
-            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
                 return true;
             }
 
             //Cast to Declaration Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Declaration(); }
                 else { target = (Q)(object)new GH_Declaration(Value); }
+                return true;
+            }
+
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 

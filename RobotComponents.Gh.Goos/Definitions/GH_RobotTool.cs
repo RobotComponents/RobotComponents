@@ -156,10 +156,18 @@ namespace RobotComponents.Gh.Goos.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
+            //Cast to Robot Tool Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTool)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_RobotTool(); }
+                else { target = (Q)(object)new GH_RobotTool(Value); }
+                return true;
+            }
+
             //Cast to Robot Tool
             if (typeof(Q).IsAssignableFrom(typeof(RobotTool)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -193,10 +201,18 @@ namespace RobotComponents.Gh.Goos.Definitions
         {
             if (source == null) { return false; }
 
+            //Cast from Robot Tool Goo
+            if (typeof(GH_RobotTool).IsAssignableFrom(source.GetType()))
+            {
+                GH_RobotTool robotToolGoo = source as GH_RobotTool;
+                Value = robotToolGoo.Value;
+                return true;
+            }
+
             //Cast from Robot Tool
             if (typeof(RobotTool).IsAssignableFrom(source.GetType()))
             {
-                Value = (RobotTool)source;
+                Value = source as RobotTool;
                 return true;
             }
 

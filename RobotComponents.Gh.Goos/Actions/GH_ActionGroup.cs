@@ -158,26 +158,18 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(out Q target)
         {
-            //Cast to Action Group
-            if (typeof(Q).IsAssignableFrom(typeof(ActionGroup)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Action Group Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ActionGroup)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_ActionGroup(); }
                 else { target = (Q)(object)new GH_ActionGroup(Value); }
                 return true;
             }
 
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            //Cast to Action Group
+            if (typeof(Q).IsAssignableFrom(typeof(ActionGroup)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
                 return true;
             }
@@ -185,8 +177,16 @@ namespace RobotComponents.Gh.Goos.Actions
             //Cast to Action Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
-                if (Value == null) { target = default; }
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
                 else { target = (Q)(object)new GH_Action(Value); }
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
                 return true;
             }
 
@@ -210,7 +210,7 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
-            //Cast from Action Goo
+            //Cast from Action Group Goo
             if (typeof(GH_ActionGroup).IsAssignableFrom(source.GetType()))
             {
                 GH_ActionGroup groupGoo = source as GH_ActionGroup;

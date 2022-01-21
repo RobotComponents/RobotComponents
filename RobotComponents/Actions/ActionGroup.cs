@@ -129,7 +129,7 @@ namespace RobotComponents.Actions
             }
             else if (_name != string.Empty)
             {
-                return "Action Group (" + this.Name + ")";
+                return "Action Group (" + _name + ")";
             }
             else
             {

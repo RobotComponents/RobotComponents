@@ -319,9 +319,9 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Robot Target";
             }
-            else if (this.Name != string.Empty)
+            else if (_name != string.Empty)
             {
-                return "Robot Target (" + this.Name + ")";
+                return "Robot Target (" + _name + ")";
             }
             else
             {

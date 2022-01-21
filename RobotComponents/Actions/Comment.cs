@@ -128,7 +128,11 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (string.IsNullOrWhiteSpace(_comment))
+            {
+                return "Empty Comment";
+            }
+            else if (!this.IsValid)
             {
                 return "Invalid Comment";
             }

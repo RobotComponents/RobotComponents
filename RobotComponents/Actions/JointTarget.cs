@@ -182,7 +182,7 @@ namespace RobotComponents.Actions
             }
             else if (this.Name != string.Empty)
             {
-                return "Joint Target (" + this.Name + ")";
+                return "Joint Target (" + _name + ")";
             }
             else
             {

@@ -461,7 +461,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "External Rotational Axis (" + this.Name + ")";
+                return "External Rotational Axis (" + _name + ")";
             }
         }
 

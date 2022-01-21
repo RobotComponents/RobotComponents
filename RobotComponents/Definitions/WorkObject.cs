@@ -174,13 +174,13 @@ namespace RobotComponents.Definitions
             {
                 return "Invalid Work Object";
             }
-            else if (this.FixedFrame == false)
+            else if (_fixedFrame == false)
             {
-                return "Movable Work Object (" + this.Name + ")";
+                return "Movable Work Object (" + _name + ")";
             }
             else
             {
-                return "Work Object (" + this.Name + ")";
+                return "Work Object (" + _name + ")";
             }
         }
 

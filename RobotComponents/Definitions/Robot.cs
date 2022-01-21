@@ -433,7 +433,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "Robot (" + this.Name + ")";
+                return "Robot (" + _name + ")";
             }
         }
 

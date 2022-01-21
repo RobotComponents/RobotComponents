@@ -126,7 +126,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Analog  Output (" + this.Name + "\\" + this.Value.ToString() + ")";
+                return "Analog  Output (" + _name + "\\" + _value.ToString() + ")";
             }
         }
 

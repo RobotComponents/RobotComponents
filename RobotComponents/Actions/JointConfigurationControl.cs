@@ -114,7 +114,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Joint Configuration Control";
             }
-            else if (this.IsActive)
+            else if (_isActive)
             {
                 return "Enable Joint Configuration Control";
             }

@@ -24,7 +24,7 @@ namespace RobotComponents.Actions
         private ReferenceType _referenceType; // reference type for sync identification
         private bool _inPosition; // if true the mechanical unit comes to still stand at the sync point
         private string _syncident; // the sync identification name
-        private TaskList _taskList; // the set with tasks to syncronize
+        private TaskList _taskList; // the set with tasks to syncronized
         #endregion
 
         #region (de)serialization
@@ -142,7 +142,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait Sync Task (" + this.SyncID + ")";
+                return "Wait Sync Task (" + _syncident + ")";
             }
         }
 

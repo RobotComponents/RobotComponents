@@ -542,7 +542,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "Robot Tool (" + this.Name + ")";
+                return "Robot Tool (" + _name + ")";
             }
         }
 

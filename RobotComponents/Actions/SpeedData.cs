@@ -247,11 +247,11 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Speed Data";
             }
-            else if (this.PreDefined == true)
+            else if (_predefined == true)
             {
                 return "Predefined Speed Data ("+ _name + ")";
             }
-            else if (this.Name != string.Empty)
+            else if (_name != string.Empty)
             {
                 return "Custom Speed Data (" + _name + ")";
             }
@@ -308,9 +308,9 @@ namespace RobotComponents.Actions
             {
                 if (_name != string.Empty)
                 {
-                    if (!RAPIDGenerator.SpeedDatas.ContainsKey(this.Name))
+                    if (!RAPIDGenerator.SpeedDatas.ContainsKey(_name))
                     {
-                        RAPIDGenerator.SpeedDatas.Add(this.Name, this);
+                        RAPIDGenerator.SpeedDatas.Add(_name, this);
                         RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }

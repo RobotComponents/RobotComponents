@@ -713,7 +713,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "External Linear Axis (" + this.Name + ")";
+                return "External Linear Axis (" + _name + ")";
             }
         }
 

@@ -368,17 +368,17 @@ namespace RobotComponents.Actions
 
             else if (_id < 0)
             {
-                if (this.MovementType == MovementType.MoveAbsJ)
+                if (_movementType == MovementType.MoveAbsJ)
                 {
-                    return "Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Absolute Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
-                else if (this.MovementType == MovementType.MoveL)
+                else if (_movementType == MovementType.MoveL)
                 {
-                    return "Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Linear Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
-                else if (this.MovementType == MovementType.MoveJ)
+                else if (_movementType == MovementType.MoveJ)
                 {
-                    return "Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
                 else
                 {
@@ -388,17 +388,17 @@ namespace RobotComponents.Actions
 
             else
             {
-                if (this.MovementType == MovementType.MoveAbsJ)
+                if (_movementType == MovementType.MoveAbsJ)
                 {
-                    return "Coordinated synchronized Absolute Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Coordinated synchronized Absolute Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
-                else if (this.MovementType == MovementType.MoveL)
+                else if (_movementType == MovementType.MoveL)
                 {
-                    return "Coordinated synchronized Linear Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Coordinated synchronized Linear Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
-                else if (this.MovementType == MovementType.MoveJ)
+                else if (_movementType == MovementType.MoveJ)
                 {
-                    return "Coordinated synchronized Joint Movement (" + this.Target.Name + "\\" + this.WorkObject.Name + ")";
+                    return "Coordinated synchronized Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
                 }
                 else
                 {
@@ -504,8 +504,7 @@ namespace RobotComponents.Actions
                     RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
 
                     // Create a joint target from the axis values
-                    _convertedTarget = new JointTarget(RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate(), RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate());
-                    _convertedTarget.Name = robotTarget.Name;
+                    _convertedTarget = new JointTarget(robotTarget.Name, RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate(), RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate());
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
                     _convertedTarget.ReferenceType = _target.ReferenceType;
 

@@ -22,7 +22,7 @@ namespace RobotComponents.Actions
     {
         #region fields
         private string _name; // The name of the digital input signal
-        private bool _value; // The desired state / value of the digtal input signal
+        private bool _value; // The desired state / value of the digital input signal
         #endregion
 
         #region (de)serialization
@@ -63,12 +63,12 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the Wait DI class.
         /// </summary>
-        /// <param name="DIName"> The name of the signal. </param>
+        /// <param name="name"> The name of the signal. </param>
         /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
-        public WaitDI(string DIName, bool value)
+        public WaitDI(string name, bool value)
         {
-            _name = DIName;
-            Value = value;
+            _name = name;
+            _value = value;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace RobotComponents.Actions
         /// <param name="waitDI"> The Wait DI instance to duplicate. </param>
         public WaitDI(WaitDI waitDI)
         {
-            _name = waitDI.DIName;
+            _name = waitDI.Name;
             _value = waitDI.Value;
         }
 
@@ -126,7 +126,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait for Digital Input (" + this.DIName + "\\" + this.Value.ToString() + ")";
+                return "Wait for Digital Input (" + this.Name + "\\" + this.Value.ToString() + ")";
             }
         }
 
@@ -185,14 +185,14 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (DIName == null) { return false; }
-                if (DIName == "") { return false; }
+                if (Name == null) { return false; }
+                if (Name == "") { return false; }
                 return true; 
             }
         }
 
         /// <summary>
-        /// Gets or sets the desired state of the digtal input signal.
+        /// Gets or sets the desired state of the digital input signal.
         /// </summary>
         public bool Value 
         {
@@ -203,8 +203,20 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Gets or sets the name of the digital input signal.
         /// </summary>
-        public string DIName 
+        public string Name 
         { 
+            get { return _name; }
+            set { _name = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets the name of the digital input signal.
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in version 2. Use the property Name instead.", false)]
+        public string DIName
+        {
             get { return _name; }
             set { _name = value; }
         }

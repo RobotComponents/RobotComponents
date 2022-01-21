@@ -116,7 +116,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait Time (" + this.Duration.ToString("0.##") + " sec.)";
+                return "Wait Time (" + _duration.ToString("0.##") + " sec.)";
             }
         }
 

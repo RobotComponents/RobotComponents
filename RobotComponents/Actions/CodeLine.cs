@@ -126,7 +126,11 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (string.IsNullOrWhiteSpace(_code))
+            {
+                return "Empty Code Line";
+            }
+            else if (!this.IsValid)
             {
                 return "Invalid Code Line";
             }

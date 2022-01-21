@@ -136,7 +136,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Sync Move On (" + this.SyncID + ")";
+                return "Sync Move On (" + _syncident + ")";
             }
         }
 

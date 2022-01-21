@@ -302,7 +302,7 @@ namespace RobotComponents.Gh.Utils
             // Creates the empty value list
             GH_ValueList obj = new GH_ValueList();
             obj.CreateAttributes();
-            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListMode = GH_ValueListMode.DropDown;
             obj.ListItems.Clear();
 
             // Add the items to the value list
@@ -349,7 +349,7 @@ namespace RobotComponents.Gh.Utils
             // Creates the empty value list
             GH_ValueList obj = new GH_ValueList();
             obj.CreateAttributes();
-            obj.ListMode = Grasshopper.Kernel.Special.GH_ValueListMode.DropDown;
+            obj.ListMode = GH_ValueListMode.DropDown;
             obj.ListItems.Clear();
 
             // Add the items to the value list

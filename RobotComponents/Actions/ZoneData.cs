@@ -337,7 +337,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Zone Data";
             }
-            else if (this.PreDefined == true)
+            else if (_predefined == true)
             {
                 return "Predefined Zone Data (" + _name + ")";
             }
@@ -416,9 +416,9 @@ namespace RobotComponents.Actions
             {
                 if (_name != string.Empty)
                 {
-                    if (!RAPIDGenerator.ZoneDatas.ContainsKey(this.Name))
+                    if (!RAPIDGenerator.ZoneDatas.ContainsKey(_name))
                     {
-                        RAPIDGenerator.ZoneDatas.Add(this.Name, this);
+                        RAPIDGenerator.ZoneDatas.Add(_name, this);
                         RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }

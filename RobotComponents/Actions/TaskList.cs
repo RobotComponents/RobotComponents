@@ -129,7 +129,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Tasks (" + this.Name + ")";
+                return "Tasks (" + _name + ")";
             }
         }
 

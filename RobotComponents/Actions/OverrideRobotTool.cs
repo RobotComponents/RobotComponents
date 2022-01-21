@@ -116,7 +116,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Override Robot Tool (" + this.ToolName + ")";
+                return "Override Robot Tool (" + _robotTool.Name + ")";
             }
         }
 

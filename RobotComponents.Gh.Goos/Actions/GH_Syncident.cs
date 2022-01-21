@@ -14,50 +14,50 @@ using RobotComponents.Utils;
 namespace RobotComponents.Gh.Goos.Actions
 {
     /// <summary>
-    /// Sync Move On Goo wrapper class, makes sure the Sync Move On class can be used in Grasshopper.
+    /// Syncident Goo wrapper class, makes sure the Syncident interface can be used in Grasshopper.
     /// </summary>
-    public class GH_SyncMoveOn : GH_Goo<SyncMoveOn>, GH_ISerializable
+    public class GH_Syncident : GH_Goo<ISyncident>, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_SyncMoveOn()
+        public GH_Syncident()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Sync Move On Goo instance from Sync Move On instance.
+        /// Data constructor: Creates a Syncident Goo instance from a Syncident instance.
         /// </summary>
-        /// <param name="SyncMoveOn"> Sync Move On Value to store inside this Goo instance. </param>
-        public GH_SyncMoveOn(SyncMoveOn syncMoveOn)
+        /// <param name="syncident"> Syncident Value to store inside this Goo instance. </param>
+        public GH_Syncident(ISyncident syncident)
         {
-            this.Value = syncMoveOn;
+            this.Value = syncident;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Sync Move On Goo instance from another Sync Move On Goo instance.
-        /// This creates a shallow copy of the passed Sync Move On Goo instance. 
+        /// Data constructor: Creates a Syncident Goo instance from another Syncident Goo instance.
+        /// This creates a shallow copy of the passed Syncident Goo instance. 
         /// </summary>
-        /// <param name="syncMoveOnGoo"> Sync Move On Goo instance to copy. </param>
-        public GH_SyncMoveOn(GH_SyncMoveOn syncMoveOnGoo)
+        /// <param name="syncidentGoo"> Syncident Goo instance to copy. </param>
+        public GH_Syncident(GH_Syncident syncidentGoo)
         {
-            if (syncMoveOnGoo == null)
+            if (syncidentGoo == null)
             {
-                syncMoveOnGoo = new GH_SyncMoveOn();
+                syncidentGoo = new GH_Syncident();
             }
 
-            this.Value = syncMoveOnGoo.Value;
+            this.Value = syncidentGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Sync Move On Goo. </returns>
+        /// <returns> A duplicate of the Syncident Goo. </returns>
         public override IGH_Goo Duplicate()
         {
-            return new GH_SyncMoveOn(Value == null ? new SyncMoveOn() : Value.Duplicate());
+            return new GH_Syncident(Value?.DuplicateSyncident());
         }
         #endregion
 
@@ -82,9 +82,9 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             get
             {
-                if (Value == null) { return "No internal Sync Move On instance"; }
+                if (Value == null) { return "No internal Syncident instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Sync Move On instance: Did you define the Sync Move On name and values?";
+                return "Invalid Syncident instance: Did you define the Syncident name and values?";
             }
         }
 
@@ -94,7 +94,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Sync Move On"; }
+            if (Value == null) { return "Null Syncident"; }
             else { return Value.ToString(); }
         }
 
@@ -103,7 +103,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeName
         {
-            get { return "Sync Move On"; }
+            get { return "Syncident"; }
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Sync Move On"; }
+            get { return "Defines a Syncident"; }
         }
         #endregion
 
@@ -124,58 +124,10 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to Sync Move On Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_SyncMoveOn)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_SyncMoveOn(); }
-                else { target = (Q)(object)new GH_SyncMoveOn(Value); }
-                return true;
-            }
-
-            //Cast to Sync Move On
-            if (typeof(Q).IsAssignableFrom(typeof(SyncMoveOn)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Action Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_Action(); }
-                else { target = (Q)(object)new GH_Action(Value); }
-                return true;
-            }
-
-            //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Instruction Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Instruction)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_Instruction(); }
-                else { target = (Q)(object)new GH_Instruction(Value); }
-                return true;
-            }
-
-            //Cast to Instruction
-            if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
             //Cast to Syncident Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_Syncident)))
             {
-                if (Value == null) { target = (Q)(object)(Q)(object)new GH_Syncident(); }
+                if (Value == null) { target = (Q)(object)new GH_Syncident(); }
                 else { target = (Q)(object)new GH_Syncident(Value); }
                 return true;
             }
@@ -184,7 +136,23 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(ISyncident)))
             {
                 if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value; }
+                else { target = (Q)Value; }
+                return true;
+            }
+
+            //Cast to Action Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_Action(); }
+                else { target = (Q)(object)new GH_Action(Value as RobotComponents.Actions.Action); }
+                return true;
+            }
+
+            //Cast to Action
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)Value; }
                 return true;
             }
 
@@ -201,40 +169,30 @@ namespace RobotComponents.Gh.Goos.Actions
         {
             if (source == null) { return false; }
 
-            //Cast from Sync Move On
-            if (typeof(SyncMoveOn).IsAssignableFrom(source.GetType()))
+            //Cast from Syncident
+            if (typeof(ISyncident).IsAssignableFrom(source.GetType()))
             {
-                Value = source as SyncMoveOn;
+                Value = source as ISyncident;
                 return true;
-            }
-
-            //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
-            {
-                if (source is SyncMoveOn action)
-                {
-                    Value = action;
-                    return true;
-                }
             }
 
             //Cast from Action Goo
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is SyncMoveOn action)
+                if (actionGoo.Value is ISyncident action)
                 {
                     Value = action;
                     return true;
                 }
             }
 
-            //Cast from Instruction
-            if (typeof(IInstruction).IsAssignableFrom(source.GetType()))
+            //Cast from Action
+            if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is SyncMoveOn instruction)
+                if (source is ISyncident action)
                 {
-                    Value = instruction;
+                    Value = action;
                     return true;
                 }
             }
@@ -243,30 +201,19 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(GH_Instruction).IsAssignableFrom(source.GetType()))
             {
                 GH_Instruction instructionGoo = source as GH_Instruction;
-                if (instructionGoo.Value is SyncMoveOn instruction)
+                if (instructionGoo.Value is ISyncident instruction)
                 {
                     Value = instruction;
                     return true;
                 }
             }
 
-            //Cast from Syncident
-            if (typeof(ISyncident).IsAssignableFrom(source.GetType()))
+            //Cast from Instruction
+            if (typeof(IInstruction).IsAssignableFrom(source.GetType()))
             {
-                if (source is SyncMoveOn syncident)
+                if (source is ISyncident instruction)
                 {
-                    Value = syncident;
-                    return true;
-                }
-            }
-
-            //Cast from Syncident Goo
-            if (typeof(GH_Syncident).IsAssignableFrom(source.GetType()))
-            {
-                GH_Syncident syncidentGoo = source as GH_Syncident;
-                if (syncidentGoo.Value is SyncMoveOn syncident)
-                {
-                    Value = syncident;
+                    Value = instruction;
                     return true;
                 }
             }
@@ -279,7 +226,7 @@ namespace RobotComponents.Gh.Goos.Actions
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Sync Move On";
+        private const string IoKey = "Syncident";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -311,7 +258,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (SyncMoveOn)HelperMethods.ByteArrayToObject(array);
+            this.Value = (ISyncident)HelperMethods.ByteArrayToObject(array);
 
             return true;
         }

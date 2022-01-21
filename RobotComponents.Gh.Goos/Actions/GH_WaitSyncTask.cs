@@ -172,6 +172,14 @@ namespace RobotComponents.Gh.Goos.Actions
                 return true;
             }
 
+            //Cast to Syncident Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Syncident)))
+            {
+                if (Value == null) { target = (Q)(object)(Q)(object)new GH_Syncident(); }
+                else { target = (Q)(object)new GH_Syncident(Value); }
+                return true;
+            }
+
             //Cast to Syncident
             if (typeof(Q).IsAssignableFrom(typeof(ISyncident)))
             {
@@ -246,6 +254,17 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(ISyncident).IsAssignableFrom(source.GetType()))
             {
                 if (source is WaitSyncTask syncident)
+                {
+                    Value = syncident;
+                    return true;
+                }
+            }
+
+            //Cast from Syncident Goo
+            if (typeof(GH_Syncident).IsAssignableFrom(source.GetType()))
+            {
+                GH_Syncident syncidentGoo = source as GH_Syncident;
+                if (syncidentGoo.Value is WaitSyncTask syncident)
                 {
                     Value = syncident;
                     return true;

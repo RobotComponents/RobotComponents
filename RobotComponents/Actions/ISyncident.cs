@@ -15,7 +15,11 @@ namespace RobotComponents.Actions
     public interface ISyncident
     {
         #region constructors
-
+        /// <summary>
+        /// Returns an exact duplicate of this Syncident.
+        /// </summary>
+        /// <returns> The exact copy of this Syncident. </returns>
+        ISyncident DuplicateSyncident();
         #endregion
 
         #region methods

@@ -58,6 +58,7 @@
     <Compile Include="Actions\GH_Syncident.cs" />
     <Compile Include="Actions\GH_SyncMoveOn.cs" />
     <Compile Include="Actions\GH_SyncMoveOff.cs" />
+    <Compile Include="Actions\GH_WaitAI.cs" />
     <Compile Include="Actions\GH_WaitSyncTask.cs" />
     <Compile Include="Actions\GH_TaskList.cs" />
     <Compile Include="Actions\GH_LinearConfigurationControl.cs" />

@@ -80,6 +80,22 @@ namespace RobotComponents.Enumerations
     }
 
     /// <summary>
+    /// Defines inequalities (less than, greater than)
+    /// </summary>
+    public enum InequalitySymbol : int
+    {
+        /// <summary>
+        /// Less than
+        /// </summary>
+        LT = 0,
+
+        /// <summary>
+        /// Greater than
+        /// </summary>
+        GT = 1
+    }
+
+    /// <summary>
     /// Defines the Robot preset
     /// </summary>
     public enum RobotPreset

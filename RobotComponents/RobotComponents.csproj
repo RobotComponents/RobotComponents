@@ -64,6 +64,7 @@
     <Compile Include="Actions\ISyncident.cs" />
     <Compile Include="Actions\SyncMoveOff.cs" />
     <Compile Include="Actions\SyncMoveOn.cs" />
+    <Compile Include="Actions\WaitAI.cs" />
     <Compile Include="Actions\WaitSyncTask.cs" />
     <Compile Include="Actions\TaskList.cs" />
     <Compile Include="Actions\LinearConfigurationControl.cs" />

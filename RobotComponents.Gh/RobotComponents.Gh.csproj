@@ -69,6 +69,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\Value Lists\InequalitySymbolValueList.cs" />
+    <Compile Include="Components\Code Generation\WaitAIComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1520ID_4_1_50_Component.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOffComponent.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
@@ -218,6 +220,7 @@
     <Compile Include="Obsolete\v0\RobotParameter.cs" />
     <Compile Include="Parameters\Actions\Param_SyncMoveOff.cs" />
     <Compile Include="Parameters\Actions\Param_SyncMoveOn.cs" />
+    <Compile Include="Parameters\Actions\Param_WaitAI.cs" />
     <Compile Include="Parameters\Actions\Param_WaitSyncTask.cs" />
     <Compile Include="Parameters\Actions\Param_TaskList.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

@@ -118,6 +118,10 @@ namespace RobotComponents.Actions
             {
                 return tasks.ToString();
             }
+            else if (this is WaitAI waitAI)
+            {
+                return waitAI.ToString();
+            }
             else if (this is WaitDI waitDI)
             {
                 return waitDI.ToString();

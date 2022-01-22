@@ -573,6 +573,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap InequalitySymbolValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("InequalitySymbolValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Info_Icon {
             get {
                 object obj = ResourceManager.GetObject("Info_Icon", resourceCulture);
@@ -1323,9 +1333,9 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap WaitAO_Icon {
+        internal static System.Drawing.Bitmap WaitAI_Icon {
             get {
-                object obj = ResourceManager.GetObject("WaitAO_Icon", resourceCulture);
+                object obj = ResourceManager.GetObject("WaitAI_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1333,9 +1343,9 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap WaitAO_Parameter_Icon {
+        internal static System.Drawing.Bitmap WaitAI_Parameter_Icon {
             get {
-                object obj = ResourceManager.GetObject("WaitAO_Parameter_Icon", resourceCulture);
+                object obj = ResourceManager.GetObject("WaitAI_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -50,7 +50,7 @@ namespace RobotComponents.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.WaitAI_Parameter_Icon; }
         }
 
         /// <summary>

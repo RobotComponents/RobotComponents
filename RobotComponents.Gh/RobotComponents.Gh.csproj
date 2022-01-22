@@ -316,7 +316,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Auto_Icon.png" />
-    <None Include="Resources\Parameter_Icons.psd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Auto_Parameter_Icon.png" />
@@ -656,16 +655,10 @@
     <None Include="Resources\RobotPreset_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\WaitAO_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\AnalogOutput_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AnalogOutput_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\WaitAO_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ConfJ_Parameter_Icon.png" />
@@ -704,9 +697,6 @@
     <None Include="Resources\TaskList_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\WaitSynTask_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -723,6 +713,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WaitSyncTask_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitAI_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitAI_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\InequalitySymbolValueList_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

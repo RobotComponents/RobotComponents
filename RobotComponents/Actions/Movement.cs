@@ -94,7 +94,7 @@ namespace RobotComponents.Actions
         /// <param name="plane"> The target plan. </param>
         public Movement(Plane plane)
         {
-            _movementType = 0;
+            _movementType = MovementType.MoveJ;
             _target = new RobotTarget(plane);
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
@@ -111,7 +111,15 @@ namespace RobotComponents.Actions
         /// <param name="target"> The Target. </param>
         public Movement(ITarget target)
         {
-            _movementType = 0;
+            if (target is JointTarget)
+            {
+                _movementType = MovementType.MoveAbsJ;
+            }
+            else
+            {
+                _movementType = MovementType.MoveJ;
+            }
+
             _target = target;
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed

@@ -6,12 +6,9 @@
 // System Libs
 using System;
 using System.Linq;
-using System.Drawing;
 using System.Windows.Forms;
 // Grasshopper Libs
-using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Special;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
@@ -33,7 +30,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         private bool _overrideRobotTool = false;
         private bool _overrideWorkObject = false;
         private bool _setDigitalOutput = false;
-        private readonly int fixedParamNumInput = 4;
+        private readonly int _fixedParamNumInput = 4;
         #endregion
 
         /// <summary>
@@ -327,7 +324,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             else
             {
                 // The index where the parameter should be added
-                int insertIndex = fixedParamNumInput;
+                int insertIndex = _fixedParamNumInput;
 
                 // Check if other parameters are already added and correct the insert index
                 for (int i = 0; i < index; i++)

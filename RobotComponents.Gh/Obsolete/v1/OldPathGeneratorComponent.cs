@@ -25,7 +25,7 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    [Obsolete("This parameter is OBSOLETE and will be removed in the future.", false)]
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
     public class OldPathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
         #region fields

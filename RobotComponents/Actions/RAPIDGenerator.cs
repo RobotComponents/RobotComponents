@@ -33,7 +33,8 @@ namespace RobotComponents.Actions
         private string _filePath; // File path to save the code
         private bool _saveToFile; // Bool that indicates if the files should be saved
         private string _programModuleName; // The module name of the rapid program code
-        private string _systemModuleName; // The module name of the rapod system code
+        private string _systemModuleName; // The module name of the rapid system code
+        private string _procedureName; // The name of the rapid procedure
         private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
         private readonly List<string> _programModule = new List<string>(); // Program module as a list with code lines
         private readonly List<string> _programDeclarations = new List<string>(); // List with RAPID code declarations
@@ -55,7 +56,7 @@ namespace RobotComponents.Actions
         }
 
         /// <summary>
-        /// Initializes a new instance of the RAPID Generator class.
+        /// Initializes a new instance of the RAPID Generator class with a main procedure.
         /// </summary>
         /// <param name="programModuleName"> The name of the program module </param>
         /// <param name="systemModuleName"> The name of the system module </param>
@@ -67,6 +68,28 @@ namespace RobotComponents.Actions
         {
             _programModuleName = programModuleName;
             _systemModuleName = systemModuleName;
+            _procedureName = "main";
+            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
+            _actions = new List<Action>(actions);
+            _filePath = filePath;
+            _saveToFile = saveToFile;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the RAPID Generator class with a custom procedure name.
+        /// </summary>
+        /// <param name="programModuleName"> The name of the program module </param>
+        /// <param name="systemModuleName"> The name of the system module </param>
+        /// <param name="procedureName"> The name of the RAPID procedure. </param>
+        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
+        /// <param name="filePath"> The path where the code files should be saved. </param>
+        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
+        /// <param name="robot"> The robot info wherefore the code should be created. </param>
+        public RAPIDGenerator(string programModuleName, string systemModuleName, string procedureName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
+        {
+            _programModuleName = programModuleName;
+            _systemModuleName = systemModuleName;
+            _procedureName = procedureName;
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = new List<Action>(actions);
             _filePath = filePath;
@@ -81,6 +104,7 @@ namespace RobotComponents.Actions
         {
             _programModuleName = generator.ProgramModuleName;
             _systemModuleName = generator.SystemModuleName;
+            _procedureName = generator.ProcedureName;
             _robot = generator.Robot.Duplicate();
             _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _filePath = generator.FilePath;
@@ -222,7 +246,7 @@ namespace RobotComponents.Actions
             if (_programInstructions.Count != 0)
             {
                 // Create Program
-                _programModule.Add("    " + "PROC main()");
+                _programModule.Add("    " + "PROC " + _procedureName + "()");
 
                 // Add instructions
                 _programModule.AddRange(_programInstructions);
@@ -559,6 +583,15 @@ namespace RobotComponents.Actions
         {
             get { return _systemModuleName; }
             set { _systemModuleName = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the RAPID procedure.
+        /// </summary>
+        public string ProcedureName
+        {
+            get { return _procedureName; }
+            set { _procedureName = value; }
         }
 
         /// <summary>

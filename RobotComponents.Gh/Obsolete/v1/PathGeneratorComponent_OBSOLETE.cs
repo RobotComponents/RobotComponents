@@ -26,7 +26,7 @@ namespace RobotComponents.Gh.Components.Obsolete
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class OldPathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    public class PathGeneratorComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private Robot _robot;
@@ -49,7 +49,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public OldPathGeneratorComponent()
+        public PathGeneratorComponent_OBSOLETE()
           : base("Path Generator", "PG",
               "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +

@@ -24,7 +24,7 @@ namespace RobotComponents.Gh.Components.Simulation
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class OldInverseKinematicsComponent : GH_Component
+    public class InverseKinematicsComponent_OBSOLETE : GH_Component
     {
         #region fields
         private InverseKinematics _inverseKinematics = new InverseKinematics();
@@ -37,7 +37,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public OldInverseKinematicsComponent()
+        public InverseKinematicsComponent_OBSOLETE()
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Target."
                 + System.Environment.NewLine + System.Environment.NewLine +

@@ -6,10 +6,13 @@
 // System Libs
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
+using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Definitions;
@@ -22,14 +25,19 @@ namespace RobotComponents.Gh.Components.CodeGeneration
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RAPIDGeneratorComponent : GH_Component
+    public class RAPIDGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private RAPIDGenerator _rapidGenerator;
         private bool _firstMovementIsMoveAbsJ = true;
         private bool _raiseWarnings = false;
+        private bool _programName = false;
+        private bool _systemName = false;
+        private bool _procedureName = false;
+        private bool _customCode = false;
         private List<string> _programModule = new List<string>();
         private List<string> _systemModule = new List<string>();
+        private readonly int _fixedParamNumInput = 2;
         #endregion
 
         /// <summary>
@@ -44,24 +52,31 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
+            // Create the component label with a message
+            Message = "EXTENDABLE";
         }
+
+        /// <summary>
+        /// Stores the variable input parameters in an array.
+        /// </summary>
+        private readonly IGH_Param[] variableInputParameters = new IGH_Param[5]
+        {
+            new Param_String() { Name = "Program Name", NickName = "PN", Description = "Name of the Pogram Module as a text. The default name is MainModule.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "System Name", NickName = "SN", Description = "Name of the System Module as a text. The default name is BASE.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "Procedure Name", NickName = "PN", Description = "Name of the RAPID procedure as a text. The default name is main.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "Custom Code", NickName = "CC", Description = "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made.", Access = GH_ParamAccess.list, Optional = true },
+            new Param_Boolean() { Name = "Update", NickName = "U", Description = "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made..", Access = GH_ParamAccess.item, Optional = true }
+        };
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions", GH_ParamAccess.list);
-            pManager.AddTextParameter("Program Name", "PN", "Name of the Pogram Module as a text. The default name is MainModule", GH_ParamAccess.item, "MainModule");
-            pManager.AddTextParameter("System Name", "SN", "Name of the System Module as a text. The default name is BASE", GH_ParamAccess.item, "BASE");
-            pManager.AddTextParameter("Custom Code", "CC", "Custom code lines for the system module as a list of text", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("Update", "U", "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made.", GH_ParamAccess.item, true);
+            pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions.", GH_ParamAccess.list);
 
-            pManager[2].Optional = true;
-            pManager[3].Optional = true;
-            pManager[4].Optional = true;
-            pManager[5].Optional = true;
+            AddParameter(4);
         }
 
         /// <summary>
@@ -83,18 +98,52 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Input variables
             Robot robInfo = new Robot();
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
-            string programName = "";
-            string systemName = "";
+            string programName = "MainModule";
+            string systemName = "BASE";
+            string procedureName = "main";
             List<string> customCodeLines = new List<string>() { };
             bool update = true;
 
             // Catch the input data
             if (!DA.GetData(0, ref robInfo)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
-            if (!DA.GetData(2, ref programName)) { programName = "MainModule"; }
-            if (!DA.GetData(3, ref systemName)) { systemName = "BASE"; }
-            if (!DA.GetDataList(4, customCodeLines)) { customCodeLines = new List<string>() { }; }
-            if (!DA.GetData(5, ref update)) { update = true; }
+
+            // Catch the input data from the variable parameteres
+            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
+            {
+                if (!DA.GetData(variableInputParameters[0].Name, ref programName))
+                {
+                    programName = "MainModule";
+                }
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
+            {
+                if (!DA.GetData(variableInputParameters[1].Name, ref systemName))
+                {
+                    systemName = "BASE";
+                }
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
+            {
+                if (!DA.GetData(variableInputParameters[2].Name, ref procedureName))
+                {
+                     procedureName= "main";
+                }
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[3].Name))
+            {
+                if (!DA.GetDataList(variableInputParameters[3].Name, customCodeLines))
+                {
+                    customCodeLines = new List<string>() { };
+                }
+            }
+            if (Params.Input.Any(x => x.Name == variableInputParameters[4].Name))
+            {
+                if (!DA.GetData(variableInputParameters[4].Name, ref update))
+                {
+                    update = true;
+                }
+            }
 
             // Checks if module name exceeds max character limit for RAPID Code
             if (HelperMethods.StringExeedsCharacterLimit32(programName))
@@ -104,6 +153,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (HelperMethods.StringExeedsCharacterLimit32(systemName))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name exceeds character limit of 32 characters.");
+            }
+            if (HelperMethods.StringExeedsCharacterLimit32(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name exceeds character limit of 32 characters.");
             }
 
             // Checks if module name starts with a number
@@ -115,6 +168,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name starts with a number which is not allowed in RAPID Code.");
             }
+            if (HelperMethods.StringStartsWithNumber(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name starts with a number which is not allowed in RAPID Code.");
+            }
 
             // Check if module name contains special character
             if (HelperMethods.StringStartsWithNumber(programName))
@@ -125,12 +182,16 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name onstains special characters.");
             }
+            if (HelperMethods.StringStartsWithNumber(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name onstains special characters.");
+            }
 
             // Updates the rapid Progam and System code
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo);
+                _rapidGenerator = new RAPIDGenerator(programName, systemName, procedureName, actions, null, false, robInfo);
 
                 // Generator code
                 _rapidGenerator.CreateProgramModule();
@@ -210,7 +271,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("00E6B125-6B7F-4FAA-91B3-F01A45EC7B58"); }
+            get { return new Guid("832B884B-D1EC-4197-8E3C-74E96A8F62EE"); }
         }
         #endregion
 
@@ -222,10 +283,63 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Overwrite Program Module Name", MenuItemClickProgramName, true, _programName);
+            Menu_AppendItem(menu, "Overwrite System Module Name", MenuItemClickSystemName, true, _systemName);
+            Menu_AppendItem(menu, "Overwrite Procedure Name", MenuItemClickProcedureName, true, _procedureName);
+            Menu_AppendItem(menu, "Set Custom System Code Lines", MenuItemClickCustomCode, true, _customCode);
+            Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Save Program module to file", MenuItemClickSaveProgramModule);
             Menu_AppendItem(menu, "Save System module to file", MenuItemClickSaveSystemModule);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Set Program Module Name" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickProgramName(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Overwrite Program Module Name");
+            _programName= !_programName;
+            AddParameter(0);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Set System Module Name" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickSystemName(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Overwrite System Module Name");
+            _systemName = !_systemName;
+            AddParameter(1);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Set Procedure Name" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickProcedureName(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Overwrite Procedure Name");
+            _procedureName = !_procedureName;
+            AddParameter(2);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Set System Custom Code Lines" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickCustomCode(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Set Custom System Code Lines");
+            _customCode = !_customCode;
+            AddParameter(3);
         }
 
         /// <summary>
@@ -323,6 +437,137 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("Program Module Name", _programName);
+            writer.SetBoolean("System Module Name", _systemName);
+            writer.SetBoolean("RAPID Procedure Name", _procedureName);
+            writer.SetBoolean("Custom System Code Lines", _customCode);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _programName = reader.GetBoolean("Program Module Name");
+            _systemName = reader.GetBoolean("System Module Name");
+            _procedureName = reader.GetBoolean("RAPID Procedure Name");
+            _customCode = reader.GetBoolean("Custom System Code Lines");
+            return base.Read(reader);
+        }
+
+        /// <summary>
+        /// Adds or destroys the input parameter to the component.
+        /// </summary>
+        /// <param name="index"> The index number of the parameter that needs to be added. </param>
+        private void AddParameter(int index)
+        {
+            // Pick the parameter
+            IGH_Param parameter = variableInputParameters[index];
+            string name = variableInputParameters[index].Name;
+
+            // If the parameter already exist: remove it
+            if (Params.Input.Any(x => x.Name == name))
+            {
+                Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
+            }
+
+            // Else remove the variable input parameter
+            else
+            {
+                // The index where the parameter should be added
+                int insertIndex = _fixedParamNumInput;
+
+                // Check if other parameters are already added and correct the insert index
+                for (int i = 0; i < index; i++)
+                {
+                    if (Params.Input.Any(x => x.Name == variableInputParameters[i].Name))
+                    {
+                        insertIndex += 1;
+                    }
+                }
+
+                // Register the input parameter
+                Params.RegisterInputParam(parameter, insertIndex);
+            }
+
+            // Expire solution and refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
+        }
+        #endregion
+
+        #region variable input parameters
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location </returns>
+        bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will get called before an attempt is made to insert a parameter. 
+        /// Since this method is potentially called on Canvas redraws, it must be fast.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if your component supports a variable parameter at the given location. </returns>
+        bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This function will be called when a new parameter is about to be inserted. 
+        /// You must provide a valid parameter or insertion will be skipped. 
+        /// You do not, repeat not, need to insert the parameter yourself.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> A valid IGH_Param instance to be inserted. In our case a null value. </returns>
+        IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// This function will be called when a parameter is about to be removed. 
+        /// You do not need to do anything, but this would be a good time to remove 
+        /// any event handlers that might be attached to the parameter in question.
+        /// </summary>
+        /// <param name="side"> Parameter side (input or output). </param>
+        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
+        /// <returns> Return True if the parameter in question can indeed be removed. Note, this is only in emergencies, 
+        /// typically the CanRemoveParameter function should return false if the parameter in question is not removable. </returns>
+        bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// This method will be called when a closely related set of variable parameter operations completes. 
+        /// This would be a good time to ensure all Nicknames and parameter properties are correct. 
+        /// This method will also be called upon IO operations such as Open, Paste, Undo and Redo.
+        /// </summary>
+        void IGH_VariableParameterComponent.VariableParameterMaintenance()
+        {
+
         }
         #endregion
     }

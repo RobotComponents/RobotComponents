@@ -69,6 +69,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\Value Lists\InequalitySymbolValueList.cs" />
     <Compile Include="Components\Code Generation\WaitAIComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1520ID_4_1_50_Component.cs" />
@@ -78,8 +79,8 @@
     <Compile Include="Components\Multi Move\TaskListComponent.cs" />
     <Compile Include="Components\Code Generation\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
-    <Compile Include="Obsolete\v1\OldInverseKinematicsComponent.cs" />
-    <Compile Include="Obsolete\v1\OldPathGeneratorComponent.cs" />
+    <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Forms\PickTaskForm.cs">
       <SubType>Form</SubType>
     </Compile>

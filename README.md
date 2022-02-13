@@ -114,6 +114,8 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 
 [EDEK Master Thesis Project - Wood Printing: The Possibility Of Printing Wood In 3D Space](https://vimeo.com/371587446)
 
+[ROASD Master Thesis Project - Winding with robots](https://www.youtube.com/watch?v=Ec1l9zdstBo)
+
 ## License
 Robot Components
 

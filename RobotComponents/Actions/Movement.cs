@@ -24,14 +24,12 @@ namespace RobotComponents.Actions
     public class Movement : Action, IInstruction, ISerializable
     {
         #region fields
-        // Fixed fields
         private MovementType _movementType;
         private ITarget _target;
         private int _id; // Synchronization id (for multi move programming)
         private SpeedData _speedData;
+        private double _time;
         private ZoneData _zoneData;
-
-        // Variable fields
         private RobotTool _robotTool;
         private WorkObject _workObject;
         private DigitalOutput _digitalOutput;
@@ -48,11 +46,12 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected Movement(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int));
             _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
+            _time = version > 103000 ? (double)info.GetValue("Time", typeof(double)) : -1;
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
@@ -73,6 +72,7 @@ namespace RobotComponents.Actions
             info.AddValue("ID", _id, typeof(int));
             info.AddValue("Speed Data", _speedData, typeof(SpeedData));
             info.AddValue("Zone Data", _zoneData, typeof(ZoneData));
+            info.AddValue("Time", _time, typeof(double));
             info.AddValue("Robot Tool", _robotTool, typeof(RobotTool));
             info.AddValue("Work Object", _workObject, typeof(WorkObject));
             info.AddValue("Digital Output", _digitalOutput, typeof(DigitalOutput));
@@ -98,6 +98,7 @@ namespace RobotComponents.Actions
             _target = new RobotTarget(plane);
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
+            _time = -1;
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -111,18 +112,11 @@ namespace RobotComponents.Actions
         /// <param name="target"> The Target. </param>
         public Movement(ITarget target)
         {
-            if (target is JointTarget)
-            {
-                _movementType = MovementType.MoveAbsJ;
-            }
-            else
-            {
-                _movementType = MovementType.MoveJ;
-            }
-
+            _movementType = target is JointTarget ? MovementType.MoveAbsJ : MovementType.MoveJ;
             _target = target;
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
+            _time = -1;
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -141,6 +135,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -161,6 +156,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -182,6 +178,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
@@ -203,6 +200,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = workObject;
@@ -224,6 +222,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
@@ -246,6 +245,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
@@ -268,6 +268,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
@@ -291,6 +292,7 @@ namespace RobotComponents.Actions
             _target = target;
             _id = -1;
             _speedData = speedData;
+            _time = -1;
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
@@ -309,6 +311,7 @@ namespace RobotComponents.Actions
             _target = movement.Target.DuplicateTarget();
             _id = movement.SyncID;
             _speedData = movement.SpeedData.Duplicate();
+            _time = movement.Time;
             _zoneData = movement.ZoneData.Duplicate();
             _digitalOutput = movement.DigitalOutput.Duplicate();
             _target = _target.DuplicateTarget();
@@ -369,7 +372,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Movement";
             }
@@ -551,109 +554,40 @@ namespace RobotComponents.Actions
             string toolName;
 
             // Check first if a tool is set
-            if (_robotTool == null) 
+            if (_robotTool == null || _robotTool.Name == "" || _robotTool.Name == null) 
             { 
                 toolName = robot.Tool.Name; 
             }
-            // Check if a tool is set by checking the name (tool can be empty)
-            else if (_robotTool.Name == "" || _robotTool.Name == null) 
-            { 
-                toolName = robot.Tool.Name; 
-            }
-            // Otherwise don't set a tool. Last overwrite is used that is combined with the movement.
+            // Otherwise: Last overwrite is used that is combined with the movement.
             else 
             { 
                 toolName = _robotTool.Name; 
             }
 
             // Declaration RAPID code
-            string target = _convertedTarget.Name;
-            string speedData = _speedData.Name;
-            string zoneData = _zoneData.Name;
+            string target = _convertedTarget.Name != string.Empty ? _convertedTarget.Name : _convertedTarget.ToRAPID();
+            string speedData = _speedData.Name != string.Empty ? _speedData.Name : _speedData.ToRAPID();
+            string zoneData = _zoneData.Name != string.Empty ? _zoneData.Name : _zoneData.ToRAPID();
+            target += _id > -1 ? string.Format("\\ID:={0}", _id) : "";
+            speedData += _time > 0 ? string.Format("\\T:={0}", _time) : "";
 
-            if (target == string.Empty)
+            // Check the movemet and target type
+            if (_target is JointTarget & _movementType != MovementType.MoveAbsJ)
             {
-                target = _convertedTarget.ToRAPID();
+                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
             }
-            if (speedData == string.Empty)
-            {
-                speedData = _speedData.ToRAPID();
-            }
-
-            if (zoneData == string.Empty)
-            {
-                zoneData = _zoneData.ToRAPID();
-            }
-
 
             // A movement not combined with a digital output
-            if (_digitalOutput.IsValid == false)
+            if (_digitalOutput == null || _digitalOutput.IsValid == false)
             {
-                // MoveAbsJ
-                if (_movementType == MovementType.MoveAbsJ)
-                {
-                    string code = "MoveAbsJ ";
-                    code += target;
+                string code = Enum.GetName(typeof(MovementType), _movementType) + " ";
+                code += target + ", ";
+                code += speedData + ", ";
+                code += zoneData + ", ";
+                code += toolName;
+                code += "\\WObj:=" + _workObject.Name + ";";
 
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code += toolName;
-                    code += "\\WObj:=" + _workObject.Name + ";";
-
-                    return code;
-                }
-
-                // MoveL
-                else if (_movementType == MovementType.MoveL && _target is RobotTarget)
-                {
-                    string code = "MoveL ";
-                    code += target;
-
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code += toolName;
-                    code += "\\WObj:=" + _workObject.Name + ";";
-
-                    return code;
-                }
-
-                // MoveJ
-                else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
-                {
-                    string code = "MoveJ ";
-                    code += target;
-
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code += toolName;
-                    code += "\\WObj:=" + _workObject.Name + ";";
-
-                    return code;
-                }
-
-                // Wrong movement type or combination
-                else
-                {
-                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
-                }
+                return code;
             }
 
             // A movement combined with a digital output
@@ -663,36 +597,22 @@ namespace RobotComponents.Actions
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    string code = "MoveAbsJ ";
-                    code += target;
-
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
+                    string code = Enum.GetName(typeof(MovementType), _movementType) + " ";
+                    code += target + ", ";
                     code += speedData + ", ";
                     code += zoneData + ", ";
                     code += toolName;
-                    code += "\\WObj:=" + _workObject.Name + "; ";
+                    code += "\\WObj:=" + _workObject.Name +  "; ";
                     code += _digitalOutput.ToRAPIDInstruction(robot);
 
                     return code;
                 }
 
-                // MoveLDO
-                else if (_movementType == MovementType.MoveL && _target is RobotTarget)
+                // MoveLDO and MoveJDO
+                else 
                 {
-                    string code = "MoveLDO ";
-                    code += target;
-
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
+                    string code = Enum.GetName(typeof(MovementType), _movementType) + "DO ";
+                    code += target + ", ";
                     code += speedData + ", ";
                     code += zoneData + ", ";
                     code += toolName;
@@ -701,34 +621,6 @@ namespace RobotComponents.Actions
                     code += (_digitalOutput.IsActive ? 1 : 0) + ";";
 
                     return code;
-                }
-
-                // MoveJDO
-                else if (_movementType == MovementType.MoveJ && _target is RobotTarget)
-                {
-                    string code = "MoveJDO ";
-                    code += target;
-
-                    if (_id > -1)
-                    {
-                        code += "\\ID:=" + _id;
-                    }
-
-                    code += ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code +=  toolName;
-                    code += "\\WObj:=" + _workObject.Name + ", ";
-                    code += _digitalOutput.Name + ", ";
-                    code += (_digitalOutput.IsActive ? 1 : 0) + ";";
-
-                    return code;
-                }
-
-                // Wrong movement type or combination
-                else
-                {
-                    throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
                 }
             }
         }
@@ -754,7 +646,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
 
             // Collect unique robot tools
             if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
@@ -778,16 +670,16 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Target == null) { return false; }
-                if (Target.IsValid == false) { return false; }
-                if (SpeedData == null) { return false; }
-                if (SpeedData.IsValid == false) { return false; }
-                if (ZoneData == null) { return false; }
-                if (ZoneData.IsValid == false) { return false; }
-                if (WorkObject == null) { return false;  }
-                if (WorkObject.IsValid == false) { return false; }
-                if (Target is JointTarget && MovementType == MovementType.MoveL) { return false; }
-                if (Target is JointTarget && MovementType == MovementType.MoveJ) { return false; }
+                if (_target == null) { return false; }
+                if (_target.IsValid == false) { return false; }
+                if (_speedData == null) { return false; }
+                if (_speedData.IsValid == false) { return false; }
+                if (_zoneData == null) { return false; }
+                if (_zoneData.IsValid == false) { return false; }
+                if (_workObject == null) { return false;  }
+                if (_workObject.IsValid == false) { return false; }
+                if (_target is JointTarget && MovementType == MovementType.MoveL) { return false; }
+                if (_target is JointTarget && MovementType == MovementType.MoveJ) { return false; }
                 return true;
             }
         }
@@ -829,6 +721,17 @@ namespace RobotComponents.Actions
         {
             get { return _speedData; }
             set { _speedData = value; }
+        }
+
+        /// <summary>
+        /// Gets the the total time which the robot will move in seconds. 
+        /// This overwrites the defined speeddata value.
+        /// Set this property to a negative value to not overwrite the speeddata value. 
+        /// </summary>
+        public double Time
+        {
+            get { return _time; }
+            set { _time = value; }
         }
 
         /// <summary>

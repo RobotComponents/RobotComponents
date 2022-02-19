@@ -4,6 +4,7 @@
 // see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.IO;
 using System.Collections.Generic;
 // RobotComponents Libs
@@ -58,40 +59,55 @@ namespace RobotComponents.Actions
         /// <summary>
         /// Initializes a new instance of the RAPID Generator class with a main procedure.
         /// </summary>
-        /// <param name="programModuleName"> The name of the program module </param>
-        /// <param name="systemModuleName"> The name of the system module </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        /// <param name="filePath"> The path where the code files should be saved. </param>
-        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
         /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programModuleName, string systemModuleName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
+        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
+        public RAPIDGenerator(Robot robot, IList<Action> actions)
         {
-            _programModuleName = programModuleName;
-            _systemModuleName = systemModuleName;
-            _procedureName = "main";
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = new List<Action>(actions);
-            _filePath = filePath;
-            _saveToFile = saveToFile;
+            _programModuleName = "MainModule";
+            _systemModuleName = "BASE";
+            _procedureName = "main";
+            _filePath = string.Empty;
+            _saveToFile = false;
         }
 
         /// <summary>
-        /// Initializes a new instance of the RAPID Generator class with a custom procedure name.
+        /// Initializes a new instance of the RAPID Generator class with a main procedure.
         /// </summary>
+        /// <param name="robot"> The robot info wherefore the code should be created. </param>
+        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
         /// <param name="programModuleName"> The name of the program module </param>
         /// <param name="systemModuleName"> The name of the system module </param>
-        /// <param name="procedureName"> The name of the RAPID procedure. </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        /// <param name="filePath"> The path where the code files should be saved. </param>
-        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
-        /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        public RAPIDGenerator(string programModuleName, string systemModuleName, string procedureName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
+        /// <param name="procedureName"> The name of the RAPID procedure </param>
+        public RAPIDGenerator(Robot robot, IList<Action> actions, string programModuleName, string systemModuleName, string procedureName)
         {
+            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
+            _actions = new List<Action>(actions);
             _programModuleName = programModuleName;
             _systemModuleName = systemModuleName;
             _procedureName = procedureName;
+            _filePath = string.Empty;
+            _saveToFile = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the RAPID Generator class with a main procedure.
+        /// </summary>
+        /// <param name="robot"> The robot info wherefore the code should be created. </param>
+        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
+        /// <param name="programModuleName"> The name of the program module </param>
+        /// <param name="systemModuleName"> The name of the system module </param>
+        /// <param name="procedureName"> The name of the RAPID procedure </param>
+        /// <param name="filePath"> The path where the code files should be saved. </param>
+        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
+        public RAPIDGenerator(Robot robot, IList<Action> actions, string programModuleName, string systemModuleName, string procedureName, string filePath, bool saveToFile)
+        {
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _actions = new List<Action>(actions);
+            _programModuleName = programModuleName;
+            _systemModuleName = systemModuleName;
+            _procedureName = procedureName;
             _filePath = filePath;
             _saveToFile = saveToFile;
         }
@@ -113,7 +129,6 @@ namespace RobotComponents.Actions
             _systemModule = generator.SystemModule.ConvertAll(line => line);
             _firstMovementIsMoveAbsJ = generator.FirstMovementIsMoveAbsJ;
         }
-
 
         /// <summary>
         /// Returns an exact duplicate of this RAPID Generator instance.
@@ -277,7 +292,7 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="customCode"> Custom user definied base code as a list with strings. </param>
         /// <returns> The RAPID system code as a list with code lines. </returns>
-        public List<string> CreateSystemModule(IList<string> customCode)
+        public List<string> CreateSystemModule(IList<string> customCode = null)
         {
             _systemModule.Clear();
 
@@ -312,7 +327,7 @@ namespace RobotComponents.Actions
         /// <param name="workObjects"> The work objects that should be added to the system code as a list. </param>
         /// <param name="customCode"> Custom user definied base code as list with strings. </param>
         /// <returns> The RAPID system code as a list with code lines. </returns>
-        public List<string> CreateSystemModule(IList<RobotTool> robotTools, IList<WorkObject> workObjects, IList<string> customCode)
+        public List<string> CreateSystemModule(IList<RobotTool> robotTools, IList<WorkObject> workObjects, IList<string> customCode = null)
         {
             _systemModule.Clear();
 
@@ -352,32 +367,41 @@ namespace RobotComponents.Actions
             }
 
             // Adds Tools Base Code
-            if (robotTools.Count != 0 && robotTools != null)
+            if (robotTools != null)
             {
-                _systemModule.Add("    " + "! User defined tooldata ");
-                _systemModule.AddRange(CreateToolSystemCode(robotTools));
-                _systemModule.Add("    ");
+                if (robotTools.Count != 0)
+                {
+                    _systemModule.Add("    " + "! User defined tooldata ");
+                    _systemModule.AddRange(CreateToolSystemCode(robotTools));
+                    _systemModule.Add("    ");
+                }
             }
 
             // Adds Work Objects Base Code
-            if (workObjects.Count != 0 && workObjects != null)
+            if (workObjects != null)
             {
-                _systemModule.Add("    " + "! User defined wobjdata ");
-                _systemModule.AddRange(CreateWorkObjectSystemCode(workObjects));
-                _systemModule.Add("    ");
+                if (workObjects.Count != 0)
+                {
+                    _systemModule.Add("    " + "! User defined wobjdata ");
+                    _systemModule.AddRange(CreateWorkObjectSystemCode(workObjects));
+                    _systemModule.Add("    ");
+                }
             }
 
             // Adds Custom code line
-            if (customCode.Count != 0 && customCode != null)
+            if (customCode != null)
             {
-                _systemModule.Add("    " + "! User definied custom code lines");
-
-                for (int i = 0; i != customCode.Count; i++)
+                if (customCode.Count != 0)
                 {
-                    _systemModule.Add("    " + customCode[i]);
-                }
+                    _systemModule.Add("    " + "! User definied custom code lines");
 
-                _systemModule.Add("    ");
+                    for (int i = 0; i != customCode.Count; i++)
+                    {
+                        _systemModule.Add("    " + customCode[i]);
+                    }
+
+                    _systemModule.Add("    ");
+                }
             }
 
             // End Module
@@ -721,6 +745,29 @@ namespace RobotComponents.Actions
         {
             get { return _synchronizedMovements; }
             set { _synchronizedMovements = value; }
+        }
+        #endregion
+
+        #region OBSOLETE
+        /// <summary>
+        /// Initializes a new instance of the RAPID Generator class with a main procedure.
+        /// </summary>
+        /// <param name="programModuleName"> The name of the program module </param>
+        /// <param name="systemModuleName"> The name of the system module </param>
+        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
+        /// <param name="filePath"> The path where the code files should be saved. </param>
+        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
+        /// <param name="robot"> The robot info wherefore the code should be created. </param>
+        [Obsolete("This constructor is OBSOLETE and will be removed in version 2.", false)]
+        public RAPIDGenerator(string programModuleName, string systemModuleName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
+        {
+            _programModuleName = programModuleName;
+            _systemModuleName = systemModuleName;
+            _procedureName = "main";
+            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
+            _actions = new List<Action>(actions);
+            _filePath = filePath;
+            _saveToFile = saveToFile;
         }
         #endregion
     }

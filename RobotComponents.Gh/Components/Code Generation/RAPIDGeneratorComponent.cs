@@ -96,7 +96,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Robot robInfo = new Robot();
+            Robot robot = new Robot();
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             string programName = "MainModule";
             string systemName = "BASE";
@@ -105,7 +105,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             bool update = true;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robInfo)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
 
             // Catch the input data from the variable parameteres
@@ -191,7 +191,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(programName, systemName, procedureName, actions, null, false, robInfo);
+                _rapidGenerator = new RAPIDGenerator(robot, actions, programName, systemName, procedureName);
 
                 // Generator code
                 _rapidGenerator.CreateProgramModule();

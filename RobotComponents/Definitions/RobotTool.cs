@@ -542,7 +542,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "Robot Tool (" + _name + ")";
+                return $"Robot Tool ({_name})";
             }
         }
 
@@ -623,46 +623,28 @@ namespace RobotComponents.Definitions
         /// <returns> The RAPID code line. </returns>
         public string ToRAPIDDeclaration()
         {
-            // Add robot tool name
+            // Adds variable type
             string result = Enum.GetName(typeof(ReferenceType), _referenceType);
+
+            // Add robot tool name
             result += " tooldata " + _name + " := ";
 
             // Add robot hold < robhold of bool >
-            if (_robotHold)
-            {
-                result += "[TRUE, [[";
-            }
-            else
-            {
-                result += "[FALSE, [[";
-            }
+            result += _robotHold ? "[TRUE, [[" : "[FALSE, [[";
 
             // Add coordinate of toolframe < tframe of pose > < trans of pos >
-            result += _position.X.ToString("0.###") 
-                + ", " + _position.Y.ToString("0.###") 
-                + ", " + _position.Z.ToString("0.###") + "], [";
-
+            result += $"{_position.X:0.###}, {_position.Y:0.###}, {_position.Z:0.###}], [";
+            
             // Add orientation of tool frame < tframe of pose > < rot of orient >
-            result += _orientation.A.ToString("0.######") 
-                + ", " + _orientation.B.ToString("0.######") 
-                + ", " + _orientation.C.ToString("0.######") 
-                + ", " + _orientation.D.ToString("0.######") + "]], [";
+            result += $"{_orientation.A:0.######}, {_orientation.B:0.######}, " +
+                $"{_orientation.C:0.######}, {_orientation.D:0.######}]], [";
 
             // Add tool load < tload of loaddata >
-            result += _mass.ToString("0.######") + ", [" 
-
-                + _centerOfGravityPosition.X.ToString("0.######") + ", " 
-                + _centerOfGravityPosition.Y.ToString("0.######") + ", " 
-                + _centerOfGravityPosition.Z.ToString("0.######") + "], ["
-
-                + _centerOfGravityOrientation.A.ToString("0.######") + ", " 
-                + _centerOfGravityOrientation.B.ToString("0.######") + ", " 
-                + _centerOfGravityOrientation.C.ToString("0.######") + ", " 
-                + _centerOfGravityOrientation.D.ToString("0.######") + "], " 
-
-                + _inertia.X.ToString("0.######") + ", " 
-                + _inertia.Y.ToString("0.######") + ", " 
-                + _inertia.Z.ToString("0.######") + "]];";
+            result += $"{_mass:0.######}, [";
+            result += $"{_centerOfGravityPosition.X:0.######}, {_centerOfGravityPosition.Y:0.######}, {_centerOfGravityPosition.Z:0.######}], [";
+            result += $"{_centerOfGravityOrientation.A:0.######}, {_centerOfGravityOrientation.B:0.######}, ";
+            result += $"{_centerOfGravityOrientation.C:0.######}, {_centerOfGravityOrientation.D:0.######}], "; 
+            result += $"{_inertia.X:0.######}, {_inertia.Y:0.######}, {_inertia.Z:0.######}" + "]];";
 
             return result;
         }

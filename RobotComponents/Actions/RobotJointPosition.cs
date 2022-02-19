@@ -261,12 +261,12 @@ namespace RobotComponents.Actions
             {
                 string result = "Robot Joint Position (";
 
-                result += _val1.ToString("0.##") + ", ";
-                result += _val2.ToString("0.##") + ", ";
-                result += _val3.ToString("0.##") + ", ";
-                result += _val4.ToString("0.##") + ", ";
-                result += _val5.ToString("0.##") + ", ";
-                result += _val6.ToString("0.##") + ")";
+                result += $"{_val1:0.##}, ";
+                result += $"{_val2:0.##}, ";
+                result += $"{_val3:0.##}, ";
+                result += $"{_val4:0.##}, ";
+                result += $"{_val5:0.##}, ";
+                result += $"{_val6:0.##})";
 
                 return result;
             }
@@ -473,14 +473,14 @@ namespace RobotComponents.Actions
         /// <returns> The string with axis values. </returns>
         public string ToRAPID()
         {
-            string code = "[";
+            string code = "";
 
-            code += _val1.ToString("0.##") + ", ";
-            code += _val2.ToString("0.##") + ", ";
-            code += _val3.ToString("0.##") + ", ";
-            code += _val4.ToString("0.##") + ", ";
-            code += _val5.ToString("0.##") + ", ";
-            code += _val6.ToString("0.##") + "]";
+            code += $"[{ _val1:0.##}, ";
+            code += $"{ _val2:0.##}, ";
+            code += $"{ _val3:0.##}, ";
+            code += $"{ _val4:0.##}, ";
+            code += $"{ _val5:0.##}, ";
+            code += $"{ _val6:0.##}]";
 
             return code;
         }
@@ -494,14 +494,7 @@ namespace RobotComponents.Actions
         {
             if (_name != string.Empty)
             {
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " robjoint ";
-                code += _name;
-                code += " := ";
-                code += ToRAPID();
-                code += ";";
-
-                return code;
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robjoint {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -529,7 +522,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
                 {
                     RAPIDGenerator.JointPositions.Add(_name, this);
-                    RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

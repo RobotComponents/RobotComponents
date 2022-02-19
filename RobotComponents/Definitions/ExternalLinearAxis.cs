@@ -713,7 +713,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "External Linear Axis (" + _name + ")";
+                return $"External Linear Axis ({_name})";
             }
         }
 

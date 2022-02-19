@@ -116,7 +116,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait Time (" + _duration.ToString("0.##") + " sec.)";
+                return $"Wait Time ({_duration:0.###} sec.)";
             }
         }
 
@@ -137,7 +137,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return "WaitTime " + _duration + ";";
+            return $"WaitTime {_duration:0.###};";
         }
 
         /// <summary>

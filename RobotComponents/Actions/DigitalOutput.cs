@@ -126,7 +126,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Digital Output (" + _name + "\\" + _isActive.ToString() + ")";
+                return $"Digital Output ({_name}\\{_isActive})";
             }
         }
 
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return _isActive == true ? "SetDO " + _name + ", 1;" : "SetDO " + _name + ", 0;";
+            return _isActive == true ? $"SetDO {_name}, 1;" : $"SetDO {_name}, 0;";
         }
 
         /// <summary>

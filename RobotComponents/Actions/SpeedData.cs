@@ -230,11 +230,11 @@ namespace RobotComponents.Actions
             }
             else if (_predefined == true)
             {
-                return "Predefined Speed Data ("+ _name + ")";
+                return $"Predefined Speed Data ({_name})";
             }
             else if (_name != string.Empty)
             {
-                return "Custom Speed Data (" + _name + ")";
+                return $"Custom Speed Data ({_name})";
             }
             else
             {
@@ -248,7 +248,7 @@ namespace RobotComponents.Actions
         /// <returns> The string with speed data values. </returns>
         public string ToRAPID()
         {
-            return "[" + _v_tcp + ", " + _v_ori + ", " + _v_leax + ", " + _v_reax + "]";
+            return $"[{_v_tcp}, {_v_ori}, {_v_leax}, {_v_reax}]";
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false && _name != string.Empty)
             {
-                return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := " + this.ToRAPID() + ";";
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} speeddata {_name} := {ToRAPID()};";
             }
             else
             {
@@ -292,7 +292,7 @@ namespace RobotComponents.Actions
                     if (!RAPIDGenerator.SpeedDatas.ContainsKey(_name))
                     {
                         RAPIDGenerator.SpeedDatas.Add(_name, this);
-                        RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                        RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }
             }

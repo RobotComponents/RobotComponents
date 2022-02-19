@@ -66,7 +66,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "External Axis (" + this.Name + ")";
+                return $"External Axis ({Name})";
             }
         }
 

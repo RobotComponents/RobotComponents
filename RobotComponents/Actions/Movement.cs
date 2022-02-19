@@ -381,15 +381,15 @@ namespace RobotComponents.Actions
             {
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    return "Absolute Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+                    return $"Absolute Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveL)
                 {
-                    return "Linear Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+                    return $"Linear Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveJ)
                 {
-                    return "Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+                    return $"Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else
                 {
@@ -401,15 +401,15 @@ namespace RobotComponents.Actions
             {
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    return "Coordinated synchronized Absolute Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+                    return $"Coordinated synchronized Absolute Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveL)
                 {
-                    return "Coordinated synchronized Linear Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+                    return $"Coordinated synchronized Linear Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveJ)
-                {
-                    return "Coordinated synchronized Joint Movement (" + _target.Name + "\\" + _workObject.Name + ")";
+            {
+                return $"Coordinated synchronized Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else
                 {
@@ -554,7 +554,7 @@ namespace RobotComponents.Actions
             string toolName;
 
             // Check first if a tool is set
-            if (_robotTool == null || _robotTool.Name == "" || _robotTool.Name == null) 
+            if (_robotTool == null || _robotTool.Name == null ||_robotTool.Name == "") 
             { 
                 toolName = robot.Tool.Name; 
             }
@@ -568,8 +568,8 @@ namespace RobotComponents.Actions
             string target = _convertedTarget.Name != string.Empty ? _convertedTarget.Name : _convertedTarget.ToRAPID();
             string speedData = _speedData.Name != string.Empty ? _speedData.Name : _speedData.ToRAPID();
             string zoneData = _zoneData.Name != string.Empty ? _zoneData.Name : _zoneData.ToRAPID();
-            target += _id > -1 ? string.Format("\\ID:={0}", _id) : "";
-            speedData += _time > 0 ? string.Format("\\T:={0}", _time) : "";
+            target += _id > -1 ? string.Format("\\ID:={0}", _id) : string.Empty;
+            speedData += _time > 0 ? string.Format("\\T:={0}", _time) : string.Empty;
 
             // Check the movemet and target type
             if (_target is JointTarget & _movementType != MovementType.MoveAbsJ)
@@ -580,13 +580,8 @@ namespace RobotComponents.Actions
             // A movement not combined with a digital output
             if (_digitalOutput == null || _digitalOutput.IsValid == false)
             {
-                string code = Enum.GetName(typeof(MovementType), _movementType) + " ";
-                code += target + ", ";
-                code += speedData + ", ";
-                code += zoneData + ", ";
-                code += toolName;
-                code += "\\WObj:=" + _workObject.Name + ";";
-
+                string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
+                code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name};";
                 return code;
             }
 
@@ -597,29 +592,18 @@ namespace RobotComponents.Actions
                 // Therefore, we write two separate RAPID code lines for an aboslute joint momvement combined with a DO. 
                 if (_movementType == MovementType.MoveAbsJ)
                 {
-                    string code = Enum.GetName(typeof(MovementType), _movementType) + " ";
-                    code += target + ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code += toolName;
-                    code += "\\WObj:=" + _workObject.Name +  "; ";
+                    string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
+                    code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}; ";
                     code += _digitalOutput.ToRAPIDInstruction(robot);
-
                     return code;
                 }
 
                 // MoveLDO and MoveJDO
-                else 
+                else
                 {
-                    string code = Enum.GetName(typeof(MovementType), _movementType) + "DO ";
-                    code += target + ", ";
-                    code += speedData + ", ";
-                    code += zoneData + ", ";
-                    code += toolName;
-                    code += "\\WObj:=" + _workObject.Name + ", ";
-                    code += _digitalOutput.Name + ", ";
-                    code += (_digitalOutput.IsActive ? 1 : 0) + ";";
-
+                    string code = $"{Enum.GetName(typeof(MovementType), _movementType)}DO ";
+                    code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}, ";
+                    code += $"{_digitalOutput.Name}, {(_digitalOutput.IsActive ? 1 : 0)};";
                     return code;
                 }
             }

@@ -129,7 +129,7 @@ namespace RobotComponents.Actions
             }
             else if (_name != string.Empty)
             {
-                return "Action Group (" + _name + ")";
+                return $"Action Group ({_name})";
             }
             else
             {
@@ -328,7 +328,7 @@ namespace RobotComponents.Actions
         {
             if (_name != string.Empty)
             {
-                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! Start of group: " + _name);
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! Start of group: {_name}");
             }
 
             for (int i = 0; i < _actions.Count; i++)
@@ -338,7 +338,7 @@ namespace RobotComponents.Actions
 
             if (_name != string.Empty)
             {
-                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "! End of group: " + _name);
+                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! End of group: {_name}");
             }
         }
         #endregion

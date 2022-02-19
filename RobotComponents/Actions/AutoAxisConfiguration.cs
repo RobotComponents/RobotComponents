@@ -115,7 +115,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Auto Axis Configuration";
             }
-            else if (this.IsActive)
+            else if (_isActive)
             {
                 return "Enable Auto Axis Configuration";
             }
@@ -142,14 +142,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_isActive == true)
-            {
-                return "ConfJ\\off; ConfL\\off;";
-            }
-            else
-            {
-                return "ConfJ\\on; ConfL\\on;";
-            }
+            return _isActive ? "ConfJ\\off; ConfL\\off;" : "ConfJ\\on; ConfL\\on;";
         }
 
         /// <summary>

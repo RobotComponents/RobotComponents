@@ -126,7 +126,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait for Digital Input (" + this.Name + "\\" + this.Value.ToString() + ")";
+                return $"Wait for Digital Input ({_name}\\{_value})";
             }
         }
 
@@ -147,14 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_value == true)
-            {
-                return "WaitDI " + _name + ", 1;";
-            }
-            else
-            {
-                return "WaitDI " + _name + ", 0;";
-            }
+            return _value ? $"WaitDI {_name}, 1;" : $"WaitDI {_name}, 0;";
         }
 
         /// <summary>

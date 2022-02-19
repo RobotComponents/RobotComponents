@@ -320,7 +320,7 @@ namespace RobotComponents.Actions
             }
             else if (_name != string.Empty)
             {
-                return "Robot Target (" + _name + ")";
+                return $"Robot Target ({_name})";
             }
             else
             {
@@ -341,20 +341,16 @@ namespace RobotComponents.Actions
                 externalJointPosition = _externalJointPosition.ToRAPID();
             }
 
-            string code = "[";
-            code += "[" + _plane.Origin.X.ToString("0.##") + ", ";
-            code += _plane.Origin.Y.ToString("0.##") + ", ";
-            code += _plane.Origin.Z.ToString("0.##") + "]";
-            code += ", ";
-            code += "[" + _quat.A.ToString("0.######") + ", ";
-            code += _quat.B.ToString("0.######") + ", ";
-            code += _quat.C.ToString("0.######") + ", ";
-            code += _quat.D.ToString("0.######") + "]";
-            code += ", ";
-            code += "[0,0,0," + _axisConfig + "]";
-            code += ", ";
-            code += externalJointPosition;
-            code += "]";
+            string code = $"[";
+            code += $"[{_plane.OriginX:0.##}, ";
+            code += $"{_plane.OriginY:0.##}, ";
+            code += $"{_plane.OriginZ:0.##}], ";
+            code += $"[{_quat.A:0.######}, ";
+            code += $"{_quat.B:0.######}, ";
+            code += $"{_quat.C:0.######}, ";
+            code += $"{_quat.D:0.######}], ";
+            code += $"[0,0,0,{_axisConfig}], ";
+            code += $"{externalJointPosition}]";
 
             return code;
         }
@@ -368,14 +364,7 @@ namespace RobotComponents.Actions
         {
             if (_name != string.Empty)
             {
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " robtarget ";
-                code += _name;
-                code += " := ";
-                code += ToRAPID();
-                code += ";";
-
-                return code;
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robtarget {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -405,7 +394,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {
                     RAPIDGenerator.Targets.Add(_name, this);
-                    RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

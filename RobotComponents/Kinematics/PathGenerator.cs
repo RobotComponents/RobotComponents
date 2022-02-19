@@ -221,11 +221,7 @@ namespace RobotComponents.Kinematics
         /// <param name="movement"> The Movement to set the Robot Tool for. </param>
         private void SetRobotTool(Movement movement)
         {
-            if (movement.RobotTool == null)
-            {
-                _robot.Tool = _currentTool;
-            }
-            else if (movement.RobotTool.Name == "")
+            if (movement.RobotTool == null || movement.RobotTool.Name == "")
             {
                 _robot.Tool = _currentTool;
             }
@@ -443,7 +439,7 @@ namespace RobotComponents.Kinematics
 
                 if (newMovement.MovementType == MovementType.MoveAbsJ && newMovement.Target is RobotTarget robotTarget1)
                 {
-                    string name = robotTarget1.Name == "" ? "" : robotTarget1.Name + "_jt";
+                    string name = robotTarget1.Name == "" ? "" : $"{robotTarget1.Name}_jt";
                     newMovement.Target = new JointTarget(name, newRobotJointPosition.Duplicate(), newExternalJointPosition.Duplicate());
                     newMovement.Target.ExternalJointPosition.Name = movement.Target.ExternalJointPosition.Name;
                 }

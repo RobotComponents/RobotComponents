@@ -147,19 +147,13 @@ namespace RobotComponents.Kinematics
         private void Initialize()
         {
             // Check robot tool: override if the movement contains a robot tool
-            if (_movement.RobotTool == null)
+            if (_movement.RobotTool == null || _movement.RobotTool.Name == null || _movement.RobotTool.Name == "")
             {
                 _robotTool = _robot.Tool;
             }
-            // Check if the set tool is not empty
-            else if (_movement.RobotTool.Name != null && _movement.RobotTool.Name != "")
-            {
-                _robotTool = _movement.RobotTool; 
-            }
-            // Otherwise use the tool that is attached to the robot
             else
             {
-                _robotTool = _robot.Tool;
+                _robotTool = _movement.RobotTool;
             }
 
             // Movement related fields
@@ -688,7 +682,7 @@ namespace RobotComponents.Kinematics
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 { 
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": The position of robot axis " + (i + 1).ToString() + " is not in range.");
+                    _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
                     _inLimits = false;
                 }
             }
@@ -706,7 +700,7 @@ namespace RobotComponents.Kinematics
 
                 if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    _errorText.Add("Movement " + Movement.Target.Name + "\\" + Movement.WorkObject.Name + ": The position of external logical axis " + logic + " is not in range.");
+                    _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The position of external logical axis {logic} is not in range.");
                     _inLimits = false;
                 }
             }

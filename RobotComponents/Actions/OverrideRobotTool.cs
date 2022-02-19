@@ -116,7 +116,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Override Robot Tool (" + _robotTool.Name + ")";
+                return $"Override Robot Tool ({_robotTool.Name})";
             }
         }
 
@@ -138,7 +138,7 @@ namespace RobotComponents.Actions
         public override string ToRAPIDInstruction(Robot robot)
         {
             robot.Tool = _robotTool;
-            return "! " + "Default Robot Tool changed to " + robot.Tool.Name + ".";
+            return $"! Default Robot Tool changed to {robot.Tool.Name}.";
         }
 
         /// <summary>

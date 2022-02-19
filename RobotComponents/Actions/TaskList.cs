@@ -129,7 +129,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Tasks (" + _name + ")";
+                return $"Tasks ({_name})";
             }
         }
 
@@ -198,7 +198,7 @@ namespace RobotComponents.Actions
             if (!RAPIDGenerator.TaskLists.ContainsKey(_name))
             {
                 RAPIDGenerator.TaskLists.Add(_name, this);
-                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }
 

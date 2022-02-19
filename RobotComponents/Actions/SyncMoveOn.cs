@@ -136,7 +136,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Sync Move On (" + _syncident + ")";
+                return $"Sync Move On ({_syncident})";
             }
         }
 
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            return Enum.GetName(typeof(ReferenceType), _referenceType) + " syncident " + _syncident + ";";
+            return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} syncident {_syncident};";
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return "SyncMoveOn " + _syncident + ", " + _taskList.Name + ";";
+            return $"SyncMoveOn {_syncident}, {_taskList.Name};";
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace RobotComponents.Actions
             if (!RAPIDGenerator.Syncidents.ContainsKey(_syncident))
             {
                 RAPIDGenerator.Syncidents.Add(_syncident, this);
-                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
         }
 

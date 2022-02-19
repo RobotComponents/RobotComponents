@@ -263,23 +263,12 @@ namespace RobotComponents.Actions
             {
                 string result = "External Joint Position (";
 
-                if (_val1 == _defaultValue) { result += "9E9, "; }
-                else { result += _val1.ToString("0.##") + ", "; }
-
-                if (_val2 == _defaultValue) { result += "9E9, "; }
-                else { result += _val2.ToString("0.##") + ", "; }
-
-                if (_val3 == _defaultValue) { result += "9E9, "; }
-                else { result += _val3.ToString("0.##") + ", "; }
-
-                if (_val4 == _defaultValue) { result += "9E9, "; }
-                else { result += _val4.ToString("0.##") + ", "; }
-
-                if (_val5 == _defaultValue) { result += "9E9, "; }
-                else { result += _val5.ToString("0.##") + ", "; }
-
-                if (_val6 == _defaultValue) { result += "9E9)"; }
-                else { result += _val6.ToString("0.##") + ")"; }
+                result += _val1 == _defaultValue ? "9E9, " : $"{_val1:0.##}, ";
+                result += _val2 == _defaultValue ? "9E9, " : $"{_val2:0.##}, ";
+                result += _val3 == _defaultValue ? "9E9, " : $"{_val3:0.##}, ";
+                result += _val4 == _defaultValue ? "9E9, " : $"{_val4:0.##}, ";
+                result += _val5 == _defaultValue ? "9E9, " : $"{_val5:0.##}, ";
+                result += _val6 == _defaultValue ? "9E9)" : $"{_val6:0.##})";
 
                 return result;
             }
@@ -350,7 +339,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
+                    throw new InvalidOperationException($"Mismatch between two External Joint Positions. A definied joint position [on index {i}] is combined with an undefinied joint position.");
                 }
             }
         }
@@ -389,7 +378,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
+                    throw new InvalidOperationException($"Mismatch between two External Joint Positions. A definied joint position [on index {i}] is combined with an undefinied joint position.");
                 }
             }
         }
@@ -428,7 +417,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
+                    throw new InvalidOperationException($"Mismatch between two External Joint Positions. A definied joint position [on index {i}] is combined with an undefinied joint position.");
                 }
             }
         }
@@ -476,7 +465,7 @@ namespace RobotComponents.Actions
                 }
                 else
                 {
-                    throw new InvalidOperationException(String.Format("Mismatch between two External Joint Positions. A definied joint position [on index {0}] is combined with an undefinied joint position.", i));
+                    throw new InvalidOperationException($"Mismatch between two External Joint Positions. A definied joint position [on index {i}] is combined with an undefinied joint position.");
                 }
             }
         }
@@ -513,25 +502,14 @@ namespace RobotComponents.Actions
         /// <returns> The string with the positions of the external axes. </returns>
         public string ToRAPID()
         {
-            string code = "[";
+            string code = "";
 
-            if (_val1 == _defaultValue) { code += "9E9, "; }
-            else { code += _val1.ToString("0.##") + ", "; }
-
-            if (_val2 == _defaultValue) { code += "9E9, "; }
-            else { code += _val2.ToString("0.##") + ", "; }
-
-            if (_val3 == _defaultValue) { code += "9E9, "; }
-            else { code += _val3.ToString("0.##") + ", "; }
-
-            if (_val4 == _defaultValue) { code += "9E9, "; }
-            else { code += _val4.ToString("0.##") + ", "; }
-
-            if (_val5 == _defaultValue) { code += "9E9, "; }
-            else { code += _val5.ToString("0.##") + ", "; }
-
-            if (_val6 == _defaultValue) { code += "9E9]"; }
-            else { code += _val6.ToString("0.##") + "]"; }
+            code += _val1 == _defaultValue ? "[9E9, " : $"[{_val1:0.##}, ";
+            code += _val2 == _defaultValue ? "9E9, " : $"{_val2:0.##}, ";
+            code += _val3 == _defaultValue ? "9E9, " : $"{_val3:0.##}, ";
+            code += _val4 == _defaultValue ? "9E9, " : $"{_val4:0.##}, ";
+            code += _val5 == _defaultValue ? "9E9, " : $"{_val5:0.##}, ";
+            code += _val6 == _defaultValue ? "9E9]" : $"{_val6:0.##}]";
 
             return code;
         }
@@ -545,14 +523,7 @@ namespace RobotComponents.Actions
         {
             if (_name != string.Empty)
             {
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " extjoint ";
-                code += _name;
-                code += " := ";
-                code += ToRAPID();
-                code += ";";
-
-                return code;
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} extjoint {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -580,7 +551,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
                 {
                     RAPIDGenerator.JointPositions.Add(_name, this);
-                    RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

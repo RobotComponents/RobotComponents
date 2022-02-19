@@ -141,7 +141,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return _isActive == true ? "ConfJ\\on;" : "ConfJ\\off;";
+            return _isActive ? "ConfJ\\on;" : "ConfJ\\off;";
         }
 
         /// <summary>

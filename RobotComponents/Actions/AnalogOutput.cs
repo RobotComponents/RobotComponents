@@ -126,7 +126,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Analog  Output (" + _name + "\\" + _value.ToString() + ")";
+                return $"Analog  Output ({ _name}\\{_value})";
             }
         }
 
@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return "SetAO " + _name + ", " + _value.ToString() + ";";
+            return $"SetAO {_name}, {_value};";
         }
 
         /// <summary>

@@ -433,7 +433,7 @@ namespace RobotComponents.Definitions
             }
             else
             {
-                return "Robot (" + _name + ")";
+                return $"Robot ({_name})";
             }
         }
 
@@ -467,7 +467,7 @@ namespace RobotComponents.Definitions
                 }
                 else if (!_externalAxes[i].IsValid)
                 {
-                    throw new ArgumentException(String.Format("External Axis {0} ({1}): The set attached External Axis is not valid.", _externalAxes[i].AxisLogic, _externalAxes[i].Name));
+                    throw new ArgumentException($"External Axis {_externalAxes[i].AxisLogic} ({_externalAxes[i].Name}): The set attached External Axis is not valid.");
                 }
 
                 _externalAxisLimits[_externalAxes[i].AxisNumber] = _externalAxes[i].AxisLimits;

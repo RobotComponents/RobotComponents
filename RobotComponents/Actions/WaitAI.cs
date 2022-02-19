@@ -132,7 +132,7 @@ namespace RobotComponents.Actions
             }
             else
             {
-                return "Wait for Analog Input (" + _name + "\\" + _value.ToString() + ")";
+                return $"Wait for Analog Input ({_name}\\{_value})";
             }
         }
 
@@ -153,7 +153,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return "WaitAI " + _name + ", \\" + Enum.GetName(typeof(InequalitySymbol), _inequalitySymbol) + ", " + _value + ";";
+            return $"WaitAI {_name}, \\{Enum.GetName(typeof(InequalitySymbol), _inequalitySymbol)}, {_value};";
         }
 
         /// <summary>

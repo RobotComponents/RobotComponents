@@ -182,7 +182,7 @@ namespace RobotComponents.Actions
             }
             else if (_name != string.Empty)
             {
-                return "Joint Target (" + _name + ")";
+                return $"Joint Target ({_name})";
             }
             else
             {
@@ -220,7 +220,7 @@ namespace RobotComponents.Actions
             {
                 if (robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
-                    errors.Add("Joint Target  " + _name + ": The position of robot axis " + (i + 1).ToString() + " is not in range.");
+                    errors.Add($"Joint Target {_name}: The position of robot axis {i + 1} is not in range.");
                 }
             }
 
@@ -245,12 +245,12 @@ namespace RobotComponents.Actions
 
                 if (_externalJointPosition[number] == 9e9)
                 {
-                    errors.Add("Joint Target " + _name + ": The position of external logical axis " + logic + " is not definied (9E9).");
+                    errors.Add($"Joint Target {_name}: The position of external logical axis {logic} is not definied (9E9).");
                 }
 
                 else if (robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
-                    errors.Add("Joint Target " + _name + ": The position of external logical axis " + logic + " is not in range.");
+                    errors.Add($"Joint Target {_name}: The position of external logical axis {logic} is not in range.");
                 }
             }
 
@@ -263,24 +263,9 @@ namespace RobotComponents.Actions
         /// <returns> The string with joint target values. </returns>
         public string ToRAPID()
         {
-            string robotJointPosition = _robotJointPosition.Name;
-            string externalJointPosition = _externalJointPosition.Name;
-
-            if (robotJointPosition == string.Empty)
-            {
-                robotJointPosition = _robotJointPosition.ToRAPID();
-            }
-
-            if (externalJointPosition == string.Empty)
-            {
-                externalJointPosition = _externalJointPosition.ToRAPID();
-            }
-
-            string code = "[";
-            code += robotJointPosition;
-            code += ", ";
-            code += externalJointPosition;
-            code += "]";
+            string robotJointPosition = _robotJointPosition.Name == string.Empty ? _robotJointPosition.ToRAPID() : _robotJointPosition.Name;
+            string externalJointPosition = _externalJointPosition.Name == string.Empty ? _externalJointPosition.ToRAPID() : _externalJointPosition.Name;
+            string code = $"[{robotJointPosition}, {externalJointPosition}]";
 
             return code;
         }
@@ -294,14 +279,7 @@ namespace RobotComponents.Actions
         {
             if (_name != string.Empty)
             {
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " jointtarget ";
-                code += _name;
-                code += " := ";
-                code += ToRAPID();
-                code += ";";
-
-                return code;
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} jointtarget {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -332,7 +310,7 @@ namespace RobotComponents.Actions
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {
                     RAPIDGenerator.Targets.Add(_name, this);
-                    RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                    RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
         }

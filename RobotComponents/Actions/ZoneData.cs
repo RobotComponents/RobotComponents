@@ -108,28 +108,11 @@ namespace RobotComponents.Actions
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-
-            // Check if the exact predefined value is used or the nearest one
-            if (zone - tcp == 0) 
-            { 
-                _exactPredefinedValue = true; 
-            }
-            else 
-            {
-                _exactPredefinedValue = false; 
-            }
+            _exactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
-            if (tcp == -1)
-            {
-                _name = "fine";
-                _finep = true;
-            }
-            else 
-            {
-                _name = "z" + tcp.ToString();
-                _finep = false;
-            }
+            _name = tcp == -1 ? "fine" : $"z{tcp}";
+            _finep = tcp == -1;
 
             // Check if pre-defined name is valid
             int pos = Array.IndexOf(_validPredefinedNames, _name);
@@ -168,28 +151,11 @@ namespace RobotComponents.Actions
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-
-            // Check if the exact predefined value is used or the nearest one
-            if (zone - tcp == 0)
-            {
-                _exactPredefinedValue = true;
-            }
-            else
-            {
-                _exactPredefinedValue = false;
-            }
+            _exactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
-            if (tcp == -1)
-            {
-                _name = "fine";
-                _finep = true;
-            }
-            else
-            {
-                _name = "z" + tcp.ToString();
-                _finep = false;
-            }
+            _name = tcp == -1 ? "fine" : $"z{tcp}";
+            _finep = tcp == -1;
 
             // Check if pre-defined name is valid
             int pos = Array.IndexOf(_validPredefinedNames, _name);
@@ -339,11 +305,11 @@ namespace RobotComponents.Actions
             }
             else if (_predefined == true)
             {
-                return "Predefined Zone Data (" + _name + ")";
+                return $"Predefined Zone Data ({_name})";
             }
             else if (_name != string.Empty)
             {
-                return "Custom Zone Data (" + _name + ")";
+                return $"Custom Zone Data ({_name})";
             }
             else
             {
@@ -357,17 +323,15 @@ namespace RobotComponents.Actions
         /// <returns> The string with zone data values. </returns>
         public string ToRAPID()
         {
-            string code = "[";
+            string code = "";
 
-            if (_finep == false) { code += "FALSE, "; }
-            else { code += "TRUE, "; }
-
-            code += _pzone_tcp + ", ";
-            code += _pzone_ori + ", ";
-            code += _pzone_eax + ", ";
-            code += _zone_ori + ", ";
-            code += _zone_leax + ", ";
-            code += _zone_reax + "]";
+            code += _finep == false ? "[FALSE, " : "[TRUE, ";
+            code += $"{_pzone_tcp}, ";
+            code += $"{_pzone_ori}, ";
+            code += $"{_pzone_eax}, ";
+            code += $"{_zone_ori}, ";
+            code += $"{_zone_leax}, ";
+            code += $"{_zone_reax}]";
 
             return code;
         }
@@ -381,13 +345,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false & _name != string.Empty)
             {
-                string code = Enum.GetName(typeof(ReferenceType), _referenceType);
-                code += " zonedata ";
-                code += _name + " := ";
-                code += ToRAPID();
-                code += ";";
-
-                return code;
+                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} zonedata {_name} := {ToRAPID()};";
             }
             else
             {
@@ -419,7 +377,7 @@ namespace RobotComponents.Actions
                     if (!RAPIDGenerator.ZoneDatas.ContainsKey(_name))
                     {
                         RAPIDGenerator.ZoneDatas.Add(_name, this);
-                        RAPIDGenerator.ProgramDeclarations.Add("    " + this.ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                        RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                     }
                 }
             }

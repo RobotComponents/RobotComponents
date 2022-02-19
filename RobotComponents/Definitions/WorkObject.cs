@@ -176,11 +176,11 @@ namespace RobotComponents.Definitions
             }
             else if (_fixedFrame == false)
             {
-                return "Movable Work Object (" + _name + ")";
+                return $"Movable Work Object ({_name})";
             }
             else
             {
-                return "Work Object (" + _name + ")";
+                return $"Work Object ({_name})";
             }
         }
 
@@ -249,12 +249,9 @@ namespace RobotComponents.Definitions
             }
 
             // Check if the external axis moves the robot
-            if (_externalAxis != null)
+            if (_externalAxis != null && _externalAxis.MovesRobot == true)
             {
-                if (_externalAxis.MovesRobot == true)
-                {
-                    throw new Exception("An external axis that moves the robot cannot move a work object.");
-                }
+                throw new Exception("An external axis that moves the robot cannot move a work object.");
             }
         }
 
@@ -275,41 +272,19 @@ namespace RobotComponents.Definitions
             string result = "";
 
             // Adds variable type
-            result += Enum.GetName(typeof(ReferenceType), _referenceType);
-            result += " wobjdata ";
+            result += $"{Enum.GetName(typeof(ReferenceType), _referenceType)} wobjdata ";
 
             // Adds work object name
             result += $"{_name} := ";
 
             // Add robot hold < robhold of bool >
-            if (_robotHold)
-            {
-                result += "[TRUE, ";
-            }
-            else
-            {
-                result += "[FALSE, ";
-            }
+            result += _robotHold ? "[TRUE, " : "[FALSE, ";
 
             // Add User frame type < ufprog of bool >
-            if (_fixedFrame)
-            {
-                result += "TRUE, ";
-            }
-            else
-            {
-                result += "FALSE, ";
-            }
+            result += _fixedFrame ? "TRUE, " : "FALSE, ";
 
-            // Add mechanical unit (an external axis or robot) < ufmec of string >            
-            if (_externalAxis != null)
-            {
-                result += $"\"{_externalAxis.Name}\", ";
-            }
-            else
-            {
-                result += "\"\", ";
-            }
+            // Add mechanical unit (an external axis or robot) < ufmec of string >
+            result += _externalAxis != null ? $"\"{_externalAxis.Name}\", " : "\"\", ";
             
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X:0.####}, {_userFrame.Origin.Y:0.####}, {_userFrame.Origin.Z:0.####}], ";

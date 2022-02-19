@@ -439,7 +439,7 @@ namespace RobotComponents.Kinematics
 
                 if (newMovement.MovementType == MovementType.MoveAbsJ && newMovement.Target is RobotTarget robotTarget1)
                 {
-                    string name = robotTarget1.Name == "" ? "" : $"{robotTarget1.Name}_jt";
+                    string name = robotTarget1.Name == string.Empty ? string.Empty : $"{robotTarget1.Name}_jt";
                     newMovement.Target = new JointTarget(name, newRobotJointPosition.Duplicate(), newExternalJointPosition.Duplicate());
                     newMovement.Target.ExternalJointPosition.Name = movement.Target.ExternalJointPosition.Name;
                 }

@@ -176,11 +176,11 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Joint Target";
             }
-            else if (this.Name != string.Empty)
+            else if (_name != string.Empty)
             {
                 return "Joint Target (" + _name + ")";
             }
@@ -298,7 +298,7 @@ namespace RobotComponents.Actions
                 code += " jointtarget ";
                 code += _name;
                 code += " := ";
-                code += this.ToRAPID();
+                code += ToRAPID();
                 code += ";";
 
                 return code;
@@ -355,10 +355,10 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (RobotJointPosition == null) { return false; }
-                if (RobotJointPosition.IsValid == false) { return false; }
-                if (ExternalJointPosition == null) { return false; }
-                if (ExternalJointPosition.IsValid == false) { return false; }
+                if (_robotJointPosition == null) { return false; }
+                if (_robotJointPosition.IsValid == false) { return false; }
+                if (_externalJointPosition == null) { return false; }
+                if (_externalJointPosition.IsValid == false) { return false; }
                 return true;
             }
         }

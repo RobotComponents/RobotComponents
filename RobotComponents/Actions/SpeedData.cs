@@ -93,17 +93,7 @@ namespace RobotComponents.Actions
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-
-            // Check if the exact predefined value is used or the nearest one
-            if (v_tcp - tcp == 0)
-            {
-                _exactPredefinedValue = true;
-            }
-            else
-            {
-                _exactPredefinedValue = false;
-            }
-
+            _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _referenceType = ReferenceType.VAR;
@@ -123,16 +113,7 @@ namespace RobotComponents.Actions
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-
-            // Check if the exact predefined value is used or the nearest one
-            if (v_tcp - tcp == 0)
-            {
-                _exactPredefinedValue = true;
-            }
-            else
-            {
-                _exactPredefinedValue = false;
-            }
+            _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _referenceType = ReferenceType.VAR;
@@ -243,7 +224,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Speed Data";
             }
@@ -277,7 +258,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != string.Empty)
+            if (_predefined == false && _name != string.Empty)
             {
                 return Enum.GetName(typeof(ReferenceType), _referenceType) + " speeddata " + _name + " := " + this.ToRAPID() + ";";
             }
@@ -335,10 +316,10 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (V_TCP <= 0) { return false; }
-                if (V_ORI <= 0) { return false; }
-                if (V_LEAX <= 0) { return false; }
-                if (V_REAX <= 0) { return false; }
+                if (_v_tcp <= 0) { return false; }
+                if (_v_ori <= 0) { return false; }
+                if (_v_leax <= 0) { return false; }
+                if (_v_reax <= 0) { return false; }
                 return true;
             }
         }

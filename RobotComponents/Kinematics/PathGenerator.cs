@@ -70,7 +70,7 @@ namespace RobotComponents.Kinematics
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Path Generator";
             }
@@ -523,8 +523,8 @@ namespace RobotComponents.Kinematics
         {
             get
             {
-                if (Robot == null) { return false; }
-                if (Robot.IsValid == false) { return false; }
+                if (_robot == null) { return false; }
+                if (_robot.IsValid == false) { return false; }
                 return true;
             }
         }

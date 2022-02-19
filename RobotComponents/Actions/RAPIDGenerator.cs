@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid RAPID Generator";
             }
@@ -534,7 +534,9 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Actions == null) { return false; }
+                if (_actions == null) { return false; }
+                if (_robot == null) { return false; }
+                if (_robot.IsValid == false) { return false; }
                 return true;
             }
         }

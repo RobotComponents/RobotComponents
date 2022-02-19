@@ -170,7 +170,7 @@ namespace RobotComponents.Definitions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Work Object";
             }
@@ -337,12 +337,12 @@ namespace RobotComponents.Definitions
         {
             get
             {
-                if (Name == null) { return false;  }
-                if (Name == "") { return false; }
-                if (Plane == null) { return false; }
-                if (Plane == Plane.Unset) { return false; }
-                if (UserFrame == null) {return false; }
-                if (UserFrame == Plane.Unset) { return false;  }
+                if (_name == null) { return false;  }
+                if (_name == "") { return false; }
+                if (_plane == null) { return false; }
+                if (_plane == Plane.Unset) { return false; }
+                if (_userFrame == null) {return false; }
+                if (_userFrame == Plane.Unset) { return false;  }
                 return true;
             }
         }

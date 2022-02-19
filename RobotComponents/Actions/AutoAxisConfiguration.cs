@@ -111,7 +111,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Auto Axis Configuration";
             }

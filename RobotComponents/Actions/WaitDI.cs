@@ -120,7 +120,7 @@ namespace RobotComponents.Actions
             {
                 return "Empty Wait for Digital Input";
             }
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Wait for Digital Input";
             }
@@ -173,7 +173,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
         }
         #endregion
 
@@ -185,8 +185,8 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == null) { return false; }
-                if (Name == "") { return false; }
+                if (_name == null) { return false; }
+                if (_name == "") { return false; }
                 return true; 
             }
         }

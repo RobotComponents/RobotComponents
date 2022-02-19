@@ -120,13 +120,13 @@ namespace RobotComponents.Actions
             {
                 return "Empty Digital Output";
             }
-            else if (!this.IsValid)
+            else if (!IsValid)
             {
                 return "Invalid Digital Output";
             }
             else
             {
-                return "Digital Output (" + this.Name + "\\" + this.IsActive.ToString() + ")";
+                return "Digital Output (" + _name + "\\" + _isActive.ToString() + ")";
             }
         }
 
@@ -147,14 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_isActive == true)
-            {
-                return "SetDO " + _name + ", 1;";
-            }
-            else
-            {
-                return "SetDO " + _name + ", 0;";
-            }
+            return _isActive == true ? "SetDO " + _name + ", 1;" : "SetDO " + _name + ", 0;";
         }
 
         /// <summary>
@@ -173,7 +166,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + this.ToRAPIDInstruction(RAPIDGenerator.Robot));
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -185,8 +178,8 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == null) { return false; }
-                if (Name == "") { return false; }
+                if (_name == null) { return false; }
+                if (_name == "") { return false; }
                 return true;
             }
         }

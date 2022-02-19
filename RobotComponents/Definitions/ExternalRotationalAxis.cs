@@ -455,7 +455,7 @@ namespace RobotComponents.Definitions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid External Rotational Axis";
             }
@@ -697,11 +697,11 @@ namespace RobotComponents.Definitions
         {
             get
             {
-                if (AttachmentPlane == null) { return false; }
-                if (AttachmentPlane == Plane.Unset) { return false; }
-                if (AxisPlane == null) { return false;  }
-                if (AxisPlane == Plane.Unset) { return false; }
-                if (AxisLimits == null) { return false; }
+                if (_attachmentPlane == null) { return false; }
+                if (_attachmentPlane == Plane.Unset) { return false; }
+                if (_axisPlane == null) { return false;  }
+                if (_axisPlane == Plane.Unset) { return false; }
+                if (_axisLimits == null) { return false; }
                 return true;
             }
         }

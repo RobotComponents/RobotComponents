@@ -333,7 +333,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Zone Data";
             }
@@ -384,7 +384,7 @@ namespace RobotComponents.Actions
                 string code = Enum.GetName(typeof(ReferenceType), _referenceType);
                 code += " zonedata ";
                 code += _name + " := ";
-                code += this.ToRAPID();
+                code += ToRAPID();
                 code += ";";
 
                 return code;
@@ -443,12 +443,12 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (PathZoneTCP < 0) { return false; }
-                if (PathZoneOrientation < 0) { return false; }
-                if (PathZoneExternalAxes < 0) { return false; }
-                if (ZoneOrientation < 0) { return false; }
-                if (ZoneExternalLinearAxes < 0) { return false; }
-                if (ZoneExternalRotationalAxes < 0) { return false; }
+                if (_pzone_tcp < 0) { return false; }
+                if (_pzone_ori < 0) { return false; }
+                if (_pzone_eax < 0) { return false; }
+                if (_zone_ori < 0) { return false; }
+                if (_zone_leax < 0) { return false; }
+                if (_zone_reax < 0) { return false; }
                 return true;
             }
         }

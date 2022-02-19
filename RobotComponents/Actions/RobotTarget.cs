@@ -47,7 +47,6 @@ namespace RobotComponents.Actions
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
             _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
-
             _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
 
@@ -315,7 +314,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Robot Target";
             }
@@ -373,7 +372,7 @@ namespace RobotComponents.Actions
                 code += " robtarget ";
                 code += _name;
                 code += " := ";
-                code += this.ToRAPID();
+                code += ToRAPID();
                 code += ";";
 
                 return code;
@@ -429,11 +428,12 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Plane == null) { return false; }
-                if (Plane == Plane.Unset) { return false; }
-                if (AxisConfig < 0) { return false; }
-                if (AxisConfig > 7) { return false; }
-                if (ExternalJointPosition.IsValid == false) { return false; }
+                if (_plane == null) { return false; }
+                if (_plane == Plane.Unset) { return false; }
+                if (_axisConfig < 0) { return false; }
+                if (_axisConfig > 7) { return false; }
+                if (_externalJointPosition == null) { return false; }
+                if (_externalJointPosition.IsValid == false) { return false; }
                 return true;
             }
         }

@@ -427,7 +427,7 @@ namespace RobotComponents.Definitions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Robot";
             }
@@ -581,16 +581,16 @@ namespace RobotComponents.Definitions
         {
             get
             {
-                if (InternalAxisPlanes == null) { return false; }
-                if (InternalAxisLimits == null) { return false; }
-                if (BasePlane == null) { return false; }
-                if (BasePlane == Plane.Unset) { return false; }
-                if (MountingFrame == null) { return false; }
-                if (MountingFrame == Plane.Unset) { return false; }
-                if (InternalAxisPlanes.Count != 6) { return false; }
-                if (Meshes.Count != 8) { return false; }
-                if (Tool == null) { return false; }
-                if (Tool.IsValid == false) { return false; }
+                if (_internalAxisPlanes == null) { return false; }
+                if (_internalAxisLimits == null) { return false; }
+                if (_basePlane == null) { return false; }
+                if (_basePlane == Plane.Unset) { return false; }
+                if (_mountingFrame == null) { return false; }
+                if (_mountingFrame == Plane.Unset) { return false; }
+                if (_internalAxisPlanes.Count != 6) { return false; }
+                if (_meshes.Count != 8) { return false; }
+                if (_tool == null) { return false; }
+                if (_tool.IsValid == false) { return false; }
                 return true;
             }
         }

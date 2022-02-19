@@ -131,7 +131,7 @@ namespace RobotComponents.Kinematics
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Inverse Kinematics";
             }
@@ -152,7 +152,7 @@ namespace RobotComponents.Kinematics
                 _robotTool = _robot.Tool;
             }
             // Check if the set tool is not empty
-            else if (_movement.RobotTool.Name != "" && _movement.RobotTool.Name != null) //TODO: RobotTool.IsValid is maybe better?
+            else if (_movement.RobotTool.Name != null && _movement.RobotTool.Name != "")
             {
                 _robotTool = _movement.RobotTool; 
             }
@@ -721,10 +721,10 @@ namespace RobotComponents.Kinematics
         {
             get
             {
-                if (Robot == null) { return false; }
-                if (Robot.IsValid == false) { return false; }
-                if (Movement == null) { return false; }
-                if (Movement.IsValid == false) { return false; }
+                if (_robot == null) { return false; }
+                if (_robot.IsValid == false) { return false; }
+                if (_movement == null) { return false; }
+                if (_movement.IsValid == false) { return false; }
                 return true;
             }
         }

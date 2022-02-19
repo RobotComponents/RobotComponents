@@ -255,7 +255,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid External Joint Position";
             }
@@ -549,7 +549,7 @@ namespace RobotComponents.Actions
                 code += " extjoint ";
                 code += _name;
                 code += " := ";
-                code += this.ToRAPID();
+                code += ToRAPID();
                 code += ";";
 
                 return code;

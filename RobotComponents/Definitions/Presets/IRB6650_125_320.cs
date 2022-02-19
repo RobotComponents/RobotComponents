@@ -66,25 +66,25 @@ namespace RobotComponents.Definitions.Presets
             string linkString;
 
             // Base
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_0;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_0;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_1;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_1;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_2;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_2;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 3
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_3;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_3;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 4
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_4;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_4;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 5
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_5;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_5;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 6
-            linkString = RobotComponents.Properties.Resources.IRB6650_125_3_2_link_6;
+            linkString = Properties.Resources.IRB6650_125_3_2_link_6;
             meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
 
             return meshes;

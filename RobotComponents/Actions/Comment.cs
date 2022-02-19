@@ -132,7 +132,7 @@ namespace RobotComponents.Actions
             {
                 return "Empty Comment";
             }
-            else if (!this.IsValid)
+            else if (!IsValid)
             {
                 return "Invalid Comment";
             }
@@ -149,14 +149,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_type == CodeType.Declaration)
-            {
-                return "! " + _comment;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return _type == CodeType.Declaration ? "! " + _comment : string.Empty;
         }
 
         /// <summary>
@@ -166,14 +159,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_type == CodeType.Instruction)
-            {
-                return "! " + _comment;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return _type == CodeType.Instruction ? "! " + _comment : string.Empty;
         }
 
         /// <summary>
@@ -225,8 +211,8 @@ namespace RobotComponents.Actions
         {
             get 
             {
-                if (Com == null) { return false; }
-                if (Com == "") { return false; }
+                if (_comment == null) { return false; }
+                if (_comment == "") { return false; }
                 return true; 
             }
         }

@@ -42,97 +42,25 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Action";
             }
-            if (this is ActionGroup group)
+            else if (this is ActionGroup group)
             {
                 return group.ToString();
             }
-            else if (this is AnalogOutput analogOutput)
+            else if (this is IDeclaration declaration)
             {
-                return analogOutput.ToString();
+                return declaration.ToString();
             }
-            else if (this is AutoAxisConfig autoAxisConfig)
+            else if (this is IInstruction instruction)
             {
-                return autoAxisConfig.ToString();
+                return instruction.ToString();
             }
-            else if (this is CodeLine codeLine)
+            else if (this is IDynamic dynamic)
             {
-                return codeLine.ToString();
-            }
-            else if (this is Comment comment)
-            {
-                return comment.ToString();
-            }
-            else if (this is DigitalOutput digitalOutput)
-            {
-                return digitalOutput.ToString();
-            }
-            else if (this is ExternalJointPosition extJointPosition)
-            {
-                return extJointPosition.ToString();
-            }
-            else if (this is JointConfigurationControl jointConfigurationControl)
-            {
-                return jointConfigurationControl.ToString();
-            }
-            else if (this is JointTarget jointTarget)
-            {
-                return jointTarget.ToString();
-            }
-            else if (this is LinearConfigurationControl linearConfigurationControl)
-            {
-                return linearConfigurationControl.ToString();
-            }
-            else if (this is Movement movement)
-            {
-                return movement.ToString();
-            }
-            else if (this is OverrideRobotTool overrideRobotTool)
-            {
-                return overrideRobotTool.ToString();
-            }
-            else if (this is RobotJointPosition robotJointPosition)
-            {
-                return robotJointPosition.ToString();
-            }
-            else if (this is SpeedData speedData)
-            { 
-                return speedData.ToString();
-            }
-            else if (this is SyncMoveOff syncMoveOff)
-            {
-                return syncMoveOff.ToString();
-            }
-            else if (this is SyncMoveOn syncMoveOn)
-            {
-                return syncMoveOn.ToString();
-            }
-            else if (this is RobotTarget robotTarget)
-            {
-                return robotTarget.ToString();
-            }
-            else if (this is TaskList tasks)
-            {
-                return tasks.ToString();
-            }
-            else if (this is WaitAI waitAI)
-            {
-                return waitAI.ToString();
-            }
-            else if (this is WaitDI waitDI)
-            {
-                return waitDI.ToString();
-            }
-            else if (this is WaitSyncTask waitSyncTask)
-            {
-                return waitSyncTask.ToString();
-            }
-            else if (this is WaitTime timer)
-            {
-                return timer.ToString();
+                return dynamic.ToString();
             }
             else
             {

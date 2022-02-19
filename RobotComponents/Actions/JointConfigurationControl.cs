@@ -110,7 +110,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Joint Configuration Control";
             }
@@ -141,14 +141,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_isActive == true)
-            {
-                return "ConfJ\\on;";
-            }
-            else
-            {
-                return "ConfJ\\off;";
-            }
+            return _isActive == true ? "ConfJ\\on;" : "ConfJ\\off;";
         }
 
         /// <summary>
@@ -167,14 +160,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_isActive == true)
-            {
-                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\on;");
-            }
-            else
-            {
-                RAPIDGenerator.ProgramInstructions.Add("    " + "    " + "ConfJ\\off;");
-            }
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 

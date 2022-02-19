@@ -119,7 +119,7 @@ namespace RobotComponents.Actions
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
-            if (!this.IsValid)
+            if (!IsValid)
             {
                 return "Invalid Action Group";
             }
@@ -351,8 +351,8 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Name == null) { return false; }
-                if (Actions == null) { return false; }
+                if (_name == null) { return false; }
+                if (_actions == null) { return false; }
                 return true;
             }
         }

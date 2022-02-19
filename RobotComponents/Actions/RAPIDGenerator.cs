@@ -367,41 +367,32 @@ namespace RobotComponents.Actions
             }
 
             // Adds Tools Base Code
-            if (robotTools != null)
+            if (robotTools != null && robotTools.Count != 0)
             {
-                if (robotTools.Count != 0)
-                {
-                    _systemModule.Add("    " + "! User defined tooldata ");
-                    _systemModule.AddRange(CreateToolSystemCode(robotTools));
-                    _systemModule.Add("    ");
-                }
+                _systemModule.Add("    " + "! User defined tooldata ");
+                _systemModule.AddRange(CreateToolSystemCode(robotTools));
+                _systemModule.Add("    ");
             }
 
             // Adds Work Objects Base Code
-            if (workObjects != null)
+            if (workObjects != null && workObjects.Count != 0)
             {
-                if (workObjects.Count != 0)
-                {
-                    _systemModule.Add("    " + "! User defined wobjdata ");
-                    _systemModule.AddRange(CreateWorkObjectSystemCode(workObjects));
-                    _systemModule.Add("    ");
-                }
+                _systemModule.Add("    " + "! User defined wobjdata ");
+                _systemModule.AddRange(CreateWorkObjectSystemCode(workObjects));
+                _systemModule.Add("    ");
             }
 
             // Adds Custom code line
-            if (customCode != null)
+            if (customCode != null && customCode.Count != 0)
             {
-                if (customCode.Count != 0)
+                _systemModule.Add("    " + "! User definied custom code lines");
+
+                for (int i = 0; i != customCode.Count; i++)
                 {
-                    _systemModule.Add("    " + "! User definied custom code lines");
-
-                    for (int i = 0; i != customCode.Count; i++)
-                    {
-                        _systemModule.Add("    " + customCode[i]);
-                    }
-
-                    _systemModule.Add("    ");
+                    _systemModule.Add("    " + customCode[i]);
                 }
+
+                _systemModule.Add("    ");
             }
 
             // End Module

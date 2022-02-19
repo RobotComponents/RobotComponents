@@ -31,7 +31,7 @@ namespace RobotComponents.Gh.Components.Simulation
     public class ForwardKinematicsComponent : GH_Component 
     {
         #region fields
-        private ForwardKinematics _fk = new ForwardKinematics();
+        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
         private bool _hideMesh = false;
         private GH_Structure<GH_Mesh> _meshes = new GH_Structure<GH_Mesh>();
         #endregion
@@ -91,25 +91,25 @@ namespace RobotComponents.Gh.Components.Simulation
             if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-            _fk = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
-            _fk.Calculate();
+            _forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
+            _forwardKinematics.Calculate();
 
             // Check the values
-            for (int i = 0; i < _fk.ErrorText.Count; i++)
+            for (int i = 0; i < _forwardKinematics.ErrorText.Count; i++)
             {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _fk.ErrorText[i]);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _forwardKinematics.ErrorText[i]);
             }
 
             // Fill data tree with meshes
             if (_hideMesh == false)
             {
-                _meshes = GetPosedMeshesDataTree(_fk);
+                _meshes = GetPosedMeshesDataTree(_forwardKinematics);
             }
 
             // Output
             DA.SetDataTree(0, _meshes); 
-            DA.SetData(1, _fk.TCPPlane);
-            DA.SetDataList(2, _fk.PosedExternalAxisPlanes);
+            DA.SetData(1, _forwardKinematics.TCPPlane);
+            DA.SetDataList(2, _forwardKinematics.PosedExternalAxisPlanes);
         }
 
         #region properties
@@ -158,7 +158,7 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickHideMesh, true, !_hideMesh);
+            Menu_AppendItem(menu, "Preview Robot Mesh", MenuItemClickHideMesh, true, !_hideMesh);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -181,7 +181,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <param name="e"> The event data. </param>
         private void MenuItemClickHideMesh(object sender, EventArgs e)
         {
-            RecordUndoEvent("Set Hide Mesh");
+            RecordUndoEvent("Preview Robot Mesh");
             _hideMesh = !_hideMesh;
             ExpireSolution(true);
         }
@@ -211,20 +211,54 @@ namespace RobotComponents.Gh.Components.Simulation
 
         #region custom preview method
         /// <summary>
+        /// Gets the clipping box for all preview geometry drawn by this component and all associated parameters.
+        /// </summary>
+        public override BoundingBox ClippingBox
+        {
+            get { return GetBoundingBox(); }
+        }
+
+        /// <summary>
+        /// Returns the bounding box for all preview geometry drawn by this component.
+        /// </summary>
+        /// <returns></returns>
+        private BoundingBox GetBoundingBox()
+        {
+            BoundingBox result = new BoundingBox();
+
+            // Get bouding box of all the output parameters
+            for (int i = 0; i < Params.Output.Count; i++)
+            {
+                if (Params.Output[i] is IGH_PreviewObject previewObject)
+                {
+                    result.Union(previewObject.ClippingBox);
+                }
+            }
+
+            // Add bounding box of custom preview
+            if (!_hideMesh)
+            {
+                result.Union(_forwardKinematics.GetBoundingBox(false));
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// This method displays the robot pose for the given axis values. 
         /// </summary>
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_fk.PosedInternalAxisMeshes != null && !_hideMesh)
+            if (_forwardKinematics.PosedInternalAxisMeshes != null && !_hideMesh)
             {
                 // Initiate the display color and transparancy of the robot mesh
                 Color color;
                 double trans;
 
                 // Set the display color and transparancy of the robot mesh
-                if (_fk.InLimits == true)
+                if (_forwardKinematics.InLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;
@@ -236,17 +270,17 @@ namespace RobotComponents.Gh.Components.Simulation
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _fk.PosedInternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_fk.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes
-                for (int i = 0; i != _fk.PosedExternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
                 {
-                    for (int j = 0; j != _fk.PosedExternalAxisMeshes[i].Count; j++)
+                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
                     {
-                        args.Display.DrawMeshShaded(_fk.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
                     }
                 }
             }

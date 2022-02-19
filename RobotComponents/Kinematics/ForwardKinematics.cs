@@ -3,7 +3,6 @@
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -269,6 +268,34 @@ namespace RobotComponents.Kinematics
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
             Calculate();
+        }
+
+        /// <summary>
+        /// Returns the Bounding Box of the posed meshes.
+        /// </summary>
+        /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
+        /// <returns> The Bounding Box. </returns>
+        public BoundingBox GetBoundingBox(bool accurate)
+        {
+            BoundingBox result = new BoundingBox();
+
+            if (_posedInternalAxisMeshes != null)
+            {
+                for (int i = 0; i != _posedInternalAxisMeshes.Count; i++)
+                {
+                    result.Union(_posedInternalAxisMeshes[i].GetBoundingBox(accurate));
+                }
+
+                for (int i = 0; i != _posedExternalAxisMeshes.Count; i++)
+                {
+                    for (int j = 0; j != _posedExternalAxisMeshes[i].Count; j++)
+                    {
+                        result.Union(_posedExternalAxisMeshes[i][j].GetBoundingBox(accurate));
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

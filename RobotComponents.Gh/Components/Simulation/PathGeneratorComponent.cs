@@ -9,6 +9,8 @@ using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
+// Rhino Libs
+using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
@@ -253,7 +255,7 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Mesh", MenuItemClickPreviewMesh, true, _previewMesh);
+            Menu_AppendItem(menu, "Preview Robot Mesh", MenuItemClickPreviewMesh, true, _previewMesh);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Output current Movement", MenuItemClickOutputMovement, true, _outputMovement);
             Menu_AppendItem(menu, "Output all Movements", MenuItemClickOutputMovements, true, _outputMovements);
@@ -276,7 +278,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <param name="e"> The event data. </param>
         private void MenuItemClickPreviewMesh(object sender, EventArgs e)
         {
-            RecordUndoEvent("Set Preview Mesh");
+            RecordUndoEvent("Preview Robot Mesh");
             _previewMesh = !_previewMesh;
             ExpireSolution(true);
         }
@@ -559,6 +561,40 @@ namespace RobotComponents.Gh.Components.Simulation
         #endregion
 
         #region custom preview method
+        /// <summary>
+        /// Gets the clipping box for all preview geometry drawn by this component and all associated parameters.
+        /// </summary>
+        public override BoundingBox ClippingBox
+        {
+            get { return GetBoundingBox(); }
+        }
+
+        /// <summary>
+        /// Returns the bounding box for all preview geometry drawn by this component.
+        /// </summary>
+        /// <returns></returns>
+        private BoundingBox GetBoundingBox()
+        {
+            BoundingBox result = new BoundingBox();
+
+            // Get bouding box of all the output parameters
+            for (int i = 0; i < Params.Output.Count; i++)
+            {
+                if (Params.Output[i] is IGH_PreviewObject previewObject)
+                {
+                    result.Union(previewObject.ClippingBox);
+                }
+            }
+
+            // Add bounding box of custom preview
+            if (_previewMesh)
+            {
+                result.Union(_forwardKinematics.GetBoundingBox(false));
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// This method displays the robot pose for the given axis values. 
         /// </summary>

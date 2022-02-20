@@ -25,6 +25,7 @@ namespace RobotComponents.Actions
         private bool _inPosition; // if true the mechanical unit comes to still stand at the sync point
         private string _syncident; // the sync identification name
         private TaskList _taskList; // the set with tasks to syncronized
+        private double _timeOut;
         #endregion
 
         #region (de)serialization
@@ -35,11 +36,12 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitSyncTask(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _inPosition = (bool)info.GetValue("In Position", typeof(bool));
             _syncident = (string)info.GetValue("Sync ID", typeof(string));
             _taskList = (TaskList)info.GetValue("Task List", typeof(TaskList));
+            _timeOut = version > 103000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
         }
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace RobotComponents.Actions
             info.AddValue("In Position", _inPosition, typeof(bool));
             info.AddValue("Sync ID", _syncident, typeof(string));
             info.AddValue("Task List", _taskList, typeof(TaskList));
+            info.AddValue("Time Out", _timeOut, typeof(double));
         }
         #endregion
 
@@ -72,12 +75,14 @@ namespace RobotComponents.Actions
         /// <param name="name"> The name of the synchronization point. </param>
         /// <param name="tasks"> The program tasks that should meet in the synchronization point. </param>
         /// <param name="inPosition"> Specifies whether or not the robot and external axes must have come to a standstill in its meeting point. </param>
-        public WaitSyncTask(string name, TaskList tasks, bool inPosition = false)
+        /// <param name="timeOut"> The max. time to wait for the other program tasks to reach the synchronization point. </param>
+        public WaitSyncTask(string name, TaskList tasks, bool inPosition = false, double timeOut = -1)
         {
             _referenceType = ReferenceType.VAR;
             _syncident = name;
             _taskList = tasks;
             _inPosition = inPosition;
+            _timeOut = timeOut;
         }
 
         /// <summary>
@@ -90,6 +95,7 @@ namespace RobotComponents.Actions
             _syncident = waitSyncTask.SyncID;
             _taskList = waitSyncTask.TaskList.Duplicate();
             _inPosition = waitSyncTask.InPosition;
+            _timeOut = waitSyncTask.TimeOut;
         }
 
         /// <summary>
@@ -163,14 +169,8 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            if (_inPosition == false)
-            {
-                return $"WaitSyncTask {_syncident}, {_taskList.Name};";
-            }
-            else
-            {
-                return $"WaitSyncTask \\InPos, {_syncident}, {_taskList.Name};";
-            }
+            return $"WaitSyncTask {(_inPosition ? "\\InPos, " : "")}{_syncident}, {_taskList.Name}" +
+                $"{(_timeOut > 0 ? $"\\TimeOut:={_timeOut:0.###}" : "")};";
         }
 
         /// <summary>
@@ -250,6 +250,16 @@ namespace RobotComponents.Actions
         {
             get { return _inPosition; }
             set { _inPosition = value; }
+        }
+
+        /// <summary>
+        /// Gets te max. time to wait for the other program tasks to reach the synchronization point.
+        /// Set a negative value to wait for ever (default is -1).
+        /// </summary>
+        public double TimeOut
+        {
+            get { return _timeOut; }
+            set { _timeOut = value; }
         }
         #endregion
     }

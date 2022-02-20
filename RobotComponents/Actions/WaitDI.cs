@@ -23,6 +23,7 @@ namespace RobotComponents.Actions
         #region fields
         private string _name; // The name of the digital input signal
         private bool _value; // The desired state / value of the digital input signal
+        private double _maxTime;
         #endregion
 
         #region (de)serialization
@@ -33,9 +34,10 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitDI(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (bool)info.GetValue("Value", typeof(bool));
+            _maxTime = version > 103000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace RobotComponents.Actions
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(bool));
+            info.AddValue("Max Time", _maxTime, typeof(double));
         }
         #endregion
 
@@ -65,10 +68,12 @@ namespace RobotComponents.Actions
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
-        public WaitDI(string name, bool value)
+        /// <param name="maxTime"> The maximum time to wait in seconds. </param>
+        public WaitDI(string name, bool value, double maxTime = -1)
         {
             _name = name;
             _value = value;
+            _maxTime = maxTime;
         }
 
         /// <summary>
@@ -79,6 +84,7 @@ namespace RobotComponents.Actions
         {
             _name = waitDI.Name;
             _value = waitDI.Value;
+            _maxTime = waitDI.MaxTime;
         }
 
         /// <summary>
@@ -147,7 +153,8 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return _value ? $"WaitDI {_name}, 1;" : $"WaitDI {_name}, 0;";
+            return $"WaitDI {_name}, {(_value ? 1 : 0)}" +
+                $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
         }
 
         /// <summary>
@@ -200,6 +207,15 @@ namespace RobotComponents.Actions
         { 
             get { return _name; }
             set { _name = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets te max. time to wait in seconds. Set a negative value to wait for ever (default is -1).
+        /// </summary>
+        public double MaxTime
+        {
+            get { return _maxTime; }
+            set { _maxTime = value; }
         }
         #endregion
 

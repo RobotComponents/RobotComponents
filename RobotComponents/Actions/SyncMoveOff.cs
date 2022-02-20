@@ -23,6 +23,7 @@ namespace RobotComponents.Actions
         #region fields
         private ReferenceType _referenceType; // reference type for sync identification
         private string _syncident; // the sync identification name
+        private double _timeOut;
         #endregion
 
         #region (de)serialization
@@ -33,9 +34,10 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected SyncMoveOff(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
             _syncident = (string)info.GetValue("Sync ID", typeof(string));
+            _timeOut = version > 103000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace RobotComponents.Actions
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
             info.AddValue("Sync ID", _syncident, typeof(string));
+            info.AddValue("Time Out", _timeOut, typeof(double));
         }
         #endregion
 
@@ -64,10 +67,12 @@ namespace RobotComponents.Actions
         /// Initializes a new instance of the SyncMoveOff class.
         /// </summary>
         /// <param name="name"> The name of the synchronization point. </param>
-        public SyncMoveOff(string name)
+        /// <param name="timeOut"> The max. time to wait for the other program tasks to reach the synchronization point. </param>
+        public SyncMoveOff(string name, double timeOut = -1)
         {
             _referenceType = ReferenceType.VAR;
             _syncident = name;
+            _timeOut = timeOut;
         }
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace RobotComponents.Actions
         {
             _referenceType = SyncMoveOff.ReferenceType;
             _syncident = SyncMoveOff.SyncID;
+            _timeOut = SyncMoveOff.TimeOut;
         }
 
         /// <summary>
@@ -151,7 +157,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"SyncMoveOff {_syncident};";
+            return $"SyncMoveOff {_syncident}{(_timeOut > 0 ? $"\\TimeOut:={_timeOut:0.###}" : "")};";
         }
 
         /// <summary>
@@ -210,6 +216,16 @@ namespace RobotComponents.Actions
         {
             get { return _syncident; }
             set { _syncident = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets te max. time to wait for the other program tasks to reach the synchronization point.
+        /// Set a negative value to wait for ever (default is -1).
+        /// </summary>
+        public double TimeOut
+        {
+            get { return _timeOut; }
+            set { _timeOut = value; }
         }
         #endregion
     }

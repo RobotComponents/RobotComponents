@@ -22,6 +22,7 @@ namespace RobotComponents.Actions
     {
         #region fields
         private double _duration; // the time expressed in seconds
+        private bool _inPosition; // if true the mechanical unit comes to still stand at the sync point
         #endregion
 
         #region (de)serialization
@@ -32,8 +33,9 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitTime(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _duration = (double)info.GetValue("Duration", typeof(double));
+            _inPosition = version > 103000 ? (bool)info.GetValue("In Position", typeof(bool)) : false;
         }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace RobotComponents.Actions
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Duration", _duration, typeof(double));
+            info.AddValue("In Postion", _inPosition, typeof(bool));
         }
         #endregion
 
@@ -61,9 +64,11 @@ namespace RobotComponents.Actions
         /// Initializes an empty instance of the Wait Time class.
         /// </summary>
         /// <param name="duration"> The time, expressed in seconds, that program execution is to wait. </param>
-        public WaitTime(double duration)
+        /// <param name="inPosition"> Specifies whether or not the mechanial units must have come to a standstill before the wait time starts. </param>
+        public WaitTime(double duration, bool inPosition = false)
         {
             _duration = duration;
+            _inPosition = inPosition;
         }
 
         /// <summary>
@@ -73,6 +78,7 @@ namespace RobotComponents.Actions
         public WaitTime(WaitTime waitTime)
         {
             _duration = waitTime.Duration;
+            _inPosition = waitTime.InPosition;
         }
 
         /// <summary>
@@ -137,7 +143,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"WaitTime {_duration:0.###};";
+            return $"WaitTime {(_inPosition ? "\\InPos, " : "")}{_duration:0.###};";
         }
 
         /// <summary>
@@ -168,7 +174,7 @@ namespace RobotComponents.Actions
         {
             get
             {
-                if (Duration < 0) { return false; }
+                if (_duration < 0) { return false; }
                 else { return true; }
             }
         }
@@ -181,6 +187,16 @@ namespace RobotComponents.Actions
         {
             get { return _duration; }
             set { _duration = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether or not the robot and external axes must have come to a standstill 
+        /// before this program task starts waiting for other program tasks to reach its meeting point.
+        /// </summary>
+        public bool InPosition
+        {
+            get { return _inPosition; }
+            set { _inPosition = value; }
         }
         #endregion
     }

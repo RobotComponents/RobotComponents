@@ -25,6 +25,7 @@ namespace RobotComponents.Actions
         private string _name; // The name of the analog input signal
         private double _value; // The desired state / value of the analog input signal
         private InequalitySymbol _inequalitySymbol; // Defines less than and greater than
+        private double _maxTime;
         #endregion
 
         #region (de)serialization
@@ -35,10 +36,11 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitAI(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (double)info.GetValue("Value", typeof(double));
             _inequalitySymbol = (InequalitySymbol)info.GetValue("Inequality Symbol", typeof(InequalitySymbol));
+            _maxTime = version > 103000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
         }
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace RobotComponents.Actions
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(double));
             info.AddValue("Inequality Symbol", _value, typeof(InequalitySymbol));
+            info.AddValue("Max Time", _maxTime, typeof(double));
         }
         #endregion
 
@@ -70,11 +73,13 @@ namespace RobotComponents.Actions
         /// <param name="name"> The name of the signal. </param>
         /// <param name="value"> The desired value. </param>
         /// <param name="inequalitySymbol"> The inequality symbol (less than, greater than) </param>
-        public WaitAI(string name, double value, InequalitySymbol inequalitySymbol)
+        /// <param name="maxTime"> The maximum time to wait in seconds. </param>
+        public WaitAI(string name, double value, InequalitySymbol inequalitySymbol, double maxTime = -1)
         {
             _name = name;
             _value = value;
             _inequalitySymbol = inequalitySymbol;
+            _maxTime = maxTime;
         }
 
         /// <summary>
@@ -85,6 +90,7 @@ namespace RobotComponents.Actions
         {
             _name = WaitAI.Name;
             _value = WaitAI.Value;
+            _maxTime = WaitAI.MaxTime;
         }
 
         /// <summary>
@@ -153,7 +159,8 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"WaitAI {_name}, \\{Enum.GetName(typeof(InequalitySymbol), _inequalitySymbol)}, {_value};";
+            return $"WaitAI {_name}, \\{Enum.GetName(typeof(InequalitySymbol), _inequalitySymbol)}, {_value}" +
+                $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
         }
 
         /// <summary>
@@ -215,6 +222,15 @@ namespace RobotComponents.Actions
         {
             get { return _inequalitySymbol; }
             set { _inequalitySymbol = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets te max. time to wait in seconds. Set a negative value to wait for ever (default is -1).
+        /// </summary>
+        public double MaxTime
+        {
+            get { return _maxTime; }
+            set { _maxTime = value; }
         }
         #endregion
     }

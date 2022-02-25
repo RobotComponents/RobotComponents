@@ -197,7 +197,7 @@ namespace RobotComponents.Actions
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _finep = finep;
             _pzone_tcp = pzone_tcp;
             _pzone_ori = pzone_ori;
@@ -307,7 +307,7 @@ namespace RobotComponents.Actions
             {
                 return $"Predefined Zone Data ({_name})";
             }
-            else if (_name != string.Empty)
+            else if (_name != "")
             {
                 return $"Custom Zone Data ({_name})";
             }
@@ -343,7 +343,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != string.Empty)
+            if (_predefined == false & _name != "")
             {
                 return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} zonedata {_name} := {ToRAPID()};";
             }
@@ -372,7 +372,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                if (_name != string.Empty)
+                if (_name != "")
                 {
                     if (!RAPIDGenerator.ZoneDatas.ContainsKey(_name))
                     {

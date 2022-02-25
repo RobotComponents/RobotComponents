@@ -43,19 +43,9 @@ namespace RobotComponents.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-
-            if (version <= 16000)
-            {
-                _referenceType = ReferenceType.CONST;
-                _name = string.Empty;
-            }
-            else
-            {
-                _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
-                _name = (string)info.GetValue("Name", typeof(string));
-            }
-
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
             _val3 = (double)info.GetValue("Axis value 3", typeof(double));
@@ -91,7 +81,7 @@ namespace RobotComponents.Actions
         public RobotJointPosition()
         {
             _referenceType = ReferenceType.CONST;
-            _name = string.Empty;
+            _name = "";
 
             _val1 = _defaultValue;
             _val2 = _defaultValue;
@@ -113,14 +103,14 @@ namespace RobotComponents.Actions
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
             _referenceType = ReferenceType.CONST;
-            _name = string.Empty;
+            _name = "";
 
-            _val1 = rax_1;
-            _val2 = rax_2;
-            _val3 = rax_3;
-            _val4 = rax_4;
-            _val5 = rax_5;
-            _val6 = rax_6;
+            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
+            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
+            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
+            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
+            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
+            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
         }
 
         /// <summary>
@@ -130,7 +120,7 @@ namespace RobotComponents.Actions
         public RobotJointPosition(IList<double> internalAxisValues)
         {
             _referenceType = ReferenceType.CONST;
-            _name = string.Empty;
+            _name = "";
 
             double[] values = CheckAxisValues(internalAxisValues);
 
@@ -174,12 +164,12 @@ namespace RobotComponents.Actions
             _referenceType = ReferenceType.CONST;
             _name = name;
 
-            _val1 = rax_1;
-            _val2 = rax_2;
-            _val3 = rax_3;
-            _val4 = rax_4;
-            _val5 = rax_5;
-            _val6 = rax_6;
+            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
+            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
+            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
+            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
+            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
+            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
         }
 
         /// <summary>
@@ -193,7 +183,7 @@ namespace RobotComponents.Actions
             _name = name;
 
             double[] values = CheckAxisValues(internalAxisValues);
-
+            
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];
@@ -452,10 +442,10 @@ namespace RobotComponents.Actions
             double[] result = new double[6];
             int n = Math.Min(axisValues.Count, 6);
 
-            // Copy definied axis values
+            // Copy and check definied axis values
             for (int i = 0; i < n; i++)
             {
-                result[i] = axisValues[i];
+                result[i] = axisValues[i] == double.NaN ? _defaultValue : axisValues[i];
             }
 
             // Add missing axis values
@@ -492,7 +482,7 @@ namespace RobotComponents.Actions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robjoint {_name} := {ToRAPID()};";
             }
@@ -517,7 +507,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 if (!RAPIDGenerator.JointPositions.ContainsKey(_name))
                 {
@@ -543,7 +533,16 @@ namespace RobotComponents.Actions
         /// </summary>
         public override bool IsValid
         {
-            get { return true; }
+            get 
+            { 
+                if (_val1 == double.NaN) { return false; }
+                if (_val2 == double.NaN) { return false; }
+                if (_val3 == double.NaN) { return false; }
+                if (_val4 == double.NaN) { return false; }
+                if (_val5 == double.NaN) { return false; }
+                if (_val6 == double.NaN) { return false; }
+                return true; 
+            }
         }
 
         /// <summary>
@@ -598,12 +597,12 @@ namespace RobotComponents.Actions
             {
                 switch (index)
                 {
-                    case 0: _val1 = value; break;
-                    case 1: _val2 = value; break;
-                    case 2: _val3 = value; break;
-                    case 3: _val4 = value; break;
-                    case 4: _val5 = value; break;
-                    case 5: _val6 = value; break;
+                    case 0: _val1 = value == double.NaN ? _defaultValue : value; break;
+                    case 1: _val2 = value == double.NaN ? _defaultValue : value; break;
+                    case 2: _val3 = value == double.NaN ? _defaultValue : value; break;
+                    case 3: _val4 = value == double.NaN ? _defaultValue : value; break;
+                    case 4: _val5 = value == double.NaN ? _defaultValue : value; break;
+                    case 5: _val6 = value == double.NaN ? _defaultValue : value; break;
                     default: throw new IndexOutOfRangeException();
                 }
             }

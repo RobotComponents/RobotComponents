@@ -75,7 +75,7 @@ namespace RobotComponents.Actions
         public JointTarget(RobotJointPosition robotJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
         }
@@ -101,7 +101,7 @@ namespace RobotComponents.Actions
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
         }
@@ -180,7 +180,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Joint Target";
             }
-            else if (_name != string.Empty)
+            else if (_name != "")
             {
                 return $"Joint Target ({_name})";
             }
@@ -263,8 +263,8 @@ namespace RobotComponents.Actions
         /// <returns> The string with joint target values. </returns>
         public string ToRAPID()
         {
-            string robotJointPosition = _robotJointPosition.Name == string.Empty ? _robotJointPosition.ToRAPID() : _robotJointPosition.Name;
-            string externalJointPosition = _externalJointPosition.Name == string.Empty ? _externalJointPosition.ToRAPID() : _externalJointPosition.Name;
+            string robotJointPosition = _robotJointPosition.Name == "" ? _robotJointPosition.ToRAPID() : _robotJointPosition.Name;
+            string externalJointPosition = _externalJointPosition.Name == "" ? _externalJointPosition.ToRAPID() : _externalJointPosition.Name;
             string code = $"[{robotJointPosition}, {externalJointPosition}]";
 
             return code;
@@ -277,7 +277,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} jointtarget {_name} := {ToRAPID()};";
             }
@@ -305,7 +305,7 @@ namespace RobotComponents.Actions
             _robotJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
             _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
 
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {

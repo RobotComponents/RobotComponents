@@ -82,7 +82,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _plane = plane;
             _axisConfig = 0;
             _externalJointPosition = new ExternalJointPosition();
@@ -112,7 +112,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
@@ -145,7 +145,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = new ExternalJointPosition();
@@ -187,7 +187,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = externalJointPosition;
@@ -222,7 +222,7 @@ namespace RobotComponents.Actions
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
             _externalJointPosition = externalJointPosition;
@@ -318,7 +318,7 @@ namespace RobotComponents.Actions
             {
                 return "Invalid Robot Target";
             }
-            else if (_name != string.Empty)
+            else if (_name != "")
             {
                 return $"Robot Target ({_name})";
             }
@@ -336,7 +336,7 @@ namespace RobotComponents.Actions
         {
             string externalJointPosition = _externalJointPosition.Name;
 
-            if (externalJointPosition == string.Empty)
+            if (externalJointPosition == "")
             {
                 externalJointPosition = _externalJointPosition.ToRAPID();
             }
@@ -362,7 +362,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robtarget {_name} := {ToRAPID()};";
             }
@@ -389,7 +389,7 @@ namespace RobotComponents.Actions
         {
             _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
 
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 if (!RAPIDGenerator.Targets.ContainsKey(_name))
                 {

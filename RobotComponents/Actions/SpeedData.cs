@@ -97,7 +97,7 @@ namespace RobotComponents.Actions
 
             // Set other fields
             _referenceType = ReferenceType.VAR;
-            _name = "v" + tcp.ToString();
+            _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
             _v_leax = 5000;
@@ -117,7 +117,7 @@ namespace RobotComponents.Actions
 
             // Set other fields
             _referenceType = ReferenceType.VAR;
-            _name = "v" + tcp.ToString();
+            _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
             _v_leax = 5000;
@@ -135,7 +135,7 @@ namespace RobotComponents.Actions
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
             _referenceType = ReferenceType.VAR;
-            _name = string.Empty;
+            _name = "";
             _v_tcp = v_tcp;
             _v_ori = v_ori;
             _v_leax = v_leax;
@@ -232,7 +232,7 @@ namespace RobotComponents.Actions
             {
                 return $"Predefined Speed Data ({_name})";
             }
-            else if (_name != string.Empty)
+            else if (_name != "")
             {
                 return $"Custom Speed Data ({_name})";
             }
@@ -258,7 +258,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false && _name != string.Empty)
+            if (_predefined == false && _name != "")
             {
                 return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} speeddata {_name} := {ToRAPID()};";
             }
@@ -287,7 +287,7 @@ namespace RobotComponents.Actions
         {
             if (_predefined == false)
             {
-                if (_name != string.Empty)
+                if (_name != "")
                 {
                     if (!RAPIDGenerator.SpeedDatas.ContainsKey(_name))
                     {

@@ -68,7 +68,7 @@ namespace RobotComponents.Actions
             _programModuleName = "MainModule";
             _systemModuleName = "BASE";
             _procedureName = "main";
-            _filePath = string.Empty;
+            _filePath = "";
             _saveToFile = false;
         }
 
@@ -87,7 +87,7 @@ namespace RobotComponents.Actions
             _programModuleName = programModuleName;
             _systemModuleName = systemModuleName;
             _procedureName = procedureName;
-            _filePath = string.Empty;
+            _filePath = "";
             _saveToFile = false;
         }
 
@@ -301,7 +301,7 @@ namespace RobotComponents.Actions
 
             foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
             {
-                if (entry.Value.Name != "tool0" & entry.Value.Name != "" & entry.Value.Name != null)
+                if (entry.Value.Name != "tool0" && entry.Value.Name != null && entry.Value.Name != "")
                 {
                     robotTools.Add(entry.Value);
                 }
@@ -309,7 +309,7 @@ namespace RobotComponents.Actions
 
             foreach (KeyValuePair<string, WorkObject> entry in _workObjects)
             {
-                if (entry.Value.Name != "wobj0" & entry.Value.Name != "" & entry.Value.Name != null)
+                if (entry.Value.Name != "wobj0" && entry.Value.Name != null && entry.Value.Name != "")
                 {
                     workObjects.Add(entry.Value);
                 }

@@ -58,7 +58,7 @@ namespace RobotComponents.Actions
         /// </summary>
         public ActionGroup()
         {
-            _name = string.Empty;
+            _name = "";
             _actions = new List<Action>() { };
         }
 
@@ -68,7 +68,7 @@ namespace RobotComponents.Actions
         /// <param name="actions"> The list with actions. </param>
         public ActionGroup(IList<Action> actions)
         {
-            _name = string.Empty;
+            _name = "";
             _actions = new List<Action>(actions);
         }
 
@@ -127,7 +127,7 @@ namespace RobotComponents.Actions
             {
                 return "Empty Action Group";
             }
-            else if (_name != string.Empty)
+            else if (_name != "")
             {
                 return $"Action Group ({_name})";
             }
@@ -326,7 +326,7 @@ namespace RobotComponents.Actions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! Start of group: {_name}");
             }
@@ -336,7 +336,7 @@ namespace RobotComponents.Actions
                 _actions[i].ToRAPIDInstruction(RAPIDGenerator);
             }
 
-            if (_name != string.Empty)
+            if (_name != "")
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! End of group: {_name}");
             }

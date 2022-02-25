@@ -147,7 +147,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            return _type == CodeType.Declaration ? _code : string.Empty;
+            return _type == CodeType.Declaration ? _code : "";
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace RobotComponents.Actions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return _type == CodeType.Instruction ? _code : string.Empty;
+            return _type == CodeType.Instruction ? _code : "";
         }
 
         /// <summary>

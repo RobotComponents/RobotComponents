@@ -519,7 +519,7 @@ namespace RobotComponents.Actions
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
                     _convertedTarget.ReferenceType = _target.ReferenceType;
 
-                    if (_convertedTarget.Name != string.Empty)
+                    if (_convertedTarget.Name != "")
                     {
                         _convertedTarget.Name += "_jt";
                     }    
@@ -565,11 +565,11 @@ namespace RobotComponents.Actions
             }
 
             // Declaration RAPID code
-            string target = _convertedTarget.Name != string.Empty ? _convertedTarget.Name : _convertedTarget.ToRAPID();
-            string speedData = _speedData.Name != string.Empty ? _speedData.Name : _speedData.ToRAPID();
-            string zoneData = _zoneData.Name != string.Empty ? _zoneData.Name : _zoneData.ToRAPID();
-            target += _id > -1 ? string.Format("\\ID:={0}", _id) : string.Empty;
-            speedData += _time > 0 ? string.Format("\\T:={0}", _time) : string.Empty;
+            string target = _convertedTarget.Name != "" ? _convertedTarget.Name : _convertedTarget.ToRAPID();
+            string speedData = _speedData.Name != "" ? _speedData.Name : _speedData.ToRAPID();
+            string zoneData = _zoneData.Name != "" ? _zoneData.Name : _zoneData.ToRAPID();
+            target += _id > -1 ? string.Format("\\ID:={0}", _id) : "";
+            speedData += _time > 0 ? string.Format("\\T:={0}", _time) : "";
 
             // Check the movemet and target type
             if (_target is JointTarget & _movementType != MovementType.MoveAbsJ)

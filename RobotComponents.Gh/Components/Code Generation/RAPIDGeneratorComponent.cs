@@ -176,15 +176,15 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             // Check if module name contains special character
             if (HelperMethods.StringStartsWithNumber(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name onstains special characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name contains special characters.");
             }
             if (HelperMethods.StringStartsWithNumber(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name onstains special characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name contains special characters.");
             }
             if (HelperMethods.StringStartsWithNumber(procedureName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name onstains special characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name contains special characters.");
             }
 
             // Updates the rapid Progam and System code

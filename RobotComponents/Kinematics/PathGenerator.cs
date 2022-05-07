@@ -121,7 +121,7 @@ namespace RobotComponents.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(List<Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -489,7 +489,7 @@ namespace RobotComponents.Kinematics
         /// Returns true if no movements were defined. 
         /// </summary>
         /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
-        private bool CheckFirstMovement(List<Action> actions)
+        private bool CheckFirstMovement(IList<Action> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {

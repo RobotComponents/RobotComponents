@@ -69,7 +69,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("ee30da59-f7e4-45b1-8fac-45cf6a057bed"); }
+            get { return new Guid("78DB5BA0-B153-4EA3-A2A7-40F5A8166604"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.

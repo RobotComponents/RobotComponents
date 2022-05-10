@@ -63,7 +63,7 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite all versions of Robot Components in publications use:
 
 ```
-Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2021). 
+Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2022). 
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```
@@ -81,8 +81,12 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 
 ## Used in 
 
+## Publications
+
+[Göbert, A., Deetman, A., Rossi, A. et al. 3DWoodWind: robotic winding processes for material-efficient lightweight veneer components. Constr Robot (2022). https://doi.org/10.1007/s41693-022-00067-2](https://link.springer.com/article/10.1007/s41693-022-00067-2)
+
 ### Conference contributions
-[Dawod M. et al. (2020) Continuous Timber Fibre Placement. In: Gengnagel C., Baverel O., Burry J., Ramsgaard Thomsen M., Weinzierl S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
+[Dawod, M. et al. (2020). Continuous Timber Fibre Placement. In: Gengnagel, C., Baverel, O., Burry, J., Ramsgaard Thomsen, M., Weinzierl, S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham. https://doi.org/10.1007/978-3-030-29829-6_36](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
 
 ### Workshops
 [Robot Wood Printing Workshop at the Design Modeling Symposium 2019](https://design-modelling-symposium.de/workshops/robotic-wood-printing-workshop/)

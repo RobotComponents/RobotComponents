@@ -18,7 +18,7 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Inveser Kinematics component. An inherent from the GH_Component Class.

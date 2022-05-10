@@ -85,6 +85,10 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 
 [Göbert, A., Deetman, A., Rossi, A. et al. 3DWoodWind: robotic winding processes for material-efficient lightweight veneer components. Constr Robot (2022). https://doi.org/10.1007/s41693-022-00067-2](https://link.springer.com/article/10.1007/s41693-022-00067-2)
 
+[Philipp Eversmann, Julian Ochs, Jannis Heise, Zuardin Akbar, and Stefan Böhm. 3D Printing and Additive Manufacturing.ahead of printhttp://doi.org/10.1089/3dp.2020.0356](https://www.liebertpub.com/doi/10.1089/3dp.2020.0356)
+
+[Özdemir E, Saeidi N, Javadian A, Rossi A, Nolte N, Ren S, Dwan A, Acosta I, Hebel DE, Wurm J, Eversmann P. Wood-Veneer-Reinforced Mycelium Composites for Sustainable Building Components. Biomimetics. 2022; 7(2):39. https://doi.org/10.3390/biomimetics7020039](https://www.mdpi.com/2313-7673/7/2/39)
+
 ### Conference contributions
 [Dawod, M. et al. (2020). Continuous Timber Fibre Placement. In: Gengnagel, C., Baverel, O., Burry, J., Ramsgaard Thomsen, M., Weinzierl, S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham. https://doi.org/10.1007/978-3-030-29829-6_36](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
 

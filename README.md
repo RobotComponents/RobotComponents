@@ -123,6 +123,8 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 
 [ROASD Master Thesis Project - Winding with robots](https://www.youtube.com/watch?v=Ec1l9zdstBo)
 
+[3DCP TU/e - Design concepts for 3D Concrete Printed spiral staircase using SHCC and helical reinforcement](https://www.youtube.com/watch?v=18HOe7LmMvg)
+
 ## License
 Robot Components
 

@@ -8,8 +8,8 @@
     <ProjectGuid>{73D440D1-ED0E-465D-B2F6-2DAFC8DAD05E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RobotComponents.Gh2</RootNamespace>
-    <AssemblyName>RobotComponents.Gh2</AssemblyName>
+    <RootNamespace>RobotComponents.ABB.Gh2</RootNamespace>
+    <AssemblyName>RobotComponents.ABB.Gh2</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>

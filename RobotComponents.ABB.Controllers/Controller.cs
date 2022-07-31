@@ -82,13 +82,13 @@ namespace RobotComponents.ABB.Controllers
             try
             {
                 _controller.Logon(_userInfo);
-                _logger.Add(System.String.Format("{0}: Log on with username {1} succeeded.", CurrentTime(), _userName));
+                _logger.Add(string.Format("{0}: Log on with username {1} succeeded.", CurrentTime(), _userName));
                 return true;
             }
 
             catch
             {
-                _logger.Add(System.String.Format("{0}: Log on with username {1} failed.", CurrentTime(), _userName));
+                _logger.Add(string.Format("{0}: Log on with username {1} failed.", CurrentTime(), _userName));
                 return false;
             }
         }
@@ -98,13 +98,13 @@ namespace RobotComponents.ABB.Controllers
             try
             {
                 _controller.Logoff();
-                _logger.Add(System.String.Format("{0}: Log off succeeded.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Log off succeeded.", CurrentTime()));
                 return true;
             }
 
             catch
             {
-                _logger.Add(System.String.Format("{0}: Log off failed.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Log off failed.", CurrentTime()));
                 return false;
             }
         }
@@ -126,7 +126,7 @@ namespace RobotComponents.ABB.Controllers
 
             catch
             {
-                _logger.Add(System.String.Format("{0}: Failed to dispose the controller object.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Failed to dispose the controller object.", CurrentTime()));
                 return false;
             }
         }
@@ -138,7 +138,7 @@ namespace RobotComponents.ABB.Controllers
 
             _userInfo = new ControllersNS.UserInfo(_userName, _password);
 
-            _logger.Add(System.String.Format("{0}: Username set to {1}", CurrentTime(), _userName));
+            _logger.Add(string.Format("{0}: Username set to {1}", CurrentTime(), _userName));
         }
 
         public void SetDefaultUser()
@@ -148,7 +148,7 @@ namespace RobotComponents.ABB.Controllers
             _userName = _userInfo.Name;
             _password = _userInfo.Password;
 
-            _logger.Add(System.String.Format("{0}: User Info set to DefaultUser.", CurrentTime()));
+            _logger.Add(string.Format("{0}: User Info set to DefaultUser.", CurrentTime()));
         }
 
         public SignalCollection GetAnalogOutputs()
@@ -207,13 +207,13 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
             {
-                _logger.Add(System.String.Format("{0}: Could not start the program. The controller is not set in automatic mode.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Could not start the program. The controller is not set in automatic mode.", CurrentTime()));
                 return false;
             }
 
             else if (_controller.State != ControllersNS.ControllerState.MotorsOn)
             {
-                _logger.Add(System.String.Format("{0}: Could not start the program. The motors are not on.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Could not start the program. The motors are not on.", CurrentTime()));
                 return false;
             }
 
@@ -225,7 +225,7 @@ namespace RobotComponents.ABB.Controllers
                     master.Release();
                 }
 
-                _logger.Add(System.String.Format("{0}: Program started.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Program started.", CurrentTime()));
                 return true;
             }
         }
@@ -234,7 +234,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
             {
-                _logger.Add(System.String.Format("{0}: Could not stop the program. The controller is not set in automatic mode.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Could not stop the program. The controller is not set in automatic mode.", CurrentTime()));
                 return false;
             }
 
@@ -246,7 +246,7 @@ namespace RobotComponents.ABB.Controllers
                     master.Release();
                 }
 
-                _logger.Add(System.String.Format("{0}: Program stopped.", CurrentTime()));
+                _logger.Add(string.Format("{0}: Program stopped.", CurrentTime()));
                 return false;
             }
         }

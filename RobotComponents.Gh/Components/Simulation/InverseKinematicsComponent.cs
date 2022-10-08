@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 //Grasshopper Libs
@@ -33,7 +34,7 @@ namespace RobotComponents.Gh.Components.Simulation
         #region fields
         private Robot _robot = new Robot();
         private InverseKinematics _inverseKinematics = new InverseKinematics();
-        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
+        private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
         private RobotJointPosition _previousRobotJointPosition = new RobotJointPosition(0, 0, 0, 0, 0, 0);
         private bool _closestRobotJointPosition = false;
         private bool _hideMesh = false;
@@ -131,6 +132,20 @@ namespace RobotComponents.Gh.Components.Simulation
             for (int i = 0; i < _inverseKinematics.ErrorText.Count; i++)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _inverseKinematics.ErrorText[i]);
+            }
+
+            // Clear list with FK on first iteration
+            if (DA.Iteration == 0)
+            {
+                _forwardKinematics.Clear();
+            }
+
+            // Add to list with FK for visualization
+            if (!_hideMesh)
+            {
+                ForwardKinematics forwardKinematics = new ForwardKinematics(_robot);
+                forwardKinematics.Calculate(_inverseKinematics.RobotJointPosition, _inverseKinematics.ExternalJointPosition); 
+                _forwardKinematics.Add(forwardKinematics);
             }
 
             // Output
@@ -385,7 +400,10 @@ namespace RobotComponents.Gh.Components.Simulation
             // Add bounding box of custom preview
             if (!_hideMesh)
             {
-                result.Union(_forwardKinematics.GetBoundingBox(false));
+                for (int i = 0; i < _forwardKinematics.Count; i++)
+                {
+                    result.Union(_forwardKinematics[i].GetBoundingBox(false));
+                }
             }
 
             return result;
@@ -397,44 +415,48 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Check if there is a mesh available to display
+            // Default implementation (disabled)
+            // base.DrawViewportMeshes(args);
+
             if (!_hideMesh)
             {
-                // Forward Kinematics
-                _forwardKinematics = new ForwardKinematics(_robot);
-
-                // Initiate the display color and transparancy of the robot mesh
-                Color color;
-                double trans;
-
-                // Calculate forward kinematics
-                _forwardKinematics.HideMesh = _hideMesh;
-                _forwardKinematics.Calculate(_inverseKinematics.RobotJointPosition, _inverseKinematics.ExternalJointPosition);
-
-                // Set the display color and transparancy of the robot mesh
-                if (_forwardKinematics.InLimits == true)
+                for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
-                    color = Color.FromArgb(225, 225, 225);
-                    trans = 0.0;
-                }
-                else
-                {
-                    color = Color.FromArgb(150, 0, 0);
-                    trans = 0.5;
-                }
+                    // Initiate the display color and transparancy of the robot mesh
+                    Color color;
+                    double trans;
 
-                // Display the internal axes of the robot
-                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
-                {
-                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
-                }
-
-                // Display the external axes
-                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
-                {
-                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
+                    // Set the display color and transparancy of the robot mesh
+                    if (_forwardKinematics[i].InLimits == true)
                     {
-                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                        color = Color.FromArgb(225, 225, 225);
+                        trans = 0.0;
+                    }
+                    else
+                    {
+                        color = Color.FromArgb(150, 0, 0);
+                        trans = 0.5;
+                    }
+
+                    // Display internal axis meshes
+                    for (int j = 0; j < _forwardKinematics[i].PosedInternalAxisMeshes.Count; j++)
+                    {
+                        if (_forwardKinematics[i].PosedInternalAxisMeshes[j].IsValid)
+                        {
+                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedInternalAxisMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                        }
+                    }
+
+                    // Display external axis meshes
+                    for (int j = 0; j < _forwardKinematics[i].PosedExternalAxisMeshes.Count; j++)
+                    {
+                        for (int k = 0; k < _forwardKinematics[i].PosedExternalAxisMeshes[j].Count; k++)
+                        {
+                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                            {
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], new Rhino.Display.DisplayMaterial(color, trans));
+                            }
+                        }
                     }
                 }
             }

@@ -78,6 +78,12 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Catch the input data
             if (!DA.GetData(0, ref robot)) { return; }
 
+            // Clear list with meshes on first iteration
+            if (DA.Iteration == 0)
+            {
+                _meshes.Clear();
+            }
+
             if (robot != null)
             {
                 // Check if the input is valid
@@ -90,7 +96,6 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
                 List<Mesh> meshes = new List<Mesh>();
 
                 // Add display meshes
-                _meshes.Clear();
                 if (robot.Meshes != null)
                 {
                     for (int i = 0; i < 7; i++)
@@ -194,6 +199,42 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
 
         #region custom preview method
         /// <summary>
+        /// Gets the clipping box for all preview geometry drawn by this component and all associated parameters.
+        /// </summary>
+        public override BoundingBox ClippingBox
+        {
+            get { return GetBoundingBox(); }
+        }
+
+        /// <summary>
+        /// Returns the bounding box for all preview geometry drawn by this component.
+        /// </summary>
+        /// <returns></returns>
+        private BoundingBox GetBoundingBox()
+        {
+            BoundingBox result = new BoundingBox();
+
+            // Get bouding box of all the output parameters
+            for (int i = 0; i < Params.Output.Count; i++)
+            {
+                if (Params.Output[i] is IGH_PreviewObject previewObject)
+                {
+                    result.Union(previewObject.ClippingBox);
+                }
+            }
+
+            for (int i = 0; i < _meshes.Count; i++)
+            {
+                if (_meshes[i].IsValid)
+                {
+                    result.Union(_meshes[i].GetBoundingBox(false));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// This method displays the meshes
         /// </summary>
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
@@ -218,7 +259,10 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
             // Display the meshes
             for (int i = 0; i != _meshes.Count; i++)
             {
-                args.Display.DrawMeshShaded(_meshes[i], material);
+                if (_meshes[i].IsValid)
+                {
+                    args.Display.DrawMeshShaded(_meshes[i], material);
+                }
             }
         }
         #endregion

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
@@ -46,7 +44,7 @@ namespace RobotComponents.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.tree);
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -64,22 +62,20 @@ namespace RobotComponents.Gh.Components.Utilities
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Clear the list with plans before catching the input data
-            _planes.Clear();
+            // Input variables
+            Plane plane = Plane.Unset;
 
             // Catch input data
-            if (!DA.GetDataTree(0, out GH_Structure<GH_Plane> inputPlanes)) { return; }
+            if (!DA.GetData(0, ref plane)) { return; }
 
-            // Flatten the datatree to a list
-            for (int i = 0; i < inputPlanes.Branches.Count; i++)
+            // Clear the list with planes on the first iteration
+            if (DA.Iteration == 0)
             {
-                var branches = inputPlanes.Branches[i];
-
-                for (int j = 0; j < branches.Count; j++)
-                {
-                    _planes.Add(branches[j].Value);
-                }
+                _planes.Clear();
             }
+
+            // Add plane to list
+            _planes.Add(plane);
         }
 
         #region properties
@@ -150,6 +146,9 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
+            // Default implementation (disabled)
+            // base.DrawViewportMeshes(args);
+
             for (int i = 0; i < _planes.Count; i++)
             {
                 Plane plane = _planes[i];

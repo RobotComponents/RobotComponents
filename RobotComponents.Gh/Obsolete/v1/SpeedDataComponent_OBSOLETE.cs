@@ -10,22 +10,23 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Action : Zone Data component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ZoneDataComponent : GH_Component, IObjectManager
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class SpeedDataComponent_OBSOLETE : GH_Component, IObjectManager
     {
         #region fields
-        private GH_Structure<GH_ZoneData> _tree = new GH_Structure<GH_ZoneData>();
+        private GH_Structure<GH_SpeedData> _tree = new GH_Structure<GH_SpeedData>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
@@ -38,10 +39,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ZoneDataComponent()
-          : base("Zone Data", "ZD",
-              "Defines a zone data declaration for robot movements in RAPID program code generation."
-                + System.Environment.NewLine + System.Environment.NewLine +
+        public SpeedDataComponent_OBSOLETE()
+          : base("Speed Data", "SD", 
+              "Defines a speed data declaration for Move components."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -52,14 +53,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, string.Empty);
-            pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.item, false);
-            pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Path Zone External Axes", "pzEA", "The zone size (the radius) for external axes in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone Reorientation", "zORI", "The zone size for the tool reorientation in degrees as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone External Linear Axes", "zELA", "The zone size for linear external axes in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone External Rotational Axes", "zERA", "The zone size for rotating external axes in degrees as a number.", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, string.Empty);
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree, 5);
+            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.tree, 500);
+            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.tree, 5000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.tree, 1000);
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Resulting Zone Data declaration");
+            pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Resulting Speed Data declaration");
         }
 
         /// <summary>
@@ -76,69 +74,63 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs
-            string name = string.Empty;
-            bool finep = false;
-            double pzone_tcp = 0;
-            double pzone_ori = 0;
-            double pzone_eax = 0;
-            double zone_ori = 0;
-            double zone_leax = 0;
-            double zone_reax = 0;
+            // Sets inputs and creates speeddatas
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Number> v_tcps;
+            GH_Structure<GH_Number> v_oris;
+            GH_Structure<GH_Number> v_leaxs;
+            GH_Structure<GH_Number> v_reaxs;
 
             // Catch the input data
-            if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref finep)) { return; }
-            if (!DA.GetData(2, ref pzone_tcp)) { return; }
-            if (!DA.GetData(3, ref pzone_ori)) { return; }
-            if (!DA.GetData(4, ref pzone_eax)) { return; }
-            if (!DA.GetData(5, ref zone_ori)) { return; }
-            if (!DA.GetData(6, ref zone_leax)) { return; }
-            if (!DA.GetData(7, ref zone_reax)) { return; }
+            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetDataTree(1, out v_tcps)) { return; }
+            if (!DA.GetDataTree(2, out v_oris)) { return; }
+            if (!DA.GetDataTree(3, out v_leaxs)) { return; }
+            if (!DA.GetDataTree(4, out v_reaxs)) { return; }
 
-            // Replace spaces
-            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+            // Clear tree 
+            _tree = new GH_Structure<GH_SpeedData>();
 
-            ZoneData zoneData = new ZoneData(name, finep, pzone_tcp, pzone_ori, pzone_eax, zone_ori, zone_leax, zone_reax);
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            SpeedDataComponentDataTreeGenerator_OBSOLETE component = new SpeedDataComponentDataTreeGenerator_OBSOLETE();
+
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(v_tcps);
+            component.Params.Input[2].AddVolatileDataTree(v_oris);
+            component.Params.Input[3].AddVolatileDataTree(v_leaxs);
+            component.Params.Input[4].AddVolatileDataTree(v_reaxs);
+
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
+
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
+
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Sets Output
-            DA.SetData(0, zoneData);
-        }
+            DA.SetDataTree(0, _tree);
 
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
+            #region Object manager
+            _toRegister.Clear();
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_ZoneData>;
-
-            if (_tree.Branches.Count != 0)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                if (_tree.Branches[0][0].Value.Name != string.Empty)
-                {
-                    UpdateVariableNames();
-                }
-
-                #region Object manager
-                _toRegister.Clear();
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-                }
-
-                GH_Document doc = this.OnPingDocument();
-                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-                _objectManager.CheckVariableNames(this);
-
-                if (doc != null)
-                {
-                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
-                }
-                #endregion
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
+
+            GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+            }
+            #endregion
         }
 
         #region properties
@@ -148,7 +140,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -156,7 +148,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -165,7 +157,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ZoneData_Icon; }
+            get { return Properties.Resources.SpeedData_Icon; }
         }
 
         /// <summary>
@@ -175,7 +167,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("FF47572E-CD49-4BD8-BEE0-A841DD91EE70"); }
+            get { return new Guid("91296EEB-3DA3-4F9F-8516-398BD369795E"); }
         }
         #endregion
 

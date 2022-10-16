@@ -10,10 +10,9 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators;
+using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -53,11 +52,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.tree, string.Empty);
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.tree, 5);
-            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.tree, 500);
-            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.tree, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.tree, 1000);
+            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.item, string.Empty);
+            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.item, 5);
+            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.item, 500);
+            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.item, 5000);
+            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.item, 1000);
         }
 
         /// <summary>
@@ -74,63 +73,63 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs and creates speeddatas
-            GH_Structure<GH_String> names;
-            GH_Structure<GH_Number> v_tcps;
-            GH_Structure<GH_Number> v_oris;
-            GH_Structure<GH_Number> v_leaxs;
-            GH_Structure<GH_Number> v_reaxs;
+            // Sets inputs 
+            string name = string.Empty;
+            double v_tcp = 5;
+            double v_ori = 500;
+            double v_leax = 5000;
+            double v_reax = 1000;
 
             // Catch the input data
-            if (!DA.GetDataTree(0, out names)) { return; }
-            if (!DA.GetDataTree(1, out v_tcps)) { return; }
-            if (!DA.GetDataTree(2, out v_oris)) { return; }
-            if (!DA.GetDataTree(3, out v_leaxs)) { return; }
-            if (!DA.GetDataTree(4, out v_reaxs)) { return; }
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref v_tcp)) { return; }
+            if (!DA.GetData(2, ref v_ori)) { return; }
+            if (!DA.GetData(3, ref v_leax)) { return; }
+            if (!DA.GetData(4, ref v_reax)) { return; }
 
-            // Clear tree 
-            _tree = new GH_Structure<GH_SpeedData>();
+            // Replace spaces
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
-            SpeedDataComponentDataTreeGenerator component = new SpeedDataComponentDataTreeGenerator();
-
-            component.Params.Input[0].AddVolatileDataTree(names);
-            component.Params.Input[1].AddVolatileDataTree(v_tcps);
-            component.Params.Input[2].AddVolatileDataTree(v_oris);
-            component.Params.Input[3].AddVolatileDataTree(v_leaxs);
-            component.Params.Input[4].AddVolatileDataTree(v_reaxs);
-
-            component.ExpireSolution(true);
-            component.Params.Output[0].CollectData();
-
-            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
-
-            if (_tree.Branches[0][0].Value.Name != string.Empty)
-            {
-                // Update the variable names in the data trees
-                UpdateVariableNames();
-            }
+            SpeedData speeddata = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
 
             // Sets Output
-            DA.SetDataTree(0, _tree);
+            DA.SetData(0, speeddata);
+        }
 
-            #region Object manager
-            _toRegister.Clear();
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
 
-            for (int i = 0; i < _tree.Branches.Count; i++)
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_SpeedData>;
+
+            if (_tree.Branches.Count != 0)
             {
-                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-            }
+                if (_tree.Branches[0][0].Value.Name != string.Empty)
+                {
+                    UpdateVariableNames();
+                }
 
-            GH_Document doc = this.OnPingDocument();
-            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-            _objectManager.CheckVariableNames(this);
+                #region Object manager
+                _toRegister.Clear();
 
-            if (doc != null)
-            {
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
+                }
+
+                GH_Document doc = this.OnPingDocument();
+                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+                _objectManager.CheckVariableNames(this);
+
+                if (doc != null)
+                {
+                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                }
+                #endregion
             }
-            #endregion
         }
 
         #region properties
@@ -167,7 +166,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("91296EEB-3DA3-4F9F-8516-398BD369795E"); }
+            get { return new Guid("2C438CE1-FC39-47CD-809E-8AF81321C077"); }
         }
         #endregion
 

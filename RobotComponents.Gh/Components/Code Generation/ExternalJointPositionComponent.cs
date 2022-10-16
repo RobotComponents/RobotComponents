@@ -11,10 +11,9 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
-using RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators;
+using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -56,12 +55,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         private readonly IGH_Param[] externalAxisParameters = new IGH_Param[6]
         {
-            new Param_Number() { Name = "External joint position A", NickName = "EJa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.tree, Optional = true }, // fixed
-            new Param_Number() { Name = "External joint position B", NickName = "EJb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.tree, Optional = true }, // fixed
-            new Param_Number() { Name = "External joint position C", NickName = "EJc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.tree, Optional = true }, // variable
-            new Param_Number() { Name = "External joint position D", NickName = "EJd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.tree, Optional = true }, // variable
-            new Param_Number() { Name = "External joint position E", NickName = "EJe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.tree, Optional = true }, // variable
-            new Param_Number() { Name = "External joint position F", NickName = "EJf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.tree, Optional = true } // variable
+            new Param_Number() { Name = "External joint position A", NickName = "EJa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.item, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position B", NickName = "EJb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.item, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position C", NickName = "EJc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position D", NickName = "EJd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position E", NickName = "EJe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.item, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position F", NickName = "EJf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.item, Optional = true } // variable
         };
 
         /// <summary>
@@ -69,9 +68,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddNumberParameter(externalAxisParameters[0].Name, externalAxisParameters[0].NickName, externalAxisParameters[0].Description, externalAxisParameters[0].Access, 9e9);
-            pManager.AddNumberParameter(externalAxisParameters[1].Name, externalAxisParameters[1].NickName, externalAxisParameters[1].Description, externalAxisParameters[0].Access, 9e9);
+            pManager.AddNumberParameter(externalAxisParameters[1].Name, externalAxisParameters[1].NickName, externalAxisParameters[1].Description, externalAxisParameters[1].Access, 9e9);
 
             pManager[1].Optional = externalAxisParameters[0].Optional;
             pManager[2].Optional = externalAxisParameters[1].Optional;
@@ -91,119 +90,90 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Variables
-            GH_Structure<GH_String> names;
-            GH_Structure<GH_Number> externalAxisValuesA = new GH_Structure<GH_Number>(); 
-            GH_Structure<GH_Number> externalAxisValuesB = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> externalAxisValuesC = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> externalAxisValuesD = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> externalAxisValuesE = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> externalAxisValuesF = new GH_Structure<GH_Number>();
+            // Declare variables
+            string name = string.Empty;
+            double externalJointPositionA = 9e9;
+            double externalJointPositionB = 9e9;
+            double externalJointPositionC = 9e9;
+            double externalJointPositionD = 9e9;
+            double externalJointPositionE = 9e9;
+            double externalJointPositionF = 9e9;
 
             // Catch input data
-            // Name
-            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetData(0, ref name)) { return; }
 
-            // External axis A
+            // External joint position A
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[0].Name, out externalAxisValuesA)) 
-                {
-                    externalAxisValuesA = new GH_Structure<GH_Number>();
-                    externalAxisValuesA.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[0].Name, ref externalJointPositionA)) { externalJointPositionA = 9e9; }
             }
-            // External axis B
+            // External joint position B
             if (Params.Input.Any(x => x.Name == externalAxisParameters[1].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[1].Name, out externalAxisValuesB))
-                {
-                    externalAxisValuesB = new GH_Structure<GH_Number>();
-                    externalAxisValuesB.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[1].Name, ref externalJointPositionB)) { externalJointPositionB = 9e9; }
             }
-            // External axis C
+            // External joint position C
             if (Params.Input.Any(x => x.Name == externalAxisParameters[2].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[2].Name, out externalAxisValuesC))
-                {
-                    externalAxisValuesC = new GH_Structure<GH_Number>();
-                    externalAxisValuesC.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[2].Name, ref externalJointPositionC)) { externalJointPositionC = 9e9; }
             }
-            // External axis D
+            // External joint position D
             if (Params.Input.Any(x => x.Name == externalAxisParameters[3].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[3].Name, out externalAxisValuesD))
-                {
-                    externalAxisValuesD = new GH_Structure<GH_Number>();
-                    externalAxisValuesD.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[3].Name, ref externalJointPositionD)) { externalJointPositionD = 9e9; }
             }
-            // External axis E
+            // External joint position E
             if (Params.Input.Any(x => x.Name == externalAxisParameters[4].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[4].Name, out externalAxisValuesE))
-                {
-                    externalAxisValuesE = new GH_Structure<GH_Number>();
-                    externalAxisValuesE.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[4].Name, ref externalJointPositionE)) { externalJointPositionE = 9e9; }
             }
-            // External axis F
+            // External joint position F
             if (Params.Input.Any(x => x.Name == externalAxisParameters[5].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[5].Name, out externalAxisValuesF))
-                {
-                    externalAxisValuesF = new GH_Structure<GH_Number>();
-                    externalAxisValuesF.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
-                }
+                if (!DA.GetData(externalAxisParameters[5].Name, ref externalJointPositionF)) { externalJointPositionF = 9e9; }
             }
 
-            // Clear tree 
-            _tree = new GH_Structure<GH_ExternalJointPosition>();
-
-            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
-            ExternalJointPositionComponentDataTreeGenerator component = new ExternalJointPositionComponentDataTreeGenerator();
-
-            component.Params.Input[0].AddVolatileDataTree(names);
-            component.Params.Input[1].AddVolatileDataTree(externalAxisValuesA);
-            component.Params.Input[2].AddVolatileDataTree(externalAxisValuesB);
-            component.Params.Input[3].AddVolatileDataTree(externalAxisValuesC);
-            component.Params.Input[4].AddVolatileDataTree(externalAxisValuesD);
-            component.Params.Input[5].AddVolatileDataTree(externalAxisValuesE);
-            component.Params.Input[6].AddVolatileDataTree(externalAxisValuesF);
-
-            component.ExpireSolution(true);
-            component.Params.Output[0].CollectData();
-
-            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ExternalJointPosition>;
-
-            if (_tree.Branches[0][0].Value.Name != string.Empty)
-            {
-                // Update the variable names in the data trees
-                UpdateVariableNames();
-            }
+            // Create external joint position
+            ExternalJointPosition externalJointPosition = new ExternalJointPosition(name, externalJointPositionA, externalJointPositionB, externalJointPositionC, externalJointPositionD, externalJointPositionE, externalJointPositionF);
 
             // Sets Output
-            DA.SetDataTree(0, _tree);
+            DA.SetData(0, externalJointPosition);
+        }
 
-            #region Object manager
-            _toRegister.Clear();
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
 
-            for (int i = 0; i < _tree.Branches.Count; i++)
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_ExternalJointPosition>;
+
+            if (_tree.Branches.Count != 0)
             {
-                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-            }
+                if (_tree.Branches[0][0].Value.Name != string.Empty)
+                {
+                    UpdateVariableNames();
+                }
 
-            GH_Document doc = this.OnPingDocument();
-            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-            _objectManager.CheckVariableNames(this);
+                #region Object manager
+                _toRegister.Clear();
 
-            if (doc != null)
-            {
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
+                }
+
+                GH_Document doc = this.OnPingDocument();
+                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+                _objectManager.CheckVariableNames(this);
+
+                if (doc != null)
+                {
+                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                }
+                #endregion
             }
-            #endregion
         }
 
         #region properties
@@ -240,7 +210,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("5317F39D-738E-4849-BDCA-FD9131D9E5E1"); }
+            get { return new Guid("D405C21A-AEA9-45D5-A987-F87CAA163AC6"); }
         }
         #endregion
 

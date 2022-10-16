@@ -11,33 +11,28 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
-using GH_IO.Serialization;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Ext Joint Position component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class ExternalJointPositionComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
         #region fields
-        private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
+        private GH_Structure<GH_ExternalJointPosition> _tree = new GH_Structure<GH_ExternalJointPosition>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
         private string _lastName = "";
         private bool _isUnique = true;
-        private bool _setReferencePlane = false;
-        private bool _setExternalJointPosition = false;
-        private readonly int fixedParamNumInput = 3;
         #endregion
 
         /// <summary>
@@ -45,9 +40,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotTargetComponent()
-          : base("Robot Target", "RT",
-              "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
+        public ExternalJointPositionComponent_OBSOLETE()
+          : base("External Joint Position", "EJ",
+              "Defines an External Joint Position for a Robot Target or Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -59,10 +54,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] parameters = new IGH_Param[2]
+        private readonly IGH_Param[] externalAxisParameters = new IGH_Param[6]
         {
-            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.item, Optional = true },
-            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.item, Optional = true }
+            new Param_Number() { Name = "External joint position A", NickName = "EJa", Description = "Defines the position of external logical axis A", Access = GH_ParamAccess.tree, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position B", NickName = "EJb", Description = "Defines the position of external logical axis B", Access = GH_ParamAccess.tree, Optional = true }, // fixed
+            new Param_Number() { Name = "External joint position C", NickName = "EJc", Description = "Defines the position of external logical axis C", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position D", NickName = "EJd", Description = "Defines the position of external logical axis D", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position E", NickName = "EJe", Description = "Defines the position of external logical axis E", Access = GH_ParamAccess.tree, Optional = true }, // variable
+            new Param_Number() { Name = "External joint position F", NickName = "EJf", Description = "Defines the position of external logical axis F", Access = GH_ParamAccess.tree, Optional = true } // variable
         };
 
         /// <summary>
@@ -70,9 +69,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
+            pManager.AddNumberParameter(externalAxisParameters[0].Name, externalAxisParameters[0].NickName, externalAxisParameters[0].Description, externalAxisParameters[0].Access, 9e9);
+            pManager.AddNumberParameter(externalAxisParameters[1].Name, externalAxisParameters[1].NickName, externalAxisParameters[1].Description, externalAxisParameters[0].Access, 9e9);
+
+            pManager[1].Optional = externalAxisParameters[0].Optional;
+            pManager[2].Optional = externalAxisParameters[1].Optional;
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTarget(), "Robot Target", "RT", "Resulting Robot Target");
+            pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The resulting external joint position");
         }
 
         /// <summary>
@@ -89,72 +91,119 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs
-            string name = string.Empty;
-            Plane plane = Plane.WorldXY;
-            Plane referencePlane = Plane.WorldXY;
-            int axisConfig = 0;
-            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+            // Variables
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Number> externalAxisValuesA = new GH_Structure<GH_Number>(); 
+            GH_Structure<GH_Number> externalAxisValuesB = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesC = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesD = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesE = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> externalAxisValuesF = new GH_Structure<GH_Number>();
 
-            // Catch inputs
-            if (!DA.GetData(0, ref name)) { return; } // Fixed index
-            if (!DA.GetData(1, ref plane)) { return; } // Fixed index
-            if (Params.Input.Any(x => x.Name == parameters[0].Name))
+            // Catch input data
+            // Name
+            if (!DA.GetDataTree(0, out names)) { return; }
+
+            // External axis A
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
-                if (!DA.GetData(parameters[0].Name, ref referencePlane)) { referencePlane = Plane.WorldXY; }
+                if (!DA.GetDataTree(externalAxisParameters[0].Name, out externalAxisValuesA)) 
+                {
+                    externalAxisValuesA = new GH_Structure<GH_Number>();
+                    externalAxisValuesA.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
-            if (Params.Input.Any(x => x.Name == "Axis Configuration"))
+            // External axis B
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[1].Name))
             {
-                if (!DA.GetData("Axis Configuration", ref axisConfig)) { axisConfig = 0; }
+                if (!DA.GetDataTree(externalAxisParameters[1].Name, out externalAxisValuesB))
+                {
+                    externalAxisValuesB = new GH_Structure<GH_Number>();
+                    externalAxisValuesB.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
-            if (Params.Input.Any(x => x.Name == parameters[1].Name))
+            // External axis C
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[2].Name))
             {
-                if (!DA.GetData(parameters[1].Name, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
+                if (!DA.GetDataTree(externalAxisParameters[2].Name, out externalAxisValuesC))
+                {
+                    externalAxisValuesC = new GH_Structure<GH_Number>();
+                    externalAxisValuesC.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
+            }
+            // External axis D
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[3].Name))
+            {
+                if (!DA.GetDataTree(externalAxisParameters[3].Name, out externalAxisValuesD))
+                {
+                    externalAxisValuesD = new GH_Structure<GH_Number>();
+                    externalAxisValuesD.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
+            }
+            // External axis E
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[4].Name))
+            {
+                if (!DA.GetDataTree(externalAxisParameters[4].Name, out externalAxisValuesE))
+                {
+                    externalAxisValuesE = new GH_Structure<GH_Number>();
+                    externalAxisValuesE.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
+            }
+            // External axis F
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[5].Name))
+            {
+                if (!DA.GetDataTree(externalAxisParameters[5].Name, out externalAxisValuesF))
+                {
+                    externalAxisValuesF = new GH_Structure<GH_Number>();
+                    externalAxisValuesF.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });
+                }
             }
 
-            // Replace spaces
-            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+            // Clear tree 
+            _tree = new GH_Structure<GH_ExternalJointPosition>();
 
-            RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            ExternalJointPositionComponentDataTreeGenerator_OBSOLETE component = new ExternalJointPositionComponentDataTreeGenerator_OBSOLETE();
+
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(externalAxisValuesA);
+            component.Params.Input[2].AddVolatileDataTree(externalAxisValuesB);
+            component.Params.Input[3].AddVolatileDataTree(externalAxisValuesC);
+            component.Params.Input[4].AddVolatileDataTree(externalAxisValuesD);
+            component.Params.Input[5].AddVolatileDataTree(externalAxisValuesE);
+            component.Params.Input[6].AddVolatileDataTree(externalAxisValuesF);
+
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
+
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_ExternalJointPosition>;
+
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Sets Output
-            DA.SetData(0, target);
-        }
+            DA.SetDataTree(0, _tree);
 
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
+            #region Object manager
+            _toRegister.Clear();
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
-
-            if (_tree.Branches.Count != 0)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                if (_tree.Branches[0][0].Value.Name != string.Empty)
-                {
-                    UpdateVariableNames();
-                }
-
-                #region Object manager
-                _toRegister.Clear();
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-                }
-
-                GH_Document doc = this.OnPingDocument();
-                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-                _objectManager.CheckVariableNames(this);
-
-                if (doc != null)
-                {
-                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
-                }
-                #endregion
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
+
+            GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+            }
+            #endregion
         }
 
         #region properties
@@ -164,7 +213,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -172,7 +221,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -181,7 +230,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.RobTarget_Icon; }
+            get { return Properties.Resources.ExternalJointPosition_Icon; }
         }
 
         /// <summary>
@@ -191,7 +240,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("A7D3F790-903D-4F62-A547-623E87CBEDE3"); }
+            get { return new Guid("5317F39D-738E-4849-BDCA-FD9131D9E5E1"); }
         }
         #endregion
 
@@ -202,9 +251,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="menu"> The context menu of the component. </param>
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, _setReferencePlane);
-            Menu_AppendItem(menu, "External Joint Position", MenuItemClickExternalJointPosition, true, _setExternalJointPosition);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -218,108 +264,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Reference Plane" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickReferencePlane(object sender, EventArgs e)
-        {
-            // Change bool
-            RecordUndoEvent("Set Reference Plane");
-            _setReferencePlane = !_setReferencePlane;
-
-            // Input parameter
-            IGH_Param parameter = parameters[0];
-
-            // If the parameter already exist: unregister it
-            if (Params.Input.Any(x => x.Name == parameter.Name))
-            {
-                // Unregister the parameter
-                Params.UnregisterInputParameter(Params.Input.First(x => x.Name == parameter.Name), true);
-            }
-
-            // Else add the reference plane parameter
-            else
-            {
-                // The index where the parameter should be added
-                int index = 2;
-
-                // Register the input parameter
-                Params.RegisterInputParam(parameters[0], index);
-            }
-
-            // Expire solution and refresh parameters since they changed
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Registers the event when the custom menu item "External Joint Position" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickExternalJointPosition(object sender, EventArgs e)
-        {
-            // Change bool
-            RecordUndoEvent("Set External Joint Position");
-            _setExternalJointPosition = !_setExternalJointPosition;
-
-            // Input parameter
-            IGH_Param parameter = parameters[1];
-
-            // If the parameter already exist: unregister it
-            if (Params.Input.Any(x => x.Name == parameter.Name))
-            {
-                // Unregister the parameter
-                Params.UnregisterInputParameter(Params.Input.First(x => x.Name == parameter.Name), true);
-            }
-
-            // Else add the reference plane parameter
-            else
-            {
-                // The index where the parameter should be added
-                int index = fixedParamNumInput;
-
-                // Correction for the index number if the reference place was already added
-                if (Params.Input.Any(x => x.Name == "Reference Plane"))
-                {
-                    index += 1;
-                }
-
-                // Register the input parameter
-                Params.RegisterInputParam(parameter, index);
-            }
-
-            // Refresh parameters since they changed
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
-        {
-            writer.SetBoolean("Set Reference Plane", _setReferencePlane);
-            writer.SetBoolean("Set External Joint Position", _setExternalJointPosition);
-            return base.Write(writer);
-        }
-
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            _setReferencePlane = reader.GetBoolean("Set Reference Plane");
-            _setExternalJointPosition = reader.GetBoolean("Set External Joint Position");
-            return base.Read(reader);
         }
         #endregion
 
@@ -376,6 +320,24 @@ namespace RobotComponents.Gh.Components.CodeGeneration
 
         #region variable input parameters
         /// <summary>
+        /// This function needs to be called to add an input parameter to override the external axis value. 
+        /// </summary>
+        /// <param name="index"> The index number of the variable input parameter that needs to be added.
+        /// In this case the index number of the array with variable input parameters. </param>
+        private void AddExternalAxisValueParameter(int index)
+        {
+            // Pick the parameter that needs to be added
+            IGH_Param parameter = externalAxisParameters[index - 1];
+
+            // Register the input parameter
+            Params.RegisterInputParam(parameter, index);
+
+            // Refresh parameters since they changed
+            Params.OnParametersChanged();
+            ExpireSolution(true);
+        }
+
+        /// <summary>
         /// This function will get called before an attempt is made to insert a parameter. 
         /// Since this method is potentially called on Canvas redraws, it must be fast.
         /// </summary>
@@ -384,7 +346,26 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> Return True if your component supports a variable parameter at the given location </returns>
         bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
         {
-            return false;
+            // Don't allow for insert before or in between the fixed input parameters
+            if (side == GH_ParameterSide.Input && index < 3)
+            {
+                return false;
+            }
+            // Don't allow for insert if all variable input parameters are already added
+            else if (side == GH_ParameterSide.Input && index == (externalAxisParameters.Length + 1))
+            {
+                return false;
+            }
+            // Allow insert after the last input parameters
+            else if (side == GH_ParameterSide.Input && index == Params.Input.Count)
+            {
+                return true;
+            }
+            // Don't allow for inserting new output parameters
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -396,7 +377,30 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> Return True if your component supports a variable parameter at the given location. </returns>
         bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index)
         {
-            return false;
+            // If the first external axis override parameter is added it is allowed to remove parameters
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
+            {
+                // Makes it impossible to remove the fixed input parameters
+                if (side == GH_ParameterSide.Input && index < 3)
+                {
+                    return false;
+                }
+                // Makes it possible to remove the last variable input parameter
+                else if (side == GH_ParameterSide.Input && index == Params.Input.Count - 1)
+                {
+                    return true;
+                }
+                // Makes it impossible to remove all the other input and output parameters
+                else
+                {
+                    return false;
+                }
+            }
+
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -409,6 +413,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> A valid IGH_Param instance to be inserted. In our case a null value. </returns>
         IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index)
         {
+            // Add input parameter
+            AddExternalAxisValueParameter(index);
+
+            // This method always returns a null value
             return null;
         }
 
@@ -423,7 +431,32 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// typically the CanRemoveParameter function should return false if the parameter in question is not removable. </returns>
         bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index)
         {
-            return false;
+            // If the first external axis is added it is allowed to destroy input parameters
+            if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
+            {
+                // Makes it impossible to detroy the fixed input parameters
+                if (side == GH_ParameterSide.Input && index < 3)
+                {
+                    return false;
+                }
+
+                // Makes it impossible to destroy the output parameters
+                else if (side == GH_ParameterSide.Output)
+                {
+                    return false;
+                }
+
+                // Makes it possible to destroy all the other parameters
+                else
+                {
+                    return true;
+                }
+            }
+
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

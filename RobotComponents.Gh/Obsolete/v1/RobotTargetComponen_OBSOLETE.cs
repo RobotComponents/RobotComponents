@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
@@ -21,12 +22,13 @@ using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RobotTargetComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
@@ -45,7 +47,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotTargetComponent()
+        public RobotTargetComponent_OBSOLETE()
           : base("Robot Target", "RT",
               "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -61,8 +63,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         private readonly IGH_Param[] parameters = new IGH_Param[2]
         {
-            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.item, Optional = true },
-            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.item, Optional = true }
+            new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.tree, Optional = true },
+            new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.tree, Optional = true }
         };
 
         /// <summary>
@@ -70,9 +72,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.tree);
+            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.tree, 0);
         }
 
         /// <summary>
@@ -89,72 +91,86 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs
-            string name = string.Empty;
-            Plane plane = Plane.WorldXY;
-            Plane referencePlane = Plane.WorldXY;
-            int axisConfig = 0;
-            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+            // Sets inputs and creates target
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Plane> planes;
+            GH_Structure<GH_Plane> referencePlanes = new GH_Structure<GH_Plane>();
+            GH_Structure<GH_Integer> axisConfigs = new GH_Structure<GH_Integer>();
+            GH_Structure<GH_ExternalJointPosition> externalJointPositions = new GH_Structure<GH_ExternalJointPosition>();
 
             // Catch inputs
-            if (!DA.GetData(0, ref name)) { return; } // Fixed index
-            if (!DA.GetData(1, ref plane)) { return; } // Fixed index
-            if (Params.Input.Any(x => x.Name == parameters[0].Name))
-            {
-                if (!DA.GetData(parameters[0].Name, ref referencePlane)) { referencePlane = Plane.WorldXY; }
+            if (!DA.GetDataTree(0, out names)) { return; } // Fixed index
+            if (!DA.GetDataTree(1, out planes)) { return; } // Fixed index
+            if (Params.Input.Any(x => x.Name == parameters[0].Name)) 
+            {            
+                if (!DA.GetDataTree(parameters[0].Name, out referencePlanes)) { return; }
             }
             if (Params.Input.Any(x => x.Name == "Axis Configuration"))
             {
-                if (!DA.GetData("Axis Configuration", ref axisConfig)) { axisConfig = 0; }
+                if (!DA.GetDataTree("Axis Configuration", out axisConfigs)) { return; }
             }
             if (Params.Input.Any(x => x.Name == parameters[1].Name))
             {
-                if (!DA.GetData(parameters[1].Name, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
+                if (!DA.GetDataTree(parameters[1].Name, out externalJointPositions)) { return; }
             }
 
-            // Replace spaces
-            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+            // Inputs shoud not be empty
+            if (referencePlanes.Branches.Count == 0)
+            {
+                referencePlanes.Append(new GH_Plane(Plane.WorldXY), new GH_Path(0));
+            }
+            if (axisConfigs.Branches.Count == 0)
+            {
+                axisConfigs.Append(new GH_Integer(0), new GH_Path(0));
+            }
+            if (externalJointPositions.Branches.Count == 0)
+            {
+                externalJointPositions.Append(new GH_ExternalJointPosition(new ExternalJointPosition()), new GH_Path(0));
+            }
 
-            RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
+            // Clear tree and list
+            _tree = new GH_Structure<GH_RobotTarget>();
+
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            RobotTargetComponentDataTreeGenerator_OBSOLETE component = new RobotTargetComponentDataTreeGenerator_OBSOLETE();
+
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(planes);
+            component.Params.Input[2].AddVolatileDataTree(referencePlanes);
+            component.Params.Input[3].AddVolatileDataTree(axisConfigs);
+            component.Params.Input[4].AddVolatileDataTree(externalJointPositions);
+
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
+
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
+
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Sets Output
-            DA.SetData(0, target);
-        }
+            DA.SetDataTree(0, _tree);
 
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
+            #region Object manager
+            _toRegister.Clear();
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_RobotTarget>;
-
-            if (_tree.Branches.Count != 0)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                if (_tree.Branches[0][0].Value.Name != string.Empty)
-                {
-                    UpdateVariableNames();
-                }
-
-                #region Object manager
-                _toRegister.Clear();
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-                }
-
-                GH_Document doc = this.OnPingDocument();
-                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-                _objectManager.CheckVariableNames(this);
-
-                if (doc != null)
-                {
-                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
-                }
-                #endregion
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
+
+            GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+            }
+            #endregion
         }
 
         #region properties
@@ -164,7 +180,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -172,7 +188,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -191,7 +207,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("A7D3F790-903D-4F62-A547-623E87CBEDE3"); }
+            get { return new Guid("EA79575D-5AED-46F2-8E50-A00BF5B65620"); }
         }
         #endregion
 

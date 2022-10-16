@@ -10,9 +10,8 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators;
+using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -52,9 +51,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
-            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.tree);
-            pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Defines the robot joint position", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "Defines the external axis joint position", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
             pManager[2].Optional = true;
@@ -75,55 +74,58 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variables
-            GH_Structure<GH_String> names;
-            GH_Structure<GH_RobotJointPosition> robotJointPositions;
-            GH_Structure<GH_ExternalJointPosition> externalJointPositions;
+            string name = string.Empty;
+            RobotJointPosition robotJointPosition = new RobotJointPosition();
+            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch input data
-            if (!DA.GetDataTree(0, out names)) { return; }
-            if (!DA.GetDataTree(1, out robotJointPositions)) { robotJointPositions = new GH_Structure<GH_RobotJointPosition>(); }
-            if (!DA.GetDataTree(2, out externalJointPositions)) { externalJointPositions = new GH_Structure<GH_ExternalJointPosition>(); }
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref robotJointPosition)) { robotJointPosition = new RobotJointPosition(); }
+            if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
-            // Clear tree and list
-            _tree = new GH_Structure<GH_JointTarget>();
+            // Replace spaces
+            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
-            JointTargetComponentDataTreeGenerator component = new JointTargetComponentDataTreeGenerator();
-
-            component.Params.Input[0].AddVolatileDataTree(names);
-            component.Params.Input[1].AddVolatileDataTree(robotJointPositions);
-            component.Params.Input[2].AddVolatileDataTree(externalJointPositions);
-
-            component.ExpireSolution(true);
-            component.Params.Output[0].CollectData();
-
-            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_JointTarget>;
-
-            if (_tree.Branches[0][0].Value.Name != string.Empty)
-            {
-                UpdateVariableNames();
-            }
+            JointTarget jointTarget = new JointTarget(name, robotJointPosition, externalJointPosition);
 
             // Sets Output
-            DA.SetDataTree(0, _tree);
+            DA.SetData(0, jointTarget);
+        }
 
-            #region Object manager
-            _toRegister.Clear();
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
 
-            for (int i = 0; i < _tree.Branches.Count; i++)
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_JointTarget>;
+
+            if (_tree.Branches.Count != 0)
             {
-                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-            }
+                if (_tree.Branches[0][0].Value.Name != string.Empty)
+                {
+                    UpdateVariableNames();
+                }
 
-            GH_Document doc = this.OnPingDocument();
-            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-            _objectManager.CheckVariableNames(this);
+                #region Object manager
+                _toRegister.Clear();
 
-            if (doc != null) 
-            { 
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted; 
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
+                }
+
+                GH_Document doc = this.OnPingDocument();
+                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+                _objectManager.CheckVariableNames(this);
+
+                if (doc != null)
+                {
+                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                }
+                #endregion
             }
-            #endregion
         }
 
         #region properties
@@ -160,7 +162,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("AC253421-ADB3-4FAA-AC55-E24BDF86F110"); }
+            get { return new Guid("529C61A7-785E-477A-BEB8-DF9BB26DF266"); }
         }
         #endregion
 

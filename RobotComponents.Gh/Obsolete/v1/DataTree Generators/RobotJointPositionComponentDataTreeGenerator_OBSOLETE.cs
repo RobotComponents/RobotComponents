@@ -11,21 +11,22 @@ using Grasshopper.Kernel;
 using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 
-namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.
     /// This is a dummy component that is hidden in Grasshopper. It is only called and used in
     /// the background to create a datatree structure that follows the Grasshopper logic.
     /// </summary>
-    public class RobotJointPositionComponentDataTreeGenerator : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RobotJointPositionComponentDataTreeGenerator_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotJointPositionComponentDataTreeGenerator()
+        public RobotJointPositionComponentDataTreeGenerator_OBSOLETE()
           : base("Robot Joint Position", "RJ",
               "Defines a Robot Joint Position for a Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -103,7 +104,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>

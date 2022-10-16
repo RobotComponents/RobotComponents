@@ -13,24 +13,25 @@ using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Action : Speed Data component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Zone Data component. An inherent from the GH_Component Class.
     /// This is a dummy component that is hidden in Grasshopper. It is only called and used in
     /// the background to create a datatree structure that follows the Grasshopper logic.
     /// </summary>
-    public class SpeedDataComponentDataTreeGenerator : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class ZoneDataComponentDataTreeGenerator_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public SpeedDataComponentDataTreeGenerator()
-          : base("Speed Data", "SD", 
-              "Defines a speed data declaration for Move components."
-               + System.Environment.NewLine + System.Environment.NewLine +
+        public ZoneDataComponentDataTreeGenerator_OBSOLETE()
+          : base("Zone Data", "ZD",
+              "Defines a zone data declaration for robot movements in RAPID program code generation."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
@@ -41,11 +42,14 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Speed Data as text", GH_ParamAccess.item, string.Empty);
-            pManager.AddNumberParameter("TCP Velocity", "vTCP", "TCP Velocity in mm/s as number", GH_ParamAccess.item, 5);
-            pManager.AddNumberParameter("ORI Velocity", "vORI", "Reorientation Velocity of the tool in degree/s as number", GH_ParamAccess.item, 500);
-            pManager.AddNumberParameter("LEAX Velocity", "vLEAX", "Linear External Axes Velocity in mm/s", GH_ParamAccess.item, 5000);
-            pManager.AddNumberParameter("REAX Velocity", "vREAX", "Reorientation of the External Rotational Axes in degrees/s", GH_ParamAccess.item, 1000);
+            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, string.Empty);
+            pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.item, false);
+            pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Path Zone External Axes", "pzEA", "The zone size (the radius) for external axes in mm as a number.", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Zone Reorientation", "zORI", "The zone size for the tool reorientation in degrees as a number.", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Zone External Linear Axes", "zELA", "The zone size for linear external axes in mm as a number.", GH_ParamAccess.item, 0);
+            pManager.AddNumberParameter("Zone External Rotational Axes", "zERA", "The zone size for rotating external axes in degrees as a number.", GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Resulting Speed Data declaration");
+            pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Resulting Zone Data declaration");
         }
 
         /// <summary>
@@ -62,27 +66,33 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs 
+            // Sets inputs
             string name = string.Empty;
-            double v_tcp = 5;
-            double v_ori = 500;
-            double v_leax = 5000;
-            double v_reax = 1000;
+            bool finep = false;
+            double pzone_tcp = 0;
+            double pzone_ori = 0;
+            double pzone_eax = 0;
+            double zone_ori = 0;
+            double zone_leax = 0;
+            double zone_reax = 0;
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref v_tcp)) { return; }
-            if (!DA.GetData(2, ref v_ori)) { return; }
-            if (!DA.GetData(3, ref v_leax)) { return; }
-            if (!DA.GetData(4, ref v_reax)) { return; }
+            if (!DA.GetData(1, ref finep)) { return; }
+            if (!DA.GetData(2, ref pzone_tcp)) { return; }
+            if (!DA.GetData(3, ref pzone_ori)) { return; }
+            if (!DA.GetData(4, ref pzone_eax)) { return; }
+            if (!DA.GetData(5, ref zone_ori)) { return; }
+            if (!DA.GetData(6, ref zone_leax)) { return; }
+            if (!DA.GetData(7, ref zone_reax)) { return; }
 
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            SpeedData speeddata = new SpeedData(name, v_tcp, v_ori, v_leax, v_reax);
+            ZoneData zoneData = new ZoneData(name, finep, pzone_tcp, pzone_ori, pzone_eax, zone_ori, zone_leax, zone_reax);
 
             // Sets Output
-            DA.SetData(0, speeddata);
+            DA.SetData(0, zoneData);
         }
 
         #region properties
@@ -92,8 +102,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         public override GH_Exposure Exposure
         {
-            // This component is hidden. It is only used to create a datatree inside the real Speed Data component.
-            get { return GH_Exposure.hidden; }
+            // This component is hidden. It is only used to create a datatree inside the real Zone Data component
+            get { return GH_Exposure.hidden; } 
         }
 
         /// <summary>
@@ -101,7 +111,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -110,7 +120,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SpeedData_Icon; }
+            get
+            { return Properties.Resources.ZoneData_Icon; }
         }
 
         /// <summary>
@@ -120,7 +131,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("4AAEE8A9-A683-4DE0-83D2-4C56C7ADE6DF"); }
+            get { return new Guid("78239012-472E-4649-AE6C-6C42EC4024E7"); }
         }
         #endregion
     }

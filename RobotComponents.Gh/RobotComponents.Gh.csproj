@@ -69,6 +69,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
+    <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE2.cs" />
     <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\Value Lists\InequalitySymbolValueList.cs" />
@@ -78,8 +84,8 @@
     <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
     <Compile Include="Components\Multi Move\WaitSyncTaskComponent.cs" />
     <Compile Include="Components\Multi Move\TaskListComponent.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator.cs" />
-    <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\ExternalJointPositionComponentDataTreeGenerator_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\JointTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Forms\PickTaskForm.cs">
@@ -90,17 +96,17 @@
     </Compile>
     <Compile Include="Obsolete\v0\OldInfoComponent.cs" />
     <Compile Include="Obsolete\v0\OldMovementComponent4.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\RobotJointPositionComponentDataTreeGenerator.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\RobotJointPositionComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructExtJointPosComponent.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructRobJointPosComponent.cs" />
     <Compile Include="Obsolete\v0\OldExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\JointTargetComponentDataTreeGenerator.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\JointTargetComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Obsolete\v0\OldRobotJointPositionComponent.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\RobotTargetComponentDataTreeGenerator.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\SpeedDataComponentDataTreeGenerator.cs" />
-    <Compile Include="Components\Code Generation\DataTree Generators\ZoneDataComponentDataTreeGenerator.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\RobotTargetComponentDataTreeGenerator_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\SpeedDataComponentDataTreeGenerator_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\DataTree Generators\ZoneDataComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\UngroupActionsComponent.cs" />
     <Compile Include="Components\Utilities\GroupActionsComponent.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructRobotToolComponent.cs" />
@@ -116,9 +122,9 @@
     <Compile Include="Components\Code Generation\Value Lists\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\SpeedDataValueList.cs" />
-    <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
-    <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
-    <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
+    <Compile Include="Obsolete\v1\ExternalJointPositionComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\RobotJointPositionComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\RobotTargetComponen_OBSOLETE.cs" />
     <Compile Include="Obsolete\v0\OldExternalLinearAxisComponent2.cs" />
     <Compile Include="Obsolete\v0\OldExternalRotationalAxisComponent.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructExternalLinearAxisComponent2.cs" />
@@ -142,7 +148,7 @@
     <Compile Include="Components\Code Generation\CommentComponent.cs" />
     <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\MovementComponent.cs" />
-    <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
+    <Compile Include="Obsolete\v1\ZoneDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructZoneDataComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6640_185_2_80_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6650S_200_3_00_Component.cs" />
@@ -176,7 +182,7 @@
     <Compile Include="Components\Utilities\QuaternionToPlaneComponent.cs" />
     <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
     <Compile Include="Components\Code Generation\RAPIDGeneratorComponent.cs" />
-    <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
+    <Compile Include="Obsolete\v1\SpeedDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
     <Compile Include="Components\Controller Utility\GetAxisValuesComponent.cs" />

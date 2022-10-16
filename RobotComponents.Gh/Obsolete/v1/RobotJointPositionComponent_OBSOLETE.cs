@@ -1,6 +1,5 @@
 ﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License
-// published by the 
+// under the terms of GNU General Public License as published by the 
 // Free Software Foundation. For more information and the LICENSE file, 
 // see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -11,21 +10,22 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Action : Zone Data component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ZoneDataComponent : GH_Component, IObjectManager
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RobotJointPositionComponent_OBSOLETE : GH_Component, IObjectManager
     {
         #region fields
-        private GH_Structure<GH_ZoneData> _tree = new GH_Structure<GH_ZoneData>();
+        private GH_Structure<GH_RobotJointPosition> _tree = new GH_Structure<GH_RobotJointPosition>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
@@ -38,9 +38,9 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ZoneDataComponent()
-          : base("Zone Data", "ZD",
-              "Defines a zone data declaration for robot movements in RAPID program code generation."
+        public RobotJointPositionComponent_OBSOLETE()
+          : base("Robot Joint Position", "RJ",
+              "Defines a Robot Joint Position for a Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
@@ -52,14 +52,13 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the Zone Data as text", GH_ParamAccess.item, string.Empty);
-            pManager.AddBooleanParameter("Fine Point", "FP", "Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point as a bool.", GH_ParamAccess.item, false);
-            pManager.AddNumberParameter("Path Zone TCP", "pzTCP", "The size (the radius) of the TCP zone in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Path Zone Reorientation", "pzORI", "The zone size (the radius) for the tool reorientation in mm as a number. ", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Path Zone External Axes", "pzEA", "The zone size (the radius) for external axes in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone Reorientation", "zORI", "The zone size for the tool reorientation in degrees as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone External Linear Axes", "zELA", "The zone size for linear external axes in mm as a number.", GH_ParamAccess.item, 0);
-            pManager.AddNumberParameter("Zone External Rotational Axes", "zERA", "The zone size for rotating external axes in degrees as a number.", GH_ParamAccess.item, 0);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
+            pManager.AddNumberParameter("Robot joint position 1", "RJ1", "Defines the position of robot joint 1 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddNumberParameter("Robot joint position 2", "RJ2", "Defines the position of robot joint 2 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddNumberParameter("Robot joint position 3", "RJ3", "Defines the position of robot joint 3 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddNumberParameter("Robot joint position 4", "RJ4", "Defines the position of robot joint 4 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddNumberParameter("Robot joint position 5", "RJ5", "Defines the position of robot joint 5 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddNumberParameter("Robot joint position 6", "RJ6", "Defines the position of robot joint 6 in degrees.", GH_ParamAccess.tree, 0.0);
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Resulting Zone Data declaration");
+            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "The resulting robot joint position");
         }
 
         /// <summary>
@@ -76,69 +75,69 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Sets inputs
-            string name = string.Empty;
-            bool finep = false;
-            double pzone_tcp = 0;
-            double pzone_ori = 0;
-            double pzone_eax = 0;
-            double zone_ori = 0;
-            double zone_leax = 0;
-            double zone_reax = 0;
+            // Variables
+            GH_Structure<GH_String> names;
+            GH_Structure<GH_Number> internalAxisValues1 = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> internalAxisValues2 = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> internalAxisValues3 = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> internalAxisValues4 = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> internalAxisValues5 = new GH_Structure<GH_Number>();
+            GH_Structure<GH_Number> internalAxisValues6 = new GH_Structure<GH_Number>();
 
-            // Catch the input data
-            if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetData(1, ref finep)) { return; }
-            if (!DA.GetData(2, ref pzone_tcp)) { return; }
-            if (!DA.GetData(3, ref pzone_ori)) { return; }
-            if (!DA.GetData(4, ref pzone_eax)) { return; }
-            if (!DA.GetData(5, ref zone_ori)) { return; }
-            if (!DA.GetData(6, ref zone_leax)) { return; }
-            if (!DA.GetData(7, ref zone_reax)) { return; }
+            // Catch input data
+            if (!DA.GetDataTree(0, out names)) { return; }
+            if (!DA.GetDataTree(1, out internalAxisValues1)) { return; }
+            if (!DA.GetDataTree(2, out internalAxisValues2)) { return; }
+            if (!DA.GetDataTree(3, out internalAxisValues3)) { return; }
+            if (!DA.GetDataTree(4, out internalAxisValues4)) { return; }
+            if (!DA.GetDataTree(5, out internalAxisValues5)) { return; }
+            if (!DA.GetDataTree(6, out internalAxisValues6)) { return; }
 
-            // Replace spaces
-            name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
+            // Clear tree 
+            _tree = new GH_Structure<GH_RobotJointPosition>();
 
-            ZoneData zoneData = new ZoneData(name, finep, pzone_tcp, pzone_ori, pzone_eax, zone_ori, zone_leax, zone_reax);
+            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
+            RobotJointPositionComponentDataTreeGenerator_OBSOLETE component = new RobotJointPositionComponentDataTreeGenerator_OBSOLETE();
+
+            component.Params.Input[0].AddVolatileDataTree(names);
+            component.Params.Input[1].AddVolatileDataTree(internalAxisValues1);
+            component.Params.Input[2].AddVolatileDataTree(internalAxisValues2);
+            component.Params.Input[3].AddVolatileDataTree(internalAxisValues3);
+            component.Params.Input[4].AddVolatileDataTree(internalAxisValues4);
+            component.Params.Input[5].AddVolatileDataTree(internalAxisValues5);
+            component.Params.Input[6].AddVolatileDataTree(internalAxisValues6);
+
+            component.ExpireSolution(true);
+            component.Params.Output[0].CollectData();
+
+            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotJointPosition>;
+
+            if (_tree.Branches[0][0].Value.Name != string.Empty)
+            {
+                // Update the variable names in the data trees
+                UpdateVariableNames();
+            }
 
             // Sets Output
-            DA.SetData(0, zoneData);
-        }
+            DA.SetDataTree(0, _tree);
 
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
+            #region Object manager
+            _toRegister.Clear();
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_ZoneData>;
-
-            if (_tree.Branches.Count != 0)
+            for (int i = 0; i < _tree.Branches.Count; i++)
             {
-                if (_tree.Branches[0][0].Value.Name != string.Empty)
-                {
-                    UpdateVariableNames();
-                }
-
-                #region Object manager
-                _toRegister.Clear();
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-                }
-
-                GH_Document doc = this.OnPingDocument();
-                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-                _objectManager.CheckVariableNames(this);
-
-                if (doc != null)
-                {
-                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
-                }
-                #endregion
+                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
             }
+
+            GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
+
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+            }
+            #endregion
         }
 
         #region properties
@@ -148,7 +147,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -156,7 +155,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -165,7 +164,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ZoneData_Icon; }
+            get { return Properties.Resources.RobotJointPosition_Icon; }
         }
 
         /// <summary>
@@ -175,7 +174,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("FF47572E-CD49-4BD8-BEE0-A841DD91EE70"); }
+            get { return new Guid("9EC1CBB1-3D33-4DF0-9335-651AD30BC0F6"); }
         }
         #endregion
 
@@ -334,4 +333,3 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         #endregion
     }
 }
-

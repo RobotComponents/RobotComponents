@@ -10,9 +10,8 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.Gh.Components.CodeGeneration.DataTreeGenerators;
+using RobotComponents.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -52,13 +51,13 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.tree, string.Empty);
-            pManager.AddNumberParameter("Robot joint position 1", "RJ1", "Defines the position of robot joint 1 in degrees.", GH_ParamAccess.tree, 0.0);
-            pManager.AddNumberParameter("Robot joint position 2", "RJ2", "Defines the position of robot joint 2 in degrees.", GH_ParamAccess.tree, 0.0);
-            pManager.AddNumberParameter("Robot joint position 3", "RJ3", "Defines the position of robot joint 3 in degrees.", GH_ParamAccess.tree, 0.0);
-            pManager.AddNumberParameter("Robot joint position 4", "RJ4", "Defines the position of robot joint 4 in degrees.", GH_ParamAccess.tree, 0.0);
-            pManager.AddNumberParameter("Robot joint position 5", "RJ5", "Defines the position of robot joint 5 in degrees.", GH_ParamAccess.tree, 0.0);
-            pManager.AddNumberParameter("Robot joint position 6", "RJ6", "Defines the position of robot joint 6 in degrees.", GH_ParamAccess.tree, 0.0);
+            pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
+            pManager.AddNumberParameter("Robot joint position 1", "RJ1", "Defines the position of robot joint 1 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot joint position 2", "RJ2", "Defines the position of robot joint 2 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot joint position 3", "RJ3", "Defines the position of robot joint 3 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot joint position 4", "RJ4", "Defines the position of robot joint 4 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot joint position 5", "RJ5", "Defines the position of robot joint 5 in degrees.", GH_ParamAccess.item, 0.0);
+            pManager.AddNumberParameter("Robot joint position 6", "RJ6", "Defines the position of robot joint 6 in degrees.", GH_ParamAccess.item, 0.0);
         }
 
         /// <summary>
@@ -76,68 +75,64 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Variables
-            GH_Structure<GH_String> names;
-            GH_Structure<GH_Number> internalAxisValues1 = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> internalAxisValues2 = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> internalAxisValues3 = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> internalAxisValues4 = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> internalAxisValues5 = new GH_Structure<GH_Number>();
-            GH_Structure<GH_Number> internalAxisValues6 = new GH_Structure<GH_Number>();
+            string name = string.Empty;
+            double robotJointPosition1 = 0.0;
+            double robotJointPosition2 = 0.0;
+            double robotJointPosition3 = 0.0;
+            double robotJointPosition4 = 0.0;
+            double robotJointPosition5 = 0.0;
+            double robotJointPosition6 = 0.0;
 
             // Catch input data
-            if (!DA.GetDataTree(0, out names)) { return; }
-            if (!DA.GetDataTree(1, out internalAxisValues1)) { return; }
-            if (!DA.GetDataTree(2, out internalAxisValues2)) { return; }
-            if (!DA.GetDataTree(3, out internalAxisValues3)) { return; }
-            if (!DA.GetDataTree(4, out internalAxisValues4)) { return; }
-            if (!DA.GetDataTree(5, out internalAxisValues5)) { return; }
-            if (!DA.GetDataTree(6, out internalAxisValues6)) { return; }
+            if (!DA.GetData(0, ref name)) { return; }
+            if (!DA.GetData(1, ref robotJointPosition1)) { return; }
+            if (!DA.GetData(2, ref robotJointPosition2)) { return; }
+            if (!DA.GetData(3, ref robotJointPosition3)) { return; }
+            if (!DA.GetData(4, ref robotJointPosition4)) { return; }
+            if (!DA.GetData(5, ref robotJointPosition5)) { return; }
+            if (!DA.GetData(6, ref robotJointPosition6)) { return; }
 
-            // Clear tree 
-            _tree = new GH_Structure<GH_RobotJointPosition>();
-
-            // Create the datatree structure with an other component (in the background, this component is not placed on the canvas)
-            RobotJointPositionComponentDataTreeGenerator component = new RobotJointPositionComponentDataTreeGenerator();
-
-            component.Params.Input[0].AddVolatileDataTree(names);
-            component.Params.Input[1].AddVolatileDataTree(internalAxisValues1);
-            component.Params.Input[2].AddVolatileDataTree(internalAxisValues2);
-            component.Params.Input[3].AddVolatileDataTree(internalAxisValues3);
-            component.Params.Input[4].AddVolatileDataTree(internalAxisValues4);
-            component.Params.Input[5].AddVolatileDataTree(internalAxisValues5);
-            component.Params.Input[6].AddVolatileDataTree(internalAxisValues6);
-
-            component.ExpireSolution(true);
-            component.Params.Output[0].CollectData();
-
-            _tree = component.Params.Output[0].VolatileData as GH_Structure<GH_RobotJointPosition>;
-
-            if (_tree.Branches[0][0].Value.Name != string.Empty)
-            {
-                // Update the variable names in the data trees
-                UpdateVariableNames();
-            }
+            // Create external joint position
+            RobotJointPosition robotJointPosition = new RobotJointPosition(name, robotJointPosition1, robotJointPosition2, robotJointPosition3, robotJointPosition4, robotJointPosition5, robotJointPosition6);
 
             // Sets Output
-            DA.SetDataTree(0, _tree);
+            DA.SetData(0, robotJointPosition);
+        }
 
-            #region Object manager
-            _toRegister.Clear();
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
 
-            for (int i = 0; i < _tree.Branches.Count; i++)
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_RobotJointPosition>;
+
+            if (_tree.Branches.Count != 0)
             {
-                _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-            }
+                if (_tree.Branches[0][0].Value.Name != string.Empty)
+                {
+                    UpdateVariableNames();
+                }
 
-            GH_Document doc = this.OnPingDocument();
-            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-            _objectManager.CheckVariableNames(this);
+                #region Object manager
+                _toRegister.Clear();
 
-            if (doc != null)
-            {
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
+                }
+
+                GH_Document doc = this.OnPingDocument();
+                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+                _objectManager.CheckVariableNames(this);
+
+                if (doc != null)
+                {
+                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                }
+                #endregion
             }
-            #endregion
         }
 
         #region properties
@@ -174,7 +169,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9EC1CBB1-3D33-4DF0-9335-651AD30BC0F6"); }
+            get { return new Guid("AC5D283B-EF6F-4D0B-A347-D24F87BD13AF"); }
         }
         #endregion
 

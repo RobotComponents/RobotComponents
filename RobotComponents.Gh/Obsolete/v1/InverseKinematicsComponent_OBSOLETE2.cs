@@ -24,17 +24,19 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Kinematics;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Invesere Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class InverseKinematicsComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class InverseKinematicsComponent_OBSOLETE2 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private readonly List<InverseKinematics> _inverseKinematics = new List<InverseKinematics>();
+        private Robot _robot = new Robot();
+        private InverseKinematics _inverseKinematics = new InverseKinematics();
         private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
-        private readonly List<RobotJointPosition> _previousRobotJointPositions = new List<RobotJointPosition>();
+        private RobotJointPosition _previousRobotJointPosition = new RobotJointPosition(0, 0, 0, 0, 0, 0);
         private bool _closestRobotJointPosition = false;
         private bool _hideMesh = false;
         private readonly int _fixedParamNumInput = 2;
@@ -45,7 +47,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InverseKinematicsComponent()
+        public InverseKinematicsComponent_OBSOLETE2()
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Movement."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -84,17 +86,6 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
-        /// Override this method if you want to be called before the first call to SolveInstance.
-        /// </summary>
-        protected override void BeforeSolveInstance()
-        {
-            base.BeforeSolveInstance();
-
-            _inverseKinematics.Clear();
-            _forwardKinematics.Clear();
-        }
-
-        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
@@ -102,13 +93,12 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            Robot robot = null;
             Movement movement = null;
             bool closestRobotJointPosition = false;
             bool reset = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robot)) { return; }
+            if (!DA.GetData(0, ref _robot)) { return; }
             if (!DA.GetData(1, ref movement)) { return; }
 
             // Catch the input data from the variable parameteres
@@ -127,54 +117,41 @@ namespace RobotComponents.Gh.Components.Simulation
                 }
             }
 
-            // Default previous robot joint position
-            if (DA.Iteration > _previousRobotJointPositions.Count - 1)
-            {
-                _previousRobotJointPositions.Add(new RobotJointPosition());
-            }
-            
             // Calculate the robot pose
-            _inverseKinematics.Add(new InverseKinematics(movement, robot));
-            _inverseKinematics[DA.Iteration].Calculate();
+            _inverseKinematics = new InverseKinematics(movement, _robot);
+            _inverseKinematics.Calculate();
 
             // Closest Robot Joint Position
             if (closestRobotJointPosition == true && reset == false && movement.Target is RobotTarget && movement.MovementType != MovementType.MoveAbsJ)
             {
-                _inverseKinematics[DA.Iteration].CalculateClosestRobotJointPosition(_previousRobotJointPositions[DA.Iteration]);
+                _inverseKinematics.CalculateClosestRobotJointPosition(_previousRobotJointPosition);
             }
 
-            _previousRobotJointPositions[DA.Iteration] = _inverseKinematics[DA.Iteration].RobotJointPosition.Duplicate();
+            _previousRobotJointPosition = _inverseKinematics.RobotJointPosition.Duplicate();
 
             // Check the values
-            for (int i = 0; i < _inverseKinematics[DA.Iteration].ErrorText.Count; i++)
+            for (int i = 0; i < _inverseKinematics.ErrorText.Count; i++)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _inverseKinematics[DA.Iteration].ErrorText[i]);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _inverseKinematics.ErrorText[i]);
+            }
+
+            // Clear list with FK on first iteration
+            if (DA.Iteration == 0)
+            {
+                _forwardKinematics.Clear();
             }
 
             // Add to list with FK for visualization
             if (!_hideMesh)
             {
-                ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition); 
+                ForwardKinematics forwardKinematics = new ForwardKinematics(_robot);
+                forwardKinematics.Calculate(_inverseKinematics.RobotJointPosition, _inverseKinematics.ExternalJointPosition);
                 _forwardKinematics.Add(forwardKinematics);
             }
 
             // Output
-            DA.SetData(0, _inverseKinematics[DA.Iteration].RobotJointPosition);
-            DA.SetData(1, _inverseKinematics[DA.Iteration].ExternalJointPosition);
-        }
-
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
-
-            if (_previousRobotJointPositions.Count - 1 > this.RunCount)
-            {
-                _previousRobotJointPositions.RemoveRange(this.RunCount  + 1, _previousRobotJointPositions.Count - 1);
-            }
+            DA.SetData(0, _inverseKinematics.RobotJointPosition);
+            DA.SetData(1, _inverseKinematics.ExternalJointPosition);
         }
 
         #region properties
@@ -184,7 +161,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -192,7 +169,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -211,7 +188,7 @@ namespace RobotComponents.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F786750C-FB68-4E1A-A55D-9968C4F4A6C4"); }
+            get { return new Guid("F0565B75-4429-4AC1-980A-D2337907DDC1"); }
         }
         #endregion
 
@@ -274,7 +251,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             writer.SetBoolean("Set Hide Mesh", _hideMesh);
             writer.SetBoolean("Closest Robot Joint Position", _closestRobotJointPosition);
-            writer.SetByteArray("Previous Robot Joint Positions", RobotComponents.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPositions));
+            writer.SetByteArray("Previous Robot Joint Position", RobotComponents.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPosition));
             return base.Write(writer);
         }
 
@@ -287,8 +264,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
-            _previousRobotJointPositions.Clear();
-            _previousRobotJointPositions.AddRange((List<RobotJointPosition>)RobotComponents.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Positions")));
+            _previousRobotJointPosition = (RobotJointPosition)RobotComponents.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Position"));
             return base.Read(reader);
         }
 

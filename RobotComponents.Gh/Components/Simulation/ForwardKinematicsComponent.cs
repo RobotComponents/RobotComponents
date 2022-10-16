@@ -73,6 +73,16 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
+        /// Override this method if you want to be called before the first call to SolveInstance.
+        /// </summary>
+        protected override void BeforeSolveInstance()
+        {
+            base.BeforeSolveInstance();
+
+            _forwardKinematics.Clear();
+        }
+
+        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
@@ -99,27 +109,20 @@ namespace RobotComponents.Gh.Components.Simulation
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
             }
 
+            // Add to list with FK
+            _forwardKinematics.Add(forwardKinematics);
+
             // Output variable
             GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
             // Fill data tree with meshes
             if (_hideMesh == false)
             {
-                meshes = (GetPosedMeshesDataTree(forwardKinematics));
+                meshes = (this.GetPosedMeshesDataTree(DA.Iteration));
             }
-
-            // Clear list with FK on first iteration
-            if (DA.Iteration == 0)
-            {
-                _forwardKinematics.Clear();
-            }
-
-            // Add to list with FK
-            _forwardKinematics.Add(forwardKinematics);
-
 
             // Output
-            DA.SetDataTree(0, meshes); 
+            DA.SetDataTree(0, meshes);
             DA.SetData(1, forwardKinematics.TCPPlane);
             DA.SetDataList(2, forwardKinematics.PosedExternalAxisPlanes);
         }
@@ -317,40 +320,38 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <summary>
         /// Transform the posed meshes rom the forward kinematics to a datatree
         /// </summary>
-        /// <param name="forwardKinematics"> The forward kinematics the posed meshes will be extracted from. </param>
+        /// <param name="iteration"> Iteration number of SolveInstance method. </param>
         /// <returns> The data tree structure with all the posed meshes. </returns>
-        private GH_Structure<GH_Mesh> GetPosedMeshesDataTree(ForwardKinematics forwardKinematics)
+        private GH_Structure<GH_Mesh> GetPosedMeshesDataTree(int iteration)
         {
             // Create data tree for output of alle posed meshes
             GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
-            {
-                // Robot pose meshes
-                List<Mesh> posedInternalAxisMeshes = forwardKinematics.PosedInternalAxisMeshes;
+            // Robot pose meshes
+            List<Mesh> posedInternalAxisMeshes = _forwardKinematics[iteration].PosedInternalAxisMeshes;
 
+            // Data tree path
+            GH_Path path = new GH_Path(new int[2] { iteration, 0 });
+            
+            // Save the posed meshes
+            for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
+            {
+                meshes.Append(new GH_Mesh(posedInternalAxisMeshes[i]), path);
+            }
+
+            // Extenal axis meshes
+            List<List<Mesh>> posedExternalAxisMeshes = _forwardKinematics[iteration].PosedExternalAxisMeshes;
+
+            // Loop over all the external axes
+            for (int i = 0; i < posedExternalAxisMeshes.Count; i++)
+            {
                 // Data tree path
-                GH_Path path = new GH_Path(0);
+                path = new GH_Path(new int[2] { iteration, i + 1 });
 
                 // Save the posed meshes
-                for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
+                for (int j = 0; j < posedExternalAxisMeshes[i].Count; j++)
                 {
-                    meshes.Append(new GH_Mesh(posedInternalAxisMeshes[i]), path);
-                }
-
-                // Extenal axis meshes
-                List<List<Mesh>> posedExternalAxisMeshes = forwardKinematics.PosedExternalAxisMeshes;
-
-                // Loop over all the external axes
-                for (int i = 0; i < posedExternalAxisMeshes.Count; i++)
-                {
-                    // Data tree path
-                    path = new GH_Path(i + 1);
-
-                    // Save the posed meshes
-                    for (int j = 0; j < posedExternalAxisMeshes[i].Count; j++)
-                    {
-                        meshes.Append(new GH_Mesh(posedExternalAxisMeshes[i][j]), path);
-                    }
+                    meshes.Append(new GH_Mesh(posedExternalAxisMeshes[i][j]), path);
                 }
             }
 

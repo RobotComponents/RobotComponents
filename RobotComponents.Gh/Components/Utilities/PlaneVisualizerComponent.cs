@@ -56,6 +56,16 @@ namespace RobotComponents.Gh.Components.Utilities
         }
 
         /// <summary>
+        /// Override this method if you want to be called before the first call to SolveInstance.
+        /// </summary>
+        protected override void BeforeSolveInstance()
+        {
+            base.BeforeSolveInstance();
+
+            _planes.Clear();
+        }
+
+        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
@@ -67,12 +77,6 @@ namespace RobotComponents.Gh.Components.Utilities
 
             // Catch input data
             if (!DA.GetData(0, ref plane)) { return; }
-
-            // Clear the list with planes on the first iteration
-            if (DA.Iteration == 0)
-            {
-                _planes.Clear();
-            }
 
             // Add plane to list
             _planes.Add(plane);
@@ -146,9 +150,6 @@ namespace RobotComponents.Gh.Components.Utilities
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Default implementation (disabled)
-            // base.DrawViewportMeshes(args);
-
             for (int i = 0; i < _planes.Count; i++)
             {
                 Plane plane = _planes[i];

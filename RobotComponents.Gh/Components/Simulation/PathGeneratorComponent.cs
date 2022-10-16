@@ -30,9 +30,9 @@ namespace RobotComponents.Gh.Components.Simulation
     public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private Robot _robot;
-        private PathGenerator _pathGenerator = new PathGenerator();
-        private ForwardKinematics _forwardKinematics = new ForwardKinematics();
+        private readonly List<PathGenerator> _pathGenerators = new List<PathGenerator>();
+        private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
+        private List<bool> _calculated = new List<bool>();
         private bool _outputMovement = false;
         private bool _outputMovements = false;
         private bool _outputRobotEndPlane = false;
@@ -44,7 +44,6 @@ namespace RobotComponents.Gh.Components.Simulation
         private bool _outputExternalJointPositions = false;
         private bool _outputErrorMessages = false;
         private bool _previewMesh = true;
-        private bool _calculated = false;
         #endregion
 
         /// <summary>
@@ -102,6 +101,16 @@ namespace RobotComponents.Gh.Components.Simulation
         }
 
         /// <summary>
+        /// Override this method if you want to be called before the first call to SolveInstance.
+        /// </summary>
+        protected override void BeforeSolveInstance()
+        {
+            base.BeforeSolveInstance();
+
+            _forwardKinematics.Clear();
+        }
+
+        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and 
@@ -109,104 +118,139 @@ namespace RobotComponents.Gh.Components.Simulation
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
+            Robot robot = new Robot();
             List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref _robot)) { return; }
+            if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
             if (!DA.GetData(4, ref update)) { return; }
 
-            // Update the path
-            if (update == true | _calculated == false)
-            {
-                // Create forward kinematics for mesh display
-                _forwardKinematics = new ForwardKinematics(_robot);
+            // Create forward kinematics for mesh display
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
 
+            // Fill list if needed
+            if (DA.Iteration > _calculated.Count - 1)
+            {
+                _calculated.Add(false);
+            }
+
+            // Update the path
+            if (update == true | _calculated[DA.Iteration] == false)
+            {
                 // Create the path generator
-                _pathGenerator = new PathGenerator(_robot);
+                if (DA.Iteration > _pathGenerators.Count - 1)
+                {
+                    _pathGenerators.Add(new PathGenerator(robot));
+                }
+                else
+                {
+                    _pathGenerators[DA.Iteration] = new PathGenerator(robot);
+                }
 
                 // Re-calculate the path
-                _pathGenerator.Calculate(actions, interpolations);
+                _pathGenerators[DA.Iteration].Calculate(actions, interpolations);
 
                 // Makes sure that there is always a calculated solution
-                _calculated = true;
+                _calculated[DA.Iteration] = true;
             }
 
             // Get the index number of the current target
-            int index = (int)(((_pathGenerator.Planes.Count - 1) * interpolationSlider));
+            int index = (int)(((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider));
 
             // Calculate foward kinematics
-            _forwardKinematics.HideMesh = !_previewMesh;
-            _forwardKinematics.Calculate(_pathGenerator.RobotJointPositions[index], _pathGenerator.ExternalJointPositions[index]);
+            forwardKinematics.HideMesh = !_previewMesh;
+            forwardKinematics.Calculate(_pathGenerators[DA.Iteration].RobotJointPositions[index], _pathGenerators[DA.Iteration].ExternalJointPositions[index]);
 
             // Show error messages
-            if (_pathGenerator.ErrorText.Count != 0)
+            if (_pathGenerators[DA.Iteration].ErrorText.Count != 0)
             {
-                for (int i = 0; i < _pathGenerator.ErrorText.Count; i++)
+                for (int i = 0; i < _pathGenerators[DA.Iteration].ErrorText.Count; i++)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _pathGenerator.ErrorText[i]);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _pathGenerators[DA.Iteration].ErrorText[i]);
                     if (i == 30) { break; }
                 }
             }
+
+            // Add to list with FK
+            _forwardKinematics.Add(forwardKinematics);
 
             // Output Parameters
             int ind;
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[0].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[0].NickName));
-                DA.SetData(ind, _pathGenerator.Movements[index]);
+                DA.SetData(ind, _pathGenerators[DA.Iteration].Movements[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[1].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[1].NickName));
-                DA.SetDataList(ind, _pathGenerator.Movements);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].Movements);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[2].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[2].NickName));
-                DA.SetData(ind, _pathGenerator.Planes[index]);
+                DA.SetData(ind, _pathGenerators[DA.Iteration].Planes[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[3].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[3].NickName));
-                DA.SetDataList(ind, _pathGenerator.Planes);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].Planes);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[4].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[4].NickName));
-                DA.SetData(ind, _pathGenerator.RobotJointPositions[index]);
+                DA.SetData(ind, _pathGenerators[DA.Iteration].RobotJointPositions[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[5].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[5].NickName));
-                DA.SetDataList(ind, _pathGenerator.RobotJointPositions);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].RobotJointPositions);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[6].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[6].NickName));
-                DA.SetDataList(ind, _forwardKinematics.PosedExternalAxisPlanes);
+                DA.SetDataList(ind, forwardKinematics.PosedExternalAxisPlanes);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[7].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[7].NickName));
-                DA.SetData(ind, _pathGenerator.ExternalJointPositions[index]);
+                DA.SetData(ind, _pathGenerators[DA.Iteration].ExternalJointPositions[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[8].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[8].NickName));
-                DA.SetDataList(ind, _pathGenerator.ExternalJointPositions);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ExternalJointPositions);
             }
             if (Params.Output.Any(x => x.NickName.Equality(outputParameters[9].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(outputParameters[9].NickName));
-                DA.SetDataList(ind, _pathGenerator.ErrorText);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ErrorText);
             }
-            DA.SetDataList(outputParameters[10].Name, _pathGenerator.Paths);
+            DA.SetDataList(outputParameters[10].Name, _pathGenerators[DA.Iteration].Paths);
+        }
+
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
+
+            if (_pathGenerators.Count - 1 > this.RunCount)
+            {
+                _pathGenerators.RemoveRange(this.RunCount + 1, _pathGenerators.Count - 1);
+            }
+
+            if (_calculated.Count - 1 > this.RunCount)
+            {
+                _calculated.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
+            }
         }
 
         #region properties
@@ -589,7 +633,10 @@ namespace RobotComponents.Gh.Components.Simulation
             // Add bounding box of custom preview
             if (_previewMesh)
             {
-                result.Union(_forwardKinematics.GetBoundingBox(false));
+                for (int i = 0; i < _forwardKinematics.Count; i++)
+                {
+                    result.Union(_forwardKinematics[i].GetBoundingBox(false));
+                }    
             }
 
             return result;
@@ -601,37 +648,48 @@ namespace RobotComponents.Gh.Components.Simulation
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_forwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
+            // Default implementation (disabled)
+            // base.DrawViewportMeshes(args);
+
+            if (_previewMesh)
             {
-                // Initiate the display color and transparancy of the robot mesh
-                Color color;
-                double trans;
+                for (int i = 0; i < _forwardKinematics.Count; i++)
+                {
+                    // Initiate the display color and transparancy of the robot mesh
+                    Color color;
+                    double trans;
 
-                // Set the display color and transparancy of the robot mesh
-                if (_forwardKinematics.InLimits == true)
-                {
-                    color = Color.FromArgb(225, 225, 225);
-                    trans = 0.0;
-                }
-                else
-                {
-                    color = Color.FromArgb(150, 0, 0);
-                    trans = 0.5;
-                }
-
-                // Display the internal axes of the robot
-                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
-                {
-                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
-                }
-
-                // Display the external axes
-                for (int i = 0; i != _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
-                {
-                    for (int j = 0; j != _forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
+                    // Set the display color and transparancy of the robot mesh
+                    if (_forwardKinematics[i].InLimits == true)
                     {
-                        args.Display.DrawMeshShaded(_forwardKinematics.PosedExternalAxisMeshes[i][j], new Rhino.Display.DisplayMaterial(color, trans));
+                        color = Color.FromArgb(225, 225, 225);
+                        trans = 0.0;
+                    }
+                    else
+                    {
+                        color = Color.FromArgb(150, 0, 0);
+                        trans = 0.5;
+                    }
+
+                    // Display internal axis meshes
+                    for (int j = 0; j < _forwardKinematics[i].PosedInternalAxisMeshes.Count; j++)
+                    {
+                        if (_forwardKinematics[i].PosedInternalAxisMeshes[j].IsValid)
+                        {
+                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedInternalAxisMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                        }
+                    }
+
+                    // Display external axis meshes
+                    for (int j = 0; j < _forwardKinematics[i].PosedExternalAxisMeshes.Count; j++)
+                    {
+                        for (int k = 0; k < _forwardKinematics[i].PosedExternalAxisMeshes[j].Count; k++)
+                        {
+                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                            {
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], new Rhino.Display.DisplayMaterial(color, trans));
+                            }
+                        }
                     }
                 }
             }

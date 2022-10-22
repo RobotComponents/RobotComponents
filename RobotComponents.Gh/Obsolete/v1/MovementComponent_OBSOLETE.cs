@@ -9,7 +9,6 @@ using System.Linq;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.Actions;
@@ -19,21 +18,20 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class MovementComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class MovementComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private bool _add = false;
         private bool _expire = false;
-        private bool _setMovementTime = false;
         private bool _overrideRobotTool = false;
         private bool _overrideWorkObject = false;
         private bool _setDigitalOutput = false;
-        private readonly int _fixedParamNumInput = 3;
+        private readonly int _fixedParamNumInput = 4;
         #endregion
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MovementComponent()
+        public MovementComponent_OBSOLETE()
           : base("Move", "M",
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
@@ -56,13 +54,11 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] variableInputParameters = new IGH_Param[5]
+        private readonly IGH_Param[] variableInputParameters = new IGH_Param[3]
         {
-            new Param_Number() { Name = "Time", NickName = "TI", Description = "The total movement time in seconds. This overwrites the defined speeddata value.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_ZoneData() { Name = "Zone Data", NickName = "ZD", Description = "Zone Data as Zone Data or as a number (path zone TCP).", Access = GH_ParamAccess.item, Optional = true},
-            new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Overrides the default Robot Tool.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Overrides the default Work Object.", Access = GH_ParamAccess.item, Optional = true },
-            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Set a Digital Output for creation of MoveLDO and MoveJDO instructions.", Access = GH_ParamAccess.item, Optional = true }
+            new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
+            new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
+            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
         };
 
         /// <summary>
@@ -70,14 +66,12 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Type", "TY", "Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.", GH_ParamAccess.item, 0);
-            pManager.AddParameter(new Param_Target(), "Target", "TA", "Target of the movement as Target.", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP).", GH_ParamAccess.item);
-            AddParameter(1);
+            pManager.AddParameter(new Param_Target(), "Target", "T", "Target of the movement as Target", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP)", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Movement Type", "MT", "Movement Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ", GH_ParamAccess.item, 0);
+            pManager.AddParameter(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data or as a number (path zone TCP)", GH_ParamAccess.item);
 
-            pManager[0].Optional = true;
-            pManager[1].Optional = true;
-            pManager[2].Optional = true;
+            pManager[3].Optional = true;
         }
 
         /// <summary>
@@ -95,10 +89,10 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            if (this.Params.Input[0].SourceCount == 0 & _add == true)
+            if (this.Params.Input[2].SourceCount == 0)
             {
                 _expire = true;
-                HelperMethods.CreateValueList(this, typeof(MovementType), 0);
+                HelperMethods.CreateValueList(this, typeof(MovementType), 2);
             }
 
             // Expire solution of this component
@@ -109,60 +103,45 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             }
 
             // Input variables
-            int movementType = 0;
             ITarget target = new RobotTarget();
             SpeedData speedData = new SpeedData();
-            double time = -1;
+            int movementType = 0;
             ZoneData zoneData = new ZoneData();
             RobotTool robotTool = RobotTool.GetEmptyRobotTool();
             WorkObject workObject = new WorkObject();
             DigitalOutput digitalOutput = new DigitalOutput();
 
             // Catch the input data from the fixed parameters
-            if (!DA.GetData(0, ref movementType)) { movementType = 0; }
-            if (!DA.GetData(1, ref target)) { target = new JointTarget(new RobotJointPosition()); }
-            if (!DA.GetData(2, ref speedData)) { speedData = new SpeedData(5); }
+            if (!DA.GetData(0, ref target)) { return; }
+            if (!DA.GetData(1, ref speedData)) { return; }
+            if (!DA.GetData(2, ref movementType)) { return; }
+            if (!DA.GetData(3, ref zoneData)) { zoneData = new ZoneData(0); }
 
             // Catch the input data from the variable parameteres
             if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetData(variableInputParameters[0].Name, ref time))
-                {
-                    time = -1;
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
-            {
-                if (!DA.GetData(variableInputParameters[1].Name, ref zoneData))
-                {
-                    zoneData = new ZoneData(0);
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
-            {
-                if (!DA.GetData(variableInputParameters[2].Name, ref robotTool))
+                if (!DA.GetData(variableInputParameters[0].Name, ref robotTool))
                 {
                     robotTool = RobotTool.GetEmptyRobotTool();
                 }
             }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[3].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetData(variableInputParameters[3].Name, ref workObject))
+                if (!DA.GetData(variableInputParameters[1].Name, ref workObject))
                 {
                     workObject = new WorkObject();
                 }
             }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[4].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetData(variableInputParameters[4].Name, ref digitalOutput))
+                if (!DA.GetData(variableInputParameters[2].Name, ref digitalOutput))
                 {
                     digitalOutput = new DigitalOutput();
                 }
             }
 
             // Movement constructor
-            Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
-            movement.Time = time;
+                Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
 
             // Check if a right value is used for the movement type
             if (movementType != 0 && movementType != 1 && movementType != 2)
@@ -196,32 +175,8 @@ namespace RobotComponents.Gh.Components.CodeGeneration
                     "a Robot Target. The Robot Target will be converted to a Joint Target.");
             }
 
-            // Movement time
-            if (movement.Time > 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "A movement time is defined. This overwrites the defined speeddata value.");
-            }
-
             // Output
             DA.SetData(0, movement);
-        }
-
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
-
-            if (_add == false)
-            {
-                _add = true;
-
-                if (this.Params.Input[0].SourceCount == 0)
-                {
-                    this.ExpireSolution(true);
-                }
-            }
         }
 
         #region properties
@@ -231,7 +186,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -239,7 +194,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -258,7 +213,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B41AA128-2217-4FE5-95F3-DEA34BEF7A7D"); }
+            get { return new Guid("A478CB0C-5AAB-4AD5-8259-062B844A7006"); }
         }
         #endregion
 
@@ -270,7 +225,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Set Movement Time", MenuItemClickMovementTime, true, _setMovementTime);
             Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, _overrideRobotTool);
             Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, _overrideWorkObject);
             Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, _setDigitalOutput);
@@ -290,18 +244,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Movement Time" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickMovementTime(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Set Movement Time");
-            _setMovementTime = !_setMovementTime;
-            AddParameter(0);
-        }
-
-        /// <summary>
         /// Handles the event when the custom menu item "Robot Tool" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -310,7 +252,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Override Robot Tool");
             _overrideRobotTool = !_overrideRobotTool;
-            AddParameter(2);
+            AddParameter(0);
         }
 
         /// <summary>
@@ -322,7 +264,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Override Work Object");
             _overrideWorkObject = !_overrideWorkObject;
-            AddParameter(3);
+            AddParameter(1);
         }
 
         /// <summary>
@@ -334,7 +276,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Set Digital Output");
             _setDigitalOutput = !_setDigitalOutput;
-            AddParameter(4);
+            AddParameter(2);
         }
 
         /// <summary>
@@ -344,7 +286,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Set Movement Time", _setMovementTime);
             writer.SetBoolean("Override Robot Tool", _overrideRobotTool);
             writer.SetBoolean("Override Work Object", _overrideWorkObject);
             writer.SetBoolean("Set Digital Output", _setDigitalOutput);
@@ -358,7 +299,6 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            _setMovementTime = reader.GetBoolean("Set Movement Time");
             _overrideRobotTool = reader.GetBoolean("Override Robot Tool");
             _overrideWorkObject = reader.GetBoolean("Override Work Object");
             _setDigitalOutput = reader.GetBoolean("Set Digital Output");

@@ -14,17 +14,18 @@ using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructMovementComponent : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class DeconstructMovementComponent_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
-        public DeconstructMovementComponent()
+        public DeconstructMovementComponent_OBSOLETE()
           : base("Deconstruct Move", "DeConMove", 
               "Deconstructs a Move component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -46,10 +47,9 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_IntegerParam("Type", "TY", "Type as Integer");
-            pManager.RegisterParam(new Param_Target(), "Target", "TA", "Target as Target");
+            pManager.RegisterParam(new Param_Target(), "Target", "T", "Target as Target");
             pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data");
-            pManager.Register_DoubleParam("Time", "TI", "The total movement time in seconds as Number");
+            pManager.Register_IntegerParam("Movement Type", "MT", "Movement Type as integer");
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data");
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool");
             pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Work Object as Work Object");
@@ -77,14 +77,13 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
                 }
 
                 // Output
-                DA.SetData(0, (int)movement.MovementType);
-                DA.SetData(1, movement.Target);
-                DA.SetData(2, movement.SpeedData);
-                DA.SetData(3, movement.Time);
-                DA.SetData(4, movement.ZoneData);
-                DA.SetData(5, movement.RobotTool);
-                DA.SetData(6, movement.WorkObject);
-                DA.SetData(7, movement.DigitalOutput);
+                DA.SetData(0, movement.Target);
+                DA.SetData(1, movement.SpeedData);
+                DA.SetData(2, (int)movement.MovementType);
+                DA.SetData(3, movement.ZoneData);
+                DA.SetData(4, movement.RobotTool);
+                DA.SetData(5, movement.WorkObject);
+                DA.SetData(6, movement.DigitalOutput);
             }
         }
 
@@ -95,7 +94,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -103,7 +102,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3A5719AC-9CDB-4255-BD25-425144C36D8A"); }
+            get { return new Guid("ACDB0D71-C805-4AEB-ADC9-99ACC740B096"); }
         }
         #endregion
 

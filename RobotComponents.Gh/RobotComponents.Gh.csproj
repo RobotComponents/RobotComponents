@@ -71,6 +71,8 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v1\DeconstructMovementComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\MovementComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
     <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />

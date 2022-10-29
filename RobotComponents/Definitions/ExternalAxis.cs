@@ -18,7 +18,7 @@ namespace RobotComponents.Definitions
     /// Represents an abstract class for External Axes. 
     /// </summary>
     [Serializable()]
-    public abstract class ExternalAxis
+    public abstract class ExternalAxis : IMechanicalUnit
     {
         #region fields
 
@@ -43,6 +43,18 @@ namespace RobotComponents.Definitions
         /// </summary>
         /// <returns> A deep copy of the External Axis without meshes. </returns>
         public abstract ExternalAxis DuplicateExternalAxisWithoutMesh();
+
+        /// <summary>
+        /// Returns an exact duplicate of this Mechanical Unit.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        public abstract IMechanicalUnit DuplicateMechanicalUnit();
+
+        /// <summary>
+        /// Returns an exact duplicate of this Mechanical Unit without meshes.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        public abstract IMechanicalUnit DuplicateMechanicalUnitWithoutMesh();
         #endregion
 
         #region methods
@@ -194,6 +206,11 @@ namespace RobotComponents.Definitions
         /// Gets a value indicating whether or not this External Axis moves the Robot.
         /// </summary>
         public abstract bool MovesRobot { get; set; }
+
+        /// <summary>
+        /// Gets the number of axes for the mechanical unit.
+        /// </summary>
+        public abstract int NumberOfAxes { get; }
         #endregion
     }
 }

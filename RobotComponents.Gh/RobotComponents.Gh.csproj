@@ -235,6 +235,7 @@
     <Compile Include="Parameters\Actions\Param_WaitAI.cs" />
     <Compile Include="Parameters\Actions\Param_WaitSyncTask.cs" />
     <Compile Include="Parameters\Actions\Param_TaskList.cs" />
+    <Compile Include="Parameters\Definitions\Param_MechanicalUnit.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -734,6 +735,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\InequalitySymbolValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MechanicalUnit_Parameter_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

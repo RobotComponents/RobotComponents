@@ -22,7 +22,7 @@ namespace RobotComponents.Definitions
     /// Represents an External Rotational Axis.
     /// </summary>
     [Serializable()]
-    public class ExternalRotationalAxis : ExternalAxis, ISerializable
+    public class ExternalRotationalAxis : ExternalAxis, ISerializable, IMechanicalUnit
     {
         #region fields
         private string _name; // The name of the external axis
@@ -443,6 +443,24 @@ namespace RobotComponents.Definitions
         /// </summary>
         /// <returns> A deep copy of the External Rotational Axis instance as an External Axis without meshes. </returns>
         public override ExternalAxis DuplicateExternalAxisWithoutMesh()
+        {
+            return new ExternalRotationalAxis(this, false);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this External Rotational Axis as a Mechanical Unit.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        public override IMechanicalUnit DuplicateMechanicalUnit()
+        {
+            return new ExternalRotationalAxis(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this External Rotational Axis as Mechanical Unit without meshes.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        public override IMechanicalUnit DuplicateMechanicalUnitWithoutMesh()
         {
             return new ExternalRotationalAxis(this, false);
         }
@@ -871,6 +889,14 @@ namespace RobotComponents.Definitions
         {
             get { return _movesRobot; }
             set { _movesRobot = value; }
+        }
+
+        /// <summary>
+        /// Gets the number of axes for the mechanical unit.
+        /// </summary>
+        public override int NumberOfAxes
+        {
+            get { return 1; }
         }
         #endregion
     }

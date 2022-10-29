@@ -85,6 +85,7 @@
     <Compile Include="Actions\Comment.cs" />
     <Compile Include="Actions\Movement.cs" />
     <Compile Include="Actions\RAPIDGenerator.cs" />
+    <Compile Include="Definitions\IMechanicalUnit.cs" />
     <Compile Include="Definitions\Presets\CRB15000_5_095.cs" />
     <Compile Include="Definitions\Presets\IRB1100_4_0475.cs" />
     <Compile Include="Definitions\Presets\IRB1100_4_058.cs" />

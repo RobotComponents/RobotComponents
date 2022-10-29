@@ -60,7 +60,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_controller == null)
             {
-                return "Controller (-)";
+                return "Null Controller";
             }
             else if (_controller.IsVirtual == true)
             {
@@ -178,7 +178,7 @@ namespace RobotComponents.ABB.Controllers
 
         public bool UploadModules(List<string> modules)
         {
-            return false; // Returns true on succes
+            return false; // Returns true on success
         }
 
         public bool UploadModule(string module)
@@ -194,13 +194,13 @@ namespace RobotComponents.ABB.Controllers
 
             // TODO
 
-            return false; // Returns true on sucess
+            return false; // Returns true on success
         }
         public bool ResetProgramPointer()
         {
             // TODO
 
-            return false; // Returns true on sucess
+            return false; // Returns true on success
         }
 
         public bool RunProgram()

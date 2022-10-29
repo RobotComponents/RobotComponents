@@ -24,7 +24,7 @@ namespace RobotComponents.Definitions
     /// Represents a 6-axis spherical Robot.
     /// </summary>
     [Serializable()]
-    public class Robot : ISerializable
+    public class Robot : ISerializable, IMechanicalUnit
     {
         #region fields
         private string _name; // The name of the robot
@@ -183,23 +183,34 @@ namespace RobotComponents.Definitions
         /// Initializes a new instance of the Robot class by duplicating an existing Robot instance. 
         /// </summary>
         /// <param name="robot"> The Robot instance to duplicate. </param>
-        public Robot(Robot robot)
+        /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
+        public Robot(Robot robot, bool duplicateMesh = true)
         {
             // Robot related fields
             _name = robot.Name;
-            _meshes = robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
-
             _internalAxisPlanes = robot.InternalAxisPlanes.ConvertAll(item => new Plane(item));
             _internalAxisLimits = robot.InternalAxisLimits.ConvertAll(item => new Interval(item));
             _basePlane = new Plane(robot.BasePlane);
             _mountingFrame = new Plane(robot.MountingFrame);
+            
+            // Mesh related fields
+            if (duplicateMesh == true)
+            {
+                _meshes = robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh()); // This includes the tool mesh
+                _tool = robot.Tool.Duplicate();
+                _externalAxes = robot.ExternalAxes.ConvertAll(item => item.DuplicateExternalAxis());
+            }
+            else
+            {
+                _meshes = new List<Mesh>() { new Mesh(), new Mesh(), new Mesh(), new Mesh(), new Mesh(), new Mesh(), new Mesh() };
+                _tool = robot.Tool.DuplicateWithoutMesh();
+                _externalAxes = robot.ExternalAxes.ConvertAll(item => item.DuplicateExternalAxisWithoutMesh());
+            }
 
             // Tool related fields
-            _tool = robot.Tool.Duplicate();
             _toolPlane = new Plane(robot.ToolPlane);
 
             // External axis related fields
-            _externalAxes = robot.ExternalAxes.ConvertAll(item => item.DuplicateExternalAxis());
             _externalAxisPlanes = robot.ExternalAxisPlanes.ConvertAll(item => new Plane(item));
             _externalAxisLimits = robot.ExternalAxisLimits.ConvertAll(item => new Interval(item));
 
@@ -215,6 +226,24 @@ namespace RobotComponents.Definitions
         public Robot Duplicate()
         {
             return new Robot(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Robot as a Mechanical Unit.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        public IMechanicalUnit DuplicateMechanicalUnit()
+        {
+            return new Robot(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Robot as Mechanical Unit without meshes.
+        /// </summary>
+        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        public IMechanicalUnit DuplicateMechanicalUnitWithoutMesh()
+        {
+            return new Robot(this, false);
         }
         #endregion
 
@@ -726,6 +755,14 @@ namespace RobotComponents.Definitions
         public List<Interval> ExternalAxisLimits
         {
             get { return _externalAxisLimits; }
+        }
+
+        /// <summary>
+        /// Gets the number of axes for the mechanical unit.
+        /// </summary>
+        public int NumberOfAxes 
+        { 
+            get { return _internalAxisPlanes.Count; }
         }
         #endregion
 

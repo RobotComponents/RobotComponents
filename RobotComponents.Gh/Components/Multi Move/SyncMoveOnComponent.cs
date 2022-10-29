@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 // RobotComponents Libs
 using RobotComponents.Actions;
 using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Utils;
 
 namespace RobotComponents.Gh.Components.MultiMove
@@ -22,6 +24,7 @@ namespace RobotComponents.Gh.Components.MultiMove
     public class SyncMoveOnComponent : GH_Component, IObjectManager
     {
         #region fields
+        private GH_Structure<GH_SyncMoveOn> _tree = new GH_Structure<GH_SyncMoveOn>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
@@ -83,20 +86,42 @@ namespace RobotComponents.Gh.Components.MultiMove
 
             // Output
             DA.SetData(0, syncMoveOn);
+        }
 
-            #region Object manager
-            _toRegister.Clear();
-            _toRegister.Add(name);
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
 
-            GH_Document doc = this.OnPingDocument();
-            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-            _objectManager.CheckVariableNames(this);
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_SyncMoveOn>;
 
-            if (doc != null)
+            if (_tree.Branches.Count != 0)
             {
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                if (_tree.Branches[0][0].Value.SyncID != string.Empty)
+                {
+                    UpdateVariableNames();
+                }
+
+                #region Object manager
+                _toRegister.Clear();
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.SyncID));
+                }
+
+                GH_Document doc = this.OnPingDocument();
+                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+                _objectManager.CheckVariableNames(this);
+
+                if (doc != null)
+                {
+                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
+                }
+                #endregion
             }
-            #endregion
         }
 
         #region properties
@@ -208,6 +233,86 @@ namespace RobotComponents.Gh.Components.MultiMove
         public List<string> ToRegister
         {
             get { return _toRegister; }
+        }
+        #endregion
+
+        #region additional methods
+        /// <summary>
+        /// Updates the variable names in the data tree
+        /// </summary>
+        private void UpdateVariableNames()
+        {
+            // Check if it is a datatree with multiple branches that have one item
+            bool check = true;
+            for (int i = 0; i < _tree.Branches.Count; i++)
+            {
+                if (_tree.Branches[i].Count != 1)
+                {
+                    check = false;
+                    break;
+                }
+            }
+
+            if (_tree.Branches.Count == 1)
+            {
+                if (_tree.Branches[0].Count == 1)
+                {
+                    // Do nothing: there is only one item in the whole datatree
+                }
+                else
+                {
+                    // Only rename the items in this single branche with + "_0", "_1" etc...
+                    for (int i = 0; i < _tree.Branches[0].Count; i++)
+                    {
+                        _tree.Branches[0][i].Value.SyncID = _tree.Branches[0][i].Value.SyncID + "_" + i.ToString();
+                    }
+                }
+
+            }
+
+            else if (check == true)
+            {
+                // Multiple branches with only one item per branch
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.Branches[i][0].Value.SyncID = _tree.Branches[i][0].Value.SyncID + "_" + i.ToString();
+                }
+            }
+
+            else
+            {
+                // Rename everything. There are multiple branches with branches that have multiple items. 
+                List<GH_Path> originalPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    originalPaths.Add(_tree.Paths[i]);
+                }
+
+                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
+
+                List<GH_Path> simplifiedPaths = new List<GH_Path>();
+                for (int i = 0; i < _tree.Paths.Count; i++)
+                {
+                    simplifiedPaths.Add(_tree.Paths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
+                }
+
+                for (int i = 0; i < _tree.Branches.Count; i++)
+                {
+                    GH_Path iPath = simplifiedPaths[i];
+                    string pathString = iPath.ToString();
+                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
+
+                    for (int j = 0; j < _tree.Branches[i].Count; j++)
+                    {
+                        _tree.Branches[i][j].Value.SyncID = _tree.Branches[i][j].Value.SyncID + "_" + pathString + "_" + j;
+                    }
+                }
+            }
         }
         #endregion
     }

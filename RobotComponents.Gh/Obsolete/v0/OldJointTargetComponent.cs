@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -109,7 +110,9 @@ namespace RobotComponents.Gh.Components.Obsolete
             sizeValues[1] = robotJointPositions.Count;
             sizeValues[2] = externalJointPositions.Count;
 
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            int biggestSize = sizeValues.Max();
+
+
 
             // Keeps track of used indicies
             int nameCounter = -1;

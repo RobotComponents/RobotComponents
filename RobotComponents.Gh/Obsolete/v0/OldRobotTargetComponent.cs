@@ -159,7 +159,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             sizeValues[3] = axisConfigs.Count;
             sizeValues[4] = externalJointPositions.Count;
 
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            int biggestSize = sizeValues.Max();
 
             // Keeps track of used indicies
             int nameCounter = -1;

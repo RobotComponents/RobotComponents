@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Linq;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -106,7 +107,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             sizeValues[0] = names.Count;
             sizeValues[1] = planes.Count;
             sizeValues[2] = externalAxes.Count;
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            int biggestSize = sizeValues.Max(); ;
 
             // Keeps track of used indicies
             int nameCounter = -1;

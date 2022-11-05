@@ -184,7 +184,7 @@ namespace RobotComponents.Gh.Components.Obsolete
             sizeValues[5] = workObjects.Count;
             sizeValues[6] = digitalOutputs.Count;
 
-            int biggestSize = HelperMethods.GetBiggestValue(sizeValues);
+            int biggestSize = sizeValues.Max();
 
             // Keeps track of used indicies
             int targetGooCounter = -1;

@@ -171,6 +171,72 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
+        /// Creates a Grasshopper value list from a list with strings and connects it to an input parameter.  
+        /// Returns true if it's created.
+        /// </summary>
+        /// <param name="component"> Component to connect to. </param>
+        /// <param name="names"> List with strings. </param>
+        /// <param name="inputIndex"> Index of the input to connect the value list to. </param>
+        /// <returns> True, if created. </returns>
+        public static bool CreateValueList(GH_Component component, List<string> names, int inputIndex)
+        {
+            try
+            {
+                var parameter = component.Params.Input[inputIndex];
+
+                // Create the value list
+                GH_ValueList obj = CreateValueList(names);
+
+                // Make point where the valuelist should be created on the canvas
+                float width = obj.Attributes.Bounds.Width;
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - width - 15, parameter.Attributes.InputGrip.Y - 11);
+
+                // Add the value list to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(obj, false);
+
+                // Connect the value list to the input parameter
+                parameter.AddSource(obj);
+
+                // Collect data
+                parameter.CollectData();
+
+                // Expire value list
+                obj.ExpireSolution(true);
+
+                //Return that it's created
+                return true;
+            }
+            catch
+            {
+                //Return that it isn't created
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Return a value list populated with names.
+        /// </summary>
+        /// <param name="names"> List with strings to take the names from. </param>
+        /// <returns> The value list with data. </returns>
+        private static GH_ValueList CreateValueList(List<string> names)
+        {
+            // Creates the empty value list
+            GH_ValueList obj = new GH_ValueList();
+            obj.CreateAttributes();
+            obj.ListMode = GH_ValueListMode.DropDown;
+            obj.ListItems.Clear();
+
+            names.Sort();
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                obj.ListItems.Add(new GH_ValueListItem(names[i], string.Format("\"{0}\"", names[i])));
+            }
+
+            return obj;
+        }
+
+        /// <summary>
         /// Creates a Grasshopper value list from an enum and connects it to an input parameter.  
         /// Returns true if it's created.
         /// </summary>
@@ -188,7 +254,8 @@ namespace RobotComponents.Gh.Utils
                 GH_ValueList obj = CreateValueList(enumType);
 
                 // Make point where the valuelist should be created on the canvas
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - 120, parameter.Attributes.InputGrip.Y - 11);
+                float width = obj.Attributes.Bounds.Width;
+                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - width - 15, parameter.Attributes.InputGrip.Y - 11);
 
                 // Add the value list to the active canvas
                 Instances.ActiveCanvas.Document.AddObject(obj, false);

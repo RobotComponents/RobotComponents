@@ -537,6 +537,27 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
+        /// Calculates and returns the position of the meshes for a given Joint Target.
+        /// </summary>
+        /// <param name="jointTarget"> The Joint Target. </param>
+        /// <returns> The posed meshes. </returns>
+        public List<Mesh> PoseMeshes(JointTarget jointTarget)
+        {
+            List<Mesh> meshes = new List<Mesh>();
+
+            _forwardKinematics.Calculate(jointTarget.RobotJointPosition, jointTarget.ExternalJointPosition);
+
+            meshes.AddRange(_forwardKinematics.PosedInternalAxisMeshes);
+
+            for (int i = 0; i < _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
+            {
+                _meshes.AddRange(_forwardKinematics.PosedExternalAxisMeshes[i]);
+            }
+
+            return meshes;
+        }
+
+        /// <summary>
         /// Transforms the robot spatial properties (planes and meshes).
         /// NOTE: The attached external axes will not be transformed. 
         /// </summary>

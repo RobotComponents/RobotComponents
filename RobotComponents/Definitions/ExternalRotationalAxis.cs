@@ -630,6 +630,16 @@ namespace RobotComponents.Definitions
         }
 
         /// <summary>
+        /// Calculates and returns the position of the meshes for a given Joint Target.
+        /// </summary>
+        /// <param name="jointTarget"> The Joint Target. </param>
+        /// <returns> The posed meshes. </returns>
+        public override List<Mesh> PoseMeshes(JointTarget jointTarget)
+        {
+            return this.PoseMeshes(jointTarget.ExternalJointPosition);
+        }
+
+        /// <summary>
         /// Calculates and returns the position of the external axis meshes for a given External Joint Position.
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>

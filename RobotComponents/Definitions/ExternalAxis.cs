@@ -124,6 +124,13 @@ namespace RobotComponents.Definitions
         public abstract void ReInitialize();
 
         /// <summary>
+        /// Calculates and returns the position of the meshes for a given Joint Target.
+        /// </summary>
+        /// <param name="jointTarget"> The Joint Target. </param>
+        /// <returns> The posed meshes. </returns>
+        public abstract List<Mesh> PoseMeshes(JointTarget jointTarget);
+
+        /// <summary>
         /// Calculates the position of the external axis meshes for a given External Joint Position.
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>

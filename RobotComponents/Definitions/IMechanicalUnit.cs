@@ -43,6 +43,13 @@ namespace RobotComponents.Definitions
         string ToString();
 
         /// <summary>
+        /// Calculates and returns the position of the meshes for a given Joint Target.
+        /// </summary>
+        /// <param name="jointTarget"> The Joint Target. </param>
+        /// <returns> The posed meshes. </returns>
+        List<Mesh> PoseMeshes(JointTarget jointTarget);
+       
+        /// <summary>
         /// Transforms the external axis spatial properties (planes and meshes). 
         /// </summary>
         /// <param name="xform"> The spatial deform. </param>

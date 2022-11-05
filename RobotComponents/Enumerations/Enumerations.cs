@@ -313,7 +313,12 @@ namespace RobotComponents.Enumerations
         /// <summary>
         /// IRB1520ID-4/1.5
         /// </summary>
-        IRB1520ID_4_150
+        IRB1520ID_4_150,
+
+        /// <summary>
+        /// IRB1010ID-1.5/0.37
+        /// </summary>
+        IRB1010_1_5_037
     }
 
     /// <summary>

@@ -71,6 +71,8 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Components\Definitions\Presets\IRB1010_4_0_475_Component.cs" />
+    <Compile Include="Obsolete\v1\RobotToolFromPlanesComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\WorkObjectComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DeconstructMovementComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\MovementComponent_OBSOLETE.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="Components\Code Generation\Value Lists\SpeedDataValueList.cs" />
     <Compile Include="Obsolete\v1\ExternalJointPositionComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\RobotJointPositionComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v1\RobotTargetComponen_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\RobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v0\OldExternalLinearAxisComponent2.cs" />
     <Compile Include="Obsolete\v0\OldExternalRotationalAxisComponent.cs" />
     <Compile Include="Obsolete\v0\OldDeconstructExternalLinearAxisComponent2.cs" />
@@ -175,7 +177,7 @@
     <Compile Include="Components\Definitions\Presets\IRB6640_235_2_55_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6620_150_2_20_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6650_200_2_75_Component.cs" />
-    <Compile Include="Components\Definitions\RobotToolFromQuaternionComponent.cs" />
+    <Compile Include="Obsolete\v1\RobotToolFromQuaternionComponent_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\GetObjectManager.cs" />
     <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructExternalRotationalAxisComponent.cs" />
@@ -217,7 +219,7 @@
     <Compile Include="Components\Definitions\Presets\IRB4600_X_2_05_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6650_125_3_20_Component.cs" />
     <Compile Include="Components\Definitions\RobotComponent.cs" />
-    <Compile Include="Components\Definitions\RobotToolFromPlanesComponent.cs" />
+    <Compile Include="Components\Definitions\RobotToolComponent.cs" />
     <Compile Include="Components\Simulation\InverseKinematicsComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneXComponent.cs" />
     <Compile Include="Components\Utilities\FlipPlaneYComponent.cs" />
@@ -738,6 +740,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\MechanicalUnit_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB1010_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

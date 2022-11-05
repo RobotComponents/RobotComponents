@@ -124,6 +124,69 @@ namespace RobotComponents.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAA1Q8LAAL6fwIAyQ8LAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgCRDwsAAAAAADilQgAAmDoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/R7X1DW7WYMAyAiSex4RzQIkP0icXhR7Bh3oSFjbrk0AAAAAAAAAAAAAAAAAAAAAAXIBBw1MAh8JP1oO6AQCFQk0Ah0LYmf9CAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_0 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAAYkIJAAL6fwIAVkIJAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgAeQgkAAAAAADiiNgAAmDoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/8dJNYhDAXcCdtx0D1w99QNhKd4nLPVPAykOQ1ynxo0AAAAAAAAAAAAAAAAAAAAAAn+yHwuv9icLA//NCAQCgQnkBikJp53BDAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_1 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAA7w4KAAL6fwIA4w4KAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgCrDgoAAAAAADjsNwAAmDoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/7nykO6OJXsBwh9wB3HGaQCFAJlAq3VLAPXvJN+PwikAAAAAAAAAAAAAAAAAAAAAAaWaWwi8AuMLJcwhDrAROQq4BuEIBAM9DAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_2 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAAtNUHAAL6fwIAqNUHAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgBw1QcAAAAAADjyLwAAlzoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/2OZguycQU8CEQLXNh5R2QASDZYEytVXANx3H+1pDpUAAAAAAAAAAAAAAAAAAAAAAxB2jwjQzb8JRhqJDNDNtQucAckJsftRDAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_3 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAAxvIJAAL6fwIAuvIJAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgCC8gkAAAAAADiQOwAAmDoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/6nUPwLJYYMB0xk2MEsCQQAUAAAAAoGHAX5V25prIlUAAAAAAAAAAAAAAAAAAAAAAMjNdQoAAcsL/f6JDAYBdQ3oAbkJKet1DAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_4 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAATM0IAAL6fwIAQM0IAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgAIzQgAAAAAADiWNgAAmDoAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/6N06q9CbYMBJtJTVWOpyQAMLPz/aaHLA2VJYXE/YnUAAAAAAAAAAAAAAAAAAAAAACNXfQjQzH8LsiqZD28xjQ0sBJEIOddBDAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_5 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjM1LjIxMjIyLjE3MDAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAOV7jIwJAwAAAA8DAAAAGjkBAAL6fwIADjkBAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgDWOAEAAAAAADjSDQAADBAAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/ZYT9u5l2RcDY5L+G0nNdQNByf+jw/kDAmJmZmZmZRkAAAAAAAAAAAAAAAAAAAAAAmZlSQwEAyMHtCq9DAQBmQwEAyEEBgMxDAACA [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string IRB1010_1_5_0_37_link_6 {
+            get {
+                return ResourceManager.GetString("IRB1010_1_5_0_37_link_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AAEAAAD/////AQAAAAAAAAAMAgAAAFdSaGlub0NvbW1vbiwgVmVyc2lvbj02LjI5LjIwMjM4LjExNTAxLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTU1MjI4MWU5N2M3NTU1MzAFAQAAABNSaGluby5HZW9tZXRyeS5NZXNoBAAAAAd2ZXJzaW9uCmFyY2hpdmUzZG0Jb3Blbm51cmJzBGRhdGEAAAAHCAgIAgIAAAAQJwAAPAAAAGl2dIwJAwAAAA8DAAAAQ70DAAL6fwIAN70DAAAAAAD7/wIAFAAAAAAAAADk1NdOR+nTEb/lABCDASLwLbkbXPz/AgD/vAMAAAAAADhZFwAAiBMAANIdM569+OX/0h0znr345f/SHTOevfjl/9IdM569+OX/u8arFGlZYsBGFljwcXWFQOaOqCzFs2XAjj87sCOtpUAAAAAAAAAAAAAAAAAAAAAAjQEVwwEAnsL67HK6AQCeQgEAnkIBgB9DAACA [rest of string was truncated]&quot;;.
         /// </summary>
         public static string IRB1100_4_0_475_link_0 {

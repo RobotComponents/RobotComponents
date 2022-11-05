@@ -37,6 +37,7 @@ namespace RobotComponents.Kinematics
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private int _interpolations; // Defines the number of interpolations between two targets
+        private double _time; // Estimate of the total program time
         #endregion
 
         #region constructors
@@ -98,6 +99,7 @@ namespace RobotComponents.Kinematics
             _linearConfigurationControl = true;
             _jointConfigurationControl = true;
             _firstMovementIsMoveAbsJ = false;
+            _time = 0;
 
             // Add initial positions
             RobotJointPosition robotJointPosition = new RobotJointPosition();
@@ -162,6 +164,11 @@ namespace RobotComponents.Kinematics
                 else if (ungrouped[i] is LinearConfigurationControl linearConfigurationControl)
                 {
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
+                }
+
+                else if (ungrouped[i] is WaitTime waitTime)
+                {
+                    _time += waitTime.Duration;
                 }
 
                 else if (ungrouped[i] is Movement movement)
@@ -383,6 +390,15 @@ namespace RobotComponents.Kinematics
             if (points.Count > 1)
             {
                 _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+
+                if (movement.Time < 0)
+                {
+                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _time += movement.Time;
+                }    
             }
             else
             {
@@ -477,6 +493,15 @@ namespace RobotComponents.Kinematics
             if (points.Count > 1)
             {
                 _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+
+                if (movement.Time < 0)
+                {
+                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _time += movement.Time;
+                }
             }
             else
             {

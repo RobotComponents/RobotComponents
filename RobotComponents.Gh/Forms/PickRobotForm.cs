@@ -58,16 +58,28 @@ namespace RobotComponents.Gh.Forms
         /// <returns> The name of the Robot preset. </returns>
         private static string GetRobotPresetName(RobotPreset preset)
         {
-            string name = Enum.GetName(typeof(RobotPreset), preset);
-            name = name.ReplaceFirst("_", "-");
-            name = name.ReplaceFirst("_", "/");
-            name = name.ReplaceFirst("/0", "/0.");
-            name = name.ReplaceFirst("/1", "/1.");
-            name = name.ReplaceFirst("/2", "/2.");
-            name = name.ReplaceFirst("/3", "/3.");
-            name = name.ReplaceFirst("/4", "/4.");
+            if (preset == RobotPreset.IRB1010_1_5_037)
+            {
+                return "IRB1010-1.5/0.37";
+            }
+            else
+            {
+                string name = Enum.GetName(typeof(RobotPreset), preset);
+                name = name.ReplaceFirst("_", "-");
+                name = name.ReplaceFirst("_", "/");
+                name = name.ReplaceFirst("/0", "/0.");
+                name = name.ReplaceFirst("/1", "/1.");
+                name = name.ReplaceFirst("/2", "/2.");
+                name = name.ReplaceFirst("/3", "/3.");
+                name = name.ReplaceFirst("/4", "/4.");
+                name = name.ReplaceFirst("/5", "/5.");
+                name = name.ReplaceFirst("/6", "/6.");
+                name = name.ReplaceFirst("/7", "/7.");
+                name = name.ReplaceFirst("/8", "/8.");
+                name = name.ReplaceFirst("/9", "/9.");
 
-            return name;
+                return name;
+            }
         }
     }
 }

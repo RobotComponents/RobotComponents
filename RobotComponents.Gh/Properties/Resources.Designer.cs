@@ -603,6 +603,16 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IRB1010_Icon {
+            get {
+                object obj = ResourceManager.GetObject("IRB1010_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IRB1100_Icon {
             get {
                 object obj = ResourceManager.GetObject("IRB1100_Icon", resourceCulture);

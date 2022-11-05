@@ -9,24 +9,22 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Goos.Definitions;
 using RobotComponents.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolFromQuaternionComponent : GH_Component, IObjectManager
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RobotToolFromQuaternionComponent_OBSOLETE : GH_Component, IObjectManager
     {
         #region fields
-        private GH_Structure<GH_RobotTool> _tree = new GH_Structure<GH_RobotTool>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
@@ -39,7 +37,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolFromQuaternionComponent()
+        public RobotToolFromQuaternionComponent_OBSOLETE()
           : base("Robot Tool From Quaternion Data", "RobTool",
               "Defines a robot tool based on TCP coorindate and quarternion values."
             + System.Environment.NewLine + System.Environment.NewLine +
@@ -53,7 +51,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item, "tool1");
+            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item, "default_tool");
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
             pManager.AddNumberParameter("Coord X", "X", "The x-coordinate of the tool center point.", GH_ParamAccess.item, 0.0);
@@ -72,7 +70,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool");
         }
 
         /// <summary>
@@ -113,42 +111,20 @@ namespace RobotComponents.Gh.Components.Definitions
 
             // Outputs
             DA.SetData(0, robotTool);
-        }
 
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
+            #region Object manager
+            _toRegister.Clear();
+            _toRegister.Add(name);
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_RobotTool>;
+            GH_Document doc = this.OnPingDocument();
+            _objectManager = DocumentManager.GetDocumentObjectManager(doc);
+            _objectManager.CheckVariableNames(this);
 
-            if (_tree.Branches.Count != 0)
+            if (doc != null)
             {
-                if (_tree.Branches[0][0].Value.Name != string.Empty)
-                {
-                    UpdateVariableNames();
-                }
-
-                #region Object manager
-                _toRegister.Clear();
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _toRegister.AddRange(_tree.Branches[i].ConvertAll(item => item.Value.Name));
-                }
-
-                GH_Document doc = this.OnPingDocument();
-                _objectManager = DocumentManager.GetDocumentObjectManager(doc);
-                _objectManager.CheckVariableNames(this);
-
-                if (doc != null)
-                {
-                    doc.ObjectsDeleted += this.DocumentObjectsDeleted;
-                }
-                #endregion
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
+            #endregion
         }
 
         #region properties
@@ -158,7 +134,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -166,7 +142,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -260,86 +236,6 @@ namespace RobotComponents.Gh.Components.Definitions
         public List<string> ToRegister
         {
             get { return _toRegister; }
-        }
-        #endregion
-
-        #region additional methods
-        /// <summary>
-        /// Updates the variable names in the data tree
-        /// </summary>
-        private void UpdateVariableNames()
-        {
-            // Check if it is a datatree with multiple branches that have one item
-            bool check = true;
-            for (int i = 0; i < _tree.Branches.Count; i++)
-            {
-                if (_tree.Branches[i].Count != 1)
-                {
-                    check = false;
-                    break;
-                }
-            }
-
-            if (_tree.Branches.Count == 1)
-            {
-                if (_tree.Branches[0].Count == 1)
-                {
-                    // Do nothing: there is only one item in the whole datatree
-                }
-                else
-                {
-                    // Only rename the items in this single branche with + "_0", "_1" etc...
-                    for (int i = 0; i < _tree.Branches[0].Count; i++)
-                    {
-                        _tree.Branches[0][i].Value.Name = _tree.Branches[0][i].Value.Name + "_" + i.ToString();
-                    }
-                }
-
-            }
-
-            else if (check == true)
-            {
-                // Multiple branches with only one item per branch
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _tree.Branches[i][0].Value.Name = _tree.Branches[i][0].Value.Name + "_" + i.ToString();
-                }
-            }
-
-            else
-            {
-                // Rename everything. There are multiple branches with branches that have multiple items. 
-                List<GH_Path> originalPaths = new List<GH_Path>();
-                for (int i = 0; i < _tree.Paths.Count; i++)
-                {
-                    originalPaths.Add(_tree.Paths[i]);
-                }
-
-                _tree.Simplify(GH_SimplificationMode.CollapseLeadingOverlaps);
-
-                List<GH_Path> simplifiedPaths = new List<GH_Path>();
-                for (int i = 0; i < _tree.Paths.Count; i++)
-                {
-                    simplifiedPaths.Add(_tree.Paths[i]);
-                }
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    _tree.ReplacePath(simplifiedPaths[i], originalPaths[i]);
-                }
-
-                for (int i = 0; i < _tree.Branches.Count; i++)
-                {
-                    GH_Path iPath = simplifiedPaths[i];
-                    string pathString = iPath.ToString();
-                    pathString = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
-
-                    for (int j = 0; j < _tree.Branches[i].Count; j++)
-                    {
-                        _tree.Branches[i][j].Value.Name = _tree.Branches[i][j].Value.Name + "_" + pathString + "_" + j;
-                    }
-                }
-            }
         }
         #endregion
     }

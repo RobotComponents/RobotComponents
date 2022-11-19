@@ -187,12 +187,16 @@ namespace RobotComponents.Gh.Utils
                 // Create the value list
                 GH_ValueList obj = CreateValueList(names);
 
-                // Make point where the valuelist should be created on the canvas
-                float width = obj.Attributes.Bounds.Width;
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - width - 15, parameter.Attributes.InputGrip.Y - 11);
-
                 // Add the value list to the active canvas
                 Instances.ActiveCanvas.Document.AddObject(obj, false);
+                obj.Attributes.ExpireLayout();
+                obj.Attributes.PerformLayout();
+
+                // Make point where the valuelist should be created on the canvas                
+                float dx = obj.Attributes.OutputGrip.X - parameter.Attributes.InputGrip.X;
+                float dy = obj.Attributes.OutputGrip.Y - parameter.Attributes.InputGrip.Y;
+                obj.Attributes.Pivot = new PointF(obj.Attributes.Pivot.X - dx - 25, obj.Attributes.Pivot.Y - dy);
+                obj.Attributes.ExpireLayout();
 
                 // Connect the value list to the input parameter
                 parameter.AddSource(obj);
@@ -253,12 +257,16 @@ namespace RobotComponents.Gh.Utils
                 // Create the value list
                 GH_ValueList obj = CreateValueList(enumType);
 
-                // Make point where the valuelist should be created on the canvas
-                float width = obj.Attributes.Bounds.Width;
-                obj.Attributes.Pivot = new PointF(parameter.Attributes.InputGrip.X - width - 15, parameter.Attributes.InputGrip.Y - 11);
-
                 // Add the value list to the active canvas
                 Instances.ActiveCanvas.Document.AddObject(obj, false);
+                obj.Attributes.ExpireLayout();
+                obj.Attributes.PerformLayout();
+
+                // Make point where the valuelist should be created on the canvas
+                float dx = obj.Attributes.OutputGrip.X - parameter.Attributes.InputGrip.X;
+                float dy = obj.Attributes.OutputGrip.Y - parameter.Attributes.InputGrip.Y;
+                obj.Attributes.Pivot = new PointF(obj.Attributes.Pivot.X - dx - 25, obj.Attributes.Pivot.Y - dy);
+                obj.Attributes.ExpireLayout();
 
                 // Connect the value list to the input parameter
                 parameter.AddSource(obj);
@@ -317,6 +325,8 @@ namespace RobotComponents.Gh.Utils
             {
                 obj.Attributes.Pivot = new PointF(location.X - obj.Attributes.Bounds.Width / 4, location.Y - obj.Attributes.Bounds.Height / 2);
                 Instances.ActiveCanvas.Document.AddObject(obj, false);
+                obj.Attributes.ExpireLayout();
+                obj.Attributes.PerformLayout();
 
                 return true;
             }

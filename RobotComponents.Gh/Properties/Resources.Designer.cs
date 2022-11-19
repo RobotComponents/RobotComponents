@@ -483,16 +483,6 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap FlipPlane_Icon {
-            get {
-                object obj = ResourceManager.GetObject("FlipPlane_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap FlipPlaneX_Icon {
             get {
                 object obj = ResourceManager.GetObject("FlipPlaneX_Icon", resourceCulture);
@@ -883,16 +873,6 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Movement_Icon_Old {
-            get {
-                object obj = ResourceManager.GetObject("Movement_Icon_Old", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Movement_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Movement_Parameter_Icon", resourceCulture);
@@ -926,26 +906,6 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap ObjectManager_Icon {
             get {
                 object obj = ResourceManager.GetObject("ObjectManager_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap OldCodeLine_Icon {
-            get {
-                object obj = ResourceManager.GetObject("OldCodeLine_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap OldComment_Icon {
-            get {
-                object obj = ResourceManager.GetObject("OldComment_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1016,16 +976,6 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap RAPID_Icon {
             get {
                 object obj = ResourceManager.GetObject("RAPID_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ReadDigitalInput_Icon {
-            get {
-                object obj = ResourceManager.GetObject("ReadDigitalInput_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1223,26 +1173,6 @@ namespace RobotComponents.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Target_Icon {
-            get {
-                object obj = ResourceManager.GetObject("Target_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Target_Icon_Old {
-            get {
-                object obj = ResourceManager.GetObject("Target_Icon_Old", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Target_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Target_Parameter_Icon", resourceCulture);
@@ -1316,16 +1246,6 @@ namespace RobotComponents.Gh.Properties {
         internal static System.Drawing.Bitmap ToolCalibration_Icon {
             get {
                 object obj = ResourceManager.GetObject("ToolCalibration_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ToolData_Icon {
-            get {
-                object obj = ResourceManager.GetObject("ToolData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -471,9 +471,6 @@
     <None Include="Resources\PlaneToQuat_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\RAPID_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\ReadDigitalInput_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -743,6 +740,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB1010_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RAPID_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,4 @@
-﻿// This file is part of RobotComponents. RobotComponents is licensed under 
+﻿// This file is part of Robot Components. Robot Components is licensed under 
 // under the terms of GNU Lesser General Public License (LGPL
 // published by the 
 // as published by the Free Software Foundation. For more information and 

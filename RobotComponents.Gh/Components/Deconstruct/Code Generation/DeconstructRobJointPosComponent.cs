@@ -1,6 +1,6 @@
-﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License as published by the 
-// Free Software Foundation. For more information and the LICENSE file, 
+﻿// This file is part of RobotComponents. RobotComponents is licensed under 
+// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+// as published by the Free Software Foundation. For more information and 
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
 // System Libs

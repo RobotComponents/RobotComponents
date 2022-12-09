@@ -1,7 +1,7 @@
-﻿// This file is part of RobotComponents. RobotComponents is licensed 
-// under the terms of GNU General Public License as published by the 
-// Free Software Foundation. For more information and the LICENSE file, 
-// see <https://github.com/RobotComponents/RobotComponents>.
+﻿// This file is part of RobotComponents. RobotComponents is licensed under 
+// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+// as published by the Free Software Foundation. For more information and 
+// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
 using System;
@@ -43,15 +43,15 @@ namespace RobotComponents.Gh.Components.Obsolete
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is free software; you can redistribute it and/or modify it under "
-                + "the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation."
+                + "the terms of the GNU Lesser General Public License (LGPL version 3.0 as published by the Free Software Foundation."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; " 
                 + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-                + "See the GNU General Public License for more details."
+                + "See the GNU Lesser General Public License (LGPL for more details."
                 + Environment.NewLine
                 + Environment.NewLine
-                + "You should have received a copy of the GNU General Public License along with Robot Components; "
+                + "You should have received a copy of the GNU Lesser General Public License (LGPL along with Robot Components; "
                 + "If not, see http://www.gnu.org/licenses/."
                 + Environment.NewLine
                 + Environment.NewLine

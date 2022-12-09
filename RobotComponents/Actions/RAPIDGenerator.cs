@@ -275,51 +275,59 @@ namespace RobotComponents.Actions
             _programModule.Add("ENDMODULE");
 
             #region For v2.0: Adds the tooldata and wobjdata to the program module (remove SYS module)
-            /*
-            // Create tooldata
-            List<string> tooldata = new List<string>();
-
-            foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
-            {
-                if (entry.Value.Name != "tool0" && entry.Value.Name != null && entry.Value.Name != "")
-                {
-                   tooldata.Add("    " + $"{entry.Value.ToRAPIDDeclaration()}");
-                }
-            }
-
-            // Create wobjdata
-            List<string> wobjdata = new List<string>();
-
-            foreach (KeyValuePair<string, WorkObject> entry in _workObjects)
-            {
-                if (entry.Value.Name != "wobj0" && entry.Value.Name != null && entry.Value.Name != "")
-                {
-                    wobjdata.Add("    " + $"{entry.Value.ToRAPIDDeclaration()}");
-                }
-            }
+            bool addTooldata = false;
+            bool addWobjdata = false;
 
             // Add data
             int index = 5;
 
-            if (tooldata.Count != 0)
+            if (addTooldata == true)
             {
-                _programModule.Insert(index, "    " + "! User defined tooldata");
-                index += 1;
-                _programModule.InsertRange(index, tooldata);
-                index += tooldata.Count;
-                _programModule.Insert(index, "    ");
-                index += 1;
+                // Create tooldata
+                List<string> tooldata = new List<string>();
+
+                foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
+                {
+                    if (entry.Value.Name != "tool0" && entry.Value.Name != null && entry.Value.Name != "")
+                    {
+                        tooldata.Add("    " + $"{entry.Value.ToRAPIDDeclaration()}");
+                    }
+                }
+
+                if (tooldata.Count != 0)
+                {
+                    _programModule.Insert(index, "    " + "! User defined tooldata");
+                    index += 1;
+                    _programModule.InsertRange(index, tooldata);
+                    index += tooldata.Count;
+                    _programModule.Insert(index, "    ");
+                    index += 1;
+                }
             }
 
-            if (wobjdata.Count != 0)
+            if (addWobjdata == true)
             {
-                _programModule.Insert(index, "    " + "! User defined wobjdata");
-                index += 1;
-                _programModule.InsertRange(index, wobjdata);
-                index += wobjdata.Count;
-                _programModule.Insert(index, "    ");
+                // Create wobjdata
+                List<string> wobjdata = new List<string>();
+
+                foreach (KeyValuePair<string, WorkObject> entry in _workObjects)
+                {
+                    if (entry.Value.Name != "wobj0" && entry.Value.Name != null && entry.Value.Name != "")
+                    {
+                        wobjdata.Add("    " + $"{entry.Value.ToRAPIDDeclaration()}");
+                    }
+                }
+
+                if (wobjdata.Count != 0)
+                {
+                    _programModule.Insert(index, "    " + "! User defined wobjdata");
+                    index += 1;
+                    _programModule.InsertRange(index, wobjdata);
+                    index += wobjdata.Count;
+                    _programModule.Insert(index, "    ");
+                }
             }
-            */
+
             #endregion
 
             // Write to file

@@ -171,18 +171,63 @@ namespace RobotComponents.Gh.Utils
         }
 
         /// <summary>
+        /// Creates the panel with the signal name and connects it to the input parameter
+        /// </summary>
+        /// <param name="text"> Text to place inside the panel. </param>
+        /// <param name="component"> Component to connect to. </param>
+        /// <param name="text"> Text to place inside the panel. </param>
+        /// <param name="index"> Index of the input to connect the panel to. </param>
+        /// <returns> True, if created. </returns>
+        public static bool CreatePanel(GH_Component component, string text, int index)
+        {
+            try
+            {
+                // Parameter
+                var parameter = component.Params.Input[index];
+
+                // Create the  panel
+                GH_Panel panel = new GH_Panel();
+                panel.SetUserText(text);
+                panel.Properties.Colour = Color.White;
+
+                // Add the panel to the active canvas
+                Instances.ActiveCanvas.Document.AddObject(panel, false);
+                panel.Attributes.ExpireLayout();
+                panel.Attributes.PerformLayout();
+
+                // Set the location and size of the panel
+                panel.Attributes.Bounds = new RectangleF(0.0f, 0.0f, 160.0f, 20.0f);
+                float x = component.Attributes.DocObject.Attributes.Bounds.Left - panel.Attributes.Bounds.Width - 30;
+                float y = parameter.Attributes.Bounds.Y;
+                panel.Attributes.Pivot = new System.Drawing.PointF(x, y);
+
+                // Connect the panel to the input parameter
+                parameter.RemoveAllSources();
+                parameter.AddSource(panel);
+
+                // Return that it's created
+                return true;
+            }
+            catch
+            {
+                // Return that it isn't created
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Creates a Grasshopper value list from a list with strings and connects it to an input parameter.  
         /// Returns true if it's created.
         /// </summary>
         /// <param name="component"> Component to connect to. </param>
         /// <param name="names"> List with strings. </param>
-        /// <param name="inputIndex"> Index of the input to connect the value list to. </param>
+        /// <param name="index"> Index of the input to connect the value list to. </param>
         /// <returns> True, if created. </returns>
-        public static bool CreateValueList(GH_Component component, List<string> names, int inputIndex)
+        public static bool CreateValueList(GH_Component component, List<string> names, int index)
         {
             try
             {
-                var parameter = component.Params.Input[inputIndex];
+                var parameter = component.Params.Input[index];
 
                 // Create the value list
                 GH_ValueList obj = CreateValueList(names);
@@ -246,13 +291,13 @@ namespace RobotComponents.Gh.Utils
         /// </summary>
         /// <param name="component"> Component to connect to. </param>
         /// <param name="enumType"> Enumeration to take values from. </param>
-        /// <param name="inputIndex"> Index of the input to connect the value list to. </param>
+        /// <param name="index"> Index of the input to connect the value list to. </param>
         /// <returns> True, if created. </returns>
-        public static bool CreateValueList(GH_Component component, Type enumType, int inputIndex)
+        public static bool CreateValueList(GH_Component component, Type enumType, int index)
         {
             try
             {
-                var parameter = component.Params.Input[inputIndex];
+                var parameter = component.Params.Input[index];
 
                 // Create the value list
                 GH_ValueList obj = CreateValueList(enumType);

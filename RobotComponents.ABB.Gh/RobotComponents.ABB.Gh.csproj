@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ABB.Robotics.Controllers.PC">
-      <HintPath>..\DLLs\ABB.Robotics.Controllers.PC.dll</HintPath>
-    </Reference>
     <Reference Include="GH_IO">
       <HintPath>..\DLLs\GH_IO.dll</HintPath>
       <Private>False</Private>
@@ -51,14 +48,6 @@
     <Reference Include="RhinoCommon">
       <HintPath>..\DLLs\RhinoCommon.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="RobotStudio.Services.RobApi, Version=20.1.8982.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLLs\RobotStudio.Services.RobApi.dll</HintPath>
-    </Reference>
-    <Reference Include="RobotStudio.Services.RobApi.Desktop, Version=20.1.8982.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLLs\RobotStudio.Services.RobApi.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,12 +82,6 @@
     <Compile Include="Obsolete\v1\JointTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE.cs" />
-    <Compile Include="Forms\PickTaskForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickTaskForm.designer.cs">
-      <DependentUpon>PickTaskForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Obsolete\v1\DataTree Generators\RobotJointPositionComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
     <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
@@ -159,7 +142,7 @@
     <Compile Include="Components\Definitions\Presets\IRB6650_200_2_75_Component.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromQuaternionComponent_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\GetObjectManager.cs" />
-    <Compile Include="Components\Controller Utility\GetPlaneComponent.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\GetPlaneComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\Definitions\ExternalRotationalAxisComponent.cs" />
@@ -170,13 +153,13 @@
     <Compile Include="Obsolete\v1\SpeedDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
-    <Compile Include="Components\Controller Utility\GetAxisValuesComponent.cs" />
-    <Compile Include="Components\Controller Utility\GetControllerComponent.cs" />
-    <Compile Include="Components\Controller Utility\GetDigitalInputComponent.cs" />
-    <Compile Include="Components\Controller Utility\GetDigitalOutputComponent.cs" />
-    <Compile Include="Components\Controller Utility\RemoteConnectionComponent.cs" />
-    <Compile Include="Components\Controller Utility\SetDigitalInputComponent.cs" />
-    <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\GetAxisValuesComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\GetControllerComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\GetDigitalInputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\GetDigitalOutputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\RemoteConnectionComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\SetDigitalInputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Controller Utility\SetDigitalOutputComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructRobotComponent.cs" />
@@ -226,8 +209,6 @@
     <Compile Include="Forms\PickRobotForm.designer.cs">
       <DependentUpon>PickRobotForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Goos\GH_Controller.cs" />
-    <Compile Include="Goos\GH_Signal.cs" />
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />
     <Compile Include="Parameters\Actions\Param_AnalogOutput.cs" />
@@ -258,30 +239,8 @@
     <Compile Include="Utils\HelperMethods.cs" />
     <Compile Include="Utils\IObjectManager.cs" />
     <Compile Include="Utils\ObjectManager.cs" />
-    <Compile Include="Forms\PickControllerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickControllerForm.designer.cs">
-      <DependentUpon>PickControllerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickDIForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickDIForm.designer.cs">
-      <DependentUpon>PickDIForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickDOForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickDOForm.designer.cs">
-      <DependentUpon>PickDOForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\PickTaskForm.resx">
-      <DependentUpon>PickTaskForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PickRobotForm.resx">
       <DependentUpon>PickRobotForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -289,17 +248,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickDOForm.resx">
-      <DependentUpon>PickDOForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickDIForm.resx">
-      <DependentUpon>PickDIForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickControllerForm.resx">
-      <DependentUpon>PickControllerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -722,7 +670,7 @@
     <None Include="Resources\RAPID_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Obsolete\v2\" />
+    <Folder Include="Components\Controller Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Components.CodeGeneration;
-using RobotComponents.ABB.Gh.Components.ControllerUtility;
+//using RobotComponents.ABB.Gh.Components.ControllerUtility;
 using RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration;
 using RobotComponents.ABB.Gh.Components.Deconstruct.Definitions;
 using RobotComponents.ABB.Gh.Components.Simulation;
@@ -60,14 +60,6 @@ namespace RobotComponents.ABB.Gh.Utils
             #endregion
 
             #region Controller utility
-            { typeof(GetAxisValuesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Get%20Axis%20Values/" },
-            { typeof(GetControllerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Get%20Controller/" },
-            { typeof(GetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Get%20Digital%20Input/" },
-            { typeof(GetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Get%20Digital%20Output/" },
-            { typeof(GetPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Get%20Plane/" },
-            { typeof(RemoteConnectionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Remote%20Connection/" },
-            { typeof(SetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Set%20Digital%20Input/" },
-            { typeof(SetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/Set%20Digital%20Output/" },
             #endregion
 
             #region Deconstruct

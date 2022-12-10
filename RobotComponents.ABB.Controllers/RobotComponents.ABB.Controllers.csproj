@@ -65,6 +65,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\PickSignalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickSignalForm.designer.cs">
+      <DependentUpon>PickSignalForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PickPathForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     <Compile Include="Signal.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickSignalForm.resx">
+      <DependentUpon>PickSignalForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PickPathForm.resx">
       <DependentUpon>PickPathForm.cs</DependentUpon>
       <SubType>Designer</SubType>

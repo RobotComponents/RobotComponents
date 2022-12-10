@@ -7,21 +7,19 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-// Robot Components Libs
-using RobotComponents.ABB.Gh.Components.ControllerUtility;
 
-namespace RobotComponents.ABB.Gh.Forms
+namespace RobotComponents.ABB.Controllers.Forms
 {
-    public partial class PickDIForm : Form
+    public partial class PickDOForm : Form
     {
         public static int SignalIndex = 0;
 
-        public PickDIForm()
+        public PickDOForm()
         {
             InitializeComponent();
         }
 
-        public PickDIForm(List<string> items)
+        public PickDOForm(List<string> items)
         {
             InitializeComponent();
             for (int i = 0; i < items.Count; i++)
@@ -30,18 +28,18 @@ namespace RobotComponents.ABB.Gh.Forms
             }
         }
 
-        private void PickDI_Load(object sender, EventArgs e)
+        private void PickDO_Load(object sender, EventArgs e)
         {
 
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Name.ToString();
-            this.labelValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Value.ToString();
-            this.labelTypeInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.Type.ToString();
-            this.labelMinValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.MinValue.ToString();
-            this.labelMaxValueInfo.Text = GetDigitalInputComponent.SignalGooList[comboBox1.SelectedIndex].Value.MaxValue.ToString();
+            this.labelNameInfo.Text = "-";
+            this.labelValueInfo.Text = "-";
+            this.labelTypeInfo.Text = "-";
+            this.labelMinValueInfo.Text = "-";
+            this.labelMaxValueInfo.Text = "-";
         }
 
         private void Button1_Click(object sender, EventArgs e)

@@ -3,6 +3,8 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 // Robot Components Libs
@@ -134,6 +136,66 @@ namespace RobotComponents.ABB.Controllers.Gh.Goos.Controllers
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
+                return true;
+            }
+
+            //Cast to bool
+            if (typeof(Q).IsAssignableFrom(typeof(bool)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)(Value.Value != 0);
+                return true;
+            }
+
+            //Cast to GH_Boolean
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)new GH_Boolean((Value.Value != 0));
+                return true;
+            }
+
+            //Cast to integer
+            if (typeof(Q).IsAssignableFrom(typeof(int)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)Convert.ToInt32(Value.Value);
+                return true;
+            }
+
+            //Cast to GH_Integer
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Integer)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)new GH_Integer(Convert.ToInt32(Value.Value));
+                return true;
+            }
+
+            //Cast to double
+            if (typeof(Q).IsAssignableFrom(typeof(double)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)Value.Value;
+                return true;
+            }
+
+            //Cast to GH_Number
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)new GH_Number(Value.Value);
                 return true;
             }
 

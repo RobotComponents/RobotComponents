@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
               "Gets the robot base frame from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility 2.0-beta")
+              "Robot Components ABB", "Controller Utility")
         {
         }
 

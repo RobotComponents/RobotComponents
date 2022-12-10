@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Controllers.Components.ControllerUt
               "Gets the signal of a defined digital input from an ABB IRC5 Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility 2.0-beta")
+              "Robot Components ABB", "Controller Utility")
         {
         }
 

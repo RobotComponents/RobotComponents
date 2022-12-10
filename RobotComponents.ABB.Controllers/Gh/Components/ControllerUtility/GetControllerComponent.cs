@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
               "Connects to a real or virtual controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility 2.0-beta")
+              "Robot Components ABB", "Controller Utility")
         {
         }
 

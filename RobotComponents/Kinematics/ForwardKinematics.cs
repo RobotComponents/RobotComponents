@@ -6,12 +6,12 @@
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
 using System;
 using System.Collections.Generic;
 
-namespace RobotComponents.Kinematics
+namespace RobotComponents.ABB.Kinematics
 {
     /// <summary>
     /// Represent the Forward Kinematics for a 6-axis spherical Robot and its attached external axes. 

@@ -12,13 +12,13 @@ using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Definitions.Presets;
-using RobotComponents.Enumerations;
-using RobotComponents.Actions;
-using RobotComponents.Kinematics;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Definitions.Presets;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Kinematics;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Definitions
+namespace RobotComponents.ABB.Definitions
 {
     /// <summary>
     /// Represents a 6-axis spherical Robot.

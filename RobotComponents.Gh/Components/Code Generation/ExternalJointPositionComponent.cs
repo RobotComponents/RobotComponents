@@ -13,7 +13,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
           : base("External Joint Position", "EJ",
               "Defines an External Joint Position for a Robot Target or Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
             // Create the component label with a message

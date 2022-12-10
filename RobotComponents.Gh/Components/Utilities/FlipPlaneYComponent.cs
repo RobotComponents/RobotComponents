@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Components.Utilities
         public FlipPlaneYComponent()
           : base("Flip Plane Y", "Flip Plane Y",
               "Flips the plane to the oposite direction by setting it's y-axis negative."
-              + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -62,7 +62,7 @@ namespace RobotComponents.Gh.Components.Utilities
 
             // Flip plane
 
-            plane = RobotComponents.Utils.HelperMethods.FlipPlaneY(plane);
+            plane = RobotComponents.ABB.Utils.HelperMethods.FlipPlaneY(plane);
 
             // Output
             DA.SetData(0, plane);

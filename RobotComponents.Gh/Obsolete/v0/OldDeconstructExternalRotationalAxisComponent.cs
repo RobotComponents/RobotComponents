@@ -8,7 +8,7 @@ using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 
 // This component is OBSOLETE!
@@ -30,7 +30,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Deconstruct External Rotational Axis", "DeConERA", 
               "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

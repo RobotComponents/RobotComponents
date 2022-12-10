@@ -48,7 +48,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
           : base("Remote Connection", "Remote Connection",
               "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB IRC5 robot controller."
               + System.Environment.NewLine + System.Environment.NewLine +
-              "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+              "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
             this.Message = "-";
@@ -433,7 +433,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_pickedIndex);
+            byte[] array = RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_pickedIndex);
             writer.SetByteArray("Picked Task Index", array);
             return base.Write(writer);
         }
@@ -448,7 +448,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             try
             { 
                 byte[] array = reader.GetByteArray("Picked Task Index");
-                _pickedIndex = (int)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
+                _pickedIndex = (int)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(array);
             }
             catch 
             { 

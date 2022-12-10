@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Parameters.Actions
           : base(new GH_InstanceDescription("Action Group Parameter", "AG",
                 "Contains the data of any Action Group."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

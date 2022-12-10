@@ -6,10 +6,10 @@
 // System lib
 using System.Collections.Generic;
 // Robot Components Libs
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the interface for different Joint Positions.

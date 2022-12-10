@@ -29,7 +29,7 @@ namespace RobotComponents.Gh.Components.Utilities
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
                 + System.Environment.NewLine + System.Environment.NewLine 
-                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -81,7 +81,7 @@ namespace RobotComponents.Gh.Components.Utilities
             if (!DA.GetData(6, ref D)) { return; }
 
             // Get plane
-            Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(x, y, z, A, B, C, D);
+            Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, A, B, C, D);
 
             // Output
             DA.SetData(0, plane);

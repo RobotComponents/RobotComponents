@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
@@ -44,7 +44,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Robot Tool From Planes", "RobTool",
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Controllers.Components.ControllerUt
           : base("Get Digital Input", "GetDI",
               "Gets the signal of a defined digital input from an ABB IRC5 Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility 2.0-beta")
         {
         }

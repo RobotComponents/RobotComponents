@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Parameters.Actions
           : base(new GH_InstanceDescription("Auto Axis Configurator Parameter", "AACP",
                 "Contains the data of an Set Auto Axis Configuration instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

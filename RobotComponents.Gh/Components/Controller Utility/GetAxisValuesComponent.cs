@@ -12,12 +12,13 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Goos;
 using RobotComponents.Gh.Utils;
 // ABB Libs
 using ABB.Robotics.Controllers.MotionDomain;
+using RapidDomainNS = ABB.Robotics.Controllers.RapidDomain;
 
 namespace RobotComponents.Gh.Components.ControllerUtility
 {
@@ -38,7 +39,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
           : base("Get Axis Values", "GA",
               "Gets the current robot axis values from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }
@@ -87,7 +88,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
             {
                 // Get the ABB joint target of the mechanical unit
                 MechanicalUnit mechanicalUnit = mechanicalUnits[i];
-                ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget = mechanicalUnit.GetPosition();
+                RapidDomainNS.JointTarget jointTarget = mechanicalUnit.GetPosition();
 
                 // For internal axis values
                 if (mechanicalUnit.Type == MechanicalUnitType.TcpRobot)
@@ -175,7 +176,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the internal axis values from. </param>
         /// <returns></returns>
-        private List<double> GetInternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        private List<double> GetInternalAxisValuesAsList(RapidDomainNS.JointTarget jointTarget)
         {
             // Initiate the list with internal axis values
             List<double> result = new List<double>() { };
@@ -206,7 +207,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         /// <param name="jointTarget"> The joint target to get the external axis values from. </param>
         /// <returns></returns>
-        private List<double> GetExternalAxisValuesAsList(ABB.Robotics.Controllers.RapidDomain.JointTarget jointTarget)
+        private List<double> GetExternalAxisValuesAsList(RapidDomainNS.JointTarget jointTarget)
         {
             // Initiate the list with external axis values
             List<double> result = new List<double>() { };

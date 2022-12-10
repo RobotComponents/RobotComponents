@@ -8,8 +8,8 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.Gh.Goos.Actions
 {
@@ -144,12 +144,12 @@ namespace RobotComponents.Gh.Goos.Actions
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
                 if (Value == null) { target = (Q)(object)new GH_Action(); }
-                else { target = (Q)(object)new GH_Action(Value as RobotComponents.Actions.Action); }
+                else { target = (Q)(object)new GH_Action(Value as RobotComponents.ABB.Actions.Action); }
                 return true;
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)Value; }

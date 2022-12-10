@@ -9,7 +9,7 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.Gh.Utils
 {

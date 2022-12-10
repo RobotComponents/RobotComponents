@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Utils;
 
 namespace RobotComponents.Gh.Components.Utilities
@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Components.Utilities
         public GroupActionsComponent()
           : base("Group Actions", "Group",
               "Groups a set of Actions."
-                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }
@@ -57,7 +57,7 @@ namespace RobotComponents.Gh.Components.Utilities
         {
             // Input variables
             string name = "";
-            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
+            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }

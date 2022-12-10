@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
 
@@ -29,7 +29,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
           : base("Set Linear Configuration Control", "SLCC",
               "Defines an instruction to activate or deactivate linear configuration control for all following MoveL instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

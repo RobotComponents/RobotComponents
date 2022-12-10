@@ -11,8 +11,8 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Utils;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Parameters.Actions;
@@ -42,7 +42,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("RAPID Generator", "RG",
               "Generates the RAPID program and system module for the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -83,7 +83,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             // Input variables
             Robot robInfo = new Robot();
-            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
+            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
             string programName = "";
             string systemName = "";
             List<string> customCodeLines = new List<string>() { };

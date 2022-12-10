@@ -536,9 +536,9 @@
       <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
       <Name>RobotComponents.Gh.Goos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+    <ProjectReference Include="..\RobotComponents\RobotComponents.ABB.csproj">
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
-      <Name>RobotComponents</Name>
+      <Name>RobotComponents.ABB</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

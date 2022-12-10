@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Utils;
@@ -41,7 +41,7 @@ namespace RobotComponents.Gh.Components.MultiMove
           : base("Sync Move On", "SMON",
               "Defines a Sync Move On synchronization point for Multi Move programming."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Multi Move")
         {
         }

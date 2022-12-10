@@ -15,9 +15,9 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Move", "M",
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
 
         {

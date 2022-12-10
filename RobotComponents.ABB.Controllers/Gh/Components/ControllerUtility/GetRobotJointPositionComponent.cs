@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // Robot Components Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
 
@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
           : base("Get Robot Joint Position", "GRJP",
               "Gets the current robot joint position from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility 2.0-beta")
         {
         }

@@ -8,11 +8,11 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.Utils;
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Utils;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the RAPID Generator.

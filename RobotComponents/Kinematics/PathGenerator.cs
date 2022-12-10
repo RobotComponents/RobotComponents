@@ -9,11 +9,11 @@ using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.Kinematics
+namespace RobotComponents.ABB.Kinematics
 {
     /// <summary>
     /// Represent the Path Generator.
@@ -123,7 +123,7 @@ namespace RobotComponents.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<Actions.Action> actions, int interpolations)
+        public void Calculate(IList<ABB.Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;

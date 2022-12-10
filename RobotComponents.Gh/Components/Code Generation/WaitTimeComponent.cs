@@ -28,7 +28,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
           : base("Wait for Time", "WT",
               "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }
@@ -63,7 +63,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref duration)) { return; }
 
             // Create the action
-            RobotComponents.Actions.WaitTime timer = new RobotComponents.Actions.WaitTime(duration);
+            RobotComponents.ABB.Actions.WaitTime timer = new RobotComponents.ABB.Actions.WaitTime(duration);
 
             // Output
             DA.SetData(0, timer);

@@ -16,8 +16,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Kinematics;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Kinematics;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -55,7 +55,7 @@ namespace RobotComponents.Gh.Components.Simulation
           : base("Path Generator", "PG",
               "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
             // Create the component label with a message
@@ -119,7 +119,7 @@ namespace RobotComponents.Gh.Components.Simulation
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
+            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;

@@ -9,11 +9,11 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
-using RobotComponents.Enumerations;
-using RobotComponents.Definitions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the Robot Joint Position declaration.

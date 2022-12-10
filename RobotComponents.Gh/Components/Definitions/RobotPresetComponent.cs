@@ -14,8 +14,8 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Enumerations;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 using RobotComponents.Gh.Forms;
@@ -36,7 +36,7 @@ namespace RobotComponents.Gh.Components.Definitions
           : base("Robot Preset", "RobPres",
               "Defines a robot which is needed for Code Generation and Simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
             this.Message = "-";
@@ -187,7 +187,7 @@ namespace RobotComponents.Gh.Components.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
+            byte[] array = RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
             writer.SetByteArray("Robot Preset", array);
             return base.Write(writer);
         }
@@ -200,7 +200,7 @@ namespace RobotComponents.Gh.Components.Definitions
         public override bool Read(GH_IReader reader)
         {
             byte[] array = reader.GetByteArray("Robot Preset");
-            _robotPreset = (RobotPreset)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
+            _robotPreset = (RobotPreset)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(array);
             return base.Read(reader);
         }
         #endregion

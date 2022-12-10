@@ -8,8 +8,8 @@
     <ProjectGuid>{496BA2CE-D067-42B3-BD7F-D1BB429A4987}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RobotComponents</RootNamespace>
-    <AssemblyName>RobotComponents</AssemblyName>
+    <RootNamespace>RobotComponents.ABB</RootNamespace>
+    <AssemblyName>RobotComponents.ABB</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -1136,6 +1136,6 @@
     </StartArguments>
     <StartAction>Program</StartAction>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\RobotComponents.xml</DocumentationFile>
+    <DocumentationFile>bin\RobotComponents.ABB.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

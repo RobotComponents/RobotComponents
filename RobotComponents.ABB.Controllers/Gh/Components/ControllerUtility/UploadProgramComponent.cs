@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
           : base("Upload Program", "UP",
               "Uploads RAPID modules directly to a real or virtual robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility 2.0-beta")
         {
             this.Message = _taskName;

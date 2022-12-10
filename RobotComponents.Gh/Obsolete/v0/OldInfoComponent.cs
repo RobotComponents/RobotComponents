@@ -66,7 +66,7 @@ namespace RobotComponents.Gh.Components.Obsolete
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

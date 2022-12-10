@@ -10,8 +10,8 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.Gh.Goos.Actions
 {
@@ -144,7 +144,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
@@ -212,7 +212,7 @@ namespace RobotComponents.Gh.Goos.Actions
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.ABB.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is AutoAxisConfig action)
                 {

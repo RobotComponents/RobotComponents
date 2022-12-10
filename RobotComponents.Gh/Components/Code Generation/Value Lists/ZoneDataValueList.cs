@@ -10,7 +10,7 @@ using System.Drawing;
 using Grasshopper;
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Enumerations;
 using RobotComponents.Gh.Utils;
 
 namespace RobotComponents.Gh.Components.CodeGeneration.ValueLists
@@ -37,7 +37,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration.ValueLists
           : base("Predefined Zone Data", "PZD",
               "Defines a value list with predefined zone data"
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

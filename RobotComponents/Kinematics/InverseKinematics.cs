@@ -11,10 +11,10 @@ using System.Linq;
 using Rhino.Geometry;
 using Rhino.Geometry.Intersect;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
 
-namespace RobotComponents.Kinematics
+namespace RobotComponents.ABB.Kinematics
 {
     /// <summary>
     /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.

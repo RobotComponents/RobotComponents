@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Parameters.Controllers
           : base(new GH_InstanceDescription("Controller Parameter", "CP",
                 "Contains the data of a Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

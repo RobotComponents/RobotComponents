@@ -28,7 +28,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
           : base(new GH_InstanceDescription("Robot Tool", "RT",
                 "Contains the data of a Robot Tool."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

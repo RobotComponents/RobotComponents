@@ -10,7 +10,7 @@ using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 
 // This component is OBSOLETE!
@@ -34,7 +34,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("External Joint Position", "EJ",
               "Defines an External Joint Position for a Robot Target or Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
             // Create the component label with a message

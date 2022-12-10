@@ -11,7 +11,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 // ABB Libs
 using ControllersNS = ABB.Robotics.Controllers;
 using RapidDomainNS = ABB.Robotics.Controllers.RapidDomain;
@@ -234,7 +234,7 @@ namespace RobotComponents.ABB.Controllers
                 double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
                 double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
 
-                Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+                Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
                 result.Add(name, plane);
             }
@@ -257,7 +257,7 @@ namespace RobotComponents.ABB.Controllers
                     double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
                     double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
 
-                    Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+                    Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
                     result.Add(name, plane);
                 }
@@ -278,7 +278,7 @@ namespace RobotComponents.ABB.Controllers
             {
                 RapidDomainNS.RobTarget robTarget = _robots[i].GetPosition(coordinateSystem);
                     
-                Plane plane = RobotComponents.Utils.HelperMethods.QuaternionToPlane(
+                Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(
                     robTarget.Trans.X, robTarget.Trans.Y, robTarget.Trans.Z,
                     robTarget.Rot.Q1, robTarget.Rot.Q2, robTarget.Rot.Q3, robTarget.Rot.Q4);
 

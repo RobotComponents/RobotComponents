@@ -10,11 +10,11 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents a predefined or user definied Zone Data declaration.

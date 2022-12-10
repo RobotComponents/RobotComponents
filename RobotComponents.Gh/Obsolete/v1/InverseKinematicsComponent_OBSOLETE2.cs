@@ -16,12 +16,12 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Kinematics;
+using RobotComponents.ABB.Kinematics;
 using RobotComponents.Gh.Utils;
 
 namespace RobotComponents.Gh.Components.Obsolete
@@ -51,7 +51,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Movement."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
             // Create the component label with a message
@@ -251,7 +251,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             writer.SetBoolean("Set Hide Mesh", _hideMesh);
             writer.SetBoolean("Closest Robot Joint Position", _closestRobotJointPosition);
-            writer.SetByteArray("Previous Robot Joint Position", RobotComponents.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPosition));
+            writer.SetByteArray("Previous Robot Joint Position", RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPosition));
             return base.Write(writer);
         }
 
@@ -264,7 +264,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         {
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
-            _previousRobotJointPosition = (RobotJointPosition)RobotComponents.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Position"));
+            _previousRobotJointPosition = (RobotJointPosition)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Position"));
             return base.Read(reader);
         }
 

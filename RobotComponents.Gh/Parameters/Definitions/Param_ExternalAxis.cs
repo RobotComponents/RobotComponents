@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Parameters.Definitions
           : base(new GH_InstanceDescription("External Axis", "EA",
                 "Contains the data of any External Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

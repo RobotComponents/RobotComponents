@@ -10,9 +10,9 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Utils;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
@@ -33,7 +33,7 @@ namespace RobotComponents.Gh.Components.Utilities
           : base("Robot Tool Calibration", "ToolCal",
               "EXPERIMENTAL: Calculates the robot tool TCP from given joint positions."
             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

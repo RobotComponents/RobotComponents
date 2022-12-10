@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.Utils;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Definitions.Presets
+namespace RobotComponents.ABB.Definitions.Presets
 {
     /// <summary>
     /// Represents a collection of methods to get the IRB4600-X/2.05 Robot instance.

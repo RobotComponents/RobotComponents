@@ -8,9 +8,9 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Utils;
 using RobotComponents.Gh.Goos.Definitions;
 
 namespace RobotComponents.Gh.Goos.Actions

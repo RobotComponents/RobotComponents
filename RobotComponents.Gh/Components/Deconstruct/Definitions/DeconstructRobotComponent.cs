@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
@@ -35,7 +35,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
           : base("Deconstruct Robot", "DeRob", 
               "Deconstructs a Robot component into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

@@ -12,11 +12,11 @@ using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Enumerations;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Definitions
+namespace RobotComponents.ABB.Definitions
 {
     /// <summary>
     /// Represents an External Rotational Axis.

@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 // Rhino Libs
 using Rhino.Geometry;
 
-namespace RobotComponents.Utils
+namespace RobotComponents.ABB.Utils
 {
     /// <summary>
     /// Represents general helper methods

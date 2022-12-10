@@ -14,9 +14,9 @@ using Rhino.Geometry;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Kinematics;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Kinematics;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Parameters.Actions;
 
@@ -41,7 +41,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Path Generator", "PG",
               "EXPERIMENTAL: Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Simulation")
         {
         }
@@ -107,7 +107,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            List<RobotComponents.Actions.Action> actions = new List<RobotComponents.Actions.Action>();
+            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;

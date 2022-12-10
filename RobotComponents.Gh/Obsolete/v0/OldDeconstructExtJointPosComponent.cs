@@ -8,7 +8,7 @@ using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 
 // This component is OBSOLETE!
@@ -30,7 +30,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Deconstruct External Joint Position", "DeConExtJoint",
               "Deconstructs an External Joint Position Component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components : v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

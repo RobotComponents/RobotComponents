@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Robot Components Libs
-using RobotComponents.Enumerations;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.Gh.Forms
 {

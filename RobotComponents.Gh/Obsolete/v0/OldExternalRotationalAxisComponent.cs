@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.13.000
@@ -35,7 +35,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("External Rotational Axis", "External Rotational Axis",
               "Defines an External Rotational Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

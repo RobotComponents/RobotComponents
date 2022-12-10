@@ -11,11 +11,11 @@ using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the Robot Target declaration. 

@@ -17,7 +17,7 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 using RobotComponents.Gh.Goos.Actions;
 using RobotComponents.Gh.Parameters.Actions;
 using RobotComponents.Gh.Utils;
@@ -51,7 +51,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Robot Target", "RT",
               "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
             // Create the component label with a message

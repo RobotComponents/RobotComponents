@@ -40,7 +40,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
           : base("Set Digital Output", "SetDO",
               "Changes the state of a defined digital output from an ABB IRC5 robot controller in Realtime."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Controller Utility")
         {
         }

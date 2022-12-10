@@ -6,9 +6,9 @@
 // System Libs
 using System;
 // RobotComponents Libs
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents a base class for all robot actions (declarations and instructions).

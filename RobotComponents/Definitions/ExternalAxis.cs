@@ -9,10 +9,10 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.Definitions
+namespace RobotComponents.ABB.Definitions
 {
     /// <summary>
     /// Represents an abstract class for External Axes. 

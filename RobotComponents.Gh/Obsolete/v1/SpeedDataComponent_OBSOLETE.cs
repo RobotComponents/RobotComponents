@@ -43,7 +43,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Speed Data", "SD", 
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

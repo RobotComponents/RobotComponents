@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.Utils;
+using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Definitions.Presets
+namespace RobotComponents.ABB.Definitions.Presets
 {
     /// <summary>
     /// Represents a collection of methods to get the CRB15000-5/0.95 Robot instance.

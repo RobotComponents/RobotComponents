@@ -11,8 +11,8 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponets Libs
-using RobotComponents.Definitions;
-using RobotComponents.Utils;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.Gh.Goos.Definitions
 {

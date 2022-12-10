@@ -25,7 +25,7 @@ namespace RobotComponents.Gh.Parameters.Actions
           : base(new GH_InstanceDescription("Code Line Parameter", "CLP",
                 "Contains the data of a Code Line."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
                 "RobotComponents", "Parameters"))
         {
         }

@@ -12,8 +12,8 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Definitions;
-using RobotComponents.Definitions.Presets;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Definitions.Presets;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
@@ -31,7 +31,7 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
           : base("ABB IRB6700-245/3.0", "IRB6700",
               "An ABB IRB6700-245/3.0 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Definitions")
         {
         }

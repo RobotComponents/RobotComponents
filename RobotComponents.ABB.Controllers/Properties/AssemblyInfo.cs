@@ -26,5 +26,5 @@ using System.Runtime.InteropServices;
 // 0.x.x ---> MAJOR version when you make incompatible API changes
 // x.0.x ---> MINOR version when you add functionality in a backwards compatible manner
 // x.x.0 ---> PATCH version when you make backwards compatible bug fixes
-[assembly: AssemblyVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]
-[assembly: AssemblyFileVersion(RobotComponents.Utils.VersionNumbering.CurrentVersion)]
+[assembly: AssemblyVersion(RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion)]
+[assembly: AssemblyFileVersion(RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion)]

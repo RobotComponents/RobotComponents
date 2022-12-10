@@ -8,9 +8,9 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.Actions;
+using RobotComponents.ABB.Actions;
 
-namespace RobotComponents.Definitions
+namespace RobotComponents.ABB.Definitions
 {
     /// <summary>
     /// Represent the interface of mechanical units

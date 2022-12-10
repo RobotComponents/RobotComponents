@@ -10,10 +10,10 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Actions;
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Definitions;
 
-namespace RobotComponents.Utils
+namespace RobotComponents.ABB.Utils
 {
 	/// <summary>
 	/// Represents the Robot Tool Calibration class.

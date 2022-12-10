@@ -42,7 +42,7 @@ namespace RobotComponents.Gh.Components.Obsolete
           : base("Joint Target", "JT",
               "Defines a Joint Target for a Move instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Code Generation")
         {
         }

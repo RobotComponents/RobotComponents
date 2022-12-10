@@ -4,10 +4,10 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // Robot Component Libs
-using RobotComponents.Definitions;
-using RobotComponents.Enumerations;
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.Actions
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the interface for different target types.

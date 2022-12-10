@@ -9,7 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Definitions;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.Gh.Parameters.Definitions;
 using RobotComponents.Gh.Utils;
 
@@ -27,7 +27,7 @@ namespace RobotComponents.Gh.Components.Deconstruct.Definitions
           : base("Deconstruct External Rotational Axis", "DeConERA", 
               "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
               "RobotComponents", "Deconstruct")
         {
         }

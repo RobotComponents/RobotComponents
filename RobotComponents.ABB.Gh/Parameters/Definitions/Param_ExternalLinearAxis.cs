@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
                 "Contains the data of an External Linear Axis."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-                "RobotComponents", "Parameters"))
+                "Robot Components", "Parameters"))
         {
         }
 

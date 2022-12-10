@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
               "Deconstructs a Move component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Deconstruct")
+              "Robot Components", "Deconstruct")
         {
         }
 

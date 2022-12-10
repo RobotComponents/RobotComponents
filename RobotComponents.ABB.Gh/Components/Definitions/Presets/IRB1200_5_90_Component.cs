@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
               "An ABB IRB 1200-5/0.9 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Definitions")
+              "Robot Components", "Definitions")
         {
         }
 

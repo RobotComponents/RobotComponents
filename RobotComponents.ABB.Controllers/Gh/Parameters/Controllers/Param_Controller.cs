@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Parameters.Controllers
                 "Contains the data of a Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-                "RobotComponents", "Parameters"))
+                "Robot Components", "Parameters"))
         {
         }
 

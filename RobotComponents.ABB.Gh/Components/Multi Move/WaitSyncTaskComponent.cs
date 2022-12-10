@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
               "Defines a Wait Sync Task synchronization point for Multi Move programming."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Multi Move")
+              "Robot Components", "Multi Move")
         {
         }
 

@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
               "Deconstructs a Zone Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Deconstruct")
+              "Robot Components", "Deconstruct")
         {
         }
 

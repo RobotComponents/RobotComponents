@@ -38,7 +38,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
               "Defines a value list with predefined zone data"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "Robot Components", "Code Generation")
         {
         }
 

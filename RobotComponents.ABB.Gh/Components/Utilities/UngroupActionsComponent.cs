@@ -27,7 +27,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
           : base("Ungroup Actions", "Ungroup",
               "Ungroup a set of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Utility")
+              "Robot Components", "Utility")
         {
         }
 

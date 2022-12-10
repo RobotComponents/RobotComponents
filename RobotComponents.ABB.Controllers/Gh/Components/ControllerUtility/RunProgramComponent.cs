@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
               "Starts and stops RAPID programs directly on a real or virtual controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Controller Utility 2.0-beta")
+              "Robot Components", "Controller Utility 2.0-beta")
         {
         }
 

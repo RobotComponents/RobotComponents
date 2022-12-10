@@ -9,9 +9,9 @@ namespace RobotComponents.ABB.Gh
     {
         public override Grasshopper.Kernel.GH_LoadingInstruction PriorityLoad()
         {
-            Grasshopper.Instances.ComponentServer.AddCategoryIcon("RobotComponents", Properties.Resources.RobotComponents_Icon24);
-            Grasshopper.Instances.ComponentServer.AddCategoryShortName("RobotComponents", "RC");
-            Grasshopper.Instances.ComponentServer.AddCategorySymbolName("RobotComponents", 'R');
+            Grasshopper.Instances.ComponentServer.AddCategoryIcon("Robot Components", Properties.Resources.RobotComponents_Icon24);
+            Grasshopper.Instances.ComponentServer.AddCategoryShortName("Robot Components", "RC");
+            Grasshopper.Instances.ComponentServer.AddCategorySymbolName("Robot Components", 'R');
             return Grasshopper.Kernel.GH_LoadingInstruction.Proceed;
         }
     }

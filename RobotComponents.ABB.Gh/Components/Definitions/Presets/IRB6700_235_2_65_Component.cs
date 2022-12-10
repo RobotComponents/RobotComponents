@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
               "An ABB IRB6700-235/2.65 Robot preset component."
               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Definitions")
+              "Robot Components", "Definitions")
         {
         }
 

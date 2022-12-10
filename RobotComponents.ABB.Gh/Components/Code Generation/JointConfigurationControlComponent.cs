@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
               "Defines an instruction to activate or deactivate joint configuration control for all following MoveJ instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "Robot Components", "Code Generation")
         {
         }
 

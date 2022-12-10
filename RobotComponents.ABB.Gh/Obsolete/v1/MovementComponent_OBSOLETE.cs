@@ -44,7 +44,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "Robot Components", "Code Generation")
 
         {
             // Create the component label with a message

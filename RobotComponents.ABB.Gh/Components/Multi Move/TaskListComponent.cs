@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
               "Defines a collection of RAPID program tasks for a Task List declaration for Multi Move programming."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Multi Move")
+              "Robot Components", "Multi Move")
         {
         }
 

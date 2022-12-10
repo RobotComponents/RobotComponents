@@ -43,7 +43,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
               "Defines a zone data declaration for robot movements in RAPID program code generation."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "Robot Components", "Code Generation")
         {
         }
 

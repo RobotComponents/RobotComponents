@@ -52,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
               "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Code Generation")
+              "Robot Components", "Code Generation")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";

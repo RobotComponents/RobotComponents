@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "RobotComponents", "Definitions")
+              "Robot Components", "Definitions")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";

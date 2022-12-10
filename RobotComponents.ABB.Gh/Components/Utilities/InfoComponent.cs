@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public InfoComponent()
           : base("Info", "I",
               "Gives info about the plugin.",
-              "RobotComponents", "Utility")
+              "Robot Components", "Utility")
         {
         }
 

@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
               "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Deconstruct")
+              "Robot Components ABB", "Deconstruct")
         {
         }
 

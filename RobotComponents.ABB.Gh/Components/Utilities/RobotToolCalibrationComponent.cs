@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
               "EXPERIMENTAL: Calculates the robot tool TCP from given joint positions."
             + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Utility")
+              "Robot Components ABB", "Utility")
         {
         }
 

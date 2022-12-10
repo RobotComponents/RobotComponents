@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
               "Computes the axis values for a defined ABB robot based on an Action: Target."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Simulation")
+              "Robot Components ABB", "Simulation")
         {
         }
 

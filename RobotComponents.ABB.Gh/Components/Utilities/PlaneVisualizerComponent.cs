@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
               "Visualizes the orientation vectors of a plane."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Utility")
+              "Robot Components ABB", "Utility")
         {
         }
 

@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
                 "Contains the data of a Override Robot Tool instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-                "Robot Components", "Parameters"))
+                "Robot Components ABB", "Parameters"))
         {
         }
 

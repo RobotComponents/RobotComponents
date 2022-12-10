@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
               "Changes the state of a defined digital input from an IRC5 robot controller in realtime."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Controller Utility 2.0-beta")
+              "Robot Components ABB", "Controller Utility 2.0-beta")
         {
         }
 

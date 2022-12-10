@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
               "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB IRC5 robot controller."
               + System.Environment.NewLine + System.Environment.NewLine +
               "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Controller Utility")
+              "Robot Components ABB", "Controller Utility")
         {
             this.Message = "-";
         }

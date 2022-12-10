@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
               "Defines a robot which is needed for Code Generation and Simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Definitions")
+              "Robot Components ABB", "Definitions")
         {
         }
 

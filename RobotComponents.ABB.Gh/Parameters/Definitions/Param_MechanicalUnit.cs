@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
                 "Contains the data of any Mechanical Unit."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-                "Robot Components", "Parameters"))
+                "Robot Components ABB", "Parameters"))
         {
         }
 

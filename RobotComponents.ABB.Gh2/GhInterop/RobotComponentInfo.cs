@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Gh2.GhInterop
         public static readonly Guid PluginId = new Guid ("{60765982-3CAC-4DBC-B55E-E9E68E70381F}");
         public PluginInfo()
             : base(PluginId, 
-                  new Nomen("Robot Components", "Intuitive robot programming."), 
+                  new Nomen("Robot Components ABB", "Intuitive robot programming."), 
                   typeof(PluginInfo).Assembly.GetName().Version)
         {
             _icon = null;

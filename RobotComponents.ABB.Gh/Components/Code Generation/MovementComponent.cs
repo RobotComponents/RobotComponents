@@ -46,7 +46,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Code Generation")
+              "Robot Components ABB", "Code Generation")
 
         {
             // Create the component label with a message

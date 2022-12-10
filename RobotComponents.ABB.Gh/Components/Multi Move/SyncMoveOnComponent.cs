@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
               "Defines a Sync Move On synchronization point for Multi Move programming."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Multi Move")
+              "Robot Components ABB", "Multi Move")
         {
         }
 

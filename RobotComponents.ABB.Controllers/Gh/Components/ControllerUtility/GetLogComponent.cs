@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
               "Connects to a real or virtual ABB IRC5 robot controller and extracts the log from it."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
-              "Robot Components", "Controller Utility 2.0-beta")
+              "Robot Components ABB", "Controller Utility 2.0-beta")
         {
         }
 

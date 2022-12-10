@@ -117,41 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="GetAxisValues_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetAxisValues_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GetController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetController_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GetDigitalInput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetDigitalInput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GetDigitalOutput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetDigitalOutput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="GetPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Log_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Log_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RAPID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RAPID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ReadDatabase_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ReadDatabase_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="RunProgram_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\RunProgram_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SetDigitalInput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SetDigitalInput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SetDigitalOutput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SetDigitalOutput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Upload_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Upload_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
 </root>

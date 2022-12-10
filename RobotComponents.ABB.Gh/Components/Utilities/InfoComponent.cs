@@ -90,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion;
+                + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion;
 
             // Assign the output parameters
             DA.SetData(0, text);

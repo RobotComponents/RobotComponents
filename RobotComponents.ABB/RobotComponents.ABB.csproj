@@ -153,7 +153,6 @@
     <Compile Include="Actions\OverrideRobotTool.cs" />
     <Compile Include="Enumerations\Enumerations.cs" />
     <Compile Include="Utils\HelperMethods.cs" />
-    <Compile Include="Utils\VersionNumbering.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

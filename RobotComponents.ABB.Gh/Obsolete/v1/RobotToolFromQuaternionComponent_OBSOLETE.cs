@@ -41,7 +41,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
           : base("Robot Tool From Quaternion Data", "RobTool",
               "Defines a robot tool based on TCP coorindate and quarternion values."
             + System.Environment.NewLine + System.Environment.NewLine +
-              "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+              "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
         {
         }

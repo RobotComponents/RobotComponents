@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
           : base("Robot Target", "RT",
               "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
             // Create the component label with a message

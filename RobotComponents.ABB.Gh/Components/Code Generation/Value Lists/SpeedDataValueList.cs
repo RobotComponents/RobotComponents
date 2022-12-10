@@ -37,7 +37,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
           : base("Predefined Speed Data", "PSD",
               "Defines a value list with predefined speed data"
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

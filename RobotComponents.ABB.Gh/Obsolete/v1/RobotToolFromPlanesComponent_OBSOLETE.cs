@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
           : base("Robot Tool From Planes", "RobTool",
               "Generates a robot tool based on attachment and effector planes."
             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
         {
             // Create the component label with a message

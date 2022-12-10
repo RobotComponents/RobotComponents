@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
           : base("ABB IRB6650S-200/3.0", "IRB6650S",
               "An ABB IRB6650S-200/3.0 Robot preset component."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
         {
         }

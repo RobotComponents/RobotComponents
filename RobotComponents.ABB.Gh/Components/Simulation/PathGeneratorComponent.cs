@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
           : base("Path Generator", "PG",
               "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Simulation")
         {
             // Create the component label with a message

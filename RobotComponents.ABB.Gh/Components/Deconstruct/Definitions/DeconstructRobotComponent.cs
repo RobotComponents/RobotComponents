@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
           : base("Deconstruct Robot", "DeRob", 
               "Deconstructs a Robot component into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Deconstruct")
         {
         }

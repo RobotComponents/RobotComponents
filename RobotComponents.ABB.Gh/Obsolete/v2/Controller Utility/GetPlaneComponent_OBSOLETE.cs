@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
           : base("Get Plane", "GP", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
               "Gets the position of a mechanical unit from the defined ABB IRC5 robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
         }

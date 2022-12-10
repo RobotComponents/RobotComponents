@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
           : base("Wait for Analog Input", "WAI",
               "Defines an instruction to wait for the signal of a Analog Input from the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

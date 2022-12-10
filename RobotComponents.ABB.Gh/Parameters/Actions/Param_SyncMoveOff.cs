@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
           : base(new GH_InstanceDescription("Sync Move Off", "SMOn",
                 "Contains the data of a Sync Move Off synchronization point."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }

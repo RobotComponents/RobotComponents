@@ -27,7 +27,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public GroupActionsComponent()
           : base("Group Actions", "Group",
               "Groups a set of Actions."
-                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Utility")
         {
         }

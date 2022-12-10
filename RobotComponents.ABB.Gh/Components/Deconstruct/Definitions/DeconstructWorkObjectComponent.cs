@@ -27,7 +27,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
           : base("Deconstruct Work Object", "DeConWobj", 
               "Deconstructs a Work Object into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Deconstruct")
         {
         }

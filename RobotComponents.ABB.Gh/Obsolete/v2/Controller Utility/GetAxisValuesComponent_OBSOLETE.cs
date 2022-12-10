@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
           : base("Get Axis Values", "GA",
               "Gets the current robot axis values from an ABB IRC5 robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
         }

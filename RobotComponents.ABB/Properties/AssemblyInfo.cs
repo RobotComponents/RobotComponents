@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RobotComponents")]
+[assembly: AssemblyTitle("RobotComponents.ABB")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -19,11 +19,11 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("496ba2ce-d067-42b3-bd7f-d1bb429a4987")] // This will also be the Guid of the Rhino plug-in
+[assembly: Guid("496ba2ce-d067-42b3-bd7f-d1bb429a4987")] 
 
 // Version information for an assembly
 // 0.x.x ---> MAJOR version when you make incompatible API changes
 // x.0.x ---> MINOR version when you add functionality in a backwards compatible manner
 // x.x.0 ---> PATCH version when you make backwards compatible bug fixes
-[assembly: AssemblyVersion(RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion)]
-[assembly: AssemblyFileVersion(RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion)]
+[assembly: AssemblyVersion(RobotComponents.VersionNumbering.CurrentVersion)]
+[assembly: AssemblyFileVersion(RobotComponents.VersionNumbering.CurrentVersion)]

@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
           : base("Set Digital Output", "SDO",
               "Defines an instruction to change the state of a digital output of the robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

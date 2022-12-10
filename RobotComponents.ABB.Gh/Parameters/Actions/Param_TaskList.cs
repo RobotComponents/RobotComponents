@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
           : base(new GH_InstanceDescription("Task List", "TL",
                 "Contains the data of a Task List declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }

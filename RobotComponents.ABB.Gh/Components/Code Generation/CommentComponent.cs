@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
           : base("Comment", "C",
               "Defines a single comment line."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

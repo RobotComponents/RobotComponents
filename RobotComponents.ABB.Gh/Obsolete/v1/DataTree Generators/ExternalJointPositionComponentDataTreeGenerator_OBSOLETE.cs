@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
           : base("External Joint Position", "RJ",
               "Defines a External Joint Position for a Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

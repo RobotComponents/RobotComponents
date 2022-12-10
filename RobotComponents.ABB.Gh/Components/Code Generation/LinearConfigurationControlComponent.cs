@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
           : base("Set Linear Configuration Control", "SLCC",
               "Defines an instruction to activate or deactivate linear configuration control for all following MoveL instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
         {
         }

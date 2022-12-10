@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
           : base("Set Analog Output", "SetAO",
               "Changes the state of a defined analog output from an IRC5 robot controller in realtime."
                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility 2.0-beta")
         {
         }

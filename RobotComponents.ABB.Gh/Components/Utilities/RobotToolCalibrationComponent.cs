@@ -33,7 +33,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
           : base("Robot Tool Calibration", "ToolCal",
               "EXPERIMENTAL: Calculates the robot tool TCP from given joint positions."
             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.ABB.Utils.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Utility")
         {
         }

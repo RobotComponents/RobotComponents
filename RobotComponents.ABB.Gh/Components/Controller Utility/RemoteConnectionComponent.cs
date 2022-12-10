@@ -433,7 +433,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            byte[] array = RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_pickedIndex);
+            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_pickedIndex);
             writer.SetByteArray("Picked Task Index", array);
             return base.Write(writer);
         }
@@ -448,7 +448,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             try
             { 
                 byte[] array = reader.GetByteArray("Picked Task Index");
-                _pickedIndex = (int)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(array);
+                _pickedIndex = (int)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
             }
             catch 
             { 

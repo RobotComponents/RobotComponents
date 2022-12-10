@@ -96,6 +96,10 @@
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
       <Name>RobotComponents.ABB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+      <Project>{f7ea2eb3-c653-4839-8843-f82c828a4b21}</Project>
+      <Name>RobotComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,7 +15,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Utils;
+using RobotComponents.Utils;
 using RobotComponents.ABB.Gh.Goos.Definitions;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions

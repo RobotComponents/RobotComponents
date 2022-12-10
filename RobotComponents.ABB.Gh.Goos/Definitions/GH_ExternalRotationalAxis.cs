@@ -12,7 +12,7 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponets Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Utils;
+using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Definitions
 {

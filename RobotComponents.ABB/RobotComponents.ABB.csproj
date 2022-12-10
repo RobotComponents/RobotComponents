@@ -1107,6 +1107,12 @@
   <ItemGroup>
     <None Include="Resources\IRB1010_1_5_0_37_link_2.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+      <Project>{f7ea2eb3-c653-4839-8843-f82c828a4b21}</Project>
+      <Name>RobotComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

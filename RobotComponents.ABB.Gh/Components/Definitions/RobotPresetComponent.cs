@@ -187,7 +187,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            byte[] array = RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
+            byte[] array = RobotComponents.Utils.HelperMethods.ObjectToByteArray(_robotPreset);
             writer.SetByteArray("Robot Preset", array);
             return base.Write(writer);
         }
@@ -200,7 +200,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         public override bool Read(GH_IReader reader)
         {
             byte[] array = reader.GetByteArray("Robot Preset");
-            _robotPreset = (RobotPreset)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(array);
+            _robotPreset = (RobotPreset)RobotComponents.Utils.HelperMethods.ByteArrayToObject(array);
             return base.Read(reader);
         }
         #endregion

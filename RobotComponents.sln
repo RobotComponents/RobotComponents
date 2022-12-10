@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Gh2", "RobotComponents.ABB.Gh2\RobotComponents.ABB.Gh2.csproj", "{73D440D1-ED0E-465D-B2F6-2DAFC8DAD05E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents", "RobotComponents\RobotComponents.csproj", "{F7EA2EB3-C653-4839-8843-F82C828A4B21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,16 @@ Global
 		{73D440D1-ED0E-465D-B2F6-2DAFC8DAD05E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73D440D1-ED0E-465D-B2F6-2DAFC8DAD05E}.Release64|Any CPU.ActiveCfg = Release|Any CPU
 		{73D440D1-ED0E-465D-B2F6-2DAFC8DAD05E}.Release64|Any CPU.Build.0 = Release|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug32|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug32|Any CPU.Build.0 = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug64|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Debug64|Any CPU.Build.0 = Debug|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Release64|Any CPU.ActiveCfg = Release|Any CPU
+		{F7EA2EB3-C653-4839-8843-F82C828A4B21}.Release64|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

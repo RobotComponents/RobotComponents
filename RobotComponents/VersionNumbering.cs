@@ -3,7 +3,7 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponents.ABB.Utils
+namespace RobotComponents
 {
     /// <summary>
     /// Stores the current version number of Robot Components
@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Utils
         /// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
         /// x.x.0 ---> PATCH version when you make backwards compatible bug fixes
         /// </summary>
-        public const string CurrentVersion = RobotComponents.VersionNumbering.CurrentVersion;
+        public const string CurrentVersion = "2.0.0";
 
         /// <summary>
         /// Gets the current version of the Robot Components plugin as an int. 
@@ -25,6 +25,6 @@ namespace RobotComponents.ABB.Utils
         /// For internal use only. Not recommended to use. 
         /// Used logic: major*10^6 + minor*10^3 + patch.
         /// </summary>
-        public const int CurrentVersionAsInt = RobotComponents.VersionNumbering.CurrentVersionAsInt; 
+        public const int CurrentVersionAsInt = 2 * 1000000 + 0 * 1000 + 0;
     }
 }

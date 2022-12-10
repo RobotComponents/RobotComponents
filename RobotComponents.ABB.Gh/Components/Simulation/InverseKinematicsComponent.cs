@@ -274,7 +274,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             writer.SetBoolean("Set Hide Mesh", _hideMesh);
             writer.SetBoolean("Closest Robot Joint Position", _closestRobotJointPosition);
-            writer.SetByteArray("Previous Robot Joint Positions", RobotComponents.ABB.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPositions));
+            writer.SetByteArray("Previous Robot Joint Positions", RobotComponents.Utils.HelperMethods.ObjectToByteArray(_previousRobotJointPositions));
             return base.Write(writer);
         }
 
@@ -288,7 +288,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
             _previousRobotJointPositions.Clear();
-            _previousRobotJointPositions.AddRange((List<RobotJointPosition>)RobotComponents.ABB.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Positions")));
+            _previousRobotJointPositions.AddRange((List<RobotJointPosition>)RobotComponents.Utils.HelperMethods.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Positions")));
             return base.Read(reader);
         }
 

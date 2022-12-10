@@ -5,8 +5,6 @@
 
 // System Libs
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 // Rhino Libs
 using Rhino.Geometry;
 
@@ -17,41 +15,6 @@ namespace RobotComponents.ABB.Utils
     /// </summary>
     public static class HelperMethods
     {
-        /// <summary>
-        /// Serializes a common object to a byte array. 
-        /// Typically used for serializing robot meshes and data inside Goo classes.
-        /// </summary>
-        /// <param name="obj"> The common object. </param>
-        /// <returns> The byte array. </returns>
-        public static byte[] ObjectToByteArray(Object obj)
-        {
-            if (obj == null) { return null; }
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, obj);
-                return stream.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Deserializes a byte array to a common object. 
-        /// Typically used for deserializing robot meshes and data inside Goo classes.
-        /// </summary>
-        /// <param name="data"> The byte array. </param>
-        /// <returns> The common object. </returns>
-        public static object ByteArrayToObject(byte[] data)
-        {
-            using (MemoryStream stream = new MemoryStream(data))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                stream.Write(data, 0, data.Length);
-                stream.Seek(0, SeekOrigin.Begin);
-                return formatter.Deserialize(stream);
-            }
-        }
-
         /// <summary>
         /// Flips a plane normal to the oposite direction by setting it's x-axis negative.
         /// </summary>

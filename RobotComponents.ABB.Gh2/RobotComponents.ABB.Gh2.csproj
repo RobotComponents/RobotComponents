@@ -56,7 +56,7 @@
     <Compile Include="GhInterop\RobotComponentInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RobotComponents\RobotComponents.ABB.csproj">
+    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
       <Name>RobotComponents.ABB</Name>
     </ProjectReference>

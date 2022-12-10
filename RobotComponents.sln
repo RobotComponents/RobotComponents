@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB", "RobotComponents\RobotComponents.ABB.csproj", "{496BA2CE-D067-42B3-BD7F-D1BB429A4987}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB", "RobotComponents.ABB\RobotComponents.ABB.csproj", "{496BA2CE-D067-42B3-BD7F-D1BB429A4987}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E84B28BC-8FC5-4D16-917E-4733DA520162}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Gh", "RobotComponents.Gh\RobotComponents.ABB.Gh.csproj", "{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Gh", "RobotComponents.ABB.Gh\RobotComponents.ABB.Gh.csproj", "{2F1A80CD-231A-4479-82BC-3B1A1382A7AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Gh.Goos", "RobotComponents.Gh.Goos\RobotComponents.ABB.Gh.Goos.csproj", "{4853E4FA-0246-486C-9F1A-0620896690C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Gh.Goos", "RobotComponents.ABB.Gh.Goos\RobotComponents.ABB.Gh.Goos.csproj", "{4853E4FA-0246-486C-9F1A-0620896690C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotComponents.ABB.Controllers", "RobotComponents.ABB.Controllers\RobotComponents.ABB.Controllers.csproj", "{4D8169CC-20CF-4597-B304-331EED09278B}"
 EndProject

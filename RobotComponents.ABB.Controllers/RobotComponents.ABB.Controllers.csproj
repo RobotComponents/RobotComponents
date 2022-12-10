@@ -115,12 +115,6 @@
     <Compile Include="Signal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RobotComponents\RobotComponents.ABB.csproj">
-      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
-      <Name>RobotComponents.ABB</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Forms\PickPathForm.resx">
       <DependentUpon>PickPathForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -173,6 +167,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ReadDatabase_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
+      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
+      <Name>RobotComponents.ABB</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

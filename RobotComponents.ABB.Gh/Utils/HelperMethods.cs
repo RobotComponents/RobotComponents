@@ -27,41 +27,6 @@ namespace RobotComponents.ABB.Gh.Utils
 
         #region methods
         /// <summary>
-        /// Creates a datatree with the same structure as the one use for the input.
-        /// It data tree with uniques names based on the given name and the path of the item. 
-        /// </summary>
-        /// <param name="name"> The name that should be used. </param>
-        /// <param name="data"> The tree structure. </param>
-        /// <returns> The datatree filled with unique names. </returns>
-        [Obsolete("This method is OBSOLETE and will be removed in the future.", false)]
-        public static GH_Structure<GH_String> DataTreeNaming(string name, GH_Structure<IGH_Goo> data)
-        {
-            // Output
-            GH_Structure<GH_String> names = new GH_Structure<GH_String>();
-
-            // Paths
-            var paths = data.Paths;
-
-            // Make the output datatree with names
-            for (int i = 0; i < data.Branches.Count; i++)
-            {
-                var branches = data.Branches[i];
-                GH_Path iPath = paths[i];
-                string pathString = iPath.ToString();
-                string newPath = pathString.Replace("{", "").Replace(";", "_").Replace("}", "");
-
-                for (int j = 0; j < branches.Count; j++)
-                {
-                    string myName = name + "_" + newPath + "_" + j;
-                    GH_String converted = new GH_String(myName);
-                    names.Append(converted, iPath);
-                }
-            }
-
-            return names;
-        }
-
-        /// <summary>
         /// Method to check if a string is longer then 32 characters. 
         /// </summary>
         /// <param name="variable"> The string to check for its length. </param>

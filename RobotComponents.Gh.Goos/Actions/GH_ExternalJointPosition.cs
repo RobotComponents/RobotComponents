@@ -13,7 +13,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// External Joint Position Goo wrapper class, makes sure the External Joint Position class can be used in Grasshopper.

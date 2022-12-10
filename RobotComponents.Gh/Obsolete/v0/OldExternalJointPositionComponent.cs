@@ -11,13 +11,13 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.18.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Ext Joint Position component. An inherent from the GH_Component Class.

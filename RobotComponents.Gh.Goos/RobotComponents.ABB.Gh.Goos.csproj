@@ -8,8 +8,8 @@
     <ProjectGuid>{4853E4FA-0246-486C-9F1A-0620896690C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RobotComponents.Gh.Goos</RootNamespace>
-    <AssemblyName>RobotComponents.Gh.Goos</AssemblyName>
+    <RootNamespace>RobotComponents.ABB.Gh.Goos</RootNamespace>
+    <AssemblyName>RobotComponents.ABB.Gh.Goos</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>

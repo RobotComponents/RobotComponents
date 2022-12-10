@@ -18,15 +18,15 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.18.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
@@ -605,7 +605,7 @@ namespace RobotComponents.Gh.Components.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.Gh.Properties.Resources.Movement_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>

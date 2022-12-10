@@ -15,7 +15,7 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
 
-namespace RobotComponents.Gh.Utils
+namespace RobotComponents.ABB.Gh.Utils
 {
     /// <summary>
     /// Helper methods and properties

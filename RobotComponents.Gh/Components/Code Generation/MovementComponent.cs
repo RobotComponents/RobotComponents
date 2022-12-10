@@ -15,11 +15,11 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
@@ -248,7 +248,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.Gh.Properties.Resources.Movement_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>

@@ -9,13 +9,13 @@ using System;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.13.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct External Rotational Axis Component. An inherent from the GH_Component Class.

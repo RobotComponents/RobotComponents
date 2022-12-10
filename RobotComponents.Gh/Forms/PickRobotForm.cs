@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Forms
+namespace RobotComponents.ABB.Gh.Forms
 {
     public partial class PickRobotForm : Form
     {

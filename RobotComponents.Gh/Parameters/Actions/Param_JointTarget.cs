@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Goos.Actions;
 
-namespace RobotComponents.Gh.Parameters.Actions
+namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
     /// Joint Target parameter

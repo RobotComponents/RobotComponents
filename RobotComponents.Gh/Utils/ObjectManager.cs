@@ -11,7 +11,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 
-namespace RobotComponents.Gh.Utils
+namespace RobotComponents.ABB.Gh.Utils
 {
     /// <summary>
     /// The Object Manager keeps track of different variables to enable global funcionalities inside Grasshopper

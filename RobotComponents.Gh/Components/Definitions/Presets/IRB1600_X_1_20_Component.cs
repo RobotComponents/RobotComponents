@@ -14,10 +14,10 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Definitions.Presets;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions.Presets
+namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
 {
     /// <summary>
     /// RobotComponents IRB1600-X/1.2 preset component. An inherent from the GH_Component Class.
@@ -108,7 +108,7 @@ namespace RobotComponents.Gh.Components.Definitions.Presets
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.Gh.Properties.Resources.IRB1600_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.IRB1600_Icon; }
         }
 
         /// <summary>

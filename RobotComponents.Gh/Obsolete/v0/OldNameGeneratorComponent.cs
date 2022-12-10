@@ -11,13 +11,13 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Utils;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.14.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Naming component. An inherent from the GH_Component Class.

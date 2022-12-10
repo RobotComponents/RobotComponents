@@ -13,10 +13,10 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Robot Tool from Quaternion Data component. An inherent from the GH_Component Class.

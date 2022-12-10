@@ -16,11 +16,11 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
-using RobotComponents.Gh.Forms;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
+using RobotComponents.ABB.Gh.Forms;
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents Robot Preset component. An inherent from the GH_Component Class.

@@ -10,7 +10,7 @@ using Grasshopper.Kernel.Types;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers.IOSystemDomain;
 
-namespace RobotComponents.Gh.Goos
+namespace RobotComponents.ABB.Gh.Goos
 {
     /// <summary>
     /// Signal Goo wrapper class, makes sure Signal can be used in Grasshopper.

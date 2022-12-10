@@ -16,11 +16,11 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Utils;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
@@ -261,7 +261,7 @@ namespace RobotComponents.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.Gh.Properties.Resources.RAPID_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.RAPID_Icon; }
         }
 
         /// <summary>

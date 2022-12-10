@@ -18,11 +18,11 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.Gh.Goos.Actions;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.

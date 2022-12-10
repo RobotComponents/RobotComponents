@@ -10,10 +10,10 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : Linear Configuration Control component. An inherent from the GH_Component Class.

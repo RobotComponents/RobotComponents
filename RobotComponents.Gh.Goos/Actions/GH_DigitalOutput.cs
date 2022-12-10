@@ -11,7 +11,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// Digital Output Goo wrapper class, makes sure the Digital Output class can be used in Grasshopper.

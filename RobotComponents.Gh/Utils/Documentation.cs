@@ -8,19 +8,19 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 // RobotComponents Libs
-using RobotComponents.Gh.Components.CodeGeneration;
-using RobotComponents.Gh.Components.ControllerUtility;
-using RobotComponents.Gh.Components.Deconstruct.CodeGeneration;
-using RobotComponents.Gh.Components.Deconstruct.Definitions;
-using RobotComponents.Gh.Components.Simulation;
-using RobotComponents.Gh.Components.Definitions;
-using RobotComponents.Gh.Components.Definitions.Presets;
-using RobotComponents.Gh.Components.MultiMove;
-using RobotComponents.Gh.Components.Utilities;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Components.CodeGeneration;
+using RobotComponents.ABB.Gh.Components.ControllerUtility;
+using RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration;
+using RobotComponents.ABB.Gh.Components.Deconstruct.Definitions;
+using RobotComponents.ABB.Gh.Components.Simulation;
+using RobotComponents.ABB.Gh.Components.Definitions;
+using RobotComponents.ABB.Gh.Components.Definitions.Presets;
+using RobotComponents.ABB.Gh.Components.MultiMove;
+using RobotComponents.ABB.Gh.Components.Utilities;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
 
-namespace RobotComponents.Gh.Utils
+namespace RobotComponents.ABB.Gh.Utils
 {
     /// <summary>
     /// Static class that contains all the data (e.g. links to pages) that is relevant for our documentation.

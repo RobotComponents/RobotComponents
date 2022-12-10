@@ -11,7 +11,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// Syncident Goo wrapper class, makes sure the Syncident interface can be used in Grasshopper.

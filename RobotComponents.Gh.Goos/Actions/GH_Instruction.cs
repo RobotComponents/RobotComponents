@@ -14,7 +14,7 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// Instruction Goo wrapper class, makes sure the Instruction interface can be used in Grasshopper.

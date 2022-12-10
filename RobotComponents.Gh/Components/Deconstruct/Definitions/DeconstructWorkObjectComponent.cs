@@ -10,10 +10,10 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Deconstruct.Definitions
+namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 {
     /// <summary>
     /// RobotComponents Deconstruct Work Object component. An inherent from the GH_Component Class.

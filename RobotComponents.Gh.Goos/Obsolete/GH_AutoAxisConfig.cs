@@ -13,7 +13,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// Auto Axis Configuration Goo wrapper class, makes sure the Auto Axis Configuration class can be used in Grasshopper.

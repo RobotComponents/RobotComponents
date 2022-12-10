@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 
-namespace RobotComponents.Gh.Utils
+namespace RobotComponents.ABB.Gh.Utils
 {
     /// <summary>
     /// Represents the interface for components that are managed by the document object manager.

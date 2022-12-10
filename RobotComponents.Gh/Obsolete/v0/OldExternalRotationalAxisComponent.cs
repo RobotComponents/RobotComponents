@@ -11,14 +11,14 @@ using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Definitions;
 
 // This component is OBSOLETE!
 // It is OBSOLETE since version 0.13.000
 // It is replaced with a new component. 
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents External Rotational Axis component. An inherent from the GH_Component Class.

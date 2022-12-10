@@ -11,9 +11,9 @@ using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Definitions;
+using RobotComponents.ABB.Gh.Goos.Definitions;
 
-namespace RobotComponents.Gh.Parameters.Definitions
+namespace RobotComponents.ABB.Gh.Parameters.Definitions
 {
     /// <summary>
     /// External Linear Axis parameter

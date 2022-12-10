@@ -14,7 +14,7 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh.Goos.Definitions
+namespace RobotComponents.ABB.Gh.Goos.Definitions
 {
     /// <summary>
     /// Robot Tool Goo wrapper class, makes sure the Robot Tool class can be used in Grasshopper.

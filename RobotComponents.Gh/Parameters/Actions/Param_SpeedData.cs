@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotcComponents Libs
-using RobotComponents.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Goos.Actions;
 
-namespace RobotComponents.Gh.Parameters.Actions
+namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
     /// Speed Data parameter

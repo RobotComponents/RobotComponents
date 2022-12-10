@@ -11,9 +11,9 @@ using Grasshopper;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration.ValueLists
+namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
 {
     /// <summary>
     /// RobotComponents Movement Type Value List. An inherent from the GH_Component Class.

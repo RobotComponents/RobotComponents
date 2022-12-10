@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Robot Components Libs
-using RobotComponents.Gh.Components.ControllerUtility;
+using RobotComponents.ABB.Gh.Components.ControllerUtility;
 
-namespace RobotComponents.Gh.Forms
+namespace RobotComponents.ABB.Gh.Forms
 {
     public partial class PickDIForm : Form
     {

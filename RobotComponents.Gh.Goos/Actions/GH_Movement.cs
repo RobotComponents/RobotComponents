@@ -16,9 +16,9 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Utils;
-using RobotComponents.Gh.Goos.Definitions;
+using RobotComponents.ABB.Gh.Goos.Definitions;
 
-namespace RobotComponents.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions
 {
     /// <summary>
     /// Movement Goo wrapper class, makes sure the Movement class can be used in Grasshopper.

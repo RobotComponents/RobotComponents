@@ -10,11 +10,11 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Utilities
+namespace RobotComponents.ABB.Gh.Components.Utilities
 {
     /// <summary>
     /// RobotComponents Group Actions component. An inherent from the GH_Component Class.

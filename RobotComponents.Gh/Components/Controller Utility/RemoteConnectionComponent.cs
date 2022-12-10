@@ -13,14 +13,14 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos;
-using RobotComponents.Gh.Utils;
-using RobotComponents.Gh.Forms;
+using RobotComponents.ABB.Gh.Goos;
+using RobotComponents.ABB.Gh.Utils;
+using RobotComponents.ABB.Gh.Forms;
 // ABB Robotics Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
 
-namespace RobotComponents.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.

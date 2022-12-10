@@ -14,10 +14,10 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Definitions.Presets;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions.Presets
+namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
 {
     /// <summary>
     /// RobotComponents IRB6700-235/2.65 preset component. An inherent from the GH_Component Class.

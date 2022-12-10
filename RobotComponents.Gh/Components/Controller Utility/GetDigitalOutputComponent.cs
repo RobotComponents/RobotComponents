@@ -10,14 +10,14 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Forms;
-using RobotComponents.Gh.Goos;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Forms;
+using RobotComponents.ABB.Gh.Goos;
+using RobotComponents.ABB.Gh.Utils;
 // ABB Robotic Libs
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.IOSystemDomain;
 
-namespace RobotComponents.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
@@ -133,7 +133,7 @@ namespace RobotComponents.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.Gh.Properties.Resources.GetDigitalOutput_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.GetDigitalOutput_Icon; }
         }
 
         /// <summary>

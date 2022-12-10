@@ -11,7 +11,7 @@ using Grasshopper.Kernel;
 // Robot Components Libs
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.Gh
+namespace RobotComponents.ABB.Gh
 {
     public class RobotComponentsInfo : GH_AssemblyInfo
     {

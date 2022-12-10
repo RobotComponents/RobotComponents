@@ -15,11 +15,11 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Definitions
+namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
     /// RobotComponents External Linear Axis component. An inherent from the GH_Component Class.

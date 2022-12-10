@@ -9,10 +9,10 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
     /// RobotComponents Action : WaitTime component. An inherent from the GH_Component Class.

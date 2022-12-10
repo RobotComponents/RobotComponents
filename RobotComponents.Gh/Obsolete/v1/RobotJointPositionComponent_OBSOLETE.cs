@@ -12,11 +12,11 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Actions;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.

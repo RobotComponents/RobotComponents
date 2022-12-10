@@ -19,11 +19,11 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Parameters.Definitions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Definitions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Simulation
+namespace RobotComponents.ABB.Gh.Components.Simulation
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.

@@ -13,11 +13,11 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
 // RobotComponents Libs
-using RobotComponents.Gh.Goos.Actions;
-using RobotComponents.Gh.Parameters.Actions;
-using RobotComponents.Gh.Utils;
+using RobotComponents.ABB.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Zone Data component. An inherent from the GH_Component Class.

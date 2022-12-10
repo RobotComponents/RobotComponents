@@ -131,7 +131,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(programName, systemName, actions, null, false, robInfo);
+                _rapidGenerator = new RAPIDGenerator(robInfo, actions, programName, systemName, "main");
 
                 // Generator code
                 _rapidGenerator.CreateProgramModule();

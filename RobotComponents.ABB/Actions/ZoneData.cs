@@ -546,17 +546,5 @@ namespace RobotComponents.ABB.Actions
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
         }
         #endregion
-
-        #region OBSOLETE
-        /// <summary>
-        /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in version 2.", false)]
-        public bool PreDefinied
-        {
-            get { return _predefined; }
-            set { _predefined = value; }
-        }
-        #endregion
     }
 }

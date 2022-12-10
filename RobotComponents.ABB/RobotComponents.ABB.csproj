@@ -80,7 +80,6 @@
     <Compile Include="Actions\ZoneData.cs" />
     <Compile Include="Definitions\ExternalAxis.cs" />
     <Compile Include="Actions\Action.cs" />
-    <Compile Include="Actions\AutoAxisConfiguration.cs" />
     <Compile Include="Actions\CodeLine.cs" />
     <Compile Include="Actions\Comment.cs" />
     <Compile Include="Actions\Movement.cs" />

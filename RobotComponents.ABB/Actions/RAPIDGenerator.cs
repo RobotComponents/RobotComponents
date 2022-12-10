@@ -796,28 +796,5 @@ namespace RobotComponents.ABB.Actions
             set { _synchronizedMovements = value; }
         }
         #endregion
-
-        #region OBSOLETE
-        /// <summary>
-        /// Initializes a new instance of the RAPID Generator class with a main procedure.
-        /// </summary>
-        /// <param name="programModuleName"> The name of the program module </param>
-        /// <param name="systemModuleName"> The name of the system module </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        /// <param name="filePath"> The path where the code files should be saved. </param>
-        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
-        /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        [Obsolete("This constructor is OBSOLETE and will be removed in version 2.", false)]
-        public RAPIDGenerator(string programModuleName, string systemModuleName, IList<Action> actions, string filePath, bool saveToFile, Robot robot)
-        {
-            _programModuleName = programModuleName;
-            _systemModuleName = systemModuleName;
-            _procedureName = "main";
-            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
-            _actions = new List<Action>(actions);
-            _filePath = filePath;
-            _saveToFile = saveToFile;
-        }
-        #endregion
     }
 }

@@ -790,19 +790,6 @@ namespace RobotComponents.ABB.Definitions
             get { return _internalAxisPlanes.Count; }
         }
         #endregion
-
-        #region OBSOLETE
-        /// <summary>
-        /// Transforms the robot spatial properties (planes and meshes).
-        /// NOTE: The attached external axes will not be transformed. 
-        /// </summary>
-        /// <param name="xform"> Spatial deform. </param>
-        [Obsolete("This method is OBSOLETE and will be removed in version 2.", false)]
-        public void Transfom(Transform xform)
-        {
-            this.Transform(xform);
-        }
-        #endregion
     }
 
 }

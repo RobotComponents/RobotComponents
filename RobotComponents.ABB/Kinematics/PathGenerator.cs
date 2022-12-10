@@ -197,13 +197,6 @@ namespace RobotComponents.ABB.Kinematics
                         counter++;
                     }
                 }
-
-                // OBSOLETE
-                else if (ungrouped[i] is AutoAxisConfig autoAxisConfig)
-                {
-                    _linearConfigurationControl = !autoAxisConfig.IsActive;
-                    _jointConfigurationControl = !autoAxisConfig.IsActive;
-                }
             }
 
             // Remove first dummy values

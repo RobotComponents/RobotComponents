@@ -218,18 +218,6 @@ namespace RobotComponents.ABB.Actions
             set { _maxTime = value; }
         }
         #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the name of the digital input signal.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in version 2. Use the property Name instead.", false)]
-        public string DIName
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-        #endregion
     }
 
 }

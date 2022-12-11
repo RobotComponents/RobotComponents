@@ -67,25 +67,25 @@ namespace RobotComponents.ABB.Definitions.Presets
 
             // Base
             linkString = Properties.Resources.CRB15000_5_0_95_link_0;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 1
             linkString = Properties.Resources.CRB15000_5_0_95_link_1;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 2
             linkString = Properties.Resources.CRB15000_5_0_95_link_2;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 3
             linkString = Properties.Resources.CRB15000_5_0_95_link_3;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 4
             linkString = Properties.Resources.CRB15000_5_0_95_link_4;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 5
             linkString = Properties.Resources.CRB15000_5_0_95_link_5;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 6
             linkString = Properties.Resources.CRB15000_5_0_95_link_6;
-            meshes.Add((Mesh)HelperMethods.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
 
             return meshes;
         }

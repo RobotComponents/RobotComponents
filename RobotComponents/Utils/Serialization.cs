@@ -10,9 +10,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace RobotComponents.Utils
 {
     /// <summary>
-    /// Represents general helper methods
+    /// Represents serialization methods 
     /// </summary>
-    public static class HelperMethods
+    public static class Serialization
     {
         /// <summary>
         /// Serializes a common object to a byte array. 

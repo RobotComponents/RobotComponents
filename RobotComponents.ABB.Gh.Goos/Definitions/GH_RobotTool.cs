@@ -320,7 +320,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         {
             if (this.Value != null)
             {
-                byte[] array = HelperMethods.ObjectToByteArray(this.Value);
+                byte[] array = Serialization.ObjectToByteArray(this.Value);
                 writer.SetByteArray(IoKey, array);
             }
 
@@ -341,7 +341,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (RobotTool)HelperMethods.ByteArrayToObject(array);
+            this.Value = (RobotTool)Serialization.ByteArrayToObject(array);
 
             return true;
         }

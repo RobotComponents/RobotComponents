@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utils\HelperMethods.cs" />
+    <Compile Include="Utils\Serialization.cs" />
     <Compile Include="VersionNumbering.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -9,25 +9,28 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Robot Components Libs
-using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Controllers;
+using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get the controller log. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and read the Analog Inputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetLogComponent : GH_Component
+    public class GetAnalogInputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
+        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetController class.
+        /// Initializes a new instance of the GetAnalogInput class.
         /// </summary>
-        public GetLogComponent()
-          : base("Get Log", "GL",
-              "Connects to a real or virtual ABB IRC5 robot controller and extracts the log from it."
+        public GetAnalogInputComponent()
+          : base("Get Analog Input", "GetAI",
+              "Gets the signal of a defined analog input from an ABB IRC5 Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -39,7 +42,9 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Analog Input Name as text", GH_ParamAccess.item);
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -47,7 +52,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Log", "L", "Resulting log", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Analog Input Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -56,11 +61,17 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Catch the input data
-            if (!DA.GetData(0, ref _controller)) { return; }
+            // Input variables
+            string name = "";
 
-            // Output
-            DA.SetDataList(0, _controller.Logger);
+            // Catch input data
+            if (!DA.GetData(0, ref _controller)) { return; }
+            if (!DA.GetData(1, ref name)) { return; }
+
+            _signal = _controller.GetSignal(name);
+
+            // Input
+            DA.SetData(0, _signal);
         }
 
         #region properties
@@ -70,7 +81,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -86,7 +97,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Log_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -94,17 +105,19 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E6FAB182-4497-411D-86B8-0577ADC1EA47"); }
+            get { return new Guid("35A4F56F-46BA-47C8-87A3-6BA0680659D9"); }
         }
         #endregion
 
-        #region menu items
+        #region menu item
         /// <summary>
-        /// Adds the additional item "Pick controller" to the context menu of the component. 
+        /// Adds the additional item "Pick Signal" to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Update Value List", MenuItemClick);
             //Menu_AppendSeparator(menu);
             //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -118,6 +131,18 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         {
             //string url = Documentation.ComponentWeblinks[this.GetType()];
             //Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Registers the event when the custom menu item is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            this.Params.Input[1].RemoveAllSources();
+            HelperMethods.CreateValueList(this, _controller.GetAnalogInputNames(), 1);
+            ExpireSolution(true);
         }
         #endregion
     }

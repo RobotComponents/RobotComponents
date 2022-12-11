@@ -60,6 +60,23 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetAnalogInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetAnalogOutputComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetControllerComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetDigitalInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetDigitalOutputComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetExternalJointPositionComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetLogComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetRobotBaseFrameComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetRobotJointPositionComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetRobotToolPlaneComponent.cs" />
+    <Compile Include="Components\Controller Utility\ReadConfigurationDatabaseComponent.cs" />
+    <Compile Include="Components\Controller Utility\RunProgramComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetAnalogInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetAnalogOutputComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetDigitalInputComponent.cs" />
+    <Compile Include="Components\Controller Utility\SetDigitalOutputComponent.cs" />
+    <Compile Include="Components\Controller Utility\UploadProgramComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1010_4_0_475_Component.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromPlanesComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\WorkObjectComponent_OBSOLETE.cs" />
@@ -194,6 +211,8 @@
     <Compile Include="Parameters\Actions\Param_WaitAI.cs" />
     <Compile Include="Parameters\Actions\Param_WaitSyncTask.cs" />
     <Compile Include="Parameters\Actions\Param_TaskList.cs" />
+    <Compile Include="Parameters\Controllers\Param_Controller.cs" />
+    <Compile Include="Parameters\Controllers\Param_Signal.cs" />
     <Compile Include="Parameters\Definitions\Param_MechanicalUnit.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -453,6 +472,10 @@
     <None Include="Resources\Target_Icon_Old.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.ABB.Controllers\RobotComponents.ABB.Controllers.csproj">
+      <Project>{4d8169cc-20cf-4597-b304-331eed09278b}</Project>
+      <Name>RobotComponents.ABB.Controllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RobotComponents.ABB.Gh.Goos\RobotComponents.ABB.Gh.Goos.csproj">
       <Project>{4853e4fa-0246-486c-9f1a-0620896690c3}</Project>
       <Name>RobotComponents.ABB.Gh.Goos</Name>
@@ -670,7 +693,16 @@
     <None Include="Resources\RAPID_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Components\Controller Utility\" />
+    <None Include="Resources\RunProgram_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Upload_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Log_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReadDatabase_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

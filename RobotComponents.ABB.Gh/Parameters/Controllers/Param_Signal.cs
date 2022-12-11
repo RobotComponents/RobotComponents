@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Robot Components Libs
-using RobotComponents.ABB.Controllers.Gh.Goos.Controllers;
+using RobotComponents.ABB.Gh.Goos.Controllers;
 
-namespace RobotComponents.ABB.Controllers.Gh.Parameters.Controllers
+namespace RobotComponents.ABB.Gh.Parameters.Controllers
 {
     /// <summary>
     /// Signal parameter

@@ -5,37 +5,33 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data;
-// Rhino Libs
-using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
-using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get the end planes from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetRobotToolPlaneComponent : GH_Component
+    public class GetDigitalOutputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Dictionary<string, Plane> _planes = new Dictionary<string, Plane>();
+        private Signal _signal;
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetAxisValues class.
+        /// Initializes a new instance of the GetDigitalOutput class.
         /// </summary>
-        public GetRobotToolPlaneComponent()
-          : base("Get Robot Tool Plane", "GREP",
-              "Gets the current robot tool planes from an ABB IRC5 robot controller."
-               + System.Environment.NewLine + System.Environment.NewLine +
+        public GetDigitalOutputComponent()
+          : base("Get Digital Output", "GetDO",
+              "Gets the signal of a defined digital output from an ABB IRC5 Controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -46,8 +42,9 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
+            pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Digital Output Name as text", GH_ParamAccess.item);
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -55,8 +52,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the robot as Text", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Plane", "P", "Current tool plane of the robot as a Plane", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Output Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -65,18 +61,17 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare input variables
-            int coordinateSystem = 1;
+            // Input variables
+            string name = "";
 
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref coordinateSystem)) { return; }
+            if (!DA.GetData(1, ref name)) { return; }
 
-            _planes = _controller.GetRobotToolPlanes(coordinateSystem);
+            _signal = _controller.GetSignal(name);
 
-            // Output
-            DA.SetDataList(0, _planes.Keys);
-            DA.SetDataList(1, _planes.Values);
+            // Input
+            DA.SetData(0, _signal);
         }
 
         #region properties
@@ -86,7 +81,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -102,7 +97,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetPlane_Icon; }
+            get { return Properties.Resources.GetDigitalOutput_Icon; }
         }
 
         /// <summary>
@@ -110,18 +105,20 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9D61E009-D6C4-4553-BFA4-5981B7B6F66E"); }
+            get { return new Guid("25924837-EECB-4F0A-8A39-6380185D339B"); }
         }
         #endregion
 
         #region menu item
         /// <summary>
-        /// Adds the additional items to the context menu of the component. 
+        /// Adds the additional item "Pick Signal" to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Update Value List", MenuItemClick);
+            //Menu_AppendSeparator(menu);
             //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
@@ -134,6 +131,18 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         {
             //string url = Documentation.ComponentWeblinks[this.GetType()];
             //Documentation.OpenBrowser(url);
+        }
+
+        /// <summary>
+        /// Registers the event when the custom menu item is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            this.Params.Input[1].RemoveAllSources();
+            HelperMethods.CreateValueList(this, _controller.GetDigitalOutputNames(), 1);
+            ExpireSolution(true);
         }
         #endregion
     }

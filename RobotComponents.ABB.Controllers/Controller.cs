@@ -768,6 +768,11 @@ namespace RobotComponents.ABB.Controllers
             get { return _tasks; }
         }
 
+        public List<string> TaskNames
+        {
+            get { return _tasks.ConvertAll(item => item.Name); }
+        }
+
         public string Name
         {
             get { return _controller.Name; }

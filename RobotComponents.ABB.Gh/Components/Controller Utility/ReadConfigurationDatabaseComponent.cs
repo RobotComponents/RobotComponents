@@ -9,10 +9,12 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Robot Components Libs
+using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
-using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
     /// RobotComponents Controller Utility : Read values from the Configuration Database. An inherent from the GH_Component Class.

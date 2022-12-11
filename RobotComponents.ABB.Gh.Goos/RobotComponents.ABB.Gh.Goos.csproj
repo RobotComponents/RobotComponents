@@ -70,6 +70,8 @@
     <Compile Include="Actions\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\GH_JointTarget.cs" />
     <Compile Include="Actions\GH_RobotJointPosition.cs" />
+    <Compile Include="Controllers\GH_Controller.cs" />
+    <Compile Include="Controllers\GH_Signal.cs" />
     <Compile Include="Definitions\GH_MechanicalUnit.cs" />
     <Compile Include="Actions\GH_CodeLine.cs" />
     <Compile Include="Actions\GH_Comment.cs" />
@@ -92,6 +94,10 @@
     <Compile Include="Definitions\GH_WorkObject.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.ABB.Controllers\RobotComponents.ABB.Controllers.csproj">
+      <Project>{4d8169cc-20cf-4597-b304-331eed09278b}</Project>
+      <Name>RobotComponents.ABB.Controllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
       <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
       <Name>RobotComponents.ABB</Name>

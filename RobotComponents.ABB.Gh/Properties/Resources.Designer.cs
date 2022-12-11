@@ -853,6 +853,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Log_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Log_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MechanicalUnit_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("MechanicalUnit_Parameter_Icon", resourceCulture);
@@ -983,6 +993,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ReadDatabase_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ReadDatabase_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Remote_OFF_Icon {
             get {
                 object obj = ResourceManager.GetObject("Remote_OFF_Icon", resourceCulture);
@@ -1076,6 +1096,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap RobTarget_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("RobTarget_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RunProgram_Icon {
+            get {
+                object obj = ResourceManager.GetObject("RunProgram_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1266,6 +1296,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap ToolQuaternion_Icon {
             get {
                 object obj = ResourceManager.GetObject("ToolQuaternion_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Upload_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Upload_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

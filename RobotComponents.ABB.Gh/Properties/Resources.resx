@@ -355,6 +355,9 @@
   <data name="LinearConfigurationControl_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LinearConfigurationControl_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Log_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Log_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MechanicalUnit_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MechanicalUnit_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -394,6 +397,9 @@
   <data name="RAPID_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RAPID_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ReadDatabase_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ReadDatabase_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Remote_OFF_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Remote_OFF_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -423,6 +429,9 @@
   </data>
   <data name="RobTarget_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\RobTarget_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RunProgram_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\RunProgram_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SetDigitalInput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SetDigitalInput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -480,6 +489,9 @@
   </data>
   <data name="Tool_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tool_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Upload_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Upload_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WaitAI_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WaitAI_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

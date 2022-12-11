@@ -5,40 +5,36 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using GH_IO.Serialization;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
-using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
+using RobotComponents.ABB.Gh.Parameters.Controllers;
 
-namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Upload program component. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and connect to an ABB controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class UploadProgramComponent : GH_Component
+    public class GetControllerComponent : GH_Component
     {
         #region fields
-        private Controller _controller;
-        private bool _fromMenu = false;
-        private string _taskName = "-";
+        private Controller _controller = new Controller();
+        private bool _fromMenu;
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the UploadProgram class.
+        /// Initializes a new instance of the GetController class.
         /// </summary>
-        public UploadProgramComponent()
-          : base("Upload Program", "UP",
-              "Uploads RAPID modules directly to a real or virtual robot controller."
+        public GetControllerComponent()
+          : base("Get Controller", "GC",
+              "Connects to a real or virtual controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
-            this.Message = _taskName;
         }
 
         /// <summary>
@@ -46,12 +42,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Upload", "U", "Upload as bool", GH_ParamAccess.item, false);
-            pManager.AddTextParameter("Module", "M", "Module as a list with code lines", GH_ParamAccess.list);
-
-            pManager[1].Optional = true;
-            pManager[2].Optional = true;
+            pManager.AddBooleanParameter("Update", "U", "Update Controller as bool", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -59,7 +50,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Controller status", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Resulting Controller", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -68,46 +59,28 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare input variables
-            bool upload = false;
-            List<string> module = new List<string>();
+            // Input variables
+            bool update = false;
 
             // Catch the input data
-            if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref upload)) { upload = false; }
-            if (!DA.GetDataList(2, module)) { module = new List<string>(); }
+            if (!DA.GetData(0, ref update)) { return; }
 
-            // Declare output variables
-            string status = "-";
-
-            if (_fromMenu)
+            // Pick a new controller when the input is toggled or the user selects one from the menu
+            if (update || _fromMenu)
             {
-                this.GetTaskName();
-                this.Message = _taskName;
-                this.ExpirePreview(true);
-                status = "Task picked from controller.";
-            }
+                bool succeeded = this.GetController();
+                
+                if (succeeded)
+                {
+                    _controller.Logon();
 
-            if (upload)
-            {
-                if (module.Count != 0 & _taskName != "-")
-                {
-                    _controller.UploadModule(_taskName, module, out status);
-                }
-                else if (module.Count == 0)
-                {
-                    status = "No module defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, status);
-                }
-                else if (_taskName == "-")
-                {
-                    status = "No task defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, status);
+                    GH_Document doc = this.OnPingDocument();
+                    doc.ContextChanged += OnContextChanged;
                 }
             }
 
             // Output
-            DA.SetDataList(0, status);
+            DA.SetData(0, _controller);
         }
 
         #region properties
@@ -117,7 +90,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -133,7 +106,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Upload_Icon; }
+            get { return Properties.Resources.GetController_Icon; }
         }
 
         /// <summary>
@@ -141,7 +114,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("30FF28E6-B93E-4AAD-B821-F6FC77C5DADF"); }
+            get { return new Guid("B3515FD1-290E-4B1D-997E-AC551FE0E04C"); }
         }
         #endregion
 
@@ -153,7 +126,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Pick Task", MenuItemClick);
+            Menu_AppendItem(menu, "Pick Controller", MenuItemClick);
             //Menu_AppendSeparator(menu);
             //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -182,64 +155,82 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         }
         #endregion
 
-        #region serialization
+        #region additional methods
         /// <summary>
-        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// This method will be called when an object is removed from a document. Override this method if you want to handle such events.
         /// </summary>
-        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Write(GH_IWriter writer)
+        /// <param name="document"> Document that now no longer owns this object. </param>
+        public override void RemovedFromDocument(GH_Document document)
         {
-            writer.SetString("Task Name", _taskName);
-            return base.Write(writer);
-        }
+            base.RemovedFromDocument(document);
 
-        /// <summary>
-        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
-        /// </summary>
-        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
-        /// <returns> True on success, false on failure. </returns>
-        public override bool Read(GH_IReader reader)
-        {
-            reader.GetString("Task Name");
-            return base.Read(reader);
-        }
-        #endregion
-
-        #region pick task
-        /// <summary>
-        /// Get the task name
-        /// </summary>
-        /// <returns> Indicates whether or not a task was picked successfully. </returns>
-        private bool GetTaskName()
-        {
-            if (_controller.Tasks.Count == 0)
+            if (_controller != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task found!");
+                if (_controller.IsValid)
+                {
+                    _controller.Logoff();
+                    _controller.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method that is called when then document context changed. 
+        /// This will log off and dispose the controller when the document is changed. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void OnContextChanged(object sender, GH_DocContextEventArgs e)
+        {
+            if (e.Context == GH_DocumentContext.Close)
+            {
+                if (_controller != null)
+                {
+                    if (_controller.IsValid)
+                    {
+                        _controller.Logoff();
+                        _controller.Dispose();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the controller
+        /// </summary>
+        /// <returns> Indicates whether or not a controller was picked successfully. </returns>
+        private bool GetController()
+        {
+            Controller.GetControllers();
+
+            if (Controller.Controllers.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller found!");
                 return false;
             }
 
-            else if (_controller.Tasks.Count == 1)
+            else if (Controller.Controllers.Count == 1)
             {
-                _taskName = _controller.Tasks[0].Name;
+                _controller = Controller.Controllers[0];
                 return true;
             }
 
-            else if (_controller.Tasks.Count > 1)
+            else if (Controller.Controllers.Count > 1)
             {
-                PickTaskForm frm = new PickTaskForm(_controller);
+                PickControllerForm frm = new PickControllerForm(Controller.Controllers.ConvertAll(item => item.Name));
                 Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
                 frm.ShowDialog();
                 int index = frm.Index;
 
                 if (index < 0)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from the menu!");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
+                    _controller = new Controller();
                     return false;
                 }
                 else
                 {
-                    _taskName = _controller.Tasks[index].Name;
+                    _controller = Controller.Controllers[index];
                     return true;
                 }
             }

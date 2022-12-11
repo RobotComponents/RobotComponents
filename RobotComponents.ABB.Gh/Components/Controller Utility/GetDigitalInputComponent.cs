@@ -10,26 +10,27 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
-using RobotComponents.ABB.Controllers.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
+namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and read the Digital Inputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetDigitalOutputComponent : GH_Component
+    public class GetDigitalInputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Signal _signal;
+        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetDigitalOutput class.
+        /// Initializes a new instance of the GetDigitalInput class.
         /// </summary>
-        public GetDigitalOutputComponent()
-          : base("Get Digital Output", "GetDO",
-              "Gets the signal of a defined digital output from an ABB IRC5 Controller."
+        public GetDigitalInputComponent()
+          : base("Get Digital Input", "GetDI",
+              "Gets the signal of a defined digital input from an ABB IRC5 Controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -42,7 +43,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Name", "N", "Digital Output Name as text", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Digital Input Name as text", GH_ParamAccess.item);
             pManager[1].Optional = true;
         }
 
@@ -51,7 +52,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Output Signal", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Input Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetDigitalOutput_Icon; }
+            get { return Properties.Resources.GetDigitalInput_Icon; ; }
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("25924837-EECB-4F0A-8A39-6380185D339B"); }
+            get { return new Guid("B45A32B4-D8DF-42FD-98D4-479BAAB9341E"); }
         }
         #endregion
 
@@ -140,7 +141,7 @@ namespace RobotComponents.ABB.Controllers.Gh.Components.ControllerUtility
         private void MenuItemClick(object sender, EventArgs e)
         {
             this.Params.Input[1].RemoveAllSources();
-            HelperMethods.CreateValueList(this, _controller.GetDigitalOutputNames(), 1);
+            HelperMethods.CreateValueList(this, _controller.GetDigitalInputNames(), 1);
             ExpireSolution(true);
         }
         #endregion

@@ -11,22 +11,21 @@ using Grasshopper.Kernel;
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and set the Digital Outputs on a defined controller. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class RemoteConnectionComponent_OBSOLETE : GH_Component
+    public class SetDigitalOutputComponent_OBSOLETE : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the RemoteConnection class.
+        /// Initializes a new instance of the SetDigitalOutput class.
         /// </summary>
-        public RemoteConnectionComponent_OBSOLETE()
-          : base("Remote Connection", "Remote Connection",
-              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB IRC5 robot controller."
-              + System.Environment.NewLine + System.Environment.NewLine +
-              "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
+        public SetDigitalOutputComponent_OBSOLETE()
+          : base("Set Digital Output", "SetDO",
+              "Changes the state of a defined digital output from an ABB IRC5 robot controller in Realtime."
+               + System.Environment.NewLine + System.Environment.NewLine +
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
-            this.Message = "-";
         }
 
         /// <summary>
@@ -34,16 +33,12 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connect to as Robot Controller", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller as bool", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item, false);
-            pManager.AddTextParameter("Program Module", "PM", "Program Module code as a list with code lines", GH_ParamAccess.list);
-            pManager.AddTextParameter("System Module", "SM", "System Module code as as list with code lines", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connected to as Robot Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("DO Name", "N", "Name of the Digital Output as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the Digital Output as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
 
-            pManager[5].Optional = true;
-            pManager[6].Optional = true;
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -51,7 +46,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Status of the ABB IRC5 robot controller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Output", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -60,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick a new component from the toolbar.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick the new component from the toolbar.");
         }
 
         #region properties
@@ -82,11 +77,19 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         }
 
         /// <summary>
+        /// Provides an Icon for the component.
+        /// </summary>
+        protected override System.Drawing.Bitmap Icon
+        {
+            get { return Properties.Resources.SetDigitalOutput_Icon; }
+        }
+
+        /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8bfb75d4-9122-45a3-9f11-8d01fb7ea069"); }
+            get { return new Guid("8fbb97b5-cdc4-41de-a33d-df1d6f7bda21"); }
         }
         #endregion
     }

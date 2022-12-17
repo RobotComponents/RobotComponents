@@ -5,7 +5,7 @@
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
-    partial class PickDOForm
+    partial class PickSignalForm
     {
         /// <summary>
         /// Required designer variable.

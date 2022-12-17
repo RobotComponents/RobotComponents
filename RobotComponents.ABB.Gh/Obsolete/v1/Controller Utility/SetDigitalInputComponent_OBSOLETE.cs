@@ -11,17 +11,17 @@ using Grasshopper.Kernel;
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and read the Digital Outputs from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get and set the Digital Inputs on a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetDigitalOutputComponent_OBSOLETE : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class SetDigitalInputComponent_OBSOLETE : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GetDigitalOutput class.
+        /// Initializes a new instance of the SetDigitalInput class.
         /// </summary>
-        [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-        public GetDigitalOutputComponent_OBSOLETE()
-          : base("Get Digital Output", "GetDO",
-              "Gets the signal of a defined digital output from an ABB IRC5 robot controller."
+        public SetDigitalInputComponent_OBSOLETE()
+          : base("Set Digital Input", "SetDI",
+              "Changes the state of a defined digital input from an ABB IRC5 robot controller in Realtime."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -34,7 +34,10 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to be connected to as Robot Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("DO Name", "N", "Digital Output Name as text", GH_ParamAccess.item);
+            pManager.AddTextParameter("DI Name", "N", "Name of the Digital Input as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("State", "S", "State of the Digital Input as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
+
             pManager[1].Optional = true;
         }
 
@@ -43,7 +46,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Output", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Input", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick a new component from the toolbar.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick the new component from the toolbar.");
         }
 
         #region properties
@@ -63,6 +66,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         public override GH_Exposure Exposure
         {
             get { return GH_Exposure.hidden; }
+
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.ABB.Gh.Properties.Resources.GetDigitalOutput_Icon; }
+            get { return Properties.Resources.SetDigitalInput_Icon; }
         }
 
         /// <summary>
@@ -86,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("15E9EB1D-3EC5-44FB-9694-0DAC7C37AD97"); }
+            get { return new Guid("0A9FE8FD-C56F-4AD4-BCAF-46CBFA609394"); }
         }
         #endregion
     }

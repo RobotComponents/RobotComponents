@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Components.CodeGeneration;
-//using RobotComponents.ABB.Gh.Components.ControllerUtility;
+using RobotComponents.ABB.Gh.Components.ControllerUtility;
 using RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration;
 using RobotComponents.ABB.Gh.Components.Deconstruct.Definitions;
 using RobotComponents.ABB.Gh.Components.Simulation;
@@ -60,6 +60,24 @@ namespace RobotComponents.ABB.Gh.Utils
             #endregion
 
             #region Controller utility
+            { typeof(GetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetControllerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetExternalAxisPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetExternalJointPositionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetLogComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetRobotBaseFrameComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetRobotJointPositionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetRobotToolPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(ReadConfigurationDatabaseComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(RunProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(SetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(SetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(SetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(SetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(UploadProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
             #endregion
 
             #region Deconstruct

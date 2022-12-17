@@ -5,9 +5,12 @@
 
 // System Libs
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// Rhino Libs
+using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
@@ -16,21 +19,22 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets the controller log. An inherent from the GH_Component Class.
+    /// Represents the component that gets the external axis planes from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetLogComponent : GH_Component
+    public class GetExternalAxisPlaneComponent : GH_Component
     {
         #region fields
         private Controller _controller;
+        private Dictionary<string, Plane> _planes = new Dictionary<string, Plane>();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetController class.
+        /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
-        public GetLogComponent()
-          : base("Get Log", "GL",
-              "Connects to a real or virtual ABB IRC5 robot controller and extracts the log from it."
-                + System.Environment.NewLine + System.Environment.NewLine +
+        public GetExternalAxisPlaneComponent()
+          : base("Get External Axis Plane", "GEAP",
+              "Gets the current external planes from an ABB IRC5 robot controller."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -42,6 +46,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -49,7 +54,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Log", "L", "Resulting log", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the external axis as Text", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Current external axis plane as a Plane", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -58,11 +64,18 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Catch the input data
+            // Declare input variables
+            int coordinateSystem = 1;
+
+            // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
+            if (!DA.GetData(1, ref coordinateSystem)) { return; }
+
+            _planes = _controller.GetExternalAxisPlanes(coordinateSystem);
 
             // Output
-            DA.SetDataList(0, _controller.Logger);
+            DA.SetDataList(0, _planes.Keys);
+            DA.SetDataList(1, _planes.Values);
         }
 
         #region properties
@@ -72,7 +85,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -88,7 +101,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Log_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -96,16 +109,16 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E6FAB182-4497-411D-86B8-0577ADC1EA47"); }
+            get { return new Guid("30A7A6EF-32BC-49C5-9198-5822E502C122"); }
         }
         #endregion
 
-        #region menu items
+        #region menu item
         /// <summary>
-        /// Adds the additional item "Pick controller" to the context menu of the component. 
+        /// Adds the additional items to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);

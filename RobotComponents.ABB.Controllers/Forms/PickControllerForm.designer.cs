@@ -26,7 +26,6 @@ namespace RobotComponents.ABB.Controllers.Forms
         }
 
         #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
@@ -208,7 +207,6 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.PerformLayout();
 
         }
-
         #endregion
 
         private System.Windows.Forms.Button button1;

@@ -7,6 +7,8 @@
 using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
+// Rhino Libs
+using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 
@@ -196,6 +198,26 @@ namespace RobotComponents.ABB.Gh.Goos.Controllers
                     target = default;
                 else
                     target = (Q)(object)new GH_Number(Value.Value);
+                return true;
+            }
+
+            //Cast to Interval
+            if (typeof(Q).IsAssignableFrom(typeof(Interval)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)Value.Limits;
+                return true;
+            }
+
+            //Cast to GH_Interval
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Interval)))
+            {
+                if (Value == null)
+                    target = default;
+                else
+                    target = (Q)(object)new GH_Interval(Value.Limits);
                 return true;
             }
 

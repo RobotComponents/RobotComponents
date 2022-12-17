@@ -11,6 +11,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
+using static RobotComponents.ABB.Utils.HelperMethods;
 using RobotComponents.ABB.Actions;
 // ABB Libs
 using ControllersNS = ABB.Robotics.Controllers;
@@ -22,6 +23,10 @@ using ABB.Robotics.Controllers.MotionDomain;
 
 namespace RobotComponents.ABB.Controllers
 {
+    /// <summary>
+    /// Represents the Controller class. 
+    /// This class is a wrapper around the ABB Controller class. 
+    /// </summary>
     public class Controller
     {
         #region fields
@@ -33,25 +38,35 @@ namespace RobotComponents.ABB.Controllers
         private string _password = ControllersNS.UserInfo.DefaultUser.Password;
         private readonly List<string> _logger = new List<string>();
 
-        private Dictionary<string, RobotJointPosition> _robotJointPositions = new Dictionary<string, RobotJointPosition>();
-        private Dictionary<string, double[]> _externalJointPositions = new Dictionary<string, double[]>();
-        private Dictionary<string, Plane> _robotToolPlanes = new Dictionary<string, Plane>();
-        private Dictionary<string, Plane> _externalAxisPlanes = new Dictionary<string, Plane>();
+        private List<RapidDomainNS.Task> _tasks = new List<RapidDomainNS.Task>();
+
+        private readonly Dictionary<string, RobotJointPosition> _robotJointPositions = new Dictionary<string, RobotJointPosition>();
+        private readonly Dictionary<string, double[]> _externalJointPositions = new Dictionary<string, double[]>();
+        private readonly Dictionary<string, Plane> _robotToolPlanes = new Dictionary<string, Plane>();
+        private readonly Dictionary<string, Plane> _externalAxisPlanes = new Dictionary<string, Plane>();
 
         private List<MechanicalUnit> _mechanicalUnits = new List<MechanicalUnit>();
-        private List<MechanicalUnit> _robots = new List<MechanicalUnit>();
-        private List<MechanicalUnit> _externalAxes = new List<MechanicalUnit>();
-        private Dictionary<string, List<MechanicalUnit>> _mechanicalUnitsPerTask = new Dictionary<string, List<MechanicalUnit>>();
-        private List<RapidDomainNS.Task> _tasks = new List<RapidDomainNS.Task>();
-        
+        private readonly List<MechanicalUnit> _robots = new List<MechanicalUnit>();
+        private readonly List<MechanicalUnit> _externalAxes = new List<MechanicalUnit>();
+
+        private readonly Dictionary<string, List<MechanicalUnit>> _mechanicalUnitsPerTask = new Dictionary<string, List<MechanicalUnit>>();
+        private readonly Dictionary<string, List<MechanicalUnit>> _robotsPerTask = new Dictionary<string, List<MechanicalUnit>>();
+        private readonly Dictionary<string, List<MechanicalUnit>> _externalAxesPerTask = new Dictionary<string, List<MechanicalUnit>>();
         #endregion
 
         #region constructors
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
         public Controller()
         {
             _controller = null;
         }
 
+        /// <summary>
+        /// Constructs a Controller instance from an ABB Controller Info instance. 
+        /// </summary>
+        /// <param name="controllerInfo"> The ABB Controller Info instance. </param>
         private Controller(ControllersNS.ControllerInfo controllerInfo)
         {
             _controller = ControllersNS.Controller.Connect(controllerInfo, ControllersNS.ConnectionType.Standalone);
@@ -61,6 +76,10 @@ namespace RobotComponents.ABB.Controllers
         #endregion
 
         #region static methods
+        /// <summary>
+        /// Returns a list with ABB Controllers that are found in the network. 
+        /// </summary>
+        /// <returns> A list with controlers. </returns>
         public static List<Controller> GetControllers()
         {
             NetworkScanner scanner = new NetworkScanner();
@@ -71,15 +90,13 @@ namespace RobotComponents.ABB.Controllers
 
             return _controllers;
         }
-
-        private static string CurrentTime()
-        {
-            DateTime localDate = DateTime.Now;
-            return localDate.ToString();
-        }
         #endregion
 
         #region methods
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
             if (_controller == null)
@@ -88,14 +105,17 @@ namespace RobotComponents.ABB.Controllers
             }
             else if (_controller.IsVirtual == true)
             {
-                return "Virtual controller (" + _controller.Name + ")";
+                return "Virtual controller (" + _controller.SystemName + ")";
             }
             else
             {
-                return "Physical controller (" + _controller.Name + ")";
+                return "Physical controller (" + _controller.SystemName + ")";
             }
         }
 
+        /// <summary>
+        /// Initialize the fiels of this Constroller instance. 
+        /// </summary>
         private void Initiliaze()
         {
             _mechanicalUnits = _controller.MotionSystem.MechanicalUnits.ToList();
@@ -104,16 +124,19 @@ namespace RobotComponents.ABB.Controllers
             for (int i = 0; i < _tasks.Count; i++)
             {
                 _mechanicalUnitsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
+                _robotsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
+                _externalAxesPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
             }
 
             for (int i = 0; i < _mechanicalUnits.Count; i++)
-            {             
+            {
                 if (_mechanicalUnits[i].Type == MechanicalUnitType.TcpRobot)
                 {
                     _robots.Add(_mechanicalUnits[i]);
                     _robotJointPositions.Add(_mechanicalUnits[i].Name, new RobotJointPosition());
                     _robotToolPlanes.Add(_mechanicalUnits[i].Name, Plane.Unset);
                     _mechanicalUnitsPerTask[_mechanicalUnits[i].Task.Name].Add(_mechanicalUnits[i]);
+                    _robotsPerTask[_mechanicalUnits[i].Task.Name].Add(_mechanicalUnits[i]);
                 }
                 else if (_mechanicalUnits[i].Type == MechanicalUnitType.SingleAxis | _mechanicalUnits[i].Type == MechanicalUnitType.MultiAxes)
                 {
@@ -121,38 +144,61 @@ namespace RobotComponents.ABB.Controllers
                     _externalJointPositions.Add(_mechanicalUnits[i].Name, Enumerable.Repeat(9e9, _mechanicalUnits[i].NumberOfAxes).ToArray());
                     _externalAxisPlanes.Add(_mechanicalUnits[i].Name, Plane.Unset);
                     _mechanicalUnitsPerTask[_mechanicalUnits[i].Task.Name].Add(_mechanicalUnits[i]);
+                    _externalAxesPerTask[_mechanicalUnits[i].Task.Name].Add(_mechanicalUnits[i]);
                 }
             }
+
+            SetDefaultUser();
         }
 
+        /// <summary>
+        /// Reintiliazes this controller instance. 
+        /// </summary>
         public void ReInitiliaze()
         {
-            _mechanicalUnits.Clear();
-            _mechanicalUnitsPerTask.Clear();
-            _robots.Clear();
-            _externalAxes.Clear();
+            _logger.Clear();
+
+            _tasks.Clear();
+
             _robotJointPositions.Clear();
             _externalJointPositions.Clear();
             _robotToolPlanes.Clear();
             _externalAxisPlanes.Clear();
-            _tasks.Clear();
-            _logger.Clear();
+
+            _mechanicalUnits.Clear();
+            _robots.Clear();
+            _externalAxes.Clear();
+            
+            _mechanicalUnitsPerTask.Clear();
+            _robotsPerTask.Clear();
+            _externalAxesPerTask.Clear();
 
             Initiliaze();
 
             Log("Controller reinitiliazed.");
         }
 
+        /// <summary>
+        /// Writes a message to the logger. 
+        /// </summary>
+        /// <param name="msg"> The message to write to the logger. </param>
         private void Log(string msg)
         {
-            _logger.Insert(0, $"{CurrentTime()}: {msg}");
+            _logger.Insert(0, $"{DateTime.Now}: {msg}");
         }
 
+        /// <summary>
+        /// Resets the logger.
+        /// </summary>
         public void ResetLogger()
         {
             _logger.Clear();
         }
 
+        /// <summary>
+        /// Logon to the set user. 
+        /// </summary>
+        /// <returns> True on success, false on failure. </returns>
         public bool Logon()
         {
             try
@@ -169,6 +215,10 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
+        /// <summary>
+        /// Logs off the current user.
+        /// </summary>
+        /// <returns> True on success, false on failure. </returns>
         public bool Logoff()
         {
             try
@@ -178,13 +228,17 @@ namespace RobotComponents.ABB.Controllers
                 return true;
             }
 
-            catch
+            catch (Exception e)
             {
-                Log("Logoff failed.");
+                Log($"{e.Message}.");
                 return false;
             }
         }
 
+        /// <summary>
+        /// Disposes the current controller object inside this instance.
+        /// </summary>
+        /// <returns> True on success, false on failure. </returns>
         public bool Dispose()
         {
             try
@@ -207,38 +261,16 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns the robot base frames.
+        /// </summary>
+        /// <returns> A dictionary with as key the name of the robot and as value the base frame. </returns>
         public Dictionary<string, Plane> GetRobotBaseFrames()
         {
             Dictionary<string, Plane> result = new Dictionary<string, Plane>();
 
             ConfigurationDomainNS.TypeCollection types = _controller.Configuration.Domains["MOC"].Types;
             ConfigurationDomainNS.Type type = _controller.Configuration.Domains["MOC"].Types[types.IndexOf("ROBOT")];
-
-            /*
-            List<ConfigurationDomainNS.Instance> instances = new List<ConfigurationDomainNS.Instance>();
-            instances.AddRange(types[types.IndexOf("ROBOT")].GetInstances());
-            instances.AddRange(types[types.IndexOf("SINGLE")].GetInstances());
-
-            for (int i = 0; i < instances.Count; i++)
-            {
-                ConfigurationDomainNS.Instance instance = instances[i];
-
-                string name = (string)instance.GetAttribute("name");
-
-                double x = Convert.ToDouble(instance.GetAttribute("base_frame_pos_x").ToString()) * 1000;
-                double y = Convert.ToDouble(instance.GetAttribute("base_frame_pos_y").ToString()) * 1000;
-                double z = Convert.ToDouble(instance.GetAttribute("base_frame_pos_z").ToString()) * 1000;
-
-                double a = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u0").ToString());
-                double b = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u1").ToString());
-                double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
-                double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
-
-                Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
-
-                result.Add(name, plane);
-            }
-            */
 
             for (int i = 0; i < _robots.Count; i++)
             {
@@ -257,7 +289,7 @@ namespace RobotComponents.ABB.Controllers
                     double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
                     double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
 
-                    Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+                    Plane plane = QuaternionToPlane(x, y, z, a, b, c, d);
 
                     result.Add(name, plane);
                 }
@@ -270,6 +302,10 @@ namespace RobotComponents.ABB.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Returns the current robot tool planes.
+        /// </summary>
+        /// <returns> A dictionary with as key the name of the robot and as value the current tool planes. </returns>
         public Dictionary<string, Plane> GetRobotToolPlanes(int system)
         {
             CoordinateSystemType coordinateSystem = (CoordinateSystemType)system;
@@ -278,9 +314,14 @@ namespace RobotComponents.ABB.Controllers
             {
                 RapidDomainNS.RobTarget robTarget = _robots[i].GetPosition(coordinateSystem);
                     
-                Plane plane = RobotComponents.ABB.Utils.HelperMethods.QuaternionToPlane(
-                    robTarget.Trans.X, robTarget.Trans.Y, robTarget.Trans.Z,
-                    robTarget.Rot.Q1, robTarget.Rot.Q2, robTarget.Rot.Q3, robTarget.Rot.Q4);
+                Plane plane = QuaternionToPlane(
+                    robTarget.Trans.X, 
+                    robTarget.Trans.Y, 
+                    robTarget.Trans.Z,
+                    robTarget.Rot.Q1, 
+                    robTarget.Rot.Q2, 
+                    robTarget.Rot.Q3, 
+                    robTarget.Rot.Q4);
 
                 _robotToolPlanes[_robots[i].Name] = plane;
             }
@@ -288,6 +329,44 @@ namespace RobotComponents.ABB.Controllers
             return _robotToolPlanes;
         }
 
+        /// <summary>
+        /// Returns the current external axis planes.
+        /// </summary>
+        /// <returns> A dictionary with as key the name of the external axis and as value the current plane. </returns>
+        public Dictionary<string, Plane> GetExternalAxisPlanes(int system)
+        {
+            CoordinateSystemType coordinateSystem = (CoordinateSystemType)system;
+
+            for (int i = 0; i < _externalAxes.Count; i++)
+            {
+                try 
+                {
+                    RapidDomainNS.RobTarget robTarget = _externalAxes[i].GetPosition(coordinateSystem);
+
+                    Plane plane = QuaternionToPlane(
+                        robTarget.Trans.X,
+                        robTarget.Trans.Y,
+                        robTarget.Trans.Z,
+                        robTarget.Rot.Q1,
+                        robTarget.Rot.Q2,
+                        robTarget.Rot.Q3,
+                        robTarget.Rot.Q4);
+
+                    _externalAxisPlanes[_externalAxes[i].Name] = plane;
+                }
+                catch
+                {
+                    //_externalAxisPlanes[_externalAxes[i].Name] = Plane.Unset;
+                }
+            }
+
+            return _externalAxisPlanes;
+        }
+
+        /// <summary>
+        /// Returns the current robot joint positions.
+        /// </summary>
+        /// <returns> A dictionary with as key the name of the robot and as value the current robot joint position. </returns>
         public Dictionary<string, RobotJointPosition> GetRobotJointPositions()
         {
             for (int i = 0; i < _robots.Count; i++)
@@ -305,6 +384,10 @@ namespace RobotComponents.ABB.Controllers
             return _robotJointPositions;
         }
 
+        /// <summary>
+        /// Returns the current external joint positions.
+        /// </summary>
+        /// <returns> A dictionary with as key the name of the external axis and as value the current external joint position. </returns>
         public Dictionary<string, double[]> GetExternalJointPositions()
         {
             for (int i = 0; i < _externalAxes.Count; i++)
@@ -330,112 +413,131 @@ namespace RobotComponents.ABB.Controllers
             return _externalJointPositions;
         }
 
+        /// <summary>
+        /// Returns the analog output names.
+        /// </summary>
+        /// <returns> A list with analog output names. </returns>
         public List<string> GetAnalogOutputNames()
         {
-            IOSystemDomainNS.SignalCollection signals = this.GetAnalogOutputs(); 
-            return signals.ToList().ConvertAll(signal => signal.Name);
+            List<Signal> signals = GetAnalogOutputs(); 
+            return signals.ConvertAll(signal => signal.Name);
         }
 
+        /// <summary>
+        /// Returns the digital output names.
+        /// </summary>
+        /// <returns> A list with digital output names. </returns>
         public List<string> GetDigitalOutputNames()
         {
-            IOSystemDomainNS.SignalCollection signals = this.GetDigitalOutputs();
-            return signals.ToList().ConvertAll(signal => signal.Name);
+            List<Signal> signals = GetDigitalOutputs();
+            return signals.ConvertAll(signal => signal.Name);
         }
 
+        /// <summary>
+        /// Returns the analog input names. 
+        /// </summary>
+        /// <returns> A list with analog input names. </returns>
         public List<string> GetAnalogInputNames()
         {
-            IOSystemDomainNS.SignalCollection signals = this.GetAnalogInputs();
-            return signals.ToList().ConvertAll(signal => signal.Name);
+            List<Signal> signals = GetAnalogInputs();
+            return signals.ConvertAll(signal => signal.Name);
         }
 
+        /// <summary>
+        /// Returns the digital input names. 
+        /// </summary>
+        /// <returns> A list with digital input names. </returns>
         public List<string> GetDigitalInputNames()
         {
-            IOSystemDomainNS.SignalCollection signals = this.GetDigitalInputs();
-            return signals.ToList().ConvertAll(signal => signal.Name);
+            List<Signal> signals = GetDigitalInputs();
+            return signals.ConvertAll(signal => signal.Name);
         }
 
-        public IOSystemDomainNS.SignalCollection GetAnalogOutputs()
+        /// <summary>
+        /// Returns the analog output signals. 
+        /// </summary>
+        /// <returns> A list with analog output signals. </returns>
+        public List<Signal> GetAnalogOutputs()
         {
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Output | IOSystemDomainNS.IOFilterTypes.Analog);
-            IOSystemDomainNS.SignalCollection result = new IOSystemDomainNS.SignalCollection();
+            List<Signal> result = new List<Signal>();
 
             for (int i = 0; i < signals.Count; i++)
             {
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
                 {
-                    result.Add(signals[i]);
+                    result.Add(new Signal(signals[i]));
                 }
             }
 
             return result;
         }
 
-        public IOSystemDomainNS.SignalCollection GetDigitalOutputs()
+        /// <summary>
+        /// Returns the digital output signals. 
+        /// </summary>
+        /// <returns> A list with digital output signals. </returns>
+        public List<Signal> GetDigitalOutputs()
         {
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Output | IOSystemDomainNS.IOFilterTypes.Digital);
-            IOSystemDomainNS.SignalCollection result = new IOSystemDomainNS.SignalCollection();
+            List<Signal> result = new List<Signal>();
 
             for (int i = 0; i < signals.Count; i++)
             {
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
                 {
-                    result.Add(signals[i]);
+                    result.Add(new Signal(signals[i]));
                 }
             }
 
             return result;
         }
 
-        public IOSystemDomainNS.SignalCollection GetAnalogInputs()
+        /// <summary>
+        /// Returns the analog inputs. 
+        /// </summary>
+        /// <returns> A list with analog inputs. </returns>
+        public List<Signal> GetAnalogInputs()
         {
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Input | IOSystemDomainNS.IOFilterTypes.Analog);
-            IOSystemDomainNS.SignalCollection result = new IOSystemDomainNS.SignalCollection();
+            List<Signal> result = new List<Signal>();
 
             for (int i = 0; i < signals.Count; i++)
             {
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
                 {
-                    result.Add(signals[i]);
+                    result.Add(new Signal(signals[i]));
                 }
             }
 
             return result;
         }
 
-        public IOSystemDomainNS.SignalCollection GetDigitalInputs()
+        /// <summary>
+        /// Returns the digital inputs.
+        /// </summary>
+        /// <returns> A list with digital inputs. </returns>
+        public List<Signal> GetDigitalInputs()
         {
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Input | IOSystemDomainNS.IOFilterTypes.Digital);
-            IOSystemDomainNS.SignalCollection result = new IOSystemDomainNS.SignalCollection();
+            List<Signal> result = new List<Signal>();
 
             for (int i = 0; i < signals.Count; i++)
             {
                 if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
                 {
-                    result.Add(signals[i]);
+                    result.Add(new Signal(signals[i]));
                 }
             }
 
             return result;
         }
 
-        public bool SetSignal(string name, float value)
-        {
-            // TODO: Check Acces level
-            // TODO: Check if value is in limits
-
-            try
-            {
-                IOSystemDomainNS.Signal signal = PickSignal(name);
-                signal.Value = value;
-                return true;
-            }
-            catch
-            {
-                Log($"Could not set the value of signal {name}.");
-                return false;
-            }
-        }
-
+        /// <summary>
+        /// Sets the uner name and password. 
+        /// </summary>
+        /// <param name="name"> The user name. </param>
+        /// <param name="password"> The password. </param>
         public void SetUserInfo(string name, string password = "")
         {
             _userName = name;
@@ -445,26 +547,34 @@ namespace RobotComponents.ABB.Controllers
             Log($"Username set to {_userName}");
         }
 
+        /// <summary>
+        /// Sets the default user info. 
+        /// </summary>
         public void SetDefaultUser()
         {
-            _userInfo = ControllersNS.UserInfo.DefaultUser;
-
-            _userName = _userInfo.Name;
-            _password = _userInfo.Password;
+            _userName = ControllersNS.UserInfo.DefaultUser.Name;
+            _password = ControllersNS.UserInfo.DefaultUser.Password;
 
             Log("User Info set to DefaultUser.");
         }
 
-        public IOSystemDomainNS.Signal PickSignal(string name)
-        {
-            return _controller.IOSystem.GetSignal(name);
-        }
-
+        /// <summary>
+        /// Returns a signal from the controller. 
+        /// </summary>
+        /// <param name="name"> The name of the signal to be picked. </param>
+        /// <returns> A signal from the controller. </returns>
         public Signal GetSignal(string name)
         {
             return new Signal(_controller.IOSystem.GetSignal(name));
         }
 
+        /// <summary>
+        /// Uploads a module to the controller. 
+        /// </summary>
+        /// <param name="taskName"> The task to upload to. </param>
+        /// <param name="module"> The module to upload. </param>
+        /// <param name="status"> The status message. </param>
+        /// <returns> True on success, false on failure. </returns>
         public bool UploadModule(string taskName, List<string> module, out string status)
         {
             status = "";
@@ -561,18 +671,8 @@ namespace RobotComponents.ABB.Controllers
                     }
                     catch
                     {
-                        //_programPointerWarning = true;
+                        Log("Could not reset the program pointer.");
                     }
-                }
-
-                // Update action status message
-                if (module.Count != 0)
-                {
-                    //_uStatus = "The RAPID code is succesfully uploaded.";
-                }
-                else
-                {
-                    //_uStatus = "The RAPID is not uploaded since there is no code defined.";
                 }
 
                 // Give back the mastership
@@ -588,6 +688,11 @@ namespace RobotComponents.ABB.Controllers
             return false; // Returns true on success
         }
 
+        /// <summary>
+        /// Resets all the program pointers. 
+        /// </summary>
+        /// <param name="status"> The status message, </param>
+        /// <returns> True on success, false on failure. </returns>
         public bool ResetProgramPointers(out string status)
         {
             bool succeeded = false;
@@ -608,7 +713,7 @@ namespace RobotComponents.ABB.Controllers
                             tasks[i].ResetProgramPointer();
                         }
 
-                        status = "Reset of all program pointers succeeded.";
+                        status = "Reset of the program pointers succeeded.";
                         Log(status);
 
                         succeeded = true;
@@ -616,7 +721,7 @@ namespace RobotComponents.ABB.Controllers
                     }
                     catch (Exception e)
                     {
-                        status = "Could not reset all program pointers.";
+                        status = "Could not reset the program pointers.";
                         Log(status);
                         Log(e.Message);
 
@@ -633,6 +738,12 @@ namespace RobotComponents.ABB.Controllers
             return succeeded;
         }
 
+        /// <summary>
+        /// Resets the program pointer of a given task. 
+        /// </summary>
+        /// <param name="taskName"> The task name. </param>
+        /// <param name="status">The status message. </param>
+        /// <returns> True on success, false on failure. </returns>
         public bool ResetProgramPointer(string taskName, out string status)
         {
             bool succeeded = false;
@@ -649,7 +760,7 @@ namespace RobotComponents.ABB.Controllers
                         RapidDomainNS.Task task = _controller.Rapid.GetTask(taskName);
                         task.ResetProgramPointer();
 
-                        status = "Reset of program pointer succeeded.";
+                        status = "Reset of the program pointer succeeded.";
                         Log(status);
 
                         succeeded = true;
@@ -674,6 +785,11 @@ namespace RobotComponents.ABB.Controllers
             return succeeded;
         }
 
+        /// <summary>
+        /// Makes a call to run the program. 
+        /// </summary>
+        /// <param name="status"> The status message. </param>
+        /// <returns> True on success, false on failure. </returns>
         public bool RunProgram(out string status)
         {
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
@@ -705,6 +821,11 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
+        /// <summary>
+        /// Makes a call to stop the program. 
+        /// </summary>
+        /// <param name="status"> The status message. </param>
+        /// <returns> True on success, false on failure. </returns>
         public bool StopProgram(out string status)
         {
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
@@ -727,21 +848,26 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns the value from the configuration database for a given path. 
+        /// </summary>
+        /// <param name="domain"> The domain name. </param>
+        /// <param name="type"> The type name. </param>
+        /// <param name="instance"> The instance name. </param>
+        /// <param name="attribute">TThe attribute name. </param>
+        /// <returns> A value from the configuration database. </returns>
         public string ReadConfigurationDatabase(string domain, string type, string instance, string attribute)
         {
             string[] path = new string[4]{ domain, type, instance, attribute };
             return _controller.Configuration.Read(path);
         }
-
-        private bool WriteConfigurationDataBase(string domain, string type, string instance, string attribute, string value)
-        {
-            // TODO
-
-            return false; // Returns true on success
-        }
         #endregion
 
         #region static properties
+        /// <summary>
+        /// Gets the controllers found in the network. 
+        /// Call the static method GetControllers to scan the network. 
+        /// </summary>
         public static List<Controller> Controllers
         {
             get { return _controllers; }
@@ -749,6 +875,9 @@ namespace RobotComponents.ABB.Controllers
         #endregion
 
         #region properties
+        /// <summary>
+        /// Gets a value indicating whether or not the object is valid.
+        /// </summary>
         public bool IsValid
         {
             get
@@ -758,34 +887,114 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
-        public ControllersNS.Controller ControllerInstanceABB
+        /// <summary>
+        /// Gets the controller instance. 
+        /// </summary>
+        public ControllersNS.Controller ControllerABB
         {
             get { return _controller; }
         }
 
-        public List<RapidDomainNS.Task> Tasks
+        /// <summary>
+        /// Gets the list with controller tasks. 
+        /// </summary>
+        public List<RapidDomainNS.Task> TasksABB
         {
             get { return _tasks; }
         }
 
+        /// <summary>
+        /// Gets the task names. 
+        /// </summary>
         public List<string> TaskNames
         {
             get { return _tasks.ConvertAll(item => item.Name); }
         }
 
+        /// <summary>
+        /// Gets the name of the controller. 
+        /// </summary>
         public string Name
         {
             get { return _controller.Name; }
         }
 
+        /// <summary>
+        /// Gets the set username. 
+        /// </summary>
         public string UserName
         {
             get { return _userName; }
         }
 
+        /// <summary>
+        /// Gets the logger. 
+        /// </summary>
         public List<string> Logger
         {
             get { return _logger; }
+        }
+        #endregion
+
+        #region events
+        private bool SubscribeToEvents()
+        {
+            try
+            {
+                // Controller domain
+                _controller.ConnectionChanged += OnConnectionChangedEvent;
+                _controller.MastershipChanged += OnMastershipChangedEvent;
+                _controller.OperatingModeChanged += OnOperatingModeChangeEvent;
+                _controller.StateChanged += OnStateChangedEventArgs;
+
+                // Event log domain
+                // Not implemented
+
+                // Signal domain
+                // Not implemented
+
+                // Motion domain
+                // Not implemented
+
+                // Rapid domain
+                // Not implemented
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void OnBackupEventArgs(object sender, ControllersNS.BackupEventArgs e)
+        {
+            // Not implemented
+        }
+
+        private void OnConnectionChangedEvent(object sender, ControllersNS.ConnectionChangedEventArgs e)
+        {
+            // Not implemented
+        }
+
+        private void OnControllerEvent(object sender, ControllersNS.ControllerEventArgs e)
+        {
+            // Not implemented
+        }
+
+        private void OnMastershipChangedEvent(object sender, ControllersNS.MastershipChangedEventArgs e)
+        {
+            // Not implemented
+        }
+
+        private void OnOperatingModeChangeEvent(object sender, ControllersNS.OperatingModeChangeEventArgs e)
+        {
+            // Not implemented
+        }
+
+        private void OnStateChangedEventArgs(object sender, ControllersNS.StateChangedEventArgs e)
+        {
+            // Not implemented
         }
         #endregion
     }

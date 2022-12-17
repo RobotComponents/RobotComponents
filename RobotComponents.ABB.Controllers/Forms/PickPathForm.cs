@@ -11,41 +11,48 @@ using ABB.Robotics.Controllers.ConfigurationDomain;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
+    /// <summary>
+    /// Represents the pick path form class.
+    /// </summary>
     public partial class PickPathForm : Form
     {
-        public string Domain = "";
-        public string Type = "";
-        public string Instance = "";
-        public string Attribute = "";
+        #region fields
+        private static Controller _controller;
 
         private DomainCollection _domains = new DomainCollection();
         private TypeCollection _types = new TypeCollection();
         private Instance[] _instances = new Instance[0];
         private AttributeCollection _attributes = new AttributeCollection();
 
-        private static Controller _controller;
+        private string _domain = "";
+        private string _type = "";
+        private string _instance = "";
+        private string _attribute = "";
+        #endregion
 
-        public PickPathForm()
-        {
-            InitializeComponent();
-        }
-
+        #region constructors
+        /// <summary>
+        /// Initiales a pick path form.
+        /// </summary>
+        /// <param name="controller"> The controller to read from. </param>
         public PickPathForm(Controller controller)
         {
             _controller = controller;
             InitializeComponent();
-            this.PopulateDomains();
-            Domain = _domains[0].Name;
+            PopulateDomains();
+            _domain = _domains[0].Name;
         }
+        #endregion
 
+        #region methods
         private void Button1Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void ComboBoxDomainSelectedIndexChanged(object sender, EventArgs e)
         {
-            Domain = _domains[comboBoxDomain.SelectedIndex].Name;
+            _domain = _domains[comboBoxDomain.SelectedIndex].Name;
 
             if (PopulateTypes() == false)
             {
@@ -61,16 +68,16 @@ namespace RobotComponents.ABB.Controllers.Forms
                 _types = new TypeCollection();
                 _instances = new Instance[0];
                 _attributes = new AttributeCollection();
-                Type = "";
-                Instance = "";
-                Attribute = "";
+                _type = "";
+                _instance = "";
+                _attribute = "";
                 labelValueInfo.Text = "-";
             }
         }
 
         private void ComboBoxTypeSelectedIndexChanged(object sender, EventArgs e)
         {
-            Type = _types[comboBoxType.SelectedIndex].Name;
+            _type = _types[comboBoxType.SelectedIndex].Name;
 
             if (PopulateInstances() == false)
             {
@@ -82,15 +89,15 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxAttribute.SelectedIndex = -1;
                 _instances = new Instance[0];
                 _attributes = new AttributeCollection();
-                Instance = "";
-                Attribute = "";
+                _instance = "";
+                _attribute = "";
                 labelValueInfo.Text = "-";
             }
         }
 
         private void ComboBoxInstanceSelectedIndexChanged(object sender, EventArgs e)
         {
-            Instance = _instances[comboBoxInstance.SelectedIndex].Name;
+            _instance = _instances[comboBoxInstance.SelectedIndex].Name;
 
             if (PopulateAttributes() == false)
             {
@@ -98,7 +105,7 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxAttribute.DataSource = null;
                 comboBoxAttribute.SelectedIndex = -1;
                 _attributes = new AttributeCollection();
-                Attribute = "";
+                _attribute = "";
                 labelValueInfo.Text = "-";
             }
         }
@@ -107,7 +114,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         {
             if (comboBoxAttribute.SelectedIndex != -1 && _attributes.Count != 0)
             {
-                Attribute = _attributes[comboBoxAttribute.SelectedIndex].Name;
+                _attribute = _attributes[comboBoxAttribute.SelectedIndex].Name;
 
                 try
                 {
@@ -121,14 +128,14 @@ namespace RobotComponents.ABB.Controllers.Forms
             }
             else
             {
-                Attribute = "";
+                _attribute = "";
             }
         }
 
         private bool PopulateDomains()
         {
             comboBoxDomain.Items.Clear();
-            _domains = _controller.ControllerInstanceABB.Configuration.Domains;
+            _domains = _controller.ControllerABB.Configuration.Domains;
 
             if (_domains.Count != 0)
             {
@@ -227,5 +234,40 @@ namespace RobotComponents.ABB.Controllers.Forms
 
             return false;
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets the name of the domain.
+        /// </summary>
+        public string Domain
+        {
+            get { return _domain; }
+        }
+
+        /// <summary>
+        /// Gets the type name. 
+        /// </summary>
+        public string Type
+        {
+            get { return _type; }
+        }
+
+        /// <summary>
+        /// Gets the name of the instance.
+        /// </summary>
+        public string Instance
+        {
+            get { return _instance; }
+        }
+
+        /// <summary>
+        /// Gets the name of the attribute. 
+        /// </summary>
+        public string Attribute
+        {
+            get { return _attribute; }
+        }
+        #endregion
     }
 }

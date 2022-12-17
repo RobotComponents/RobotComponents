@@ -11,18 +11,18 @@ using Grasshopper.Kernel;
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and set the Digital Outputs on a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get Plane from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class SetDigitalOutputComponent_OBSOLETE : GH_Component
+    public class GetPlaneComponent_OBSOLETE : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the SetDigitalOutput class.
+        /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
-        public SetDigitalOutputComponent_OBSOLETE()
-          : base("Set Digital Output", "SetDO",
-              "Changes the state of a defined digital output from an ABB IRC5 robot controller in Realtime."
-               + System.Environment.NewLine + System.Environment.NewLine +
+        public GetPlaneComponent_OBSOLETE()
+          : base("Get Plane", "GP", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
+              "Gets the position of a mechanical unit from the defined ABB IRC5 robot controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -33,12 +33,8 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connected to as Robot Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("DO Name", "N", "Name of the Digital Output as text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State of the Digital Output as bool", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
-
-            pManager[1].Optional = true;
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to extract the position from as Robot Controller", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -46,7 +42,8 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Signal", "S", "Signal of the Digital Output", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Plane", "P", "Position Plane of the mechanical unit", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Names of the mechanical units", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -55,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick a new component from the toolbar.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick the new component from the toolbar.");
         }
 
         #region properties
@@ -81,7 +78,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SetDigitalOutput_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.GetPlane_Icon; }
         }
 
         /// <summary>
@@ -89,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8fbb97b5-cdc4-41de-a33d-df1d6f7bda21"); }
+            get { return new Guid("3090E331-FF16-4D17-ACAC-513D288B37C4"); }
         }
         #endregion
     }

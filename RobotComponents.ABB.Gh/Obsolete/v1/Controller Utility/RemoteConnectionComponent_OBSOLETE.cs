@@ -7,27 +7,26 @@
 using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// RobotComponents Libs
-using RobotComponents.ABB.Gh.Parameters.Actions;
 
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class GetAxisValuesComponent_OBSOLETE : GH_Component
+    public class RemoteConnectionComponent_OBSOLETE : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GetAxisValues class.
+        /// Initializes a new instance of the RemoteConnection class.
         /// </summary>
-        public GetAxisValuesComponent_OBSOLETE()
-          : base("Get Axis Values", "GA",
-              "Gets the current robot axis values from an ABB IRC5 robot controller."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
+        public RemoteConnectionComponent_OBSOLETE()
+          : base("Remote Connection", "Remote Connection",
+              "Establishes a remote connection with the controller to upload an run RAPID code directly on a virtual or real ABB IRC5 robot controller."
+              + System.Environment.NewLine + System.Environment.NewLine +
+              "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
+            this.Message = "-";
         }
 
         /// <summary>
@@ -35,7 +34,16 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller as Robot Controller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to connect to as Robot Controller", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Connect", "C", "Create an online connection with the Robot Controller as bool", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Upload", "U", "Upload the RAPID code to the Robot as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item, false);
+            pManager.AddTextParameter("Program Module", "PM", "Program Module code as a list with code lines", GH_ParamAccess.list);
+            pManager.AddTextParameter("System Module", "SM", "System Module code as as list with code lines", GH_ParamAccess.list);
+
+            pManager[5].Optional = true;
+            pManager[6].Optional = true;
         }
 
         /// <summary>
@@ -43,8 +51,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
-            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Status", "S", "Status of the ABB IRC5 robot controller", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,7 +60,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick a new component from the toolbar.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick the new component from the toolbar.");
         }
 
         #region properties
@@ -75,19 +82,11 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         }
 
         /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get { return RobotComponents.ABB.Gh.Properties.Resources.GetAxisValues_Icon; }
-        }
-
-        /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2C546F24-938B-4C8A-85D9-22927E51E1FD"); }
+            get { return new Guid("8bfb75d4-9122-45a3-9f11-8d01fb7ea069"); }
         }
         #endregion
     }

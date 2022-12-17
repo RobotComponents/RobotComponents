@@ -12,11 +12,12 @@ using Grasshopper.Kernel;
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and connect to an ABB controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets an ABB controller from the network. An inherent from the GH_Component Class.
     /// </summary>
     public class GetControllerComponent : GH_Component
     {
@@ -127,8 +128,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Controller", MenuItemClick);
-            //Menu_AppendSeparator(menu);
-            //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
         /// <summary>
@@ -138,8 +139,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
-            //string url = Documentation.ComponentWeblinks[this.GetType()];
-            //Documentation.OpenBrowser(url);
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
         }
 
         /// <summary>
@@ -186,11 +187,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             {
                 if (_controller != null)
                 {
-                    if (_controller.IsValid)
-                    {
-                        _controller.Logoff();
-                        _controller.Dispose();
-                    }
+                    _controller.Logoff();
+                    _controller.Dispose();
                 }
             }
         }

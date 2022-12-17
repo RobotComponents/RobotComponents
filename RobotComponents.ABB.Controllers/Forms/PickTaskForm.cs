@@ -9,39 +9,57 @@ using System.Windows.Forms;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
+    /// <summary>
+    /// Represents the pick task form class.
+    /// </summary>
     public partial class PickTaskForm : Form
     {
-        public int Index = 0;
-        private Controller _controller = new Controller();
+        #region fields
+        private readonly Controller _controller = new Controller();
+        private int _index = 0;
+        #endregion
 
-        public PickTaskForm()
-        {
-            InitializeComponent();
-        }
-
+        #region constructors
+        /// <summary>
+        /// Creates a pick task form.
+        /// </summary>
+        /// <param name="controller"> The controller to pick a task from. </param>
         public PickTaskForm(Controller controller)
         {
             InitializeComponent();
 
             _controller = controller;
 
-            for (int i = 0; i < _controller.Tasks.Count; i++)
+            for (int i = 0; i < _controller.TasksABB.Count; i++)
             {
-                comboBox.Items.Add(_controller.Tasks[i].Name[i]);
+                comboBox.Items.Add(_controller.TasksABB[i].Name[i]);
             }
         }
+        #endregion
 
+        #region methods
         private void Button1Click(object sender, EventArgs e)
         {
-            Index = comboBox.SelectedIndex;
+            _index = comboBox.SelectedIndex;
             this.Close();
         }
 
         private void ComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = _controller.Tasks[comboBox.SelectedIndex].Name.ToString();
-            this.labelTaskTypeInfo.Text = _controller.Tasks[comboBox.SelectedIndex].TaskType.ToString();
-            this.labelEnabledInfo.Text = _controller.Tasks[comboBox.SelectedIndex].Enabled.ToString();
+            this.labelNameInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].Name.ToString();
+            this.labelTaskTypeInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].TaskType.ToString();
+            this.labelEnabledInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].Enabled.ToString();
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets the selected index.
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+        #endregion
     }
 }

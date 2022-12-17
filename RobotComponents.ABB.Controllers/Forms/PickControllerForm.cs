@@ -7,20 +7,23 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-// RobotComponents Libs
-using RobotComponents.ABB.Controllers;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
+    /// <summary>
+    /// Represents the pick controller form class.
+    /// </summary>
     public partial class PickControllerForm : Form
     {
-        public int Index = 0;
+        #region fields
+        private int _index = 0;
+        #endregion
 
-        public PickControllerForm()
-        {
-            InitializeComponent();
-        }
-
+        #region constructors
+        /// <summary>
+        /// Constructs the form from a given list with items.
+        /// </summary>
+        /// <param name="items"> Items to fill the form with. </param>
         public PickControllerForm(List<string> items)
         {
             InitializeComponent();
@@ -30,20 +33,33 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBox1.Items.Add(items[i]);
             }
         }
+        #endregion
 
+        #region methods
         private void Button1Click(object sender, EventArgs e)
         {
-            Index = comboBox1.SelectedIndex;
+            _index = comboBox1.SelectedIndex;
             this.Close();
         }
 
         private void ComboBoxSelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerInstanceABB.Name;
-            this.labelSystemNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerInstanceABB.SystemName;
-            this.labelIPInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerInstanceABB.IPAddress.ToString();
-            this.labelIsVirtualInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerInstanceABB.IsVirtual.ToString();
-            this.labelOperationModeInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerInstanceABB.OperatingMode.ToString();
+            this.labelNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.Name;
+            this.labelSystemNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.SystemName;
+            this.labelIPInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.IPAddress.ToString();
+            this.labelIsVirtualInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.IsVirtual.ToString();
+            this.labelOperationModeInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.OperatingMode.ToString();
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets the picked index.
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+        #endregion
     }
 }

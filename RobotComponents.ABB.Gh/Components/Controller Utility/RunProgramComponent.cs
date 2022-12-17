@@ -11,13 +11,14 @@ using Grasshopper.Kernel;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Run program component. An inherent from the GH_Component Class.
+    /// Represents the component that runs a program. An inherent from the GH_Component Class.
     /// </summary>
-    public class PlayProgramComponent : GH_Component
+    public class RunProgramComponent : GH_Component
     {
         #region fields
         private Controller _controller;
@@ -27,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the RunProgram class.
         /// </summary>
-        public PlayProgramComponent()
+        public RunProgramComponent()
           : base("Run Program", "RP",
               "Starts and stops RAPID programs directly on a real or virtual controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -135,8 +136,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            //Menu_AppendSeparator(menu);
-            //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
         /// <summary>
@@ -146,8 +147,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
-            //string url = Documentation.ComponentWeblinks[this.GetType()];
-            //Documentation.OpenBrowser(url);
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
         }
         #endregion
     }

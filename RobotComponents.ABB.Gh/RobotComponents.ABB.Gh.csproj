@@ -69,6 +69,7 @@
     <Compile Include="Components\Controller Utility\GetLogComponent.cs" />
     <Compile Include="Components\Controller Utility\GetRobotBaseFrameComponent.cs" />
     <Compile Include="Components\Controller Utility\GetRobotJointPositionComponent.cs" />
+    <Compile Include="Components\Controller Utility\GetExternalAxisPlaneComponent.cs" />
     <Compile Include="Components\Controller Utility\GetRobotToolPlaneComponent.cs" />
     <Compile Include="Components\Controller Utility\ReadConfigurationDatabaseComponent.cs" />
     <Compile Include="Components\Controller Utility\RunProgramComponent.cs" />
@@ -159,7 +160,7 @@
     <Compile Include="Components\Definitions\Presets\IRB6650_200_2_75_Component.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromQuaternionComponent_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\GetObjectManager.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\GetPlaneComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\GetPlaneComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructWorkObjectComponent.cs" />
     <Compile Include="Components\Definitions\ExternalRotationalAxisComponent.cs" />
@@ -170,13 +171,13 @@
     <Compile Include="Obsolete\v1\SpeedDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
     <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\GetAxisValuesComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\GetControllerComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\GetDigitalInputComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\GetDigitalOutputComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\RemoteConnectionComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\SetDigitalInputComponent_OBSOLETE.cs" />
-    <Compile Include="Obsolete\v2\Controller Utility\SetDigitalOutputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\GetAxisValuesComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\GetControllerComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\GetDigitalInputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\GetDigitalOutputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\RemoteConnectionComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\SetDigitalInputComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\Controller Utility\SetDigitalOutputComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructExternalLinearAxisComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructMovementComponent.cs" />
     <Compile Include="Components\Deconstruct\Definitions\DeconstructRobotComponent.cs" />
@@ -703,6 +704,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ReadDatabase_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Obsolete\v2\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

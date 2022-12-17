@@ -7,22 +7,24 @@
 using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// RobotComponents Libs
+using RobotComponents.ABB.Gh.Parameters.Actions;
 
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get Plane from a defined controller. An inherent from the GH_Component Class.
+    /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class GetPlaneComponent_OBSOLETE : GH_Component
+    public class GetAxisValuesComponent_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GetAxisValues class.
         /// </summary>
-        public GetPlaneComponent_OBSOLETE()
-          : base("Get Plane", "GP", "Controller Utility" + System.Environment.NewLine + System.Environment.NewLine +
-              "Gets the position of a mechanical unit from the defined ABB IRC5 robot controller."
-                + System.Environment.NewLine + System.Environment.NewLine +
+        public GetAxisValuesComponent_OBSOLETE()
+          : base("Get Axis Values", "GA",
+              "Gets the current robot axis values from an ABB IRC5 robot controller."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -33,8 +35,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller to extract the position from as Robot Controller", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
+            pManager.AddGenericParameter("Robot Controller", "RC", "Robot Controller as Robot Controller", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,8 +43,8 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Position Plane of the mechanical unit", GH_ParamAccess.list);
-            pManager.AddTextParameter("Name", "N", "Names of the mechanical units", GH_ParamAccess.list);
+            pManager.RegisterParam(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Extracted Robot Joint Position");
+            pManager.AddNumberParameter("External Axis Values", "EAV", "Extracted external Axis Values", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick a new component from the toolbar.");
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE. Pick the new component from the toolbar.");
         }
 
         #region properties
@@ -78,7 +79,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.ABB.Gh.Properties.Resources.GetPlane_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.GetAxisValues_Icon; }
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Components.Obsolete
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3090E331-FF16-4D17-ACAC-513D288B37C4"); }
+            get { return new Guid("2C546F24-938B-4C8A-85D9-22927E51E1FD"); }
         }
         #endregion
     }

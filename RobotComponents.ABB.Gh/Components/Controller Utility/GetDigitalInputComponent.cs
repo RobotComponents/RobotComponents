@@ -16,7 +16,7 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and read the Digital Inputs from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets digital inputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
     public class GetDigitalInputComponent : GH_Component
     {
@@ -118,8 +118,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Update Value List", MenuItemClick);
-            //Menu_AppendSeparator(menu);
-            //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
         /// <summary>
@@ -129,8 +129,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
-            //string url = Documentation.ComponentWeblinks[this.GetType()];
-            //Documentation.OpenBrowser(url);
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
         }
 
         /// <summary>

@@ -10,29 +10,32 @@ using System.Windows.Forms;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
-    public partial class PickDOForm : Form
+    /// <summary>
+    /// Represents the pick signal form class.
+    /// </summary>
+    public partial class PickSignalForm : Form
     {
-        public static int SignalIndex = 0;
+        #region fields
+        private int _index = 0;
+        #endregion
 
-        public PickDOForm()
+        #region constructors
+        /// <summary>
+        /// Constructs a pick signal form.
+        /// </summary>
+        /// <param name="items"> The items to fill the form with. </param>
+        public PickSignalForm(List<string> items)
         {
             InitializeComponent();
-        }
 
-        public PickDOForm(List<string> items)
-        {
-            InitializeComponent();
             for (int i = 0; i < items.Count; i++)
             {
                 comboBox1.Items.Add(items[i]);
             }
         }
+        #endregion
 
-        private void PickDO_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        #region methods
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.labelNameInfo.Text = "-";
@@ -44,8 +47,19 @@ namespace RobotComponents.ABB.Controllers.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            SignalIndex = comboBox1.SelectedIndex;
+            _index = comboBox1.SelectedIndex;
             this.Close();
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets the index of the picked signal. 
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+        #endregion
     }
 }

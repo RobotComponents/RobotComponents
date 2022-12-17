@@ -138,5 +138,6 @@
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
+    <DocumentationFile>bin\RobotComponents.ABB.Controllers.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

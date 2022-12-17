@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Controllers
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Controllers
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.septenary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>

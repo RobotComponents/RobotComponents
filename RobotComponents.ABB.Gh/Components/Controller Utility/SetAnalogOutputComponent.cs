@@ -16,7 +16,7 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// RobotComponents Controller Utility : Get and set the Analog Outputs on a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets and sets analog outputs on a defined controller. An inherent from the GH_Component Class.
     /// </summary>
     public class SetAnalogOutputComponent : GH_Component
     {
@@ -76,12 +76,27 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (!DA.GetData(3, ref update)) { return; }
 
             // Get the signal
-            _signal = _controller.GetSignal(name);
+            if (name != _signal.Name)
+            {
+                try
+                {
+                    _signal = _controller.GetSignal(name);
+                }
+                catch (Exception e)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, e.Message);
+                }
+            }
 
             // Update the signal
             if (update == true)
             {
-                _controller.SetSignal(name, Convert.ToSingle(value));
+                bool success = _signal.SetValue(Convert.ToSingle(value), out string msg);
+
+                if (success == false)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, msg);
+                }
             }
 
             // Output
@@ -132,8 +147,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Create Value List", MenuItemClick);
-            //Menu_AppendSeparator(menu);
-            //Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
 
         /// <summary>
@@ -143,8 +158,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClickComponentDoc(object sender, EventArgs e)
         {
-            //string url = Documentation.ComponentWeblinks[this.GetType()];
-            //Documentation.OpenBrowser(url);
+            string url = Documentation.ComponentWeblinks[this.GetType()];
+            Documentation.OpenBrowser(url);
         }
 
         /// <summary>

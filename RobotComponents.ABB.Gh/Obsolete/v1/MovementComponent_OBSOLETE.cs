@@ -11,7 +11,9 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Instructions;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Actions;

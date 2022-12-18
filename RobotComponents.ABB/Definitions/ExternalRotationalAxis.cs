@@ -12,9 +12,8 @@ using static System.Math;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Definitions
 {

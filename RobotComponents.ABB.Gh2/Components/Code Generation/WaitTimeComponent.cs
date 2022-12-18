@@ -14,7 +14,7 @@ using Grasshopper.Components;
 using Grasshopper.UI;
 using GrasshopperIO;
 // Robot Components Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Instructions;
 
 namespace RobotComponents.ABB.Gh2.Components.Code_Generation
 {

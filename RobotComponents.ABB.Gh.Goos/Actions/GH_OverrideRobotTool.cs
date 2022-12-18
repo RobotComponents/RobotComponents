@@ -9,6 +9,8 @@ using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.Utils;
 using RobotComponents.ABB.Gh.Goos.Definitions;

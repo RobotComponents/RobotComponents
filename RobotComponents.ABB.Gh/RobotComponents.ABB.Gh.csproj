@@ -119,9 +119,9 @@
     <Compile Include="Obsolete\v1\ExternalJointPositionComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\RobotJointPositionComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\RobotTargetComponent_OBSOLETE.cs" />
-    <Compile Include="Components\Deconstruct\Code Generation\DeconstructExtJointPosComponent.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructExternalJointPositionComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructJointTargetComponent.cs" />
-    <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobJointPosComponent.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobotJointPosistionComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobotTargetComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1100_4_0_475_Component.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1100_4_0_58_Component.cs" />

@@ -11,7 +11,9 @@ using System.Linq;
 using Rhino.Geometry;
 using Rhino.Geometry.Intersect;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 
 namespace RobotComponents.ABB.Kinematics

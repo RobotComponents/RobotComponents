@@ -3,13 +3,14 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
+using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
-using System;
-using System.Collections.Generic;
 
 namespace RobotComponents.ABB.Kinematics
 {

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
+using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Gh.Utils;
 
@@ -63,7 +64,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             if (!DA.GetData(0, ref duration)) { return; }
 
             // Create the action
-            RobotComponents.ABB.Actions.WaitTime timer = new RobotComponents.ABB.Actions.WaitTime(duration);
+            WaitTime timer = new WaitTime(duration);
 
             // Output
             DA.SetData(0, timer);

@@ -13,7 +13,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Gh.Goos.Actions;
 using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Gh.Utils;

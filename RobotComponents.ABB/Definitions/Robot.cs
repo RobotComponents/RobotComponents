@@ -14,9 +14,9 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions.Presets;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Kinematics;
-using RobotComponents.ABB.Utils;
+using RobotComponents.ABB.Actions.Instructions;
+using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Definitions
 {

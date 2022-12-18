@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 // Robot Components Libs
 using static RobotComponents.ABB.Utils.HelperMethods;
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
 // ABB Libs
 using ControllersNS = ABB.Robotics.Controllers;
 using RapidDomainNS = ABB.Robotics.Controllers.RapidDomain;

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Definitions
 {

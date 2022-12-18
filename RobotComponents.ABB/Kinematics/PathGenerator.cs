@@ -12,6 +12,8 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Actions.Instructions;
+using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Kinematics
 {

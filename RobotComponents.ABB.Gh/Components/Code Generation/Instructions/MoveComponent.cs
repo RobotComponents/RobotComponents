@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class MovementComponent : GH_Component, IGH_VariableParameterComponent
+    public class MoveComponent : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private bool _add = false;
@@ -41,7 +41,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MovementComponent()
+        public MoveComponent()
           : base("Move", "M",
               "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +

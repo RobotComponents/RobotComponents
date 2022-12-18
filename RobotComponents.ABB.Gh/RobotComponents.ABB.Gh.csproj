@@ -58,8 +58,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\Code Generation\ExternalJointPositionComponent.cs" />
-    <Compile Include="Components\Code Generation\JointTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogOutputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Controller\GetControllerComponent.cs" />
@@ -84,14 +84,14 @@
     <Compile Include="Obsolete\v1\WorkObjectComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DeconstructMovementComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\MovementComponent_OBSOLETE.cs" />
-    <Compile Include="Components\Code Generation\RobotJointPositionComponent.cs" />
-    <Compile Include="Components\Code Generation\RobotTargetComponent.cs" />
-    <Compile Include="Components\Code Generation\SpeedDataComponent.cs" />
-    <Compile Include="Components\Code Generation\ZoneDataComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\RobotJointPositionComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\RobotTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\SpeedDataComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\ZoneDataComponent.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE2.cs" />
     <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\Value Lists\InequalitySymbolValueList.cs" />
-    <Compile Include="Components\Code Generation\WaitAIComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\WaitAIComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1520ID_4_1_50_Component.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOffComponent.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
@@ -102,8 +102,8 @@
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DataTree Generators\RobotJointPositionComponentDataTreeGenerator_OBSOLETE.cs" />
-    <Compile Include="Components\Code Generation\LinearConfigurationControlComponent.cs" />
-    <Compile Include="Components\Code Generation\JointConfigurationControlComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\LinearConfigurationControlComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\JointConfigurationControlComponent.cs" />
     <Compile Include="Obsolete\v1\DataTree Generators\JointTargetComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DataTree Generators\RobotTargetComponentDataTreeGenerator_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DataTree Generators\SpeedDataComponentDataTreeGenerator_OBSOLETE.cs" />
@@ -112,7 +112,7 @@
     <Compile Include="Components\Utilities\GroupActionsComponent.cs" />
     <Compile Include="Components\Utilities\RobotToolCalibrationComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\CodeTypeValueList.cs" />
-    <Compile Include="Components\Code Generation\AnalogOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\AnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\SpeedDataValueList.cs" />
@@ -131,10 +131,10 @@
     <Compile Include="Components\Definitions\RobotPresetComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
-    <Compile Include="Components\Code Generation\CodeLineComponent.cs" />
-    <Compile Include="Components\Code Generation\CommentComponent.cs" />
-    <Compile Include="Components\Code Generation\DigitalOutputComponent.cs" />
-    <Compile Include="Components\Code Generation\MovementComponent.cs" />
+    <Compile Include="Components\Code Generation\Dynamic\CodeLineComponent.cs" />
+    <Compile Include="Components\Code Generation\Dynamic\CommentComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\DigitalOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\MoveComponent.cs" />
     <Compile Include="Obsolete\v1\ZoneDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructZoneDataComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB6640_185_2_80_Component.cs" />
@@ -167,11 +167,11 @@
     <Compile Include="Components\Definitions\ExternalRotationalAxisComponent.cs" />
     <Compile Include="Components\Definitions\WorkObjectComponent.cs" />
     <Compile Include="Components\Utilities\QuaternionToPlaneComponent.cs" />
-    <Compile Include="Components\Code Generation\OverrideRobotToolComponent.cs" />
-    <Compile Include="Components\Code Generation\RAPIDGeneratorComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\OverrideRobotToolComponent.cs" />
+    <Compile Include="Components\Code Generation\Generators\RAPIDGeneratorComponent.cs" />
     <Compile Include="Obsolete\v1\SpeedDataComponent_OBSOLETE.cs" />
-    <Compile Include="Components\Code Generation\WaitTimeComponent.cs" />
-    <Compile Include="Components\Code Generation\WaitDIComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\WaitTimeComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\WaitDIComponent.cs" />
     <Compile Include="Obsolete\v1\Controller Utility\GetAxisValuesComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\Controller Utility\GetControllerComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\Controller Utility\GetDigitalInputComponent_OBSOLETE.cs" />

@@ -16,21 +16,20 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets analog inputs from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets the controller log. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetAnalogInputComponent : GH_Component
+    public class GetLogComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetAnalogInput class.
+        /// Initializes a new instance of the GetLogComponent class.
         /// </summary>
-        public GetAnalogInputComponent()
-          : base("Get Analog Input", "GetAI",
-              "Gets the signal of a defined analog input from an ABB IRC5 Controller."
+        public GetLogComponent()
+          : base("Get Log", "GL",
+              "Connects to a real or virtual ABB controller and extracts the log messages from it."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -42,9 +41,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Name", "N", "Analog Input Name as text", GH_ParamAccess.item);
-            pManager[1].Optional = true;
+            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -52,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Analog Input Signal", GH_ParamAccess.item);
+            pManager.AddTextParameter("Log", "L", "Resulting log", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -61,17 +58,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Input variables
-            string name = "";
-
-            // Catch input data
+            // Catch the input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref name)) { return; }
 
-            _signal = _controller.GetSignal(name);
-
-            // Input
-            DA.SetData(0, _signal);
+            // Output
+            DA.SetDataList(0, _controller.Logger);
         }
 
         #region properties
@@ -81,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quarternary; }
+            get { return GH_Exposure.primary; }
         }
 
         /// <summary>
@@ -97,7 +88,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.Log_Icon; }
         }
 
         /// <summary>
@@ -105,19 +96,17 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("35A4F56F-46BA-47C8-87A3-6BA0680659D9"); }
+            get { return new Guid("E6FAB182-4497-411D-86B8-0577ADC1EA47"); }
         }
         #endregion
 
-        #region menu item
+        #region menu items
         /// <summary>
-        /// Adds the additional item "Pick Signal" to the context menu of the component. 
+        /// Adds the additional item "Pick controller" to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Update Value List", MenuItemClick);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -131,18 +120,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
-        }
-
-        /// <summary>
-        /// Registers the event when the custom menu item is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClick(object sender, EventArgs e)
-        {
-            this.Params.Input[1].RemoveAllSources();
-            HelperMethods.CreateValueList(this, _controller.GetAnalogInputNames(), 1);
-            ExpireSolution(true);
         }
         #endregion
     }

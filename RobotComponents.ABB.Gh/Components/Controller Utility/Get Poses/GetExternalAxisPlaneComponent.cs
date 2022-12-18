@@ -29,11 +29,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetAxisValues class.
+        /// Initializes a new instance of the GetExternalAxisPlaneComponent class.
         /// </summary>
         public GetExternalAxisPlaneComponent()
           : base("Get External Axis Plane", "GEAP",
-              "Gets the current external planes from an ABB IRC5 robot controller."
+              "Gets the current external planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")

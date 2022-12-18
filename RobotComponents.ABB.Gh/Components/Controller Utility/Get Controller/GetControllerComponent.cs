@@ -27,11 +27,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetController class.
+        /// Initializes a new instance of the GetControllerComponent class.
         /// </summary>
         public GetControllerComponent()
           : base("Get Controller", "GC",
-              "Connects to a real or virtual controller."
+              "Connects to a real or virtual ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")

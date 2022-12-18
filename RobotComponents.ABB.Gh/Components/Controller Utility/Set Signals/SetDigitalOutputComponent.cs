@@ -10,28 +10,28 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
-using RobotComponents.ABB.Controllers.Forms;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that reads values from the configuration database. An inherent from the GH_Component Class.
+    /// Represents the component that gets and sets digital outputs on a defined controller.  An inherent from the GH_Component Class.
     /// </summary>
-    public class ReadConfigurationDatabaseComponent : GH_Component
+    public class SetDigitalOutputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
+        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the ReadConfigurationDatabase class.
+        /// Initializes a new instance of the SetDigitalOutputComponent class.
         /// </summary>
-        public ReadConfigurationDatabaseComponent()
-          : base("Read Configuration Database", "ReadConf",
-              "Connects to a real or virtual ABB IRC5 robot controller and extracts data from the configuration database."
-                + System.Environment.NewLine + System.Environment.NewLine +
+        public SetDigitalOutputComponent()
+          : base("Set Digital Output", "SetDO",
+              "Changes the state of a defined digital output from an ABB controller in realtime."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -42,11 +42,12 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Domain", "D", "The database domain as Text", GH_ParamAccess.item, "");
-            pManager.AddTextParameter("Type", "T", "The type as Text", GH_ParamAccess.item, "");
-            pManager.AddTextParameter("Instance", "I", "The instance as Text", GH_ParamAccess.item, "");
-            pManager.AddTextParameter("Attribute", "A", "The attribute as Text", GH_ParamAccess.item, "");
+            pManager.AddGenericParameter("Controller", "C", "Controller to connected to as Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the Digital Output Signal as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Value", "V", "State of the Digital Output as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
+
+            pManager[1].Optional = true;
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Data", "D", "Resulting data as Text", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Output Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -63,32 +64,43 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare input variables
-            string domain = "";
-            string type = "";
-            string instance = "";
-            string attribute = "";
+            // Input variables      
+            string name = "";
+            bool value = false;
+            bool update = false;
 
-            // Catch the input data
+            // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref domain)) { return; }
-            if (!DA.GetData(2, ref type)) { return; }
-            if (!DA.GetData(3, ref instance)) { return; }
-            if (!DA.GetData(4, ref attribute)) { return; }
+            if (!DA.GetData(1, ref name)) { return; }
+            if (!DA.GetData(2, ref value)) { return; }
+            if (!DA.GetData(3, ref update)) { return; }
 
-            string value = "";
-
-            try
+            // Get the signal
+            if (name != _signal.Name)
             {
-                value = _controller.ReadConfigurationDatabase(domain, type, instance, attribute);
+                try
+                {
+                    _signal = _controller.GetSignal(name);
+                }
+                catch (Exception e)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, e.Message);
+                }
             }
-            catch
+
+            // Update the signal
+            if (update == true)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Path not found!");
+                bool success = _signal.SetValue(Convert.ToSingle(value), out string msg);
+
+                if (success == false)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, msg);
+                }
             }
 
             // Output
-            DA.SetData(0, value);
+            DA.SetData(0, _signal);
         }
 
         #region properties
@@ -98,7 +110,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.septenary; }
+            get { return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -114,7 +126,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ReadDatabase_Icon; }
+            get { return Properties.Resources.SetDigitalOutput_Icon; }
         }
 
         /// <summary>
@@ -122,19 +134,19 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0901438D-9049-4E33-84F6-1E7B1D709C40"); }
+            get { return new Guid("B8A678B3-716D-4988-9D7A-A86E2C8F1213"); }
         }
         #endregion
 
-        #region menu items
+        #region menu-items
         /// <summary>
-        /// Adds the additional item "Pick controller" to the context menu of the component. 
+        /// Adds the additional item "Pick Signal" to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Pick Path", MenuItemClick);
+            Menu_AppendItem(menu, "Create Value List", MenuItemClick);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -157,16 +169,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            PickPathForm frm = new PickPathForm(_controller);
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
-            frm.ShowDialog();
-
-            HelperMethods.CreatePanel(this, frm.Domain, 1);
-            HelperMethods.CreatePanel(this, frm.Type, 2);
-            HelperMethods.CreatePanel(this, frm.Instance, 3);
-            HelperMethods.CreatePanel(this, frm.Attribute, 4);
-
-            this.ExpireSolution(true);
+            this.Params.Input[1].RemoveAllSources();
+            HelperMethods.CreateValueList(this, _controller.GetDigitalOutputNames(), 1);
+            ExpireSolution(true);
         }
         #endregion
     }

@@ -118,7 +118,7 @@ namespace RobotComponents.ABB.Controllers.Forms
 
                 try
                 {
-                    labelValueInfo.Text = _controller.ReadConfigurationDatabase(Domain, Type, Instance, Attribute);
+                    labelValueInfo.Text = _controller.ReadConfigurationDomain(Domain, Type, Instance, Attribute);
 
                 }
                 catch

@@ -856,7 +856,7 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="instance"> The instance name. </param>
         /// <param name="attribute">TThe attribute name. </param>
         /// <returns> A value from the configuration database. </returns>
-        public string ReadConfigurationDatabase(string domain, string type, string instance, string attribute)
+        public string ReadConfigurationDomain(string domain, string type, string instance, string attribute)
         {
             string[] path = new string[4]{ domain, type, instance, attribute };
             return _controller.Configuration.Read(path);

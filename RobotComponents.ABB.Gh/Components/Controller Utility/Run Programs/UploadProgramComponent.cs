@@ -30,11 +30,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the UploadProgram class.
+        /// Initializes a new instance of the UploadProgramComponent class.
         /// </summary>
         public UploadProgramComponent()
           : base("Upload Program", "UP",
-              "Uploads RAPID modules directly to a real or virtual robot controller."
+              "Uploads RAPID modules directly to a real or virtual ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")

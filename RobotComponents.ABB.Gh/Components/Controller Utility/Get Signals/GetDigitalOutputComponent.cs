@@ -16,22 +16,22 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets and sets analog outputs on a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets digital outputs from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class SetAnalogOutputComponent : GH_Component
+    public class GetDigitalOutputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Signal _signal = new Signal();
+        private Signal _signal;
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the SetAnalogOutput class.
+        /// Initializes a new instance of the GetDigitalOutputComponent class.
         /// </summary>
-        public SetAnalogOutputComponent()
-          : base("Set Analog Output", "SetAO",
-              "Changes the state of a defined analog output from an IRC5 robot controller in realtime."
-               + System.Environment.NewLine + System.Environment.NewLine +
+        public GetDigitalOutputComponent()
+          : base("Get Digital Output", "GetDO",
+              "Gets the signal of a defined digital output from an ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -42,11 +42,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Controller", "C", "Controller to connected to as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Name", "N", "Name of the Analog Output Signal as text", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Value", "V", "State of the Analog Output as a number", GH_ParamAccess.item, 0.0);
-            pManager.AddBooleanParameter("Update", "U", "Updates the Analog Input as bool", GH_ParamAccess.item, false);
-
+            pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Digital Output Name as text", GH_ParamAccess.item);
             pManager[1].Optional = true;
         }
 
@@ -55,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Analog Output Signal", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Output Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -64,43 +61,17 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Input variables      
+            // Input variables
             string name = "";
-            double value = 0.0;
-            bool update = false;
 
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
             if (!DA.GetData(1, ref name)) { return; }
-            if (!DA.GetData(2, ref value)) { return; }
-            if (!DA.GetData(3, ref update)) { return; }
 
-            // Get the signal
-            if (name != _signal.Name)
-            {
-                try
-                {
-                    _signal = _controller.GetSignal(name);
-                }
-                catch (Exception e)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, e.Message);
-                }
-            }
+            _signal = _controller.GetSignal(name);
 
-            // Update the signal
-            if (update == true)
-            {
-                bool success = _signal.SetValue(Convert.ToSingle(value), out string msg);
-
-                if (success == false)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, msg);
-                }
-            }
-
-            // Output
-            DA.SetData(0, _signal); ;
+            // Input
+            DA.SetData(0, _signal);
         }
 
         #region properties
@@ -110,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quinary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -126,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.GetDigitalOutput_Icon; }
         }
 
         /// <summary>
@@ -134,11 +105,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("C562D80E-1E0A-40BE-9081-17480A86AD22"); }
+            get { return new Guid("25924837-EECB-4F0A-8A39-6380185D339B"); }
         }
         #endregion
 
-        #region menu-items
+        #region menu item
         /// <summary>
         /// Adds the additional item "Pick Signal" to the context menu of the component. 
         /// </summary>
@@ -146,7 +117,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Create Value List", MenuItemClick);
+            Menu_AppendItem(menu, "Update Value List", MenuItemClick);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -170,7 +141,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private void MenuItemClick(object sender, EventArgs e)
         {
             this.Params.Input[1].RemoveAllSources();
-            HelperMethods.CreateValueList(this, _controller.GetAnalogOutputNames(), 1);
+            HelperMethods.CreateValueList(this, _controller.GetDigitalOutputNames(), 1);
             ExpireSolution(true);
         }
         #endregion

@@ -10,27 +10,27 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
+using RobotComponents.ABB.Controllers.Forms;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets snalog outputs from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that reads values from the configuration database. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetAnalogOutputComponent : GH_Component
+    public class ReadConfigurationDomainComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetAnalogOutput class.
+        /// Initializes a new instance of the ReadConfigurationDomain class.
         /// </summary>
-        public GetAnalogOutputComponent()
-          : base("Get Analog Output", "GetAO",
-              "Gets the signal of a defined analog output from an ABB IRC5 Controller."
+        public ReadConfigurationDomainComponent()
+          : base("Read Configuration Domain", "ReadConf",
+              "Connects to a real or virtual ABB controller and extracts data from the configuration domain."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -42,9 +42,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Controller", "C", "Controller to be connected to as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Name", "N", "Analog Output Name as text", GH_ParamAccess.item);
-            pManager[1].Optional = true;
+            pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
+            pManager.AddTextParameter("Domain", "D", "The domain as Text", GH_ParamAccess.item, "");
+            pManager.AddTextParameter("Type", "T", "The type as Text", GH_ParamAccess.item, "");
+            pManager.AddTextParameter("Instance", "I", "The instance as Text", GH_ParamAccess.item, "");
+            pManager.AddTextParameter("Attribute", "A", "The attribute as Text", GH_ParamAccess.item, "");
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Analog Output Signal", GH_ParamAccess.item);
+            pManager.AddTextParameter("Data", "D", "Resulting data as Text", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -61,17 +63,32 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Input variables
-            string name = "";
+            // Declare input variables
+            string domain = "";
+            string type = "";
+            string instance = "";
+            string attribute = "";
 
-            // Catch input data
+            // Catch the input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref name)) { return; }
+            if (!DA.GetData(1, ref domain)) { return; }
+            if (!DA.GetData(2, ref type)) { return; }
+            if (!DA.GetData(3, ref instance)) { return; }
+            if (!DA.GetData(4, ref attribute)) { return; }
 
-            _signal = _controller.GetSignal(name);
+            string value = "";
 
-            // Input
-            DA.SetData(0, _signal);
+            try
+            {
+                value = _controller.ReadConfigurationDomain(domain, type, instance, attribute);
+            }
+            catch
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Path not found!");
+            }
+
+            // Output
+            DA.SetData(0, value);
         }
 
         #region properties
@@ -81,7 +98,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quarternary; }
+            get { return GH_Exposure.septenary; }
         }
 
         /// <summary>
@@ -97,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.ReadDatabase_Icon; }
         }
 
         /// <summary>
@@ -105,19 +122,19 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("E8D4EF4B-38A5-4F17-A91E-C9AB041F7E90"); }
+            get { return new Guid("0901438D-9049-4E33-84F6-1E7B1D709C40"); }
         }
         #endregion
 
-        #region menu item
+        #region menu items
         /// <summary>
-        /// Adds the additional item "Pick Signal" to the context menu of the component. 
+        /// Adds the additional item "Pick path" to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Update Value List", MenuItemClick);
+            Menu_AppendItem(menu, "Pick Path", MenuItemClick);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -140,9 +157,16 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            this.Params.Input[1].RemoveAllSources();
-            HelperMethods.CreateValueList(this, _controller.GetAnalogOutputNames(), 1);
-            ExpireSolution(true);
+            PickPathForm frm = new PickPathForm(_controller);
+            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+            frm.ShowDialog();
+
+            HelperMethods.CreatePanel(this, frm.Domain, 1);
+            HelperMethods.CreatePanel(this, frm.Type, 2);
+            HelperMethods.CreatePanel(this, frm.Instance, 3);
+            HelperMethods.CreatePanel(this, frm.Attribute, 4);
+
+            this.ExpireSolution(true);
         }
         #endregion
     }

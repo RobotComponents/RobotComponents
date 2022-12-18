@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetAxisValues class.
+        /// Initializes a new instance of the GetExternalJointPositionComponent class.
         /// </summary>
         public GetExternalJointPositionComponent()
           : base("Get External Joint Position", "GEJP",

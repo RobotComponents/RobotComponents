@@ -5,9 +5,12 @@
 
 // System Libs
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// Rhino Libs
+using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
@@ -16,22 +19,21 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that runs a program. An inherent from the GH_Component Class.
+    /// Represents the component that get the base frames of the robots from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class RunProgramComponent : GH_Component
+    public class GetTaskNameComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private string _status = "";
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the RunProgram class.
+        /// Initializes a new instance of the GetTaskNameComponent class.
         /// </summary>
-        public RunProgramComponent()
-          : base("Run Program", "RP",
-              "Starts and stops RAPID programs directly on a real or virtual controller."
-                + System.Environment.NewLine + System.Environment.NewLine +
+        public GetTaskNameComponent()
+          : base("Get Task Name", "GTN",
+              "Gets the task names from an ABB robot controller."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -43,13 +45,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Run", "R", "Run as bool", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Stop", "S", "Stop/Pause as bool", GH_ParamAccess.item, false);
-            pManager.AddBooleanParameter("Reset", "R", "Resets the program pointer of all tasks as bool", GH_ParamAccess.item, false);
-
-            pManager[1].Optional = true;
-            pManager[2].Optional = true;
-            pManager[3].Optional = true;
         }
 
         /// <summary>
@@ -57,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Controller status.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the tasks as Text", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -66,32 +61,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare input variables
-            bool run = false;
-            bool stop = false;
-            bool reset = false;
-
-            // Catch the input data
+            // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref run)) { run = false; }
-            if (!DA.GetData(2, ref stop)) { stop = false; }
-            if (!DA.GetData(3, ref reset)) { reset = false; }
-
-            if (run)
-            {
-                _controller.RunProgram(out _status);
-            }
-            if (stop)
-            {
-                _controller.StopProgram(out _status);
-            }
-            if (reset)
-            {
-                _controller.ResetProgramPointers(out _status);
-            }
 
             // Output
-            DA.SetData(0, _status);
+            DA.SetDataList(0, _controller.TaskNames);
         }
 
         #region properties
@@ -101,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -117,7 +91,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.RunProgram_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -125,16 +99,16 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("89A12C4C-EA6F-435A-A068-9E4806FFFF62"); }
+            get { return new Guid("0FBCB277-F484-48BC-AB10-F723C58E7609"); }
         }
         #endregion
 
-        #region menu items
+        #region menu item
         /// <summary>
-        /// Adds the additional item "Pick controller" to the context menu of the component. 
+        /// Adds the additional items to the context menu of the component. 
         /// </summary>
         /// <param name="menu"> The context menu of the component. </param>
-        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);

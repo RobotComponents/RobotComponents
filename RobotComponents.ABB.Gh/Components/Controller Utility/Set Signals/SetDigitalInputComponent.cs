@@ -16,9 +16,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets and sets analog inputs on a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets and sets digital inputs on a defined controller.  An inherent from the GH_Component Class.
     /// </summary>
-    public class SetAnalogInputComponent : GH_Component
+    public class SetDigitalInputComponent : GH_Component
     {
         #region fields
         private Controller _controller;
@@ -26,11 +26,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the SetAnalogIntput class.
+        /// Initializes a new instance of the SetDigitalInputComponent class.
         /// </summary>
-        public SetAnalogInputComponent()
-          : base("Set Analog Input", "SetAI",
-              "Changes the state of a defined analog input from an IRC5 robot controller in realtime."
+        public SetDigitalInputComponent()
+          : base("Set Digital Input", "SetDI",
+              "Changes the state of a defined digital input from an ABB controller in realtime."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -43,9 +43,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Controller", "C", "Controller to connected to as Controller", GH_ParamAccess.item);
-            pManager.AddTextParameter("Name", "N", "Name of the Analog Intput Signal as text", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Value", "V", "State of the Analog Input as a number", GH_ParamAccess.item, 0.0);
-            pManager.AddBooleanParameter("Update", "U", "Updates the Analog Input as bool", GH_ParamAccess.item, false);
+            pManager.AddTextParameter("Name", "N", "Name of the Digital Input Signal as text", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Value", "V", "State of the Digital Input as bool", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Update", "U", "Updates the Digital Input as bool", GH_ParamAccess.item, false);
 
             pManager[1].Optional = true;
         }
@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Analog Input Signal", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_Signal(), "Signal", "S", "Digital Input Signal", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             // Input variables      
             string name = "";
-            double value = 0.0;
+            bool value = false;
             bool update = false;
 
             // Catch input data
@@ -126,7 +126,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.SetDigitalOutput_Icon; }
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("C799F319-75D6-4F0D-BCAD-8E2ECACEB0B8"); }
+            get { return new Guid("9DCABFA9-49E3-4D00-8298-3EE9B7C7D32F"); }
         }
         #endregion
 
@@ -170,7 +170,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private void MenuItemClick(object sender, EventArgs e)
         {
             this.Params.Input[1].RemoveAllSources();
-            HelperMethods.CreateValueList(this, _controller.GetAnalogInputNames(), 1);
+            HelperMethods.CreateValueList(this, _controller.GetDigitalInputNames(), 1);
             ExpireSolution(true);
         }
         #endregion

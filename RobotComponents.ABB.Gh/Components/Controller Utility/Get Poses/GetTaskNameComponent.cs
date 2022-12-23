@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -91,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.GetTaskNameIcon; }
         }
 
         /// <summary>

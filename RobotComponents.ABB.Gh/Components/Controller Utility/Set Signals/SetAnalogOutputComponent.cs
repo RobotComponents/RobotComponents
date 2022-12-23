@@ -126,7 +126,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.SetAnalogOutput_Icon; }
         }
 
         /// <summary>

@@ -513,6 +513,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetAnalogInput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetAnalogInput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetAnalogOutput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetAnalogOutput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GetAxisValues_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetAxisValues_Icon", resourceCulture);
@@ -553,9 +573,69 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetExternalAxisPlane_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetExternalAxisPlane_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetExternalJointPositions_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetExternalJointPositions_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GetPlane_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetPlane_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetRobotBaseFrame_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetRobotBaseFrame_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetRobotJointPositions_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetRobotJointPositions_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetTaskNameIcon {
+            get {
+                object obj = ResourceManager.GetObject("GetTaskNameIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetToolPlane_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetToolPlane_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1106,6 +1186,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap RunProgram_Icon {
             get {
                 object obj = ResourceManager.GetObject("RunProgram_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SetAnalogInput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("SetAnalogInput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SetAnalogOutput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("SetAnalogOutput_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

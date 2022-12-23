@@ -709,6 +709,36 @@
   <ItemGroup>
     <Folder Include="Obsolete\v2\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetRobotBaseFrame_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetRobotJointPositions_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetTaskNameIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetToolPlane_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SetAnalogInput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SetAnalogOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetAnalogInput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetAnalogOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetExternalAxisPlane_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetExternalJointPositions_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

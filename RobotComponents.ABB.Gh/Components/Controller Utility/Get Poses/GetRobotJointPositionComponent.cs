@@ -97,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetAxisValues_Icon; ; }
+            get { return Properties.Resources.GetRobotJointPositions_Icon; ; }
         }
 
         /// <summary>

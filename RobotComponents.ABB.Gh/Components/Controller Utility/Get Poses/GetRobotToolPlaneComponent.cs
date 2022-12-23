@@ -101,7 +101,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetPlane_Icon; }
+            get { return Properties.Resources.GetToolPlane_Icon; }
         }
 
         /// <summary>

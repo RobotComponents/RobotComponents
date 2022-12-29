@@ -11,7 +11,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
-using static RobotComponents.ABB.Utils.HelperMethods;
+using RobotComponents.ABB.Utils;
 using RobotComponents.ABB.Actions.Declarations;
 // ABB Libs
 using ControllersNS = ABB.Robotics.Controllers;
@@ -339,29 +339,22 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < _robots.Count; i++)
             {
-                try
-                {
-                    ConfigurationDomainNS.Instance instance = type.GetInstance(_robots[i].Name);
+                ConfigurationDomainNS.Instance instance = type.GetInstance(_robots[i].Name);
 
-                    string name = (string)instance.GetAttribute("name");
+                string name = (string)instance.GetAttribute("name");
 
-                    double x = Convert.ToDouble(instance.GetAttribute("base_frame_pos_x").ToString()) * 1000;
-                    double y = Convert.ToDouble(instance.GetAttribute("base_frame_pos_y").ToString()) * 1000;
-                    double z = Convert.ToDouble(instance.GetAttribute("base_frame_pos_z").ToString()) * 1000;
+                double x = Convert.ToDouble(instance.GetAttribute("base_frame_pos_x").ToString()) * 1000;
+                double y = Convert.ToDouble(instance.GetAttribute("base_frame_pos_y").ToString()) * 1000;
+                double z = Convert.ToDouble(instance.GetAttribute("base_frame_pos_z").ToString()) * 1000;
 
-                    double a = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u0").ToString());
-                    double b = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u1").ToString());
-                    double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
-                    double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
+                double a = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u0").ToString());
+                double b = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u1").ToString());
+                double c = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u2").ToString());
+                double d = Convert.ToDouble(instance.GetAttribute("base_frame_orient_u3").ToString());
 
-                    Plane plane = QuaternionToPlane(x, y, z, a, b, c, d);
+                Plane plane = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
-                    result.Add(name, plane);
-                }
-                catch
-                {
-                    Log($"Could not find robot {_robots[i].Name}.");
-                }
+                result.Add(name, plane);
             }
 
             return result;
@@ -385,7 +378,7 @@ namespace RobotComponents.ABB.Controllers
             {
                 RapidDomainNS.RobTarget robTarget = _robots[i].GetPosition(coordinateSystem);
                    
-                _robotToolPlanes[_robots[i].Name] = QuaternionToPlane(
+                _robotToolPlanes[_robots[i].Name] = HelperMethods.QuaternionToPlane(
                     robTarget.Trans.X,
                     robTarget.Trans.Y,
                     robTarget.Trans.Z,
@@ -414,25 +407,18 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < _externalAxes.Count; i++)
             {
-                try 
-                {
-                    RapidDomainNS.RobTarget robTarget = _externalAxes[i].GetPosition(coordinateSystem);
+                RapidDomainNS.RobTarget robTarget = _externalAxes[i].GetPosition(coordinateSystem);
 
-                    Plane plane = QuaternionToPlane(
-                        robTarget.Trans.X,
-                        robTarget.Trans.Y,
-                        robTarget.Trans.Z,
-                        robTarget.Rot.Q1,
-                        robTarget.Rot.Q2,
-                        robTarget.Rot.Q3,
-                        robTarget.Rot.Q4);
+                Plane plane = HelperMethods.QuaternionToPlane(
+                    robTarget.Trans.X,
+                    robTarget.Trans.Y,
+                    robTarget.Trans.Z,
+                    robTarget.Rot.Q1,
+                    robTarget.Rot.Q2,
+                    robTarget.Rot.Q3,
+                    robTarget.Rot.Q4);
 
-                    _externalAxisPlanes[_externalAxes[i].Name] = plane;
-                }
-                catch
-                {
-                    //_externalAxisPlanes[_externalAxes[i].Name] = Plane.Unset;
-                }
+                _externalAxisPlanes[_externalAxes[i].Name] = plane;
             }
 
             return _externalAxisPlanes;
@@ -506,6 +492,8 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the task and as value the current joint target.</returns>
         private Dictionary<string, JointTarget> GetJointTargets()
         {
+            //TODO: This metod is private since it needs to be tested first. 
+
             if (_isEmtpy == true)
             {
                 Log($"Could not get the joint targets. The controller is empty.");
@@ -540,6 +528,8 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the task and as value the current robot target.</returns>
         private Dictionary<string, RobotTarget> GetRobotTargets()
         {
+            //TODO: This metod is private since it needs to be tested first. 
+
             if (_isEmtpy == true)
             {
                 Log($"Could not get the robot targets. The controller is empty.");
@@ -553,7 +543,7 @@ namespace RobotComponents.ABB.Controllers
 
                 RapidDomainNS.RobTarget robotTarget = _tasks[i].GetRobTarget();
 
-                _robotTargets[_tasks[i].Name].Plane = QuaternionToPlane(
+                _robotTargets[_tasks[i].Name].Plane = HelperMethods.QuaternionToPlane(
                     robotTarget.Trans.X,
                     robotTarget.Trans.Y,
                     robotTarget.Trans.Z,
@@ -592,12 +582,7 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                result.Add(new Signal(signals[i]));
-
-                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                //{
-                //    result.Add(new Signal(signals[i]));
-                //}
+                result.Add(new Signal(signals[i], _controller));
             }
 
             return result;
@@ -620,12 +605,7 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                result.Add(new Signal(signals[i]));
-
-                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                //{
-                //    result.Add(new Signal(signals[i]));
-                //}
+                result.Add(new Signal(signals[i], _controller));
             }
 
             return result;
@@ -648,12 +628,7 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                result.Add(new Signal(signals[i]));
-
-                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                //{
-                //    result.Add(new Signal(signals[i]));
-                //}
+                result.Add(new Signal(signals[i], _controller));
             }
 
             return result;
@@ -676,12 +651,7 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                result.Add(new Signal(signals[i]));
-
-                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                //{
-                //    result.Add(new Signal(signals[i]));
-                //}
+                result.Add(new Signal(signals[i], _controller));
             }
 
             return result;
@@ -904,73 +874,76 @@ namespace RobotComponents.ABB.Controllers
             string directory;
 
             // Stop the program before upload
-            StopProgram(out _);
+            StopProgram(out status);
 
-            // Upload to the real physical controller
+            // Settings for a upload to a physical controller
             if (_controller.IsVirtual == false)
             {
                 _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.WriteFtp);
                 _controller.FileSystem.PutDirectory(tempDirectory, "RAPID", true);
                 directory = controllerDirectory;
             }
-            // Upload to a virtual controller
+            // Settings for a upload to a virtual controller
             else
             {
                 directory = tempDirectory;
             }
 
             // The real upload
-            using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
+            try
             {
-                // Grant acces
-                _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
-
-                // Load the new program from the created file
-                if (module.Count != 0)
+                using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
                 {
-                    filePath = Path.Combine(directory, "temp.mod");
-                    task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
-                }
+                    // Grant acces
+                    _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
 
-                // Resets the program pointer of this task to the main entry point.
-                if (_controller.OperatingMode == ControllersNS.ControllerOperatingMode.Auto)
+                    // Load the new program from the created file
+                    if (module.Count != 0)
+                    {
+                        filePath = Path.Combine(directory, "temp.mod");
+                        task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
+                    }
+
+                    // Give back the mastership
+                    master.Release();
+                }
+            }
+            catch (Exception e)
+            {
+                status = $"Could not upload the module. {e.Message}.";
+                Log(status);
+                return false;
+            }
+            finally
+            {
+                // Delete the temporary files
+                if (Directory.Exists(tempDirectory))
                 {
-                    _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.ExecuteRapid);
-
-                    try
-                    {
-                        task.ResetProgramPointer(); // Requires auto mode and execute rapid
-                        //_programPointerWarning = false;
-                    }
-                    catch
-                    {
-                        Log("Could not reset the program pointer.");
-                    }
+                    Directory.Delete(tempDirectory, true);
                 }
-
-                // Give back the mastership
-                master.Release();
             }
 
-            // Delete the temporary files
-            if (Directory.Exists(tempDirectory))
-            {
-                Directory.Delete(tempDirectory, true);
-            }
+            status = "Upload succeeded.";
+            Log(status);
 
-            return false; // Returns true on success
+            return true;
         }
 
-        private bool SetProgramPointer(string task, string routine, out string status)
+        /// <summary>
+        /// Sets the Programing pointer at specific routine in specified task. 
+        /// </summary>
+        /// <param name="task"> The name of the task, </param>
+        /// <param name="routine"> The name of the routine. </param>
+        /// <returns> True on success, false on failure. </returns>
+        private bool SetProgramPointer(string task, string routine)
         {
-            status = "";
-
-            //TODO
+            //TODO: Therefore it is a private. 
 
             return false;
         }
+
         /// <summary>
-        /// Resets all the program pointers. 
+        /// Resets all the program pointers to the main routine. 
         /// </summary>
         /// <param name="status"> The status message, </param>
         /// <returns> True on success, false on failure. </returns>
@@ -1267,8 +1240,8 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
-        /// Gets a value indicating whether or not the controller class is empty.
-        /// Empty means that there is no ABB controller instance defined inside this instance. 
+        /// Gets a value indicating whether or not the controller instance is empty.
+        /// If empty, there is no ABB controller instance defined inside this instance. 
         /// </summary>
         public bool IsEmpty
         {
@@ -1313,7 +1286,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmtpy == true)
             {
-                Log("Could not subscribe to the events. The controller is empty.");
+                Log("Could not subscribe the events. The controller is empty.");
                 return false;
             }
 

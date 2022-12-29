@@ -3,9 +3,12 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Rhino Libs
 using Rhino.Geometry;
 // ABB Libs
+using ControllersNS = ABB.Robotics.Controllers;
 using IOSystemDomainNS = ABB.Robotics.Controllers.IOSystemDomain;
 
 namespace RobotComponents.ABB.Controllers
@@ -20,6 +23,8 @@ namespace RobotComponents.ABB.Controllers
         private readonly IOSystemDomainNS.Signal _signal;
         private readonly Interval _limits = new Interval();
         private readonly string _name = "";
+        private readonly bool _isEmpty = true;
+        private string _accesLevel = "";
         #endregion
 
         #region constructors
@@ -27,18 +32,38 @@ namespace RobotComponents.ABB.Controllers
         /// Empty constructor. 
         /// </summary>
         public Signal()
-        { 
+        {
+            _isEmpty = true;
         }
 
         /// <summary>
         /// Construct a Signal instance from an ABB Signal instance. 
         /// </summary>
         /// <param name="signal"> The ABB Signal instance. </param>
-        public Signal(IOSystemDomainNS.Signal signal)
+        /// <param name="controller"> The ABB Controller instance. </param>
+        public Signal(IOSystemDomainNS.Signal signal, ControllersNS.Controller controller)
         {
             _signal = signal;
-            _limits = new Interval(_signal.MinValue, _signal.MinValue);
+            _limits = new Interval(_signal.MinValue, _signal.MaxValue);
             _name = _signal.Name;
+            _isEmpty = false;
+
+            this.SetAccesLevels(controller);
+        }
+
+        /// <summary>
+        /// Construct a Signal instance from an ABB Signal instance. 
+        /// </summary>
+        /// <param name="signal"> The ABB Signal instance. </param>
+        /// <param name="controller"> The Robot Components Controller instance. </param>
+        public Signal(IOSystemDomainNS.Signal signal, Controller controller)
+        {
+            _signal = signal;
+            _limits = new Interval(_signal.MinValue, _signal.MaxValue);
+            _name = _signal.Name;
+            _isEmpty = false;
+
+            this.SetAccesLevels(controller.ControllerABB);
         }
         #endregion
 
@@ -49,6 +74,10 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A string that represents the current object. </returns>
         public override string ToString()
         {
+            if (_isEmpty == true)
+            {
+                return "Empty signal";
+            }
             if (_signal.Type == IOSystemDomainNS.SignalType.AnalogInput)
             {
                 return $"Analog Input ({_signal.Name}/{_signal.Value})";
@@ -80,6 +109,15 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
+        /// Sets the acces level of the signal.
+        /// </summary>
+        /// <param name="controller"> The ABB controller instance. </param>
+        private void SetAccesLevels(ControllersNS.Controller controller)
+        {
+            _accesLevel = controller.Configuration.Read("EIO", "EIO_SIGNAL", this.Name, "Access");
+        }
+
+        /// <summary>
         /// Overwrites the current value of the signal. 
         /// </summary>
         /// <param name="value"> The desired signal state. </param>
@@ -87,13 +125,16 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool SetValue(float value, out string msg)
         {
-            // TODO: Check Acces level
-
             msg = "";
 
-            if (_limits.IncludesParameter(value) == false)
+            if (_isEmpty == true)
             {
-                msg = $"Desired value of signal {_signal.Name} is not within  limits.";
+                msg = $"Could not set the value of the signal. No signal defined.";
+            }
+
+            if (_limits.IncludesParameter(value, false) == false)
+            {
+                msg = $"Desired value of signal {_signal.Name} is not within limits.";
                 return false;
             }
 
@@ -104,7 +145,7 @@ namespace RobotComponents.ABB.Controllers
             }
             catch
             {
-                msg = $"Could not set the value of signal {_signal.Name}.";
+                msg = $"Could not set the value of signal {_signal.Name}. Does the signal has the correct acces level?.";
                 return false;
             }
         }
@@ -170,6 +211,23 @@ namespace RobotComponents.ABB.Controllers
         public float MaxValue
         {
             get { return _signal.MaxValue; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the signal instance is empty.
+        /// If empty, there is no ABB signal instance defined inside this instance. 
+        /// </summary>
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+        }
+
+        /// <summary>
+        /// Gets the acces level.
+        /// </summary>
+        public string AccesLevel
+        {
+            get { return _accesLevel; }
         }
         #endregion
     }

@@ -65,7 +65,16 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
-            Dictionary<string, Plane> output = _controller.GetRobotBaseFrames();
+            Dictionary<string, Plane> output = new Dictionary<string, Plane>();
+
+            try
+            {
+                output = _controller.GetRobotBaseFrames();
+            }
+            catch (Exception e)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
+            }
 
             // Output
             DA.SetDataList(0, output.Keys);

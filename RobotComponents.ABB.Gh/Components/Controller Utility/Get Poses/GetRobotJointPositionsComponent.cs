@@ -67,7 +67,14 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
-            _robotJointPositions = _controller.GetRobotJointPositions();
+            try
+            {
+                _robotJointPositions = _controller.GetRobotJointPositions();
+            }
+            catch (Exception e)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
+            }
 
             // Output
             DA.SetDataList(0, _robotJointPositions.Keys);

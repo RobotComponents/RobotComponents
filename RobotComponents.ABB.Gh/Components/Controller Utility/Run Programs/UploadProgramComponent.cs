@@ -27,6 +27,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private Controller _controller;
         private bool _fromMenu = false;
         private string _taskName = "-";
+        private string _status = "-";
         #endregion
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Status", "S", "Controller status", GH_ParamAccess.list);
+            pManager.AddTextParameter("Status", "S", "Controller status", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -79,36 +80,35 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (!DA.GetDataList(2, module)) { module = new List<string>(); }
 
             // Declare output variables
-            string status = "-";
 
             if (_fromMenu)
             {
                 this.GetTaskName();
                 this.Message = _taskName;
                 this.ExpirePreview(true);
-                status = "Task picked from controller.";
+                _status = "Task picked from controller.";
             }
 
             if (upload)
             {
                 if (module.Count != 0 & _taskName != "-")
                 {
-                    _controller.UploadModule(_taskName, module, out status);
+                    _controller.UploadModule(_taskName, module, out _status);
                 }
                 else if (module.Count == 0)
                 {
-                    status = "No module defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, status);
+                    _status = "No module defined.";
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
                 }
                 else if (_taskName == "-")
                 {
-                    status = "No task defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, status);
+                    _status = "No task defined.";
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
                 }
             }
 
             // Output
-            DA.SetDataList(0, status);
+            DA.SetData(0, _status);
         }
 
         #region properties
@@ -202,7 +202,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            reader.GetString("Task Name");
+            _taskName = reader.GetString("Task Name");
+            this.Message = _taskName;
+            this.ExpirePreview(true);
+
             return base.Read(reader);
         }
         #endregion

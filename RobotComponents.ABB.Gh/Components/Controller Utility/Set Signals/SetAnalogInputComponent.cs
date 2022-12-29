@@ -24,7 +24,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     {
         #region fields
         private Controller _controller;
-        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
@@ -77,23 +76,28 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (!DA.GetData(2, ref value)) { return; }
             if (!DA.GetData(3, ref update)) { return; }
 
+            // Define an empty signal
+            Signal signal = new Signal();
+
             // Get the signal
-            if (name != _signal.Name)
+            try
             {
-                try
+                signal = _controller.GetAnalogInput(name, out int index);
+
+                if (index == -1)
                 {
-                    _signal = _controller.GetAnalogInput(name, out _);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Could not get the signal {name}. Signal not found.");
                 }
-                catch (Exception e)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, e.Message);
-                }
+            }
+            catch (Exception e)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
             }
 
             // Update the signal
             if (update == true)
             {
-                bool success = _signal.SetValue(Convert.ToSingle(value), out string msg);
+                bool success = signal.SetValue(Convert.ToSingle(value), out string msg);
 
                 if (success == false)
                 {
@@ -102,21 +106,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             }
 
             // Output
-            DA.SetData(0, _signal);
-        }
-
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
-
-            if (this.Params.Output[0].VolatileData.DataCount > 1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component only functions correctly with item inputs. " +
-                    "Use multiple components if you want to set multiple signals.");
-            }
+            DA.SetData(0, signal);
         }
 
         #region properties
@@ -185,10 +175,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            if (this.GetSignal() == true)
+            if (this.GetSignal(out string name) == true)
             {
                 this.Params.Input[1].RemoveAllSources();
-                HelperMethods.CreatePanel(this, _signal.Name, 1);
+                HelperMethods.CreatePanel(this, name, 1);
                 this.ExpireSolution(true);
             }
         }
@@ -199,9 +189,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Get the signal
         /// </summary>
         /// <returns> Indicates whether or not the signal was picked successfully. </returns>
-        private bool GetSignal()
+        private bool GetSignal(out string name)
         {
             List<Signal> signals = _controller.AnalogInputs;
+            name = "";
 
             if (signals.Count == 0)
             {
@@ -211,7 +202,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (signals.Count == 1)
             {
-                _signal = signals[0];
+                name = signals[0].Name;
                 return true;
             }
 
@@ -225,12 +216,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 if (index < 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No signal picked from the menu!");
-                    _signal = new Signal();
                     return false;
                 }
                 else
                 {
-                    _signal = signals[index];
+                    name = signals[index].Name;
                     return true;
                 }
             }

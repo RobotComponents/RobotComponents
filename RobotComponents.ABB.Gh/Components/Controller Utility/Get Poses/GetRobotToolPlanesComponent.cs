@@ -79,7 +79,14 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (!DA.GetData(0, ref _controller)) { return; }
             if (!DA.GetData(1, ref coordinateSystem)) { return; }
 
-            _planes = _controller.GetRobotToolPlanes(coordinateSystem);
+            try
+            {
+                _planes = _controller.GetRobotToolPlanes(coordinateSystem);
+            }
+            catch (Exception e)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
+            }
 
             // Output
             DA.SetDataList(0, _planes.Keys);

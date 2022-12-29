@@ -24,7 +24,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     {
         #region fields
         private Controller _controller;
-        private Signal _signal = new Signal();
         #endregion
 
         /// <summary>
@@ -72,33 +71,19 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             try
             {
-                _signal = _controller.GetAnalogOutput(name, out int index);
+                Signal signal = _controller.GetAnalogOutput(name, out int index);
 
                 if (index == -1)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Could not get the signal {name}. Signal not found.");
                 }
+
+                // Output
+                DA.SetData(0, signal);
             }
             catch (Exception e)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, e.Message);
-            }
-
-            // Input
-            DA.SetData(0, _signal);
-        }
-
-        /// <summary>
-        /// Override this method if you want to be called after the last call to SolveInstance.
-        /// </summary>
-        protected override void AfterSolveInstance()
-        {
-            base.AfterSolveInstance();
-
-            if (this.Params.Output[0].VolatileData.DataCount > 1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component only functions correctly with item inputs. " +
-                    "Use multiple components if you want to read multiple signals.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
             }
         }
 
@@ -168,10 +153,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            if (this.GetSignal() == true)
+            if (this.GetSignal(out string name) == true)
             {
                 this.Params.Input[1].RemoveAllSources();
-                HelperMethods.CreatePanel(this, _signal.Name, 1);
+                HelperMethods.CreatePanel(this, name, 1);
                 this.ExpireSolution(true);
             }
         }
@@ -182,9 +167,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Get the signal
         /// </summary>
         /// <returns> Indicates whether or not the signal was picked successfully. </returns>
-        private bool GetSignal()
+        private bool GetSignal(out string name)
         {
             List<Signal> signals = _controller.AnalogOutputs;
+            name = "";
 
             if (signals.Count == 0)
             {
@@ -194,7 +180,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (signals.Count == 1)
             {
-                _signal = signals[0];
+                name = signals[0].Name;
                 return true;
             }
 
@@ -208,12 +194,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 if (index < 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No signal picked from the menu!");
-                    _signal = new Signal();
                     return false;
                 }
                 else
                 {
-                    _signal = signals[index];
+                    name = signals[index].Name;
                     return true;
                 }
             }

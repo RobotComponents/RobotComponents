@@ -68,8 +68,14 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
-            _externalJointPositions = _controller.GetExternalJointPositions();
-
+            try
+            {
+                _externalJointPositions = _controller.GetExternalJointPositions();
+            }
+            catch (Exception e)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
+            }
             // Output
             DA.SetDataList(0, _externalJointPositions.Keys);
             DA.SetDataTree(1, this.ToDataTree(_externalJointPositions));

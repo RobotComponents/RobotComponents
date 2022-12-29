@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTitle = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.labelName = new System.Windows.Forms.Label();
             this.labelValue = new System.Windows.Forms.Label();
@@ -46,7 +46,9 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelMinValueInfo = new System.Windows.Forms.Label();
             this.labelMaxValue = new System.Windows.Forms.Label();
             this.labelMaxValueInfo = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelSignalInfo = new System.Windows.Forms.Label();
+            this.labelAccesLevel = new System.Windows.Forms.Label();
+            this.labelAccesLevelInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -60,16 +62,16 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // label1
+            // labelTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(124, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a signal";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(12, 18);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(124, 17);
+            this.labelTitle.TabIndex = 2;
+            this.labelTitle.Text = "Choose a signal";
+            this.labelTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
             // 
@@ -105,7 +107,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelNameInfo.Location = new System.Drawing.Point(164, 140);
             this.labelNameInfo.Name = "labelNameInfo";
             this.labelNameInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelNameInfo.Size = new System.Drawing.Size(322, 32);
+            this.labelNameInfo.Size = new System.Drawing.Size(322, 13);
             this.labelNameInfo.TabIndex = 6;
             this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -116,7 +118,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelValueInfo.Location = new System.Drawing.Point(164, 165);
             this.labelValueInfo.Name = "labelValueInfo";
             this.labelValueInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelValueInfo.Size = new System.Drawing.Size(322, 25);
+            this.labelValueInfo.Size = new System.Drawing.Size(322, 13);
             this.labelValueInfo.TabIndex = 7;
             this.labelValueInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -144,7 +146,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelTypeInfo.Location = new System.Drawing.Point(164, 190);
             this.labelTypeInfo.Name = "labelTypeInfo";
             this.labelTypeInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTypeInfo.Size = new System.Drawing.Size(322, 25);
+            this.labelTypeInfo.Size = new System.Drawing.Size(322, 13);
             this.labelTypeInfo.TabIndex = 10;
             this.labelTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -154,7 +156,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelMinValueInfo.Location = new System.Drawing.Point(164, 215);
             this.labelMinValueInfo.Name = "labelMinValueInfo";
             this.labelMinValueInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelMinValueInfo.Size = new System.Drawing.Size(322, 25);
+            this.labelMinValueInfo.Size = new System.Drawing.Size(322, 13);
             this.labelMinValueInfo.TabIndex = 11;
             this.labelMinValueInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -172,25 +174,45 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelMaxValueInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMaxValueInfo.Location = new System.Drawing.Point(164, 240);
             this.labelMaxValueInfo.Name = "labelMaxValueInfo";
-            this.labelMaxValueInfo.Size = new System.Drawing.Size(322, 25);
+            this.labelMaxValueInfo.Size = new System.Drawing.Size(322, 13);
             this.labelMaxValueInfo.TabIndex = 13;
             this.labelMaxValueInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // labelSignalInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 115);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Signal info";
+            this.labelSignalInfo.AutoSize = true;
+            this.labelSignalInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSignalInfo.Location = new System.Drawing.Point(13, 115);
+            this.labelSignalInfo.Name = "labelSignalInfo";
+            this.labelSignalInfo.Size = new System.Drawing.Size(67, 13);
+            this.labelSignalInfo.TabIndex = 14;
+            this.labelSignalInfo.Text = "Signal info";
+            // 
+            // labelAccesLevel
+            // 
+            this.labelAccesLevel.AutoSize = true;
+            this.labelAccesLevel.Location = new System.Drawing.Point(13, 263);
+            this.labelAccesLevel.Name = "labelAccesLevel";
+            this.labelAccesLevel.Size = new System.Drawing.Size(66, 13);
+            this.labelAccesLevel.TabIndex = 15;
+            this.labelAccesLevel.Text = "Acces Level";
+            // 
+            // labelAccesLevelInfo
+            // 
+            this.labelAccesLevelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAccesLevelInfo.Location = new System.Drawing.Point(164, 263);
+            this.labelAccesLevelInfo.Name = "labelAccesLevelInfo";
+            this.labelAccesLevelInfo.Size = new System.Drawing.Size(322, 13);
+            this.labelAccesLevelInfo.TabIndex = 16;
+            this.labelAccesLevelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // PickSignalForm
             // 
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelAccesLevelInfo);
+            this.Controls.Add(this.labelAccesLevel);
+            this.Controls.Add(this.labelSignalInfo);
             this.Controls.Add(this.labelMaxValueInfo);
             this.Controls.Add(this.labelMaxValue);
             this.Controls.Add(this.labelMinValueInfo);
@@ -202,7 +224,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.Controls.Add(this.labelValue);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "PickSignalForm";
@@ -213,7 +235,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelValue;
@@ -225,6 +247,8 @@ namespace RobotComponents.ABB.Controllers.Forms
         private System.Windows.Forms.Label labelMinValueInfo;
         private System.Windows.Forms.Label labelMaxValue;
         private System.Windows.Forms.Label labelMaxValueInfo;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelSignalInfo;
+        private System.Windows.Forms.Label labelAccesLevel;
+        private System.Windows.Forms.Label labelAccesLevelInfo;
     }
 }

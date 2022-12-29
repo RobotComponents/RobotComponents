@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     {
         #region fields
         private int _index = 0;
-        private List<Signal> _signals;
+        private readonly List<Signal> _signals;
         #endregion
 
         #region constructors
@@ -46,6 +46,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelTypeInfo.Text = _signals[comboBox1.SelectedIndex].SignalABB.Type.ToString();
             this.labelMinValueInfo.Text = _signals[comboBox1.SelectedIndex].MinValue.ToString();
             this.labelMaxValueInfo.Text = _signals[comboBox1.SelectedIndex].MaxValue.ToString();
+            this.labelAccesLevelInfo.Text = _signals[comboBox1.SelectedIndex].AccesLevel;
         }
 
         private void Button1_Click(object sender, EventArgs e)

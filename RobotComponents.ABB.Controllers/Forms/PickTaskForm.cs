@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Controllers.Forms
 
             for (int i = 0; i < _controller.TasksABB.Count; i++)
             {
-                comboBox.Items.Add(_controller.TasksABB[i].Name[i]);
+                comboBox.Items.Add(_controller.TasksABB[i].Name);
             }
         }
         #endregion

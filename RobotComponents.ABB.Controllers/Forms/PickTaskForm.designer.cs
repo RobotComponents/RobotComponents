@@ -100,7 +100,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelNameInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelNameInfo.Location = new System.Drawing.Point(198, 140);
             this.labelNameInfo.Name = "labelNameInfo";
-            this.labelNameInfo.Size = new System.Drawing.Size(287, 25);
+            this.labelNameInfo.Size = new System.Drawing.Size(287, 13);
             this.labelNameInfo.TabIndex = 18;
             this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -109,7 +109,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelTaskTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTaskTypeInfo.Location = new System.Drawing.Point(203, 165);
             this.labelTaskTypeInfo.Name = "labelTaskTypeInfo";
-            this.labelTaskTypeInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelTaskTypeInfo.Size = new System.Drawing.Size(282, 13);
             this.labelTaskTypeInfo.TabIndex = 19;
             this.labelTaskTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -118,7 +118,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelEnabledInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelEnabledInfo.Location = new System.Drawing.Point(203, 190);
             this.labelEnabledInfo.Name = "labelEnabledInfo";
-            this.labelEnabledInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelEnabledInfo.Size = new System.Drawing.Size(282, 13);
             this.labelEnabledInfo.TabIndex = 20;
             this.labelEnabledInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 

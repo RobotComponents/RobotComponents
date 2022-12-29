@@ -194,7 +194,7 @@ namespace RobotComponents.ABB.Actions.Generators
             _programModule.Add("    ");
 
             // Add comment lines for tracking which version of RC was used
-            _programModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (GPL v3)");
+            _programModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (LGPL v3)");
             _programModule.Add("    " + "! Visit www.github.com/RobotComponents for more information");
             _programModule.Add("    ");
 
@@ -401,7 +401,7 @@ namespace RobotComponents.ABB.Actions.Generators
             }
 
             // Version number
-            _systemModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (GPL v3)");
+            _systemModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (LGPL v3)");
             _systemModule.Add("    " + "! Visit www.github.com/RobotComponents for more information");
             _systemModule.Add("    ");
 

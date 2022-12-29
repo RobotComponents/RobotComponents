@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         #region fields
         private GH_Structure<GH_WorkObject> _tree = new GH_Structure<GH_WorkObject>();
         private List<string> _registered = new List<string>();
-        private List<string> _toRegister = new List<string>();
+        private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
         private string _lastName = "";
         private bool _isUnique = true;

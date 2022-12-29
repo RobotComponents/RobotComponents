@@ -33,7 +33,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTitle = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.labelOperationMode = new System.Windows.Forms.Label();
             this.labelIsVirtual = new System.Windows.Forms.Label();
@@ -45,12 +45,12 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelIPInfo = new System.Windows.Forms.Label();
             this.labelIsVirtualInfo = new System.Windows.Forms.Label();
             this.labelOperationModeInfo = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelControllerInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Location = new System.Drawing.Point(12, 303);
@@ -61,16 +61,16 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1Click);
             // 
-            // label1
+            // labelTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(250, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a controller to connect to";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(12, 18);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(250, 17);
+            this.labelTitle.TabIndex = 2;
+            this.labelTitle.Text = "Choose a controller to connect to";
+            this.labelTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
             // 
@@ -131,7 +131,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelNameInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelNameInfo.Location = new System.Drawing.Point(198, 140);
             this.labelNameInfo.Name = "labelNameInfo";
-            this.labelNameInfo.Size = new System.Drawing.Size(287, 25);
+            this.labelNameInfo.Size = new System.Drawing.Size(287, 13);
             this.labelNameInfo.TabIndex = 18;
             this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -140,7 +140,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelSystemNameInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelSystemNameInfo.Location = new System.Drawing.Point(203, 165);
             this.labelSystemNameInfo.Name = "labelSystemNameInfo";
-            this.labelSystemNameInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelSystemNameInfo.Size = new System.Drawing.Size(282, 13);
             this.labelSystemNameInfo.TabIndex = 19;
             this.labelSystemNameInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -149,7 +149,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelIPInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelIPInfo.Location = new System.Drawing.Point(203, 190);
             this.labelIPInfo.Name = "labelIPInfo";
-            this.labelIPInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelIPInfo.Size = new System.Drawing.Size(282, 13);
             this.labelIPInfo.TabIndex = 20;
             this.labelIPInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -158,7 +158,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelIsVirtualInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelIsVirtualInfo.Location = new System.Drawing.Point(203, 215);
             this.labelIsVirtualInfo.Name = "labelIsVirtualInfo";
-            this.labelIsVirtualInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelIsVirtualInfo.Size = new System.Drawing.Size(282, 13);
             this.labelIsVirtualInfo.TabIndex = 21;
             this.labelIsVirtualInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -167,19 +167,19 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelOperationModeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelOperationModeInfo.Location = new System.Drawing.Point(203, 240);
             this.labelOperationModeInfo.Name = "labelOperationModeInfo";
-            this.labelOperationModeInfo.Size = new System.Drawing.Size(282, 25);
+            this.labelOperationModeInfo.Size = new System.Drawing.Size(282, 13);
             this.labelOperationModeInfo.TabIndex = 22;
             this.labelOperationModeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label2
+            // labelControllerInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 115);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Controller info";
+            this.labelControllerInfo.AutoSize = true;
+            this.labelControllerInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControllerInfo.Location = new System.Drawing.Point(13, 115);
+            this.labelControllerInfo.Name = "labelControllerInfo";
+            this.labelControllerInfo.Size = new System.Drawing.Size(86, 13);
+            this.labelControllerInfo.TabIndex = 14;
+            this.labelControllerInfo.Text = "Controller info";
             // 
             // PickControllerForm
             // 
@@ -197,8 +197,8 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.Controls.Add(this.labelSystemName);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelTitle);
+            this.Controls.Add(this.labelControllerInfo);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "PickControllerForm";
@@ -210,7 +210,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label labelOperationMode;
         private System.Windows.Forms.Label labelIsVirtual;
@@ -222,6 +222,6 @@ namespace RobotComponents.ABB.Controllers.Forms
         private System.Windows.Forms.Label labelIPInfo;
         private System.Windows.Forms.Label labelIsVirtualInfo;
         private System.Windows.Forms.Label labelOperationModeInfo;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelControllerInfo;
     }
 }

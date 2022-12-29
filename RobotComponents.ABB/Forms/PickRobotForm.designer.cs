@@ -33,11 +33,11 @@ namespace RobotComponents.ABB.Forms
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelTitle = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.labelName = new System.Windows.Forms.Label();
             this.labelNameInfo = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelRobotInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -51,16 +51,16 @@ namespace RobotComponents.ABB.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
-            // label1
+            // labelTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Choose a robot preset";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(12, 18);
+            this.labelTitle.Name = "labelTitle";
+            this.labelTitle.Size = new System.Drawing.Size(170, 17);
+            this.labelTitle.TabIndex = 2;
+            this.labelTitle.Text = "Choose a robot preset";
+            this.labelTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // comboBox1
             // 
@@ -87,42 +87,43 @@ namespace RobotComponents.ABB.Forms
             this.labelNameInfo.Location = new System.Drawing.Point(164, 140);
             this.labelNameInfo.Name = "labelNameInfo";
             this.labelNameInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelNameInfo.Size = new System.Drawing.Size(322, 32);
+            this.labelNameInfo.Size = new System.Drawing.Size(322, 13);
             this.labelNameInfo.TabIndex = 6;
             this.labelNameInfo.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label2
+            // labelRobotInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 115);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Robot info";
+            this.labelRobotInfo.AutoSize = true;
+            this.labelRobotInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelRobotInfo.Location = new System.Drawing.Point(13, 115);
+            this.labelRobotInfo.Name = "labelRobotInfo";
+            this.labelRobotInfo.Size = new System.Drawing.Size(66, 13);
+            this.labelRobotInfo.TabIndex = 14;
+            this.labelRobotInfo.Text = "Robot info";
             // 
             // PickRobotForm
             // 
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelRobotInfo);
             this.Controls.Add(this.labelNameInfo);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "PickRobotForm";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelNameInfo;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelRobotInfo;
     }
 }

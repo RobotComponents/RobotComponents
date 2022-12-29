@@ -80,6 +80,8 @@
     <Compile Include="Components\Controller Utility\Set Signals\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Controller Utility\Run Programs\UploadProgramComponent.cs" />
     <Compile Include="Components\Definitions\Presets\IRB1010_4_0_475_Component.cs" />
+    <Compile Include="Obsolete\v1\RobotPresetComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE3.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromPlanesComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\WorkObjectComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\DeconstructMovementComponent_OBSOLETE.cs" />

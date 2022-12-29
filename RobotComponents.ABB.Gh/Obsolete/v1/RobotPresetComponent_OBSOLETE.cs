@@ -20,19 +20,20 @@ using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Forms;
 
-namespace RobotComponents.ABB.Gh.Components.Definitions
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
-    /// RobotComponents Robot Preset component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotPresetComponent : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RobotPresetComponent_OBSOLETE : GH_Component
     {
         #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
         private bool _fromMenu = false;
         #endregion
 
-        public RobotPresetComponent()
+        public RobotPresetComponent_OBSOLETE()
           : base("Robot Preset", "RobPres",
               "Defines a robot which is needed for Code Generation and Simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
@@ -116,7 +117,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("33D7467A-17B3-43DB-B26E-2AF153AA8491"); }
+            get { return new Guid("CF1004D8-9598-4B2B-8F8A-5A3E43614579"); }
         }
         #endregion
 
@@ -200,7 +201,16 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         public override bool Read(GH_IReader reader)
         {
             byte[] array = reader.GetByteArray("Robot Preset");
-            _robotPreset = (RobotPreset)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
+
+            try
+            {
+                _robotPreset = (RobotPreset)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
+            }
+            catch 
+            {
+                _robotPreset = RobotPreset.EMPTY;
+            }
+
             return base.Read(reader);
         }
         #endregion

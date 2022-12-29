@@ -25,12 +25,13 @@ using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Simulation
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Invesere Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class InverseKinematicsComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class InverseKinematicsComponent_OBSOLETE3 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private readonly List<InverseKinematics> _inverseKinematics = new List<InverseKinematics>();
@@ -46,7 +47,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InverseKinematicsComponent()
+        public InverseKinematicsComponent_OBSOLETE3()
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Movement."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -185,7 +186,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -212,7 +213,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3E512804-5166-4535-A217-FC53C77D8CB8"); }
+            get { return new Guid("F786750C-FB68-4E1A-A55D-9968C4F4A6C4"); }
         }
         #endregion
 
@@ -289,7 +290,17 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
             _previousRobotJointPositions.Clear();
-            _previousRobotJointPositions.AddRange((List<RobotJointPosition>)RobotComponents.Utils.Serialization.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Positions")));
+
+            try
+            {
+                _previousRobotJointPositions.AddRange((List<RobotJointPosition>)RobotComponents.Utils.Serialization.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Positions")));
+            }
+
+            catch
+            {
+                _previousRobotJointPositions.Clear();
+            }
+
             return base.Read(reader);
         }
 

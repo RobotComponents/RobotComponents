@@ -65,13 +65,13 @@
     <Compile Include="Components\Controller Utility\Get Controller\GetControllerComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetDigitalInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetDigitalOutputComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetExternalJointPositionComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetExternalJointPositionsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Controller\GetLogComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetTaskNameComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotBaseFrameComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotJointPositionComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetExternalAxisPlaneComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotToolPlaneComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetTaskNamesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetRobotBaseFramesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetRobotJointPositionsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetExternalAxisPlanesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses\GetRobotToolPlanesComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadConfigurationDomainComponent.cs" />
     <Compile Include="Components\Controller Utility\Run Programs\RunProgramComponent.cs" />
     <Compile Include="Components\Controller Utility\Set Signals\SetAnalogInputComponent.cs" />
@@ -224,12 +224,6 @@
     <Compile Include="RobotComponentsIcon.cs" />
     <Compile Include="RobotComponentsInfo.cs" />
     <Compile Include="Utils\DocumentManager.cs" />
-    <Compile Include="Forms\PickRobotForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickRobotForm.designer.cs">
-      <DependentUpon>PickRobotForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />
     <Compile Include="Parameters\Actions\Param_AnalogOutput.cs" />
@@ -262,9 +256,6 @@
     <Compile Include="Utils\ObjectManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\PickRobotForm.resx">
-      <DependentUpon>PickRobotForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

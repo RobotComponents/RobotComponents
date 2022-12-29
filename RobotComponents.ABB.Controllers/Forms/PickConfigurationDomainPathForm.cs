@@ -14,7 +14,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick path form class.
     /// </summary>
-    public partial class PickPathForm : Form
+    public partial class PickConfigurationDomainPathForm : Form
     {
         #region fields
         private static Controller _controller;
@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         /// Initiales a pick path form.
         /// </summary>
         /// <param name="controller"> The controller to read from. </param>
-        public PickPathForm(Controller controller)
+        public PickConfigurationDomainPathForm(Controller controller)
         {
             _controller = controller;
             InitializeComponent();

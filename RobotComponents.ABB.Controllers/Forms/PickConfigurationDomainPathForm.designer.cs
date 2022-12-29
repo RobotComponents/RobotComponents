@@ -5,7 +5,7 @@
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
-    partial class PickPathForm
+    partial class PickConfigurationDomainPathForm
     {
         /// <summary>
         /// Required designer variable.
@@ -26,7 +26,6 @@ namespace RobotComponents.ABB.Controllers.Forms
         }
 
         #region Windows Form Designer generated code
-
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.

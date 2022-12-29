@@ -45,6 +45,9 @@ namespace RobotComponents.ABB.Controllers
         private readonly Dictionary<string, Plane> _robotToolPlanes = new Dictionary<string, Plane>();
         private readonly Dictionary<string, Plane> _externalAxisPlanes = new Dictionary<string, Plane>();
 
+        private readonly Dictionary<string, JointTarget> _jointTargets = new Dictionary<string, JointTarget>();
+        private readonly Dictionary<string, RobotTarget> _robotTargets = new Dictionary<string, RobotTarget>();
+
         private List<MechanicalUnit> _mechanicalUnits = new List<MechanicalUnit>();
         private readonly List<MechanicalUnit> _robots = new List<MechanicalUnit>();
         private readonly List<MechanicalUnit> _externalAxes = new List<MechanicalUnit>();
@@ -52,6 +55,11 @@ namespace RobotComponents.ABB.Controllers
         private readonly Dictionary<string, List<MechanicalUnit>> _mechanicalUnitsPerTask = new Dictionary<string, List<MechanicalUnit>>();
         private readonly Dictionary<string, List<MechanicalUnit>> _robotsPerTask = new Dictionary<string, List<MechanicalUnit>>();
         private readonly Dictionary<string, List<MechanicalUnit>> _externalAxesPerTask = new Dictionary<string, List<MechanicalUnit>>();
+
+        private readonly List<Signal> _analogInputs = new List<Signal>();
+        private readonly List<Signal> _analogOutputs = new List<Signal>();
+        private readonly List<Signal> _digitalInputs = new List<Signal>();
+        private readonly List<Signal> _digitalOutputs = new List<Signal>();
 
         private bool _isEmtpy = true;
         #endregion
@@ -127,6 +135,7 @@ namespace RobotComponents.ABB.Controllers
                 Log("Could not initialize the controller class. There is no ABB controller defined.");
             }
 
+            #region mechanical units
             _mechanicalUnits = _controller.MotionSystem.MechanicalUnits.ToList();
             _tasks = _controller.Rapid.GetTasks().ToList();
 
@@ -135,6 +144,9 @@ namespace RobotComponents.ABB.Controllers
                 _mechanicalUnitsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
                 _robotsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
                 _externalAxesPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
+
+                _jointTargets.Add(_tasks[i].Name, new JointTarget());
+                _robotTargets.Add(_tasks[i].Name, new RobotTarget());
             }
 
             for (int i = 0; i < _mechanicalUnits.Count; i++)
@@ -156,6 +168,14 @@ namespace RobotComponents.ABB.Controllers
                     _externalAxesPerTask[_mechanicalUnits[i].Task.Name].Add(_mechanicalUnits[i]);
                 }
             }
+            #endregion
+
+            #region signals
+            _analogInputs.AddRange(GetAnalogInputs());
+            _analogOutputs.AddRange(GetAnalogOutputs());
+            _digitalInputs.AddRange(GetDigitalInputs());
+            _digitalOutputs.AddRange(GetDigitalOutputs());
+            #endregion
 
             SetDefaultUser();
         }
@@ -174,6 +194,9 @@ namespace RobotComponents.ABB.Controllers
             _robotToolPlanes.Clear();
             _externalAxisPlanes.Clear();
 
+            _jointTargets.Clear();
+            _robotTargets.Clear();
+
             _mechanicalUnits.Clear();
             _robots.Clear();
             _externalAxes.Clear();
@@ -181,6 +204,11 @@ namespace RobotComponents.ABB.Controllers
             _mechanicalUnitsPerTask.Clear();
             _robotsPerTask.Clear();
             _externalAxesPerTask.Clear();
+
+            _analogInputs.Clear();
+            _analogOutputs.Clear();
+            _digitalInputs.Clear();
+            _digitalOutputs.Clear();
 
             Initiliaze();
 
@@ -356,17 +384,15 @@ namespace RobotComponents.ABB.Controllers
             for (int i = 0; i < _robots.Count; i++)
             {
                 RapidDomainNS.RobTarget robTarget = _robots[i].GetPosition(coordinateSystem);
-                    
-                Plane plane = QuaternionToPlane(
-                    robTarget.Trans.X, 
-                    robTarget.Trans.Y, 
+                   
+                _robotToolPlanes[_robots[i].Name] = QuaternionToPlane(
+                    robTarget.Trans.X,
+                    robTarget.Trans.Y,
                     robTarget.Trans.Z,
-                    robTarget.Rot.Q1, 
-                    robTarget.Rot.Q2, 
-                    robTarget.Rot.Q3, 
-                    robTarget.Rot.Q4);
-
-                _robotToolPlanes[_robots[i].Name] = plane;
+                    robTarget.Rot.Q1,
+                    robTarget.Rot.Q2,
+                    robTarget.Rot.Q3,
+                    robTarget.Rot.Q4); 
             }
 
             return _robotToolPlanes;
@@ -475,74 +501,85 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
-        /// Returns the analog output names.
+        /// Returns the current joint targets. 
         /// </summary>
-        /// <returns> A list with analog output names. </returns>
-        public List<string> GetAnalogOutputNames()
+        /// <returns> A dictionary with as key the name of the task and as value the current joint target.</returns>
+        private Dictionary<string, JointTarget> GetJointTargets()
         {
             if (_isEmtpy == true)
             {
-                Log($"Could not get the analog output names. The controller is empty.");
-                return new List<string>();
+                Log($"Could not get the joint targets. The controller is empty.");
+                return _jointTargets;
             }
 
-            List<Signal> signals = GetAnalogOutputs(); 
-            return signals.ConvertAll(signal => signal.Name);
+            for (int i = 0; i < _tasks.Count; i++)
+            {
+                RapidDomainNS.JointTarget jointTarget = _tasks[i].GetJointTarget();
+
+                _jointTargets[_tasks[i].Name].RobotJointPosition[0] = jointTarget.RobAx.Rax_1;
+                _jointTargets[_tasks[i].Name].RobotJointPosition[1] = jointTarget.RobAx.Rax_2;
+                _jointTargets[_tasks[i].Name].RobotJointPosition[2] = jointTarget.RobAx.Rax_3;
+                _jointTargets[_tasks[i].Name].RobotJointPosition[3] = jointTarget.RobAx.Rax_4;
+                _jointTargets[_tasks[i].Name].RobotJointPosition[4] = jointTarget.RobAx.Rax_5;
+                _jointTargets[_tasks[i].Name].RobotJointPosition[5] = jointTarget.RobAx.Rax_6;
+
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[0] = jointTarget.ExtAx.Eax_a < 9e8 ? jointTarget.ExtAx.Eax_a : _jointTargets[_tasks[i].Name].ExternalJointPosition[0];
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[1] = jointTarget.ExtAx.Eax_b < 9e8 ? jointTarget.ExtAx.Eax_b : _jointTargets[_tasks[i].Name].ExternalJointPosition[1];
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[2] = jointTarget.ExtAx.Eax_c < 9e8 ? jointTarget.ExtAx.Eax_c : _jointTargets[_tasks[i].Name].ExternalJointPosition[2];
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[3] = jointTarget.ExtAx.Eax_d < 9e8 ? jointTarget.ExtAx.Eax_d : _jointTargets[_tasks[i].Name].ExternalJointPosition[3];
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[4] = jointTarget.ExtAx.Eax_e < 9e8 ? jointTarget.ExtAx.Eax_e : _jointTargets[_tasks[i].Name].ExternalJointPosition[4];
+                _jointTargets[_tasks[i].Name].ExternalJointPosition[5] = jointTarget.ExtAx.Eax_f < 9e8 ? jointTarget.ExtAx.Eax_f : _jointTargets[_tasks[i].Name].ExternalJointPosition[5];
+            }
+
+            return _jointTargets;
         }
 
         /// <summary>
-        /// Returns the digital output names.
+        /// Returns the current robot targets. 
         /// </summary>
-        /// <returns> A list with digital output names. </returns>
-        public List<string> GetDigitalOutputNames()
+        /// <returns> A dictionary with as key the name of the task and as value the current robot target.</returns>
+        private Dictionary<string, RobotTarget> GetRobotTargets()
         {
             if (_isEmtpy == true)
             {
-                Log($"Could not get the digital output names. The controller is empty.");
-                return new List<string>();
+                Log($"Could not get the robot targets. The controller is empty.");
+                return _robotTargets;
             }
 
-            List<Signal> signals = GetDigitalOutputs();
-            return signals.ConvertAll(signal => signal.Name);
-        }
-
-        /// <summary>
-        /// Returns the analog input names. 
-        /// </summary>
-        /// <returns> A list with analog input names. </returns>
-        public List<string> GetAnalogInputNames()
-        {
-            if (_isEmtpy == true)
+            for (int i = 0; i < _tasks.Count; i++)
             {
-                Log($"Could not get the analog inputs names. The controller is empty.");
-                return new List<string>();
+                // if (_tasks[i].Enabled == true) ? 
+                // Check _tasks[i].TaskType ? 
+
+                RapidDomainNS.RobTarget robotTarget = _tasks[i].GetRobTarget();
+
+                _robotTargets[_tasks[i].Name].Plane = QuaternionToPlane(
+                    robotTarget.Trans.X,
+                    robotTarget.Trans.Y,
+                    robotTarget.Trans.Z,
+                    robotTarget.Rot.Q1,
+                    robotTarget.Rot.Q2,
+                    robotTarget.Rot.Q3,
+                    robotTarget.Rot.Q4);
+
+                _robotTargets[_tasks[i].Name].AxisConfig = robotTarget.Robconf.Cfx;
+
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[0] = robotTarget.Extax.Eax_a < 9e8 ? robotTarget.Extax.Eax_a : _robotTargets[_tasks[i].Name].ExternalJointPosition[0];
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[1] = robotTarget.Extax.Eax_b < 9e8 ? robotTarget.Extax.Eax_b : _robotTargets[_tasks[i].Name].ExternalJointPosition[1];
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[2] = robotTarget.Extax.Eax_c < 9e8 ? robotTarget.Extax.Eax_c : _robotTargets[_tasks[i].Name].ExternalJointPosition[2];
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[3] = robotTarget.Extax.Eax_d < 9e8 ? robotTarget.Extax.Eax_d : _robotTargets[_tasks[i].Name].ExternalJointPosition[3];
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[4] = robotTarget.Extax.Eax_e < 9e8 ? robotTarget.Extax.Eax_e : _robotTargets[_tasks[i].Name].ExternalJointPosition[4];
+                _robotTargets[_tasks[i].Name].ExternalJointPosition[5] = robotTarget.Extax.Eax_f < 9e8 ? robotTarget.Extax.Eax_f : _robotTargets[_tasks[i].Name].ExternalJointPosition[5];
             }
 
-            List<Signal> signals = GetAnalogInputs();
-            return signals.ConvertAll(signal => signal.Name);
-        }
-
-        /// <summary>
-        /// Returns the digital input names. 
-        /// </summary>
-        /// <returns> A list with digital input names. </returns>
-        public List<string> GetDigitalInputNames()
-        {
-            if (_isEmtpy == true)
-            {
-                Log($"Could not get the digital inputs names. The controller is empty.");
-                return new List<string>();
-            }
-
-            List<Signal> signals = GetDigitalInputs();
-            return signals.ConvertAll(signal => signal.Name);
+            return _robotTargets;
         }
 
         /// <summary>
         /// Returns the analog output signals. 
         /// </summary>
         /// <returns> A list with analog output signals. </returns>
-        public List<Signal> GetAnalogOutputs()
+        private List<Signal> GetAnalogOutputs()
         {
             if (_isEmtpy == true)
             {
@@ -555,10 +592,12 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                {
-                    result.Add(new Signal(signals[i]));
-                }
+                result.Add(new Signal(signals[i]));
+
+                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
+                //{
+                //    result.Add(new Signal(signals[i]));
+                //}
             }
 
             return result;
@@ -568,7 +607,7 @@ namespace RobotComponents.ABB.Controllers
         /// Returns the digital output signals. 
         /// </summary>
         /// <returns> A list with digital output signals. </returns>
-        public List<Signal> GetDigitalOutputs()
+        private List<Signal> GetDigitalOutputs()
         {
             if (_isEmtpy == true)
             {
@@ -581,10 +620,12 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                {
-                    result.Add(new Signal(signals[i]));
-                }
+                result.Add(new Signal(signals[i]));
+
+                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
+                //{
+                //    result.Add(new Signal(signals[i]));
+                //}
             }
 
             return result;
@@ -594,7 +635,7 @@ namespace RobotComponents.ABB.Controllers
         /// Returns the analog inputs. 
         /// </summary>
         /// <returns> A list with analog inputs. </returns>
-        public List<Signal> GetAnalogInputs()
+        private List<Signal> GetAnalogInputs()
         {
             if (_isEmtpy == true)
             {
@@ -607,10 +648,12 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < signals.Count; i++)
             {
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                {
-                    result.Add(new Signal(signals[i]));
-                }
+                result.Add(new Signal(signals[i]));
+
+                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
+                //{
+                //    result.Add(new Signal(signals[i]));
+                //}
             }
 
             return result;
@@ -620,7 +663,7 @@ namespace RobotComponents.ABB.Controllers
         /// Returns the digital inputs.
         /// </summary>
         /// <returns> A list with digital inputs. </returns>
-        public List<Signal> GetDigitalInputs()
+        private List<Signal> GetDigitalInputs()
         {
             if (_isEmtpy == true)
             {
@@ -628,16 +671,17 @@ namespace RobotComponents.ABB.Controllers
                 return new List<Signal>();
             }
 
-
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Input | IOSystemDomainNS.IOFilterTypes.Digital);
             List<Signal> result = new List<Signal>();
 
             for (int i = 0; i < signals.Count; i++)
             {
-                if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
-                {
-                    result.Add(new Signal(signals[i]));
-                }
+                result.Add(new Signal(signals[i]));
+
+                //if (_controller.Configuration.Read("EIO", "EIO_SIGNAL", signals[i].Name, "Access") != "ReadOnly")
+                //{
+                //    result.Add(new Signal(signals[i]));
+                //}
             }
 
             return result;
@@ -679,19 +723,115 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
-        /// Returns a signal from the controller. 
+        /// Returns the analog input signal from the controller. 
         /// </summary>
-        /// <param name="name"> The name of the signal to be picked. </param>
-        /// <returns> A signal from the controller. </returns>
-        public Signal GetSignal(string name)
+        /// <param name="name"> The name of the signal. </param>
+        /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
+        /// <returns> The analog input signal. Returns an empty signal if no signal was found. </returns>
+        public Signal GetAnalogInput(string name, out int index)
         {
             if (_isEmtpy == true)
             {
+                index = -1;
                 Log($"Could not get the signal {name}. The controller is empty.");
                 return new Signal();
             }
 
-            return new Signal(_controller.IOSystem.GetSignal(name));
+            index = _analogInputs.FindIndex(item => item.Name == name);
+
+            if (index == -1)
+            {
+                Log($"Could not get the signal {name}. Signal not found.");
+                return new Signal();
+            }
+            else
+            {
+                return _analogInputs[index];
+            }
+        }
+
+        /// <summary>
+        /// Returns the analog output signal from the controller. 
+        /// </summary>
+        /// <param name="name"> The name of the signal. </param>
+        /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
+        /// <returns> The analog output signal. Returns an empty signal if no signal was found. </returns>
+        public Signal GetAnalogOutput(string name, out int index)
+        {
+            if (_isEmtpy == true)
+            {
+                index = -1;
+                Log($"Could not get the signal {name}. The controller is empty.");
+                return new Signal();
+            }
+
+            index = _analogOutputs.FindIndex(item => item.Name == name);
+
+            if (index == -1)
+            {
+                Log($"Could not get the signal {name}. Signal not found.");
+                return new Signal();
+            }
+            else
+            {
+                return _analogOutputs[index];
+            }
+        }
+
+        /// <summary>
+        /// Returns the digital input signal from the controller. 
+        /// </summary>
+        /// <param name="name"> The name of the signal. </param>
+        /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
+        /// <returns> The digital input signal. Returns an empty signal if no signal was found. </returns>
+        public Signal GetDigitalInput(string name, out int index)
+        {
+            if (_isEmtpy == true)
+            {
+                index = -1;
+                Log($"Could not get the signal {name}. The controller is empty.");
+                return new Signal();
+            }
+
+            index = _digitalInputs.FindIndex(item => item.Name == name);
+
+            if (index == -1)
+            {
+                Log($"Could not get the signal {name}. Signal not found.");
+                return new Signal();
+            }
+            else
+            {
+                return _digitalInputs[index];
+            }
+        }
+
+        /// <summary>
+        /// Returns the digital output signal from the controller. 
+        /// </summary>
+        /// <param name="name"> The name of the signal. </param>
+        /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
+        /// <returns> The digital output signal. Returns an empty signal if no signal was found. </returns>
+        public Signal GetDigitalOutput(string name, out int index)
+        {
+            if (_isEmtpy == true)
+            {
+                index = -1;
+                Log($"Could not get the signal {name}. The controller is empty.");
+                return new Signal();
+            }
+
+            index = _digitalOutputs.FindIndex(item => item.Name == name);
+
+            if (index == -1)
+            {
+                Log($"Could not get the signal {name}. Signal not found.");
+                return new Signal();
+            }
+            else
+            {
+                return _digitalOutputs[index];
+            }
         }
 
         /// <summary>
@@ -821,6 +961,14 @@ namespace RobotComponents.ABB.Controllers
             return false; // Returns true on success
         }
 
+        private bool SetProgramPointer(string task, string routine, out string status)
+        {
+            status = "";
+
+            //TODO
+
+            return false;
+        }
         /// <summary>
         /// Resets all the program pointers. 
         /// </summary>
@@ -1027,6 +1175,23 @@ namespace RobotComponents.ABB.Controllers
             string[] path = new string[4] { domain, type, instance, attribute };
             return _controller.Configuration.Read(path);
         }
+
+        /// <summary>
+        /// Returns the rapid value of a specified path.
+        /// </summary>
+        /// <param name="task"> The task name. </param>
+        /// <param name="module"> The module name. </param>
+        /// <param name="variable"> The variable name. </param>
+        /// <returns> The rapid value. </returns>
+        private string ReadRapidDomain(string task, string module, string variable)
+        {
+            if (_isEmtpy == true)
+            {
+                return "";
+            }
+
+            return _controller.Rapid.GetRapidData(task, module, variable).StringValue;   
+        }
         #endregion
 
         #region static properties
@@ -1108,6 +1273,38 @@ namespace RobotComponents.ABB.Controllers
         public bool IsEmpty
         {
             get { return _isEmtpy; }
+        }
+
+        /// <summary>
+        /// Gets the analog inputs. 
+        /// </summary>
+        public List<Signal> AnalogInputs
+        {
+            get { return _analogInputs; }
+        }
+
+        /// <summary>
+        /// Gets the analog outputs. 
+        /// </summary>
+        public List<Signal> AnalogOutputs
+        {
+            get { return _analogOutputs; }
+        }
+
+        /// <summary>
+        /// Gets the digital inputs. 
+        /// </summary>
+        public List<Signal> DigitalInputs
+        {
+            get { return _digitalInputs; }
+        }
+
+        /// <summary>
+        /// Gets the analog outputs. 
+        /// </summary>
+        public List<Signal> DigitalOutputs
+        {
+            get { return _digitalOutputs; }
         }
         #endregion
 

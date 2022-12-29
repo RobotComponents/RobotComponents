@@ -17,6 +17,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     {
         #region fields
         private int _index = 0;
+        private List<Signal> _signals;
         #endregion
 
         #region constructors
@@ -24,13 +25,15 @@ namespace RobotComponents.ABB.Controllers.Forms
         /// Constructs a pick signal form.
         /// </summary>
         /// <param name="items"> The items to fill the form with. </param>
-        public PickSignalForm(List<string> items)
+        public PickSignalForm(List<Signal> items)
         {
             InitializeComponent();
 
-            for (int i = 0; i < items.Count; i++)
+            _signals = items;
+
+            for (int i = 0; i < _signals.Count; i++)
             {
-                comboBox1.Items.Add(items[i]);
+                comboBox1.Items.Add(_signals[i].Name);
             }
         }
         #endregion
@@ -38,11 +41,11 @@ namespace RobotComponents.ABB.Controllers.Forms
         #region methods
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = "-";
-            this.labelValueInfo.Text = "-";
-            this.labelTypeInfo.Text = "-";
-            this.labelMinValueInfo.Text = "-";
-            this.labelMaxValueInfo.Text = "-";
+            this.labelNameInfo.Text = _signals[comboBox1.SelectedIndex].Name;
+            this.labelValueInfo.Text = _signals[comboBox1.SelectedIndex].Value.ToString();
+            this.labelTypeInfo.Text = _signals[comboBox1.SelectedIndex].SignalABB.Type.ToString();
+            this.labelMinValueInfo.Text = _signals[comboBox1.SelectedIndex].MinValue.ToString();
+            this.labelMaxValueInfo.Text = _signals[comboBox1.SelectedIndex].MaxValue.ToString();
         }
 
         private void Button1_Click(object sender, EventArgs e)

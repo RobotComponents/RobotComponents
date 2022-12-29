@@ -157,7 +157,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            PickPathForm frm = new PickPathForm(_controller);
+            PickConfigurationDomainPathForm frm = new PickConfigurationDomainPathForm(_controller);
             Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
             frm.ShowDialog();
 

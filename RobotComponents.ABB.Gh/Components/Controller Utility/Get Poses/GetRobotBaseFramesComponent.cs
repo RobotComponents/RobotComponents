@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data;
+// Rhino Libs
+using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
@@ -19,21 +19,20 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets the external joint positions from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that get the base frames of the robots from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetExternalJointPositionComponent : GH_Component
+    public class GetRobotBaseFramesComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Dictionary<string, double[]> _externalJointPositions;
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetExternalJointPositionComponent class.
+        /// Initializes a new instance of the GetRobotBaseFrameComponent class.
         /// </summary>
-        public GetExternalJointPositionComponent()
-          : base("Get External Joint Position", "GEJP",
-              "Gets the current external joint position from an ABB IRC5 robot controller."
+        public GetRobotBaseFramesComponent()
+          : base("Get Robot Base Frames", "GRBF",
+              "Gets the robot base frame from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -53,10 +52,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            //TODO: Change generic parameter to Param_ExternalJointPosition
-
-            pManager.AddTextParameter("Name", "N", "Name of the external axis as Text", GH_ParamAccess.list);
-            pManager.AddNumberParameter("External Joint Position", "EJ", "Extracted External Joint Positions", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Name", "N", "Name of the robot as Text", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Base frame of the robot as a Plane", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -68,11 +65,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
-            _externalJointPositions = _controller.GetExternalJointPositions();
+            Dictionary<string, Plane> output = _controller.GetRobotBaseFrames();
 
             // Output
-            DA.SetDataList(0, _externalJointPositions.Keys);
-            DA.SetDataTree(1, this.ToDataTree(_externalJointPositions));
+            DA.SetDataList(0, output.Keys);
+            DA.SetDataList(1, output.Values);
         }
 
         #region properties
@@ -98,7 +95,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetExternalJointPositions_Icon; }
+            get { return Properties.Resources.GetRobotBaseFrame_Icon; }
         }
 
         /// <summary>
@@ -106,7 +103,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8D819F0C-A554-4D73-BE40-771043A33FFA"); }
+            get { return new Guid("A399E86A-1DFA-4825-895B-8FE4218390E1"); }
         }
         #endregion
 
@@ -130,29 +127,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             string url = Documentation.ComponentWeblinks[this.GetType()];
             Documentation.OpenBrowser(url);
-        }
-        #endregion
-
-        #region methods
-        private GH_Structure<GH_Number> ToDataTree(Dictionary<string, double[]> data)
-        {
-            GH_Structure<GH_Number> result = new GH_Structure<GH_Number>();
-            
-            int counter = 0;
-
-            foreach (KeyValuePair<string, double[]> entry in data)
-            {
-                GH_Path path = new GH_Path(counter);
-
-                for (int i = 0; i < entry.Value.Length; i++)
-                {
-                    result.Append(new GH_Number(entry.Value[i]), path);
-                }
-                
-                counter++;
-            }
-
-            return result;
         }
         #endregion
     }

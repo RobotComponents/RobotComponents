@@ -172,7 +172,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelMaxValueInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMaxValueInfo.Location = new System.Drawing.Point(164, 240);
             this.labelMaxValueInfo.Name = "labelMaxValueInfo";
-            this.labelMaxValueInfo.Size = new System.Drawing.Size(324, 25);
+            this.labelMaxValueInfo.Size = new System.Drawing.Size(322, 25);
             this.labelMaxValueInfo.TabIndex = 13;
             this.labelMaxValueInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -182,11 +182,11 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(13, 115);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 13);
+            this.label2.Size = new System.Drawing.Size(67, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "Signal info";
             // 
-            // PickDOForm
+            // PickSignalForm
             // 
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
@@ -205,9 +205,10 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "PickDOForm";
+            this.Name = "PickSignalForm";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
         #endregion
 

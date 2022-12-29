@@ -9,9 +9,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// Rhino Libs
-using Rhino.Geometry;
 // Robot Components Libs
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
 using RobotComponents.ABB.Gh.Utils;
@@ -19,20 +18,21 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that get the base frames of the robots from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets thhe robot joint positions from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetRobotBaseFrameComponent : GH_Component
+    public class GetRobotJointPositionsComponent : GH_Component
     {
         #region fields
         private Controller _controller;
+        private Dictionary<string, RobotJointPosition> _robotJointPositions;
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetRobotBaseFrameComponent class.
+        /// Initializes a new instance of the GetRobotJointPositionComponent class.
         /// </summary>
-        public GetRobotBaseFrameComponent()
-          : base("Get Robot Base Frame", "GRBF",
-              "Gets the robot base frame from an ABB controller."
+        public GetRobotJointPositionsComponent()
+          : base("Get Robot Joint Positions", "GRJP",
+              "Gets the current robot joint position from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -52,8 +52,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            //TODO: Change generic parameter to Param_RobotJointPosition
+
             pManager.AddTextParameter("Name", "N", "Name of the robot as Text", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Plane", "P", "Base frame of the robot as a Plane", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Robot Joint Position", "RJ", "Extracted Robot Joint Positions", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -65,11 +67,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
-            Dictionary<string, Plane> output = _controller.GetRobotBaseFrames();
+            _robotJointPositions = _controller.GetRobotJointPositions();
 
             // Output
-            DA.SetDataList(0, output.Keys);
-            DA.SetDataList(1, output.Values);
+            DA.SetDataList(0, _robotJointPositions.Keys);
+            DA.SetDataList(1, _robotJointPositions.Values);
         }
 
         #region properties
@@ -95,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetRobotBaseFrame_Icon; }
+            get { return Properties.Resources.GetRobotJointPositions_Icon; ; }
         }
 
         /// <summary>
@@ -103,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("A399E86A-1DFA-4825-895B-8FE4218390E1"); }
+            get { return new Guid("D9A1DDB7-58D7-4888-B489-5FAF13F9EF66"); }
         }
         #endregion
 

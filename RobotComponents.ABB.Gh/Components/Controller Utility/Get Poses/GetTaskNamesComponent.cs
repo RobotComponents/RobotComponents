@@ -5,12 +5,9 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// Rhino Libs
-using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
@@ -19,21 +16,20 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets the robot tool planes from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that get the base frames of the robots from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetRobotToolPlaneComponent : GH_Component
+    public class GetTaskNamesComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Dictionary<string, Plane> _planes = new Dictionary<string, Plane>();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetRobotToolPlaneComponent class.
+        /// Initializes a new instance of the GetTaskNameComponent class.
         /// </summary>
-        public GetRobotToolPlaneComponent()
-          : base("Get Robot Tool Plane", "GREP",
-              "Gets the current robot tool planes from an ABB controller."
+        public GetTaskNamesComponent()
+          : base("Get Task Names", "GTN",
+              "Gets the task names from an ABB robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
@@ -46,7 +42,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -54,8 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the robot as Text", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Plane", "P", "Current tool plane of the robot as a Plane", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the tasks as Text", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -64,18 +58,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            // Declare input variables
-            int coordinateSystem = 1;
-
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
-            if (!DA.GetData(1, ref coordinateSystem)) { return; }
-
-            _planes = _controller.GetRobotToolPlanes(coordinateSystem);
 
             // Output
-            DA.SetDataList(0, _planes.Keys);
-            DA.SetDataList(1, _planes.Values);
+            DA.SetDataList(0, _controller.TaskNames);
         }
 
         #region properties
@@ -101,7 +88,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetToolPlane_Icon; }
+            get { return Properties.Resources.GetTaskNameIcon; }
         }
 
         /// <summary>
@@ -109,7 +96,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9D61E009-D6C4-4553-BFA4-5981B7B6F66E"); }
+            get { return new Guid("0FBCB277-F484-48BC-AB10-F723C58E7609"); }
         }
         #endregion
 

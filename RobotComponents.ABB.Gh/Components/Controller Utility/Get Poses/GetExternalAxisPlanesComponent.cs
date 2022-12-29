@@ -13,6 +13,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
+using RobotComponents.ABB.Controllers.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
 using RobotComponents.ABB.Gh.Utils;
 
@@ -21,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     /// <summary>
     /// Represents the component that gets the external axis planes from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetExternalAxisPlaneComponent : GH_Component
+    public class GetExternalAxisPlanesComponent : GH_Component
     {
         #region fields
         private Controller _controller;
@@ -31,8 +32,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the GetExternalAxisPlaneComponent class.
         /// </summary>
-        public GetExternalAxisPlaneComponent()
-          : base("Get External Axis Plane", "GEAP",
+        public GetExternalAxisPlanesComponent()
+          : base("Get External Axis Planes", "GEAP",
               "Gets the current external planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -64,6 +65,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Creates the input value list and attachs it to the input parameter
+            if (this.Params.Input[1].SourceCount == 0)
+            {
+                HelperMethods.CreateValueList(this, typeof(CoordinateSystemType), 1);
+                this.ExpireSolution(true);
+            }
+
             // Declare input variables
             int coordinateSystem = 1;
 

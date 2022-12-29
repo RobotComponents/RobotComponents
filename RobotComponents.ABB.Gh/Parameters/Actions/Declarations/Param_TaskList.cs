@@ -14,16 +14,16 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Digital Output parameter
+    /// Task List parameter
     /// </summary>
-    public class Param_DigitalOutput : GH_PersistentParam<GH_DigitalOutput>
+    public class Param_TaskList : GH_PersistentParam<GH_TaskList>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_DigitalOutput> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_TaskList> class
         /// </summary>
-        public Param_DigitalOutput()
-          : base(new GH_InstanceDescription("Digital Output", "DO",
-                "Contains the data of a Set Digital Output instruction."
+        public Param_TaskList()
+          : base(new GH_InstanceDescription("Task List Parameter", "TL",
+                "Contains the data of a Task List declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Digital Output";
+            return "Task List";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Digital Output"; set => base.Name = value; }
+        public override string Name { get => "Task List"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DigitalOutput_Parameter_Icon; }
+            get { return Properties.Resources.TaskList_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.tertiary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("C137C7B6-C6C0-482F-8192-732D9B1EA651"); }
+            get { return new Guid("C8D213BC-4DFF-4DD7-9703-7ACB0A5FC165"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_TaskList> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_TaskList value)
         {
             return GH_GetterResult.cancel;
         }

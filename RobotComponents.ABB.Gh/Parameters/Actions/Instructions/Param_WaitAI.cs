@@ -14,16 +14,16 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Comment parameter
+    /// Wait for Analog Input parameter
     /// </summary>
-    public class Param_Comment : GH_PersistentParam<GH_Comment>
+    public class Param_WaitAI : GH_PersistentParam<GH_WaitAI>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_Comment> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_WaitAI> class
         /// </summary>
-        public Param_Comment()
-          : base(new GH_InstanceDescription("Comment", "C",
-                "Contains the data of a Comment."
+        public Param_WaitAI()
+          : base(new GH_InstanceDescription("Wait for Analog Input Parameter", "WAI",
+                "Contains the data of a Wait for Analog Input instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Comment";
+            return "Wait for Analog Input";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Comment"; set => base.Name = value; }
+        public override string Name { get => "Wait for Analog Input"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,10 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get
-            {
-                return Properties.Resources.Comment_Parameter_Icon; 
-            }
+            get { return Properties.Resources.WaitAI_Parameter_Icon; }
         }
 
         /// <summary>
@@ -61,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.quarternary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -70,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2154A09B-BC1F-40B5-BD5B-59ABEC37B2E3"); }
+            get { return new Guid("A7457B7F-6D3D-483E-AD6A-4F0A2B99EA65"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitAI> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WaitAI value)
         {
             return GH_GetterResult.cancel;
         }

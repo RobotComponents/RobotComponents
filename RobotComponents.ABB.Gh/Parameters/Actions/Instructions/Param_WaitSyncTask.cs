@@ -14,18 +14,18 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Ext Joint Position parameter
+    /// Wait Sync Task parameter
     /// </summary>
-    public class Param_ExternalJointPosition : GH_PersistentParam<GH_ExternalJointPosition>
+    public class Param_WaitSyncTask : GH_PersistentParam<GH_WaitSyncTask>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<ExternalJointPositionGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_WaitSyncTask> class
         /// </summary>
-        public Param_ExternalJointPosition()
-          : base(new GH_InstanceDescription("Ext Joint Position", "EJ",
-                "Containts the data of an External Joint Position declaration."
+        public Param_WaitSyncTask()
+          : base(new GH_InstanceDescription("Wait Sync Task Parameter", "WST",
+                "Contains the data of a Wait Sync Task synchronization point."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "External Joint Position";
+            return "Wait Sync Task";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "External Joint Position"; set => base.Name = value; }
+        public override string Name { get => "Wait Sync Task"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ExternalJointPosition_Parameter_Icon; } 
+            get { return Properties.Resources.WaitSyncTask_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("EEC1FAF4-3054-4511-89F3-B747CEEA7E74"); }
+            get { return new Guid("B3C80E2B-E1F9-41C9-A122-2FC165CDEC4F"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalJointPosition> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitSyncTask> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalJointPosition value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WaitSyncTask value)
         {
             return GH_GetterResult.cancel;
         }

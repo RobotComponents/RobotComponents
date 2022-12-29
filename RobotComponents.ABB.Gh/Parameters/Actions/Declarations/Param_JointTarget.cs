@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-// Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions;
@@ -14,18 +13,18 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Sync Move On parameter
+    /// Joint Target parameter
     /// </summary>
-    public class Param_SyncMoveOn : GH_PersistentParam<GH_SyncMoveOn>
+    public class Param_JointTarget : GH_PersistentParam<GH_JointTarget>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_SyncMoveOn> class
+        /// Initializes a new instance of the GH_PersistentParam<JointTargetGoo> class
         /// </summary>
-        public Param_SyncMoveOn()
-          : base(new GH_InstanceDescription("Sync Move On", "SMOn",
-                "Contains the data of a Sync Move On synchronization point."
+        public Param_JointTarget()
+          : base(new GH_InstanceDescription("Joint Target Parameter", "JT",
+                "Contains the data of a Joint Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
+                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }
@@ -36,13 +35,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Sync Move On";
+            return "Joint Target";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Sync Move On"; set => base.Name = value; }
+        public override string Name { get => "Joint Target"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SyncMoveOn_Parameter_Icon; }
+            get { return Properties.Resources.JointTarget_Parameter_Icon; } 
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.quinary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -67,17 +66,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3E5F3E71-7582-4801-B24C-6F510410D2AF"); }
+            get { return new Guid("B5E59149-07CE-4835-AEEE-A705A2AAD286"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_SyncMoveOn> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_JointTarget> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_SyncMoveOn value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_JointTarget value)
         {
             return GH_GetterResult.cancel;
         }

@@ -8,22 +8,22 @@ using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// RobotcComponents Libs
+// RobotComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions;
 
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Zone Data parameter
+    /// Robot Target parameter
     /// </summary>
-    public class Param_ZoneData : GH_PersistentParam<GH_ZoneData>
+    public class Param_RobotTarget : GH_PersistentParam<GH_RobotTarget>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_ZoneData> class
+        /// Initializes a new instance of the GH_PersistentParam<TargetGoo> class
         /// </summary>
-        public Param_ZoneData()
-          : base(new GH_InstanceDescription("Zone Data", "ZD",
-                "Contains the data of a Zone Data declaration. "
+        public Param_RobotTarget()
+          : base(new GH_InstanceDescription("Robot Target Parameter", "RT",
+                "Contains the data of a Robot Target declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Zone Data";
+            return "Robot Target";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Zone Data"; set => base.Name = value; }
+        public override string Name { get => "Robot Target"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ZoneData_Parameter_Icon; }
+            get { return Properties.Resources.RobTarget_Parameter_Icon; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("1DEA0335-6574-4A08-9616-8D49B72D4162"); }
+            get { return new Guid("7032DC09-06E9-4D53-A06C-E2842E5EFFFE"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ZoneData> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotTarget> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_ZoneData value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_RobotTarget value)
         {
             return GH_GetterResult.cancel;
         }
@@ -104,5 +104,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
             return item;
         }
         #endregion
+
     }
+
 }

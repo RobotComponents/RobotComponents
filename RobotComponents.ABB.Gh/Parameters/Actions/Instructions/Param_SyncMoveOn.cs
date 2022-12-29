@@ -6,8 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,16 +14,16 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Movement parameter
+    /// Sync Move On parameter
     /// </summary>
-    public class Param_Movement : GH_PersistentGeometryParam<GH_Movement>, IGH_PreviewObject
+    public class Param_SyncMoveOn : GH_PersistentParam<GH_SyncMoveOn>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_SyncMoveOn> class
         /// </summary>
-        public Param_Movement()
-          : base(new GH_InstanceDescription("Move", "M",
-                "Contains the data of a Move instruction."
+        public Param_SyncMoveOn()
+          : base(new GH_InstanceDescription("Sync Move On Parameter", "SMOn",
+                "Contains the data of a Sync Move On synchronization point."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -38,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Movement";
+            return "Sync Move On";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Movement"; set => base.Name = value; }
+        public override string Name { get => "Sync Move On"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -52,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Movement_Parameter_Icon; }
+            get { return Properties.Resources.SyncMoveOn_Parameter_Icon; }
         }
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -69,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("0C14B6CF-3D00-4A02-B42F-99EE159AEE6D"); }
+            get { return new Guid("3E5F3E71-7582-4801-B24C-6F510410D2AF"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Movement> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SyncMoveOn> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_Movement value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SyncMoveOn value)
         {
             return GH_GetterResult.cancel;
         }
@@ -104,58 +102,6 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
             };
 
             return item;
-        }
-        #endregion
-
-        #region preview methods
-        /// <summary>
-        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
-        /// </summary>
-        public BoundingBox ClippingBox
-        {
-            get
-            {
-                return Preview_ComputeClippingBox();
-            }
-        }
-
-        /// <summary>
-        /// Implement this function to draw all shaded meshes. 
-        /// If the viewport does not support shading, this function will not be called.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportMeshes(IGH_PreviewArgs args)
-        {
-            Preview_DrawMeshes(args);
-        }
-
-        /// <summary>
-        /// Implement this function to draw all wire and point previews.
-        /// </summary>
-        /// <param name="args"> Drawing arguments. </param>
-        public void DrawViewportWires(IGH_PreviewArgs args)
-        {
-            //Use a standard method to draw wires, you don't have to specifically implement this.
-            Preview_DrawWires(args);
-        }
-
-        private bool m_hidden = false;
-
-        /// <summary>
-        /// Gets or sets the hidden flag for this component. Does not affect Hidden flags on parameters associated with this component.
-        /// </summary>
-        public bool Hidden
-        {
-            get { return m_hidden; }
-            set { m_hidden = value; }
-        }
-
-        /// <summary>
-        /// If a single parameter is PreviewCapable, so is the component. Override this property if you need special Preview flags.
-        /// </summary>
-        public bool IsPreviewCapable
-        {
-            get { return true; }
         }
         #endregion
     }

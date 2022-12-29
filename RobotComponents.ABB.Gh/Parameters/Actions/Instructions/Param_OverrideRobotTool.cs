@@ -14,16 +14,16 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Sync Move Off parameter
+    /// Override Robot Tool parameter
     /// </summary>
-    public class Param_SyncMoveOff : GH_PersistentParam<GH_SyncMoveOff>
+    public class Param_OverrideRobotTool : GH_PersistentParam<GH_OverrideRobotTool>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_SyncMoveOff> class
+        /// Initializes a new instance of the GH_PersistentParam<OverrideRobotToolGoo> class
         /// </summary>
-        public Param_SyncMoveOff()
-          : base(new GH_InstanceDescription("Sync Move Off", "SMOn",
-                "Contains the data of a Sync Move Off synchronization point."
+        public Param_OverrideRobotTool()
+          : base(new GH_InstanceDescription("Override Robot Tool Parameter", "ORT",
+                "Contains the data of a Override Robot Tool instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Sync Move Off";
+            return "Override Robot Tool";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Sync Move Off"; set => base.Name = value; }
+        public override string Name { get => "Override Robot Tool"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SyncMoveOff_Parameter_Icon; }
+            get { return Properties.Resources.ChangeTool_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.quinary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3E427EB0-2EF4-4661-87C9-1BA48A2540B6"); }
+            get { return new Guid("0F58F521-09B0-442C-A7A4-65795B0A2D6E"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_SyncMoveOff> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_OverrideRobotTool> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_SyncMoveOff value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_OverrideRobotTool value)
         {
             return GH_GetterResult.cancel;
         }
@@ -105,4 +105,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         }
         #endregion
     }
+
 }

@@ -14,18 +14,18 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Robot Joint Position parameter
+    /// Sync Move Off parameter
     /// </summary>
-    public class Param_RobotJointPosition : GH_PersistentParam<GH_RobotJointPosition>
+    public class Param_SyncMoveOff : GH_PersistentParam<GH_SyncMoveOff>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<RobotJointPositionGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_SyncMoveOff> class
         /// </summary>
-        public Param_RobotJointPosition()
-          : base(new GH_InstanceDescription("Robot Joint Position", "RJ",
-                "Contains the data of a Robot Joint Position declaration."
+        public Param_SyncMoveOff()
+          : base(new GH_InstanceDescription("Sync Move Off Parameter", "SMOff",
+                "Contains the data of a Sync Move Off synchronization point."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Robot Joint Position";
+            return "Sync Move Off";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Robot Joint Position"; set => base.Name = value; }
+        public override string Name { get => "Sync Move Off"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.RobotJointPosition_Parameter_Icon; } 
+            get { return Properties.Resources.SyncMoveOff_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get {return GH_Exposure.quinary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2D735AA0-FE6D-451F-A98E-16AF369B1EA3"); }
+            get { return new Guid("3E427EB0-2EF4-4661-87C9-1BA48A2540B6"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotJointPosition> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SyncMoveOff> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotJointPosition value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SyncMoveOff value)
         {
             return GH_GetterResult.cancel;
         }

@@ -8,22 +8,22 @@ using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// RobotComponents Libs
+// RobotcComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions;
 
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// WaitTime parameter
+    /// Zone Data parameter
     /// </summary>
-    public class Param_WaitTime : GH_PersistentParam<GH_WaitTime>
+    public class Param_ZoneData : GH_PersistentParam<GH_ZoneData>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_WaitTime> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_ZoneData> class
         /// </summary>
-        public Param_WaitTime()
-          : base(new GH_InstanceDescription("Wait for time", "WT",
-                "Contains the data of a Wait for Time instruction."
+        public Param_ZoneData()
+          : base(new GH_InstanceDescription("Zone Data Parameter", "ZD",
+                "Contains the data of a Zone Data declaration. "
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Wait for time";
+            return "Zone Data";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Wait for time"; set => base.Name = value; }
+        public override string Name { get => "Zone Data"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Timer_Parameter_Icon; }
+            get { return Properties.Resources.ZoneData_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("F685DD4F-74E2-428B-B7DA-EB6DF19489E6"); }
+            get { return new Guid("1DEA0335-6574-4A08-9616-8D49B72D4162"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitTime> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ZoneData> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_WaitTime value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ZoneData value)
         {
             return GH_GetterResult.cancel;
         }

@@ -8,22 +8,22 @@ using System;
 using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-// RobotcComponents Libs
+// RobotComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions;
 
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Speed Data parameter
+    /// Comment parameter
     /// </summary>
-    public class Param_SpeedData : GH_PersistentParam<GH_SpeedData>
+    public class Param_Comment : GH_PersistentParam<GH_Comment>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_SpeedData> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_Comment> class
         /// </summary>
-        public Param_SpeedData()
-          : base(new GH_InstanceDescription("Speed Data", "SD",
-                "Contains the data of a Speed Data declaration."
+        public Param_Comment()
+          : base(new GH_InstanceDescription("Comment Parameter", "C",
+                "Contains the data of a Comment."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Speed Data";
+            return "Comment";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Speed Data"; set => base.Name = value; }
+        public override string Name { get => "Comment"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,10 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SpeedData_Parameter_Icon; }
+            get
+            {
+                return Properties.Resources.Comment_Parameter_Icon; 
+            }
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -67,17 +70,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("02454176-B166-4C99-8476-B3D5DB1504B0"); }
+            get { return new Guid("2154A09B-BC1F-40B5-BD5B-59ABEC37B2E3"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_SpeedData> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Comment> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_SpeedData value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Comment value)
         {
             return GH_GetterResult.cancel;
         }

@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+// Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions;
@@ -13,18 +14,18 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Joint Target parameter
+    /// WaitTime parameter
     /// </summary>
-    public class Param_JointTarget : GH_PersistentParam<GH_JointTarget>
+    public class Param_WaitTime : GH_PersistentParam<GH_WaitTime>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<JointTargetGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_WaitTime> class
         /// </summary>
-        public Param_JointTarget()
-          : base(new GH_InstanceDescription("Joint Target", "JT",
-                "Contains the data of a Joint Target declaration."
+        public Param_WaitTime()
+          : base(new GH_InstanceDescription("Wait for Time Parameter", "WT",
+                "Contains the data of a Wait for Time instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
+                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }
@@ -35,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Joint Target";
+            return "Wait for time";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Joint Target"; set => base.Name = value; }
+        public override string Name { get => "Wait for time"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -49,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.JointTarget_Parameter_Icon; } 
+            get { return Properties.Resources.Timer_Parameter_Icon; }
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -66,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B5E59149-07CE-4835-AEEE-A705A2AAD286"); }
+            get { return new Guid("F685DD4F-74E2-428B-B7DA-EB6DF19489E6"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_JointTarget> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitTime> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_JointTarget value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_WaitTime value)
         {
             return GH_GetterResult.cancel;
         }

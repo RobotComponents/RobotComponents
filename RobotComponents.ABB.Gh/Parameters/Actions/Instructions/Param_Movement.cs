@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+// Rhino Libs
+using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -14,16 +16,16 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Wait Sync Task parameter
+    /// Movement parameter
     /// </summary>
-    public class Param_WaitSyncTask : GH_PersistentParam<GH_WaitSyncTask>
+    public class Param_Movement : GH_PersistentGeometryParam<GH_Movement>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_WaitSyncTask> class
+        /// Initializes a new instance of the GH_PersistentGeometryParam<MovementGoo> class
         /// </summary>
-        public Param_WaitSyncTask()
-          : base(new GH_InstanceDescription("Wait Sync Task", "WST",
-                "Contains the data of a Wait Sync Task synchronization point."
+        public Param_Movement()
+          : base(new GH_InstanceDescription("Move Parameter", "M",
+                "Contains the data of a Move instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +38,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Wait Sync Task";
+            return "Movement";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Wait Sync Task"; set => base.Name = value; }
+        public override string Name { get => "Movement"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.WaitSyncTask_Parameter_Icon; }
+            get { return Properties.Resources.Movement_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.quinary; }
+            get { return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -67,17 +69,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B3C80E2B-E1F9-41C9-A122-2FC165CDEC4F"); }
+            get { return new Guid("0C14B6CF-3D00-4A02-B42F-99EE159AEE6D"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_WaitSyncTask> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_Movement> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_WaitSyncTask value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_Movement value)
         {
             return GH_GetterResult.cancel;
         }
@@ -102,6 +104,58 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
             };
 
             return item;
+        }
+        #endregion
+
+        #region preview methods
+        /// <summary>
+        /// Gets the clipping box for this data. The clipping box is typically the same as the boundingbox.
+        /// </summary>
+        public BoundingBox ClippingBox
+        {
+            get
+            {
+                return Preview_ComputeClippingBox();
+            }
+        }
+
+        /// <summary>
+        /// Implement this function to draw all shaded meshes. 
+        /// If the viewport does not support shading, this function will not be called.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportMeshes(IGH_PreviewArgs args)
+        {
+            Preview_DrawMeshes(args);
+        }
+
+        /// <summary>
+        /// Implement this function to draw all wire and point previews.
+        /// </summary>
+        /// <param name="args"> Drawing arguments. </param>
+        public void DrawViewportWires(IGH_PreviewArgs args)
+        {
+            //Use a standard method to draw wires, you don't have to specifically implement this.
+            Preview_DrawWires(args);
+        }
+
+        private bool m_hidden = false;
+
+        /// <summary>
+        /// Gets or sets the hidden flag for this component. Does not affect Hidden flags on parameters associated with this component.
+        /// </summary>
+        public bool Hidden
+        {
+            get { return m_hidden; }
+            set { m_hidden = value; }
+        }
+
+        /// <summary>
+        /// If a single parameter is PreviewCapable, so is the component. Override this property if you need special Preview flags.
+        /// </summary>
+        public bool IsPreviewCapable
+        {
+            get { return true; }
         }
         #endregion
     }

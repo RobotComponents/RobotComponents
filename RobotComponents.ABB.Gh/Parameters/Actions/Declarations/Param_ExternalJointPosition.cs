@@ -14,18 +14,18 @@ using RobotComponents.ABB.Gh.Goos.Actions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions
 {
     /// <summary>
-    /// Robot Target parameter
+    /// Ext Joint Position parameter
     /// </summary>
-    public class Param_RobotTarget : GH_PersistentParam<GH_RobotTarget>
+    public class Param_ExternalJointPosition : GH_PersistentParam<GH_ExternalJointPosition>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<TargetGoo> class
+        /// Initializes a new instance of the GH_PersistentParam<ExternalJointPositionGoo> class
         /// </summary>
-        public Param_RobotTarget()
-          : base(new GH_InstanceDescription("Robot Target", "RT",
-                "Contains the data of a Robot Target declaration."
+        public Param_ExternalJointPosition()
+          : base(new GH_InstanceDescription("Ext Joint Position Parameter", "EJ",
+                "Containts the data of an External Joint Position declaration."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
+                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
         {
         }
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Robot Target";
+            return "External Joint Position";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Robot Target"; set => base.Name = value; }
+        public override string Name { get => "External Joint Position"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.RobTarget_Parameter_Icon; }
+            get { return Properties.Resources.ExternalJointPosition_Parameter_Icon; } 
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("7032DC09-06E9-4D53-A06C-E2842E5EFFFE"); }
+            get { return new Guid("EEC1FAF4-3054-4511-89F3-B747CEEA7E74"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_RobotTarget> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalJointPosition> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_RobotTarget value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalJointPosition value)
         {
             return GH_GetterResult.cancel;
         }
@@ -104,7 +104,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
             return item;
         }
         #endregion
-
     }
-
 }

@@ -11,18 +11,23 @@ using System.Windows.Forms;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 
-namespace RobotComponents.ABB.Gh.Forms
+namespace RobotComponents.ABB.Forms
 {
+    /// <summary>
+    /// Represents the pick robot preset form class.
+    /// </summary>
     public partial class PickRobotForm : Form
     {
-        public int RobotIndex = 0;
+        #region fields
         private readonly List<RobotPreset> _robotPresets;
+        private int _index = 0;
+        #endregion
 
-        public PickRobotForm()
-        {
-            InitializeComponent();
-        }
-
+        #region constructors
+        /// <summary>
+        /// Constructs the form from a given list with items.
+        /// </summary>
+        /// <param name="items"> Items to fill the form with. </param>
         public PickRobotForm(List<RobotPreset> items)
         {
             InitializeComponent();
@@ -34,12 +39,9 @@ namespace RobotComponents.ABB.Gh.Forms
 
             _robotPresets = items;
         }
+        #endregion
 
-        private void PickRobot_Load(object sender, EventArgs e)
-        {
-
-        }
-
+        #region methods
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.labelNameInfo.Text = PickRobotForm.GetRobotPresetName(_robotPresets[comboBox1.SelectedIndex]);
@@ -47,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            RobotIndex = comboBox1.SelectedIndex;
+            _index = comboBox1.SelectedIndex;
             this.Close();
         }
 
@@ -81,5 +83,16 @@ namespace RobotComponents.ABB.Gh.Forms
                 return name;
             }
         }
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets the picked index.
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+        #endregion
     }
 }

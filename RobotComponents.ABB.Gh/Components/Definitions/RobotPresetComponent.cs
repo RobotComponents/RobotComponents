@@ -18,7 +18,7 @@ using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
-using RobotComponents.ABB.Gh.Forms;
+using RobotComponents.ABB.Forms;
 
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
@@ -223,7 +223,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             frm.ShowDialog();
 
             // Return the index number of the picked controller
-            int index = frm.RobotIndex;
+            int index = frm.Index;
 
             // Return a null value when the picked index is incorrect. 
             if (index < 0)

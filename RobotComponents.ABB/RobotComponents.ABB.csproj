@@ -131,6 +131,12 @@
     <Compile Include="Definitions\Presets\IRB1200_7_070.cs" />
     <Compile Include="Definitions\Presets\IRB1200_5_090.cs" />
     <Compile Include="Definitions\RobotTool.cs" />
+    <Compile Include="Forms\PickRobotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickRobotForm.designer.cs">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -155,6 +161,9 @@
     <Compile Include="Utils\HelperMethods.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickRobotForm.resx">
+      <DependentUpon>PickRobotForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

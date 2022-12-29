@@ -132,7 +132,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.SetDigitalOutput_Icon; }
+            get { return Properties.Resources.SetDigitalInput_Icon; }
         }
 
         /// <summary>

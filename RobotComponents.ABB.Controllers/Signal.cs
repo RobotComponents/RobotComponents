@@ -194,23 +194,27 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         public float Value
         {
-            get { return _signal.Value; }
+            get 
+            { 
+                if (!_isEmpty) { return _signal.Value; }
+                else { return 0; }
+            }
         }
 
         /// <summary>
         /// Gets the minimum value of the signal.
         /// </summary>
-        public float MinValue
+        public double MinValue
         {
-            get { return _signal.MinValue; }
+            get { return _limits.Min; }
         }
 
         /// <summary>
         /// Gets the maximum value of the signal. 
         /// </summary>
-        public float MaxValue
+        public double MaxValue
         {
-            get { return _signal.MaxValue; }
+            get { return _limits.Max; }
         }
 
         /// <summary>

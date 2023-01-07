@@ -13,7 +13,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Instructions;
 
-namespace RobotComponents.ABB.Actions.Generators
+namespace RobotComponents.ABB.Actions
 {
     /// <summary>
     /// Represents the RAPID Generator.

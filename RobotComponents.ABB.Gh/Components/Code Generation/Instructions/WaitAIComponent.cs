@@ -11,7 +11,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration

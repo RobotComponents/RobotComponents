@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration

@@ -14,7 +14,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
     /// Joint Target Goo wrapper class, makes sure the Joint Target class can be used in Grasshopper.

@@ -15,7 +15,7 @@ using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
 {
     /// <summary>
     /// Dynamic Goo wrapper class, makes sure the Dynamic interface can be used in Grasshopper.

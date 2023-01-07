@@ -12,7 +12,7 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Interfaces;
-using RobotComponents.ABB.Actions.Generators;
+using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {

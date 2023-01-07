@@ -15,7 +15,7 @@ using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
     /// Speed Data Goo wrapper class, makes sure the Speed Data class can be used in Grasshopper.

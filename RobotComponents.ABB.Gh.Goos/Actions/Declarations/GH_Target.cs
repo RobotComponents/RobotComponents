@@ -16,7 +16,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
     /// Target Goo wrapper class, makes sure the Target interface can be used in Grasshopper.

@@ -19,7 +19,7 @@ using Rhino.Geometry;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 

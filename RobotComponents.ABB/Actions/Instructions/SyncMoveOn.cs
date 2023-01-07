@@ -12,7 +12,6 @@ using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Generators;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {

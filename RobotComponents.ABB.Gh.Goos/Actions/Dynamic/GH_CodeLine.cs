@@ -13,7 +13,7 @@ using RobotComponents.ABB.Actions.Dynamic;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
 {
     /// <summary>
     /// Code Line Goo wrapper class, makes sure the Code Line class can be used in Grasshopper.

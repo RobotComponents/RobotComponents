@@ -20,6 +20,8 @@ using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
+using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Simulation

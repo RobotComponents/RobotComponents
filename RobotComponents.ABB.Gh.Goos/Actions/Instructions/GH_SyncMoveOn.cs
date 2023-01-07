@@ -13,7 +13,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
     /// Sync Move On Goo wrapper class, makes sure the Sync Move On class can be used in Grasshopper.

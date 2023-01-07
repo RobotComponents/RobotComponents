@@ -4,7 +4,6 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.Linq;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
@@ -15,7 +14,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
     /// Zone Data Goo wrapper class, makes sure the Zone Data class can be used in Grasshopper.

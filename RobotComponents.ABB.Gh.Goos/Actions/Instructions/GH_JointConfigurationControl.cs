@@ -13,7 +13,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
     /// Joint Configuration Control Goo wrapper class, makes sure the Joint Configuration Control class can be used in Grasshopper.

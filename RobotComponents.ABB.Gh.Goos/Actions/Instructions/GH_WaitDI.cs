@@ -13,7 +13,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
     /// Wait DI Goo wrapper class, makes sure the Wait DI class can be used in Grasshopper.

@@ -14,7 +14,8 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
+using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Gh.Utils;
 

@@ -15,7 +15,7 @@ using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
     /// Instruction Goo wrapper class, makes sure the Instruction interface can be used in Grasshopper.

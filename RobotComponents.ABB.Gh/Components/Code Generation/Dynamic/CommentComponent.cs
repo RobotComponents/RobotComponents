@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Dynamic;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Dynamic;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration

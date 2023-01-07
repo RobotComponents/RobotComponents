@@ -14,7 +14,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Generators;
+using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;

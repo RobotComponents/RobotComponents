@@ -9,9 +9,9 @@ using System.Collections.Generic;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.ABB.Gh.Goos.Actions;
+using RobotComponents.ABB.Gh.Goos.Actions.Instructions;
 
-namespace RobotComponents.ABB.Gh.Parameters.Actions
+namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 {
     /// <summary>
     /// WaitTime parameter

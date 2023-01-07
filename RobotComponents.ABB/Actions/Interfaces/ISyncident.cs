@@ -6,7 +6,7 @@
 // Robot Component Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Generators;
+using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Interfaces
 {

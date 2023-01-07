@@ -8,7 +8,7 @@ using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.ABB.Gh.Parameters.Actions;
+using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 
 namespace RobotComponents.ABB.Gh.Components.Obsolete
 {

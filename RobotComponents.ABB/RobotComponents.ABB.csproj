@@ -83,7 +83,7 @@
     <Compile Include="Actions\Dynamic\CodeLine.cs" />
     <Compile Include="Actions\Dynamic\Comment.cs" />
     <Compile Include="Actions\Instructions\Movement.cs" />
-    <Compile Include="Actions\Generators\RAPIDGenerator.cs" />
+    <Compile Include="Actions\RAPIDGenerator.cs" />
     <Compile Include="Definitions\IMechanicalUnit.cs" />
     <Compile Include="Definitions\Presets\CRB15000_5_095.cs" />
     <Compile Include="Definitions\Presets\IRB1010_15_037.cs" />
@@ -1121,7 +1121,9 @@
       <Name>RobotComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Actions\Generators\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -15,7 +15,7 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.Utils;
 using RobotComponents.ABB.Gh.Goos.Definitions;
 
-namespace RobotComponents.ABB.Gh.Goos.Actions
+namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
     /// Override Robot Tool Goo wrapper class, makes sure the Override Robot Tool class can be used in Grasshopper.

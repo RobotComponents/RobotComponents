@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Generators;
 using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions

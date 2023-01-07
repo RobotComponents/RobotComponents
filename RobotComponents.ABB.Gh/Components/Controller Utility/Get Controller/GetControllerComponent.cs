@@ -24,6 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #region fields
         private Controller _controller = new Controller();
         private bool _fromMenu;
+        private bool _picked = false;
         #endregion
 
         /// <summary>
@@ -73,11 +74,21 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 
                 if (succeeded)
                 {
+                    _picked = true;
                     _controller.Logon();
 
                     GH_Document doc = this.OnPingDocument();
                     doc.ContextChanged += OnContextChanged;
                 }
+                else
+                {
+                    _picked = false;
+                }
+            }
+
+            if (_picked == false)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
             }
 
             // Output

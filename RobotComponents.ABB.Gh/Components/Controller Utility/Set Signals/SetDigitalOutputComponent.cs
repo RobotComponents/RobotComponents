@@ -84,7 +84,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             {
                 signal = _controller.GetDigitalOutput(name, out int index);
 
-                if (index == -1)
+                if (_controller.IsEmpty == true)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Could not get the signal {name}. The controller is empty.");
+                }
+                else
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, $"Could not get the signal {name}. Signal not found.");
                 }

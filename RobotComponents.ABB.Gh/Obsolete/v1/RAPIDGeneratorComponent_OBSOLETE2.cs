@@ -20,24 +20,25 @@ using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Actions;
 
-namespace RobotComponents.ABB.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Components.Obsolete
 {
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RAPIDGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class RAPIDGeneratorComponent_OBSOLETE2 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private RAPIDGenerator _rapidGenerator = new RAPIDGenerator();
+        private RAPIDGenerator _rapidGenerator;
         private bool _firstMovementIsMoveAbsJ = true;
-        private bool _moduleNameInputParam = false;
-        private bool _routineNameInputParam = false;
-        private bool _addTooldataInputParam = false;
-        private bool _addWobjdataInputParam = false;
+        private bool _raiseWarnings = false;
+        private bool _programName = false;
+        private bool _systemName = false;
+        private bool _procedureName = false;
+        private bool _customCode = false;
+        private List<string> _programModule = new List<string>();
+        private List<string> _systemModule = new List<string>();
         private readonly int _fixedParamNumInput = 2;
-        private bool _tooldataOutputParam = false;
-        private bool _wobjdataOutputParam = false;
-        private readonly int _fixedParamNumOutput = 1;
         #endregion
 
         /// <summary>
@@ -45,9 +46,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RAPIDGeneratorComponent()
+        public RAPIDGeneratorComponent_OBSOLETE2()
           : base("RAPID Generator", "RG",
-              "Generates the RAPID module for the ABB robot controller."
+              "Generates the RAPID program and system module for the ABB robot controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
@@ -59,22 +60,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[5]
+        private readonly IGH_Param[] variableInputParameters = new IGH_Param[5]
         {
-            new Param_String() { Name = "Module Name", NickName = "MN", Description = "The name of the module as a text. The default name is MainModule.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_String() { Name = "Procedure Name", NickName = "RN", Description = "The name of the RAPID routine as a text. The default name is main.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_Boolean() { Name = "Add tooldata", NickName = "AT", Description = "Indicates if the tooldata should be added to the RAPID module.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_Boolean() { Name = "Add wobjdata", NickName = "AW", Description = "Indicates if the wobjdata should be added the RAPID module.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_Boolean() { Name = "Update", NickName = "U", Description = "Updates the RAPID module based on a boolean value. To increase performance, only update when changes were made.", Access = GH_ParamAccess.item, Optional = true }
-        };
-
-        /// <summary>
-        /// Stores the variable output parameters in an array.
-        /// </summary>
-        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[2]
-        {
-            new Param_String() { Name = "Tooldata", NickName = "T", Description = "The RAPID tooldata as a list with text.", Access = GH_ParamAccess.list},
-            new Param_String() { Name = "Wobjdata", NickName = "W", Description = "The RAPID wobjdata as a list with text.", Access = GH_ParamAccess.list}
+            new Param_String() { Name = "Program Name", NickName = "PN", Description = "Name of the Pogram Module as a text. The default name is MainModule.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "System Name", NickName = "SN", Description = "Name of the System Module as a text. The default name is BASE.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "Procedure Name", NickName = "PN", Description = "Name of the RAPID procedure as a text. The default name is main.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_String() { Name = "Custom Code", NickName = "CC", Description = "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made.", Access = GH_ParamAccess.list, Optional = true },
+            new Param_Boolean() { Name = "Update", NickName = "U", Description = "Updates the RAPID Code based on a boolean value. To increase performance, only update when changes were made..", Access = GH_ParamAccess.item, Optional = true }
         };
 
         /// <summary>
@@ -85,7 +77,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot.", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions.", GH_ParamAccess.list);
 
-            AddInputParameter(4);
+            AddParameter(4);
         }
 
         /// <summary>
@@ -93,7 +85,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Module", "M", "The RAPID Module as list with strings", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
         }
 
         /// <summary>
@@ -106,10 +99,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             // Input variables
             Robot robot = new Robot();
             List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
-            string moduleName = "MainModule";
-            string routineName = "main";
-            bool addTooldata = true;
-            bool addWobjdata = true;
+            string programName = "MainModule";
+            string systemName = "BASE";
+            string procedureName = "main";
+            List<string> customCodeLines = new List<string>() { };
             bool update = true;
 
             // Catch the input data
@@ -117,83 +110,108 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             if (!DA.GetDataList(1, actions)) { return; }
 
             // Catch the input data from the variable parameteres
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[0].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetData(_variableInputParameters[0].Name, ref moduleName))
+                if (!DA.GetData(variableInputParameters[0].Name, ref programName))
                 {
-                    moduleName = "MainModule";
+                    programName = "MainModule";
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[1].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetData(_variableInputParameters[1].Name, ref routineName))
+                if (!DA.GetData(variableInputParameters[1].Name, ref systemName))
                 {
-                     routineName= "main";
+                    systemName = "BASE";
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[2].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetData(_variableInputParameters[2].Name, ref addTooldata))
+                if (!DA.GetData(variableInputParameters[2].Name, ref procedureName))
                 {
-                    addTooldata = true;
+                     procedureName= "main";
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[3].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[3].Name))
             {
-                if (!DA.GetData(_variableInputParameters[3].Name, ref addWobjdata))
+                if (!DA.GetDataList(variableInputParameters[3].Name, customCodeLines))
                 {
-                    addWobjdata = true;
+                    customCodeLines = new List<string>() { };
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[4].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[4].Name))
             {
-                if (!DA.GetData(_variableInputParameters[4].Name, ref update))
+                if (!DA.GetData(variableInputParameters[4].Name, ref update))
                 {
                     update = true;
                 }
             }
 
             // Checks if module name exceeds max character limit for RAPID Code
-            if (HelperMethods.StringExeedsCharacterLimit32(moduleName))
+            if (HelperMethods.StringExeedsCharacterLimit32(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The module name exceeds the character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name exceeds character limit of 32 characters.");
             }
-            if (HelperMethods.StringExeedsCharacterLimit32(routineName))
+            if (HelperMethods.StringExeedsCharacterLimit32(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The routine name exceeds the character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name exceeds character limit of 32 characters.");
+            }
+            if (HelperMethods.StringExeedsCharacterLimit32(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name exceeds character limit of 32 characters.");
             }
 
             // Checks if module name starts with a number
-            if (HelperMethods.StringStartsWithNumber(moduleName))
+            if (HelperMethods.StringStartsWithNumber(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The module name starts with a number which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name starts with a number which is not allowed in RAPID Code.");
             }
-            if (HelperMethods.StringStartsWithNumber(routineName))
+            if (HelperMethods.StringStartsWithNumber(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The routine name starts with a number which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name starts with a number which is not allowed in RAPID Code.");
+            }
+            if (HelperMethods.StringStartsWithNumber(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name starts with a number which is not allowed in RAPID Code.");
             }
 
             // Check if module name contains special character
-            if (HelperMethods.StringStartsWithNumber(moduleName))
+            if (HelperMethods.StringStartsWithNumber(programName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The module name contains special characters which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name contains special characters.");
             }
-            if (HelperMethods.StringStartsWithNumber(routineName))
+            if (HelperMethods.StringStartsWithNumber(systemName))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The routine name contains special characters which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name contains special characters.");
+            }
+            if (HelperMethods.StringStartsWithNumber(procedureName))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name contains special characters.");
             }
 
             // Updates the rapid Progam and System code
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(robot, actions, moduleName, routineName);
+                _rapidGenerator = new RAPIDGenerator(robot, actions, programName, systemName, procedureName);
 
                 // Generator code
-                _rapidGenerator.CreateModule(addTooldata, addWobjdata);
+                _rapidGenerator.CreateProgramModule();
+                _rapidGenerator.CreateSystemModule(customCodeLines);
+                _programModule = _rapidGenerator.ProgramModule;
+                _systemModule = _rapidGenerator.SystemModule;
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
+
+                // Raise warnings?
+                if (_rapidGenerator.ErrorText.Count != 0)
+                {
+                    _raiseWarnings = true;
+                }
+                else
+                {
+                    _raiseWarnings = false;
+                }
             }
 
             // Checks if first Movement is MoveAbsJ
@@ -203,7 +221,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             }
 
             // Show warning messages
-            if (_rapidGenerator.ErrorText.Count != 0)
+            if (_raiseWarnings == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only axis values of absolute joint movements are checked.");
 
@@ -214,20 +232,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 }
             }
 
-            // Fixed output parameter
-            DA.SetDataList(0, _rapidGenerator.Module);
-
-            // Variable output parameters
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
-            {
-                int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Tooldata);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[1].NickName)))
-            {
-                int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Wobjdata);
-            }
+            // Output
+            DA.SetDataList(0, _programModule);
+            DA.SetDataList(1, _systemModule);
         }
 
         #region properties
@@ -237,8 +244,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            // Always place the RAPID generator in the last sub category
-            get { return GH_Exposure.septenary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -246,7 +252,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -265,7 +271,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("98554C6D-C877-4037-B2C2-1AA016715932"); }
+            get { return new Guid("832B884B-D1EC-4197-8E3C-74E96A8F62EE"); }
         }
         #endregion
 
@@ -277,15 +283,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Overwrite Module Name", MenuItemClickProgramName, true, _moduleNameInputParam);
-            Menu_AppendItem(menu, "Overwrite Routine Name", MenuItemClickRoutineName, true, _routineNameInputParam);
-            Menu_AppendItem(menu, "Add Tool Data", MenuItemClickTooldata, true, _addTooldataInputParam);
-            Menu_AppendItem(menu, "Add Work Object Data", MenuItemClickWobjdata, true, _addWobjdataInputParam);
+            Menu_AppendItem(menu, "Overwrite Program Module Name", MenuItemClickProgramName, true, _programName);
+            Menu_AppendItem(menu, "Overwrite System Module Name", MenuItemClickSystemName, true, _systemName);
+            Menu_AppendItem(menu, "Overwrite Procedure Name", MenuItemClickProcedureName, true, _procedureName);
+            Menu_AppendItem(menu, "Set Custom System Code Lines", MenuItemClickCustomCode, true, _customCode);
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Output Tool Data", MenuItemClickOutputTooldata, true, _tooldataOutputParam);
-            Menu_AppendItem(menu, "Output Work Object Data", MenuItemClickOutputWobjdata, true, _wobjdataOutputParam);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Save RAPID module to file", MenuItemClickSaveModule);
+            Menu_AppendItem(menu, "Save Program module to file", MenuItemClickSaveProgramModule);
+            Menu_AppendItem(menu, "Save System module to file", MenuItemClickSaveSystemModule);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -297,9 +301,21 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <param name="e"> The event data. </param>
         private void MenuItemClickProgramName(object sender, EventArgs e)
         {
-            RecordUndoEvent("Overwrite Module Name");
-            _moduleNameInputParam= !_moduleNameInputParam;
-            AddInputParameter(0);
+            RecordUndoEvent("Overwrite Program Module Name");
+            _programName= !_programName;
+            AddParameter(0);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Set System Module Name" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickSystemName(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Overwrite System Module Name");
+            _systemName = !_systemName;
+            AddParameter(1);
         }
 
         /// <summary>
@@ -307,59 +323,23 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void MenuItemClickRoutineName(object sender, EventArgs e)
+        private void MenuItemClickProcedureName(object sender, EventArgs e)
         {
-            RecordUndoEvent("Overwrite Routine Name");
-            _routineNameInputParam = !_routineNameInputParam;
-            AddInputParameter(1);
+            RecordUndoEvent("Overwrite Procedure Name");
+            _procedureName = !_procedureName;
+            AddParameter(2);
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Add Tool Data" is clicked. 
+        /// Handles the event when the custom menu item "Set System Custom Code Lines" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void MenuItemClickTooldata(object sender, EventArgs e)
+        private void MenuItemClickCustomCode(object sender, EventArgs e)
         {
-            RecordUndoEvent("Add Tool Data");
-            _addTooldataInputParam = !_addTooldataInputParam;
-            AddInputParameter(2);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Add Work Object Data" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickWobjdata(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Add Work Object Data");
-            _addWobjdataInputParam = !_addWobjdataInputParam;
-            AddInputParameter(3);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output Tool Data" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputTooldata(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output Tool Data");
-            _tooldataOutputParam = !_tooldataOutputParam;
-            AddOutputParameter(0);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output Work Object Data" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputWobjdata(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output Work Object Data");
-            _wobjdataOutputParam = !_wobjdataOutputParam;
-            AddOutputParameter(1);
+            RecordUndoEvent("Set Custom System Code Lines");
+            _customCode = !_customCode;
+            AddParameter(3);
         }
 
         /// <summary>
@@ -378,15 +358,25 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
         /// <param name="e"> The event data. </param>
-        private void MenuItemClickSaveModule(object sender, EventArgs e)
+        private void MenuItemClickSaveProgramModule(object sender, EventArgs e)
         {
-            SaveModule();
+            SaveProgramModule();
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Save to System module to file" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickSaveSystemModule(object sender, EventArgs e)
+        {
+            SaveSystemModule();
         }
 
         /// <summary>
         /// Save Program module to file
         /// </summary>
-        private void SaveModule()
+        private void SaveProgramModule()
         {
             // Create save file dialog
             SaveFileDialog saveFileDialog = new SaveFileDialog
@@ -394,8 +384,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 CheckFileExists = false,
                 CheckPathExists = true,
                 DefaultExt = "mod",
-                Filter = "RAPID Module|*.mod",
-                Title = "Save a RAPID Module"
+                Filter = "RAPID Program Module|*.mod",
+                Title = "Save a RAPID Program Module"
             };
 
             // If result of dialog is OK the file can be saved
@@ -407,9 +397,42 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                     // Write RAPID code to file
                     using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
                     {
-                        for (int i = 0; i != _rapidGenerator.Module.Count; i++)
+                        for (int i = 0; i != _programModule.Count; i++)
                         {
-                            writer.WriteLine(_rapidGenerator.Module[i]);
+                            writer.WriteLine(_programModule[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save System module to file
+        /// </summary>
+        private void SaveSystemModule()
+        {
+            // Create save file dialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                CheckFileExists = false,
+                CheckPathExists = true,
+                DefaultExt = "sys",
+                Filter = "RAPID System Module|*.sys",
+                Title = "Save a RAPID System Module"
+            };
+
+            // If result of dialog is OK the file can be saved
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Check the file name
+                if (saveFileDialog.FileName != "")
+                {
+                    // Write RAPID code to file
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false))
+                    {
+                        for (int i = 0; i != _systemModule.Count; i++)
+                        {
+                            writer.WriteLine(_systemModule[i]);
                         }
                     }
                 }
@@ -423,12 +446,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Module Name", _moduleNameInputParam);
-            writer.SetBoolean("Routine Name", _routineNameInputParam);
-            writer.SetBoolean("Add tooldata", _addTooldataInputParam);
-            writer.SetBoolean("Add wobjdata", _addWobjdataInputParam);
-            writer.SetBoolean("Output tooldata", _tooldataOutputParam);
-            writer.SetBoolean("Output wobjdata", _wobjdataOutputParam);
+            writer.SetBoolean("Program Module Name", _programName);
+            writer.SetBoolean("System Module Name", _systemName);
+            writer.SetBoolean("RAPID Procedure Name", _procedureName);
+            writer.SetBoolean("Custom System Code Lines", _customCode);
             return base.Write(writer);
         }
 
@@ -439,12 +460,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            _moduleNameInputParam = reader.GetBoolean("Module Name");
-            _routineNameInputParam = reader.GetBoolean("Routine Name");
-            _addTooldataInputParam = reader.GetBoolean("Add tooldata");
-            _addWobjdataInputParam = reader.GetBoolean("Add wobjdata");
-            _tooldataOutputParam = reader.GetBoolean("Output tooldata");
-            _wobjdataOutputParam = reader.GetBoolean("Output wobjdata");
+            _programName = reader.GetBoolean("Program Module Name");
+            _systemName = reader.GetBoolean("System Module Name");
+            _procedureName = reader.GetBoolean("RAPID Procedure Name");
+            _customCode = reader.GetBoolean("Custom System Code Lines");
             return base.Read(reader);
         }
 
@@ -452,11 +471,11 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Adds or destroys the input parameter to the component.
         /// </summary>
         /// <param name="index"> The index number of the parameter that needs to be added. </param>
-        private void AddInputParameter(int index)
+        private void AddParameter(int index)
         {
             // Pick the parameter
-            IGH_Param parameter = _variableInputParameters[index];
-            string name = _variableInputParameters[index].Name;
+            IGH_Param parameter = variableInputParameters[index];
+            string name = variableInputParameters[index].Name;
 
             // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
@@ -473,7 +492,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 // Check if other parameters are already added and correct the insert index
                 for (int i = 0; i < index; i++)
                 {
-                    if (Params.Input.Any(x => x.Name == _variableInputParameters[i].Name))
+                    if (Params.Input.Any(x => x.Name == variableInputParameters[i].Name))
                     {
                         insertIndex += 1;
                     }
@@ -481,46 +500,6 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 
                 // Register the input parameter
                 Params.RegisterInputParam(parameter, insertIndex);
-            }
-
-            // Expire solution and refresh parameters since they changed
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Adds or destroys the output parameter to the component.
-        /// </summary>
-        /// <param name="index"> The index number of the parameter that needs to be added. </param>
-        private void AddOutputParameter(int index)
-        {
-            // Pick the parameter
-            IGH_Param parameter = _variableOutputParameters[index];
-            string name = _variableOutputParameters[index].NickName;
-
-            // If the parameter already exist: remove it
-            if (Params.Output.Any(x => x.NickName.Equality(parameter.NickName)))
-            {
-                Params.UnregisterOutputParameter(Params.Output.First(x => x.NickName.Equality(parameter.NickName)), true);
-            }
-
-            // Else remove the variable input parameter
-            else
-            {
-                // The index where the parameter should be added
-                int insertIndex = _fixedParamNumOutput;
-
-                // Check if other parameters are already added and correct the insert index
-                for (int i = 0; i < index; i++)
-                {
-                    if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[i].NickName)))
-                    {
-                        insertIndex += 1;
-                    }
-                }
-
-                // Register the input parameter
-                Params.RegisterOutputParam(parameter, insertIndex);
             }
 
             // Expire solution and refresh parameters since they changed

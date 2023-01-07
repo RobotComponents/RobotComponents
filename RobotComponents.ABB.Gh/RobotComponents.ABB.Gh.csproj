@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogOutputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Controller\GetControllerComponent.cs" />

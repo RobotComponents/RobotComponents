@@ -593,9 +593,9 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap GetJointTargetIcon {
+        internal static System.Drawing.Bitmap GetJointTarget_Icon {
             get {
-                object obj = ResourceManager.GetObject("GetJointTargetIcon", resourceCulture);
+                object obj = ResourceManager.GetObject("GetJointTarget_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

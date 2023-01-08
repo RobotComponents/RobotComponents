@@ -277,8 +277,8 @@
   <data name="GetExternalJointPositions_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetExternalJointPositions_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GetJointTargetIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\GetJointTargetIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="GetJointTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GetJointTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GetPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

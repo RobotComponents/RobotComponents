@@ -54,7 +54,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             //TODO: Change generic parameter to Param_RobotJointPosition
 
-            pManager.AddTextParameter("Name", "N", "Name of the robot as Text", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the robot as text", GH_ParamAccess.list);
             pManager.AddGenericParameter("Robot Joint Position", "RJ", "Extracted Robot Joint Positions", GH_ParamAccess.list);
         }
 

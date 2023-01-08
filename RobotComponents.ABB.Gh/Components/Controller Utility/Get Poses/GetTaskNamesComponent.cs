@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the tasks as Text", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the tasks as text", GH_ParamAccess.list);
         }
 
         /// <summary>

@@ -55,8 +55,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the external axis as Text", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Plane", "P", "Current external axis plane as a Plane", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the external axis as text", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Current external axis plane as a plane", GH_ParamAccess.list);
         }
 
         /// <summary>

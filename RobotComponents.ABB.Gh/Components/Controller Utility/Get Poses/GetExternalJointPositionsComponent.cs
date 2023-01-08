@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             //TODO: Change generic parameter to Param_ExternalJointPosition
 
-            pManager.AddTextParameter("Name", "N", "Name of the external axis as Text", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the external axis as text", GH_ParamAccess.list);
             pManager.AddNumberParameter("External Joint Position", "EJ", "Extracted External Joint Positions", GH_ParamAccess.tree);
         }
 

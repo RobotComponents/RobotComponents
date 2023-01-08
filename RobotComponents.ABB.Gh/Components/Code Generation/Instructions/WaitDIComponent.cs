@@ -74,11 +74,11 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             }
             if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name starts with a number which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name starts with a number which is not allowed in RAPID code.");
             }
             if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name constains special characters which is not allowed in RAPID Code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital input name constains special characters which is not allowed in RAPID code.");
             }
 
             // Create the action

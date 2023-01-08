@@ -68,7 +68,7 @@
     <Compile Include="Components\Controller Utility\Get Signals\GetDigitalOutputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetExternalJointPositionsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Controller\GetLogComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetTaskNamesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Run Programs\GetTaskNamesComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetRobotBaseFramesComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetRobotJointPositionsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetExternalAxisPlanesComponent.cs" />

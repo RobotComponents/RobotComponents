@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary | GH_Exposure.obscure; }
+            get { return GH_Exposure.secondary | GH_Exposure.obscure; }
         }
 
         /// <summary>

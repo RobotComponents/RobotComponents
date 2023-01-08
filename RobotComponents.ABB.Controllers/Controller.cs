@@ -145,8 +145,8 @@ namespace RobotComponents.ABB.Controllers
                 _robotsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
                 _externalAxesPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
 
-                _jointTargets.Add(_tasks[i].Name, new JointTarget());
-                _robotTargets.Add(_tasks[i].Name, new RobotTarget());
+                _jointTargets.Add(_tasks[i].Name, new JointTarget(new RobotJointPosition(), new ExternalJointPosition()));
+                _robotTargets.Add(_tasks[i].Name, new RobotTarget(Plane.WorldXY));
             }
 
             for (int i = 0; i < _mechanicalUnits.Count; i++)
@@ -490,10 +490,8 @@ namespace RobotComponents.ABB.Controllers
         /// Returns the current joint targets. 
         /// </summary>
         /// <returns> A dictionary with as key the name of the task and as value the current joint target.</returns>
-        private Dictionary<string, JointTarget> GetJointTargets()
+        public Dictionary<string, JointTarget> GetJointTargets()
         {
-            //TODO: This metod is private since it needs to be tested first. 
-
             if (_isEmtpy == true)
             {
                 Log($"Could not get the joint targets. The controller is empty.");
@@ -526,10 +524,8 @@ namespace RobotComponents.ABB.Controllers
         /// Returns the current robot targets. 
         /// </summary>
         /// <returns> A dictionary with as key the name of the task and as value the current robot target.</returns>
-        private Dictionary<string, RobotTarget> GetRobotTargets()
+        public Dictionary<string, RobotTarget> GetRobotTargets()
         {
-            //TODO: This metod is private since it needs to be tested first. 
-
             if (_isEmtpy == true)
             {
                 Log($"Could not get the robot targets. The controller is empty.");
@@ -1156,7 +1152,7 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="module"> The module name. </param>
         /// <param name="variable"> The variable name. </param>
         /// <returns> The rapid value. </returns>
-        private string ReadRapidDomain(string task, string module, string variable)
+        public string ReadRapidDomain(string task, string module, string variable)
         {
             if (_isEmtpy == true)
             {

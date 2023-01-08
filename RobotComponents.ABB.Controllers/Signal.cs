@@ -3,8 +3,6 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
 // Rhino Libs
 using Rhino.Geometry;
 // ABB Libs
@@ -114,7 +112,15 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="controller"> The ABB controller instance. </param>
         private void SetAccesLevels(ControllersNS.Controller controller)
         {
-            _accesLevel = controller.Configuration.Read("EIO", "EIO_SIGNAL", this.Name, "Access");
+            // Try: some acces levels are restricted. 
+            try
+            {
+                _accesLevel = controller.Configuration.Read("EIO", "EIO_SIGNAL", this.Name, "Access");
+            }
+            catch
+            {
+                _accesLevel = "-";
+            }
         }
 
         /// <summary>

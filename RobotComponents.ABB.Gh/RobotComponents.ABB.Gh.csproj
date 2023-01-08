@@ -320,9 +320,6 @@
     <None Include="Resources\ExternalLinearAxis_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\FlipPlane_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\FlipPlaneX_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -463,9 +460,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WaitDI_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Target_Icon_Old.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RobotComponents.ABB.Controllers\RobotComponents.ABB.Controllers.csproj">
@@ -732,6 +726,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\GetExternalJointPositions_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetJointTargetIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetRobotTarget_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ReadRapidDomain_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

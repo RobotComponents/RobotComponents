@@ -593,6 +593,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetJointTargetIcon {
+            get {
+                object obj = ResourceManager.GetObject("GetJointTargetIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GetPlane_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetPlane_Icon", resourceCulture);
@@ -616,6 +626,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap GetRobotJointPositions_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetRobotJointPositions_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetRobotTarget_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetRobotTarget_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1076,6 +1096,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap ReadDatabase_Icon {
             get {
                 object obj = ResourceManager.GetObject("ReadDatabase_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ReadRapidDomain_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ReadRapidDomain_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

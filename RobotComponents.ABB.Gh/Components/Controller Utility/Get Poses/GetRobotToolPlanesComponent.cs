@@ -33,9 +33,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetRobotToolPlaneComponent class.
         /// </summary>
         public GetRobotToolPlanesComponent()
-          : base("Get Robot Tool Planes", "GREP",
+          : base("Get Robot Tool Planes", "GetEP",
               "Gets the current robot tool planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

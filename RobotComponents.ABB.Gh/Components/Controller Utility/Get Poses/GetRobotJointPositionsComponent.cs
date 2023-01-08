@@ -13,6 +13,7 @@ using Grasshopper.Kernel;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
+using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
@@ -31,9 +32,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetRobotJointPositionComponent class.
         /// </summary>
         public GetRobotJointPositionsComponent()
-          : base("Get Robot Joint Positions", "GRJP",
+          : base("Get Robot Joint Positions", "GetJP",
               "Gets the current robot joint position from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -52,10 +55,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            //TODO: Change generic parameter to Param_RobotJointPosition
-
             pManager.AddTextParameter("Name", "N", "Name of the robot as text", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Robot Joint Position", "RJ", "Extracted Robot Joint Positions", GH_ParamAccess.list);
+            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Extracted Robot Joint Positions", GH_ParamAccess.list);
         }
 
         /// <summary>

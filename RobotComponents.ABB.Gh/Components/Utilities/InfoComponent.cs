@@ -60,6 +60,9 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + "Mohamed Dawod, Zuardin Akbar, and Andrea Rossi."
                 + Environment.NewLine
                 + Environment.NewLine
+                + "The components of the controller utility category use the ABB PC SDK (version 2022.3). For more information, see https://developercenter.robotstudio.com/pc-sdk."
+                + Environment.NewLine
+                + Environment.NewLine
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine

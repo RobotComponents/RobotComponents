@@ -37,6 +37,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
           : base("Upload Program", "UP",
               "Uploads RAPID modules directly to a real or virtual ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

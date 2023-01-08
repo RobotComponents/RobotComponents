@@ -31,9 +31,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetRobotBaseFrameComponent class.
         /// </summary>
         public GetRobotBaseFramesComponent()
-          : base("Get Robot Base Frames", "GRBF",
+          : base("Get Robot Base Frames", "GetBF",
               "Gets the robot base frame from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

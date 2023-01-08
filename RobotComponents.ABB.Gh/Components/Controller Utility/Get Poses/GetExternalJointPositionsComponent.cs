@@ -32,9 +32,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetExternalJointPositionComponent class.
         /// </summary>
         public GetExternalJointPositionsComponent()
-          : base("Get External Joint Positions", "GEJP",
-              "Gets the current external joint position from an ABB IRC5 robot controller."
+          : base("Get External Joint Positions", "GetEJ",
+              "Gets the current external joint position from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {
@@ -53,8 +55,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            //TODO: Change generic parameter to Param_ExternalJointPosition
-
             pManager.AddTextParameter("Name", "N", "Name of the external axis as text", GH_ParamAccess.list);
             pManager.AddNumberParameter("External Joint Position", "EJ", "Extracted External Joint Positions", GH_ParamAccess.tree);
         }
@@ -76,6 +76,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
             }
+
             // Output
             DA.SetDataList(0, _externalJointPositions.Keys);
             DA.SetDataTree(1, this.ToDataTree(_externalJointPositions));

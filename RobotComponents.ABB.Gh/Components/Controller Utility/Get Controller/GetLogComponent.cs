@@ -31,6 +31,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
           : base("Get Log", "GL",
               "Connects to a real or virtual ABB controller and extracts the log messages from it."
                 + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

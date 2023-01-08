@@ -76,6 +76,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
             }
+
             // Output
             DA.SetDataList(0, _robotTargets.Keys);
             DA.SetDataList(1, _robotTargets.Values);

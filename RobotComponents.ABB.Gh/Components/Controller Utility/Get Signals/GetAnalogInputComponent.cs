@@ -33,6 +33,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
           : base("Get Analog Input", "GetAI",
               "Gets the signal of a defined analog input from an ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

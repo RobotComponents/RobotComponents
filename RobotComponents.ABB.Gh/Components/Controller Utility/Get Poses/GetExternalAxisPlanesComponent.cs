@@ -33,9 +33,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetExternalAxisPlaneComponent class.
         /// </summary>
         public GetExternalAxisPlanesComponent()
-          : base("Get External Axis Planes", "GEAP",
+          : base("Get External Axis Planes", "GetEAP",
               "Gets the current external planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

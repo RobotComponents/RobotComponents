@@ -31,6 +31,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
           : base("Get Task Names", "GTN",
               "Gets the task names from an ABB robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK." +
+                System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Controller Utility")
         {

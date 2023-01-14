@@ -145,8 +145,11 @@ namespace RobotComponents.ABB.Controllers
                 _robotsPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
                 _externalAxesPerTask.Add(_tasks[i].Name, new List<MechanicalUnit>());
 
-                _jointTargets.Add(_tasks[i].Name, new JointTarget(new RobotJointPosition(), new ExternalJointPosition()));
-                _robotTargets.Add(_tasks[i].Name, new RobotTarget(Plane.WorldXY));
+                if (_tasks[i].Motion == true)
+                {
+                    _jointTargets.Add(_tasks[i].Name, new JointTarget(new RobotJointPosition(), new ExternalJointPosition()));
+                    _robotTargets.Add(_tasks[i].Name, new RobotTarget(Plane.WorldXY));
+                }
             }
 
             for (int i = 0; i < _mechanicalUnits.Count; i++)
@@ -500,21 +503,24 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < _tasks.Count; i++)
             {
-                RapidDomainNS.JointTarget jointTarget = _tasks[i].GetJointTarget();
+                if (_tasks[i].Motion == true)
+                {
+                    RapidDomainNS.JointTarget jointTarget = _tasks[i].GetJointTarget();
 
-                _jointTargets[_tasks[i].Name].RobotJointPosition[0] = jointTarget.RobAx.Rax_1;
-                _jointTargets[_tasks[i].Name].RobotJointPosition[1] = jointTarget.RobAx.Rax_2;
-                _jointTargets[_tasks[i].Name].RobotJointPosition[2] = jointTarget.RobAx.Rax_3;
-                _jointTargets[_tasks[i].Name].RobotJointPosition[3] = jointTarget.RobAx.Rax_4;
-                _jointTargets[_tasks[i].Name].RobotJointPosition[4] = jointTarget.RobAx.Rax_5;
-                _jointTargets[_tasks[i].Name].RobotJointPosition[5] = jointTarget.RobAx.Rax_6;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[0] = jointTarget.RobAx.Rax_1;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[1] = jointTarget.RobAx.Rax_2;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[2] = jointTarget.RobAx.Rax_3;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[3] = jointTarget.RobAx.Rax_4;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[4] = jointTarget.RobAx.Rax_5;
+                    _jointTargets[_tasks[i].Name].RobotJointPosition[5] = jointTarget.RobAx.Rax_6;
 
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[0] = jointTarget.ExtAx.Eax_a < 9e8 ? jointTarget.ExtAx.Eax_a : _jointTargets[_tasks[i].Name].ExternalJointPosition[0];
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[1] = jointTarget.ExtAx.Eax_b < 9e8 ? jointTarget.ExtAx.Eax_b : _jointTargets[_tasks[i].Name].ExternalJointPosition[1];
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[2] = jointTarget.ExtAx.Eax_c < 9e8 ? jointTarget.ExtAx.Eax_c : _jointTargets[_tasks[i].Name].ExternalJointPosition[2];
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[3] = jointTarget.ExtAx.Eax_d < 9e8 ? jointTarget.ExtAx.Eax_d : _jointTargets[_tasks[i].Name].ExternalJointPosition[3];
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[4] = jointTarget.ExtAx.Eax_e < 9e8 ? jointTarget.ExtAx.Eax_e : _jointTargets[_tasks[i].Name].ExternalJointPosition[4];
-                _jointTargets[_tasks[i].Name].ExternalJointPosition[5] = jointTarget.ExtAx.Eax_f < 9e8 ? jointTarget.ExtAx.Eax_f : _jointTargets[_tasks[i].Name].ExternalJointPosition[5];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[0] = jointTarget.ExtAx.Eax_a < 9e8 ? jointTarget.ExtAx.Eax_a : _jointTargets[_tasks[i].Name].ExternalJointPosition[0];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[1] = jointTarget.ExtAx.Eax_b < 9e8 ? jointTarget.ExtAx.Eax_b : _jointTargets[_tasks[i].Name].ExternalJointPosition[1];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[2] = jointTarget.ExtAx.Eax_c < 9e8 ? jointTarget.ExtAx.Eax_c : _jointTargets[_tasks[i].Name].ExternalJointPosition[2];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[3] = jointTarget.ExtAx.Eax_d < 9e8 ? jointTarget.ExtAx.Eax_d : _jointTargets[_tasks[i].Name].ExternalJointPosition[3];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[4] = jointTarget.ExtAx.Eax_e < 9e8 ? jointTarget.ExtAx.Eax_e : _jointTargets[_tasks[i].Name].ExternalJointPosition[4];
+                    _jointTargets[_tasks[i].Name].ExternalJointPosition[5] = jointTarget.ExtAx.Eax_f < 9e8 ? jointTarget.ExtAx.Eax_f : _jointTargets[_tasks[i].Name].ExternalJointPosition[5];
+                }
             }
 
             return _jointTargets;
@@ -534,28 +540,28 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < _tasks.Count; i++)
             {
-                // if (_tasks[i].Enabled == true) ? 
-                // Check _tasks[i].TaskType ? 
+                if (_tasks[i].Motion == true)
+                {
+                    RapidDomainNS.RobTarget robotTarget = _tasks[i].GetRobTarget();
 
-                RapidDomainNS.RobTarget robotTarget = _tasks[i].GetRobTarget();
+                    _robotTargets[_tasks[i].Name].Plane = HelperMethods.QuaternionToPlane(
+                        robotTarget.Trans.X,
+                        robotTarget.Trans.Y,
+                        robotTarget.Trans.Z,
+                        robotTarget.Rot.Q1,
+                        robotTarget.Rot.Q2,
+                        robotTarget.Rot.Q3,
+                        robotTarget.Rot.Q4);
 
-                _robotTargets[_tasks[i].Name].Plane = HelperMethods.QuaternionToPlane(
-                    robotTarget.Trans.X,
-                    robotTarget.Trans.Y,
-                    robotTarget.Trans.Z,
-                    robotTarget.Rot.Q1,
-                    robotTarget.Rot.Q2,
-                    robotTarget.Rot.Q3,
-                    robotTarget.Rot.Q4);
+                    _robotTargets[_tasks[i].Name].AxisConfig = robotTarget.Robconf.Cfx;
 
-                _robotTargets[_tasks[i].Name].AxisConfig = robotTarget.Robconf.Cfx;
-
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[0] = robotTarget.Extax.Eax_a < 9e8 ? robotTarget.Extax.Eax_a : _robotTargets[_tasks[i].Name].ExternalJointPosition[0];
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[1] = robotTarget.Extax.Eax_b < 9e8 ? robotTarget.Extax.Eax_b : _robotTargets[_tasks[i].Name].ExternalJointPosition[1];
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[2] = robotTarget.Extax.Eax_c < 9e8 ? robotTarget.Extax.Eax_c : _robotTargets[_tasks[i].Name].ExternalJointPosition[2];
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[3] = robotTarget.Extax.Eax_d < 9e8 ? robotTarget.Extax.Eax_d : _robotTargets[_tasks[i].Name].ExternalJointPosition[3];
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[4] = robotTarget.Extax.Eax_e < 9e8 ? robotTarget.Extax.Eax_e : _robotTargets[_tasks[i].Name].ExternalJointPosition[4];
-                _robotTargets[_tasks[i].Name].ExternalJointPosition[5] = robotTarget.Extax.Eax_f < 9e8 ? robotTarget.Extax.Eax_f : _robotTargets[_tasks[i].Name].ExternalJointPosition[5];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[0] = robotTarget.Extax.Eax_a < 9e8 ? robotTarget.Extax.Eax_a : _robotTargets[_tasks[i].Name].ExternalJointPosition[0];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[1] = robotTarget.Extax.Eax_b < 9e8 ? robotTarget.Extax.Eax_b : _robotTargets[_tasks[i].Name].ExternalJointPosition[1];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[2] = robotTarget.Extax.Eax_c < 9e8 ? robotTarget.Extax.Eax_c : _robotTargets[_tasks[i].Name].ExternalJointPosition[2];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[3] = robotTarget.Extax.Eax_d < 9e8 ? robotTarget.Extax.Eax_d : _robotTargets[_tasks[i].Name].ExternalJointPosition[3];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[4] = robotTarget.Extax.Eax_e < 9e8 ? robotTarget.Extax.Eax_e : _robotTargets[_tasks[i].Name].ExternalJointPosition[4];
+                    _robotTargets[_tasks[i].Name].ExternalJointPosition[5] = robotTarget.Extax.Eax_f < 9e8 ? robotTarget.Extax.Eax_f : _robotTargets[_tasks[i].Name].ExternalJointPosition[5];
+                }
             }
 
             return _robotTargets;
@@ -1141,8 +1147,7 @@ namespace RobotComponents.ABB.Controllers
                 return "";
             }
 
-            string[] path = new string[4] { domain, type, instance, attribute };
-            return _controller.Configuration.Read(path);
+            return _controller.Configuration.Read(domain, type, instance, attribute);
         }
 
         /// <summary>
@@ -1290,7 +1295,7 @@ namespace RobotComponents.ABB.Controllers
             {
                 // Controller domain
                 _controller.ConnectionChanged += OnConnectionChangedEvent;
-                _controller.MastershipChanged += OnMastershipChangedEvent;
+                _controller.Rapid.MastershipChanged += OnMastershipChangedEvent;
                 _controller.OperatingModeChanged += OnOperatingModeChangeEvent;
                 _controller.StateChanged += OnStateChangedEventArgs;
 

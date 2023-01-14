@@ -55,6 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerations\Enumerations.cs" />
+    <Compile Include="Forms\PickRapidDomainPathForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PickRapidDomainPathForm.designer.cs">
+      <DependentUpon>PickRapidDomainPathForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PickSignalForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,6 +95,10 @@
     <Compile Include="Signal.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PickRapidDomainPathForm.resx">
+      <DependentUpon>PickRapidDomainPathForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PickSignalForm.resx">
       <DependentUpon>PickSignalForm.cs</DependentUpon>
     </EmbeddedResource>

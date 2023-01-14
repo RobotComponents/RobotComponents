@@ -62,6 +62,7 @@
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetJointTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetRobotTargetsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Read Domains\ReadRapidDomainComponent.cs" />
     <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetAnalogOutputComponent.cs" />

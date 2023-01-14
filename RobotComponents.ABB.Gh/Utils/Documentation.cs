@@ -84,6 +84,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(UploadProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
             { typeof(GetRobotTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
             { typeof(GetJointTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(ReadRapidDomainComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
             #endregion
 
             #region Deconstruct

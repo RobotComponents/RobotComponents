@@ -17,7 +17,6 @@ using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;

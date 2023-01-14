@@ -80,13 +80,16 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             string value = "";
 
-            try
+            if (domain != "" & type != "" & instance != "" & attribute != "")
             {
-                value = _controller.ReadConfigurationDomain(domain, type, instance, attribute);
-            }
-            catch
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Path not found!");
+                try
+                {
+                    value = _controller.ReadConfigurationDomain(domain, type, instance, attribute);
+                }
+                catch (Exception e)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, e.Message);
+                }
             }
 
             // Output

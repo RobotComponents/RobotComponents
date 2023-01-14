@@ -44,6 +44,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.comboBoxInstance = new System.Windows.Forms.ComboBox();
             this.comboBoxAttribute = new System.Windows.Forms.ComboBox();
+            this.labelConfigDataInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonOk
@@ -79,37 +80,10 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.comboBoxDomain.TabIndex = 3;
             this.comboBoxDomain.SelectedIndexChanged += new System.EventHandler(this.ComboBoxDomainSelectedIndexChanged);
             // 
-            // comboBoxType
-            // 
-            this.comboBoxType.DropDownWidth = 476;
-            this.comboBoxType.Location = new System.Drawing.Point(169, 87);
-            this.comboBoxType.Name = "comboBoxType";
-            this.comboBoxType.Size = new System.Drawing.Size(316, 21);
-            this.comboBoxType.TabIndex = 23;
-            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxTypeSelectedIndexChanged);
-            // 
-            // comboBoxInstance
-            // 
-            this.comboBoxInstance.DropDownWidth = 476;
-            this.comboBoxInstance.Location = new System.Drawing.Point(169, 114);
-            this.comboBoxInstance.Name = "comboBoxInstance";
-            this.comboBoxInstance.Size = new System.Drawing.Size(316, 21);
-            this.comboBoxInstance.TabIndex = 24;
-            this.comboBoxInstance.SelectedIndexChanged += new System.EventHandler(this.ComboBoxInstanceSelectedIndexChanged);
-            // 
-            // comboBoxAttribute
-            // 
-            this.comboBoxAttribute.DropDownWidth = 476;
-            this.comboBoxAttribute.Location = new System.Drawing.Point(169, 141);
-            this.comboBoxAttribute.Name = "comboBoxAttribute";
-            this.comboBoxAttribute.Size = new System.Drawing.Size(316, 21);
-            this.comboBoxAttribute.TabIndex = 25;
-            this.comboBoxAttribute.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAttributeSelectedIndexChanged);
-            // 
             // labelValue
             // 
             this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(13, 171);
+            this.labelValue.Location = new System.Drawing.Point(13, 221);
             this.labelValue.Name = "labelValue";
             this.labelValue.Size = new System.Drawing.Size(34, 13);
             this.labelValue.TabIndex = 17;
@@ -154,17 +128,55 @@ namespace RobotComponents.ABB.Controllers.Forms
             // labelValueInfo
             // 
             this.labelValueInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelValueInfo.Location = new System.Drawing.Point(170, 165);
+            this.labelValueInfo.Location = new System.Drawing.Point(170, 221);
             this.labelValueInfo.Name = "labelValueInfo";
-            this.labelValueInfo.Size = new System.Drawing.Size(315, 25);
+            this.labelValueInfo.Size = new System.Drawing.Size(315, 13);
             this.labelValueInfo.TabIndex = 22;
             this.labelValueInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // PickPathForm
+            // comboBoxType
+            // 
+            this.comboBoxType.DropDownWidth = 476;
+            this.comboBoxType.Location = new System.Drawing.Point(169, 87);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(316, 21);
+            this.comboBoxType.TabIndex = 23;
+            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.ComboBoxTypeSelectedIndexChanged);
+            // 
+            // comboBoxInstance
+            // 
+            this.comboBoxInstance.DropDownWidth = 476;
+            this.comboBoxInstance.Location = new System.Drawing.Point(169, 114);
+            this.comboBoxInstance.Name = "comboBoxInstance";
+            this.comboBoxInstance.Size = new System.Drawing.Size(316, 21);
+            this.comboBoxInstance.TabIndex = 24;
+            this.comboBoxInstance.SelectedIndexChanged += new System.EventHandler(this.ComboBoxInstanceSelectedIndexChanged);
+            // 
+            // comboBoxAttribute
+            // 
+            this.comboBoxAttribute.DropDownWidth = 476;
+            this.comboBoxAttribute.Location = new System.Drawing.Point(169, 141);
+            this.comboBoxAttribute.Name = "comboBoxAttribute";
+            this.comboBoxAttribute.Size = new System.Drawing.Size(316, 21);
+            this.comboBoxAttribute.TabIndex = 25;
+            this.comboBoxAttribute.SelectedIndexChanged += new System.EventHandler(this.ComboBoxAttributeSelectedIndexChanged);
+            // 
+            // labelConfigDataInfo
+            // 
+            this.labelConfigDataInfo.AutoSize = true;
+            this.labelConfigDataInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelConfigDataInfo.Location = new System.Drawing.Point(13, 196);
+            this.labelConfigDataInfo.Name = "labelConfigDataInfo";
+            this.labelConfigDataInfo.Size = new System.Drawing.Size(136, 13);
+            this.labelConfigDataInfo.TabIndex = 27;
+            this.labelConfigDataInfo.Text = "Configuration data info";
+            // 
+            // PickConfigurationDomainPathForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
+            this.Controls.Add(this.labelConfigDataInfo);
             this.Controls.Add(this.comboBoxAttribute);
             this.Controls.Add(this.comboBoxInstance);
             this.Controls.Add(this.comboBoxType);
@@ -178,7 +190,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.buttonOk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "PickPathForm";
+            this.Name = "PickConfigurationDomainPathForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -198,5 +210,6 @@ namespace RobotComponents.ABB.Controllers.Forms
         private System.Windows.Forms.Label labelType;
         private System.Windows.Forms.Label labelDomain;
         private System.Windows.Forms.Label labelValueInfo;
+        private System.Windows.Forms.Label labelConfigDataInfo;
     }
 }

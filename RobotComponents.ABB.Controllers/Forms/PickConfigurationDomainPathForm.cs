@@ -65,6 +65,9 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxType.SelectedIndex = -1;
                 comboBoxInstance.SelectedIndex = -1;
                 comboBoxAttribute.SelectedIndex = -1;
+                comboBoxType.ResetText();
+                comboBoxInstance.ResetText();
+                comboBoxAttribute.ResetText();
                 _types = new TypeCollection();
                 _instances = new Instance[0];
                 _attributes = new AttributeCollection();
@@ -87,6 +90,8 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxAttribute.DataSource = null;
                 comboBoxInstance.SelectedIndex = -1;
                 comboBoxAttribute.SelectedIndex = -1;
+                comboBoxInstance.ResetText();
+                comboBoxAttribute.ResetText();
                 _instances = new Instance[0];
                 _attributes = new AttributeCollection();
                 _instance = "";
@@ -104,6 +109,7 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxAttribute.Items.Clear();
                 comboBoxAttribute.DataSource = null;
                 comboBoxAttribute.SelectedIndex = -1;
+                comboBoxAttribute.ResetText();
                 _attributes = new AttributeCollection();
                 _attribute = "";
                 labelValueInfo.Text = "-";
@@ -123,7 +129,7 @@ namespace RobotComponents.ABB.Controllers.Forms
                 }
                 catch
                 {
-                    labelValueInfo.Text = "Path does not exist.";
+                    labelValueInfo.Text = "-";
                 }
             }
             else
@@ -135,6 +141,8 @@ namespace RobotComponents.ABB.Controllers.Forms
         private bool PopulateDomains()
         {
             comboBoxDomain.Items.Clear();
+            comboBoxDomain.ResetText();
+
             _domains = _controller.ControllerABB.Configuration.Domains;
 
             if (_domains.Count != 0)
@@ -155,6 +163,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         private bool PopulateTypes()
         {
             comboBoxType.Items.Clear();
+            comboBoxType.ResetText();
 
             if (comboBoxDomain.SelectedIndex != -1)
             {
@@ -183,6 +192,8 @@ namespace RobotComponents.ABB.Controllers.Forms
         private bool PopulateInstances()
         {
             comboBoxInstance.Items.Clear();
+            comboBoxInstance.ResetText();
+
             if (comboBoxType.SelectedIndex != -1)
             {
                 _instances = _types[comboBoxType.SelectedIndex].GetInstances();
@@ -210,6 +221,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         private bool PopulateAttributes()
         {
             comboBoxAttribute.Items.Clear();
+            comboBoxAttribute.ResetText();
 
             if (comboBoxType.SelectedIndex != -1)
             {

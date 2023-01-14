@@ -8,7 +8,7 @@ using System;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 
-namespace RobotComponents.ABB.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Controller Utility : Setup a remote connection. An inherent from the GH_Component Class.

@@ -10,7 +10,7 @@ using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 
-namespace RobotComponents.ABB.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Controller Utility : Get the Axis Values from a defined controller. An inherent from the GH_Component Class.

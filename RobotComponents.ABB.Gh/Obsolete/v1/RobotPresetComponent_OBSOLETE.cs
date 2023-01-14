@@ -20,7 +20,7 @@ using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Forms;
 
-namespace RobotComponents.ABB.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.

@@ -14,7 +14,7 @@ using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Obsolete
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.

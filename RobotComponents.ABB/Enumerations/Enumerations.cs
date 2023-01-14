@@ -80,6 +80,27 @@ namespace RobotComponents.ABB.Enumerations
     }
 
     /// <summary>
+    /// Defines the level of the declaration.
+    /// </summary>
+    public enum LevelType : int
+    {
+        /// <summary>
+        /// Global level
+        /// </summary>
+        GLOBAL = 0,
+
+        /// <summary>
+        /// Local level
+        /// </summary>
+        LOCAL = 1,
+
+        /// <summary>
+        /// Task level
+        /// </summary>
+        TASK = 2
+    }
+
+    /// <summary>
     /// Defines inequalities (less than, greater than)
     /// </summary>
     public enum InequalitySymbol : int

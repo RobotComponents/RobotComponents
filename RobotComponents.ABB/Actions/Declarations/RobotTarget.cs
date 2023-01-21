@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // robot target variable name
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
         private Quaternion _quat; // target plane orientation (as quarternion)
@@ -41,8 +41,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotTarget(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
@@ -59,7 +59,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
             info.AddValue("Axis Configuration", _axisConfig, typeof(int));
@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(Plane plane)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
             _axisConfig = 0;
@@ -96,7 +96,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(string name, Plane plane)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = 0;
@@ -111,7 +111,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(Plane plane, int axisConfig)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
@@ -127,7 +127,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, int axisConfig)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -144,7 +144,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
@@ -166,7 +166,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;            
             _axisConfig = axisConfig;
@@ -186,7 +186,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
@@ -203,7 +203,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -221,7 +221,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
             _axisConfig = axisConfig;
@@ -244,7 +244,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _axisConfig = axisConfig;
@@ -262,7 +262,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="target"> The Robot Target instance to duplicate. </param>
         public RobotTarget(RobotTarget target)
         {
-            _referenceType = target.ReferenceType;
+            _variableType = target.VariableType;
             _name = target.Name;
             _plane = new Plane(target.Plane);
             _axisConfig = target.AxisConfig;
@@ -364,7 +364,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robtarget {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} robtarget {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -428,12 +428,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

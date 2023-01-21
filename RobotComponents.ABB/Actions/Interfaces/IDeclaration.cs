@@ -47,9 +47,9 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        ReferenceType ReferenceType { get; set; }
+        VariableType VariableType { get; set; }
 
         /// <summary>
         /// Gets or sets the variable name of the declaration.

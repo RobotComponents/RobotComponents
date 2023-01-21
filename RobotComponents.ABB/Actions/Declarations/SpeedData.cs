@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class SpeedData : Action, IDeclaration, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // SpeeData variable name
         private double _v_tcp; // Tool center point speed
         private double _v_ori; // Re-orientation speed
@@ -46,8 +46,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected SpeedData(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
             _v_ori = (double)info.GetValue("v_ori", typeof(double));
@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("v_tcp", _v_tcp, typeof(double));
             info.AddValue("v_ori", _v_ori, typeof(double));
@@ -96,7 +96,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -116,7 +116,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -134,7 +134,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _v_tcp = v_tcp;
             _v_ori = v_ori;
@@ -154,7 +154,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _v_tcp = v_tcp;
             _v_ori = v_ori;
@@ -170,7 +170,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="speeddata"> The Speed Data instance to duplicate. </param>
         public SpeedData(SpeedData speeddata)
         {
-            _referenceType = speeddata.ReferenceType;
+            _variableType = speeddata.VariableType;
             _name = speeddata.Name;
             _v_tcp = speeddata.V_TCP;
             _v_ori = speeddata.V_ORI;
@@ -260,7 +260,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_predefined == false && _name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} speeddata {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} speeddata {_name} := {ToRAPID()};";
             }
             else
             {
@@ -327,10 +327,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets the reference type.
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

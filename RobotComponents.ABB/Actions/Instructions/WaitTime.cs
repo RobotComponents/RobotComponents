@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _duration = (double)info.GetValue("Duration", typeof(double));
-            _inPosition = version > 103000 ? (bool)info.GetValue("In Position", typeof(bool)) : false;
+            _inPosition = version >= 1004000 ? (bool)info.GetValue("In Position", typeof(bool)) : false;
         }
 
         /// <summary>

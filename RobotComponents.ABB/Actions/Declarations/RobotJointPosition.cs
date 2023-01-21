@@ -12,7 +12,6 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Interfaces;
-using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
@@ -24,7 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType;
+        private VariableType _variableType;
         private string _name;
         private double _val1;
         private double _val2;
@@ -44,8 +43,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
@@ -64,7 +63,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Axis value 1", _val1, typeof(double));
             info.AddValue("Axis value 2", _val2, typeof(double));
@@ -81,7 +80,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public RobotJointPosition()
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             _val1 = _defaultValue;
@@ -103,7 +102,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
@@ -120,7 +119,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalAxisValues"> The user defined internal axis values as a collection.</param>
         public RobotJointPosition(IList<double> internalAxisValues)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             double[] values = CheckAxisValues(internalAxisValues);
@@ -139,7 +138,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="name"> The robot joint position name, must be unique. </param>
         public RobotJointPosition(string name)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             _val1 = _defaultValue;
@@ -162,7 +161,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
@@ -180,7 +179,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalAxisValues"> The user defined internal axis values as a colection.</param>
         public RobotJointPosition(string name, IList<double> internalAxisValues)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             double[] values = CheckAxisValues(internalAxisValues);
@@ -199,7 +198,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The Robot Joint Position instance to duplicate. </param>
         public RobotJointPosition(RobotJointPosition robotJointPosition)
         {
-            _referenceType = robotJointPosition.ReferenceType;
+            _variableType = robotJointPosition.VariableType;
             _name = robotJointPosition.Name;
             _val1 = robotJointPosition[0];
             _val2 = robotJointPosition[1];
@@ -485,7 +484,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} robjoint {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} robjoint {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -557,12 +556,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

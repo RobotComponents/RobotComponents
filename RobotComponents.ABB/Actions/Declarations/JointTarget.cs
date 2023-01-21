@@ -12,7 +12,6 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Interfaces;
-using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
@@ -24,7 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class JointTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // joint target variable name
         private RobotJointPosition _robotJointPosition; // the position of the robot
         private ExternalJointPosition _externalJointPosition; // the position of the external logical axes
@@ -38,8 +37,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected JointTarget(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _robotJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
             _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
@@ -54,7 +53,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Robot Joint Position", _robotJointPosition, typeof(RobotJointPosition));
             info.AddValue("External Joint Position", _externalJointPosition, typeof(ExternalJointPosition));
@@ -75,7 +74,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(RobotJointPosition robotJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
@@ -88,7 +87,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
@@ -101,7 +100,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
@@ -115,7 +114,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
@@ -127,7 +126,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="jointTarget"> The Joint Target instance to duplicate. </param>
         public JointTarget(JointTarget jointTarget)
         {
-            _referenceType = jointTarget.ReferenceType;
+            _variableType = jointTarget.VariableType;
             _name = jointTarget.Name;
             _robotJointPosition = jointTarget.RobotJointPosition.Duplicate();
             _externalJointPosition = jointTarget.ExternalJointPosition.Duplicate();
@@ -280,7 +279,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} jointtarget {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} jointtarget {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -343,12 +342,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

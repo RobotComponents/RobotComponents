@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ZoneData : Action, IDeclaration, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // ZoneData variable name
         private bool _finep; // Fine point
         private double _pzone_tcp; // Path zone TCP
@@ -54,8 +54,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected ZoneData(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _pzone_tcp = (double)info.GetValue("pzone_tcp", typeof(double));
             _pzone_ori = (double)info.GetValue("pzone_ori", typeof(double));
@@ -76,7 +76,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("pzone_tcp", _pzone_tcp, typeof(double));
             info.AddValue("pzone_ori", _pzone_ori, typeof(double));
@@ -104,7 +104,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
@@ -147,7 +147,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
@@ -196,7 +196,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = "";
             _finep = finep;
             _pzone_tcp = pzone_tcp;
@@ -223,7 +223,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(string name, bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _name = name;
             _finep = finep;
             _pzone_tcp = pzone_tcp;
@@ -242,7 +242,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zonedata"> The Zone Data instance to duplicate. </param>
         public ZoneData(ZoneData zonedata)
         {
-            _referenceType = zonedata.ReferenceType;
+            _variableType = zonedata.VariableType;
             _name = zonedata.Name;
             _finep = zonedata.FinePoint;
             _pzone_tcp = zonedata.PathZoneTCP;
@@ -345,7 +345,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_predefined == false & _name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} zonedata {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} zonedata {_name} := {ToRAPID()};";
             }
             else
             {
@@ -414,10 +414,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets the reference type.
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

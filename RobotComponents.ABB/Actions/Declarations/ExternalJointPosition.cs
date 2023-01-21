@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ExternalJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType;
+        private VariableType _variableType;
         private string _name;
         private double _val1;
         private double _val2;
@@ -43,8 +43,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization.</param>
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Value 1", typeof(double));
             _val2 = (double)info.GetValue("Value 2", typeof(double));
@@ -63,7 +63,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value 1", _val1, typeof(double));
             info.AddValue("Value 2", _val2, typeof(double));
@@ -80,7 +80,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ExternalJointPosition()
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             _val1 = _defaultValue;
@@ -103,7 +103,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
@@ -120,7 +120,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalAxisValues"> The list with the position of the external logical axes. </param>
         public ExternalJointPosition(IList<double> externalAxisValues)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = "";
 
             double[] values = CheckAxisValues(new List<double>(externalAxisValues).ToArray());
@@ -139,7 +139,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="name"> The external joint position name, must be unique. </param>
         public ExternalJointPosition(string name)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             _val1 = _defaultValue;
@@ -163,7 +163,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
@@ -181,7 +181,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalAxisValues"> The collection with the position of the external logical axes. </param>
         public ExternalJointPosition(string name, IList<double> externalAxisValues)
         {
-            _referenceType = ReferenceType.CONST;
+            _variableType = VariableType.CONST;
             _name = name;
 
             double[] values = CheckAxisValues(externalAxisValues);
@@ -200,7 +200,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position instance to duplicate. </param>
         public ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
-            _referenceType = externalJointPosition.ReferenceType;
+            _variableType = externalJointPosition.VariableType;
             _name = externalJointPosition.Name;
             _val1 = externalJointPosition[0];
             _val2 = externalJointPosition[1];
@@ -513,7 +513,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} extjoint {_name} := {ToRAPID()};";
+                return $"{Enum.GetName(typeof(VariableType), _variableType)} extjoint {_name} := {ToRAPID()};";
             }
 
             return string.Empty;
@@ -585,12 +585,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

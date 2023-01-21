@@ -40,7 +40,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (double)info.GetValue("Value", typeof(double));
             _inequalitySymbol = (InequalitySymbol)info.GetValue("Inequality Symbol", typeof(InequalitySymbol));
-            _maxTime = version > 103000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
         }
 
         /// <summary>

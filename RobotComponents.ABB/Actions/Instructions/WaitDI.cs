@@ -37,7 +37,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (bool)info.GetValue("Value", typeof(bool));
-            _maxTime = version > 103000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
         }
 
         /// <summary>

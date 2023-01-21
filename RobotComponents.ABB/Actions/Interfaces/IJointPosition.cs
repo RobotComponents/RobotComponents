@@ -64,9 +64,9 @@ namespace RobotComponents.ABB.Actions.Interfaces
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        ReferenceType ReferenceType { get; set;  }
+        VariableType VariableType { get; set;  }
 
         /// <summary>
         /// Gets the number of elements in the joint position.

@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class TaskList : Action, IDeclaration, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // the name of the set with tasks
         private readonly List<string> _taskNames; // the set with tasks as a list with task names
         #endregion
@@ -35,8 +35,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected TaskList(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _taskNames = (List<string>)info.GetValue("Task Names", typeof(List<string>));
         }
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Task Names", _taskNames, typeof(List<string>));
         }
@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="tasks"> The tasks names as a collection with strings. </param>
         public TaskList(string name, IList<string> tasks)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _taskNames = new List<string>(tasks);
         }
@@ -82,7 +82,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="tasks"> The Tasks instance to duplicate. </param>
         public TaskList(TaskList tasks)
         {
-            _referenceType = tasks.ReferenceType;
+            _variableType = tasks.VariableType;
             _name = tasks.Name;
             _taskNames = tasks.ToList();
         }
@@ -157,7 +157,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string result = Enum.GetName(typeof(ReferenceType), _referenceType);
+            string result = Enum.GetName(typeof(VariableType), _variableType);
             result += " tasks ";
             result += _name;
             result += "{" + _taskNames.Count.ToString() + "} := [";
@@ -230,10 +230,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets the reference type.
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType VariableType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

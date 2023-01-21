@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class SyncMoveOff : Action, IInstruction, ISyncident, ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type for sync identification
+        private VariableType _variableType; // variable type for sync identification
         private string _syncident; // the sync identification name
         private double _timeOut;
         #endregion
@@ -35,9 +35,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         protected SyncMoveOff(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _syncident = (string)info.GetValue("Sync ID", typeof(string));
-            _timeOut = version > 103000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
+            _timeOut = version >= 1004000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Sync ID", _syncident, typeof(string));
             info.AddValue("Time Out", _timeOut, typeof(double));
         }
@@ -70,7 +70,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="timeOut"> The max. time to wait for the other program tasks to reach the synchronization point. </param>
         public SyncMoveOff(string name, double timeOut = -1)
         {
-            _referenceType = ReferenceType.VAR;
+            _variableType = VariableType.VAR;
             _syncident = name;
             _timeOut = timeOut;
         }
@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="SyncMoveOff"> The SyncMoveOff instance to duplicate. </param>
         public SyncMoveOff(SyncMoveOff SyncMoveOff)
         {
-            _referenceType = SyncMoveOff.ReferenceType;
+            _variableType = SyncMoveOff.ReferenceType;
             _syncident = SyncMoveOff.SyncID;
             _timeOut = SyncMoveOff.TimeOut;
         }
@@ -147,7 +147,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            return $"{Enum.GetName(typeof(ReferenceType), _referenceType)} syncident {_syncident};";
+            return $"{Enum.GetName(typeof(VariableType), _variableType)} syncident {_syncident};";
         }
 
         /// <summary>
@@ -203,10 +203,10 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType ReferenceType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

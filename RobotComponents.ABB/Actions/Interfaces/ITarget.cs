@@ -56,7 +56,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the Reference Type.
         /// </summary>
-        ReferenceType ReferenceType { get; set;}
+        VariableType VariableType { get; set;}
 
         /// <summary>
         /// Gets or sets the Target variable name.

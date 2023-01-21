@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Definitions
     public class WorkObject : ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // The work object name
         private Plane _plane; // The work object coordinate system
         private Quaternion _orientation; // The orientation of the work object coordinate system
@@ -42,8 +42,8 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Definitions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
             info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));
@@ -77,7 +77,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public WorkObject()
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = "wobj0";
             _plane = Plane.WorldXY;
             _externalAxis = null;
@@ -94,7 +94,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="plane"> The work object coordinate system. </param>
         public WorkObject(string name, Plane plane)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = null;
@@ -112,7 +112,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = externalAxis;
@@ -129,7 +129,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
-            _referenceType = workObject.ReferenceType;
+            _variableType = workObject.ReferenceType;
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
             _userFrame = new Plane(workObject.UserFrame);
@@ -272,7 +272,7 @@ namespace RobotComponents.ABB.Definitions
             string result = "";
 
             // Adds variable type
-            result += $"{Enum.GetName(typeof(ReferenceType), _referenceType)} wobjdata ";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
 
             // Adds work object name
             result += $"{_name} := ";
@@ -323,12 +323,12 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType ReferenceType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

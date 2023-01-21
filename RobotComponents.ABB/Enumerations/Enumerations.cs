@@ -59,30 +59,9 @@ namespace RobotComponents.ABB.Enumerations
     }
 
     /// <summary>
-    /// Defines the reference type of the declaration.
+    /// Defines the scope of the declaration.
     /// </summary>
-    public enum ReferenceType : int
-    {
-        /// <summary>
-        /// Persistent data type
-        /// </summary>
-        PERS = 0,
-
-        /// <summary>
-        /// Variable data type
-        /// </summary>
-        VAR = 1,
-
-        /// <summary>
-        /// Constant data type
-        /// </summary>
-        CONST = 2
-    }
-
-    /// <summary>
-    /// Defines the level of the declaration.
-    /// </summary>
-    public enum LevelType : int
+    public enum Scope : int
     {
         /// <summary>
         /// Global level
@@ -98,6 +77,27 @@ namespace RobotComponents.ABB.Enumerations
         /// Task level
         /// </summary>
         TASK = 2
+    }
+
+    /// <summary>
+    /// Defines the variable type of the declaration.
+    /// </summary>
+    public enum VariableType : int
+    {
+        /// <summary>
+        /// Persistent data type
+        /// </summary>
+        PERS = 0,
+
+        /// <summary>
+        /// Variable data type
+        /// </summary>
+        VAR = 1,
+
+        /// <summary>
+        /// Constant data type
+        /// </summary>
+        CONST = 2
     }
 
     /// <summary>

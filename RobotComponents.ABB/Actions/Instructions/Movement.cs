@@ -52,7 +52,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
-            _time = version > 103000 ? (double)info.GetValue("Time", typeof(double)) : -1;
+            _time = version >= 1004000 ? (double)info.GetValue("Time", typeof(double)) : -1;
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
@@ -505,7 +505,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                     _convertedTarget.ExternalJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
                     _convertedTarget.Name = robotTarget.Name;
-                    _convertedTarget.ReferenceType = _target.ReferenceType;
+                    _convertedTarget.VariableType = _target.VariableType;
                 }
 
                 // Convert the robot target to a joint target
@@ -518,7 +518,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                     // Create a joint target from the axis values
                     _convertedTarget = new JointTarget(robotTarget.Name, RAPIDGenerator.Robot.InverseKinematics.RobotJointPosition.Duplicate(), RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate());
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
-                    _convertedTarget.ReferenceType = _target.ReferenceType;
+                    _convertedTarget.VariableType = _target.VariableType;
 
                     if (_convertedTarget.Name != "")
                     {

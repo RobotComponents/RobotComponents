@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
-        ReferenceType ReferenceType { get; set; }
+        VariableType ReferenceType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the synchronization (meeting) point (syncident).

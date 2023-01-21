@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Definitions
     public class RobotTool : ISerializable
     {
         #region fields
-        private ReferenceType _referenceType; // reference type
+        private VariableType _variableType; // variable type
         private string _name; // tool name
         private Mesh _mesh; // tool mesh
         private Plane _attachmentPlane; // mounting frame
@@ -46,8 +46,8 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotTool(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _referenceType = (ReferenceType)info.GetValue("Reference Type", typeof(ReferenceType));
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _mesh = (Mesh)info.GetValue("Mesh", typeof(Mesh));
             _attachmentPlane = (Plane)info.GetValue("Attachment Plane", typeof(Plane));
@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Definitions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
-            info.AddValue("Reference Type", _referenceType, typeof(ReferenceType));
+            info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Mesh", _mesh, typeof(Mesh));
             info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
@@ -91,7 +91,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public RobotTool()
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = "tool0";
             _mesh = new Mesh();
             _attachmentPlane = Plane.WorldXY;
@@ -115,7 +115,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -139,7 +139,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -170,7 +170,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, double toolTransX, double toolTransY, 
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -205,7 +205,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, double toolTransX, double toolTransY,
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -242,7 +242,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -274,7 +274,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -307,7 +307,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, double x, 
             double y, double z, double q1, double q2, double q3, double q4)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -334,7 +334,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="quat"> The orientation of TCP point. </param>
         public RobotTool(string name, Mesh mesh, Point3d point, Quaternion quat)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = Plane.WorldXY;
@@ -365,7 +365,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, 
             double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -398,7 +398,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold,
             double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -429,7 +429,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -456,7 +456,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
-            _referenceType = ReferenceType.PERS;
+            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
             for (int i = 0; i < meshes.Count; i++) { _mesh.Append(meshes[i]); }
@@ -478,7 +478,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public RobotTool(RobotTool robotTool, bool duplicateMesh = true)
         {
-            _referenceType = robotTool.ReferenceType;
+            _variableType = robotTool.ReferenceType;
             _name = robotTool.Name;
             _attachmentPlane = new Plane(robotTool.AttachmentPlane);
             _toolPlane = new Plane(robotTool.ToolPlane);
@@ -624,7 +624,7 @@ namespace RobotComponents.ABB.Definitions
         public string ToRAPIDDeclaration()
         {
             // Adds variable type
-            string result = Enum.GetName(typeof(ReferenceType), _referenceType);
+            string result = Enum.GetName(typeof(VariableType), _variableType);
 
             // Add robot tool name
             result += " tooldata " + _name + " := ";
@@ -726,12 +726,12 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the Reference Type. 
+        /// Gets or sets the variable type. 
         /// </summary>
-        public ReferenceType ReferenceType
+        public VariableType ReferenceType
         {
-            get { return _referenceType; }
-            set { _referenceType = value; }
+            get { return _variableType; }
+            set { _variableType = value; }
         }
 
         /// <summary>

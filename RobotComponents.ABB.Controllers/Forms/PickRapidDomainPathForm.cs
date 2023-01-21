@@ -64,9 +64,10 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxSymbol.ResetText();
                 _modules = new Module[0];
                 _symbols = new RapidSymbol[0];
+                labelScopeInfo.Text = "-";
+                labelVariableTypeInfo.Text = "-";
+                labelDataTypeInfo.Text = "-";
                 labelValueInfo.Text = "-";
-                labelSymbolTypeInfo.Text = "-";
-                labelRapidTypeInfo.Text = "-";
             }
         }
 
@@ -82,9 +83,10 @@ namespace RobotComponents.ABB.Controllers.Forms
                 comboBoxSymbol.ResetText();
                 _symbols = new RapidSymbol[0];
                 _symbol = "";
+                labelScopeInfo.Text = "-";
+                labelVariableTypeInfo.Text = "-";
+                labelDataTypeInfo.Text = "-";
                 labelValueInfo.Text = "-";
-                labelSymbolTypeInfo.Text = "-";
-                labelRapidTypeInfo.Text = "-";
             }
         }
 
@@ -107,14 +109,16 @@ namespace RobotComponents.ABB.Controllers.Forms
                         labelValueInfo.Text = data.StringValue;
                     }
 
-                    labelSymbolTypeInfo.Text = _symbols[comboBoxSymbol.SelectedIndex].Type.ToString();
-                    labelRapidTypeInfo.Text = data.RapidType;
+                    labelScopeInfo.Text = _symbols[comboBoxSymbol.SelectedIndex].Scope.ToString();
+                    labelVariableTypeInfo.Text = _symbols[comboBoxSymbol.SelectedIndex].Type.ToString();
+                    labelDataTypeInfo.Text = data.RapidType;
                 }
                 catch
                 {
+                    labelScopeInfo.Text = "-";
+                    labelVariableTypeInfo.Text = "-";
+                    labelDataTypeInfo.Text = "-";
                     labelValueInfo.Text = "-";
-                    labelSymbolTypeInfo.Text = "-";
-                    labelRapidTypeInfo.Text = "-";
                 }
             }
             else

@@ -42,11 +42,13 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelValueInfo = new System.Windows.Forms.Label();
             this.comboBoxModule = new System.Windows.Forms.ComboBox();
             this.comboBoxSymbol = new System.Windows.Forms.ComboBox();
-            this.labelSymbolType = new System.Windows.Forms.Label();
-            this.labelSymbolTypeInfo = new System.Windows.Forms.Label();
-            this.labelRapidTypeInfo = new System.Windows.Forms.Label();
-            this.labelRapidType = new System.Windows.Forms.Label();
+            this.labelVariableType = new System.Windows.Forms.Label();
+            this.labelVariableTypeInfo = new System.Windows.Forms.Label();
+            this.labelDataTypeInfo = new System.Windows.Forms.Label();
+            this.labelDataType = new System.Windows.Forms.Label();
             this.labelRapidDataInfo = new System.Windows.Forms.Label();
+            this.labelScopeInfo = new System.Windows.Forms.Label();
+            this.labelScope = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonOk
@@ -85,7 +87,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             // labelValue
             // 
             this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(12, 250);
+            this.labelValue.Location = new System.Drawing.Point(11, 277);
             this.labelValue.Name = "labelValue";
             this.labelValue.Size = new System.Drawing.Size(34, 13);
             this.labelValue.TabIndex = 17;
@@ -121,7 +123,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             // labelValueInfo
             // 
             this.labelValueInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelValueInfo.Location = new System.Drawing.Point(170, 250);
+            this.labelValueInfo.Location = new System.Drawing.Point(169, 277);
             this.labelValueInfo.Name = "labelValueInfo";
             this.labelValueInfo.Size = new System.Drawing.Size(315, 13);
             this.labelValueInfo.TabIndex = 22;
@@ -145,41 +147,41 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.comboBoxSymbol.TabIndex = 23;
             this.comboBoxSymbol.SelectedIndexChanged += new System.EventHandler(this.ComboBoxSymbolSelectedIndexChanged);
             // 
-            // labelSymbolType
+            // labelVariableType
             // 
-            this.labelSymbolType.AutoSize = true;
-            this.labelSymbolType.Location = new System.Drawing.Point(12, 196);
-            this.labelSymbolType.Name = "labelSymbolType";
-            this.labelSymbolType.Size = new System.Drawing.Size(64, 13);
-            this.labelSymbolType.TabIndex = 25;
-            this.labelSymbolType.Text = "Symbol type";
+            this.labelVariableType.AutoSize = true;
+            this.labelVariableType.Location = new System.Drawing.Point(11, 223);
+            this.labelVariableType.Name = "labelVariableType";
+            this.labelVariableType.Size = new System.Drawing.Size(68, 13);
+            this.labelVariableType.TabIndex = 25;
+            this.labelVariableType.Text = "Variable type";
             // 
-            // labelSymbolTypeInfo
+            // labelVariableTypeInfo
             // 
-            this.labelSymbolTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelSymbolTypeInfo.Location = new System.Drawing.Point(171, 196);
-            this.labelSymbolTypeInfo.Name = "labelSymbolTypeInfo";
-            this.labelSymbolTypeInfo.Size = new System.Drawing.Size(315, 13);
-            this.labelSymbolTypeInfo.TabIndex = 26;
-            this.labelSymbolTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelVariableTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelVariableTypeInfo.Location = new System.Drawing.Point(170, 223);
+            this.labelVariableTypeInfo.Name = "labelVariableTypeInfo";
+            this.labelVariableTypeInfo.Size = new System.Drawing.Size(315, 13);
+            this.labelVariableTypeInfo.TabIndex = 26;
+            this.labelVariableTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelRapidTypeInfo
+            // labelDataTypeInfo
             // 
-            this.labelRapidTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelRapidTypeInfo.Location = new System.Drawing.Point(170, 223);
-            this.labelRapidTypeInfo.Name = "labelRapidTypeInfo";
-            this.labelRapidTypeInfo.Size = new System.Drawing.Size(315, 13);
-            this.labelRapidTypeInfo.TabIndex = 28;
-            this.labelRapidTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelDataTypeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelDataTypeInfo.Location = new System.Drawing.Point(169, 250);
+            this.labelDataTypeInfo.Name = "labelDataTypeInfo";
+            this.labelDataTypeInfo.Size = new System.Drawing.Size(315, 13);
+            this.labelDataTypeInfo.TabIndex = 28;
+            this.labelDataTypeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // labelRapidType
+            // labelDataType
             // 
-            this.labelRapidType.AutoSize = true;
-            this.labelRapidType.Location = new System.Drawing.Point(12, 223);
-            this.labelRapidType.Name = "labelRapidType";
-            this.labelRapidType.Size = new System.Drawing.Size(63, 13);
-            this.labelRapidType.TabIndex = 27;
-            this.labelRapidType.Text = "RAPID type";
+            this.labelDataType.AutoSize = true;
+            this.labelDataType.Location = new System.Drawing.Point(11, 250);
+            this.labelDataType.Name = "labelDataType";
+            this.labelDataType.Size = new System.Drawing.Size(53, 13);
+            this.labelDataType.TabIndex = 27;
+            this.labelDataType.Text = "Data type";
             // 
             // labelRapidDataInfo
             // 
@@ -191,16 +193,36 @@ namespace RobotComponents.ABB.Controllers.Forms
             this.labelRapidDataInfo.TabIndex = 31;
             this.labelRapidDataInfo.Text = "RAPID data info";
             // 
+            // labelScopeInfo
+            // 
+            this.labelScopeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelScopeInfo.Location = new System.Drawing.Point(171, 197);
+            this.labelScopeInfo.Name = "labelScopeInfo";
+            this.labelScopeInfo.Size = new System.Drawing.Size(315, 13);
+            this.labelScopeInfo.TabIndex = 33;
+            this.labelScopeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelScope
+            // 
+            this.labelScope.AutoSize = true;
+            this.labelScope.Location = new System.Drawing.Point(12, 197);
+            this.labelScope.Name = "labelScope";
+            this.labelScope.Size = new System.Drawing.Size(62, 13);
+            this.labelScope.TabIndex = 32;
+            this.labelScope.Text = "Data scope";
+            // 
             // PickRapidDomainPathForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(500, 350);
             this.ControlBox = false;
+            this.Controls.Add(this.labelScopeInfo);
+            this.Controls.Add(this.labelScope);
             this.Controls.Add(this.labelRapidDataInfo);
-            this.Controls.Add(this.labelRapidTypeInfo);
-            this.Controls.Add(this.labelRapidType);
-            this.Controls.Add(this.labelSymbolTypeInfo);
-            this.Controls.Add(this.labelSymbolType);
+            this.Controls.Add(this.labelDataTypeInfo);
+            this.Controls.Add(this.labelDataType);
+            this.Controls.Add(this.labelVariableTypeInfo);
+            this.Controls.Add(this.labelVariableType);
             this.Controls.Add(this.comboBoxSymbol);
             this.Controls.Add(this.comboBoxModule);
             this.Controls.Add(this.labelValueInfo);
@@ -230,10 +252,12 @@ namespace RobotComponents.ABB.Controllers.Forms
         private System.Windows.Forms.Label labelModule;
         private System.Windows.Forms.Label labelTask;
         private System.Windows.Forms.Label labelValueInfo;
-        private System.Windows.Forms.Label labelSymbolType;
-        private System.Windows.Forms.Label labelSymbolTypeInfo;
-        private System.Windows.Forms.Label labelRapidTypeInfo;
-        private System.Windows.Forms.Label labelRapidType;
+        private System.Windows.Forms.Label labelVariableType;
+        private System.Windows.Forms.Label labelVariableTypeInfo;
+        private System.Windows.Forms.Label labelDataTypeInfo;
+        private System.Windows.Forms.Label labelDataType;
         private System.Windows.Forms.Label labelRapidDataInfo;
+        private System.Windows.Forms.Label labelScopeInfo;
+        private System.Windows.Forms.Label labelScope;
     }
 }

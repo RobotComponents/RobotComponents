@@ -148,7 +148,7 @@ namespace RobotComponents.ABB.Controllers
                 if (_tasks[i].Motion == true)
                 {
                     _jointTargets.Add(_tasks[i].Name, new JointTarget(new RobotJointPosition(), new ExternalJointPosition()));
-                    _robotTargets.Add(_tasks[i].Name, new RobotTarget(Plane.WorldXY));
+                    _robotTargets.Add(_tasks[i].Name, new RobotTarget(Plane.Unset));
                 }
             }
 
@@ -410,18 +410,29 @@ namespace RobotComponents.ABB.Controllers
 
             for (int i = 0; i < _externalAxes.Count; i++)
             {
-                RapidDomainNS.RobTarget robTarget = _externalAxes[i].GetPosition(coordinateSystem);
+                // Try catch is implemented here since it is not possible to check if 
+                // the mechanical unit is active. If the mechanical unit is not active, 
+                // reading the position will result in an error. 
+                try
+                {
+                    RapidDomainNS.RobTarget robTarget = _externalAxes[i].GetPosition(coordinateSystem);
 
-                Plane plane = HelperMethods.QuaternionToPlane(
-                    robTarget.Trans.X,
-                    robTarget.Trans.Y,
-                    robTarget.Trans.Z,
-                    robTarget.Rot.Q1,
-                    robTarget.Rot.Q2,
-                    robTarget.Rot.Q3,
-                    robTarget.Rot.Q4);
+                    Plane plane = HelperMethods.QuaternionToPlane(
+                        robTarget.Trans.X,
+                        robTarget.Trans.Y,
+                        robTarget.Trans.Z,
+                        robTarget.Rot.Q1,
+                        robTarget.Rot.Q2,
+                        robTarget.Rot.Q3,
+                        robTarget.Rot.Q4);
 
-                _externalAxisPlanes[_externalAxes[i].Name] = plane;
+                    _externalAxisPlanes[_externalAxes[i].Name] = plane;
+                }
+                catch
+                {
+                    // Mechanical unit is not active? 
+                    _externalAxisPlanes[_externalAxes[i].Name] = Plane.Unset;
+                }
             }
 
             return _externalAxisPlanes;

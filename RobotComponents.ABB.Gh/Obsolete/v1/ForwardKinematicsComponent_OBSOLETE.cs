@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -13,7 +12,6 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
@@ -25,18 +23,17 @@ using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Simulation
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class ForwardKinematicsComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class ForwardKinematicsComponent_OBSOLETE : GH_Component 
     {
         #region fields
         private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
         private bool _hideMesh = false;
-        private bool _outputMeshParameter = false;
-        private readonly int _fixedParamNumOutput = 2;
         #endregion
 
         /// <summary>
@@ -44,24 +41,14 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ForwardKinematicsComponent()
+        public ForwardKinematicsComponent_OBSOLETE()
           : base("Forward Kinematics", "FK",
               "Computes the position of the end-effector of a defined ABB robot based on a set of given axis values."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Simulation")
         {
-            // Create the component label with a message
-            Message = "EXTENDABLE";
         }
-
-        /// <summary>
-        /// Stores the variable output parameters in an array.
-        /// </summary>
-        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[1]
-        {
-            new Param_Mesh() { Name = "Posed Meshes", NickName = "PM", Description = "Posed Robot and External Axis meshes.", Access = GH_ParamAccess.tree}
-        };
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -81,6 +68,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
+            pManager.Register_MeshParam("Posed Meshes", "PM", "Posed Robot and External Axis meshes");
             pManager.Register_PlaneParam("End Plane", "EP", "Robot TCP plane placed on Target");
             pManager.Register_PlaneParam("External Axis Planes", "EAP", "Exernal Axis Planes as list of Planes");
         }
@@ -113,18 +101,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition);
-            
-            if (_hideMesh == false | _outputMeshParameter == true)
-            {
-                forwardKinematics.HideMesh = false;
-            }
-            else
-            {
-                forwardKinematics.HideMesh = true;
-            }
-            
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
             forwardKinematics.Calculate();
 
             // Check the values
@@ -136,14 +113,19 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             // Add to list with FK
             _forwardKinematics.Add(forwardKinematics);
 
-            // Output
-            DA.SetData(0, forwardKinematics.TCPPlane);
-            DA.SetDataList(1, forwardKinematics.PosedExternalAxisPlanes);
+            // Output variable
+            GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
+            // Fill data tree with meshes
+            if (_hideMesh == false)
             {
-                DA.SetDataTree(2, this.GetPosedMeshesDataTree(DA.Iteration));
+                meshes = (this.GetPosedMeshesDataTree(DA.Iteration));
             }
+
+            // Output
+            DA.SetDataTree(0, meshes);
+            DA.SetData(1, forwardKinematics.TCPPlane);
+            DA.SetDataList(2, forwardKinematics.PosedExternalAxisPlanes);
         }
 
         #region properties
@@ -153,7 +135,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -161,7 +143,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -180,7 +162,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("CDCF743F-C6E3-4633-B3E8-CE3930F9C80F"); }
+            get { return new Guid("438679CC-2135-48B3-B818-F7E3A65503C2"); }
         }
         #endregion
 
@@ -192,8 +174,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Preview Posed Meshes", MenuItemClickHideMesh, true, !_hideMesh);
-            Menu_AppendItem(menu, "Output Posed Meshes", MenuItemClickOutputMesh, true, _outputMeshParameter);
+            Menu_AppendItem(menu, "Preview Robot Mesh", MenuItemClickHideMesh, true, !_hideMesh);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -216,32 +197,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <param name="e"> The event data. </param>
         private void MenuItemClickHideMesh(object sender, EventArgs e)
         {
-            RecordUndoEvent("Preview Posed Meshes");
+            RecordUndoEvent("Preview Robot Mesh");
             _hideMesh = !_hideMesh;
             ExpireSolution(true);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output Posed Meshes" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputMesh(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output Posed Meshes");
-            _outputMeshParameter = !_outputMeshParameter;
-            AddOutputParameter(0);
-
-            // Disable default mesh preview
-            if (_outputMeshParameter == true)
-            {
-                IGH_Param param = Params.Output.Find(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-
-                if (param is IGH_PreviewObject previewObject)
-                {
-                    previewObject.Hidden = true;
-                }
-            }
         }
 
         /// <summary>
@@ -251,8 +209,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Hide Posed Meshes", _hideMesh);
-            writer.SetBoolean("Output Posed Meshes", _outputMeshParameter);
+            writer.SetBoolean("Set Hide Mesh", _hideMesh);
             return base.Write(writer);
         }
 
@@ -263,112 +220,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            _hideMesh = reader.GetBoolean("Hide Posed Meshes");
-            _outputMeshParameter = reader.GetBoolean("Output Posed Meshes");
+            _hideMesh = reader.GetBoolean("Set Hide Mesh");
             return base.Read(reader);
-        }
-
-        /// <summary>
-        /// Adds or destroys the output parameter to the component.
-        /// </summary>
-        /// <param name="index"> The index number of the parameter that needs to be added. </param>
-        private void AddOutputParameter(int index)
-        {
-            // Pick the parameter
-            IGH_Param parameter = _variableOutputParameters[index];
-            string name = _variableOutputParameters[index].Name;
-
-            // If the parameter already exist: remove it
-            if (Params.Output.Any(x => x.Name == name))
-            {
-                Params.UnregisterOutputParameter(Params.Output.First(x => x.Name == name), true);
-            }
-
-            // Else remove the variable input parameter
-            else
-            {
-                // The index where the parameter should be added
-                int insertIndex = _fixedParamNumOutput;
-
-                // Check if other parameters are already added and correct the insert index
-                for (int i = 0; i < index; i++)
-                {
-                    if (Params.Output.Any(x => x.Name == _variableOutputParameters[i].Name))
-                    {
-                        insertIndex += 1;
-                    }
-                }
-
-                // Register the parameter
-                Params.RegisterOutputParam(parameter, insertIndex);
-            }
-
-            // Expire solution and refresh parameters since they changed
-            Params.OnParametersChanged();
-            ExpireSolution(true);
-        }
-        #endregion
-
-        #region variable input parameters
-        /// <summary>
-        /// This function will get called before an attempt is made to insert a parameter. 
-        /// Since this method is potentially called on Canvas redraws, it must be fast.
-        /// </summary>
-        /// <param name="side"> Parameter side (input or output). </param>
-        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
-        /// <returns> Return True if your component supports a variable parameter at the given location </returns>
-        bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// This function will get called before an attempt is made to insert a parameter. 
-        /// Since this method is potentially called on Canvas redraws, it must be fast.
-        /// </summary>
-        /// <param name="side"> Parameter side (input or output). </param>
-        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
-        /// <returns> Return True if your component supports a variable parameter at the given location. </returns>
-        bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// This function will be called when a new parameter is about to be inserted. 
-        /// You must provide a valid parameter or insertion will be skipped. 
-        /// You do not, repeat not, need to insert the parameter yourself.
-        /// </summary>
-        /// <param name="side"> Parameter side (input or output). </param>
-        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
-        /// <returns> A valid IGH_Param instance to be inserted. In our case a null value. </returns>
-        IGH_Param IGH_VariableParameterComponent.CreateParameter(GH_ParameterSide side, int index)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// This function will be called when a parameter is about to be removed. 
-        /// You do not need to do anything, but this would be a good time to remove 
-        /// any event handlers that might be attached to the parameter in question.
-        /// </summary>
-        /// <param name="side"> Parameter side (input or output). </param>
-        /// <param name="index"> Insertion index of parameter. Index=0 means the parameter will be in the topmost spot. </param>
-        /// <returns> Return True if the parameter in question can indeed be removed. Note, this is only in emergencies, 
-        /// typically the CanRemoveParameter function should return false if the parameter in question is not removable. </returns>
-        bool IGH_VariableParameterComponent.DestroyParameter(GH_ParameterSide side, int index)
-        {
-            return false;
-        }
-
-        /// <summary>
-        /// This method will be called when a closely related set of variable parameter operations completes. 
-        /// This would be a good time to ensure all Nicknames and parameter properties are correct. 
-        /// This method will also be called upon IO operations such as Open, Paste, Undo and Redo.
-        /// </summary>
-        void IGH_VariableParameterComponent.VariableParameterMaintenance()
-        {
-
         }
         #endregion
 
@@ -399,7 +252,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             }
 
             // Add bounding box of custom preview
-            if (_hideMesh == false)
+            if (!_hideMesh)
             {
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
@@ -416,9 +269,10 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <param name="args"> Preview display arguments for IGH_PreviewObjects. </param>
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
-            base.DrawViewportMeshes(args);
+            // Default implementation (disabled)
+            // base.DrawViewportMeshes(args);
 
-            if (_hideMesh == false)
+            if (!_hideMesh)
             {
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {

@@ -63,6 +63,9 @@
     <Compile Include="Components\Controller Utility\Get Poses\GetJointTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses\GetRobotTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadRapidDomainComponent.cs" />
+    <Compile Include="Obsolete\v1\ForwardKinematicsComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE4.cs" />
+    <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE2.cs" />
     <Compile Include="Obsolete\v0\OldAutoAxisConfigParameter.cs" />
     <Compile Include="Obsolete\v0\OldExternalAxisParameter.cs" />
     <Compile Include="Obsolete\v0\OldExternalLinearAxisParameter.cs" />

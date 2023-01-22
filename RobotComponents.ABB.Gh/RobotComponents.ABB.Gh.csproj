@@ -60,8 +60,8 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetJointTargetsComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotTargetsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetRobotTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadRapidDomainComponent.cs" />
     <Compile Include="Obsolete\v1\ForwardKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE4.cs" />
@@ -99,13 +99,13 @@
     <Compile Include="Components\Controller Utility\Get Controller\GetControllerComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetDigitalInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Signals\GetDigitalOutputComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetExternalJointPositionsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Task\GetExternalJointPositionsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Controller\GetLogComponent.cs" />
     <Compile Include="Components\Controller Utility\Run Programs\GetTaskNamesComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotBaseFramesComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotJointPositionsComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetExternalAxisPlanesComponent.cs" />
-    <Compile Include="Components\Controller Utility\Get Poses\GetRobotToolPlanesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Task\GetRobotBaseFramesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Task\GetRobotJointPositionsComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Task\GetExternalAxisPlanesComponent.cs" />
+    <Compile Include="Components\Controller Utility\Get Poses - Task\GetRobotToolPlanesComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadConfigurationDomainComponent.cs" />
     <Compile Include="Components\Controller Utility\Run Programs\RunProgramComponent.cs" />
     <Compile Include="Components\Controller Utility\Set Signals\SetAnalogInputComponent.cs" />

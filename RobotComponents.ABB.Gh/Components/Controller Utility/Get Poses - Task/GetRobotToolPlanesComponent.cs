@@ -20,9 +20,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets the external axis planes from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets the robot tool planes from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetExternalAxisPlanesComponent : GH_Component
+    public class GetRobotToolPlanesComponent : GH_Component
     {
         #region fields
         private Controller _controller;
@@ -30,11 +30,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetExternalAxisPlaneComponent class.
+        /// Initializes a new instance of the GetRobotToolPlaneComponent class.
         /// </summary>
-        public GetExternalAxisPlanesComponent()
-          : base("Get External Axis Planes", "GetEAP",
-              "Gets the current external planes from an ABB controller."
+        public GetRobotToolPlanesComponent()
+          : base("Get Robot Tool Planes", "GetEP",
+              "Gets the current robot tool planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "This component uses the ABB PC SDK." +
                 System.Environment.NewLine + System.Environment.NewLine +
@@ -57,8 +57,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the external axis as text", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Plane", "P", "Current external axis plane as a plane", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the robot as text", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Current tool plane of the robot as a plane", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             try
             {
-                _planes = _controller.GetExternalAxisPlanes(coordinateSystem);
+                _planes = _controller.GetRobotToolPlanes(coordinateSystem);
             }
             catch (Exception e)
             {
@@ -102,7 +102,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetExternalAxisPlane_Icon; }
+            get { return Properties.Resources.GetToolPlane_Icon; }
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("30A7A6EF-32BC-49C5-9198-5822E502C122"); }
+            get { return new Guid("9D61E009-D6C4-4553-BFA4-5981B7B6F66E"); }
         }
         #endregion
 

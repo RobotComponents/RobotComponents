@@ -9,31 +9,32 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+// Rhino Libs
+using Rhino.Geometry;
 // Robot Components Libs
-using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Controllers;
+using RobotComponents.ABB.Controllers.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
-using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets thhe robot joint positions from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets the external axis planes from a defined controller. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetRobotJointPositionsComponent : GH_Component
+    public class GetExternalAxisPlanesComponent : GH_Component
     {
         #region fields
         private Controller _controller;
-        private Dictionary<string, RobotJointPosition> _robotJointPositions;
+        private Dictionary<string, Plane> _planes = new Dictionary<string, Plane>();
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the GetRobotJointPositionComponent class.
+        /// Initializes a new instance of the GetExternalAxisPlaneComponent class.
         /// </summary>
-        public GetRobotJointPositionsComponent()
-          : base("Get Robot Joint Positions", "GetJP",
-              "Gets the current robot joint position from an ABB controller."
+        public GetExternalAxisPlanesComponent()
+          : base("Get External Axis Planes", "GetEAP",
+              "Gets the current external planes from an ABB controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "This component uses the ABB PC SDK." +
                 System.Environment.NewLine + System.Environment.NewLine +
@@ -48,6 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddParameter(new Param_Controller(), "Controller", "C", "Controller as Controller", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Coordinate System", "CS", "The coordinate system type", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -55,8 +57,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the robot as text", GH_ParamAccess.list);
-            pManager.AddParameter(new Param_RobotJointPosition(), "Robot Joint Position", "RJ", "Extracted Robot Joint Positions", GH_ParamAccess.list);
+            pManager.AddTextParameter("Name", "N", "Name of the external axis as text", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Plane", "P", "Current external axis plane as a plane", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -65,12 +67,23 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Creates the input value list and attachs it to the input parameter
+            if (this.Params.Input[1].SourceCount == 0)
+            {
+                HelperMethods.CreateValueList(this, typeof(CoordinateSystemType), 1);
+                this.ExpireSolution(true);
+            }
+
+            // Declare input variables
+            int coordinateSystem = 1;
+
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
+            if (!DA.GetData(1, ref coordinateSystem)) { return; }
 
             try
             {
-                _robotJointPositions = _controller.GetRobotJointPositions();
+                _planes = _controller.GetExternalAxisPlanes(coordinateSystem);
             }
             catch (Exception e)
             {
@@ -78,8 +91,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             }
 
             // Output
-            DA.SetDataList(0, _robotJointPositions.Keys);
-            DA.SetDataList(1, _robotJointPositions.Values);
+            DA.SetDataList(0, _planes.Keys);
+            DA.SetDataList(1, _planes.Values);
         }
 
         #region properties
@@ -89,7 +102,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -105,7 +118,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.GetRobotJointPositions_Icon; ; }
+            get { return Properties.Resources.GetExternalAxisPlane_Icon; }
         }
 
         /// <summary>
@@ -113,7 +126,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("D9A1DDB7-58D7-4888-B489-5FAF13F9EF66"); }
+            get { return new Guid("30A7A6EF-32BC-49C5-9198-5822E502C122"); }
         }
         #endregion
 

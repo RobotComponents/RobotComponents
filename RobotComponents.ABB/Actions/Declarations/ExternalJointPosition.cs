@@ -84,7 +84,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition()
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             _val1 = _defaultValue;
@@ -108,7 +108,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
@@ -126,7 +126,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition(IList<double> externalAxisValues)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             double[] values = CheckAxisValues(new List<double>(externalAxisValues).ToArray());
@@ -146,7 +146,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition(string name)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             _val1 = _defaultValue;
@@ -171,7 +171,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
@@ -190,7 +190,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ExternalJointPosition(string name, IList<double> externalAxisValues)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             double[] values = CheckAxisValues(externalAxisValues);

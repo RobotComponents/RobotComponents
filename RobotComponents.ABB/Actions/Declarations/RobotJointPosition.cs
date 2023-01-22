@@ -84,7 +84,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition()
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             _val1 = _defaultValue;
@@ -107,7 +107,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
@@ -125,7 +125,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition(IList<double> internalAxisValues)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = "";
 
             double[] values = CheckAxisValues(internalAxisValues);
@@ -145,7 +145,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition(string name)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             _val1 = _defaultValue;
@@ -169,7 +169,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
@@ -188,7 +188,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public RobotJointPosition(string name, IList<double> internalAxisValues)
         {
             _scope = Scope.GLOBAL;
-            _variableType = VariableType.CONST;
+            _variableType = VariableType.VAR;
             _name = name;
 
             double[] values = CheckAxisValues(internalAxisValues);

@@ -27,7 +27,7 @@ namespace RobotComponents.Utils
             //result.UnifyNormals(); // <-- decreases display quality
             result.Normals.ComputeNormals();
             result.FaceNormals.ComputeFaceNormals();
-            // result.ExtractNonManifoldMeshEdges(true); // <-- RH6 or higher
+            result.ExtractNonManifoldEdges(true);
             result.HealNakedEdges(tolerance);
             result.Faces.ExtractDuplicateFaces();
             result.Faces.CullDegenerateFaces();

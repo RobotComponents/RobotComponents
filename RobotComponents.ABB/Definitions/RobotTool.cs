@@ -23,6 +23,7 @@ namespace RobotComponents.ABB.Definitions
     public class RobotTool : ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // tool name
         private Mesh _mesh; // tool mesh
@@ -47,6 +48,7 @@ namespace RobotComponents.ABB.Definitions
         protected RobotTool(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _mesh = (Mesh)info.GetValue("Mesh", typeof(Mesh));
@@ -71,6 +73,7 @@ namespace RobotComponents.ABB.Definitions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Mesh", _mesh, typeof(Mesh));
@@ -91,6 +94,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public RobotTool()
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = "tool0";
             _mesh = new Mesh();
@@ -115,6 +119,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -139,6 +144,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -170,6 +176,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, double toolTransX, double toolTransY, 
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -205,6 +212,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, double toolTransX, double toolTransY,
             double toolTransZ, double toolRotX, double toolRotY, double toolRotZ)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -242,6 +250,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -274,6 +283,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, double x, double y,
             double z, double q1, double q2, double q3, double q4)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -307,6 +317,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, double x, 
             double y, double z, double q1, double q2, double q3, double q4)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -334,6 +345,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="quat"> The orientation of TCP point. </param>
         public RobotTool(string name, Mesh mesh, Point3d point, Quaternion quat)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -365,6 +377,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, 
             double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -398,6 +411,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold,
             double mass, Point3d centerOfGravityPosition, Quaternion centerOfGravityOrientation, Vector3d inertia)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -429,6 +443,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
@@ -456,6 +471,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="inertia"> The moment of inertia of the load in kgm2. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, bool robotHold, double mass, Plane centerOfGravity, Vector3d inertia)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
@@ -478,6 +494,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public RobotTool(RobotTool robotTool, bool duplicateMesh = true)
         {
+            _scope = robotTool.Scope;
             _variableType = robotTool.ReferenceType;
             _name = robotTool.Name;
             _attachmentPlane = new Plane(robotTool.AttachmentPlane);
@@ -623,8 +640,11 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> The RAPID code line. </returns>
         public string ToRAPIDDeclaration()
         {
+            // Scope
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+
             // Adds variable type
-            string result = Enum.GetName(typeof(VariableType), _variableType);
+            result += Enum.GetName(typeof(VariableType), _variableType);
 
             // Add robot tool name
             result += " tooldata " + _name + " := ";
@@ -723,6 +743,15 @@ namespace RobotComponents.ABB.Definitions
                 if (_mass < 0.0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

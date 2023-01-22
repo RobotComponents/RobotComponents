@@ -23,6 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class JointTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // joint target variable name
         private RobotJointPosition _robotJointPosition; // the position of the robot
@@ -38,6 +39,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected JointTarget(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _robotJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
@@ -53,6 +55,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Robot Joint Position", _robotJointPosition, typeof(RobotJointPosition));
@@ -74,6 +77,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(RobotJointPosition robotJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _robotJointPosition = robotJointPosition;
@@ -87,6 +91,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
@@ -100,6 +105,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _robotJointPosition = robotJointPosition;
@@ -114,6 +120,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
@@ -126,6 +133,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="jointTarget"> The Joint Target instance to duplicate. </param>
         public JointTarget(JointTarget jointTarget)
         {
+            _scope = jointTarget.Scope;
             _variableType = jointTarget.VariableType;
             _name = jointTarget.Name;
             _robotJointPosition = jointTarget.RobotJointPosition.Duplicate();
@@ -279,7 +287,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} jointtarget {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} jointtarget {_name} := {ToRAPID()};";
+
+                return result;
             }
 
             return string.Empty;
@@ -339,6 +350,15 @@ namespace RobotComponents.ABB.Actions.Declarations
                 if (_externalJointPosition.IsValid == false) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

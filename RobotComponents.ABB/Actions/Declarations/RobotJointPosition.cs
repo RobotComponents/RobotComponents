@@ -23,6 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType;
         private string _name;
         private double _val1;
@@ -44,6 +45,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
@@ -63,6 +65,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Axis value 1", _val1, typeof(double));
@@ -80,6 +83,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public RobotJointPosition()
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -102,6 +106,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -119,6 +124,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalAxisValues"> The user defined internal axis values as a collection.</param>
         public RobotJointPosition(IList<double> internalAxisValues)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -138,6 +144,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="name"> The robot joint position name, must be unique. </param>
         public RobotJointPosition(string name)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -161,6 +168,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -179,6 +187,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalAxisValues"> The user defined internal axis values as a colection.</param>
         public RobotJointPosition(string name, IList<double> internalAxisValues)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -198,6 +207,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The Robot Joint Position instance to duplicate. </param>
         public RobotJointPosition(RobotJointPosition robotJointPosition)
         {
+            _scope = robotJointPosition.Scope;
             _variableType = robotJointPosition.VariableType;
             _name = robotJointPosition.Name;
             _val1 = robotJointPosition[0];
@@ -484,7 +494,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} robjoint {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} robjoint {_name} := {ToRAPID()};";
+
+                return result;
             }
 
             return string.Empty;
@@ -546,13 +559,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Robot Joint Position variable name.
-        /// Each Robot Joint Position variable name has to be unique.
+        /// Gets or sets the scope. 
         /// </summary>
-        public string Name
+        public Scope Scope
         {
-            get { return _name; }
-            set { _name = value; }
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>
@@ -562,6 +574,16 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Robot Joint Position variable name.
+        /// Each Robot Joint Position variable name has to be unique.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
         }
 
         /// <summary>

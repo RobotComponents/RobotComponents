@@ -23,6 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ExternalJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType;
         private string _name;
         private double _val1;
@@ -44,6 +45,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Value 1", typeof(double));
@@ -63,6 +65,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value 1", _val1, typeof(double));
@@ -80,6 +83,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ExternalJointPosition()
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -103,6 +107,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -120,6 +125,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalAxisValues"> The list with the position of the external logical axes. </param>
         public ExternalJointPosition(IList<double> externalAxisValues)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = "";
 
@@ -139,6 +145,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="name"> The external joint position name, must be unique. </param>
         public ExternalJointPosition(string name)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -163,6 +170,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -181,6 +189,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalAxisValues"> The collection with the position of the external logical axes. </param>
         public ExternalJointPosition(string name, IList<double> externalAxisValues)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.CONST;
             _name = name;
 
@@ -200,6 +209,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position instance to duplicate. </param>
         public ExternalJointPosition(ExternalJointPosition externalJointPosition)
         {
+            _scope = externalJointPosition.Scope;
             _variableType = externalJointPosition.VariableType;
             _name = externalJointPosition.Name;
             _val1 = externalJointPosition[0];
@@ -513,7 +523,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} extjoint {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} extjoint {_name} := {ToRAPID()};";
+
+                return result;
             }
 
             return string.Empty;
@@ -575,13 +588,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the External Joint Position variable name.
-        /// Each External Joint Position variable name has to be unique.
+        /// Gets or sets the scope. 
         /// </summary>
-        public string Name
+        public Scope Scope
         {
-            get { return _name; }
-            set { _name = value; }
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>
@@ -591,6 +603,16 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the External Joint Position variable name.
+        /// Each External Joint Position variable name has to be unique.
+        /// </summary>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
         }
 
         /// <summary>

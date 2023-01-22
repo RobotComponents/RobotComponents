@@ -25,6 +25,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // robot target variable name
         private Plane _plane; // target plane (defines the required position and orientation of the tool)
@@ -42,6 +43,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected RobotTarget(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
@@ -59,6 +61,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
@@ -81,6 +84,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(Plane plane)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
@@ -96,6 +100,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(string name, Plane plane)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
@@ -111,6 +116,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(Plane plane, int axisConfig)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
@@ -127,6 +133,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, int axisConfig)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
@@ -144,6 +151,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
@@ -166,6 +174,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;            
@@ -186,6 +195,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
@@ -203,6 +213,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
@@ -221,6 +232,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
@@ -244,6 +256,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
@@ -262,6 +275,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="target"> The Robot Target instance to duplicate. </param>
         public RobotTarget(RobotTarget target)
         {
+            _scope = target.Scope;
             _variableType = target.VariableType;
             _name = target.Name;
             _plane = new Plane(target.Plane);
@@ -364,7 +378,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} robtarget {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} robtarget {_name} := {ToRAPID()};";
+
+                return result;
             }
 
             return string.Empty;
@@ -425,6 +442,15 @@ namespace RobotComponents.ABB.Actions.Declarations
                 if (_externalJointPosition.IsValid == false) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

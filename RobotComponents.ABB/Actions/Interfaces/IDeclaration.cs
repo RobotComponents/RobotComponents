@@ -47,6 +47,11 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
+        /// Gets or sets the scope
+        /// </summary>
+        Scope Scope { get; set; }
+
+        /// <summary>
         /// Gets or sets the variable type. 
         /// </summary>
         VariableType VariableType { get; set; }

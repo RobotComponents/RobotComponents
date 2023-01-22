@@ -24,6 +24,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class SpeedData : Action, IDeclaration, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // SpeeData variable name
         private double _v_tcp; // Tool center point speed
@@ -47,6 +48,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected SpeedData(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
@@ -67,6 +69,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("v_tcp", _v_tcp, typeof(double));
             info.AddValue("v_ori", _v_ori, typeof(double));
@@ -96,6 +99,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
@@ -116,6 +120,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _exactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
@@ -134,6 +139,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _v_tcp = v_tcp;
@@ -154,6 +160,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _v_tcp = v_tcp;
@@ -170,6 +177,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="speeddata"> The Speed Data instance to duplicate. </param>
         public SpeedData(SpeedData speeddata)
         {
+            _scope = speeddata.Scope;
             _variableType = speeddata.VariableType;
             _name = speeddata.Name;
             _v_tcp = speeddata.V_TCP;
@@ -260,7 +268,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_predefined == false && _name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} speeddata {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} speeddata {_name} := {ToRAPID()};";
+
+                return result;
             }
             else
             {
@@ -322,6 +333,15 @@ namespace RobotComponents.ABB.Actions.Declarations
                 if (_v_reax <= 0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

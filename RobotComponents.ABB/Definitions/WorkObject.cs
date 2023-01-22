@@ -22,6 +22,7 @@ namespace RobotComponents.ABB.Definitions
     public class WorkObject : ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // The work object name
         private Plane _plane; // The work object coordinate system
@@ -43,6 +44,7 @@ namespace RobotComponents.ABB.Definitions
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
@@ -62,6 +64,7 @@ namespace RobotComponents.ABB.Definitions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
@@ -77,6 +80,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public WorkObject()
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = "wobj0";
             _plane = Plane.WorldXY;
@@ -94,6 +98,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="plane"> The work object coordinate system. </param>
         public WorkObject(string name, Plane plane)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
@@ -112,6 +117,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
@@ -129,6 +135,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="duplicateMesh"> Specifies whether the meshes should be duplicated. </param>
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
+            _scope = workObject.Scope;
             _variableType = workObject.ReferenceType;
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
@@ -269,7 +276,8 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> The RAPID code line. </returns>
         public string ToRAPIDDeclaration()
         {
-            string result = "";
+            // Scope
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
 
             // Adds variable type
             result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
@@ -320,6 +328,15 @@ namespace RobotComponents.ABB.Definitions
                 if (_userFrame == Plane.Unset) { return false;  }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

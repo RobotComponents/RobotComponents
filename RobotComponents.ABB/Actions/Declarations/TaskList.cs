@@ -22,6 +22,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class TaskList : Action, IDeclaration, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // the name of the set with tasks
         private readonly List<string> _taskNames; // the set with tasks as a list with task names
@@ -36,6 +37,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected TaskList(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _taskNames = (List<string>)info.GetValue("Task Names", typeof(List<string>));
@@ -50,6 +52,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Task Names", _taskNames, typeof(List<string>));
@@ -71,6 +74,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="tasks"> The tasks names as a collection with strings. </param>
         public TaskList(string name, IList<string> tasks)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
             _name = name;
             _taskNames = new List<string>(tasks);
@@ -82,6 +86,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="tasks"> The Tasks instance to duplicate. </param>
         public TaskList(TaskList tasks)
         {
+            _scope = tasks.Scope;
             _variableType = tasks.VariableType;
             _name = tasks.Name;
             _taskNames = tasks.ToList();
@@ -157,7 +162,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> An empty string. </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            string result = Enum.GetName(typeof(VariableType), _variableType);
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+            result += Enum.GetName(typeof(VariableType), _variableType);
             result += " tasks ";
             result += _name;
             result += "{" + _taskNames.Count.ToString() + "} := [";
@@ -225,6 +231,15 @@ namespace RobotComponents.ABB.Actions.Declarations
                 if (_taskNames.Count == 0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

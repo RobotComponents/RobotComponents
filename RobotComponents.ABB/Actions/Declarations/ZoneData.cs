@@ -24,6 +24,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ZoneData : Action, IDeclaration, ISerializable
     {
         #region fields
+        private Scope _scope;
         private VariableType _variableType; // variable type
         private string _name; // ZoneData variable name
         private bool _finep; // Fine point
@@ -55,6 +56,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         protected ZoneData(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _pzone_tcp = (double)info.GetValue("pzone_tcp", typeof(double));
@@ -76,6 +78,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("pzone_tcp", _pzone_tcp, typeof(double));
@@ -104,6 +107,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
 
             // Get nearest predefined zonedata value
@@ -147,6 +151,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
 
             // Get nearest predefined zonedata value
@@ -196,6 +201,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
             _finep = finep;
@@ -223,6 +229,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(string name, bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
+            _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _finep = finep;
@@ -242,6 +249,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zonedata"> The Zone Data instance to duplicate. </param>
         public ZoneData(ZoneData zonedata)
         {
+            _scope = zonedata.Scope;
             _variableType = zonedata.VariableType;
             _name = zonedata.Name;
             _finep = zonedata.FinePoint;
@@ -345,7 +353,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             if (_predefined == false & _name != "")
             {
-                return $"{Enum.GetName(typeof(VariableType), _variableType)} zonedata {_name} := {ToRAPID()};";
+                string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} zonedata {_name} := {ToRAPID()};";
+
+                return result;
             }
             else
             {
@@ -409,6 +420,15 @@ namespace RobotComponents.ABB.Actions.Declarations
                 if (_zone_reax < 0) { return false; }
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the scope. 
+        /// </summary>
+        public Scope Scope
+        {
+            get { return _scope; }
+            set { _scope = value; }
         }
 
         /// <summary>

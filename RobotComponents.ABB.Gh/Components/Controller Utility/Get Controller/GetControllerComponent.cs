@@ -8,6 +8,7 @@ using System;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using GH_IO.Serialization;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
@@ -23,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     {
         #region fields
         private Controller _controller = new Controller();
-        private bool _fromMenu;
+        private bool _fromMenu = false;
         private bool _picked = false;
         #endregion
 
@@ -86,11 +87,15 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 {
                     _picked = false;
                 }
-            }
 
-            if (_picked == false)
+                _fromMenu = false;
+            }
+            else
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
+                if (_picked == false)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
+                }
             }
 
             // Output
@@ -169,6 +174,30 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         }
         #endregion
 
+        #region serialization
+        /// <summary>
+        /// Add our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="writer"> Provides access to a subset of GH_Chunk methods used for writing archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            writer.SetBoolean("From Menu", _fromMenu);
+            return base.Write(writer);
+        }
+
+        /// <summary>
+        /// Read our own fields. Needed for (de)serialization of the variable input parameters.
+        /// </summary>
+        /// <param name="reader"> Provides access to a subset of GH_Chunk methods used for reading archives. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public override bool Read(GH_IReader reader)
+        {
+            _fromMenu = reader.GetBoolean("From Menu");
+            return base.Read(reader);
+        }
+        #endregion
+
         #region additional methods
         /// <summary>
         /// This method will be called when an object is removed from a document. Override this method if you want to handle such events.
@@ -223,6 +252,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             else if (Controller.Controllers.Count == 1)
             {
                 _controller = Controller.Controllers[0];
+                _controller.Initiliaze();
                 return true;
             }
 
@@ -242,6 +272,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 else
                 {
                     _controller = Controller.Controllers[index];
+                    _controller.Initiliaze();
                     return true;
                 }
             }

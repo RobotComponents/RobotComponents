@@ -3,6 +3,8 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Rhino Libs
 using Rhino.Geometry;
 // ABB Libs
@@ -18,10 +20,10 @@ namespace RobotComponents.ABB.Controllers
     public class Signal
     {
         #region fields
-        private readonly IOSystemDomainNS.Signal _signal;
-        private readonly Interval _limits = new Interval();
-        private readonly string _name = "";
-        private readonly bool _isEmpty = true;
+        private IOSystemDomainNS.Signal _signal;
+        private Interval _limits = new Interval();
+        private string _name = "";
+        private bool _isEmpty = true;
         private string _accesLevel = "";
         #endregion
 
@@ -155,6 +157,35 @@ namespace RobotComponents.ABB.Controllers
                 return false;
             }
         }
+
+
+        /// <summary>
+        /// Disposes the current signal object inside this instance.
+        /// </summary>
+        /// <returns> True on success, false on failure. </returns>
+        public bool Dispose()
+        {
+            if (_isEmpty == true)
+            {
+                return false;
+            }
+
+            try
+            {
+                _signal.Dispose();
+                _limits = new Interval();
+                _name = "";
+                _accesLevel = "";
+                _isEmpty = true;
+
+                return true;
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region properties
@@ -225,7 +256,9 @@ namespace RobotComponents.ABB.Controllers
 
         /// <summary>
         /// Gets a value indicating whether or not the signal instance is empty.
+        /// <remarks>
         /// If empty, there is no ABB signal instance defined inside this instance. 
+        /// </remarks>
         /// </summary>
         public bool IsEmpty
         {

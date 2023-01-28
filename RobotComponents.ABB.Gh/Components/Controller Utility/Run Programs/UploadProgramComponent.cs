@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     {
         #region fields
         private Controller _controller;
-        private bool _fromMenu = false;
+        private bool _fromMenu = true;
         private string _taskName = "-";
         private string _status = "-";
         #endregion
@@ -81,14 +81,12 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (!DA.GetData(1, ref upload)) { upload = false; }
             if (!DA.GetDataList(2, module)) { module = new List<string>(); }
 
-            // Declare output variables
-
             if (_fromMenu)
             {
+                _fromMenu = false;
                 this.GetTaskName();
                 this.Message = _taskName;
                 this.ExpirePreview(true);
-                _status = "Task picked from controller.";
             }
 
             if (upload)
@@ -194,6 +192,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override bool Write(GH_IWriter writer)
         {
             writer.SetString("Task Name", _taskName);
+            writer.SetBoolean("From Menu", _fromMenu);
             return base.Write(writer);
         }
 
@@ -205,6 +204,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override bool Read(GH_IReader reader)
         {
             _taskName = reader.GetString("Task Name");
+            _fromMenu = reader.GetBoolean("From Menu");
+
             this.Message = _taskName;
             this.ExpirePreview(true);
 
@@ -221,12 +222,14 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             if (_controller.TaskNames.Count == 0)
             {
+                _status = "Not task found!";
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task found!");
                 return false;
             }
 
             else if (_controller.TaskNames.Count == 1)
             {
+                _status = "Task picked from the controller.";
                 _taskName = _controller.TaskNames[0];
                 return true;
             }
@@ -240,11 +243,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
                 if (index < 0)
                 {
+                    _status = "No task picked from the menu!";
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from the menu!");
                     return false;
                 }
                 else
                 {
+                    _status = "Task picked from the controller.";
                     _taskName = _controller.TaskNames[index];
                     return true;
                 }

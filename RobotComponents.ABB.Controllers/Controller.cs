@@ -61,7 +61,8 @@ namespace RobotComponents.ABB.Controllers
         private readonly List<Signal> _digitalInputs = new List<Signal>();
         private readonly List<Signal> _digitalOutputs = new List<Signal>();
 
-        private bool _isEmtpy = true;
+        private bool _isEmpty = true;
+        private bool _isInitialized = false;
         #endregion
 
         #region constructors
@@ -71,25 +72,47 @@ namespace RobotComponents.ABB.Controllers
         public Controller()
         {
             _controller = null;
-            _isEmtpy = true;
+            _isEmpty = true;
         }
 
         /// <summary>
         /// Constructs a Controller instance from an ABB Controller Info instance. 
         /// </summary>
         /// <param name="controllerInfo"> The ABB Controller Info instance. </param>
-        private Controller(ControllersNS.ControllerInfo controllerInfo)
+        public Controller(ControllersNS.ControllerInfo controllerInfo)
         {
             _controller = ControllersNS.Controller.Connect(controllerInfo, ControllersNS.ConnectionType.Standalone);
-            _isEmtpy = false;
+            _isEmpty = false;
 
             Initiliaze();
+        }
+
+        /// <summary>
+        /// Constructs a Controller instance from an ABB Controller Info instance. 
+        /// </summary>
+        /// <remarks>
+        /// Only used for scanning the network with controllers. 
+        /// </remarks>
+        /// <param name="controllerInfo"> The ABB Controller Info instance. </param>
+        /// <param name="initialize"> Defines if the field should be initialized. </param>
+        private Controller(ControllersNS.ControllerInfo controllerInfo, bool initialize)
+        {
+            _controller = ControllersNS.Controller.Connect(controllerInfo, ControllersNS.ConnectionType.Standalone);
+            _isEmpty = false;
+
+            if (initialize == true)
+            {
+                Initiliaze();
+            }
         }
         #endregion
 
         #region static methods
         /// <summary>
         /// Returns a list with ABB Controllers that are found in the network. 
+        /// <remarks> 
+        /// These controllers are not initialized. Call Initialize first if you want to use these controllers. 
+        /// </remarks>
         /// </summary>
         /// <returns> A list with controlers. </returns>
         public static List<Controller> GetControllers()
@@ -98,7 +121,7 @@ namespace RobotComponents.ABB.Controllers
             scanner.Scan();
 
             _controllers.Clear();
-            _controllers = scanner.GetControllers().ToList().ConvertAll(item => new Controller(item));
+            _controllers = scanner.GetControllers().ToList().ConvertAll(item => new Controller(item, false));
 
             return _controllers;
         }
@@ -126,12 +149,13 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
-        /// Initialize the fiels of this Constroller instance. 
+        /// Initializes the fields of this Controller instance. 
         /// </summary>
-        private void Initiliaze()
+        public void Initiliaze()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
+                _isInitialized = false;
                 Log("Could not initialize the controller class. There is no ABB controller defined.");
             }
 
@@ -181,14 +205,16 @@ namespace RobotComponents.ABB.Controllers
             #endregion
 
             SetDefaultUser();
+
+            _isInitialized = true;
         }
 
         /// <summary>
-        /// Reintiliazes this controller instance. 
+        /// Clears all fields except the log. 
         /// </summary>
-        public void ReInitiliaze()
+        public void Clear()
         {
-            _logger.Clear();
+            _isInitialized = false;
 
             _tasks.Clear();
 
@@ -208,14 +234,17 @@ namespace RobotComponents.ABB.Controllers
             _robotsPerTask.Clear();
             _externalAxesPerTask.Clear();
 
+            _analogInputs.ConvertAll(item => item.Dispose());
+            _analogOutputs.ConvertAll(item => item.Dispose());
+            _digitalInputs.ConvertAll(item => item.Dispose());
+            _digitalOutputs.ConvertAll(item => item.Dispose());
+
             _analogInputs.Clear();
             _analogOutputs.Clear();
             _digitalInputs.Clear();
             _digitalOutputs.Clear();
 
-            Initiliaze();
-
-            Log("Controller reinitiliazed.");
+            Log("Cleared the fields and properties of the controller.");
         }
 
         /// <summary>
@@ -241,7 +270,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool Logon()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log("Logon failed. The controller is empty.");
                 return false;
@@ -268,7 +297,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool Logoff()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log("Logoff failed. The controller is empty.");
                 return false;
@@ -295,7 +324,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool Dispose()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Failed to dispose the controller object. The controller is empty.");
                 return false;
@@ -310,7 +339,7 @@ namespace RobotComponents.ABB.Controllers
 
                 _controller.Dispose();
                 _controller = null;
-                _isEmtpy = true;
+                _isEmpty = true;
 
                 return true;
             }
@@ -331,7 +360,7 @@ namespace RobotComponents.ABB.Controllers
         {
             Dictionary<string, Plane> result = new Dictionary<string, Plane>();
 
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the robot base frames. The controller is empty.");
                 return result;
@@ -369,7 +398,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the robot and as value the current tool planes. </returns>
         public Dictionary<string, Plane> GetRobotToolPlanes(int system)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the robot tool planes. The controller is empty.");
                 return _robotToolPlanes;
@@ -400,7 +429,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the external axis and as value the current plane. </returns>
         public Dictionary<string, Plane> GetExternalAxisPlanes(int system)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the external axis planes. The controller is empty.");
                 return _externalAxisPlanes;
@@ -444,7 +473,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the robot and as value the current robot joint position. </returns>
         public Dictionary<string, RobotJointPosition> GetRobotJointPositions()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the robot joint positions. The controller is empty.");
                 return _robotJointPositions;
@@ -471,7 +500,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the external axis and as value the current external joint position. </returns>
         public Dictionary<string, double[]> GetExternalJointPositions()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the external joint positions. The controller is empty.");
                 return _externalJointPositions;
@@ -506,7 +535,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the task and as value the current joint target.</returns>
         public Dictionary<string, JointTarget> GetJointTargets()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the joint targets. The controller is empty.");
                 return _jointTargets;
@@ -543,7 +572,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A dictionary with as key the name of the task and as value the current robot target.</returns>
         public Dictionary<string, RobotTarget> GetRobotTargets()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the robot targets. The controller is empty.");
                 return _robotTargets;
@@ -584,7 +613,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A list with analog output signals. </returns>
         private List<Signal> GetAnalogOutputs()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the analog outputs. The controller is empty.");
                 return new List<Signal>();
@@ -607,7 +636,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A list with digital output signals. </returns>
         private List<Signal> GetDigitalOutputs()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the digital outputs. The controller is empty.");
                 return new List<Signal>();
@@ -630,7 +659,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A list with analog inputs. </returns>
         private List<Signal> GetAnalogInputs()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the analog inputs. The controller is empty.");
                 return new List<Signal>();
@@ -653,7 +682,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A list with digital inputs. </returns>
         private List<Signal> GetDigitalInputs()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not get the digital inputs. The controller is empty.");
                 return new List<Signal>();
@@ -677,7 +706,7 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="password"> The password. </param>
         public void SetUserInfo(string name, string password = "")
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log($"Could not set the user {name}. The controller is empty.");
             }
@@ -694,7 +723,7 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         public void SetDefaultUser()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log("Could not set the default user. The controller is empty.");
             }
@@ -713,7 +742,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> The analog input signal. Returns an empty signal if no signal was found. </returns>
         public Signal GetAnalogInput(string name, out int index)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 index = -1;
                 Log($"Could not get the signal {name}. The controller is empty.");
@@ -741,7 +770,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> The analog output signal. Returns an empty signal if no signal was found. </returns>
         public Signal GetAnalogOutput(string name, out int index)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 index = -1;
                 Log($"Could not get the signal {name}. The controller is empty.");
@@ -769,7 +798,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> The digital input signal. Returns an empty signal if no signal was found. </returns>
         public Signal GetDigitalInput(string name, out int index)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 index = -1;
                 Log($"Could not get the signal {name}. The controller is empty.");
@@ -797,7 +826,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> The digital output signal. Returns an empty signal if no signal was found. </returns>
         public Signal GetDigitalOutput(string name, out int index)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 index = -1;
                 Log($"Could not get the signal {name}. The controller is empty.");
@@ -828,7 +857,7 @@ namespace RobotComponents.ABB.Controllers
         {
             status = "";
 
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 status = "Could not upload the module. The controller is empty.";
                 Log(status);
@@ -849,6 +878,12 @@ namespace RobotComponents.ABB.Controllers
                 return false;
             }
             #endregion
+
+            if (task.ExecutionStatus == RapidDomainNS.TaskExecutionStatus.Running)
+            {
+                status = "Could not upload the module. The task is still running.";
+                return false;
+            }
 
             #region write temporary file
             string tempDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
@@ -965,7 +1000,7 @@ namespace RobotComponents.ABB.Controllers
             bool succeeded = false;
             status = "";
 
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 status = "Could not reset the program pointers. The controller is empty.";
                 Log(status);
@@ -1023,7 +1058,7 @@ namespace RobotComponents.ABB.Controllers
             bool succeeded = false;
             status = "";
 
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 status = "Could not reset the program pointer. The controller is empty.";
                 Log(status);
@@ -1073,7 +1108,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool RunProgram(out string status)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 status = "Could not start the program. The controller is empty.";
                 Log(status);
@@ -1116,7 +1151,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> True on success, false on failure. </returns>
         public bool StopProgram(out string status)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 status = "Could not stop the program. The controller is empty.";
                 Log(status);
@@ -1153,7 +1188,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> A value from the configuration database. </returns>
         public string ReadConfigurationDomain(string domain, string type, string instance, string attribute)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 return "";
             }
@@ -1170,7 +1205,7 @@ namespace RobotComponents.ABB.Controllers
         /// <returns> The rapid value. </returns>
         public string ReadRapidDomain(string task, string module, string variable)
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 return "";
             }
@@ -1182,7 +1217,10 @@ namespace RobotComponents.ABB.Controllers
         #region static properties
         /// <summary>
         /// Gets the controllers found in the network. 
-        /// Call the static method GetControllers to scan the network. 
+        /// <remarks> 
+        /// Call the static method GetControllers first to scan the network. 
+        /// Call Initialize before using one of the controllers. 
+        /// </remarks>
         /// </summary>
         public static List<Controller> Controllers
         {
@@ -1197,8 +1235,8 @@ namespace RobotComponents.ABB.Controllers
         public bool IsValid
         {
             get
-            {
-                if (_controller == null) { return false; }
+            { 
+                if (_controller == null) return false;
                 return true;
             }
         }
@@ -1257,7 +1295,15 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         public bool IsEmpty
         {
-            get { return _isEmtpy; }
+            get { return _isEmpty; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the controller instance is initialized.
+        /// </summary>
+        public bool IsInitialized
+        {
+            get { return _isInitialized; }
         }
 
         /// <summary>
@@ -1296,7 +1342,7 @@ namespace RobotComponents.ABB.Controllers
         #region events
         private bool SubscribeToEvents()
         {
-            if (_isEmtpy == true)
+            if (_isEmpty == true)
             {
                 Log("Could not subscribe the events. The controller is empty.");
                 return false;

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Utils;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 
@@ -244,6 +245,14 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _robot.ExternalAxes[i].PoseMeshes(_externalJointPosition);
                     _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
+                }
+
+                // Repair the meshes if needed
+                _posedInternalAxisMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh);
+
+                for (int i = 0; i < _robot.ExternalAxes.Count; i++)
+                {
+                    _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh));
                 }
             }
         }

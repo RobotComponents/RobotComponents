@@ -14,17 +14,30 @@ namespace RobotComponents.Utils
     public static class MeshPreperation
     {
         /// <summary>
-        /// Returns a repaired mesh. Heals the naked edges, culls degenerate faces and unifies the normals.
-        /// Used for repairing robot and external axes meshes. Needed for RH7 and higher. 
+        /// Returns a repaired mesh. Makes a duplicate of the orignal mesh. 
+        /// Heals the naked edges, culls degenerate faces and unifies the normals.
+        /// <remarks>
+        /// Used for repairing robot and external axes meshes. 
+        /// </remarks>
         /// </summary>
         /// <param name="mesh"> The mesh to repair. </param>
         /// <param name="tolerance"> The tolerance for the naked edges. </param>
+        /// <param name="duplicate"> Indicates whether or not, the mesh should be duplicated first. </param>
         /// <returns> The repaired mesh. </returns>
-        public static Mesh Repair(Mesh mesh, double tolerance = 0.25)
+        public static Mesh Repair(Mesh mesh, double tolerance = 0.25, bool duplicate = false)
         {
-            Mesh result = mesh.DuplicateMesh();
+            Mesh result;
 
-            //result.UnifyNormals(); // <-- decreases display quality
+            if (duplicate == true)
+            {
+                result = mesh.DuplicateMesh();
+            }
+            else
+            {
+                result = mesh;
+            }
+            
+            //result.UnifyNormals(); // <-- decreases the display quality
             result.Normals.ComputeNormals();
             result.FaceNormals.ComputeFaceNormals();
             result.ExtractNonManifoldEdges(true);
@@ -32,7 +45,7 @@ namespace RobotComponents.Utils
             result.Faces.ExtractDuplicateFaces();
             result.Faces.CullDegenerateFaces();
             result.Vertices.CullUnused();
-            //result.UnifyNormals(); <-- decreases display quality
+            //result.UnifyNormals(); <-- decreases the display quality
             result.Normals.ComputeNormals();
             result.FaceNormals.ComputeFaceNormals();
             result.Compact();
@@ -42,11 +55,13 @@ namespace RobotComponents.Utils
 
         /// <summary>
         /// Returns a reduced mesh.
-        /// Used for constructing robot and external axis meshes. 
         /// </summary>
+        /// <remarks>
+        /// Used for constructing robot and external axis meshes.
+        /// </remarks>
         /// <param name="mesh"> The mesh. </param>
         /// <param name="count"> The desired polygon count. </param>
-        /// <returns></returns>
+        /// <returns> The reduced mesh. </returns>
         public static Mesh Reduce(Mesh mesh, int count = 5000)
         {
             Mesh result = mesh.DuplicateMesh();

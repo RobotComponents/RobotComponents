@@ -13,7 +13,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Definitions.Presets;
+using RobotComponents.ABB.Presets.Robots;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 

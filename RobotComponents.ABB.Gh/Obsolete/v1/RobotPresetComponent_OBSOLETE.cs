@@ -14,11 +14,12 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
-using RobotComponents.ABB.Forms;
+using RobotComponents.ABB.Presets;
+using RobotComponents.ABB.Presets.Forms;
+using RobotComponents.ABB.Presets.Enumerations;
 
 namespace RobotComponents.ABB.Gh.Obsolete
 {
@@ -87,7 +88,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             try
             {
-                robot = Robot.GetRobotPreset(_robotPreset, positionPlane, tool, externalAxis);
+                robot = Factory.GetRobotPreset(_robotPreset, positionPlane, tool, externalAxis);
 
                 int position = robot.Name.IndexOf("-");
 

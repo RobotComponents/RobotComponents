@@ -140,25 +140,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Initializes a new instance of the External Joint Position class with undefinied positions of the external logical axes.
-        /// </summary>
-        /// <param name="name"> The external joint position name, must be unique. </param>
-        public ExternalJointPosition(string name)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
-            _val1 = _defaultValue;
-            _val2 = _defaultValue;
-            _val3 = _defaultValue;
-            _val4 = _defaultValue;
-            _val5 = _defaultValue;
-            _val6 = _defaultValue;
-        }
-
-
-        /// <summary>
         /// Initializes a new instance of the External Joint Position class.
         /// </summary>
         /// <param name="name"> The external joint position name, must be unique. </param>

@@ -139,24 +139,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class with all axis values set to zero.
-        /// </summary>
-        /// <param name="name"> The robot joint position name, must be unique. </param>
-        public RobotJointPosition(string name)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
-            _val1 = _defaultValue;
-            _val2 = _defaultValue;
-            _val3 = _defaultValue;
-            _val4 = _defaultValue;
-            _val5 = _defaultValue;
-            _val6 = _defaultValue;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the Robot Joint Position class.
         /// </summary>
         /// <param name="name"> The robot joint position name, must be unique. </param>

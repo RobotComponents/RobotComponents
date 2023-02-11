@@ -512,7 +512,6 @@ namespace RobotComponents.ABB.Definitions
 
             if (duplicateMesh == true) { _mesh = robotTool.Mesh.DuplicateMesh(); }
             else { }//_mesh = new Mesh(); }
-
         }
 
         /// <summary>
@@ -543,6 +542,172 @@ namespace RobotComponents.ABB.Definitions
             robotTool.Clear();
 
             return robotTool;
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Robot Tool class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private RobotTool(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "PERStooldata"; // default: GLOBAL scope and PERS variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("tooldata") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("tooldata", "");
+
+            // Name
+            _name = type;
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 19)
+            {
+                _robotHold = values[0] == "TRUE" ? true : false;
+
+                _position = new Point3d();
+                _position.X = Convert.ToDouble(values[1]);
+                _position.X = Convert.ToDouble(values[2]);
+                _position.X = Convert.ToDouble(values[3]);
+
+                _orientation = new Quaternion();
+                _orientation.A = Convert.ToDouble(values[4]);
+                _orientation.B = Convert.ToDouble(values[5]);
+                _orientation.C = Convert.ToDouble(values[6]);
+                _orientation.D = Convert.ToDouble(values[7]);
+
+                _mass = Convert.ToDouble(values[8]);
+
+                _centerOfGravityPosition = new Point3d();
+                _centerOfGravityPosition.X = Convert.ToDouble(values[9]);
+                _centerOfGravityPosition.Y = Convert.ToDouble(values[10]);
+                _centerOfGravityPosition.Z = Convert.ToDouble(values[11]);
+
+                _centerOfGravityOrientation = new Quaternion();
+                _centerOfGravityOrientation.A = Convert.ToDouble(values[12]);
+                _centerOfGravityOrientation.B = Convert.ToDouble(values[13]);
+                _centerOfGravityOrientation.C = Convert.ToDouble(values[14]);
+                _centerOfGravityOrientation.D = Convert.ToDouble(values[15]);
+
+                _inertia = new Vector3d();
+                _inertia.X = Convert.ToDouble(values[16]);
+                _inertia.Y = Convert.ToDouble(values[17]);
+                _inertia.Z = Convert.ToDouble(values[18]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+
+            _mesh = new Mesh();
+            _attachmentPlane = Plane.WorldXY;
+            _toolPlane = HelperMethods.QuaternionToPlane(_attachmentPlane, _position, _orientation);
+        }
+
+        /// <summary>
+        /// Returns a Robot Tool instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static RobotTool Parse(string rapidData)
+        {
+            return new RobotTool(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Robot Tool instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="robotTool"> The Robot Tool intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out RobotTool robotTool)
+        {
+            try
+            {
+                robotTool = new RobotTool(rapidData);
+                return true;
+            }
+            catch
+            {
+                robotTool = new RobotTool();
+                return false;
+            }
         }
         #endregion
 

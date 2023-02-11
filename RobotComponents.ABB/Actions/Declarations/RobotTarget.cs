@@ -5,6 +5,8 @@
 
 // System Libs
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 // Rhino Libs
@@ -318,6 +320,144 @@ namespace RobotComponents.ABB.Actions.Declarations
         public override Action DuplicateAction()
         {
             return new RobotTarget(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private RobotTarget(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARrobtarget"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("robtarget") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("robtarget", "");
+
+            // Name
+            _name = type;
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 17)
+            {
+                List<double> val = values.ToList().ConvertAll(item => Convert.ToDouble(item));
+
+                _plane = HelperMethods.QuaternionToPlane(val[0], val[1], val[2], val[3], val[4], val[5], val[6]);
+                _quat = HelperMethods.PlaneToQuaternion(_plane);
+                _axisConfig = Convert.ToInt32(val[10]);
+                _externalJointPosition = new ExternalJointPosition(val[11], val[12], val[13], val[14], val[15], val[16]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Robot Target instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static RobotTarget Parse(string rapidData)
+        {
+            return new RobotTarget(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Robot Target instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="robotTarget"> The Robot Target intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out RobotTarget robotTarget)
+        {
+            try
+            {
+                robotTarget = new RobotTarget(rapidData);
+                return true;
+            }
+            catch
+            {
+                robotTarget = new RobotTarget();
+                return false;
+            }
         }
         #endregion
 

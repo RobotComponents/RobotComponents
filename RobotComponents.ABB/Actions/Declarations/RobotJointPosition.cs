@@ -228,6 +228,144 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
         #endregion
 
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private RobotJointPosition(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARrobjoint"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("robjoint") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("robjoint", "");
+
+            // Name
+            _name = type;
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 6)
+            {
+                _val1 = values[0] == "9E9" ? 9e9 : Convert.ToDouble(values[0]);
+                _val2 = values[1] == "9E9" ? 9e9 : Convert.ToDouble(values[1]);
+                _val3 = values[2] == "9E9" ? 9e9 : Convert.ToDouble(values[2]);
+                _val4 = values[3] == "9E9" ? 9e9 : Convert.ToDouble(values[3]);
+                _val5 = values[4] == "9E9" ? 9e9 : Convert.ToDouble(values[4]);
+                _val6 = values[5] == "9E9" ? 9e9 : Convert.ToDouble(values[5]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Robot Joint Position instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static RobotJointPosition Parse(string rapidData)
+        {
+            return new RobotJointPosition(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Robot Joint Position instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="robotJointPosition"> The Robot Joint Position intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out RobotJointPosition robotJointPosition)
+        {
+            try
+            {
+                robotJointPosition = new RobotJointPosition(rapidData);
+                return true;
+            }
+            catch
+            {
+                robotJointPosition = new RobotJointPosition();
+                return false;
+            }
+        }
+        #endregion
+
         #region method
         /// <summary>
         /// Returns a string that represents the current object.

@@ -170,6 +170,166 @@ namespace RobotComponents.ABB.Definitions
         }
         #endregion
 
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Work Object class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private WorkObject(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARwobjdata"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("wobjdata") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("wobjdata", "");
+
+            // Name
+            _name = type;
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 17)
+            {
+                _robotHold = values[0] == "TRUE" ? true : false;
+                _fixedFrame = values[1] == "TRUE" ? true : false;
+
+                // External axes are ignored. 
+                _externalAxis = null;
+
+                double x = Convert.ToDouble(values[3]);
+                double y = Convert.ToDouble(values[4]);
+                double z = Convert.ToDouble(values[5]);
+                double a = Convert.ToDouble(values[6]);
+                double b = Convert.ToDouble(values[7]);
+                double c = Convert.ToDouble(values[8]);
+                double d = Convert.ToDouble(values[9]);
+                _userFrame = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+
+
+                x = Convert.ToDouble(values[10]);
+                y = Convert.ToDouble(values[11]);
+                z = Convert.ToDouble(values[12]);
+                a = Convert.ToDouble(values[13]);
+                b = Convert.ToDouble(values[14]);
+                c = Convert.ToDouble(values[15]);
+                d = Convert.ToDouble(values[16]);
+                _plane = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+
+                CalculateOrientation();
+                CalculateUserFrameOrientation();
+                CalculateGlobalWorkObjectPlane();
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Work Object instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static WorkObject Parse(string rapidData)
+        {
+            return new WorkObject(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Work Object instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="workObject"> The Work Object intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out WorkObject workObject)
+        {
+            try
+            {
+                workObject = new WorkObject(rapidData);
+                return true;
+            }
+            catch
+            {
+                workObject = new WorkObject();
+                return false;
+            }
+        }
+        #endregion
+
         #region methods
         /// <summary>
         /// Returns a string that represents the current object.

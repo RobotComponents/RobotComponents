@@ -5,6 +5,7 @@
 
 // System lib
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
@@ -174,6 +175,141 @@ namespace RobotComponents.ABB.Actions.Declarations
         public override Action DuplicateAction()
         {
             return new JointTarget(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Joint Target class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private JointTarget(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARjointtarget"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("jointtarget") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("jointtarget", "");
+
+            // Name
+            _name = type;
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 12)
+            {
+                List<double> pos = values.ToList().ConvertAll(item => Convert.ToDouble(item));
+                _robotJointPosition = new RobotJointPosition(pos[0], pos[1], pos[2], pos[3], pos[4], pos[5]);
+                _externalJointPosition = new ExternalJointPosition(pos[6], pos[7], pos[8], pos[9], pos[10], pos[11]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Joint Target instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static JointTarget Parse(string rapidData)
+        {
+            return new JointTarget(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Joint Target instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="jointTarget"> The Joint Target intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out JointTarget jointTarget)
+        {
+            try
+            {
+                jointTarget = new JointTarget(rapidData);
+                return true;
+            }
+            catch
+            {
+                jointTarget = new JointTarget();
+                return false;
+            }
         }
         #endregion
 

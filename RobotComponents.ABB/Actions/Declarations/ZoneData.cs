@@ -300,6 +300,155 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
         #endregion
 
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Zone Data class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private ZoneData(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARzonedata"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("zonedata") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("zonedata", "");
+
+            // Name
+            _name = type;
+
+            if (_validPredefinedNames.Contains(_name))
+            {
+                _predefined = true;
+            }
+            else
+            {
+                _predefined = false;
+            }
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 7)
+            {
+                _finep = values[0] == "TRUE" ? true : false;
+                _pzone_tcp = Convert.ToDouble(values[1]);
+                _pzone_ori = Convert.ToDouble(values[2]);
+                _pzone_eax = Convert.ToDouble(values[3]);
+                _zone_ori = Convert.ToDouble(values[4]);
+                _zone_leax = Convert.ToDouble(values[5]);
+                _zone_reax = Convert.ToDouble(values[6]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a Zone Data instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static ZoneData Parse(string rapidData)
+        {
+            return new ZoneData(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Zone Data instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="zoneData"> The Zone Data intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out ZoneData zoneData)
+        {
+            try
+            {
+                zoneData = new ZoneData(rapidData);
+                return true;
+            }
+            catch
+            {
+                zoneData = new ZoneData();
+                return false;
+            }
+        }
+        #endregion
+
         #region method
         /// <summary>
         /// Returns a string that represents the current object.
@@ -534,8 +683,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined speeddata value. 
-        /// If false the nearest predefined speedata or a custom zonedata was used. 
+        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined zonedata value. 
+        /// If false the nearest predefined zoneata or a custom zonedata was used. 
         /// </summary>
         public bool ExactPredefinedValue
         {

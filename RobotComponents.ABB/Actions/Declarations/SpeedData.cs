@@ -225,6 +225,151 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
         #endregion
 
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Speed Data class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private SpeedData(string rapidData)
+        {
+            string clean = rapidData;
+            clean = clean.Replace(" ", "");
+            clean = clean.Replace("\t", "");
+            clean = clean.Replace("\n", "");
+            clean = clean.Replace(";", "");
+            clean = clean.Replace(":", "");
+            clean = clean.Replace("[", "");
+            clean = clean.Replace("]", "");
+            clean = clean.Replace("(", "");
+            clean = clean.Replace(")", "");
+            clean = clean.Replace("{", "");
+            clean = clean.Replace("}", "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            if (split.Length == 1)
+            {
+                type = "VARspeeddata"; // default: GLOBAL scope and VAR variable type
+                value = split[0];
+            }
+            else if (split.Length == 2)
+            {
+                type = split[0];
+                value = split[1];
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            if (type.StartsWith("LOCAL"))
+            {
+                _scope = Scope.LOCAL;
+                type = type.Replace("LOCAL", "");
+            }
+            else if (type.StartsWith("TASK"))
+            {
+                _scope = Scope.TASK;
+                type = type.Replace("TASK", "");
+            }
+            else
+            {
+                _scope = Scope.GLOBAL;
+            }
+
+            // Variable type
+            if (type.StartsWith("VAR"))
+            {
+                _variableType = VariableType.VAR;
+                type = type.Replace("VAR", "");
+            }
+            else if (type.StartsWith("CONST"))
+            {
+                _variableType = VariableType.CONST;
+                type = type.Replace("CONST", "");
+            }
+            else if (type.StartsWith("PERS"))
+            {
+                _variableType = VariableType.PERS;
+                type = type.Replace("PERS", "");
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith("speeddata") == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            type = type.Replace("speeddata", "");
+
+            // Name
+            _name = type;
+
+            if (_validPredefinedNames.Contains(_name))
+            {
+                _predefined = true;
+            }
+            else
+            {
+                _predefined = false;
+            }
+
+            // Value
+            string[] values = value.Split(',');
+
+            if (values.Length == 4)
+            {
+                _v_tcp = Convert.ToDouble(values[0]);
+                _v_ori = Convert.ToDouble(values[1]);
+                _v_leax = Convert.ToDouble(values[2]);
+                _v_reax = Convert.ToDouble(values[3]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Speed Data instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static SpeedData Parse(string rapidData)
+        {
+            return new SpeedData(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Speed Data instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="speedData"> The Speed Data intance. </param>
+        /// <returns> True on success, false on failure. </returns>
+        public static bool TryParse(string rapidData, out SpeedData speedData)
+        {
+            try
+            {
+                speedData = new SpeedData(rapidData);
+                return true;
+            }
+            catch
+            {
+                speedData = new SpeedData();
+                return false;
+            }
+        }
+        #endregion
+
         #region method
         /// <summary>
         /// Returns a string that represents the current object.
@@ -431,16 +576,16 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets the valid predefined speeddata variable names.
         /// </summary>
-        public static string[] ValidPredefinedNames 
-        { 
+        public static string[] ValidPredefinedNames
+        {
             get { return _validPredefinedNames; }
         }
 
         /// <summary>
         /// Gets the valid predefined speeddata values.
         /// </summary>
-        public static double[] ValidPredefinedValues 
-        { 
+        public static double[] ValidPredefinedValues
+        {
             get { return _validPredefinedValues; }
         }
 

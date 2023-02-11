@@ -331,6 +331,22 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
+            //Cast from Point
+            if (typeof(Point3d).IsAssignableFrom(source.GetType()))
+            {
+                Point3d point = (Point3d)source;
+                Value = new RobotTarget(new Plane(point, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
+            //Cast from Point Goo
+            if (typeof(GH_Point).IsAssignableFrom(source.GetType()))
+            {
+                GH_Point pointGoo = (GH_Point)source;
+                Value = new RobotTarget(new Plane(pointGoo.Value, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
             //Cast from Text
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {

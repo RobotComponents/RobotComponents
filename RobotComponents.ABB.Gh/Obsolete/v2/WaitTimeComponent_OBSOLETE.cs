@@ -13,19 +13,20 @@ using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : WaitTime component. An inherent from the GH_Component Class.
     /// </summary>
-    public class WaitTimeComponent : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class WaitTimeComponent_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public WaitTimeComponent()
+        public WaitTimeComponent_OBSOLETE()
           : base("Wait for Time", "WT",
               "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
@@ -39,8 +40,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddBooleanParameter("In Position", "P", "Specifies whether or not the mechanial units must have come to a standstill before the wait time starts.", GH_ParamAccess.item, false);
-            pManager.AddNumberParameter("Duration", "D", "Duration in seconds as a number", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("Duration", "D", "Duration in seconds as a number", GH_ParamAccess.item, 1);
         }
 
         /// <summary>
@@ -59,15 +59,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            bool inPosition = false;
             double duration = 0;
 
             // Catch the input variables
-            if (!DA.GetData(0, ref inPosition)) { return; }
-            if (!DA.GetData(1, ref duration)) { return; }
+            if (!DA.GetData(0, ref duration)) { return; }
 
             // Create the action
-            WaitTime timer = new WaitTime(duration, inPosition);
+            WaitTime timer = new WaitTime(duration);
 
             // Output
             DA.SetData(0, timer);
@@ -80,7 +78,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -88,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("9523BCFA-3657-452B-88AC-73851F486286"); }
+            get { return new Guid("86776D1A-672D-44F5-B655-B60D2FCE58AA"); }
         }
         #endregion
 

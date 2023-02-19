@@ -27,6 +27,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
     public class MoveComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent
     {
         #region fields

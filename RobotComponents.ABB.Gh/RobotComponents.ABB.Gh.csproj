@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v2\WaitTimeComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\MoveComponent_OBSOLETE.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetRobotTargetsComponent.cs" />

@@ -60,9 +60,11 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v2\MoveComponent_OBSOLETE.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetRobotTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadRapidDomainComponent.cs" />
+    <Compile Include="Obsolete\v2\DeconstructMovementComponent_OBSOLETE2.cs" />
     <Compile Include="Obsolete\v1\ForwardKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE4.cs" />
     <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE2.cs" />
@@ -731,9 +733,7 @@
   <ItemGroup>
     <None Include="Resources\ReadDatabase_Icon.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Obsolete\v2\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\GetRobotBaseFrame_Icon.png" />
   </ItemGroup>

@@ -7,8 +7,6 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
-// Rhino Libs
-using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
@@ -24,23 +22,21 @@ using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
     /// </summary>
-    public class MoveComponent : GH_Component, IGH_VariableParameterComponent
+    public class MoveComponent_OBSOLETE : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private bool _add = false;
         private bool _expire = false;
-        private bool _cirPointInputParam = false;
-        private bool _movementTimeInputParam = false;
-        private bool _overrideRobotToolInputParam = false;
-        private bool _overrideWorkObjectInputParam = false;
-        private bool _digitalOutputInputParam = false;
-        private readonly int _fixedParamNumInput = 1;
-        private bool _isCircularMovement = false;
+        private bool _setMovementTime = false;
+        private bool _overrideRobotTool = false;
+        private bool _overrideWorkObject = false;
+        private bool _setDigitalOutput = false;
+        private readonly int _fixedParamNumInput = 3;
         #endregion
 
         /// <summary>
@@ -48,9 +44,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MoveComponent()
+        public MoveComponent_OBSOLETE()
           : base("Move", "M",
-              "Defines a joint, linear or circular movement instruction."
+              "Defines a linear or joint movement instruction."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
@@ -63,11 +59,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[8]
+        private readonly IGH_Param[] variableInputParameters = new IGH_Param[5]
         {
-            new Param_RobotTarget() { Name = "Circular Point", NickName = "CP", Description = "Circular Point for MoveC instructions as Robot Target.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_Target() { Name = "Target", NickName = "TA", Description = "Target of the movement as Target.", Access = GH_ParamAccess.item, Optional = true},
-            new Param_SpeedData() { Name = "Speed Data", NickName = "SD", Description = "Speed Data as Speed Data or as a number (vTCP).", Access = GH_ParamAccess.item, Optional = true},
             new Param_Number() { Name = "Time", NickName = "TI", Description = "The total movement time in seconds. This overwrites the defined speeddata value.", Access = GH_ParamAccess.item, Optional = true},
             new Param_ZoneData() { Name = "Zone Data", NickName = "ZD", Description = "Zone Data as Zone Data or as a number (path zone TCP).", Access = GH_ParamAccess.item, Optional = true},
             new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Overrides the default Robot Tool.", Access = GH_ParamAccess.item, Optional = true},
@@ -81,11 +74,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddIntegerParameter("Type", "TY", "Type as integer. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.", GH_ParamAccess.item, 0);
+            pManager.AddParameter(new Param_Target(), "Target", "TA", "Target of the movement as Target.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data or as a number (vTCP).", GH_ParamAccess.item);
             AddParameter(1);
-            AddParameter(2);
-            AddParameter(4);
 
             pManager[0].Optional = true;
+            pManager[1].Optional = true;
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -97,23 +92,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Override this method if you want to be called before the first call to SolveInstance.
-        /// </summary>
-        protected override void BeforeSolveInstance()
-        {
-            base.BeforeSolveInstance();
-
-            _isCircularMovement = false;
-        }
-
-        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object can be used to retrieve data from input parameters and to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Creates the input value list and attachs it to the input parameter
-            if (Params.Input[0].SourceCount == 0 & _add == true)
+            if (this.Params.Input[0].SourceCount == 0 & _add == true)
             {
                 _expire = true;
                 HelperMethods.CreateValueList(this, typeof(MovementType), 0);
@@ -123,13 +108,12 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             if (_expire == true)
             {
                 _expire = false;
-                ExpireSolution(true);
+                this.ExpireSolution(true);
             }
 
             // Input variables
             int movementType = 0;
-            RobotTarget cirPoint = new RobotTarget(Plane.Unset);
-            ITarget target = new JointTarget();
+            ITarget target = new RobotTarget();
             SpeedData speedData = new SpeedData();
             double time = -1;
             ZoneData zoneData = new ZoneData();
@@ -139,60 +123,41 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 
             // Catch the input data from the fixed parameters
             if (!DA.GetData(0, ref movementType)) { movementType = 0; }
+            if (!DA.GetData(1, ref target)) { target = new JointTarget(new RobotJointPosition()); }
+            if (!DA.GetData(2, ref speedData)) { speedData = new SpeedData(5); }
 
             // Catch the input data from the variable parameteres
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[0].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
             {
-                if (!DA.GetData(_variableInputParameters[0].Name, ref cirPoint))
-                {
-                    cirPoint = new RobotTarget(Plane.Unset);
-                }
-            }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[1].Name))
-            {
-                if (!DA.GetData(_variableInputParameters[1].Name, ref target))
-                {
-                    target = new JointTarget(new RobotJointPosition());
-                }
-            }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[2].Name))
-            {
-                if (!DA.GetData(_variableInputParameters[2].Name, ref speedData))
-                {
-                    speedData = new SpeedData(5);
-                }
-            }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[3].Name))
-            {
-                if (!DA.GetData(_variableInputParameters[3].Name, ref time))
+                if (!DA.GetData(variableInputParameters[0].Name, ref time))
                 {
                     time = -1;
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[4].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
             {
-                if (!DA.GetData(_variableInputParameters[4].Name, ref zoneData))
+                if (!DA.GetData(variableInputParameters[1].Name, ref zoneData))
                 {
                     zoneData = new ZoneData(0);
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[5].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
             {
-                if (!DA.GetData(_variableInputParameters[5].Name, ref robotTool))
+                if (!DA.GetData(variableInputParameters[2].Name, ref robotTool))
                 {
                     robotTool = RobotTool.GetEmptyRobotTool();
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[6].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[3].Name))
             {
-                if (!DA.GetData(_variableInputParameters[6].Name, ref workObject))
+                if (!DA.GetData(variableInputParameters[3].Name, ref workObject))
                 {
                     workObject = new WorkObject();
                 }
             }
-            if (Params.Input.Any(x => x.Name == _variableInputParameters[7].Name))
+            if (Params.Input.Any(x => x.Name == variableInputParameters[4].Name))
             {
-                if (!DA.GetData(_variableInputParameters[7].Name, ref digitalOutput))
+                if (!DA.GetData(variableInputParameters[4].Name, ref digitalOutput))
                 {
                     digitalOutput = new DigitalOutput();
                 }
@@ -200,20 +165,13 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 
             // Movement constructor
             Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
-            movement.CircularPoint = cirPoint;
             movement.Time = time;
 
-            // Check if a circular movement is used
-            if (movementType == 3)
-            {
-                _isCircularMovement = true;
-            }
-
             // Check if a right value is used for the movement type
-            if (movementType != 0 && movementType != 1 && movementType != 2 && movementType != 3)
+            if (movementType != 0 && movementType != 1 && movementType != 2)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Movement type value is invalid. " +
-                    "In can only be set to 0, 1, 2 and 3. Use 0 for MoveAbsJ, 1 for MoveL, 2 for MoveJ and 3 for MoveC.");
+                    "In can only be set to 0, 1 and 2. Use 0 for MoveAbsJ, 1 for MoveL and 2 for MoveJ.");
             }
 
             // Check if an exact predefined zonedata value is used
@@ -262,18 +220,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             {
                 _add = true;
 
-                if (Params.Input[0].SourceCount == 0)
+                if (this.Params.Input[0].SourceCount == 0)
                 {
-                    ExpireSolution(true);
-                }
-            }
-
-            if (_isCircularMovement == true)
-            {
-                if (Params.Input.Any(x => x.Name == _variableInputParameters[0].Name) == false)
-                {
-                    _cirPointInputParam = !_cirPointInputParam;
-                    AddParameter(0);
+                    this.ExpireSolution(true);
                 }
             }
         }
@@ -285,7 +234,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -293,7 +242,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -302,7 +251,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.Movement_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.Movement_Icon; }
         }
 
         /// <summary>
@@ -312,7 +261,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("151B9D23-5B05-40CA-8DBD-F182FBEA8ABA"); }
+            get { return new Guid("B41AA128-2217-4FE5-95F3-DEA34BEF7A7D"); }
         }
         #endregion
 
@@ -324,11 +273,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Set Circular Point", MenuItemClickCircularPoint, true, _cirPointInputParam);
-            Menu_AppendItem(menu, "Set Movement Time", MenuItemClickMovementTime, true, _movementTimeInputParam);
-            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, _overrideRobotToolInputParam);
-            Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, _overrideWorkObjectInputParam);
-            Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, _digitalOutputInputParam);
+            Menu_AppendItem(menu, "Set Movement Time", MenuItemClickMovementTime, true, _setMovementTime);
+            Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, _overrideRobotTool);
+            Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, _overrideWorkObject);
+            Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, _setDigitalOutput);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
         }
@@ -345,18 +293,6 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Circular Point" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickCircularPoint(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Set Circular Point");
-            _cirPointInputParam = !_cirPointInputParam;
-            AddParameter(0);
-        }
-
-        /// <summary>
         /// Handles the event when the custom menu item "Movement Time" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -364,8 +300,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void MenuItemClickMovementTime(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Movement Time");
-            _movementTimeInputParam = !_movementTimeInputParam;
-            AddParameter(3);
+            _setMovementTime = !_setMovementTime;
+            AddParameter(0);
         }
 
         /// <summary>
@@ -376,8 +312,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void MenuItemClickRobotTool(object sender, EventArgs e)
         {
             RecordUndoEvent("Override Robot Tool");
-            _overrideRobotToolInputParam = !_overrideRobotToolInputParam;
-            AddParameter(5);
+            _overrideRobotTool = !_overrideRobotTool;
+            AddParameter(2);
         }
 
         /// <summary>
@@ -388,8 +324,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void MenuItemClickWorkObject(object sender, EventArgs e)
         {
             RecordUndoEvent("Override Work Object");
-            _overrideWorkObjectInputParam = !_overrideWorkObjectInputParam;
-            AddParameter(6);
+            _overrideWorkObject = !_overrideWorkObject;
+            AddParameter(3);
         }
 
         /// <summary>
@@ -400,8 +336,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void MenuItemClickDigitalOutput(object sender, EventArgs e)
         {
             RecordUndoEvent("Set Digital Output");
-            _digitalOutputInputParam = !_digitalOutputInputParam;
-            AddParameter(7);
+            _setDigitalOutput = !_setDigitalOutput;
+            AddParameter(4);
         }
 
         /// <summary>
@@ -411,11 +347,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Write(GH_IWriter writer)
         {
-            writer.SetBoolean("Set Circular Point", _cirPointInputParam);
-            writer.SetBoolean("Set Movement Time", _movementTimeInputParam);
-            writer.SetBoolean("Override Robot Tool", _overrideRobotToolInputParam);
-            writer.SetBoolean("Override Work Object", _overrideWorkObjectInputParam);
-            writer.SetBoolean("Set Digital Output", _digitalOutputInputParam);
+            writer.SetBoolean("Set Movement Time", _setMovementTime);
+            writer.SetBoolean("Override Robot Tool", _overrideRobotTool);
+            writer.SetBoolean("Override Work Object", _overrideWorkObject);
+            writer.SetBoolean("Set Digital Output", _setDigitalOutput);
             return base.Write(writer);
         }
 
@@ -426,11 +361,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <returns> True on success, false on failure. </returns>
         public override bool Read(GH_IReader reader)
         {
-            _cirPointInputParam = reader.GetBoolean("Set Circular Point");
-            _movementTimeInputParam = reader.GetBoolean("Set Movement Time");
-            _overrideRobotToolInputParam = reader.GetBoolean("Override Robot Tool");
-            _overrideWorkObjectInputParam = reader.GetBoolean("Override Work Object");
-            _digitalOutputInputParam = reader.GetBoolean("Set Digital Output");
+            _setMovementTime = reader.GetBoolean("Set Movement Time");
+            _overrideRobotTool = reader.GetBoolean("Override Robot Tool");
+            _overrideWorkObject = reader.GetBoolean("Override Work Object");
+            _setDigitalOutput = reader.GetBoolean("Set Digital Output");
             return base.Read(reader);
         }
 
@@ -441,10 +375,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void AddParameter(int index)
         {
             // Pick the parameter
-            IGH_Param parameter = _variableInputParameters[index];
-            string name = _variableInputParameters[index].Name;
+            IGH_Param parameter = variableInputParameters[index];
+            string name = variableInputParameters[index].Name;
 
-            // If the parameter already exists: remove it
+            // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
             {
                 Params.UnregisterInputParameter(Params.Input.First(x => x.Name == name), true);
@@ -459,7 +393,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 // Check if other parameters are already added and correct the insert index
                 for (int i = 0; i < index; i++)
                 {
-                    if (Params.Input.Any(x => x.Name == _variableInputParameters[i].Name))
+                    if (Params.Input.Any(x => x.Name == variableInputParameters[i].Name))
                     {
                         insertIndex += 1;
                     }

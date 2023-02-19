@@ -78,6 +78,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public RobotTarget()
         {
+            _plane = Plane.Unset;
         }
 
         /// <summary>
@@ -280,7 +281,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _scope = target.Scope;
             _variableType = target.VariableType;
             _name = target.Name;
-            _plane = new Plane(target.Plane);
+            _plane = target.Plane == null ? Plane.Unset : new Plane(target.Plane);
             _axisConfig = target.AxisConfig;
             _externalJointPosition = target.ExternalJointPosition.Duplicate();
             _quat = target.Quat;

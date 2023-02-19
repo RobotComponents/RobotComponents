@@ -39,7 +39,12 @@ namespace RobotComponents.ABB.Enumerations
         /// <summary>
         /// Joint Movement
         /// </summary>
-        MoveJ = 2
+        MoveJ = 2,
+
+        /// <summary>
+        /// Ciclular Movement
+        /// </summary>
+        MoveC = 3
     }
 
     /// <summary>

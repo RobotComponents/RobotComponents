@@ -26,6 +26,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     {
         #region fields
         private MovementType _movementType;
+        private RobotTarget _cirPoint;
         private ITarget _target;
         private int _id; // Synchronization id (for multi move programming)
         private SpeedData _speedData;
@@ -49,6 +50,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             int version = (int)info.GetValue("Version", typeof(int));
             _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
+            _cirPoint = version >= 2001000 ? (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget)) : new RobotTarget();
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
@@ -69,6 +71,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Movement Type", _movementType, typeof(MovementType));
+            info.AddValue("Circle Point", _cirPoint, typeof(RobotTarget));
             info.AddValue("Target", _target, typeof(ITarget));
             info.AddValue("ID", _id, typeof(int));
             info.AddValue("Speed Data", _speedData, typeof(SpeedData));
@@ -96,6 +99,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(Plane plane)
         {
             _movementType = MovementType.MoveJ;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = new RobotTarget(plane);
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
@@ -114,6 +118,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(ITarget target)
         {
             _movementType = target is JointTarget ? MovementType.MoveAbsJ : MovementType.MoveJ;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = new SpeedData(5); // Slowest predefined tcp speed
@@ -133,6 +138,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -154,6 +160,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -176,6 +183,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -198,6 +206,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, WorkObject workObject)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -220,6 +229,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -243,6 +253,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -266,6 +277,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -290,6 +302,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
         {
             _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
             _target = target;
             _id = -1;
             _speedData = speedData;
@@ -309,6 +322,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public Movement(Movement movement, bool duplicateMesh = true)
         {
             _movementType = movement.MovementType;
+            _cirPoint = movement.CircularPoint.Duplicate();
             _target = movement.Target.DuplicateTarget();
             _id = movement.SyncID;
             _speedData = movement.SpeedData.Duplicate();
@@ -392,6 +406,10 @@ namespace RobotComponents.ABB.Actions.Instructions
                 {
                     return $"Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
+                else if (_movementType == MovementType.MoveC)
+                {
+                    return $"Circular Movement ({_target.Name}\\{_workObject.Name})";
+                }
                 else
                 {
                     return "Movement";
@@ -409,8 +427,12 @@ namespace RobotComponents.ABB.Actions.Instructions
                     return $"Coordinated synchronized Linear Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveJ)
-            {
+                {
                 return $"Coordinated synchronized Joint Movement ({_target.Name}\\{_workObject.Name})";
+                }
+                else if (_movementType == MovementType.MoveC)
+                {
+                    return $"Coordinated synchronized Circular Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else
                 {
@@ -421,20 +443,24 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Checks the combination between the movement type and the target type.
+        /// <remarks>
         /// Throws an exception if the combination is not valid. 
+        /// </remarks>
         /// </summary>
         private void CheckCombination()
         {
             if (_movementType != MovementType.MoveAbsJ && _target is JointTarget)
             {
-                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
+                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL, MoveJ or MoveC instruction.");
             }
         }
 
         /// <summary>
         /// Calculates the position and the orientation of the target in world coordinate space. 
+        /// <remarks>
         /// If an external axis is attached to the work object this method returns the pose of the 
         /// target plane in the world coorinate space for axis values equal to zero.
+        /// </remarks>
         /// </summary>
         /// <returns> The the target plane in world coordinate space. </returns>
         public Plane GetGlobalTargetPlane()
@@ -498,18 +524,8 @@ namespace RobotComponents.ABB.Actions.Instructions
                 // Update the movement of the inverse kinematics
                 RAPIDGenerator.Robot.InverseKinematics.Movement = this;
 
-                // Calculate the external joint position for the robot target
-                if (_movementType == MovementType.MoveL || _movementType == MovementType.MoveJ)
-                {
-                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
-                    _convertedTarget.ExternalJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
-                    _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
-                    _convertedTarget.Name = robotTarget.Name;
-                    _convertedTarget.VariableType = _target.VariableType;
-                }
-
                 // Convert the robot target to a joint target
-                else
+                if (_movementType == MovementType.MoveAbsJ)
                 {
                     // Calculate the axis values from the robot target
                     RAPIDGenerator.Robot.InverseKinematics.Calculate();
@@ -523,7 +539,17 @@ namespace RobotComponents.ABB.Actions.Instructions
                     if (_convertedTarget.Name != "")
                     {
                         _convertedTarget.Name += "_jt";
-                    }    
+                    }
+                }
+
+                // Calculate the external joint position for the robot target
+                else
+                {
+                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
+                    _convertedTarget.ExternalJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
+                    _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
+                    _convertedTarget.Name = robotTarget.Name;
+                    _convertedTarget.VariableType = _target.VariableType;
                 }
             }
 
@@ -565,25 +591,41 @@ namespace RobotComponents.ABB.Actions.Instructions
                 toolName = _robotTool.Name; 
             }
 
+            // Check the movement and target type
+            if (_target is JointTarget & _movementType != MovementType.MoveAbsJ)
+            {
+                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveLm MoveJ or MoveC instruction.");
+            }
+
+            // Check circular point
+            if (_movementType == MovementType.MoveC && _cirPoint.Plane == Plane.Unset)
+            {
+                throw new Exception("The circular point for the MoveC instruction is not defined.");
+            }
+
             // Declaration RAPID code
+            string toPoint = _movementType == MovementType.MoveC ? (_cirPoint.Name != "" ? _cirPoint.Name : _cirPoint.ToRAPID()) : "";
             string target = _convertedTarget.Name != "" ? _convertedTarget.Name : _convertedTarget.ToRAPID();
             string speedData = _speedData.Name != "" ? _speedData.Name : _speedData.ToRAPID();
             string zoneData = _zoneData.Name != "" ? _zoneData.Name : _zoneData.ToRAPID();
             target += _id > -1 ? string.Format("\\ID:={0}", _id) : "";
             speedData += _time > 0 ? string.Format("\\T:={0}", _time) : "";
 
-            // Check the movemet and target type
-            if (_target is JointTarget & _movementType != MovementType.MoveAbsJ)
-            {
-                throw new InvalidOperationException("Invalid Move instruction: A Joint Target cannot be combined with a MoveL or MoveJ instruction.");
-            }
-
             // A movement not combined with a digital output
             if (_digitalOutput == null || _digitalOutput.IsValid == false)
             {
-                string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
-                code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name};";
-                return code;
+                if (_movementType == MovementType.MoveC)
+                {
+                    string code = $"{Enum.GetName(typeof(MovementType), _movementType)} {toPoint}, ";
+                    code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name};";
+                    return code;
+                }
+                else
+                {
+                    string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
+                    code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name};";
+                    return code;
+                }
             }
 
             // A movement combined with a digital output
@@ -596,6 +638,15 @@ namespace RobotComponents.ABB.Actions.Instructions
                     string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
                     code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}; ";
                     code += _digitalOutput.ToRAPIDInstruction(robot);
+                    return code;
+                }
+
+                // MoveCDO
+                else if (_movementType == MovementType.MoveC)
+                {
+                    string code = $"{Enum.GetName(typeof(MovementType), _movementType)}DO {toPoint}, ";
+                    code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}, ";
+                    code += $"{_digitalOutput.Name}, {(_digitalOutput.IsActive ? 1 : 0)};";
                     return code;
                 }
 
@@ -612,8 +663,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -622,12 +675,19 @@ namespace RobotComponents.ABB.Actions.Instructions
             _convertedTarget.ToRAPIDDeclaration(RAPIDGenerator);
             _speedData.ToRAPIDDeclaration(RAPIDGenerator);
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
+
+            if (_movementType == MovementType.MoveC)
+            {
+                _cirPoint.ToRAPIDDeclaration(RAPIDGenerator);
+            }
         }
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.s
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -679,9 +739,24 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the Target.
-        /// Defines the destination target of the robot and external axes.
+        /// Gets or sets the circular point as a Robot Target. 
         /// </summary>
+        /// <remarks>
+        /// Defines the circular point for a MoveC instruction.
+        /// Positions of external axes are ignored. 
+        /// </remarks>
+        public RobotTarget CircularPoint
+        {
+            get { return _cirPoint; }
+            set { _cirPoint = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Target.
+        /// </summary>
+        /// <remarks>
+        /// Defines the destination target of the robot and external axes.
+        /// </remarks>
         public ITarget Target
         {
             get { return _target; }
@@ -690,9 +765,11 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the synchronization id for multi move programming. 
+        /// </summary>
+        /// <remarks>
         /// This ID number must be defined for coordinated synchronized movements in multi move systems. 
         /// Set this property to -1 to define normal movements (not coordinated / not synchronized).
-        /// </summary>
+        /// </remarks>
         public int SyncID
         {
             get { return _id; }
@@ -709,10 +786,12 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets the the total time which the robot will move in seconds. 
-        /// This overwrites the defined speeddata value.
-        /// Set this property to a negative value to not overwrite the speeddata value. 
+        /// Gets the the total time which the robot will move in seconds.  
         /// </summary>
+        /// <remarks>
+        /// This overwrites the defined speeddata value.
+        /// Set this property to a negative value to not overwrite the speeddata value.
+        /// </remarks>
         public double Time
         {
             get { return _time; }
@@ -730,8 +809,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the Robot Tool.
-        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
         /// </summary>
+        /// <remarks>
+        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
+        /// </remarks>
         public RobotTool RobotTool
         {
             get { return _robotTool; }
@@ -748,11 +829,13 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or set the Digital Output. 
+        /// Gets or sets the Digital Output. 
+        /// </summary>
+        /// <remarks>
         /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
         /// If a valid Digital oOutput is combined movement will be created (MoveLDO or MoveJDO). 
         /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
-        /// </summary>
+        /// </remarks>
         public DigitalOutput DigitalOutput
         {
             get { return _digitalOutput; }

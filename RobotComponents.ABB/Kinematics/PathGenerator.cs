@@ -4,6 +4,7 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 // Rhino Libs
@@ -125,7 +126,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<ABB.Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -133,7 +134,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Action> ungrouped = new List<Action>() { };
+            List<Actions.Action> ungrouped = new List<Actions.Action>() { };
 
             for (int i = 0; i < actions.Count; i++)
             {
@@ -197,6 +198,15 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         JointMovementFromJointTarget(movement);
                         counter++;
+                    }
+
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveC)
+                    {
+                        CircularMovementFromRobotTarget(movement);
+                        counter++;
+
+                        _errorText.Insert(0 , "The tool orientation for MoveC instructions is not correct. " +
+                            "Check you program with a simulation in Robot Studio.");
                     }
                 }
             }
@@ -402,6 +412,152 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Calculates the interpolated path for a circular movement.
+        /// </summary>
+        /// <param name="movement"> The movement as a linear movement type. </param>
+        private void CircularMovementFromRobotTarget(Movement movement)
+        {
+            // Set the correct tool for this movement
+            SetRobotTool(movement);
+
+            // Points for path
+            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
+
+            // Get the final external joint positions of this movement
+            _robot.InverseKinematics.Movement = movement;
+            _robot.InverseKinematics.CalculateExternalJointPosition();
+            ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
+
+            // External Joint Position change
+            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
+            externalJointPositionChange.Substract(_externalJointPositions.Last());
+            externalJointPositionChange.Divide(_interpolations);
+
+            // First target plane in WORLD coordinate space
+            Plane plane1 = _planes.Last();
+
+            // Circular point in WORK OBJECT coordinate space
+            if (movement.CircularPoint.Plane == Plane.Unset)
+            {
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: No circular point defined.");
+            }
+
+            Point3d cirPoint = movement.CircularPoint.Plane.Origin;
+
+            // Second target plane in WORK OBJECT coordinate space 
+            RobotTarget robotTarget = movement.Target as RobotTarget;
+            Plane plane2 = robotTarget.Plane;
+
+            // Correction for rotation of the target plane on a movable work object
+            if (movement.WorkObject.ExternalAxis != null)
+            {
+                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
+                plane1.Transform(trans);
+            }
+
+            // Re-orient the starting plane to the work object coordinate space of the second target plane
+            Transform orient = Transform.ChangeBasis(Plane.WorldXY, movement.WorkObject.GlobalWorkObjectPlane);
+            plane1.Transform(orient);
+
+            // Circular curve
+            Arc arc = new Arc(plane1.Origin, cirPoint, plane2.Origin);
+
+            if (arc.IsValid == false)
+            {
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
+            }
+
+            Curve circle = arc.ToNurbsCurve();
+            circle.Domain = new Interval(0, 1);
+
+            // Check the RAPID conditions
+            // Minimum distance between start and ToPoint is 0.1 mm
+            if (plane1.Origin.DistanceTo(plane2.Origin) < 0.1)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
+            }
+            // Minimum distance between start and CirPoint is 0.1 mm
+            if (plane1.Origin.DistanceTo(cirPoint) < 0.1)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
+            }
+            // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
+            if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, cirPoint - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
+            }
+
+            // Target plane position and orientation change per interpolation step
+            double paramChange = 1.0 / _interpolations;
+            Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations; // Incorrect! 
+            Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations; // Incorrect! 
+
+            // New movement
+            Movement newMovement = movement.DuplicateWithoutMesh();
+
+            // New external joint position
+            ExternalJointPosition newExternalJointPosition = _externalJointPositions.Last().Duplicate();
+
+            // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
+            for (int i = 0; i < _interpolations; i++)
+            {
+                // Plane: the target plane in WORK OBJECT coordinate space
+                Plane plane = new Plane(circle.PointAt(paramChange * (i + 1)), plane1.XAxis + xAxisChange * (i + 1), plane1.YAxis + yAxisChange * (i + 1)); // Incorrect! 
+
+                // Update the external joint position
+                newExternalJointPosition.Add(externalJointPositionChange);
+
+                // Update movement
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.AxisConfig, newExternalJointPosition);
+                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(paramChange * (i + 0.5)), plane1.XAxis + xAxisChange * (i + 0.5), plane1.YAxis + yAxisChange * (i + 0.5)); // Incorrect! 
+
+                // Calculate joint positions
+                _robot.InverseKinematics.Movement = newMovement;
+                _robot.InverseKinematics.Calculate();
+
+                // Add te calculated joint positions and plane to the class property
+                _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
+                _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
+
+                // Add error messages (check axis limits)
+                _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
+
+                // Add the target plane in WORLD coordinate space
+                Plane globalPlane = newMovement.GetPosedGlobalTargetPlane();
+                _planes.Add(globalPlane);
+
+                // Add movement
+                _movements.Add(newMovement.DuplicateWithoutMesh());
+
+                // Only add the other point if this point is different
+                if (points[points.Count - 1] != globalPlane.Origin)
+                {
+                    points.Add(globalPlane.Origin);
+                }
+            }
+
+            // Generate path curve
+            if (points.Count > 1)
+            {
+                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+
+                if (movement.Time < 0)
+                {
+                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _time += movement.Time;
+                }
+            }
+            else
+            {
+                _paths.Add(null);
+            }
+        }
+
+        /// <summary>
         /// Calculates the interpolated path for a joint movement.
         /// </summary>
         /// <param name="towardsRobotJointPosition"> The final Robot Joint Position of the joint movement. </param>
@@ -509,7 +665,7 @@ namespace RobotComponents.ABB.Kinematics
         /// Returns true if no movements were defined. 
         /// </summary>
         /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
-        private bool CheckFirstMovement(IList<Action> actions)
+        private bool CheckFirstMovement(IList<Actions.Action> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {

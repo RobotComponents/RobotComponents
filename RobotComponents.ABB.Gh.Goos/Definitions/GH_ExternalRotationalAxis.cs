@@ -211,6 +211,14 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Axis vector
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Vector(Value.AxisPlane.ZAxis); }
+                return true;
+            }
+
             //Cast to Bool
             if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {

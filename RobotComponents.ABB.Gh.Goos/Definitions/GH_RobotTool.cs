@@ -188,6 +188,22 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Point(Value.ToolPlane.Origin); }
+                return true;
+            }
+
+            //Cast to Vector
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Vector(Value.ToolPlane.ZAxis); }
+                return true;
+            }
+
             target = default;
             return false;
         }

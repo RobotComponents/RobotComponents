@@ -216,12 +216,12 @@ namespace RobotComponents.ABB.Definitions
             if (type.StartsWith("LOCAL"))
             {
                 _scope = Scope.LOCAL;
-                type = type.Replace("LOCAL", "");
+                type = type.ReplaceFirst("LOCAL", "");
             }
             else if (type.StartsWith("TASK"))
             {
                 _scope = Scope.TASK;
-                type = type.Replace("TASK", "");
+                type = type.ReplaceFirst("TASK", "");
             }
             else
             {
@@ -232,17 +232,17 @@ namespace RobotComponents.ABB.Definitions
             if (type.StartsWith("VAR"))
             {
                 _variableType = VariableType.VAR;
-                type = type.Replace("VAR", "");
+                type = type.ReplaceFirst("VAR", "");
             }
             else if (type.StartsWith("CONST"))
             {
                 _variableType = VariableType.CONST;
-                type = type.Replace("CONST", "");
+                type = type.ReplaceFirst("CONST", "");
             }
             else if (type.StartsWith("PERS"))
             {
                 _variableType = VariableType.PERS;
-                type = type.Replace("PERS", "");
+                type = type.ReplaceFirst("PERS", "");
             }
             else
             {
@@ -255,7 +255,7 @@ namespace RobotComponents.ABB.Definitions
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
-            type = type.Replace("wobjdata", "");
+            type = type.ReplaceFirst("wobjdata", "");
 
             // Name
             _name = type;

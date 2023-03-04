@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionGroup.cs" />
     <Compile Include="Actions\Instructions\AnalogOutput.cs" />
+    <Compile Include="Actions\Instructions\CirclePathMode.cs" />
     <Compile Include="Actions\Interfaces\ISyncident.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOff.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOn.cs" />
@@ -122,9 +123,7 @@
       <Name>RobotComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actions\Generators\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

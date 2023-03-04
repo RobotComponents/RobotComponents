@@ -55,6 +55,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(WaitTimeComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Time/" },
             { typeof(WaitAIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Analog%20Input/" },
             { typeof(WaitDIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Digital%20Input/" },
+            { typeof(CirclePathModeComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             // Dynamic
             { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Code/" },
             { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Comment/" },
@@ -63,28 +64,28 @@ namespace RobotComponents.ABB.Gh.Utils
             #endregion
 
             #region Controller utility
-            { typeof(GetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetControllerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetExternalAxisPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetExternalJointPositionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetLogComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetRobotBaseFramesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetRobotJointPositionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetRobotToolPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetTaskNamesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(ReadConfigurationDomainComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(RunProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(SetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(SetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(SetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(SetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(UploadProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetRobotTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(GetJointTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
-            { typeof(ReadRapidDomainComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" },
+            { typeof(GetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetControllerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetExternalAxisPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetExternalJointPositionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetLogComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetRobotBaseFramesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetRobotJointPositionsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetRobotToolPlanesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetTaskNamesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(ReadConfigurationDomainComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(RunProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(SetAnalogInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(SetAnalogOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(SetDigitalInputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(SetDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(UploadProgramComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetRobotTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(GetJointTargetsComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
+            { typeof(ReadRapidDomainComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Controller%20Utility/" }, // TODO
             #endregion
 
             #region Deconstruct
@@ -209,6 +210,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(Param_WaitAI), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Analog%20Input/"},
             { typeof(Param_WaitDI), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20for%20Digital%20Input/"},
             { typeof(Param_ZoneData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
+            { typeof(Param_CirclePathMode), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             // Multi Move
             { typeof(Param_TaskList), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Task%20List/"},
             { typeof(Param_WaitSyncTask), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20Sync%20Task/"},

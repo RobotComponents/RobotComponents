@@ -203,6 +203,7 @@ namespace RobotComponents.ABB.Utils
             {
                 return text;
             }
+
             return text.Substring(0, position) + replace + text.Substring(position + search.Length);
         }
     }

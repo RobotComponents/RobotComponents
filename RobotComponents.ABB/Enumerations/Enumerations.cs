@@ -48,6 +48,42 @@ namespace RobotComponents.ABB.Enumerations
     }
 
     /// <summary>
+    /// Dfines the circle path mode type. 
+    /// </summary>
+    public enum CirPathMode : int
+    {
+        /// <summary>
+        /// Standard mode for tool reorientation in the actual path frame. 
+        /// </summary>
+        PathFrame = 0,
+
+        /// <summary>
+        /// Modified mode for tool reorientation in actual object frame.
+        /// </summary>
+        ObjectFrame = 1,
+
+        /// <summary>
+        /// Modified mode for tool reorientation from the start point via the programmed CirPoint.
+        /// </summary>
+        CirPointOri = 2,
+
+        /// <summary>
+        /// Modified mode such that the projection of the tool’s z-axis onto the cut plane will follow the programmed circle segment. Only wrist axes 4 and 5 are used.
+        /// </summary>
+        Wrist45 = 3,
+
+        /// <summary>
+        /// Modified mode such that the projection of the tool’s z-axis onto the cut plane will follow the programmed circle segment. Only wrist axes 4 and 6 are used.
+        /// </summary>
+        Wrist46 = 4,
+
+        /// <summary>
+        /// Modified mode such that the projection of the tool’s z-axis onto the cut plane will follow the programmed circle segment. Only wrist axes 5 and 6 are used.
+        /// </summary>
+        Wrist56 = 5
+    }
+
+    /// <summary>
     /// Defines the code type.
     /// </summary>
     public enum CodeType : int

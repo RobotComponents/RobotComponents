@@ -39,6 +39,7 @@ namespace RobotComponents.ABB.Kinematics
         private RobotTool _currentTool; // Defines the default robot tool
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
+        private CirPathMode _cirPathMode; // Defines the circle path mode
         private int _interpolations; // Defines the number of interpolations between two targets
         private double _time; // Estimate of the total program time
         #endregion
@@ -102,6 +103,7 @@ namespace RobotComponents.ABB.Kinematics
             _linearConfigurationControl = true;
             _jointConfigurationControl = true;
             _firstMovementIsMoveAbsJ = false;
+            _cirPathMode = CirPathMode.PathFrame;
             _time = 0;
 
             // Add initial positions
@@ -169,6 +171,11 @@ namespace RobotComponents.ABB.Kinematics
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
                 }
 
+                else if (ungrouped[i] is CirclePathMode circlePathMode)
+                {
+                    _cirPathMode = circlePathMode.Mode;
+                }
+
                 else if (ungrouped[i] is WaitTime waitTime)
                 {
                     _time += waitTime.Duration;
@@ -205,7 +212,7 @@ namespace RobotComponents.ABB.Kinematics
                         CircularMovementFromRobotTarget(movement);
                         counter++;
 
-                        _errorText.Insert(0 , "The tool orientation for MoveC instructions is not correct. " +
+                        _errorText.Insert(0, "The tool orientation for MoveC instructions is not accurate. " +
                             "Check you program with a simulation in Robot Studio.");
                     }
                 }
@@ -468,9 +475,14 @@ namespace RobotComponents.ABB.Kinematics
                 throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
             }
 
+            if (arc.AngleDegrees > 240)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
+            }
+
             Curve circle = arc.ToNurbsCurve();
             circle.Domain = new Interval(0, 1);
-
+            
             // Check the RAPID conditions
             // Minimum distance between start and ToPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(plane2.Origin) < 0.1)
@@ -487,11 +499,23 @@ namespace RobotComponents.ABB.Kinematics
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
             }
+            // Circle Path Mode specific restrictions
+            if (_cirPathMode == CirPathMode.CirPointOri)
+            {
+                circle.ClosestPoint(cirPoint, out double param);
+
+                if (param < 0.25 | param > 0.75)
+                {
+                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
+                }
+            }
 
             // Target plane position and orientation change per interpolation step
             double paramChange = 1.0 / _interpolations;
-            Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations; // Incorrect! 
-            Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations; // Incorrect! 
+
+            // For linear interpolation: Object frame mode
+            Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations;
+            Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations;
 
             // New movement
             Movement newMovement = movement.DuplicateWithoutMesh();
@@ -502,15 +526,34 @@ namespace RobotComponents.ABB.Kinematics
             // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
             for (int i = 0; i < _interpolations; i++)
             {
-                // Plane: the target plane in WORK OBJECT coordinate space
-                Plane plane = new Plane(circle.PointAt(paramChange * (i + 1)), plane1.XAxis + xAxisChange * (i + 1), plane1.YAxis + yAxisChange * (i + 1)); // Incorrect! 
+                // Point
+                Point3d point = circle.PointAt(paramChange * (i + 1));
+
+                // Orientation
+                // Rotates both target planes to the current position. 
+                double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                Plane plane3 = new Plane(plane1);
+                Plane plane4 = new Plane(plane2);
+                Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                plane3.Transform(xform1);
+                plane4.Transform(xform2);
+
+                // Weighted average between the two rotated target planes
+                double amount = (i + 1) * paramChange;
+                Vector3d xAxis = plane3.XAxis + amount * (plane4.XAxis - plane3.XAxis);
+                Vector3d yAxis = plane3.YAxis + amount * (plane4.YAxis - plane3.YAxis);
+
+                // New plane
+                Plane plane = new Plane(point, xAxis, yAxis);
 
                 // Update the external joint position
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
                 newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.AxisConfig, newExternalJointPosition);
-                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(paramChange * (i + 0.5)), plane1.XAxis + xAxisChange * (i + 0.5), plane1.YAxis + yAxisChange * (i + 0.5)); // Incorrect! 
+                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(paramChange * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
 
                 // Calculate joint positions
                 _robot.InverseKinematics.Movement = newMovement;

@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\CirclePathModeComponent.cs" />
+    <Compile Include="Components\Code Generation\Value Lists\CirclePathModeValueList.cs" />
     <Compile Include="Obsolete\v2\WaitTimeComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\MoveComponent_OBSOLETE.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="Components\Utilities\PlaneToQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOff.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_CirclePathMode.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOn.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_WaitAI.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_WaitSyncTask.cs" />

@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.quinary; }
+            get {return GH_Exposure.tertiary; }
         }
 
         /// <summary>

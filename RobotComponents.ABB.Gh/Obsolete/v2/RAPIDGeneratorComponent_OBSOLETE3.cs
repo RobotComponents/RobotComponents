@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
     /// <summary>
     /// RobotComponents Rapid Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    [Obsolete("This class is obsolete and will be removed in v3. Use Param_SetDigitalOutput instead.", false)]
+    [Obsolete("This class is obsolete and will be removed in the future.", false)]
     public class RAPIDGeneratorComponent_OBSOLETE3 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields

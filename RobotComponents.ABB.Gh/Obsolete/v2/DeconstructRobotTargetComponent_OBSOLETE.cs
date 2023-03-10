@@ -13,17 +13,18 @@ using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotTargetComponent : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class DeconstructRobotTargetComponent_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
-        public DeconstructRobotTargetComponent()
+        public DeconstructRobotTargetComponent_OBSOLETE()
           : base("Deconstruct Robot Target", "DeConRobTar", 
               "Deconstructs a Robot Target into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -47,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
-            pManager.RegisterParam(new Param_ConfigurationData(), "Configuration Data", "CD", "The robot configuration as Configuration Data");
+            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
             pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The positions of the external logical axes as an External Joint Position");
         }
    
@@ -74,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Output
                 DA.SetData(0, target.Name);
                 DA.SetData(1, target.Plane);
-                DA.SetData(2, target.ConfigurationData);
+                DA.SetData(2, target.ConfigurationData.Cfx);
                 DA.SetData(3, target.ExternalJointPosition);
             }
         }
@@ -86,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("BD810C50-2530-4F3B-A693-B43BB49FDDF0"); }
+            get { return new Guid("2EE07DDD-B0F2-4111-BFD3-B88364B55415"); }
         }
         #endregion
 

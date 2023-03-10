@@ -61,6 +61,7 @@
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\ConfigurationDataComponent.cs" />
+    <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructConfigurationDataComponent.cs" />
     <Compile Include="Obsolete\v2\RAPIDGeneratorComponent_OBSOLETE3.cs" />

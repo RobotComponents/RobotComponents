@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return " Load Data";
+            return "Load Data";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => " Load Data"; set => base.Name = value; }
+        public override string Name { get => "Load Data"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 

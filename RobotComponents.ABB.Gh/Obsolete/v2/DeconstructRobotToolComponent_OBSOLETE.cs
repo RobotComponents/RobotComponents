@@ -13,17 +13,18 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Deconstruct Robot Tool component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotToolComponent : GH_Component
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class DeconstructRobotToolComponent_OBSOLETE : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
-        public DeconstructRobotToolComponent()
+        public DeconstructRobotToolComponent_OBSOLETE()
           : base("Deconstruct Robot Tool", "DeRobTool",
               "Deconstructs a Robot Tool component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -49,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "The tool loaddata as Load Data.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "The tool load data as Load Data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("DA380F54-54A2-400D-A573-7E8F7DA54A91"); }
+            get { return new Guid("830CC56C-ACEB-448D-A513-89AAA5414145"); }
         }
         #endregion
 

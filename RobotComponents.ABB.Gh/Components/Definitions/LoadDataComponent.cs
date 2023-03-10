@@ -21,12 +21,12 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Tool component. An inherent from the GH_Component Class.
+    /// RobotComponents Load Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotToolComponent : GH_Component, IObjectManager
+    public class LoadDataComponent : GH_Component, IObjectManager
     {
         #region fields
-        private GH_Structure<GH_RobotTool> _tree = new GH_Structure<GH_RobotTool>();
+        private GH_Structure<GH_LoadData> _tree = new GH_Structure<GH_LoadData>();
         private List<string> _registered = new List<string>();
         private readonly List<string> _toRegister = new List<string>();
         private ObjectManager _objectManager;
@@ -34,15 +34,10 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         private bool _isUnique = true;
         #endregion
 
-        /// <summary>
-        /// Each implementation of GH_Component must provide a public constructor without any arguments.
-        /// Category represents the Tab in which the component will appear,  Subcategory the panel. 
-        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
-        /// </summary>
-        public RobotToolComponent()
-          : base("Robot Tool", "RobTool",
-              "Generates a robot tool based on attachment and effector planes."
-            + System.Environment.NewLine + System.Environment.NewLine +
+        public LoadDataComponent()
+          : base("Load Data", "LoDa",
+              "Defines load data."
+               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
         {
@@ -53,13 +48,15 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item, "tool1");
-            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.list);
-            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
-            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "Load Data as Load Data", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Load Data name as Text.", GH_ParamAccess.item, "load1");
+            pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number.", GH_ParamAccess.item, 0.001);
+            pManager.AddPointParameter("Center of Gravity", "CG", "The center of gravity of the load as a Point.", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Axes of Moment", "AM", "The orientation of the load coordinate system defined by the principal inertial axes of the tool as a Plane.", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Inertial Moments", "IM", "the moment of inertia of the load in kgm2 as a Vector.", GH_ParamAccess.item);
 
             pManager[1].Optional = true;
+            pManager[2].Optional = true;
+            pManager[3].Optional = true;
             pManager[4].Optional = true;
         }
 
@@ -68,7 +65,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_LoadData(), "Load Data", "LD", "Resulting Load Data");   
         }
 
         /// <summary>
@@ -79,27 +76,36 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string name = "default_tool";
-            List<Mesh> meshes = new List<Mesh>();
-            Plane attachmentPlane = Plane.Unset;
-            Plane toolPlane = Plane.Unset;
-            LoadData loadData = new LoadData();
+            string name = "load1";
+            double mass = 0.001;
+            Point3d centerOfGravity = new Point3d(0, 0, 0.001);
+            Plane axesOfMoment = Plane.WorldXY;
+            Vector3d inertialMoments = new Vector3d(0, 0, 0);
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
-            if (!DA.GetDataList(1, meshes)) { meshes = new List<Mesh>() { new Mesh() }; }
-            if (!DA.GetData(2, ref attachmentPlane)) { return; }
-            if (!DA.GetData(3, ref toolPlane)) { return; };
-            if (!DA.GetData(4, ref loadData)) { loadData = new LoadData() { Name = "" }; };
-           
+            if (!DA.GetData(1, ref mass)) { mass = 0.001; }
+            if (!DA.GetData(2, ref centerOfGravity)) { centerOfGravity = new Point3d(0, 0, 0.001); }
+            if (!DA.GetData(3, ref axesOfMoment)) { axesOfMoment = Plane.WorldXY; }
+            if (!DA.GetData(4, ref inertialMoments)) { inertialMoments = new Vector3d(0, 0, 0); }
+
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            // Create the Robot Tool
-            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, loadData);
+            // Check tool mass
+            if (mass < 0.0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Tool mass cannot be negative.");
+            }
 
-            // Outputs
-            DA.SetData(0, robotTool);
+            // Convert to quaternion
+            Quaternion quaternion = ABB.Utils.HelperMethods.PlaneToQuaternion(axesOfMoment);
+
+            // Make work object
+            LoadData loadData = new LoadData(name, mass, centerOfGravity, quaternion, inertialMoments);
+
+            // Output
+            DA.SetData(0, loadData);
         }
 
         /// <summary>
@@ -109,7 +115,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             base.AfterSolveInstance();
 
-            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_RobotTool>;
+            _tree = this.Params.Output[0].VolatileData as GH_Structure<GH_LoadData>;
 
             if (_tree.Branches.Count != 0)
             {
@@ -162,7 +168,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ToolPlane_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -172,7 +178,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("69F6DF47-A0E2-45EC-BC24-38460DFE11C6"); }
+            get { return new Guid("4BC58335-0CBE-47D6-986B-61F6ABF1D199"); }
         }
         #endregion
 

@@ -29,7 +29,8 @@ namespace RobotComponents.ABB.Actions
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
         private readonly Dictionary<string, IJointPosition> _jointPositions = new Dictionary<string, IJointPosition>(); // Dictionary that stores all the unique joint positions used by the RAPIDGenerator
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
-        private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); // Dictionary that stores all the unique robo ttools used by the RAPIDGenerator
+        private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); // Dictionary that stores all the unique robot tools used by the RAPIDGenerator
+        private readonly Dictionary<string, LoadData> _loadDatas = new Dictionary<string, LoadData>(); // Dictionary that stores all the unique load datas used by the RAPIDGenerator
         private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>(); // Dictionary that stores all the unique work objects used by the RAPIDGenerator
         private readonly Dictionary<string, TaskList> _taskLists = new Dictionary<string, TaskList>(); // Dictionary that stores all the unique task lists used by the RAPIDGenerator
         private readonly Dictionary<string, ISyncident> _syncidents = new Dictionary<string, ISyncident>(); // Dictionary that stores all the unique sync ids used by the RAPIDGenerator
@@ -45,6 +46,7 @@ namespace RobotComponents.ABB.Actions
         private readonly List<string> _errorText = new List<string>(); // List with collected error messages: for now only checking for absolute joint momvements!
         private bool _synchronizedMovements = false; // Indicates if the movements are synchronized
         private readonly List<string> _tooldata = new List<string>(); // List with RAPID tooldata
+        private readonly List<string> _loaddata = new List<string>(); // List with RAPID tooldata
         private readonly List<string> _wobjdata = new List<string>(); // List with RAPID wobjdata
         #endregion
 
@@ -136,8 +138,9 @@ namespace RobotComponents.ABB.Actions
         /// </summary>
         /// <param name="addTooldata"> Specifies if the tooldata should be added to the RAPID module. </param>
         /// <param name="addWobjdata"> Specifies if the wobjdata should be added to the RAPID module. </param>
+        /// <param name="addLoaddata"> Specifies if the loaddata should be added to the RAPID module. </param>
         /// <returns> The RAPID module as a list with code lines. </returns>
-        public List<string> CreateModule(bool addTooldata = true, bool addWobjdata = true)
+        public List<string> CreateModule(bool addTooldata = true, bool addWobjdata = true, bool addLoaddata = true)
         {
             // Reset fields
             _module.Clear();
@@ -151,16 +154,19 @@ namespace RobotComponents.ABB.Actions
             _targets.Clear();
             _zoneDatas.Clear();
             _robotTools.Clear();
+            _loadDatas.Clear();
             _workObjects.Clear();
             _taskLists.Clear();
             _syncidents.Clear();
             _errorText.Clear();
             _tooldata.Clear();
+            _loaddata.Clear();
             _wobjdata.Clear();
 
             // Save initial tool and add to used tools
             RobotTool initTool = _robot.Tool.Duplicate();
             _robotTools.Add(_robot.Tool.Name, _robot.Tool);
+            _loadDatas.Add(_robot.Tool.LoadData.Name, _robot.Tool.LoadData);
 
             // Check if the first movement is an Absolute Joint Movement
             _firstMovementIsMoveAbsJ = CheckFirstMovement(_actions);
@@ -254,6 +260,15 @@ namespace RobotComponents.ABB.Actions
             // Add tooldata and wobjdata
             int index = 5;
 
+            // Create loaddata
+            foreach (KeyValuePair<string, LoadData> entry in _loadDatas)
+            {
+                if (entry.Value.Name != "load0" && entry.Value.Name != null && entry.Value.Name != "")
+                {
+                    _loaddata.Add(entry.Value.ToRAPIDDeclaration());
+                }
+            }
+
             // Create tooldata
             foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
             {
@@ -269,6 +284,28 @@ namespace RobotComponents.ABB.Actions
                 if (entry.Value.Name != "wobj0" && entry.Value.Name != null && entry.Value.Name != "")
                 {
                     _wobjdata.Add(entry.Value.ToRAPIDDeclaration());
+                }
+            }
+
+            // Add loaddata
+            if (addLoaddata == true)
+            {
+                // Create tooldata
+                List<string> loaddata = new List<string>();
+
+                for (int i = 0; i != _loaddata.Count; i++)
+                {
+                    loaddata.Add("    " + _loaddata[i]);
+                }
+
+                if (_loaddata.Count != 0)
+                {
+                    _module.Insert(index, "    " + "! User defined loaddata");
+                    index += 1;
+                    _module.InsertRange(index, loaddata);
+                    index += loaddata.Count;
+                    _module.Insert(index, "    ");
+                    index += 1;
                 }
             }
 
@@ -494,6 +531,14 @@ namespace RobotComponents.ABB.Actions
         }
 
         /// <summary>
+        /// Gets the collection with unique Load Datas used to create the RAPID program module. 
+        /// </summary>
+        public Dictionary<string, LoadData> LoadDatas
+        {
+            get { return _loadDatas; }
+        }
+
+        /// <summary>
         /// Gets the collection with unique Work Objects used to create the RAPID program module. 
         /// </summary>
         public Dictionary<string, WorkObject> WorkObjects
@@ -580,6 +625,14 @@ namespace RobotComponents.ABB.Actions
         public List<string> Tooldata
         {
             get { return _tooldata; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID loaddata.
+        /// </summary>
+        public List<string> Loaddata
+        {
+            get { return _loaddata; }
         }
 
         /// <summary>

@@ -88,6 +88,7 @@
     <Compile Include="Definitions\GH_ExternalRotationalAxis.cs" />
     <Compile Include="Actions\Instructions\GH_Movement.cs" />
     <Compile Include="Actions\Instructions\GH_OverrideRobotTool.cs" />
+    <Compile Include="Definitions\GH_LoadData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Definitions\GH_Robot.cs" />
     <Compile Include="Definitions\GH_RobotTool.cs" />

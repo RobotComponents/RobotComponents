@@ -172,6 +172,22 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Load Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_LoadData)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_LoadData(); }
+                else { target = (Q)(object)new GH_LoadData(Value.LoadData); }
+                return true;
+            }
+
+            //Cast to Load Data
+            if (typeof(Q).IsAssignableFrom(typeof(LoadData)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.LoadData; }
+                return true;
+            }
+
             //Cast to Mesh
             if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
             {

@@ -81,6 +81,7 @@
     <Compile Include="Actions\Interfaces\IJointPosition.cs" />
     <Compile Include="Actions\Declarations\ExternalJointPosition.cs" />
     <Compile Include="Actions\Declarations\ZoneData.cs" />
+    <Compile Include="Definitions\LoadData.cs" />
     <Compile Include="Definitions\ExternalAxis.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\Dynamic\CodeLine.cs" />

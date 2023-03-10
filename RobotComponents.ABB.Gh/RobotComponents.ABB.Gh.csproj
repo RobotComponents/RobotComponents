@@ -60,8 +60,13 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Obsolete\v2\RAPIDGeneratorComponent_OBSOLETE3.cs" />
     <Compile Include="Components\Code Generation\Instructions\CirclePathModeComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\CirclePathModeValueList.cs" />
+    <Compile Include="Components\Deconstruct\Definitions\DeconstructLoadDataComponent.cs" />
+    <Compile Include="Obsolete\v2\DeconstructRobotToolComponent_OBSOLETE.cs" />
+    <Compile Include="Components\Definitions\LoadDataComponent.cs" />
+    <Compile Include="Obsolete\v2\RobotToolComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\WaitTimeComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\MoveComponent_OBSOLETE.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
@@ -260,6 +265,7 @@
     <Compile Include="Parameters\Controllers\Param_Controller.cs" />
     <Compile Include="Parameters\Controllers\Param_Signal.cs" />
     <Compile Include="Parameters\Definitions\Param_MechanicalUnit.cs" />
+    <Compile Include="Parameters\Definitions\Param_LoadData.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

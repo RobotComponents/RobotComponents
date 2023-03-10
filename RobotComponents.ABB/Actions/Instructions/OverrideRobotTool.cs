@@ -165,6 +165,12 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
             }
+
+            // Collect unique loaddatas
+            if (!RAPIDGenerator.LoadDatas.ContainsKey(_robotTool.LoadData.Name))
+            {
+                RAPIDGenerator.LoadDatas.Add(_robotTool.LoadData.Name, _robotTool.LoadData);
+            }
         }
         #endregion
 

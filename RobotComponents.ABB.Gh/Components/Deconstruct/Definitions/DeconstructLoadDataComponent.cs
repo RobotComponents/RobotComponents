@@ -6,6 +6,8 @@
 // System Libs
 using System;
 using System.Windows.Forms;
+// Rhino Libs
+using Rhino.Geometry;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -16,16 +18,16 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 {
     /// <summary>
-    /// RobotComponents Deconstruct Robot Tool component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Load Data component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DeconstructRobotToolComponent : GH_Component
+    public class DeconstructLoadDataComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructLoadData class.
         /// </summary>
-        public DeconstructRobotToolComponent()
-          : base("Deconstruct Robot Tool", "DeRobTool",
-              "Deconstructs a Robot Tool component into its parameters."
+        public DeconstructLoadDataComponent()
+          : base("Deconstruct Load Data", "DeLoDa",
+              "Deconstructs a Load Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Deconstruct")
@@ -37,7 +39,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "Load Data as Load Data", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,11 +47,11 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "The tool loaddata as Load Data.", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Load Data Name as Text", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number.", GH_ParamAccess.item);
+            pManager.AddPointParameter("Center of Gravity", "CG", "The center of gravity of the load as a Point.", GH_ParamAccess.item);
+            pManager.AddPlaneParameter("Axes of Moment", "AM", "The orientation of the load coordinate system defined by the principal inertial axes of the tool as a Plane.", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Inertial Moments", "IM", "the moment of inertia of the load in kgm2 as a Vector.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -59,25 +61,25 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            RobotTool robotTool = null;
+            LoadData loadData = null;
 
             // Catch the input data
-            if (!DA.GetData(0, ref robotTool)) { return; }
+            if (!DA.GetData(0, ref loadData)) { return; }
 
-            if (robotTool != null)
+            if (loadData != null)
             {
                 // Check if the object is valid
-                if (!robotTool.IsValid)
+                if (!loadData.IsValid)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Robot Tool is not valid");
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The Load Data is not valid");
                 }
 
                 // Output
-                DA.SetData(0, robotTool.Name);
-                DA.SetData(1, robotTool.Mesh);
-                DA.SetData(2, robotTool.AttachmentPlane);
-                DA.SetData(3, robotTool.ToolPlane);
-                DA.SetData(4, robotTool.LoadData);
+                DA.SetData(0, loadData.Name);
+                DA.SetData(1, loadData.Mass);
+                DA.SetData(2, loadData.CenterOfGravity);
+                DA.SetData(3, ABB.Utils.HelperMethods.QuaternionToPlane(new Point3d(0, 0, 0), loadData.AxesOfMoment));
+                DA.SetData(4, loadData.InertialMoments);
             }
         }
 
@@ -104,7 +106,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructRobotTool_Icon; }
+            get { return null; }
         }
 
         /// <summary>
@@ -112,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("DA380F54-54A2-400D-A573-7E8F7DA54A91"); }
+            get { return new Guid("670E1BAC-6F56-4B9E-BE44-4677A4EF8E75"); }
         }
         #endregion
 

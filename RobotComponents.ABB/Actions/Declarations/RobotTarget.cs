@@ -28,12 +28,12 @@ namespace RobotComponents.ABB.Actions.Declarations
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // robot target variable name
-        private Plane _plane; // target plane (defines the required position and orientation of the tool)
-        private Quaternion _quat; // target plane orientation (as quarternion)
-        private int _axisConfig; // the axis configuration of the robot 
-        private ExternalJointPosition _externalJointPosition; // the position of the external logical axes
+        private VariableType _variableType;
+        private string _name;
+        private Plane _plane;
+        private Quaternion _quat;
+        private ConfigurationData _configurationData;
+        private ExternalJointPosition _externalJointPosition;
         #endregion
 
         #region (de)serialization
@@ -49,9 +49,18 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
-            _axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
             _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
             _quat = HelperMethods.PlaneToQuaternion(_plane);
+
+            if (version >= 2001000)
+            {
+                _configurationData = (ConfigurationData)info.GetValue("Configuration Data", typeof(ConfigurationData));
+            }
+            else
+            {
+                int axisConfig = (int)info.GetValue("Axis Configuration", typeof(int));
+                _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            }
         }
 
         /// <summary>
@@ -67,7 +76,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
-            info.AddValue("Axis Configuration", _axisConfig, typeof(int));
+            info.AddValue("Configuration Data", _configurationData, typeof(ConfigurationData));
             info.AddValue("External Joint Position", _externalJointPosition, typeof(ExternalJointPosition));
         }
         #endregion
@@ -91,7 +100,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
-            _axisConfig = 0;
+            _configurationData = new ConfigurationData(0 ,0, 0, 0);
             _externalJointPosition = new ExternalJointPosition();
             _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
@@ -107,103 +116,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
-            _axisConfig = 0;
+            _configurationData = new ConfigurationData(0, 0, 0, 0);
             _externalJointPosition = new ExternalJointPosition();
-            _quat = HelperMethods.PlaneToQuaternion(_plane);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
-        /// </summary>
-        /// <param name="plane"> Thr target plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
-        public RobotTarget(Plane plane, int axisConfig)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition();
-            _quat = HelperMethods.PlaneToQuaternion(_plane);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
-        /// </summary>
-        /// <param name="name"> The target name, must be unique. </param>
-        /// <param name="plane"> Thr target plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
-        public RobotTarget(string name, Plane plane, int axisConfig)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition();
-            _quat = HelperMethods.PlaneToQuaternion(_plane);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
-        /// </summary>
-        /// <param name="plane"> The target plane. </param>
-        /// <param name="referencePlane"> The reference plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
-        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition();
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane from the reference coordinate system to the world coordinate system
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
-        /// </summary>
-        /// <param name="name"> The target name, must be unique. </param>
-        /// <param name="plane"> The target plane. </param>
-        /// <param name="referencePlane"> The reference plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
-        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-            _plane = plane;            
-            _axisConfig = axisConfig;
-            _externalJointPosition = new ExternalJointPosition();
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane from the reference coordinate system to the world coordinate system
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class.
-        /// </summary>
-        /// <param name="plane"> The target plane.</param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
-        /// <param name="externalJointPosition"> The External Joint Position. </param>
-        public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = externalJointPosition;
             _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
 
@@ -212,40 +126,17 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="name"> The target name, must be unique. </param>
         /// <param name="plane"> The target plane.</param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        /// <param name="configurationData"> The Configuration Data. </param>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        public RobotTarget(string name, Plane plane, ConfigurationData configurationData, ExternalJointPosition externalJointPosition)
         {
             _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
-            _axisConfig = axisConfig;
+            _configurationData = configurationData;
             _externalJointPosition = externalJointPosition;
             _quat = HelperMethods.PlaneToQuaternion(_plane);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Robot Target class.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
-        /// </summary>
-        /// <param name="plane"> The target plane.</param>
-        /// <param name="referencePlane"> The Reference plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
-        /// <param name="externalJointPosition"> The External Joint Position. </param>
-        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
-        {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-            _plane = plane;
-            _axisConfig = axisConfig;
-            _externalJointPosition = externalJointPosition;
-            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
-
-            // Re-orient the plane to the reference plane
-            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
-            _plane.Transform(orient);
         }
 
         /// <summary>
@@ -255,15 +146,15 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="name"> The target name, must be unique.</param>
         /// <param name="plane"> The target plane.</param>
         /// <param name="referencePlane"> The Reference plane. </param>
-        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
+        /// <param name="configurationData"> The Configuration Data. </param>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        public RobotTarget(string name, Plane plane, Plane referencePlane, ConfigurationData configurationData, ExternalJointPosition externalJointPosition)
         {
             _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
-            _axisConfig = axisConfig;
+            _configurationData = configurationData;
             _externalJointPosition = externalJointPosition;
             _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
 
@@ -282,7 +173,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = target.VariableType;
             _name = target.Name;
             _plane = target.Plane == null ? Plane.Unset : new Plane(target.Plane);
-            _axisConfig = target.AxisConfig;
+            _configurationData = target.ConfigurationData.Duplicate();
             _externalJointPosition = target.ExternalJointPosition.Duplicate();
             _quat = target.Quat;
         }
@@ -422,9 +313,9 @@ namespace RobotComponents.ABB.Actions.Declarations
                 List<double> val = values.ToList().ConvertAll(item => Convert.ToDouble(item));
 
                 _plane = HelperMethods.QuaternionToPlane(val[0], val[1], val[2], val[3], val[4], val[5], val[6]);
-                _quat = HelperMethods.PlaneToQuaternion(_plane);
-                _axisConfig = Convert.ToInt32(val[10]);
+                _configurationData = new ConfigurationData((int)val[7], (int)val[8], (int)val[9], (int)val[10]);
                 _externalJointPosition = new ExternalJointPosition(val[11], val[12], val[13], val[14], val[15], val[16]);
+                _quat = HelperMethods.PlaneToQuaternion(_plane);
             }
             else
             {
@@ -490,10 +381,15 @@ namespace RobotComponents.ABB.Actions.Declarations
         public string ToRAPID()
         {
             string externalJointPosition = _externalJointPosition.Name;
+            string configurationData = _configurationData.Name;
 
             if (externalJointPosition == "")
             {
                 externalJointPosition = _externalJointPosition.ToRAPID();
+            }
+            if (configurationData == "")
+            {
+                configurationData = _configurationData.ToRAPID();
             }
 
             string code = $"[";
@@ -504,7 +400,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             code += $"{_quat.B:0.######}, ";
             code += $"{_quat.C:0.######}, ";
             code += $"{_quat.D:0.######}], ";
-            code += $"[0,0,0,{_axisConfig}], ";
+            code += $"{configurationData}, ";
             code += $"{externalJointPosition}]";
 
             return code;
@@ -545,6 +441,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
+            _configurationData.ToRAPIDDeclaration(RAPIDGenerator);
             _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
 
             if (_name != "")
@@ -577,8 +474,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 if (_plane == null) { return false; }
                 if (_plane == Plane.Unset) { return false; }
-                if (_axisConfig < 0) { return false; }
-                if (_axisConfig > 7) { return false; }
+                if (_configurationData == null) { return false; }
+                if (_configurationData.IsValid == false) { return false; }
                 if (_externalJointPosition == null) { return false; }
                 if (_externalJointPosition.IsValid == false) { return false; }
                 return true;
@@ -646,13 +543,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or set the axis configuration.
-        /// Min. value 0. Max. value 7.
+        /// Gets or sets the configuration data.
         /// </summary>
-        public int AxisConfig
+        public ConfigurationData ConfigurationData
         {
-            get { return _axisConfig; }
-            set { _axisConfig = value; }
+            get { return _configurationData; }
+            set { _configurationData = value; }
         }
 
         /// <summary>
@@ -662,6 +558,187 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _externalJointPosition; }
             set { _externalJointPosition = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
+        /// </summary>
+        /// <param name="plane"> Thr target plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(Plane plane, int axisConfig)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = "";
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined External Joint Position.
+        /// </summary>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> Thr target plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(string name, Plane plane, int axisConfig)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = name;
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="plane"> The target plane. </param>
+        /// <param name="referencePlane"> The reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = "";
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> The target plane. </param>
+        /// <param name="referencePlane"> The reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = name;
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = new ExternalJointPosition();
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane from the reference coordinate system to the world coordinate system
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// </summary>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = "";
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// </summary>
+        /// <param name="name"> The target name, must be unique. </param>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(string name, Plane plane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = name;
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(_plane);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="name"> The target name, must be unique.</param>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="referencePlane"> The Reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(string name, Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = name;
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Robot Target class.
+        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// </summary>
+        /// <param name="plane"> The target plane.</param>
+        /// <param name="referencePlane"> The Reference plane. </param>
+        /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public RobotTarget(Plane plane, Plane referencePlane, int axisConfig, ExternalJointPosition externalJointPosition)
+        {
+            _scope = Scope.GLOBAL;
+            _variableType = VariableType.VAR;
+            _name = "";
+            _plane = plane;
+            _configurationData = new ConfigurationData(0, 0, 0, axisConfig);
+            _externalJointPosition = externalJointPosition;
+            _quat = HelperMethods.PlaneToQuaternion(referencePlane, _plane);
+
+            // Re-orient the plane to the reference plane
+            Transform orient = Transform.PlaneToPlane(referencePlane, Plane.WorldXY);
+            _plane.Transform(orient);
+        }
+
+        /// <summary>
+        /// Gets or set the axis configuration.
+        /// Min. value 0. Max. value 7.
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use ConfigurationData instead.", false)]
+        public int AxisConfig
+        {
+            get { return _configurationData.Cfx; }
+            set { _configurationData.Cfx = value; }
         }
         #endregion
     }

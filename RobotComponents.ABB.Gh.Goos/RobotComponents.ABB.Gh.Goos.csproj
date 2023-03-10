@@ -54,6 +54,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Declarations\GH_ConfigurationData.cs" />
     <Compile Include="Actions\GH_Action.cs" />
     <Compile Include="Actions\GH_Syncident.cs" />
     <Compile Include="Actions\Instructions\GH_AnalogOutput_OBSOLETE.cs" />

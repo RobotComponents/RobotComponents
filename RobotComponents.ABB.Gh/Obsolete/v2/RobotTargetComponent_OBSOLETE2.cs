@@ -21,12 +21,13 @@ using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.CodeGeneration
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
+    [Obsolete("This class is obsolete and will be removed in the future.", false)]
+    public class RobotTargetComponent_OBSOLETE2 : GH_Component, IGH_VariableParameterComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
@@ -45,7 +46,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotTargetComponent()
+        public RobotTargetComponent_OBSOLETE2()
           : base("Robot Target", "RT",
               "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -72,9 +73,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddParameter(new Param_ConfigurationData(), "Configuration Data", "CD", "Robot configuration as Configuration Data", GH_ParamAccess.item);
-            
-            pManager[2].Optional = true;
+            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
         }
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             string name = string.Empty;
             Plane plane = Plane.WorldXY;
             Plane referencePlane = Plane.WorldXY;
-            ConfigurationData configurationData = new ConfigurationData();
+            int axisConfig = 0;
             ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch inputs
@@ -105,9 +104,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             {
                 if (!DA.GetData(parameters[0].Name, ref referencePlane)) { referencePlane = Plane.WorldXY; }
             }
-            if (Params.Input.Any(x => x.Name == "Configuration Data"))
+            if (Params.Input.Any(x => x.Name == "Axis Configuration"))
             {
-                if (!DA.GetData("Configuration Data", ref configurationData)) { configurationData = new ConfigurationData(0, 0, 0, 0); }
+                if (!DA.GetData("Axis Configuration", ref axisConfig)) { axisConfig = 0; }
             }
             if (Params.Input.Any(x => x.Name == parameters[1].Name))
             {
@@ -117,7 +116,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            RobotTarget target = new RobotTarget(name, plane, referencePlane, configurationData, externalJointPosition);
+            RobotTarget target = new RobotTarget(name, plane, referencePlane, new ConfigurationData(0, 0, 0, axisConfig), externalJointPosition);
 
             // Sets Output
             DA.SetData(0, target);
@@ -166,7 +165,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -193,7 +192,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("B6FD2D36-E091-40DC-A15C-44FD0310632C"); }
+            get { return new Guid("A7D3F790-903D-4F62-A547-623E87CBEDE3"); }
         }
         #endregion
 

@@ -365,7 +365,7 @@ namespace RobotComponents.ABB.Kinematics
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
-                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.AxisConfig, newExternalJointPosition);
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
 
                 // Calculate joint positions
                 _robot.InverseKinematics.Movement = newMovement;
@@ -552,7 +552,7 @@ namespace RobotComponents.ABB.Kinematics
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
-                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.AxisConfig, newExternalJointPosition);
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
                 newMovement.CircularPoint.Plane = new Plane(circle.PointAt(paramChange * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
 
                 // Calculate joint positions

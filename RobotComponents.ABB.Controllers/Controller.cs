@@ -593,7 +593,10 @@ namespace RobotComponents.ABB.Controllers
                         robotTarget.Rot.Q3,
                         robotTarget.Rot.Q4);
 
-                    _robotTargets[_tasks[i].Name].AxisConfig = robotTarget.Robconf.Cfx;
+                    _robotTargets[_tasks[i].Name].ConfigurationData.Cf1 = robotTarget.Robconf.Cf1;
+                    _robotTargets[_tasks[i].Name].ConfigurationData.Cf4 = robotTarget.Robconf.Cf4;
+                    _robotTargets[_tasks[i].Name].ConfigurationData.Cf6 = robotTarget.Robconf.Cf6;
+                    _robotTargets[_tasks[i].Name].ConfigurationData.Cfx = robotTarget.Robconf.Cfx;
 
                     _robotTargets[_tasks[i].Name].ExternalJointPosition[0] = robotTarget.Extax.Eax_a < 9e8 ? robotTarget.Extax.Eax_a : _robotTargets[_tasks[i].Name].ExternalJointPosition[0];
                     _robotTargets[_tasks[i].Name].ExternalJointPosition[1] = robotTarget.Extax.Eax_b < 9e8 ? robotTarget.Extax.Eax_b : _robotTargets[_tasks[i].Name].ExternalJointPosition[1];

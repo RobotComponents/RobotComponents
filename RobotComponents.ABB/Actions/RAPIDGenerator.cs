@@ -26,6 +26,7 @@ namespace RobotComponents.ABB.Actions
         private Robot _robot; // Robot to construct the code for
         private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>(); // Dictionary that stores all speedDatas used by the RAPIDGenerator
+        private readonly Dictionary<string, ConfigurationData> _configurationDatas = new Dictionary<string, ConfigurationData>(); // Dictionary that stores all configurationDatas used by the RAPIDGenerator
         private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); // Dictionary that stores all zoneDatas used by the RAPIDGenerator
         private readonly Dictionary<string, IJointPosition> _jointPositions = new Dictionary<string, IJointPosition>(); // Dictionary that stores all the unique joint positions used by the RAPIDGenerator
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>(); // Dictionary that stores all the unique targets used by the RAPIDGenerator
@@ -149,6 +150,7 @@ namespace RobotComponents.ABB.Actions
             _programDeclarationCustomCodeLines.Clear();
             _programDeclarationsMultiMove.Clear();
             _programInstructions.Clear();
+            _configurationDatas.Clear();
             _speedDatas.Clear();
             _jointPositions.Clear();
             _targets.Clear();
@@ -488,6 +490,14 @@ namespace RobotComponents.ABB.Actions
         public bool FirstMovementIsMoveAbsJ
         {
             get { return _firstMovementIsMoveAbsJ; }
+        }
+
+        /// <summary>
+        /// Gets the collection with unique Configuration Datas used to create the RAPID program module. 
+        /// </summary>
+        public Dictionary<string, ConfigurationData> ConfigurationDatas
+        {
+            get { return _configurationDatas; }
         }
 
         /// <summary>

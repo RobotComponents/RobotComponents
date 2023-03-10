@@ -381,7 +381,7 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Select solution
-                _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
+                _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
             }
 
             else if (_target is JointTarget jointTarget)
@@ -397,10 +397,12 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates and returns the closest Robot Joint Position to a given previous Robot Joint Position.
+        /// </summary>
+        /// <remarks>
         /// This methods sets and returns the closest Robot Joint Poistion insides this Inverse Kinematics object. 
         /// You first have to calculate the Inverse Kinematics solution before you call this method. 
-        /// This method is typically used for using the Auto Axis Config inside the Path Generator.
-        /// </summary>
+        /// This method is typically used for using Configuration Control inside the Path Generator.
+        /// </remarks>
         /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
         /// <returns> The closest Robot Joint Position. </returns>
         public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)

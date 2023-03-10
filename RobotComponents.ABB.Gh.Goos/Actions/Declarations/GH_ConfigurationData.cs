@@ -7,8 +7,6 @@
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
-// Rhino Libs
-using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Declarations;
@@ -18,50 +16,50 @@ using RobotComponents.Utils;
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
-    /// Robot Target Goo wrapper class, makes sure the Robot Target class can be used in Grasshopper.
+    /// Configuration Data Goo wrapper class, makes sure the Configuration Data class can be used in Grasshopper.
     /// </summary>
-    public class GH_RobotTarget : GH_Goo<RobotTarget>, GH_ISerializable
+    public class GH_ConfigurationData : GH_Goo<ConfigurationData>, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_RobotTarget() 
+        public GH_ConfigurationData()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Create a Robot Target Goo instance from a Robot Target instance.
+        /// Data constructor: Create a Configuration Data Goo instance from a Configuration Data instance.
         /// </summary>
-        /// <param name="target"> Robot Target Value to store inside this Goo instance. </param>
-        public GH_RobotTarget(RobotTarget target)
+        /// <param name="configurationData"> Configuration Data Value to store inside this Goo instance. </param>
+        public GH_ConfigurationData(ConfigurationData configurationData)
         {
-            this.Value = target;
+            this.Value = configurationData;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Robot Target Goo instance from another Robot Target Goo instance.
-        /// This creates a shallow copy of the passed Robot Target Goo instance. 
+        /// Data constructor: Creates a Configuration Data Goo instance from another Configuration Data Goo instance.
+        /// This creates a shallow copy of the passed Configuration Data Goo instance. 
         /// </summary>
-        /// <param name="targetGoo"> Robot Target Goo to copy. </param>
-        public GH_RobotTarget(GH_RobotTarget targetGoo)
+        /// <param name="configurationDataGoo"> Configuration Data Goo instance to copy. </param>
+        public GH_ConfigurationData(GH_ConfigurationData configurationDataGoo)
         {
-            if (targetGoo == null)
+            if (configurationDataGoo == null)
             {
-                targetGoo = new GH_RobotTarget();
+                configurationDataGoo = new GH_ConfigurationData();
             }
 
-            this.Value = targetGoo.Value;
+            this.Value = configurationDataGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Robot Target Goo. </returns>
+        /// <returns> A duplicate of the Configuration Data Goo. </returns>
         public override IGH_Goo Duplicate()
         {
-            return new GH_RobotTarget(Value == null ? new RobotTarget() : Value.Duplicate());
+            return new GH_ConfigurationData(Value == null ? new ConfigurationData() : Value.Duplicate());
         }
         #endregion
 
@@ -86,9 +84,9 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         {
             get
             {
-                if (Value == null) { return "No internal Robot Target instance"; }
+                if (Value == null) { return "No internal Configuration Data instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Robot Target instance: Did you define a name and target plane?";
+                return "Invalid Configuration Data instance: Did you define the robot axis configurations?";
             }
         }
 
@@ -98,7 +96,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Robot Target"; }
+            if (Value == null) { return "Null Configuration Data"; }
             else { return Value.ToString(); }
         }
 
@@ -107,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeName
         {
-            get { return "Robot Target"; }
+            get { return ("Configuration Data"); }
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Robot Target"; }
+            get { return ("Defines a Configuration Data"); }
         }
         #endregion
 
@@ -123,37 +121,21 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// Attempt a cast to type Q.
         /// </summary>
-        /// <typeparam name="Q"> Type to cast to.  </typeparam>
+        /// <typeparam name="Q"> Type to cast to. </typeparam>
         /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to Target Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Target)))
+            //Cast to Configuration Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ConfigurationData)))
             {
-                if (Value == null) { target = (Q)(object)new GH_Target(); }
-                else { target = (Q)(object)new GH_Target(Value); }
+                if (Value == null) { target = (Q)(object)new GH_ConfigurationData(); }
+                else { target = (Q)(object)new GH_ConfigurationData(Value); }
                 return true;
             }
 
-            //Cast to Target
-            if (typeof(Q).IsAssignableFrom(typeof(ITarget)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value; }
-                return true;
-            }
-
-            //Cast to Robot Target Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_RobotTarget)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_Target(); }
-                else { target = (Q)(object)new GH_Target(Value); }
-                return true;
-            }
-
-            //Cast to Robot Target
-            if (typeof(Q).IsAssignableFrom(typeof(RobotTarget)))
+            //Cast to Configuration Data
+            if (typeof(Q).IsAssignableFrom(typeof(ConfigurationData)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -192,51 +174,11 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
-            //Cast to Configuration Data Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ConfigurationData)))
+            //Cast to Interger
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Integer)))
             {
-                if (Value == null) { target = (Q)(object)new GH_ConfigurationData(); }
-                else { target = (Q)(object)new GH_ConfigurationData(Value.ConfigurationData); }
-                return true;
-            }
-
-            //Cast to Configuration Data
-            if (typeof(Q).IsAssignableFrom(typeof(ConfigurationData)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value.ConfigurationData; }
-                return true;
-            }
-
-            //Cast to External Joint Position Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_ExternalJointPosition(); }
-                else { target = (Q)(object)new GH_ExternalJointPosition(Value.ExternalJointPosition); }
-                return true;
-            }
-
-            //Cast to External Joint Position
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalJointPosition)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value.ExternalJointPosition; }
-                return true;
-            }
-
-            //Cast to Plane
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Plane(Value.Plane); }
-                return true;
-            }
-
-            //Cast to Point
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
-            {
-                if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Point(Value.Plane.Origin); }
+                if (Value == null) { target = (Q)(object)new GH_Integer(); }
+                else { target = (Q)(object)new GH_Integer(Value.Cfx); }
                 return true;
             }
 
@@ -253,31 +195,33 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         {
             if (source == null) { return false; }
 
-            //Cast from Target
-            if (typeof(ITarget).IsAssignableFrom(source.GetType()))
+            //Cast from Configuration Data Goo
+            if (typeof(GH_ConfigurationData).IsAssignableFrom(source.GetType()))
             {
-                if (source is RobotTarget target)
-                {
-                    Value = target;
-                    return true;
-                }
+                GH_ConfigurationData configurationDataGoo = source as GH_ConfigurationData;
+                Value = configurationDataGoo.Value;
+                return true;
             }
 
-            //Cast from Target Goo
-            if (typeof(GH_Target).IsAssignableFrom(source.GetType()))
+            //Cast from Configuration Data
+            if (typeof(ConfigurationData).IsAssignableFrom(source.GetType()))
             {
-                GH_Target targetGoo = source as GH_Target;
-                if (targetGoo.Value is RobotTarget target)
-                {
-                    Value = target;
-                    return true;
-                }
+                Value = (ConfigurationData)source;
+                return true;
+            }
+
+            //Cast from Integer
+            if (typeof(GH_Integer).IsAssignableFrom(source.GetType()))
+            {
+                int cfx = (source as GH_Integer).Value;
+                Value = new ConfigurationData(0, 0, 0, cfx);
+                return true;
             }
 
             //Cast from Action
             if (typeof(Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is RobotTarget action)
+                if (source is ConfigurationData action)
                 {
                     Value = action;
                     return true;
@@ -288,34 +232,19 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is RobotTarget action)
+                if (actionGoo.Value is ConfigurationData action)
                 {
                     Value = action;
                     return true;
                 }
             }
 
-            //Cast from Robot Target
-            if (typeof(RobotTarget).IsAssignableFrom(source.GetType()))
-            {
-                Value = source as RobotTarget;
-                return true;
-            }
-
-            //Cast from Robot Target Goo
-            if (typeof(GH_RobotTarget).IsAssignableFrom(source.GetType()))
-            {
-                GH_RobotTarget targetGoo = source as GH_RobotTarget;
-                Value = targetGoo.Value as RobotTarget;
-                return true;
-            }
-
             //Cast from Declaration
             if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
             {
-                if (source is RobotTarget target)
+                if (source is ConfigurationData action)
                 {
-                    Value = target;
+                    Value = action;
                     return true;
                 }
             }
@@ -324,43 +253,11 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
             {
                 GH_Declaration declarationGoo = source as GH_Declaration;
-                if (declarationGoo.Value is RobotTarget target)
+                if (declarationGoo.Value is ConfigurationData configurationdata)
                 {
-                    Value = target;
+                    Value = configurationdata;
                     return true;
                 }
-            }
-
-            //Cast from Plane
-            if (typeof(Plane).IsAssignableFrom(source.GetType()))
-            {
-                Plane plane = (Plane)source;
-                Value = new RobotTarget(plane);
-                return true;
-            }
-
-            //Cast from Plane Goo
-            if (typeof(GH_Plane).IsAssignableFrom(source.GetType()))
-            {
-                GH_Plane planeGoo = (GH_Plane)source;
-                Value = new RobotTarget(planeGoo.Value);
-                return true;
-            }
-
-            //Cast from Point
-            if (typeof(Point3d).IsAssignableFrom(source.GetType()))
-            {
-                Point3d point = (Point3d)source;
-                Value = new RobotTarget(new Plane(point, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
-                return true;
-            }
-
-            //Cast from Point Goo
-            if (typeof(GH_Point).IsAssignableFrom(source.GetType()))
-            {
-                GH_Point pointGoo = (GH_Point)source;
-                Value = new RobotTarget(new Plane(pointGoo.Value, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
-                return true;
             }
 
             //Cast from Text
@@ -370,7 +267,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 
                 try
                 {
-                    Value = RobotTarget.Parse(text);
+                    Value = ConfigurationData.Parse(text);
                     return true;
                 }
                 catch
@@ -387,7 +284,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Robot Target";
+        private const string IoKey = "Configuration Data";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -419,7 +316,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (RobotTarget)Serialization.ByteArrayToObject(array);
+            this.Value = (ConfigurationData)Serialization.ByteArrayToObject(array);
 
             return true;
         }

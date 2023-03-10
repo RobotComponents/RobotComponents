@@ -174,7 +174,15 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
-            //Cast to Interger
+            //Cast to Number
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_Number(); }
+                else { target = (Q)(object)new GH_Number(Value.Cfx); }
+                return true;
+            }
+
+            //Cast to Integer
             if (typeof(Q).IsAssignableFrom(typeof(GH_Integer)))
             {
                 if (Value == null) { target = (Q)(object)new GH_Integer(); }
@@ -215,6 +223,14 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             {
                 int cfx = (source as GH_Integer).Value;
                 Value = new ConfigurationData(0, 0, 0, cfx);
+                return true;
+            }
+
+            //Cast from Number
+            if (typeof(GH_Number).IsAssignableFrom(source.GetType()))
+            {
+                double cfx = (source as GH_Number).Value;
+                Value = new ConfigurationData(0, 0, 0, (int)cfx);
                 return true;
             }
 

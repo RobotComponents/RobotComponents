@@ -292,9 +292,13 @@ namespace RobotComponents.ABB.Definitions
             {
                 return "Invalid Load Data";
             }
-            else
+            else if (_name != "")
             {
                 return $"Load Data ({_name})";
+            }
+            else
+            {
+                return $"Load Data";
             }
         }
 

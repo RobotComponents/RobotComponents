@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="Actions\GH_Action.cs" />
     <Compile Include="Actions\GH_Syncident.cs" />
+    <Compile Include="Actions\Instructions\GH_AnalogOutput_OBSOLETE.cs" />
+    <Compile Include="Actions\Instructions\GH_DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\GH_CirclePathMode.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOn.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOff.cs" />
@@ -67,7 +69,7 @@
     <Compile Include="Actions\Instructions\GH_Instruction.cs" />
     <Compile Include="Actions\Dynamic\GH_Dynamic.cs" />
     <Compile Include="Actions\Declarations\GH_Declaration.cs" />
-    <Compile Include="Actions\Instructions\GH_AnalogOutput.cs" />
+    <Compile Include="Actions\Instructions\GH_SetAnalogOutput.cs" />
     <Compile Include="Actions\Declarations\GH_ExternalJointPosition.cs" />
     <Compile Include="Actions\Declarations\GH_JointTarget.cs" />
     <Compile Include="Actions\Declarations\GH_RobotJointPosition.cs" />
@@ -76,7 +78,7 @@
     <Compile Include="Definitions\GH_MechanicalUnit.cs" />
     <Compile Include="Actions\Dynamic\GH_CodeLine.cs" />
     <Compile Include="Actions\Dynamic\GH_Comment.cs" />
-    <Compile Include="Actions\Instructions\GH_DigitalOutput.cs" />
+    <Compile Include="Actions\Instructions\GH_SetDigitalOutput.cs" />
     <Compile Include="Actions\Declarations\GH_RobotTarget.cs" />
     <Compile Include="Actions\Declarations\GH_ZoneData.cs" />
     <Compile Include="Actions\Instructions\GH_WaitDI.cs" />

@@ -92,7 +92,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="waitSyncTask"> The WaitSyncTask instance to duplicate. </param>
         public WaitSyncTask(WaitSyncTask waitSyncTask)
         {
-            _variableType = waitSyncTask.ReferenceType;
+            _variableType = waitSyncTask.VariableType;
             _syncident = waitSyncTask.SyncID;
             _taskList = waitSyncTask.TaskList.Duplicate();
             _inPosition = waitSyncTask.InPosition;
@@ -219,6 +219,16 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
+        public VariableType VariableType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
         public VariableType ReferenceType
         {
             get { return _variableType; }

@@ -14,16 +14,17 @@ using RobotComponents.ABB.Gh.Goos.Actions.Instructions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 {
     /// <summary>
-    /// Digital Output parameter
+    /// Analog Output parameter
     /// </summary>
-    public class Param_DigitalOutput : GH_PersistentParam<GH_DigitalOutput>
+    [Obsolete("This class is obsolete and will be removed in v3. Use Param_SetAnalogOutput instead.", false)]
+    public class Param_AnalogOutput : GH_PersistentParam<GH_AnalogOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_DigitalOutput> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_AnalogOutput> class
         /// </summary>
-        public Param_DigitalOutput()
-          : base(new GH_InstanceDescription("Digital Output Parameter", "DO",
-                "Contains the data of a Set Digital Output instruction."
+        public Param_AnalogOutput()
+          : base(new GH_InstanceDescription("Analog Output Parameter", "AO",
+                "Contains the data of a Set Analog Output instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +37,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Digital Output";
+            return "Analog Output";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Digital Output"; set => base.Name = value; }
+        public override string Name { get => "Analog Output"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +51,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DigitalOutput_Parameter_Icon; }
+            get { return Properties.Resources.AnalogOutput_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +59,15 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get {return GH_Exposure.tertiary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -67,17 +76,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("C137C7B6-C6C0-482F-8192-732D9B1EA651"); }
+            get { return new Guid("F26632C6-E93A-4DAC-A6C0-EA3D7B939C8B"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_AnalogOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_AnalogOutput value)
         {
             return GH_GetterResult.cancel;
         }

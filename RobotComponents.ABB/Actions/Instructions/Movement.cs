@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         private ZoneData _zoneData;
         private RobotTool _robotTool;
         private WorkObject _workObject;
-        private DigitalOutput _digitalOutput;
+        private SetDigitalOutput _setDigitalOutput;
 
         // For RAPID generator
         private ITarget _convertedTarget;
@@ -58,7 +58,16 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
-            _digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
+
+            if (version >= 2001000)
+            {
+                _setDigitalOutput = (SetDigitalOutput)info.GetValue("Set Digital Output", typeof(SetDigitalOutput));
+            }
+            else
+            {
+                DigitalOutput digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
+                _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
+            }
         }
 
         /// <summary>
@@ -79,7 +88,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             info.AddValue("Time", _time, typeof(double));
             info.AddValue("Robot Tool", _robotTool, typeof(RobotTool));
             info.AddValue("Work Object", _workObject, typeof(WorkObject));
-            info.AddValue("Digital Output", _digitalOutput, typeof(DigitalOutput));
+            info.AddValue("Set Digital Output", _setDigitalOutput, typeof(SetDigitalOutput));
         }
         #endregion
 
@@ -107,7 +116,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
         }
 
         /// <summary>
@@ -126,7 +135,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
         }
 
         /// <summary>
@@ -146,7 +155,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = new ZoneData(0);
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
             CheckCombination();
         }
 
@@ -168,7 +177,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
             CheckCombination();
         }
 
@@ -191,7 +200,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
             CheckCombination();
         }
 
@@ -214,7 +223,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = workObject;
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
             CheckCombination();
         }
 
@@ -226,7 +235,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="speedData"> The Speed Data.</param>
         /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, SetDigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _cirPoint = new RobotTarget(Plane.Unset);
@@ -237,7 +246,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = digitalOutput;
+            _setDigitalOutput = digitalOutput;
             CheckCombination();
         }
 
@@ -261,7 +270,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
-            _digitalOutput = new DigitalOutput(); // InValid / empty DO
+            _setDigitalOutput = new SetDigitalOutput(); // InValid / empty DO
             CheckCombination();
         }
 
@@ -274,7 +283,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, SetDigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _cirPoint = new RobotTarget(Plane.Unset);
@@ -285,7 +294,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
-            _digitalOutput = digitalOutput;
+            _setDigitalOutput = digitalOutput;
             CheckCombination();
         }
 
@@ -299,7 +308,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object. </param>
         /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, SetDigitalOutput digitalOutput)
         {
             _movementType = movementType;
             _cirPoint = new RobotTarget(Plane.Unset);
@@ -310,7 +319,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
-            _digitalOutput = digitalOutput;
+            _setDigitalOutput = digitalOutput;
             CheckCombination();
         }
 
@@ -328,7 +337,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _speedData = movement.SpeedData.Duplicate();
             _time = movement.Time;
             _zoneData = movement.ZoneData.Duplicate();
-            _digitalOutput = movement.DigitalOutput.Duplicate();
+            _setDigitalOutput = movement.SetDigitalOutput.Duplicate();
             _target = _target.DuplicateTarget();
 
             if (duplicateMesh == true)
@@ -612,7 +621,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             speedData += _time > 0 ? string.Format("\\T:={0}", _time) : "";
 
             // A movement not combined with a digital output
-            if (_digitalOutput == null || _digitalOutput.IsValid == false)
+            if (_setDigitalOutput == null || _setDigitalOutput.IsValid == false)
             {
                 if (_movementType == MovementType.MoveC)
                 {
@@ -637,7 +646,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 {
                     string code = $"{Enum.GetName(typeof(MovementType), _movementType)} ";
                     code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}; ";
-                    code += _digitalOutput.ToRAPIDInstruction(robot);
+                    code += _setDigitalOutput.ToRAPIDInstruction(robot);
                     return code;
                 }
 
@@ -646,7 +655,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 {
                     string code = $"{Enum.GetName(typeof(MovementType), _movementType)}DO {toPoint}, ";
                     code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}, ";
-                    code += $"{_digitalOutput.Name}, {(_digitalOutput.IsActive ? 1 : 0)};";
+                    code += $"{_setDigitalOutput.Name}, {(_setDigitalOutput.Value ? 1 : 0)};";
                     return code;
                 }
 
@@ -655,7 +664,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 {
                     string code = $"{Enum.GetName(typeof(MovementType), _movementType)}DO ";
                     code += $"{target}, {speedData}, {zoneData}, {toolName}\\WObj:={_workObject.Name}, ";
-                    code += $"{_digitalOutput.Name}, {(_digitalOutput.IsActive ? 1 : 0)};";
+                    code += $"{_setDigitalOutput.Name}, {(_setDigitalOutput.Value ? 1 : 0)};";
                     return code;
                 }
             }
@@ -833,13 +842,28 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </summary>
         /// <remarks>
         /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
-        /// If a valid Digital oOutput is combined movement will be created (MoveLDO or MoveJDO). 
+        /// If a valid Digital Output is combined movement will be created (MoveLDO or MoveJDO). 
         /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
         /// </remarks>
+        public SetDigitalOutput SetDigitalOutput
+        {
+            get { return _setDigitalOutput; }
+            set { _setDigitalOutput = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Digital Output. 
+        /// </summary>
+        /// <remarks>
+        /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
+        /// If a valid Digital Output is combined movement will be created (MoveLDO or MoveJDO). 
+        /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
+        /// </remarks>
+        [Obsolete("This property is obsolete and will be removed in v3. Use SetDigitalOutput instead.", false)]
         public DigitalOutput DigitalOutput
         {
-            get { return _digitalOutput; }
-            set { _digitalOutput = value; }
+            get { return new DigitalOutput(_setDigitalOutput.Name, _setDigitalOutput.Value); }
+            set { _setDigitalOutput = new SetDigitalOutput(value.Name, value.IsActive); }
         }
         #endregion
     }

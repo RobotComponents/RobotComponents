@@ -136,7 +136,7 @@ namespace RobotComponents.ABB.Definitions
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
             _scope = workObject.Scope;
-            _variableType = workObject.ReferenceType;
+            _variableType = workObject.VariableType;
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
             _userFrame = new Plane(workObject.UserFrame);
@@ -265,8 +265,8 @@ namespace RobotComponents.ABB.Definitions
 
             if (values.Length == 17)
             {
-                _robotHold = values[0] == "TRUE" ? true : false;
-                _fixedFrame = values[1] == "TRUE" ? true : false;
+                _robotHold = values[0] == "TRUE";
+                _fixedFrame = values[1] == "TRUE";
 
                 // External axes are ignored. 
                 _externalAxis = null;
@@ -502,6 +502,16 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the variable type. 
         /// </summary>
+        public VariableType VariableType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
         public VariableType ReferenceType
         {
             get { return _variableType; }
@@ -536,9 +546,12 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the user coordinate system, i.e. the position of the current work surface or fixture.
-        /// If the robot is holding the tool, the user coordinate system is defined in the world coordinate system (in the wrist coordinate system if a stationary tool is used). 
-        /// For movable user frame (FixedFrame = false), the user frame is continuously defined by the system.
         /// </summary>
+        /// <remarks>
+        /// If the robot is holding the tool, the user coordinate system is defined in the 
+        /// world coordinate system (in the wrist coordinate system if a stationary tool is used). 
+        /// For movable user frame (FixedFrame = false), the user frame is continuously defined by the system.
+        /// </remarks>
         public Plane UserFrame
         {
             get 
@@ -554,8 +567,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or set the work object coordinate system as a plane (e.g. the position of the current work object).
-        /// The object coordinate system is defined in the user coordinate system.
         /// </summary>
+        /// <remarks>
+        /// The object coordinate system is defined in the user coordinate system.
+        /// </remarks>
         public Plane Plane
         {
             get 
@@ -571,8 +586,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the external axis (mechanical unit) with which the robot movements are coordinated. 
-        /// Only specified in the case of movable user coordinate systems.
         /// </summary>
+        /// <remarks>
+        /// Only specified in the case of movable user coordinate systems.
+        /// </remarks>
         public ExternalAxis ExternalAxis
         {
             get 
@@ -604,9 +621,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets a value indicating whether or not a fixed user coordinate system is used.
-        /// True indicates that the user frame is fixed. 
-        /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).
         /// </summary>
+        /// <remarks>
+        /// True indicates that the user frame is fixed. 
+        /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).s
+        /// </remarks>
         public bool FixedFrame
         {
             get { return _fixedFrame; }

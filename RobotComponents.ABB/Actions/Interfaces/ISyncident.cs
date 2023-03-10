@@ -3,10 +3,11 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Robot Component Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Interfaces
 {
@@ -62,6 +63,12 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
+        VariableType VariableType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
         VariableType ReferenceType { get; set; }
 
         /// <summary>

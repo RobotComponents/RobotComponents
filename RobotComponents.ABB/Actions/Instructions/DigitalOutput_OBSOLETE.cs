@@ -14,15 +14,16 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents a Set Analog Output instruction. 
-    /// This action is used to set the value of an analog output signal.
+    /// Represents a Set Digital Output instruction. 
+    /// This action is used to set the value (state) of a digital output signal.
     /// </summary>
     [Serializable()]
-    public class AnalogOutput : Action, IInstruction, ISerializable
+    [Obsolete("This class is obsolete and will be removed in v3. Use SetDigitalOutput instead.", false)]
+    public class DigitalOutput : Action, IInstruction, ISerializable
     {
         #region fields
         private string _name; // the name of the signal to be changed.
-        private double _value; // the desired value of the signal
+        private bool _isActive; // the desired value of the signal 0 or 1.
         #endregion
 
         #region (de)serialization
@@ -31,11 +32,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
-        protected AnalogOutput(SerializationInfo info, StreamingContext context)
+        protected DigitalOutput(SerializationInfo info, StreamingContext context)
         {
             // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
-            _value = (double)info.GetValue("Value", typeof(double));
+            _isActive = (bool)info.GetValue("Is Active", typeof(bool));
         }
 
         /// <summary>
@@ -48,64 +49,64 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Value", _value, typeof(double));
+            info.AddValue("Is Active", _isActive, typeof(bool));
         }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Initializes an empty instance of the Analog Output class.
+        /// Initializes an empty instance of the Digital Output class.
         /// </summary>
-        public AnalogOutput()
+        public DigitalOutput()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the Analog Output class.
+        /// Initializes a new instance of the Digital Output class.
         /// </summary>
-        /// <param name="name"> The name of the Analog Output signal. </param>
-        /// <param name="value"> The desired value of the signal. </param>
-        public AnalogOutput(string name, double value)
+        /// <param name="Name"> The name of the Digital Output signal. </param>
+        /// <param name="IsActive"> Specifies whether the Digital Output is active. </param>
+        public DigitalOutput(string Name, bool IsActive)
         {
-            _name = name;
-            _value = value;
+            _name = Name;
+            _isActive = IsActive;
         }
 
         /// <summary>
-        /// Initializes a new instance of the Analog Output class by duplicating an existing Analog Output instance. 
+        /// Initializes a new instance of the Digital Output class by duplicating an existing Digital Output instance. 
         /// </summary>
-        /// <param name="analogOutput"> The Analog Output instance to duplicate. </param>
-        public AnalogOutput(AnalogOutput analogOutput)
+        /// <param name="digitalOutput"> The Digital Output instance to duplicate. </param>
+        public DigitalOutput(DigitalOutput digitalOutput)
         {
-            _name = analogOutput.Name;
-            _value= analogOutput.Value;
+            _name = digitalOutput.Name;
+            _isActive = digitalOutput.IsActive;
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Analog Output instance.
+        /// Returns an exact duplicate of this Digital Output instance.
         /// </summary>
-        /// <returns> A deep copy of the Analog Output instance. </returns>
-        public AnalogOutput Duplicate()
+        /// <returns> A deep copy of the Digital Output instance. </returns>
+        public DigitalOutput Duplicate()
         {
-            return new AnalogOutput(this);
+            return new DigitalOutput(this);
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Analog Output instance as IInstruction.
+        /// Returns an exact duplicate of this Digital Output instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Analog Output instance as an IInstruction. </returns>
+        /// <returns> A deep copy of the Digital Output instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new AnalogOutput(this);
+            return new DigitalOutput(this);
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Analog Output instance as an Action. 
+        /// Returns an exact duplicate of this Digital Output instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Analog Output instance as an Action. </returns>
+        /// <returns> A deep copy of the Digital Output instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new AnalogOutput(this);
+            return new DigitalOutput(this);
         }
         #endregion
 
@@ -118,15 +119,15 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             if (_name == null)
             {
-                return "Empty Analog Output";
+                return "Empty Digital Output";
             }
             else if (!IsValid)
             {
-                return "Invalid Analog Output";
+                return "Invalid Digital Output";
             }
             else
             {
-                return $"Analog  Output ({ _name}\\{_value})";
+                return $"Digital Output ({_name}\\{_isActive})";
             }
         }
 
@@ -147,7 +148,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"SetAO {_name}, {_value};";
+            return _isActive ? $"SetDO {_name}, 1;" : $"SetDO {_name}, 0;";
         }
 
         /// <summary>
@@ -185,7 +186,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the name of the Analog Output signal.
+        /// Gets or sets the name of the Digital Output signal.
         /// </summary>
         public string Name
         {
@@ -194,12 +195,12 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the value of the signal.
+        /// Gets or sets a value indicating whether the Digital Output is active.
         /// </summary>
-        public double Value
+        public bool IsActive
         {
-            get { return _value; }
-            set { _value = value; }
+            get { return _isActive; }
+            set { _isActive = value; }
         }
         #endregion
     }

@@ -16,18 +16,18 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Digital Output component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Set Analog Output component. An inherent from the GH_Component Class.
     /// </summary>
-    public class DigitalOutputComponent : GH_Component
+    public class SetAnalogOutputComponent : GH_Component
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public DigitalOutputComponent()
-          : base("Set Digital Output", "SDO",
-              "Defines an instruction to change the state of a digital output of the robot controller."
+        public SetAnalogOutputComponent()
+          : base("Set Analog Output", "SAO",
+              "Defines an instruction to change the state of a analog output of the robot controller."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
@@ -39,8 +39,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Name of the digital output as text", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("State", "S", "State of the digital output as boolean", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Name of the analog output signal as text", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Value", "V", "Value of the analg output signal as number", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_DigitalOutput(), "Set Digital Output", "SDO", "Resulting Set Digital Output instruction");   
+            pManager.RegisterParam(new Param_SetAnalogOutput(), "Set Analog Output", "SAO", "Resulting Set Analog Output instruction");   
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             // Input variables
             string name = "";
-            bool value = false;
+            double value = 0.0;
             
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
@@ -71,22 +71,22 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 
             if (HelperMethods.StringExeedsCharacterLimit32(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name exceeds character limit of 32 characters.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name exceeds character limit of 32 characters.");
             }
             if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name starts with a number which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name starts with a number which is not allowed in RAPID code.");
             }
             if (HelperMethods.StringStartsWithNumber(name))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Digital output name constains special characters which is not allowed in RAPID code.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Analog output name constains special characters which is not allowed in RAPID code.");
             }
 
             // Create the action
-            DigitalOutput digitalOutput = new DigitalOutput(name, value);
+            SetAnalogOutput analogOutput = new SetAnalogOutput(name, value);
 
             // Output
-            DA.SetData(0, digitalOutput);
+            DA.SetData(0, analogOutput);
         }
 
         #region properties
@@ -113,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.ABB.Gh.Properties.Resources.DigitalOutput_Icon; }
+            get { return RobotComponents.ABB.Gh.Properties.Resources.AnalogOutput_Icon; }
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("75014DB2-351F-4A79-9917-DEA7DAD89BEF"); }
+            get { return new Guid("AB5C7B87-EF9C-4165-9752-4686DF310C2C"); }
         }
         #endregion
 
@@ -150,4 +150,5 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         }
         #endregion
     }
+
 }

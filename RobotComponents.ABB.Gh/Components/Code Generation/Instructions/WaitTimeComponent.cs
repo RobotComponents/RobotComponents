@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public WaitTimeComponent()
-          : base("Wait for Time", "WT",
+          : base("Wait Time", "WT",
               "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_WaitTime(), "WaitTime", "WT", "Resulting Wait for Time instruction");   
+            pManager.RegisterParam(new Param_WaitTime(), "Wait Time", "WT", "Resulting Wait Time instruction");   
         }
 
         /// <summary>

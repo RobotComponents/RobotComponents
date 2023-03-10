@@ -3,12 +3,13 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
@@ -16,50 +17,51 @@ using RobotComponents.Utils;
 namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
 {
     /// <summary>
-    /// Analog Output Goo wrapper class, makes sure the Analog Output class can be used in Grasshopper.
+    /// Digital Output Goo wrapper class, makes sure the Digital Output class can be used in Grasshopper.
     /// </summary>
-    public class GH_AnalogOutput : GH_Goo<AnalogOutput>, GH_ISerializable
+    [Obsolete("This class is obsolete and will be removed in v3. Use GH_SetDigitalOutput instead.", false)]
+    public class GH_DigitalOutput : GH_Goo<DigitalOutput>, GH_ISerializable
     {
         #region constructors
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_AnalogOutput()
+        public GH_DigitalOutput()
         {
             this.Value = null;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Analog Output Goo instance from Analog Ouput instance.
+        /// Data constructor: Creates a Digital Output Goo instance from Digital Ouput instance.
         /// </summary>
-        /// <param name="analogOutput"> Analog Output Value to store inside this Goo instance. </param>
-        public GH_AnalogOutput(AnalogOutput analogOutput)
+        /// <param name="digitalOutput"> Digital Output Value to store inside this Goo instance. </param>
+        public GH_DigitalOutput(DigitalOutput digitalOutput)
         {
-            this.Value = analogOutput;
+            this.Value = digitalOutput;
         }
 
         /// <summary>
-        /// Data constructor: Creates a Analog Output Goo instance from another Analog Output Goo instance.
-        /// This creates a shallow copy of the passed Analog Output Goo instance. 
+        /// Data constructor: Creates a Digital Output Goo instance from another Digital Output Goo instance.
+        /// This creates a shallow copy of the passed Digital Output Goo instance. 
         /// </summary>
-        /// <param name="analogOutputGoo"> Analog Output Goo instance to copy. </param>
-        public GH_AnalogOutput(GH_AnalogOutput analogOutputGoo)
+        /// <param name="digitalOutputGoo"> Digital Output Goo instance to copy. </param>
+        public GH_DigitalOutput(GH_DigitalOutput digitalOutputGoo)
         {
-            if (analogOutputGoo == null)
+            if (digitalOutputGoo == null)
             {
-                analogOutputGoo = new GH_AnalogOutput();
+                digitalOutputGoo = new GH_DigitalOutput();
             }
 
-            this.Value = analogOutputGoo.Value;
+            this.Value = digitalOutputGoo.Value;
         }
 
         /// <summary>
         /// Make a complete duplicate of this Goo instance. No shallow copies.
         /// </summary>
-        /// <returns> A duplicate of the Analog Output Goo. </returns>
+        /// <returns> A duplicate of the Digital Output Goo. </returns>
         public override IGH_Goo Duplicate()
         {
-            return new GH_AnalogOutput(Value == null ? new AnalogOutput() : Value.Duplicate());
+            return new GH_DigitalOutput(Value == null ? new DigitalOutput() : Value.Duplicate());
         }
         #endregion
 
@@ -84,9 +86,9 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         {
             get
             {
-                if (Value == null) { return "No internal Analog Output instance"; }
+                if (Value == null) { return "No internal Digital Output instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Analog Output instance: Did you define the analog output name and value?";
+                return "Invalid Digital Output instance: Did you define the digital output name and state?";
             }
         }
 
@@ -96,7 +98,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// <returns></returns>
         public override string ToString()
         {
-            if (Value == null) { return "Null Analog Output"; }
+            if (Value == null) { return "Null Digital Output"; }
             else { return Value.ToString(); }
         }
 
@@ -105,7 +107,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeName
         {
-            get { return "Analog Output"; }
+            get { return "Digital Output"; }
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeDescription
         {
-            get { return "Defines a Analog Output"; }
+            get { return "Defines a Digital Output"; }
         }
         #endregion
 
@@ -126,16 +128,16 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {
-            //Cast to Analog Output Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_AnalogOutput)))
+            //Cast to Digital Output Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
             {
-                if (Value == null) { target = (Q)(object)new GH_AnalogOutput(); }
-                else { target = (Q)(object)new GH_AnalogOutput(Value); }
+                if (Value == null) { target = (Q)(object)new GH_DigitalOutput(); }
+                else { target = (Q)(object)new GH_DigitalOutput(Value); }
                 return true;
             }
 
-            //Cast to Analog Output
-            if (typeof(Q).IsAssignableFrom(typeof(AnalogOutput)))
+            //Cast to Digital Output
+            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -151,7 +153,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.Action)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -166,7 +168,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
-
             //Cast to Instruction
             if (typeof(Q).IsAssignableFrom(typeof(IInstruction)))
             {
@@ -175,11 +176,19 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
-            //Cast to Number
-            if (typeof(Q).IsAssignableFrom(typeof(GH_Number)))
+            //Cast to Boolean
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
             {
                 if (Value == null) { target = default; }
-                else { target = (Q)(object)new GH_Number(Value.Value); }
+                else { target = (Q)(object)new GH_Boolean(Value.IsActive); }
+                return true;
+            }
+
+            //Cast to SetDigital Output
+            if (typeof(Q).IsAssignableFrom(typeof(SetDigitalOutput)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)new SetDigitalOutput(Value.Name, Value.IsActive); }
                 return true;
             }
 
@@ -196,17 +205,25 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         {
             if (source == null) { return false; }
 
-            //Cast from Analog Output
-            if (typeof(AnalogOutput).IsAssignableFrom(source.GetType()))
+            //Cast from Set Digital Output Goo
+            if (typeof(GH_DigitalOutput).IsAssignableFrom(source.GetType()))
             {
-                Value = source as AnalogOutput;
+                GH_DigitalOutput digitalOutputGoo = source as GH_DigitalOutput;
+                Value = digitalOutputGoo.Value;
+                return true;
+            }
+
+            //Cast from Digital Output
+            if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
+            {
+                Value = source as DigitalOutput;
                 return true;
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(ABB.Actions.Action).IsAssignableFrom(source.GetType()))
             {
-                if (source is AnalogOutput action)
+                if (source is DigitalOutput action)
                 {
                     Value = action;
                     return true;
@@ -217,7 +234,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             if (typeof(GH_Action).IsAssignableFrom(source.GetType()))
             {
                 GH_Action actionGoo = source as GH_Action;
-                if (actionGoo.Value is AnalogOutput action)
+                if (actionGoo.Value is DigitalOutput action)
                 {
                     Value = action;
                     return true;
@@ -227,7 +244,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             //Cast from Instruction
             if (typeof(IInstruction).IsAssignableFrom(source.GetType()))
             {
-                if (source is AnalogOutput instruction)
+                if (source is DigitalOutput instruction)
                 {
                     Value = instruction;
                     return true;
@@ -238,11 +255,27 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             if (typeof(GH_Instruction).IsAssignableFrom(source.GetType()))
             {
                 GH_Instruction instructionGoo = source as GH_Instruction;
-                if (instructionGoo.Value is AnalogOutput instruction)
+                if (instructionGoo.Value is DigitalOutput instruction)
                 {
                     Value = instruction;
                     return true;
                 }
+            }
+
+            //Cast from Set Digital Output Goo
+            if (typeof(GH_SetDigitalOutput).IsAssignableFrom(source.GetType()))
+            {
+                GH_SetDigitalOutput setDigitalOutputGoo = source as GH_SetDigitalOutput;
+                Value = new DigitalOutput(setDigitalOutputGoo.Value.Name, setDigitalOutputGoo.Value.Value);
+                return true;
+            }
+
+            //Cast from Set Digital Output
+            if (typeof(SetDigitalOutput).IsAssignableFrom(source.GetType()))
+            {
+                SetDigitalOutput setDigitalOutput = source as SetDigitalOutput;
+                Value = new DigitalOutput(setDigitalOutput.Name, setDigitalOutput.Value);
+                return true;
             }
 
             return false;
@@ -253,7 +286,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// <summary>
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
-        private const string IoKey = "Analog Output";
+        private const string IoKey = "Digital Output";
 
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
@@ -285,7 +318,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (AnalogOutput)Serialization.ByteArrayToObject(array);
+            this.Value = (DigitalOutput)Serialization.ByteArrayToObject(array);
 
             return true;
         }

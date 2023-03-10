@@ -14,16 +14,17 @@ using RobotComponents.ABB.Gh.Goos.Actions.Instructions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 {
     /// <summary>
-    /// Joint Configuration Control parameter
+    /// Digital Output parameter
     /// </summary>
-    public class Param_JointConfigurationControl : GH_PersistentParam<GH_JointConfigurationControl>
+    [Obsolete("This class is obsolete and will be removed in v3. Use Param_SetDigitalOutput instead.", false)]
+    public class Param_DigitalOutput : GH_PersistentParam<GH_DigitalOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_JointConfigurationControl> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_DigitalOutput> class
         /// </summary>
-        public Param_JointConfigurationControl()
-          : base(new GH_InstanceDescription("Joint Configuration Control Parameter", "JCCP",
-                "Contains the data of a Joint Configuration Control instruction."
+        public Param_DigitalOutput()
+          : base(new GH_InstanceDescription("Digital Output Parameter", "DO",
+                "Contains the data of a Set Digital Output instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +37,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Joint Configuration Control";
+            return "Digital Output";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Joint Configuration Control"; set => base.Name = value; }
+        public override string Name { get => "Digital Output"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +51,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ConfJ_Parameter_Icon; }
+            get { return Properties.Resources.DigitalOutput_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +59,15 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get { return GH_Exposure.hidden; }
+        }
+
+        /// <summary>
+        /// Gets whether this object is obsolete.
+        /// </summary>
+        public override bool Obsolete
+        {
+            get { return true; }
         }
 
         /// <summary>
@@ -67,17 +76,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3CBD5E38-2C5D-4C06-A8CD-5938D7703D77"); }
+            get { return new Guid("C137C7B6-C6C0-482F-8192-732D9B1EA651"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_JointConfigurationControl> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_JointConfigurationControl value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
         {
             return GH_GetterResult.cancel;
         }
@@ -105,6 +114,4 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         }
         #endregion
     }
-
-
 }

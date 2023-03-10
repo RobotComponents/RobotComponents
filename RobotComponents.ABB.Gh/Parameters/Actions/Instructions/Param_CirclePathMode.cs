@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// Initializes a new instance of the GH_PersistentParam<GH_CirclePathMode> class
         /// </summary>
         public Param_CirclePathMode()
-          : base(new GH_InstanceDescription("Circle Path Mode Parameter", "CPM",
+          : base(new GH_InstanceDescription("Circle Path Mode Parameter", "CPMP",
                 "Contains the data of a Circle Path Mode."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Tool Name as String", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item);
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);

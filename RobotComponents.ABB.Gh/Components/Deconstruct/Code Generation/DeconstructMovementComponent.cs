@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data");
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool");
             pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Work Object as Work Object");
-            pManager.RegisterParam(new Param_DigitalOutput(), "Digital Output", "DO", "Digital Output as Digital Output");
+            pManager.RegisterParam(new Param_SetDigitalOutput(), "Digital Output", "DO", "Set Digital Output as Set Digital Output");
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 DA.SetData(5, movement.ZoneData);
                 DA.SetData(6, movement.RobotTool);
                 DA.SetData(7, movement.WorkObject);
-                DA.SetData(8, movement.DigitalOutput);
+                DA.SetData(8, movement.SetDigitalOutput);
             }
         }
 

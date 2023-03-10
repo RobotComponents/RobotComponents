@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
             new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
-            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
+            new Param_SetDigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
         };
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             ZoneData zoneData = new ZoneData();
             RobotTool robotTool = RobotTool.GetEmptyRobotTool();
             WorkObject workObject = new WorkObject();
-            DigitalOutput digitalOutput = new DigitalOutput();
+            SetDigitalOutput digitalOutput = new SetDigitalOutput();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetData(0, ref target)) { return; }
@@ -139,7 +139,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetData(variableInputParameters[2].Name, ref digitalOutput))
                 {
-                    digitalOutput = new DigitalOutput();
+                    digitalOutput = new SetDigitalOutput();
                 }
             }
 

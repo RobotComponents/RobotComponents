@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.list, Optional = true},
             new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.list, Optional = true },
-            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
+            new Param_SetDigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.list, Optional = true }
         };
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             List<ZoneData> zoneDatas = new List<ZoneData>();
             List<RobotTool> robotTools = new List<RobotTool>();
             List<WorkObject> workObjects = new List<WorkObject>();
-            List<DigitalOutput> digitalOutputs = new List<DigitalOutput>();
+            List<SetDigitalOutput> digitalOutputs = new List<SetDigitalOutput>();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetDataList(0, targets)) { return; }
@@ -154,7 +154,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetDataList(variableInputParameters[2].Name, digitalOutputs))
                 {
-                    digitalOutputs = new List<DigitalOutput>() { new DigitalOutput() };
+                    digitalOutputs = new List<SetDigitalOutput>() { new SetDigitalOutput() };
                 }
             }
 
@@ -169,7 +169,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
             if (digitalOutputs.Count == 0)
             {
-                digitalOutputs.Add(new DigitalOutput()); // InValid / empty DO
+                digitalOutputs.Add(new SetDigitalOutput()); // InValid / empty DO
             }
 
             // Get longest Input List
@@ -204,7 +204,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 ZoneData zoneData;
                 RobotTool robotTool;
                 WorkObject workObject;
-                DigitalOutput digitalOutput;
+                SetDigitalOutput digitalOutput;
 
                 // Target counter
                 if (i < sizeValues[0])

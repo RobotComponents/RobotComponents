@@ -234,6 +234,5 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
         #endregion
     }
-
 }
 

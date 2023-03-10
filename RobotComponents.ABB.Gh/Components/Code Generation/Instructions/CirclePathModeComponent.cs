@@ -33,7 +33,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public CirclePathModeComponent()
           : base("Circle Path Mode", "CPM",
-              "Defines the Circle Path Mode for MoveC instructions."
+              "Defines the Circle Path Mode for all following MoveC instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Code Generation")
@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddIntegerParameter("Mode", "M", "Type of the CirclePathMode as integer. Use 0 for commenting on instructions, 1 for commenting on declarations", GH_ParamAccess.item, 0);
+            pManager.AddIntegerParameter("Mode", "M", "Type of the Circle Path Mode as integer.", GH_ParamAccess.item, 0);
 
             pManager[0].Optional = true;
         }

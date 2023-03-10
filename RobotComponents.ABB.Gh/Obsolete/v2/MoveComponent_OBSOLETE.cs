@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             new Param_ZoneData() { Name = "Zone Data", NickName = "ZD", Description = "Zone Data as Zone Data or as a number (path zone TCP).", Access = GH_ParamAccess.item, Optional = true},
             new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Overrides the default Robot Tool.", Access = GH_ParamAccess.item, Optional = true},
             new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Overrides the default Work Object.", Access = GH_ParamAccess.item, Optional = true },
-            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Set a Digital Output for creation of MoveLDO and MoveJDO instructions.", Access = GH_ParamAccess.item, Optional = true }
+            new Param_SetDigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Set a Digital Output for creation of MoveLDO and MoveJDO instructions.", Access = GH_ParamAccess.item, Optional = true }
         };
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             ZoneData zoneData = new ZoneData();
             RobotTool robotTool = RobotTool.GetEmptyRobotTool();
             WorkObject workObject = new WorkObject();
-            DigitalOutput digitalOutput = new DigitalOutput();
+            SetDigitalOutput digitalOutput = new SetDigitalOutput();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetData(0, ref movementType)) { movementType = 0; }
@@ -160,7 +160,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetData(variableInputParameters[4].Name, ref digitalOutput))
                 {
-                    digitalOutput = new DigitalOutput();
+                    digitalOutput = new SetDigitalOutput();
                 }
             }
 

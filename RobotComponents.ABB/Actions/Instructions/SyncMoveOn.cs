@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="syncMoveOn"> The SyncMoveOn instance to duplicate. </param>
         public SyncMoveOn(SyncMoveOn syncMoveOn)
         {
-            _variableType = syncMoveOn.ReferenceType;
+            _variableType = syncMoveOn.VariableType;
             _syncident = syncMoveOn.SyncID;
             _taskList = syncMoveOn.TaskList.Duplicate();
             _timeOut = syncMoveOn.TimeOut;
@@ -213,6 +213,16 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
+        public VariableType VariableType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
         public VariableType ReferenceType
         {
             get { return _variableType; }

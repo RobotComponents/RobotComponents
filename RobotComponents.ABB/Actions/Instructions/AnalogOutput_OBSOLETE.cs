@@ -14,16 +14,16 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents a Wait for Digital Input instruction.
-    /// This action is used to wait until a digital input is set.
+    /// Represents a Set Analog Output instruction. 
+    /// This action is used to set the value of an analog output signal.
     /// </summary>
     [Serializable()]
-    public class WaitDI : Action, IInstruction, ISerializable
+    [Obsolete("This class is obsolete and will be removed in v3. Use SetAnalogOutput instead.", false)]
+    public class AnalogOutput : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _name; // The name of the digital input signal
-        private bool _value; // The desired state / value of the digital input signal
-        private double _maxTime;
+        private string _name; // the name of the signal to be changed.
+        private double _value; // the desired value of the signal
         #endregion
 
         #region (de)serialization
@@ -32,12 +32,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </summary>
         /// <param name="info"> The SerializationInfo to extract the data from. </param>
         /// <param name="context"> The context of this deserialization. </param>
-        protected WaitDI(SerializationInfo info, StreamingContext context)
+        protected AnalogOutput(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
-            _value = (bool)info.GetValue("Value", typeof(bool));
-            _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _value = (double)info.GetValue("Value", typeof(double));
         }
 
         /// <summary>
@@ -50,68 +49,64 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Value", _value, typeof(bool));
-            info.AddValue("Max Time", _maxTime, typeof(double));
+            info.AddValue("Value", _value, typeof(double));
         }
         #endregion
 
         #region constructors
         /// <summary>
-        /// Initializes an empty instance of the Wait DI class.
+        /// Initializes an empty instance of the Analog Output class.
         /// </summary>
-        public WaitDI()
+        public AnalogOutput()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the Wait DI class.
+        /// Initializes a new instance of the Analog Output class.
         /// </summary>
-        /// <param name="name"> The name of the signal. </param>
-        /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
-        /// <param name="maxTime"> The maximum time to wait in seconds. </param>
-        public WaitDI(string name, bool value, double maxTime = -1)
+        /// <param name="name"> The name of the Analog Output signal. </param>
+        /// <param name="value"> The desired value of the signal. </param>
+        public AnalogOutput(string name, double value)
         {
             _name = name;
             _value = value;
-            _maxTime = maxTime;
         }
 
         /// <summary>
-        /// Initializes a new instance of the Wait DI class by duplicating an existing Wait DI instance. 
+        /// Initializes a new instance of the Analog Output class by duplicating an existing Analog Output instance. 
         /// </summary>
-        /// <param name="waitDI"> The Wait DI instance to duplicate. </param>
-        public WaitDI(WaitDI waitDI)
+        /// <param name="analogOutput"> The Analog Output instance to duplicate. </param>
+        public AnalogOutput(AnalogOutput analogOutput)
         {
-            _name = waitDI.Name;
-            _value = waitDI.Value;
-            _maxTime = waitDI.MaxTime;
+            _name = analogOutput.Name;
+            _value= analogOutput.Value;
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Wait DI instance.
+        /// Returns an exact duplicate of this Analog Output instance.
         /// </summary>
-        /// <returns> A deep copy of the Wait DI instance. </returns>
-        public WaitDI Duplicate()
+        /// <returns> A deep copy of the Analog Output instance. </returns>
+        public AnalogOutput Duplicate()
         {
-            return new WaitDI(this);
+            return new AnalogOutput(this);
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Wait DI instance as IInstruction.
+        /// Returns an exact duplicate of this Analog Output instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Wait DI instance as an IInstruction. </returns>
+        /// <returns> A deep copy of the Analog Output instance as an IInstruction. </returns>
         public IInstruction DuplicateInstruction()
         {
-            return new WaitDI(this);
+            return new AnalogOutput(this);
         }
 
         /// <summary>
-        /// Returns an exact duplicate of this Wait DI instance as an Action. 
+        /// Returns an exact duplicate of this Analog Output instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Wait Di instance as an Action. </returns>
+        /// <returns> A deep copy of the Analog Output instance as an Action. </returns>
         public override Action DuplicateAction()
         {
-            return new WaitDI(this);
+            return new AnalogOutput(this);
         }
         #endregion
 
@@ -124,15 +119,15 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             if (_name == null)
             {
-                return "Empty Wait for Digital Input";
+                return "Empty Analog Output";
             }
-            if (!IsValid)
+            else if (!IsValid)
             {
-                return "Invalid Wait for Digital Input";
+                return "Invalid Analog Output";
             }
             else
             {
-                return $"Wait for Digital Input ({_name}\\{_value})";
+                return $"Analog  Output ({ _name}\\{_value})";
             }
         }
 
@@ -153,8 +148,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> The RAPID code line. </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"WaitDI {_name}, {(_value ? 1 : 0)}" +
-                $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
+            return $"SetAO {_name}, {_value};";
         }
 
         /// <summary>
@@ -173,7 +167,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -187,37 +181,27 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
         /// <summary>
-        /// Gets or sets the desired state of the digital input signal.
+        /// Gets or sets the name of the Analog Output signal.
         /// </summary>
-        public bool Value 
+        public string Name
         {
-            get { return _value; }
-            set { _value = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the digital input signal.
-        /// </summary>
-        public string Name 
-        { 
             get { return _name; }
             set { _name = value; }
         }
 
         /// <summary>
-        /// Gets or sets te max. time to wait in seconds. Set a negative value to wait for ever (default is -1).
+        /// Gets or sets the value of the signal.
         /// </summary>
-        public double MaxTime
+        public double Value
         {
-            get { return _maxTime; }
-            set { _maxTime = value; }
+            get { return _value; }
+            set { _value = value; }
         }
         #endregion
     }
 }
-

@@ -8,7 +8,6 @@ using System.Collections.Generic;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Interfaces
 {

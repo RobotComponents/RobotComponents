@@ -153,7 +153,7 @@
     <Compile Include="Components\Utilities\GroupActionsComponent.cs" />
     <Compile Include="Components\Utilities\RobotToolCalibrationComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\CodeTypeValueList.cs" />
-    <Compile Include="Components\Code Generation\Instructions\AnalogOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\SetAnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\SpeedDataValueList.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\Code Generation\Dynamic\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\Dynamic\CommentComponent.cs" />
-    <Compile Include="Components\Code Generation\Instructions\DigitalOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\MoveComponent.cs" />
     <Compile Include="Obsolete\v1\ZoneDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructZoneDataComponent.cs" />
@@ -249,6 +249,8 @@
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
+    <Compile Include="Obsolete\v2\Param_AnalogOutput_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Param_DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOff.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_CirclePathMode.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOn.cs" />
@@ -268,7 +270,7 @@
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />
-    <Compile Include="Parameters\Actions\Instructions\Param_AnalogOutput.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_SetAnalogOutput.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_LinearConfigurationControl.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_JointConfigurationControl.cs" />
     <Compile Include="Parameters\Actions\Declarations\Param_ExternalJointPosition.cs" />
@@ -281,7 +283,7 @@
     <Compile Include="Parameters\Definitions\Param_WorkObject.cs" />
     <Compile Include="Parameters\Actions\Dynamic\Param_CodeLine.cs" />
     <Compile Include="Parameters\Actions\Dynamic\Param_Comment.cs" />
-    <Compile Include="Parameters\Actions\Instructions\Param_DigitalOutput.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_SetDigitalOutput.cs" />
     <Compile Include="Parameters\Definitions\Param_ExternalLinearAxis.cs" />
     <Compile Include="Parameters\Definitions\Param_ExternalRotationalAxis.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_Movement.cs" />

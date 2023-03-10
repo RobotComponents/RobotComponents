@@ -14,16 +14,16 @@ using RobotComponents.ABB.Gh.Goos.Actions.Instructions;
 namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 {
     /// <summary>
-    /// Joint Configuration Control parameter
+    /// Analog Output parameter
     /// </summary>
-    public class Param_JointConfigurationControl : GH_PersistentParam<GH_JointConfigurationControl>
+    public class Param_SetAnalogOutput : GH_PersistentParam<GH_SetAnalogOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_JointConfigurationControl> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_AnalogOutput> class
         /// </summary>
-        public Param_JointConfigurationControl()
-          : base(new GH_InstanceDescription("Joint Configuration Control Parameter", "JCCP",
-                "Contains the data of a Joint Configuration Control instruction."
+        public Param_SetAnalogOutput()
+          : base(new GH_InstanceDescription("Set Analog Output Parameter", "SAOP",
+                "Contains the data of a Set Analog Output instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))
@@ -36,13 +36,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// <returns> A string representation of the parameter. </returns>
         public override string ToString()
         {
-            return "Joint Configuration Control";
+            return "Set Analog Output";
         }
 
         /// <summary>
         /// Gets or sets the name of the object. This field typically remains fixed during the lifetime of an object.
         /// </summary>
-        public override string Name { get => "Joint Configuration Control"; set => base.Name = value; }
+        public override string Name { get => "Set Analog Output"; set => base.Name = value; }
 
         /// <summary>
         /// Override this function to supply a custom icon (24x24 pixels). 
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ConfJ_Parameter_Icon; }
+            get { return Properties.Resources.AnalogOutput_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary; }
+            get {return GH_Exposure.tertiary; }
         }
 
         /// <summary>
@@ -67,17 +67,17 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3CBD5E38-2C5D-4C06-A8CD-5938D7703D77"); }
+            get { return new Guid("BDA44664-A2CF-4162-9617-B8FA0D8F6D99"); }
         }
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_JointConfigurationControl> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SetAnalogOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_JointConfigurationControl value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SetAnalogOutput value)
         {
             return GH_GetterResult.cancel;
         }
@@ -105,6 +105,4 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         }
         #endregion
     }
-
-
 }

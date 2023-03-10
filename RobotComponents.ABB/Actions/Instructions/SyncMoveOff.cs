@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="SyncMoveOff"> The SyncMoveOff instance to duplicate. </param>
         public SyncMoveOff(SyncMoveOff SyncMoveOff)
         {
-            _variableType = SyncMoveOff.ReferenceType;
+            _variableType = SyncMoveOff.VariableType;
             _syncident = SyncMoveOff.SyncID;
             _timeOut = SyncMoveOff.TimeOut;
         }
@@ -203,6 +203,16 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the reference type of the syncident.
         /// </summary>
+        public VariableType VariableType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
         public VariableType ReferenceType
         {
             get { return _variableType; }

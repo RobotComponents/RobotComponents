@@ -15,14 +15,16 @@ namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
     /// Represent the Wait Time instruction.
-    /// This action is used to wait a given amount of time between two actions.
     /// </summary>
+    /// <remarks>
+    /// This action is used to wait a given amount of time between two actions.
+    /// </remarks>
     [Serializable()]
     public class WaitTime : Action, IInstruction, ISerializable
     {
         #region fields
-        private double _duration; // the time expressed in seconds
-        private bool _inPosition; // if true the mechanical unit comes to still stand at the sync point
+        private double _duration;
+        private bool _inPosition;
         #endregion
 
         #region (de)serialization
@@ -84,7 +86,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Wait Time instance.
         /// </summary>
-        /// <returns> A deep copy of the Wait Time instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait Time instance. 
+        /// </returns>
         public WaitTime Duplicate()
         {
             return new WaitTime(this);
@@ -93,7 +97,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Wait Time instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Wait Time instance as an IInstruction. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait Time instance as an IInstruction. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new WaitTime(this);
@@ -102,7 +108,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Wait Time instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Wait Time instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait Time instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new WaitTime(this);
@@ -113,7 +121,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -130,7 +140,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
@@ -140,7 +152,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return $"WaitTime {(_inPosition ? "\\InPos, " : "")}{_duration:0.###};";
@@ -148,8 +162,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -157,8 +173,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -181,8 +199,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the time, expressed in seconds, that program execution is to wait. 
-        /// Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
         /// </summary>
+        /// <remarks>
+        /// Min. value 0 seconds. Max. value no limit. Resolution 0.001 seconds.
+        /// </remarks>
         public double Duration
         {
             get { return _duration; }

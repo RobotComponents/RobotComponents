@@ -19,21 +19,23 @@ namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents a predefined or user definied Speed Data declaration.
-    /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </summary>
+    /// <remarks>
+    /// This action is used to specify the velocity at which both the robot and the external axes move.
+    /// </remarks>
     [Serializable()]
     public class SpeedData : Action, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // SpeeData variable name
-        private double _v_tcp; // Tool center point speed
-        private double _v_ori; // Re-orientation speed
-        private double _v_leax; // External linear axis speed
-        private double _v_reax; // External rotational axis speed
-        private bool _predefined; // ABB predefined data (e.g. v5, v10, v20, v30)?
-        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private VariableType _variableType;
+        private string _name; 
+        private double _v_tcp; 
+        private double _v_ori; 
+        private double _v_leax;
+        private double _v_reax; 
+        private bool _predefined; 
+        private readonly bool _exactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
@@ -201,7 +203,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Speed Data instance.
         /// </summary>
-        /// <returns> A deep copy of the Speed Data instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Speed Data instance. 
+        /// </returns>
         public SpeedData Duplicate()
         {
             return new SpeedData(this);
@@ -210,7 +214,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Speed Data instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the SpeedData instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the SpeedData instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new SpeedData(this);
@@ -219,7 +225,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Spee Data instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Speed Data instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Speed Data instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new SpeedData(this);
@@ -355,7 +363,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="speedData"> The Speed Data intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out SpeedData speedData)
         {
             try
@@ -375,7 +385,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -409,7 +421,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined.
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false && _name != "")
@@ -429,7 +443,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -437,8 +453,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -457,8 +475,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -510,8 +530,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the velocity of the tool center point (TCP) in mm/s.
-        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
+        /// <remarks>
+        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
+        /// </remarks>
         public double V_TCP
         {
             get { return _v_tcp; }
@@ -520,8 +542,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the reorientation velocity of the TCP expressed in degrees/s. 
-        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
+        /// <remarks>
+        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
+        /// </remarks>
         public double V_ORI
         {
             get { return _v_ori; }
@@ -567,8 +591,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
-        /// If false the nearest predefined speedata or a custom speeddata was used. 
         /// </summary>
+        /// <remarks>
+        /// If false, the nearest predefined speedata or a custom speeddata was used. 
+        /// </remarks>
         public bool ExactPredefinedValue
         {
             get { return _exactPredefinedValue; }

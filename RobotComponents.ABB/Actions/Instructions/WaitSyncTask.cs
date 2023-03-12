@@ -22,10 +22,10 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class WaitSyncTask : Action, IInstruction, ISyncident, ISerializable
     {
         #region fields
-        private VariableType _variableType; // variable type for sync identification
-        private bool _inPosition; // if true the mechanical unit comes to still stand at the sync point
-        private string _syncident; // the sync identification name
-        private TaskList _taskList; // the set with tasks to syncronized
+        private VariableType _variableType;
+        private bool _inPosition; 
+        private string _syncident;
+        private TaskList _taskList; 
         private double _timeOut;
         #endregion
 
@@ -102,7 +102,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this WaitSyncTask instance.
         /// </summary>
-        /// <returns> A deep copy of the WaitSyncTask instance. </returns>
+        /// <returns> 
+        /// A deep copy of the WaitSyncTask instance. 
+        /// </returns>
         public WaitSyncTask Duplicate()
         {
             return new WaitSyncTask(this);
@@ -111,7 +113,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this WaitSyncTask instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the WaitSyncTask instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the WaitSyncTask instance as an IDeclaration. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new WaitSyncTask(this);
@@ -120,7 +124,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this WaitSyncTask instance as ISyncident.
         /// </summary>
-        /// <returns> A deep copy of the WaitSyncTask instance as an ISyncident. </returns>
+        /// <returns> 
+        /// A deep copy of the WaitSyncTask instance as an ISyncident. 
+        /// </returns>
         public ISyncident DuplicateSyncident()
         {
             return new WaitSyncTask(this);
@@ -129,7 +135,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Tasks instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Tasks instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Tasks instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new WaitSyncTask(this);
@@ -140,7 +148,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -157,7 +167,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return $"{Enum.GetName(typeof(VariableType), _variableType)} syncident {_syncident};";
@@ -167,7 +179,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return $"WaitSyncTask {(_inPosition ? "\\InPos, " : "")}{_syncident}, {_taskList.Name}" +
@@ -176,8 +190,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -192,8 +208,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -220,16 +238,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Gets or sets the reference type of the syncident.
         /// </summary>
         public VariableType VariableType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
         {
             get { return _variableType; }
             set { _variableType = value; }
@@ -265,12 +273,26 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets te max. time to wait for the other program tasks to reach the synchronization point.
-        /// Set a negative value to wait for ever (default is -1).
         /// </summary>
+        /// <remarks>
+        /// Set a negative value to wait for ever(default is -1).
+        /// </remarks>
         public double TimeOut
         {
             get { return _timeOut; }
             set { _timeOut = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
+        public VariableType ReferenceType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
         }
         #endregion
     }

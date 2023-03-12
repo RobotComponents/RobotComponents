@@ -194,7 +194,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 _rapidGenerator.CreateModule(addTooldata, addWobjdata, addTooldata);
 
                 // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
+                _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
             }
 
             // Checks if first Movement is MoveAbsJ

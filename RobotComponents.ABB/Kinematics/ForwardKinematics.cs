@@ -21,14 +21,14 @@ namespace RobotComponents.ABB.Kinematics
     public class ForwardKinematics
     {
         #region fields
-        private Robot _robot; // Robot info
-        private Plane _positionPlane = Plane.Unset; // Robot Position Plane: needed for external linear axis
-        private Plane[] _posedExternalAxisPlanes; // External Axis Planes 
-        private readonly List<string> _errorText = new List<string>(); // Error text
-        private List<Mesh> _posedInternalAxisMeshes = new List<Mesh>(); // Posed Robot Meshes
-        private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>(); //Posed Axis Meshes
-        private Plane _tcpPlane = Plane.Unset; // TCP Plane of end effector
-        private bool _inLimits = true; // Indicates if the joint positions are in limits 
+        private Robot _robot;
+        private Plane _positionPlane = Plane.Unset;
+        private Plane[] _posedExternalAxisPlanes;
+        private readonly List<string> _errorText = new List<string>();
+        private List<Mesh> _posedInternalAxisMeshes = new List<Mesh>(); 
+        private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>(); 
+        private Plane _tcpPlane = Plane.Unset;
+        private bool _inLimits = true; 
         private bool _hideMesh;
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
@@ -111,7 +111,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns an exact duplicate of this Forward Kinematics instance.
         /// </summary>
-        /// <returns> A deep copy of the Forward Kinematics instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Forward Kinematics instance. 
+        /// </returns>
         public ForwardKinematics Duplicate()
         {
             return new ForwardKinematics(this);
@@ -122,7 +124,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -284,7 +288,9 @@ namespace RobotComponents.ABB.Kinematics
         /// Returns the Bounding Box of the posed meshes.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         public BoundingBox GetBoundingBox(bool accurate)
         {
             BoundingBox result = new BoundingBox();

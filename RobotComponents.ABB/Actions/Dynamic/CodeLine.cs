@@ -21,8 +21,8 @@ namespace RobotComponents.ABB.Actions.Dynamic
     public class CodeLine : Action, IDynamic, ISerializable
     {
         #region fields
-        private string _code; // the code line as a string
-        private CodeType _type;  // the code line type as a CodeType enum
+        private string _code;
+        private CodeType _type; 
         #endregion
 
         #region (de)serialization
@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// Initializes a new instance of the Code Line class
         /// </summary>
         /// <param name="code"> The custom RAPID code line. </param>
-        /// <param name="type">The Code Type. </param>
+        /// <param name="type"> The Code Type. </param>
         public CodeLine(string code, CodeType type)
         {
             _code = code;
@@ -94,7 +94,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Code Line instance.
         /// </summary>
-        /// <returns> A deep copy of the Code Line instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Code Line instance. 
+        /// </returns>
         public CodeLine Duplicate()
         {
             return new CodeLine(this);
@@ -103,7 +105,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Code Line instance as IDynamic. 
         /// </summary>
-        /// <returns> A deep copy of the Code Line instance as an IDynamic. </returns>
+        /// <returns> 
+        /// A deep copy of the Code Line instance as an IDynamic. 
+        /// </returns>
         public IDynamic DuplicateDynamic()
         {
             return new CodeLine(this);
@@ -112,7 +116,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Code Line instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Code Line instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Code Line instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new CodeLine(this);
@@ -123,7 +129,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (string.IsNullOrWhiteSpace(_code))
@@ -144,7 +152,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return _type == CodeType.Declaration ? _code : "";
@@ -154,7 +164,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return _type == CodeType.Instruction ? _code : "";
@@ -162,8 +174,10 @@ namespace RobotComponents.ABB.Actions.Dynamic
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -175,8 +189,10 @@ namespace RobotComponents.ABB.Actions.Dynamic
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -220,5 +236,4 @@ namespace RobotComponents.ABB.Actions.Dynamic
         }
         #endregion
     }
-
 }

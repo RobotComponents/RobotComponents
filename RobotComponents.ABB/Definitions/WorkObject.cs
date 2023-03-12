@@ -154,7 +154,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Work Object instance.
         /// </summary>
-        /// <returns> A deep copy of the Work Object instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Work Object instance. 
+        /// </returns>
         public WorkObject Duplicate()
         {
             return new WorkObject(this);
@@ -163,7 +165,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Work Object instance without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Work Object instance without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Work Object instance without meshes. 
+        /// </returns>
         public WorkObject DuplicateWithoutMesh()
         {
             return new WorkObject(this, false);
@@ -177,7 +181,7 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
         /// </remarks>
-        /// <param name="rapidData"></param>
+        /// <param name="rapidData"> The RAPID data string. </param>
         private WorkObject(string rapidData)
         {
             string clean = rapidData;
@@ -314,7 +318,9 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="workObject"> The Work Object intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out WorkObject workObject)
         {
             try
@@ -334,7 +340,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -354,7 +362,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the quaternion orientation of the work object coordinate system. 
         /// </summary>
-        /// <returns> The quaternion orientation of the work object. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the work object. 
+        /// </returns>
         public Quaternion CalculateOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_plane);
@@ -364,7 +374,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the quaternion orientation of the user frame coordinate system. 
         /// </summary>
-        /// <returns> The quaternion orientation of the user frame. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the user frame. 
+        /// </returns>
         public Quaternion CalculateUserFrameOrientation()
         {
             _userFrameOrientation = HelperMethods.PlaneToQuaternion(_userFrame);
@@ -374,7 +386,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the global work object plane. 
         /// </summary>
-        /// <returns> The global work object plane. </returns>
+        /// <returns> 
+        /// The global work object plane. 
+        /// </returns>
         public Plane CalculateGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
@@ -431,19 +445,14 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Returns the RAPID declaration code line of the this Work Object.
+        /// Returns the Configuration Data in RAPID code format, e.g. "[FALSE, TRUE, "", [[0, 0, 0], [1, 0, 0, 0]], [[0.0009, -0.0082, 8.0304], [0.9999999, 0.0005131, 0.0000556, 0]]]"
         /// </summary>
-        /// <returns> The RAPID code line. </returns>
-        public string ToRAPIDDeclaration()
+        /// <returns> 
+        /// The RAPID data string with work object values. 
+        /// </returns>
+        public string ToRAPID()
         {
-            // Scope
-            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-
-            // Adds variable type
-            result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
-
-            // Adds work object name
-            result += $"{_name} := ";
+            string result = "";
 
             // Add robot hold < robhold of bool >
             result += _robotHold ? "[TRUE, " : "[FALSE, ";
@@ -453,7 +462,7 @@ namespace RobotComponents.ABB.Definitions
 
             // Add mechanical unit (an external axis or robot) < ufmec of string >
             result += _externalAxis != null ? $"\"{_externalAxis.Name}\", " : "\"\", ";
-            
+
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X:0.####}, {_userFrame.Origin.Y:0.####}, {_userFrame.Origin.Z:0.####}], ";
 
@@ -466,7 +475,24 @@ namespace RobotComponents.ABB.Definitions
 
             // Add object frame orientation < oframe of pose > < rot of orient >
             result += $"[{_orientation.A:0.#######}, {_orientation.B:0.#######}, " +
-                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]];";
+                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]]";
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this Work Object.
+        /// </summary>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
+        public string ToRAPIDDeclaration()
+        {
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
+            result += $"{_name} := ";
+            result += ToRAPID();
+            result += ";";
 
             return result;
         }

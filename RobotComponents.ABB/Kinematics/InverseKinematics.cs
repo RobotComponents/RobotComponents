@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Kinematics
         private RobotTool _robotTool;
         private Movement _movement;
         private ITarget _target;
-        private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
+        private Plane _positionPlane;   
         private Plane _targetPlane;
         private Plane _endPlane;
         private List<Plane> _axisPlanes;
@@ -37,11 +37,11 @@ namespace RobotComponents.ABB.Kinematics
         private double _lowerArmLength;
         private double _upperArmLength;
         private double _axis4offsetAngle;
-        private readonly List<string> _errorText = new List<string>(); // Error text
-        private bool _inLimits = true; // Indicates if the joint positions are in limits 
-        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
-        private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
-        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
+        private readonly List<string> _errorText = new List<string>();
+        private bool _inLimits = true; 
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; 
+        private RobotJointPosition _robotJointPosition = new RobotJointPosition();
+        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
         #endregion
 
         #region constructors
@@ -76,8 +76,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class from a Target.
-        /// The target will be casted to robot movement with a default work object (wobj0). 
         /// </summary>
+        /// <remarks>
+        /// The target will be casted to robot movement with a default work object (wobj0). 
+        /// </remarks>
         /// <param name="target"> The Target </param>
         /// <param name="robot"> The Robot. </param>
         public InverseKinematics(ITarget target, Robot robot)
@@ -119,7 +121,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns an exact duplicate of this Inverse Kinematics instance.
         /// </summary>
-        /// <returns> A deep copy of the Inverse Kinematics instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Inverse Kinematics instance. 
+        /// </returns>
         public InverseKinematics Duplicate()
         {
             return new InverseKinematics(this);
@@ -130,7 +134,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -200,8 +206,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Reinitialize all the fields to construct a valid Inverse Kinematics object. 
-        /// This method also resets the solution. Calculate() has to be called to obtain a new solution. 
         /// </summary>
+        /// <remarks>
+        /// This method also resets the solution. Calculate() has to be called to obtain a new solution.
+        /// </remarks>
         public void ReInitialize()
         {
             Initialize();
@@ -222,8 +230,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the Robot Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the internal axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the internal axis limits.
+        /// </remarks>
         public void CalculateRobotJointPosition()
         {
             // Clear the current solutions before calculating a new ones. 
@@ -404,7 +414,9 @@ namespace RobotComponents.ABB.Kinematics
         /// This method is typically used for using Configuration Control inside the Path Generator.
         /// </remarks>
         /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
-        /// <returns> The closest Robot Joint Position. </returns>
+        /// <returns> 
+        /// The closest Robot Joint Position. 
+        /// </returns>
         public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
         {
             RobotJointPosition diff;
@@ -481,8 +493,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the External Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the external axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the external axis limits. 
+        /// </remarks>
         public void CalculateExternalJointPosition()
         {
             // Clear current solution
@@ -611,7 +625,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="targetPlane"> The global target plane defined in the world coordinate space. </param>
         /// <param name="attachmentPlane"> The attachement plane of the robot defined in the robot coordinate space. </param>
         /// <param name="toolPlane"> The TCP plane. </param>
-        /// <returns> The transfomed tool plane. </returns>
+        /// <returns> 
+        /// The transfomed tool plane. 
+        /// </returns>
         private Plane TransformToolPlane(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
         {
             Plane result = new Plane(attachmentPlane);
@@ -624,7 +640,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns the base position of the robot in world coordinate space if it is moved by an external axis.
         /// </summary>
-        /// <returns> The position of the robot as a plane. </returns>
+        /// <returns> 
+        /// The position of the robot as a plane. 
+        /// </returns>
         private Plane GetPositionPlane()
         {
             // NOTE: Only works for a robot info with an maximum of one external linear axis
@@ -745,8 +763,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets or sets the Movement.
-        /// The target and work object are obtained from this movement.
         /// </summary>
+        /// <remarks>
+        /// The target and work object are obtained from this movement.
+        /// </remarks>
         public Movement Movement
         {
             get 
@@ -762,9 +782,11 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets the tool used by the this Inverse Kinematics.
+        /// </summary>
+        /// <remarks>
         /// By default the tool attached to the robot is used. 
         /// If a tool is set as a property of the movement, this tool will be used. 
-        /// </summary>
+        /// </remarks>
         public RobotTool RobotTool
         {
             get { return _robotTool; }

@@ -21,8 +21,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents the Robot Target declaration. 
-    /// This action is used to define the pose of the robot and the external axes.
     /// </summary>
+    /// <remarks>
+    /// This action is used to define the pose of the robot and the external axes.
+    /// </remarks>
     [Serializable()]
     public class RobotTarget : Action, ITarget, IDeclaration, ISerializable
     {
@@ -141,8 +143,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Robot Target class.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
+        /// <remarks>
+        /// The target plane will be reoriented from the reference plane to the world xy-plane.
+        /// </remarks>
         /// <param name="name"> The target name, must be unique.</param>
         /// <param name="plane"> The target plane.</param>
         /// <param name="referencePlane"> The Reference plane. </param>
@@ -181,7 +185,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Target instance.
         /// </summary>
-        /// <returns> A deep copy of the Robot Target instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Target instance. 
+        /// </returns>
         public RobotTarget Duplicate()
         {
             return new RobotTarget(this);
@@ -190,7 +196,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Target instance as an ITarget. 
         /// </summary>
-        /// <returns> A deep copy of the Robot Target instance as an ITarget. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Target instance as an ITarget. 
+        /// </returns>
         public ITarget DuplicateTarget()
         {
             return new RobotTarget(this);
@@ -199,7 +207,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Target instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Robot Target instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Target instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new RobotTarget(this);
@@ -208,7 +218,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Target instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Robot Target instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Target instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new RobotTarget(this);
@@ -222,7 +234,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <remarks>
         /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
         /// </remarks>
-        /// <param name="rapidData"></param>
+        /// <param name="rapidData"> The RAPID data string. </param>
         private RobotTarget(string rapidData)
         {
             string clean = rapidData;
@@ -337,7 +349,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="robotTarget"> The Robot Target intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out RobotTarget robotTarget)
         {
             try
@@ -357,7 +371,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -377,7 +393,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns the Robot Target in RAPID code format, e.g. "[[300, 600, 250], [1, 0, 0, 0], [0, 0, 0, 1] [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]".
         /// </summary>
-        /// <returns> The string with robot target values. </returns>
+        /// <returns> 
+        /// The string with robot target values. 
+        /// </returns>
         public string ToRAPID()
         {
             string externalJointPosition = _externalJointPosition.Name;
@@ -410,7 +428,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
@@ -428,7 +448,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An emptry string. </returns>
+        /// <returns> 
+        /// An emptry string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -436,8 +458,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -456,8 +480,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -502,8 +528,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the Robot Target variable name.
-        /// Each Target variable name has to be unique. 
         /// </summary>
+        /// <remarks>
+        /// Each variable name has to be unique. 
+        /// </remarks>
         public string Name
         {
             get { return _name; }
@@ -599,8 +627,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
+        /// <remarks>
+        /// The target plane will be reoriented from the reference plane to the world xy-plane.
+        /// </remarks>
         /// <param name="plane"> The target plane. </param>
         /// <param name="referencePlane"> The reference plane. </param>
         /// <param name="axisConfig"> The axis configuration as a number (0-7). </param>
@@ -621,9 +651,11 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
+        /// Initializes a new instance of the Robot Target class with an undefined Extenal Joint Position..
         /// </summary>
+        /// <remarks>
+        /// The target plane will be reoriented from the reference plane to the world xy-plane.
+        /// </remarks>
         /// <param name="name"> The target name, must be unique. </param>
         /// <param name="plane"> The target plane. </param>
         /// <param name="referencePlane"> The reference plane. </param>
@@ -683,8 +715,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Robot Target class.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
+        /// <remarks>
+        /// The target plane will be reoriented from the reference plane to the world xy-plane.
+        /// </remarks>
         /// <param name="name"> The target name, must be unique.</param>
         /// <param name="plane"> The target plane.</param>
         /// <param name="referencePlane"> The Reference plane. </param>
@@ -708,8 +742,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Robot Target class.
-        /// The target planes will be reoriented from the reference plane to the world xy-plane.
         /// </summary>
+        /// <remarks>
+        /// The target plane will be reoriented from the reference plane to the world xy-plane.
+        /// </remarks>
         /// <param name="plane"> The target plane.</param>
         /// <param name="referencePlane"> The Reference plane. </param>
         /// <param name="axisConfig"> The axis configuration as a number (0-7).</param>
@@ -732,8 +768,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or set the axis configuration.
-        /// Min. value 0. Max. value 7.
         /// </summary>
+        /// <remarks>
+        /// Min. value 0. Max. value 7.
+        /// </remarks>
         [Obsolete("This property is obsolete and will be removed in v3. Use ConfigurationData instead.", false)]
         public int AxisConfig
         {

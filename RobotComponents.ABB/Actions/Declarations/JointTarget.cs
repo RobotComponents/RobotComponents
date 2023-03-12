@@ -19,17 +19,19 @@ namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents a Joint Target declaration. 
-    /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </summary>
+    /// <remarks>
+    /// This action is used to define each individual axis position, for both the robot and the external axes.
+    /// </remarks>
     [Serializable()]
     public class JointTarget : Action, ITarget, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // joint target variable name
-        private RobotJointPosition _robotJointPosition; // the position of the robot
-        private ExternalJointPosition _externalJointPosition; // the position of the external logical axes
+        private VariableType _variableType;
+        private string _name; 
+        private RobotJointPosition _robotJointPosition;
+        private ExternalJointPosition _externalJointPosition;
         #endregion
 
         #region (de)serialization
@@ -145,7 +147,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Joint Target instance.
         /// </summary>
-        /// <returns> A deep copy of the Joint Target instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Joint Target instance. 
+        /// </returns>
         public JointTarget Duplicate()
         {
             return new JointTarget(this);
@@ -154,7 +158,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Joint Target instance as an ITarget. 
         /// </summary>
-        /// <returns> A deep copy of the Joint Target instance as an ITarget. </returns>
+        /// <returns> 
+        /// A deep copy of the Joint Target instance as an ITarget. 
+        /// </returns>
         public ITarget DuplicateTarget()
         {
             return new JointTarget(this);
@@ -163,7 +169,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Joint Target instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Joint Target instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Joint Target instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new JointTarget(this);
@@ -172,7 +180,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Joint Target instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Joint Target instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Joint Target instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new JointTarget(this);
@@ -186,7 +196,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <remarks>
         /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
         /// </remarks>
-        /// <param name="rapidData"></param>
+        /// <param name="rapidData"> The RAPID data string. </param>
         private JointTarget(string rapidData)
         {
             string clean = rapidData;
@@ -298,7 +308,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="jointTarget"> The Joint Target intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out JointTarget jointTarget)
         {
             try
@@ -318,7 +330,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns>
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -339,7 +353,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Checks both internal and external axis limits and returns a list with possible errors messages. 
         /// </summary>
         /// <param name="robot"> The robot to check the axis values for. </param>
-        /// <returns> The list with error messages. </returns>
+        /// <returns> 
+        /// The list with error messages. 
+        /// </returns>
         public List<string> CheckAxisLimits(Robot robot)
         {
             List<string> errors = new List<string>();
@@ -354,7 +370,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Checks the internal axis limits and returns a list with possible errors messages. 
         /// </summary>
         /// <param name="robot"> The robot to check the axis values for. </param>
-        /// <returns> The list with error messages. </returns>
+        /// <returns> 
+        /// The list with error messages. 
+        /// </returns>
         public List<string> CheckInternalAxisLimits(Robot robot)
         {
             // Initiate list
@@ -376,7 +394,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Checks the external axis limits and returns a list with possible errors messages. 
         /// </summary>
         /// <param name="robot"> The robot to check the axis values for. </param>
-        /// <returns> The list with error messages. </returns>
+        /// <returns> 
+        /// The list with error messages. 
+        /// </returns>
         public List<string> CheckExternalAxisLimits(Robot robot)
         {
             // Initiate list
@@ -405,7 +425,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns the Joint Target in RAPID code format, e.g. "[[0, 0, 0, 0, 45, 0], [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]".
         /// </summary>
-        /// <returns> The string with joint target values. </returns>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
         public string ToRAPID()
         {
             string robotJointPosition = _robotJointPosition.Name == "" ? _robotJointPosition.ToRAPID() : _robotJointPosition.Name;
@@ -419,7 +441,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined.
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
@@ -437,7 +461,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -445,8 +471,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -465,8 +493,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -509,8 +539,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the Joint Target variable name.
-        /// Each Target variable name has to be unique.
         /// </summary>
+        /// <remarks>
+        /// Each variable name has to be unique.
+        /// </remarks>
         public string Name
         {
             get { return _name; }
@@ -536,5 +568,4 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
         #endregion
     }
-
 }

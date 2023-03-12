@@ -3,15 +3,13 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
 // Rhino Libs
 using Rhino.Geometry;
 
 namespace RobotComponents.ABB.Utils
 {
     /// <summary>
-    /// Represents general helper methods
+    /// Represents general helper methods.
     /// </summary>
     public static class HelperMethods
     {
@@ -19,7 +17,9 @@ namespace RobotComponents.ABB.Utils
         /// Flips a plane normal to the oposite direction by setting it's x-axis negative.
         /// </summary>
         /// <param name="plane"> The plane that needs to be flipped. </param>
-        /// <returns> Tshe flipped plane. </returns>
+        /// <returns> 
+        /// The flipped plane. 
+        /// </returns>
         public static Plane FlipPlaneX(Plane plane)
         {
             return new Plane(plane.Origin, -plane.XAxis, plane.YAxis);
@@ -29,7 +29,9 @@ namespace RobotComponents.ABB.Utils
         /// Flips a plane normal to the oposite direction by setting it's y-axis negative.
         /// </summary>
         /// <param name="plane"> The plane that needs to be flipped. </param>
-        /// <returns> The flipped plane. </returns>
+        /// <returns> 
+        /// The flipped plane. 
+        /// </returns>
         public static Plane FlipPlaneY(Plane plane)
         {
             return new Plane(plane.Origin, plane.XAxis, -plane.YAxis);
@@ -40,7 +42,9 @@ namespace RobotComponents.ABB.Utils
         /// </summary>
         /// <param name="origin"> The origin of the plane. </param>
         /// <param name="quat"> The quarternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values. 
+        /// </returns>
         public static Plane QuaternionToPlane(Point3d origin, Quaternion quat)
         {
             quat.GetRotation(out Plane plane);
@@ -54,7 +58,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="origin"> The origin of the new plane. </param>
         /// <param name="quat"> The quarternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values. 
+        /// </returns>
         public static Plane QuaternionToPlane(Plane refPlane, Point3d origin, Quaternion quat)
         {
             quat.GetRotation(out Plane plane);
@@ -74,7 +80,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values. 
+        /// </returns>
         public static Plane QuaternionToPlane(Point3d origin, double A, double B, double C, double D)
         {
             Quaternion quat = new Quaternion(A, B, C, D);
@@ -91,7 +99,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values.
+        /// </returns>
         public static Plane QuaternionToPlane(Plane refPlane, Point3d origin, double A, double B, double C, double D)
         {
             Quaternion quat = new Quaternion(A, B, C, D);
@@ -109,7 +119,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values. 
+        /// </returns>
         public static Plane QuaternionToPlane(double x, double y, double z, double A, double B, double C, double D)
         {
             Point3d point = new Point3d(x, y, z);
@@ -128,7 +140,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="B"> The first imaginary coefficient of the quaternion. </param>
         /// <param name="C"> The second imaginary coefficient of the quaternion. </param>
         /// <param name="D"> The third imaginary coefficient of the quaternion. </param>
-        /// <returns> The plane obtained with the orientation defined by the quarternion values. </returns>
+        /// <returns> 
+        /// The plane obtained with the orientation defined by the quarternion values. 
+        /// </returns>
         public static Plane QuaternionToPlane(Plane refPlane, double x, double y, double z, double A, double B, double C, double D)
         {
             Point3d point = new Point3d(x, y, z);
@@ -141,7 +155,9 @@ namespace RobotComponents.ABB.Utils
         /// </summary>
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="plane"> The plane that should be transformed. </param>
-        /// <returns> The quaternion as a Quaternion. </returns>
+        /// <returns> 
+        /// The quaternion as a Quaternion. 
+        /// </returns>
         public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane)
         {
             Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
@@ -160,7 +176,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="refPlane"> The reference plane. </param>
         /// <param name="plane"> The plane that should be transformed. </param>
         /// <param name="origin"> The origin of the plane oriented based on the reference plane. </param>
-        /// <returns> The quaternion as a Quaternion. </returns>
+        /// <returns> 
+        /// The quaternion as a Quaternion. 
+        /// </returns>
         public static Quaternion PlaneToQuaternion(Plane refPlane, Plane plane, out Point3d origin)
         {
             Transform orient = Transform.PlaneToPlane(refPlane, Plane.WorldXY);
@@ -180,7 +198,9 @@ namespace RobotComponents.ABB.Utils
         /// Transforms a plane to a quarternion with as reference plane WorldXY.
         /// </summary>
         /// <param name="plane"> The plane to should be transformed. </param>
-        /// <returns> The quaternion. </returns>
+        /// <returns> 
+        /// The quaternion. 
+        /// </returns>
         public static Quaternion PlaneToQuaternion(Plane plane)
         {
             Plane refPlane = Plane.WorldXY;
@@ -194,7 +214,9 @@ namespace RobotComponents.ABB.Utils
         /// <param name="text"> The text the search and replace in. </param>
         /// <param name="search"> The text to search for. </param>
         /// <param name="replace"> The new text. </param>
-        /// <returns> Returns a new string with replaced text. </returns>
+        /// <returns> 
+        /// Returns a new string with replaced text. 
+        /// </returns>
         public static string ReplaceFirst(this string text, string search, string replace)
         {
             int position = text.IndexOf(search);

@@ -20,9 +20,11 @@ namespace RobotComponents.ABB.Kinematics
 {
     /// <summary>
     /// Represent the Path Generator.
+    /// </summary>
+    /// <remarks>
     /// This class is used to approximate of the path the Robot will follow for a given set of Actions. 
     /// Speed Datas and Zone Datas are neglected. 
-    /// </summary>
+    /// </remarks>
     public class PathGenerator
     {
         #region fields
@@ -34,7 +36,7 @@ namespace RobotComponents.ABB.Kinematics
         private readonly List<ExternalJointPosition> _externalJointPositions; // The external joint position needed to follow the path
         private List<string> _errorText = new List<string>(); // List with collected error messages
 
-        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
+        private bool _isFirstMovementMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
         private readonly RobotTool _initialTool; // Defines the first tool that will be used
         private RobotTool _currentTool; // Defines the default robot tool
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
@@ -72,7 +74,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -102,7 +106,7 @@ namespace RobotComponents.ABB.Kinematics
             _currentTool = _initialTool;
             _linearConfigurationControl = true;
             _jointConfigurationControl = true;
-            _firstMovementIsMoveAbsJ = false;
+            _isFirstMovementMoveAbsJ = false;
             _cirPathMode = CirPathMode.PathFrame;
             _time = 0;
 
@@ -151,7 +155,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Check fist movement
-            _firstMovementIsMoveAbsJ = CheckFirstMovement(ungrouped);
+            _isFirstMovementMoveAbsJ = CheckFirstMovement(ungrouped);
 
             // Get path from the list with actions
             for (int i = 0; i < ungrouped.Count; i++)
@@ -704,10 +708,14 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Checks whether the first movement type is an absolute joint movement.
-        /// Returns true if no movements were defined. 
+        /// Checks whether the first movement type is an absolute joint movement. 
         /// </summary>
-        /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
+        /// <remarks>
+        /// Returns true if no movements are defined. 
+        /// </remarks>
+        /// <returns> 
+        /// Specifies whether the first movement type is an absolute joint movement. 
+        /// </returns>
         private bool CheckFirstMovement(IList<Actions.Action> actions)
         {
             for (int i = 0; i != actions.Count; i++)
@@ -745,7 +753,7 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets or sets the Robot.
+        /// Gets the Robot.
         /// </summary>
         public Robot Robot
         {
@@ -762,8 +770,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets the path curve as list with curve.
-        /// For every move instruction a curve is constructed. 
         /// </summary>
+        /// <remarks>
+        /// For every move instruction a curve is constructed. 
+        /// </remarks>
         public List<Curve> Paths 
         {
             get { return _paths; }
@@ -804,13 +814,23 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
         /// </summary>
+        public bool IsFirstMovementMoveAbsJ
+        {
+            get { return _isFirstMovementMoveAbsJ; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsFirstMovementMoveAbsJ instead.", false)]
         public bool FirstMovementIsMoveAbsJ
         {
-            get { return _firstMovementIsMoveAbsJ; }
+            get { return _isFirstMovementMoveAbsJ; }
         }
         #endregion
     }
-
 }
 
 

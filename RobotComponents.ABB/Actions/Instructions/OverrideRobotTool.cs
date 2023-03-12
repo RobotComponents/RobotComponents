@@ -15,13 +15,15 @@ namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
     /// Represents the Override Robot Tool action.
-    /// This action is used to set a new default Robot Tool from this action. 
     /// </summary>
+    /// <remarks>
+    /// This action is used to set a new default Robot Tool from this action. 
+    /// </remarks>
     [Serializable()]
     public class OverrideRobotTool : Action, IInstruction, ISerializable
     {
         #region fields
-        private RobotTool _robotTool; // The robot that should be used
+        private RobotTool _robotTool;
         #endregion
 
         #region (de)serialization
@@ -78,7 +80,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Override Robot Tool instance.
         /// </summary>
-        /// <returns> A deep copy of the Override Robot Tool instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Override Robot Tool instance. 
+        /// </returns>
         public OverrideRobotTool Duplicate()
         {
             return new OverrideRobotTool(this);
@@ -87,7 +91,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Override Robot Tool instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Override Robot Tool instance as an IInstruction. </returns>
+        /// <returns> 
+        /// A deep copy of the Override Robot Tool instance as an IInstruction. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new OverrideRobotTool(this);
@@ -96,7 +102,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Override Robot Tool instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Override Robot Tool instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Override Robot Tool instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new OverrideRobotTool(this);
@@ -107,7 +115,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -124,7 +134,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty; // We don't write a comment between our declarations.
@@ -134,7 +146,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             robot.Tool = _robotTool;
@@ -143,8 +157,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -153,8 +169,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {

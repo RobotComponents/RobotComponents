@@ -19,7 +19,7 @@ using RobotComponents.ABB.Actions.Declarations;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents several Move instructions (MoveAbsJ, MoveL, MoveJ, MoveLDO and MoveJDO). 
+    /// Represents several Move instructions (MoveAbsJ, MoveL, MoveJ, MoveC, MoveLDO, MoveJDO and MoveC). 
     /// </summary>
     [Serializable()]
     public class Movement : Action, IInstruction, ISerializable
@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         private MovementType _movementType;
         private RobotTarget _cirPoint;
         private ITarget _target;
-        private int _id; // Synchronization id (for multi move programming)
+        private int _id;
         private SpeedData _speedData;
         private double _time;
         private ZoneData _zoneData;
@@ -102,9 +102,11 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Initializes a new instance of the Movement class.
-        /// This constructor is typically used to cast a Plane to a movement. 
         /// </summary>
-        /// <param name="plane"> The target plan. </param>
+        /// <remarks>
+        /// This constructor is typically used to cast a Plane to a Movement. 
+        /// </remarks>
+        /// <param name="plane"> The target plane. </param>
         public Movement(Plane plane)
         {
             _movementType = MovementType.MoveJ;
@@ -121,8 +123,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Initializes a new instance of the Movement class.
-        /// This constructor is typically used to cast a Robot Target to a movement. 
         /// </summary>
+        /// <remarks>
+        /// This constructor is typically used to cast a Robot Target to a Movement.
+        /// </remarks>
         /// <param name="target"> The Target. </param>
         public Movement(ITarget target)
         {
@@ -228,29 +232,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data.</param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, SetDigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
-            _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = digitalOutput;
-            CheckCombination();
-        }
-
-        /// <summary>
         /// Initializes a new instance of the Movement class with an empty Digital Output.
         /// </summary>
         /// <param name="movementType"> The Movement Type. </param>
@@ -275,6 +256,29 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
+        /// </summary>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data.</param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="setDigitalOutput"> The Digital Output. When set this will define a MoveLDO, MoveJDO or MoveCDO instruction. </param>
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, SetDigitalOutput setDigitalOutput)
+        {
+            _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
+            _time = -1;
+            _zoneData = zoneData;
+            _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _setDigitalOutput = setDigitalOutput;
+            CheckCombination();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Movement class with a default Work Object (wobj0). 
         /// </summary>
         /// <param name="movementType"> The Movement Type. </param>
@@ -282,8 +286,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="speedData"> The Speed Data. </param>
         /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, SetDigitalOutput digitalOutput)
+        /// <param name="setDigitalOutput"> The Digital Output. When set this will define a MoveLDO, MoveJDO or MoveCDO instruction. </param>
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, SetDigitalOutput setDigitalOutput)
         {
             _movementType = movementType;
             _cirPoint = new RobotTarget(Plane.Unset);
@@ -294,7 +298,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = digitalOutput;
+            _setDigitalOutput = setDigitalOutput;
             CheckCombination();
         }
 
@@ -307,8 +311,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="zoneData"> The Zone Data. </param>
         /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
         /// <param name="workObject"> The Work Object. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, SetDigitalOutput digitalOutput)
+        /// <param name="setDigitalOutput"> The Digital Output. When set this will define a MoveLDO, MoveJDO or MoveCDO instruction. </param>
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, SetDigitalOutput setDigitalOutput)
         {
             _movementType = movementType;
             _cirPoint = new RobotTarget(Plane.Unset);
@@ -319,7 +323,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = zoneData;
             _robotTool = robotTool;
             _workObject = workObject;
-            _setDigitalOutput = digitalOutput;
+            _setDigitalOutput = setDigitalOutput;
             CheckCombination();
         }
 
@@ -355,7 +359,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Movement instance.
         /// </summary>
-        /// <returns> A deep copy of the Movement instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Movement instance. 
+        /// </returns>
         public Movement Duplicate()
         {
             return new Movement(this);
@@ -364,7 +370,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Movement instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Movement instance as an IInstruction. </returns>
+        /// <returns>
+        /// A deep copy of the Movement instance as an IInstruction. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new Movement(this);
@@ -373,7 +381,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Movement instance without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Movement instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Movement instance. 
+        /// </returns>
         public Movement DuplicateWithoutMesh()
         {
             return new Movement(this, false);
@@ -382,7 +392,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Movement instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Movement instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Movement instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new Movement(this);
@@ -393,7 +405,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -452,10 +466,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Checks the combination between the movement type and the target type.
+        /// </summary>
         /// <remarks>
         /// Throws an exception if the combination is not valid. 
         /// </remarks>
-        /// </summary>
         private void CheckCombination()
         {
             if (_movementType != MovementType.MoveAbsJ && _target is JointTarget)
@@ -466,12 +480,14 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Calculates the position and the orientation of the target in world coordinate space. 
+        /// </summary>
         /// <remarks>
         /// If an external axis is attached to the work object this method returns the pose of the 
         /// target plane in the world coorinate space for axis values equal to zero.
         /// </remarks>
-        /// </summary>
-        /// <returns> The the target plane in world coordinate space. </returns>
+        /// <returns> 
+        /// The the target plane in world coordinate space. 
+        /// </returns>
         public Plane GetGlobalTargetPlane()
         {
             if (_target is RobotTarget robotTarget)
@@ -491,7 +507,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Calculates the posed target plane for the defined Robot with attached external axes in world coordinate space.
         /// </summary>
-        /// <returns> The posed target plane in world coordinate space. </returns>
+        /// <returns> 
+        /// The posed target plane in world coordinate space. 
+        /// </returns>
         public Plane GetPosedGlobalTargetPlane()
         {
             if (_target is RobotTarget robotTarget)
@@ -573,7 +591,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
@@ -583,7 +603,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             // Set tool name
@@ -702,16 +724,16 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
 
-            // Collect unique robot tools
-            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
-            {
-                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
-            }
-
             // Collect unique loaddatas
             if (!RAPIDGenerator.LoadDatas.ContainsKey(_robotTool.LoadData.Name))
             {
                 RAPIDGenerator.LoadDatas.Add(_robotTool.LoadData.Name, _robotTool.LoadData);
+            }
+
+            // Collect unique robot tools
+            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
+            {
+                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
             }
 
             // Collect unique work objects
@@ -855,6 +877,83 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _setDigitalOutput; }
             set { _setDigitalOutput = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
+        /// </summary>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data.</param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
+        {
+            _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
+            _time = -1;
+            _zoneData = zoneData;
+            _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
+            _workObject = new WorkObject(); // Default work object wobj0
+            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
+            CheckCombination();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Movement class with a default Work Object (wobj0). 
+        /// </summary>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
+        {
+            _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
+            _time = -1;
+            _zoneData = zoneData;
+            _robotTool = robotTool;
+            _workObject = new WorkObject(); // Default work object wobj0
+            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
+            CheckCombination();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Movement class.
+        /// </summary>
+        /// <param name="movementType"> The Movement Type. </param>
+        /// <param name="target"> The Target. </param>
+        /// <param name="speedData"> The Speed Data. </param>
+        /// <param name="zoneData"> The Zone Data. </param>
+        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
+        /// <param name="workObject"> The Work Object. </param>
+        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
+        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
+        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
+        {
+            _movementType = movementType;
+            _cirPoint = new RobotTarget(Plane.Unset);
+            _target = target;
+            _id = -1;
+            _speedData = speedData;
+            _time = -1;
+            _zoneData = zoneData;
+            _robotTool = robotTool;
+            _workObject = workObject;
+            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
+            CheckCombination();
         }
 
         /// <summary>

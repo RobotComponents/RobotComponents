@@ -112,8 +112,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from planes.
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the loaddata as load0.
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
@@ -138,8 +140,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from planes.
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the loaddata as load0.
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
@@ -170,8 +174,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from planes.
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the loaddata as load0.
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
@@ -193,8 +199,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from planes.
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the loaddata as load0.
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh as The list with robot meshes. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
@@ -244,7 +252,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Robot Tool instance.
         /// </summary>
-        /// <returns> A deep copy of the Robot Tool instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Tool instance. 
+        /// </returns>
         public RobotTool Duplicate()
         {
             return new RobotTool(this);
@@ -253,7 +263,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Robot Tool instance without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Robot Tool instance without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Tool instance without meshes. 
+        /// </returns>
         public RobotTool DuplicateWithoutMesh()
         {
             return new RobotTool(this, false);
@@ -262,7 +274,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an empty Robot Tool instance.
         /// </summary>
-        /// <returns> The empty Robot Tool. </returns>
+        /// <returns> 
+        /// The empty Robot Tool.
+        /// </returns>
         public static RobotTool GetEmptyRobotTool()
         {
             RobotTool robotTool = new RobotTool();
@@ -279,7 +293,7 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
         /// </remarks>
-        /// <param name="rapidData"></param>
+        /// <param name="rapidData"> The RAPID data string. </param>
         private RobotTool(string rapidData)
         {
             string clean = rapidData;
@@ -436,7 +450,9 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="robotTool"> The Robot Tool intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out RobotTool robotTool)
         {
             try
@@ -456,7 +472,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -489,7 +507,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the tool center point relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> The tool center point. </returns>
+        /// <returns> 
+        /// The tool center point. 
+        /// </returns>
         public Point3d CalculateToolPosition()
         {
             Plane toolPlane = new Plane(_toolPlane);
@@ -504,7 +524,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the tool center orientation relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> The quaternion orientation of the tool center plane. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the tool center plane. 
+        /// </returns>
         public Quaternion CalculateToolOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _toolPlane);
@@ -515,7 +537,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns the RAPID declaration code line of the this Robot Tool.
         /// </summary>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public string ToRAPIDDeclaration()
         {
             // Scope
@@ -548,9 +572,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Clears all the fields and properties of the current instance.
-        /// Typically used for defining an empty Robot Tool instance 
-        /// (since the empty constructor creates the default Robot Tool tool0).
         /// </summary>
+        /// <remarks>
+        /// Typically used for defining an empty Robot Tool instance 
+        /// since the empty constructor creates the default Robot Tool tool0.
+        /// </remarks>
         private void Clear()
         {
             _name = "";
@@ -584,7 +610,9 @@ namespace RobotComponents.ABB.Definitions
         /// Returns the Bounding Box of the object.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         public BoundingBox GetBoundingBox(bool accurate)
         {
             BoundingBox boundingBox = BoundingBox.Empty;
@@ -637,8 +665,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the tool name.
-        /// Each tool name has to be unique.
         /// </summary>
+        /// <remarks>
+        /// Each name has to be unique.
+        /// </remarks>
         public string Name
         {
             get { return _name; }
@@ -728,9 +758,11 @@ namespace RobotComponents.ABB.Definitions
         #region obsolete
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from Euler data.
+        /// </summary>
+        /// <remarks>
         /// Sets the attachtment plane equal to the world xy-plane. 
         /// Sets the load data as defined for the default tool tool0.
-        /// </summary>
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
         /// <param name="toolTransX"> The tool center point translation in x-direction. </param>
@@ -767,9 +799,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from Euler data.
+        /// </summary>
+        /// <remarks>
         /// Sets the attachtment plane equal to the world xy-plane. 
         /// Sets the load data as defined for the default tool tool0.
-        /// </summary>
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh. </param>
         /// <param name="toolTransX"> The tool center point translation in x-direction. </param>
@@ -812,9 +846,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
+        /// </summary>
+        /// <remarks>
         /// Sets the attachtment plane equal to the world xy-plane. 
         /// Sets the load data as defined for the default tool tool0.
-        /// </summary>
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh. </param>
         /// <param name="x"> The x coordinate of the TCP point. </param>
@@ -847,9 +883,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
+        /// </summary>
+        /// <remarks>
         /// Sets the attachtment plane equal to the world xy-plane. 
         /// Sets the load data as defined for the default tool tool0.
-        /// </summary>
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh. </param>
         /// <param name="x"> The x coordinate of the TCP point. </param>
@@ -888,8 +926,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from the x, y and z coordinate and the four quarternion values of the TCP point. 
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the load data as defined for the default tool tool0.
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="meshes"> The tool mesh. </param>
         /// <param name="attachmentPlane"> The attachement plane. </param>
@@ -929,9 +969,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Initializes a new instance of the Robot Tool class from a point and a quarternion.
-        /// Sets the attachtment plane equal to the world xy-plane. 
-        /// Sets the load data as defined for the default tool tool0.
         /// </summary>
+        /// <remarks>
+        /// Sets the attachtment plane equal to the world xy-plane. 
+        /// Sets the load data as defined for the default tool tool0.s
+        /// </remarks>
         /// <param name="name"> The tool name, must be unique. </param>
         /// <param name="mesh"> The tool mesh defined in the tool coordinate space. </param>
         /// <param name="point"> The point of the TCP point. </param>
@@ -1080,7 +1122,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the tool center of gravity relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> The center of gravity point. </returns>
+        /// <returns> 
+        /// The center of gravity point. 
+        /// </returns>
         [Obsolete("This method is obsolete and will be removed in v3.", false)]
         public Point3d CalculateCenterOfGravityPosition()
         {
@@ -1090,7 +1134,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the tool center of gravity orientation relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> The quaternion orientation of the tool center of gravity. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the tool center of gravity. 
+        /// </returns>
         [Obsolete("This method is obsolete and will be removed in v3.", false)]
         public Quaternion CalculateCenterOfGravityOrientation()
         {
@@ -1145,8 +1191,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets the orientation of the tool load coordinate system defined by the principal inertial axes of the tool load. 
-        /// Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).
         /// </summary>
+        /// <remarks>
+        /// Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).
+        /// </remarks>
         [Obsolete("This property is obsolete and will be removed in v3. Use LoadData.AxesOfMoment instead.", false)]
         public Quaternion CenterOfGravityOrientation
         {

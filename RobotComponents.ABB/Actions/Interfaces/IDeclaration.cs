@@ -15,27 +15,40 @@ namespace RobotComponents.ABB.Actions.Interfaces
     public interface IDeclaration
     {
         #region constructors
-
-        #endregion
-
-        #region methods
         /// <summary>
         /// Returns an exact duplicate of this Declaration.
         /// </summary>
-        /// <returns> The exact copy of this Declaration. </returns>
+        /// <returns> 
+        /// The exact copy of this Declaration. 
+        /// </returns>
         IDeclaration DuplicateDeclaration();
+        #endregion
+
+        #region methods
+
+        /// <summary>
+        /// Returns the Declaration in RAPID code format.
+        /// </summary>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
+        string ToRAPID();
 
         /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
         #endregion
@@ -59,6 +72,9 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the variable name of the declaration.
         /// </summary>
+        /// <remarks>
+        /// Each variable name has to be unique. 
+        /// </remarks>
         string Name { get; set; }
         #endregion 
     }

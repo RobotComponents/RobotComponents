@@ -16,7 +16,7 @@ using RobotComponents.ABB.Utils;
 namespace RobotComponents.ABB.Definitions
 {
     /// <summary>
-    /// Represent Load Data
+    /// Represent Load Data.
     /// </summary>
     public class LoadData : ISerializable
     {
@@ -265,7 +265,9 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="loadData"> The Load Data intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out LoadData loadData)
         {
             try
@@ -285,7 +287,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -305,7 +309,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns the loaddata in RAPID code format, e.g. "[ 5, [50, 0, 50], [1, 0, 0, 0], 0, 0, 0]".
         /// </summary>
-        /// <returns> The string with loaddata values. </returns>
+        /// <returns> 
+        /// The string with loaddata values. 
+        /// </returns>
         public string ToRAPID()
         {
             string result = $"[{_mass:0.######}, ";
@@ -320,7 +326,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns the RAPID declaration code line of the this Load Data.
         /// </summary>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public string ToRAPIDDeclaration()
         {
             string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";

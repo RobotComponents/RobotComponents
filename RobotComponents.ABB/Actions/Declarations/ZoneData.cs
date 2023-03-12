@@ -19,24 +19,26 @@ namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents a predefined or user definied Zone Data declaration.
-    /// This action is used to specify how a position is to be terminated.
     /// </summary>
+    /// <remarks>
+    /// This action is used to specify how a position is to be terminated.
+    /// </remarks>
     [Serializable()]
     public class ZoneData : Action, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // ZoneData variable name
-        private bool _finep; // Fine point
-        private double _pzone_tcp; // Path zone TCP
-        private double _pzone_ori; // Path zone orientation
-        private double _pzone_eax; // Path zone external axes
-        private double _zone_ori; // Zone orientation
-        private double _zone_leax; // Zone linear external axes
-        private double _zone_reax; // Zone rotational external axes
-        private bool _predefined; // ABB predefinied data (e.g. fine, z1, z5, z10 etc.)?
-        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private VariableType _variableType;
+        private string _name;
+        private bool _finep;
+        private double _pzone_tcp; 
+        private double _pzone_ori;
+        private double _pzone_eax;
+        private double _zone_ori;
+        private double _zone_leax;
+        private double _zone_reax;
+        private bool _predefined; 
+        private readonly bool _exactPredefinedValue; 
 
         private static readonly string[] _validPredefinedNames = new string[] { "fine", "z0", "z1", "z5", "z10", "z15", "z20", "z30", "z40", "z50", "z60", "z80", "z100", "z150", "z200" };
         private static readonly double[] _validPredefinedValues = new double[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -103,8 +105,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
-        /// Use -1 to define a fine point.
         /// </summary>
+        /// <remarks>
+        /// Use -1 to define a fine point.
+        /// </remarks>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
@@ -147,8 +151,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
-        /// Use -1 to define a fine point.
         /// </summary>
+        /// <remarks>
+        /// Use -1 to define a fine point.
+        /// </remarks>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
@@ -276,7 +282,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance.
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance.
+        /// </returns>
         public ZoneData Duplicate()
         {
             return new ZoneData(this);
@@ -285,7 +293,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new ZoneData(this);
@@ -294,7 +304,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new ZoneData(this);
@@ -308,7 +320,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <remarks>
         /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
         /// </remarks>
-        /// <param name="rapidData"></param>
+        /// <param name="rapidData"> The RAPID data string. </param>
         private ZoneData(string rapidData)
         {
             string clean = rapidData;
@@ -405,7 +417,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             if (values.Length == 7)
             {
-                _finep = values[0] == "TRUE" ? true : false;
+                _finep = values[0] == "TRUE";
                 _pzone_tcp = Convert.ToDouble(values[1]);
                 _pzone_ori = Convert.ToDouble(values[2]);
                 _pzone_eax = Convert.ToDouble(values[3]);
@@ -418,7 +430,6 @@ namespace RobotComponents.ABB.Actions.Declarations
                 throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
             }
         }
-
 
         /// <summary>
         /// Returns a Zone Data instance constructed from a RAPID data string. 
@@ -434,7 +445,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="zoneData"> The Zone Data intance. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public static bool TryParse(string rapidData, out ZoneData zoneData)
         {
             try
@@ -454,7 +467,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -478,7 +493,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns the Zone Data in RAPID code format, e.g. "[FALSE, 0, 0.3, 0.3, 0.3, 0.3, 0.03]".
         /// </summary>
-        /// <returns> The string with zone data values. </returns>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
         public string ToRAPID()
         {
             string code = "";
@@ -498,7 +515,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_predefined == false & _name != "")
@@ -518,7 +537,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An emptry string. </returns>
+        /// <returns> 
+        /// An emptry string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -526,8 +547,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -546,8 +569,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -619,8 +644,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size (the radius) for the tool reorientation. 
-        /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
+        /// <remarks>
+        /// The size is defined as the distance of the TCP from the programmed point in mm.
+        /// </remarks>
         public double PathZoneOrientation
         {
             get { return _pzone_ori; }
@@ -629,8 +656,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size (the radius) for external axes. 
-        /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
+        /// <remarks>
+        /// The size is defined as the distance of the TCP from the programmed point in mm.
+        /// </remarks>
         public double PathZoneExternalAxes
         {
             get { return _pzone_eax; }
@@ -639,8 +668,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size for the tool reorientation in degrees. 
-        /// If the robot is holding the work object, this means an angle of rotation for the work object.
         /// </summary>
+        /// <remarks>
+        /// If the robot is holding the work object, this means an angle of rotation for the work object.
+        /// </remarks>
         public double ZoneOrientation
         {
             get { return _zone_ori; }
@@ -685,8 +716,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined zonedata value. 
-        /// If false the nearest predefined zoneata or a custom zonedata was used. 
         /// </summary>
+        /// <remarks>
+        /// If false the nearest predefined zoneata or a custom zonedata was used.
+        /// </remarks>
         public bool ExactPredefinedValue
         {
             get { return _exactPredefinedValue; }

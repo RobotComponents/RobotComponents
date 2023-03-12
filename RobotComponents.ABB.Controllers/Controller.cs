@@ -25,8 +25,10 @@ namespace RobotComponents.ABB.Controllers
 {
     /// <summary>
     /// Represents the Controller class. 
-    /// This class is a wrapper around the ABB Controller class. 
     /// </summary>
+    /// <remarks>
+    /// This class is a wrapper around the ABB Controller class
+    /// </remarks>
     public class Controller
     {
         #region fields
@@ -110,11 +112,13 @@ namespace RobotComponents.ABB.Controllers
         #region static methods
         /// <summary>
         /// Returns a list with ABB Controllers that are found in the network. 
+        /// </summary>
         /// <remarks> 
         /// These controllers are not initialized. Call Initialize first if you want to use these controllers. 
         /// </remarks>
-        /// </summary>
-        /// <returns> A list with controlers. </returns>
+        /// <returns> 
+        /// A list with controlers. 
+        /// </returns>
         public static List<Controller> GetControllers()
         {
             NetworkScanner scanner = new NetworkScanner();
@@ -131,7 +135,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (_controller == null)
@@ -267,7 +273,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Logon to the set user. 
         /// </summary>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool Logon()
         {
             if (_isEmpty == true)
@@ -294,7 +302,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Logs off the current user.
         /// </summary>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool Logoff()
         {
             if (_isEmpty == true)
@@ -321,7 +331,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Disposes the current controller object inside this instance.
         /// </summary>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool Dispose()
         {
             if (_isEmpty == true)
@@ -355,7 +367,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the robot base frames.
         /// </summary>
-        /// <returns> A dictionary with as key the name of the robot and as value the base frame. </returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the robot and as value the base frame. 
+        /// </returns>
         public Dictionary<string, Plane> GetRobotBaseFrames()
         {
             Dictionary<string, Plane> result = new Dictionary<string, Plane>();
@@ -395,7 +409,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current robot tool planes.
         /// </summary>
-        /// <returns> A dictionary with as key the name of the robot and as value the current tool planes. </returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the robot and as value the current tool planes. 
+        /// </returns>
         public Dictionary<string, Plane> GetRobotToolPlanes(int system)
         {
             if (_isEmpty == true)
@@ -426,7 +442,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current external axis planes.
         /// </summary>
-        /// <returns> A dictionary with as key the name of the external axis and as value the current plane. </returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the external axis and as value the current plane.
+        /// </returns>
         public Dictionary<string, Plane> GetExternalAxisPlanes(int system)
         {
             if (_isEmpty == true)
@@ -470,7 +488,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current robot joint positions.
         /// </summary>
-        /// <returns> A dictionary with as key the name of the robot and as value the current robot joint position. </returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the robot and as value the current robot joint position. 
+        /// </returns>
         public Dictionary<string, RobotJointPosition> GetRobotJointPositions()
         {
             if (_isEmpty == true)
@@ -497,7 +517,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current external joint positions.
         /// </summary>
-        /// <returns> A dictionary with as key the name of the external axis and as value the current external joint position. </returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the external axis and as value the current external joint position. 
+        /// </returns>
         public Dictionary<string, double[]> GetExternalJointPositions()
         {
             if (_isEmpty == true)
@@ -532,7 +554,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current joint targets. 
         /// </summary>
-        /// <returns> A dictionary with as key the name of the task and as value the current joint target.</returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the task and as value the current joint target.
+        /// </returns>
         public Dictionary<string, JointTarget> GetJointTargets()
         {
             if (_isEmpty == true)
@@ -569,7 +593,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the current robot targets. 
         /// </summary>
-        /// <returns> A dictionary with as key the name of the task and as value the current robot target.</returns>
+        /// <returns> 
+        /// A dictionary with as key the name of the task and as value the current robot target.
+        /// </returns>
         public Dictionary<string, RobotTarget> GetRobotTargets()
         {
             if (_isEmpty == true)
@@ -613,7 +639,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the analog output signals. 
         /// </summary>
-        /// <returns> A list with analog output signals. </returns>
+        /// <returns> 
+        /// A list with analog output signals. 
+        /// </returns>
         private List<Signal> GetAnalogOutputs()
         {
             if (_isEmpty == true)
@@ -636,7 +664,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the digital output signals. 
         /// </summary>
-        /// <returns> A list with digital output signals. </returns>
+        /// <returns> 
+        /// A list with digital output signals. 
+        /// </returns>
         private List<Signal> GetDigitalOutputs()
         {
             if (_isEmpty == true)
@@ -659,7 +689,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the analog inputs. 
         /// </summary>
-        /// <returns> A list with analog inputs. </returns>
+        /// <returns> 
+        /// A list with analog inputs. 
+        /// </returns>
         private List<Signal> GetAnalogInputs()
         {
             if (_isEmpty == true)
@@ -682,7 +714,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns the digital inputs.
         /// </summary>
-        /// <returns> A list with digital inputs. </returns>
+        /// <returns> 
+        /// A list with digital inputs. 
+        /// </returns>
         private List<Signal> GetDigitalInputs()
         {
             if (_isEmpty == true)
@@ -742,7 +776,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
-        /// <returns> The analog input signal. Returns an empty signal if no signal was found. </returns>
+        /// <returns> 
+        /// The analog input signal. Returns an empty signal if no signal was found. 
+        /// </returns>
         public Signal GetAnalogInput(string name, out int index)
         {
             if (_isEmpty == true)
@@ -770,7 +806,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
-        /// <returns> The analog output signal. Returns an empty signal if no signal was found. </returns>
+        /// <returns> 
+        /// The analog output signal. Returns an empty signal if no signal was found. 
+        /// </returns>
         public Signal GetAnalogOutput(string name, out int index)
         {
             if (_isEmpty == true)
@@ -798,7 +836,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
-        /// <returns> The digital input signal. Returns an empty signal if no signal was found. </returns>
+        /// <returns> 
+        /// The digital input signal. Returns an empty signal if no signal was found. 
+        /// </returns>
         public Signal GetDigitalInput(string name, out int index)
         {
             if (_isEmpty == true)
@@ -826,7 +866,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
         /// <param name="index"> The index number of the signal. The index is -1 if no signal was found. </param>
-        /// <returns> The digital output signal. Returns an empty signal if no signal was found. </returns>
+        /// <returns> 
+        /// The digital output signal. Returns an empty signal if no signal was found. 
+        /// </returns>
         public Signal GetDigitalOutput(string name, out int index)
         {
             if (_isEmpty == true)
@@ -855,7 +897,9 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="taskName"> The task to upload to. </param>
         /// <param name="module"> The module to upload. </param>
         /// <param name="status"> The status message. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool UploadModule(string taskName, List<string> module, out string status)
         {
             status = "";
@@ -985,7 +1029,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="task"> The name of the task, </param>
         /// <param name="routine"> The name of the routine. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         private bool SetProgramPointer(string task, string routine)
         {
             //TODO: Therefore it is a private. 
@@ -997,7 +1043,9 @@ namespace RobotComponents.ABB.Controllers
         /// Resets all the program pointers to the main routine. 
         /// </summary>
         /// <param name="status"> The status message, </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool ResetProgramPointers(out string status)
         {
             bool succeeded = false;
@@ -1055,7 +1103,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="taskName"> The task name. </param>
         /// <param name="status">The status message. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool ResetProgramPointer(string taskName, out string status)
         {
             bool succeeded = false;
@@ -1108,7 +1158,9 @@ namespace RobotComponents.ABB.Controllers
         /// Makes a call to run the program. 
         /// </summary>
         /// <param name="status"> The status message. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool RunProgram(out string status)
         {
             if (_isEmpty == true)
@@ -1151,7 +1203,9 @@ namespace RobotComponents.ABB.Controllers
         /// Makes a call to stop the program. 
         /// </summary>
         /// <param name="status"> The status message. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure.
+        /// </returns>
         public bool StopProgram(out string status)
         {
             if (_isEmpty == true)
@@ -1188,7 +1242,9 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="type"> The type name. </param>
         /// <param name="instance"> The instance name. </param>
         /// <param name="attribute">TThe attribute name. </param>
-        /// <returns> A value from the configuration database. </returns>
+        /// <returns> 
+        /// A value from the configuration database. 
+        /// </returns>
         public string ReadConfigurationDomain(string domain, string type, string instance, string attribute)
         {
             if (_isEmpty == true)
@@ -1205,7 +1261,9 @@ namespace RobotComponents.ABB.Controllers
         /// <param name="task"> The task name. </param>
         /// <param name="module"> The module name. </param>
         /// <param name="variable"> The variable name. </param>
-        /// <returns> The rapid value. </returns>
+        /// <returns> 
+        /// The rapid value as a RAPID data string. 
+        /// </returns>
         public string ReadRapidDomain(string task, string module, string variable)
         {
             if (_isEmpty == true)
@@ -1220,11 +1278,11 @@ namespace RobotComponents.ABB.Controllers
         #region static properties
         /// <summary>
         /// Gets the controllers found in the network. 
+        /// </summary>
         /// <remarks> 
         /// Call the static method GetControllers first to scan the network. 
         /// Call Initialize before using one of the controllers. 
         /// </remarks>
-        /// </summary>
         public static List<Controller> Controllers
         {
             get { return _controllers; }
@@ -1294,8 +1352,10 @@ namespace RobotComponents.ABB.Controllers
 
         /// <summary>
         /// Gets a value indicating whether or not the controller instance is empty.
-        /// If empty, there is no ABB controller instance defined inside this instance. 
         /// </summary>
+        /// <remarks>
+        /// If empty, there is no ABB controller instance defined inside this instance.
+        /// </remarks>
         public bool IsEmpty
         {
             get { return _isEmpty; }

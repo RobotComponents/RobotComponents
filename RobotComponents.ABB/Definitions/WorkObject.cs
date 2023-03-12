@@ -7,6 +7,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Text.RegularExpressions;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
@@ -184,73 +185,60 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="rapidData"> The RAPID data string. </param>
         private WorkObject(string rapidData)
         {
-            string clean = rapidData;
-            clean = clean.Replace(" ", "");
-            clean = clean.Replace("\t", "");
-            clean = clean.Replace("\n", "");
-            clean = clean.Replace(";", "");
-            clean = clean.Replace(":", "");
-            clean = clean.Replace("[", "");
-            clean = clean.Replace("]", "");
-            clean = clean.Replace("(", "");
-            clean = clean.Replace(")", "");
-            clean = clean.Replace("{", "");
-            clean = clean.Replace("}", "");
+            string clean = Regex.Replace(rapidData, @"[\s;:\[\]\(\){}]", "");
 
             string[] split = clean.Split('=');
             string type;
             string value;
 
-            if (split.Length == 1)
+            // Check for equal signs
+            switch (split.Length)
             {
-                type = "VARwobjdata"; // default: GLOBAL scope and VAR variable type
-                value = split[0];
-            }
-            else if (split.Length == 2)
-            {
-                type = split[0];
-                value = split[1];
-            }
-            else
-            {
-                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+                case 1:
+                    type = "VARwobjdata";
+                    value = split[0];
+                    break;
+                case 2:
+                    type = split[0];
+                    value = split[1];
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
             }
 
             // Scope
-            if (type.StartsWith("LOCAL"))
+            switch (type)
             {
-                _scope = Scope.LOCAL;
-                type = type.ReplaceFirst("LOCAL", "");
-            }
-            else if (type.StartsWith("TASK"))
-            {
-                _scope = Scope.TASK;
-                type = type.ReplaceFirst("TASK", "");
-            }
-            else
-            {
-                _scope = Scope.GLOBAL;
+                case string t when t.StartsWith("LOCAL"):
+                    _scope = Scope.LOCAL;
+                    type = type.ReplaceFirst("LOCAL", "");
+                    break;
+                case string t when t.StartsWith("TASK"):
+                    _scope = Scope.TASK;
+                    type = type.ReplaceFirst("TASK", "");
+                    break;
+                default:
+                    _scope = Scope.GLOBAL;
+                    break;
             }
 
             // Variable type
-            if (type.StartsWith("VAR"))
+            switch (type)
             {
-                _variableType = VariableType.VAR;
-                type = type.ReplaceFirst("VAR", "");
-            }
-            else if (type.StartsWith("CONST"))
-            {
-                _variableType = VariableType.CONST;
-                type = type.ReplaceFirst("CONST", "");
-            }
-            else if (type.StartsWith("PERS"))
-            {
-                _variableType = VariableType.PERS;
-                type = type.ReplaceFirst("PERS", "");
-            }
-            else
-            {
-                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+                case string t when t.StartsWith("VAR"):
+                    _variableType = VariableType.VAR;
+                    type = type.ReplaceFirst("VAR", "");
+                    break;
+                case string t when t.StartsWith("CONST"):
+                    _variableType = VariableType.CONST;
+                    type = type.ReplaceFirst("CONST", "");
+                    break;
+                case string t when t.StartsWith("PERS"):
+                    _variableType = VariableType.PERS;
+                    type = type.ReplaceFirst("PERS", "");
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
             }
 
             // Datatype
@@ -259,10 +247,8 @@ namespace RobotComponents.ABB.Definitions
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
-            type = type.ReplaceFirst("wobjdata", "");
-
             // Name
-            _name = type;
+            _name = type.ReplaceFirst("wobjdata", "");
 
             // Value
             string[] values = value.Split(',');
@@ -275,23 +261,23 @@ namespace RobotComponents.ABB.Definitions
                 // External axes are ignored. 
                 _externalAxis = null;
 
-                double x = Convert.ToDouble(values[3]);
-                double y = Convert.ToDouble(values[4]);
-                double z = Convert.ToDouble(values[5]);
-                double a = Convert.ToDouble(values[6]);
-                double b = Convert.ToDouble(values[7]);
-                double c = Convert.ToDouble(values[8]);
-                double d = Convert.ToDouble(values[9]);
+                double x = double.Parse(values[3]);
+                double y = double.Parse(values[4]);
+                double z = double.Parse(values[5]);
+                double a = double.Parse(values[6]);
+                double b = double.Parse(values[7]);
+                double c = double.Parse(values[8]);
+                double d = double.Parse(values[9]);
                 _userFrame = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
 
-                x = Convert.ToDouble(values[10]);
-                y = Convert.ToDouble(values[11]);
-                z = Convert.ToDouble(values[12]);
-                a = Convert.ToDouble(values[13]);
-                b = Convert.ToDouble(values[14]);
-                c = Convert.ToDouble(values[15]);
-                d = Convert.ToDouble(values[16]);
+                x = double.Parse(values[10]);
+                y = double.Parse(values[11]);
+                z = double.Parse(values[12]);
+                a = double.Parse(values[13]);
+                b = double.Parse(values[14]);
+                c = double.Parse(values[15]);
+                d = double.Parse(values[16]);
                 _plane = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
                 CalculateOrientation();
@@ -535,16 +521,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the name of the workobject.
         /// </summary>
         public string Name
@@ -656,6 +632,18 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _fixedFrame; }
             set { _fixedFrame = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
+        public VariableType ReferenceType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
         }
         #endregion
     }

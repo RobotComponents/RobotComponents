@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Text.RegularExpressions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
@@ -138,72 +139,60 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"> The RAPID data string. </param>
         private TaskList(string rapidData)
         {
-            string clean = rapidData;
-            clean = clean.Replace(" ", "");
-            clean = clean.Replace("\t", "");
-            clean = clean.Replace("\n", "");
-            clean = clean.Replace("\"", "");
-            clean = clean.Replace(";", "");
-            clean = clean.Replace(":", "");
-            clean = clean.Replace("[", "");
-            clean = clean.Replace("]", "");
-            clean = clean.Replace("(", "");
-            clean = clean.Replace(")", "");
+            string clean = Regex.Replace(rapidData, @"[\s;:\[\]\(\)]", "");
 
             string[] split = clean.Split('=');
             string type;
             string value;
 
-            if (split.Length == 1)
+            // Check for equal signs
+            switch (split.Length)
             {
-                type = "VARtasks"; // default: GLOBAL scope and VAR variable type
-                value = split[0];
-            }
-            else if (split.Length == 2)
-            {
-                type = split[0];
-                value = split[1];
-            }
-            else
-            {
-                throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+                case 1:
+                    type = "VARtasks";
+                    value = split[0];
+                    break;
+                case 2:
+                    type = split[0];
+                    value = split[1];
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
             }
 
             // Scope
-            if (type.StartsWith("LOCAL"))
+            switch (type)
             {
-                _scope = Scope.LOCAL;
-                type = type.ReplaceFirst("LOCAL", "");
-            }
-            else if (type.StartsWith("TASK"))
-            {
-                _scope = Scope.TASK;
-                type = type.ReplaceFirst("TASK", "");
-            }
-            else
-            {
-                _scope = Scope.GLOBAL;
+                case string t when t.StartsWith("LOCAL"):
+                    _scope = Scope.LOCAL;
+                    type = type.ReplaceFirst("LOCAL", "");
+                    break;
+                case string t when t.StartsWith("TASK"):
+                    _scope = Scope.TASK;
+                    type = type.ReplaceFirst("TASK", "");
+                    break;
+                default:
+                    _scope = Scope.GLOBAL;
+                    break;
             }
 
             // Variable type
-            if (type.StartsWith("VAR"))
+            switch (type)
             {
-                _variableType = VariableType.VAR;
-                type = type.ReplaceFirst("VAR", "");
-            }
-            else if (type.StartsWith("CONST"))
-            {
-                _variableType = VariableType.CONST;
-                type = type.ReplaceFirst("CONST", "");
-            }
-            else if (type.StartsWith("PERS"))
-            {
-                _variableType = VariableType.PERS;
-                type = type.ReplaceFirst("PERS", "");
-            }
-            else
-            {
-                throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+                case string t when t.StartsWith("VAR"):
+                    _variableType = VariableType.VAR;
+                    type = type.ReplaceFirst("VAR", "");
+                    break;
+                case string t when t.StartsWith("CONST"):
+                    _variableType = VariableType.CONST;
+                    type = type.ReplaceFirst("CONST", "");
+                    break;
+                case string t when t.StartsWith("PERS"):
+                    _variableType = VariableType.PERS;
+                    type = type.ReplaceFirst("PERS", "");
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
             }
 
             // Datatype
@@ -212,13 +201,12 @@ namespace RobotComponents.ABB.Actions.Declarations
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
-            type = type.ReplaceFirst("tasks", "");
-
             // Name
-            type = type.Split('{')[0];
-            _name = type;
+            type = type.ReplaceFirst("tasks", "");
+            _name = type.Split('{')[0];
 
             // Value
+            value = value.Replace("\"", "");
             string[] values = value.Split(',');
 
             if (values.Length == 1 & values[0] == "")

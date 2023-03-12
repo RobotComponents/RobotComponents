@@ -25,7 +25,6 @@ namespace RobotComponents.ABB.Actions.Interfaces
         #endregion
 
         #region methods
-
         /// <summary>
         /// Returns the Declaration in RAPID code format.
         /// </summary>

@@ -31,6 +31,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         #region fields
         private Scope _scope;
         private VariableType _variableType;
+        private const string _datatype = "robtarget";
         private string _name;
         private Plane _plane;
         private Quaternion _quat;
@@ -247,7 +248,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             switch (split.Length)
             {
                 case 1:
-                    type = "VARrobtarget";
+                    type = $"VAR{_datatype}";
                     value = split[0];
                     break;
                 case 2:
@@ -294,13 +295,13 @@ namespace RobotComponents.ABB.Actions.Declarations
             }
 
             // Datatype
-            if (type.StartsWith("robtarget") == false)
+            if (type.StartsWith(_datatype) == false)
             {
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
             // Name
-            _name = type.ReplaceFirst("robtarget", "");
+            _name = type.ReplaceFirst(_datatype, "");
 
             // Value
             string[] values = value.Split(',');
@@ -375,8 +376,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Robot Target in RAPID code format, e.g. "[[300, 600, 250], [1, 0, 0, 0], [0, 0, 0, 1] [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]".
+        /// Returns the Robot Target in RAPID code format.
         /// </summary>
+        /// <remarks>
+        /// Example output are 
+        /// "[[300, 600, 250], [1, 0, 0, 0], [0, 0, 0, 1], [1000, 9E9, 9E9, 9E9, 9E9, 9E9]]", 
+        /// "[[300, 600, 250], [1, 0, 0, 0], [0, 0, 0, 1], extjoint1]" and 
+        /// "[[300, 600, 250], [1, 0, 0, 0], confdata1, extjoint1]".
+        /// </remarks>
         /// <returns> 
         /// The string with robot target values. 
         /// </returns>
@@ -420,7 +427,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             if (_name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-                result += $"{Enum.GetName(typeof(VariableType), _variableType)} robtarget {_name} := {ToRAPID()};";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
                 return result;
             }
@@ -508,6 +515,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string DataType
+        {
+            get { return _datatype; }
         }
 
         /// <summary>

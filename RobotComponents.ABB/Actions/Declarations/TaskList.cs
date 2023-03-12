@@ -27,6 +27,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         #region fields
         private Scope _scope;
         private VariableType _variableType;
+        private const string _datatype = "tasks";
         private string _name; 
         private readonly List<string> _taskNames; 
         #endregion
@@ -149,7 +150,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             switch (split.Length)
             {
                 case 1:
-                    type = "VARtasks";
+                    type = $"VAR{_datatype}";
                     value = split[0];
                     break;
                 case 2:
@@ -196,13 +197,13 @@ namespace RobotComponents.ABB.Actions.Declarations
             }
 
             // Datatype
-            if (type.StartsWith("tasks") == false)
+            if (type.StartsWith(_datatype) == false)
             {
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
             // Name
-            type = type.ReplaceFirst("tasks", "");
+            type = type.ReplaceFirst(_datatype, "");
             _name = type.Split('{')[0];
 
             // Value
@@ -294,8 +295,11 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Task List in RAPID code format, e.g. "["T_ROB1", "T_ROB2"]".
+        /// Returns the Task List in RAPID code format. 
         /// </summary>
+        /// <remarks>
+        /// An example output is "["T_ROB1", "T_ROB2"]".
+        /// </remarks>
         /// <returns> 
         /// The RAPID data string. 
         /// </returns>
@@ -328,12 +332,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-            result += Enum.GetName(typeof(VariableType), _variableType);
-            result += " tasks ";
-            result += _name;
+            result += $"{ Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name}";
             result += "{" + _taskNames.Count.ToString() + "} := ";
-            result += ToRAPID();
-            result += ";";
+            result += $"{ ToRAPID()};";
 
             return result;
         }
@@ -410,6 +411,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string DataType
+        {
+            get { return _datatype; }
         }
 
         /// <summary>

@@ -30,6 +30,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         #region fields
         private Scope _scope;
         private VariableType _variableType;
+        private const string _datatype = "speeddata";
         private string _name; 
         private double _v_tcp; 
         private double _v_ori; 
@@ -255,7 +256,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             switch (split.Length)
             {
                 case 1:
-                    type = "VARspeeddata";
+                    type = $"VAR{_datatype}";
                     value = split[0];
                     break;
                 case 2:
@@ -302,13 +303,13 @@ namespace RobotComponents.ABB.Actions.Declarations
             }
 
             // Datatype
-            if (type.StartsWith("speeddata") == false)
+            if (type.StartsWith(_datatype) == false)
             {
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
             // Name
-            _name = type.ReplaceFirst("speeddata", "");
+            _name = type.ReplaceFirst(_datatype, "");
 
             if (_validPredefinedNames.Contains(_name))
             {
@@ -395,8 +396,11 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Speed Data in RAPID code format, e.g. "[200, 500, 5000, 1000]".
+        /// Returns the Speed Data in RAPID code format.
         /// </summary>
+        /// <remarks>
+        /// An example output is "[200, 500, 5000, 1000]".s
+        /// </remarks>
         /// <returns> The string with speed data values. </returns>
         public string ToRAPID()
         {
@@ -415,7 +419,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             if (_predefined == false && _name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-                result += $"{Enum.GetName(typeof(VariableType), _variableType)} speeddata {_name} := {ToRAPID()};";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
                 return result;
             }
@@ -503,6 +507,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string DataType
+        {
+            get { return _datatype; }
         }
 
         /// <summary>

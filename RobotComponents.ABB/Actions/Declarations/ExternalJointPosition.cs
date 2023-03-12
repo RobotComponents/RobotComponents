@@ -102,7 +102,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Initializes a new instance of the External Joint Position class with an empty name.
         /// </summary>
-        /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm. </param>
+        /// <param name="Eax_a"> The position of the external logical axis “a” expressed in degrees or mm.double.IsNaN(Eax_a) </param>
         /// <param name="Eax_b"> The position of the external logical axis “b” expressed in degrees or mm. </param>
         /// <param name="Eax_c"> The position of the external logical axis “c” expressed in degrees or mm. </param>
         /// <param name="Eax_d"> The position of the external logical axis “d” expressed in degrees or mm. </param>
@@ -114,12 +114,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = "";
 
-            _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
-            _val2 = Eax_b == double.NaN ? _defaultValue : Eax_b;
-            _val3 = Eax_c == double.NaN ? _defaultValue : Eax_c;
-            _val4 = Eax_d == double.NaN ? _defaultValue : Eax_d;
-            _val5 = Eax_e == double.NaN ? _defaultValue : Eax_e;
-            _val6 = Eax_f == double.NaN ? _defaultValue : Eax_f;
+            _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
+            _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
+            _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
+            _val4 = double.IsNaN(Eax_d) ? _defaultValue : Eax_d;
+            _val5 = double.IsNaN(Eax_e) ? _defaultValue : Eax_e;
+            _val6 = double.IsNaN(Eax_f) ? _defaultValue : Eax_f;
         }
 
         /// <summary>
@@ -158,12 +158,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = name;
 
-            _val1 = Eax_a == double.NaN ? _defaultValue : Eax_a;
-            _val2 = Eax_b == double.NaN ? _defaultValue : Eax_b;
-            _val3 = Eax_c == double.NaN ? _defaultValue : Eax_c;
-            _val4 = Eax_d == double.NaN ? _defaultValue : Eax_d;
-            _val5 = Eax_e == double.NaN ? _defaultValue : Eax_e;
-            _val6 = Eax_f == double.NaN ? _defaultValue : Eax_f;
+            _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
+            _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
+            _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
+            _val4 = double.IsNaN(Eax_d) ? _defaultValue : Eax_d;
+            _val5 = double.IsNaN(Eax_e) ? _defaultValue : Eax_e;
+            _val6 = double.IsNaN(Eax_f) ? _defaultValue : Eax_f;
         }
 
         /// <summary>
@@ -642,8 +642,8 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Copy definied joint positions
             for (int i = 0; i < n; i++)
-            {
-                result[i] = axisValues[i] == double.NaN ? _defaultValue : axisValues[i];
+            {   
+                result[i] = double.IsNaN(axisValues[i]) ? _defaultValue : axisValues[i];
             }
 
             // Add missing joint positions
@@ -746,12 +746,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get
             {
-                if (_val1 == double.NaN) { return false; }
-                if (_val2 == double.NaN) { return false; }
-                if (_val3 == double.NaN) { return false; }
-                if (_val4 == double.NaN) { return false; }
-                if (_val5 == double.NaN) { return false; }
-                if (_val6 == double.NaN) { return false; }
+                if (double.IsNaN(_val1)) { return false; }
+                if (double.IsNaN(_val2)) { return false; }
+                if (double.IsNaN(_val3)) { return false; }
+                if (double.IsNaN(_val4)) { return false; }
+                if (double.IsNaN(_val5)) { return false; }
+                if (double.IsNaN(_val6)) { return false; }
                 return true;
             }
         }
@@ -821,12 +821,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 switch (index)
                 {
-                    case 0: _val1 = value == double.NaN ? _defaultValue : value; break;
-                    case 1: _val2 = value == double.NaN ? _defaultValue : value; break;
-                    case 2: _val3 = value == double.NaN ? _defaultValue : value; break;
-                    case 3: _val4 = value == double.NaN ? _defaultValue : value; break;
-                    case 4: _val5 = value == double.NaN ? _defaultValue : value; break;
-                    case 5: _val6 = value == double.NaN ? _defaultValue : value; break;
+                    case 0: _val1 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 1: _val2 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 2: _val3 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 3: _val4 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 4: _val5 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 5: _val6 = double.IsNaN(value) ? _defaultValue : value; break;
                     default: throw new IndexOutOfRangeException();
                 }
             }
@@ -867,19 +867,19 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 switch (index)
                 {
-                    case 'a': _val1 = value == double.NaN ? _defaultValue : value; break;
-                    case 'b': _val2 = value == double.NaN ? _defaultValue : value; break;
-                    case 'c': _val3 = value == double.NaN ? _defaultValue : value; break;
-                    case 'd': _val4 = value == double.NaN ? _defaultValue : value; break;
-                    case 'e': _val5 = value == double.NaN ? _defaultValue : value; break;
-                    case 'f': _val6 = value == double.NaN ? _defaultValue : value; break;
+                    case 'a': _val1 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'b': _val2 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'c': _val3 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'd': _val4 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'e': _val5 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'f': _val6 = double.IsNaN(value) ? _defaultValue : value; break;
 
-                    case 'A': _val1 = value == double.NaN ? _defaultValue : value; break;
-                    case 'B': _val2 = value == double.NaN ? _defaultValue : value; break;
-                    case 'C': _val3 = value == double.NaN ? _defaultValue : value; break;
-                    case 'D': _val4 = value == double.NaN ? _defaultValue : value; break;
-                    case 'E': _val5 = value == double.NaN ? _defaultValue : value; break;
-                    case 'F': _val6 = value == double.NaN ? _defaultValue : value; break;
+                    case 'A': _val1 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'B': _val2 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'C': _val3 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'D': _val4 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'E': _val5 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 'F': _val6 = double.IsNaN(value) ? _defaultValue : value; break;
 
                     default: throw new IndexOutOfRangeException();
                 }

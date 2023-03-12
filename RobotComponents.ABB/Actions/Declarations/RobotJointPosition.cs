@@ -113,12 +113,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = "";
 
-            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
-            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
-            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
-            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
-            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
-            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
+            _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
+            _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
+            _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
+            _val4 = double.IsNaN(rax_4) ? _defaultValue : rax_4;
+            _val5 = double.IsNaN(rax_5) ? _defaultValue : rax_5;
+            _val6 = double.IsNaN(rax_6) ? _defaultValue : rax_6;
         }
 
         /// <summary>
@@ -157,12 +157,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = name;
 
-            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
-            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
-            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
-            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
-            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
-            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
+            _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
+            _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
+            _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
+            _val4 = double.IsNaN(rax_4) ? _defaultValue : rax_4;
+            _val5 = double.IsNaN(rax_5) ? _defaultValue : rax_5;
+            _val6 = double.IsNaN(rax_6) ? _defaultValue : rax_6;
         }
 
         /// <summary>
@@ -621,7 +621,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             // Copy and check definied joint positions
             for (int i = 0; i < n; i++)
             {
-                result[i] = jointPositions[i] == double.NaN ? _defaultValue : jointPositions[i];
+                result[i] = double.IsNaN(jointPositions[i]) ? _defaultValue : jointPositions[i];
             }
 
             // Add missing joint positions
@@ -724,12 +724,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get 
             { 
-                if (_val1 == double.NaN) { return false; }
-                if (_val2 == double.NaN) { return false; }
-                if (_val3 == double.NaN) { return false; }
-                if (_val4 == double.NaN) { return false; }
-                if (_val5 == double.NaN) { return false; }
-                if (_val6 == double.NaN) { return false; }
+                if (double.IsNaN(_val1)) { return false; }
+                if (double.IsNaN(_val2)) { return false; }
+                if (double.IsNaN(_val3)) { return false; }
+                if (double.IsNaN(_val4)) { return false; }
+                if (double.IsNaN(_val5)) { return false; }
+                if (double.IsNaN(_val6)) { return false; }
                 return true; 
             }
         }
@@ -799,12 +799,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 switch (index)
                 {
-                    case 0: _val1 = value == double.NaN ? _defaultValue : value; break;
-                    case 1: _val2 = value == double.NaN ? _defaultValue : value; break;
-                    case 2: _val3 = value == double.NaN ? _defaultValue : value; break;
-                    case 3: _val4 = value == double.NaN ? _defaultValue : value; break;
-                    case 4: _val5 = value == double.NaN ? _defaultValue : value; break;
-                    case 5: _val6 = value == double.NaN ? _defaultValue : value; break;
+                    case 0: _val1 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 1: _val2 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 2: _val3 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 3: _val4 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 4: _val5 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 5: _val6 = double.IsNaN(value) ? _defaultValue : value; break;
                     default: throw new IndexOutOfRangeException();
                 }
             }

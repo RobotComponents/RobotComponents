@@ -26,6 +26,7 @@ namespace RobotComponents.ABB.Definitions
         #region fields
         private Scope _scope;
         private VariableType _variableType;
+        private const string _datatype = "tooldata";
         private string _name;
         private Mesh _mesh; 
         private Plane _attachmentPlane;
@@ -307,7 +308,7 @@ namespace RobotComponents.ABB.Definitions
             switch (split.Length)
             {
                 case 1:
-                    type = "VARtooldata";
+                    type = $"VAR{_datatype}";
                     value = split[0];
                     break;
                 case 2:
@@ -354,13 +355,13 @@ namespace RobotComponents.ABB.Definitions
             }
 
             // Datatype
-            if (type.StartsWith("tooldata") == false)
+            if (type.StartsWith(_datatype) == false)
             {
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
             // Name
-            _name = type.ReplaceFirst("tooldata", "");
+            _name = type.ReplaceFirst(_datatype, "");
 
             // Value
             string[] values = value.Split(',');
@@ -521,28 +522,24 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Returns the RAPID declaration code line of the this Robot Tool.
+        /// Returns the tooldata in RAPID code format, e.g. 
         /// </summary>
+        /// <remarks>
+        /// Example outputs are 
+        /// "[TRUE, [[215.448, 3.171, 102.332], [0.5, 0.5, 0.5, 0.5]], [0.001, [0, 0, 0.001], [1, 0, 0, 0], 0, 0, 0]] and 
+        /// "[TRUE, [[215.448, 3.171, 102.332], [0.5, 0.5, 0.5, 0.5]], load1]
+        /// </remarks>
         /// <returns> 
-        /// The RAPID code line. 
+        /// The string with tooldata values. 
         /// </returns>
-        public string ToRAPIDDeclaration()
+        public string ToRAPID()
         {
-            // Scope
-            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-
-            // Adds variable type
-            result += Enum.GetName(typeof(VariableType), _variableType);
-
-            // Add robot tool name
-            result += " tooldata " + _name + " := ";
-
             // Add robot hold < robhold of bool >
-            result += _robotHold ? "[TRUE, [[" : "[FALSE, [[";
+            string result = _robotHold ? "[TRUE, [[" : "[FALSE, [[";
 
             // Add coordinate of toolframe < tframe of pose > < trans of pos >
             result += $"{_position.X:0.###}, {_position.Y:0.###}, {_position.Z:0.###}], [";
-            
+
             // Add orientation of tool frame < tframe of pose > < rot of orient >
             result += $"{_orientation.A:0.######}, {_orientation.B:0.######}, " +
                 $"{_orientation.C:0.######}, {_orientation.D:0.######}]], ";
@@ -550,8 +547,22 @@ namespace RobotComponents.ABB.Definitions
             // Add tool load < tload of loaddata >
             result += _loadData.Name != "" ? _loadData.Name : _loadData.ToRAPID();
 
-            // End / Close
-            result += "];"; ;
+            // Close
+            result += "]";
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this Robot Tool.
+        /// </summary>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
+        public string ToRAPIDDeclaration()
+        {
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
             return result;
         }
@@ -647,6 +658,14 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string DataType
+        {
+            get { return _datatype; }
         }
 
         /// <summary>

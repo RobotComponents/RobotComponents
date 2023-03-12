@@ -24,16 +24,17 @@ namespace RobotComponents.ABB.Definitions
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // The work object name
-        private Plane _plane; // The work object coordinate system
-        private Quaternion _orientation; // The orientation of the work object coordinate system
-        private ExternalAxis _externalAxis; // The coupled mechanical unit
-        private bool _robotHold; // Bool that indicates if the robot holds the work object
-        private bool _fixedFrame; // Bool that indicates if the workobject is fixed (true) or movable (false)
-        private Plane _userFrame; // The user frame coordinate system
-        private Quaternion _userFrameOrientation; // the orienation of the user frame coordinate system
-        private Plane _globalPlane; // global work object plane
+        private VariableType _variableType;
+        private const string _datatype = "wobjdata";
+        private string _name; 
+        private Plane _plane; 
+        private Quaternion _orientation; 
+        private ExternalAxis _externalAxis; 
+        private bool _robotHold;
+        private bool _fixedFrame; 
+        private Plane _userFrame; 
+        private Quaternion _userFrameOrientation; 
+        private Plane _globalPlane; 
         #endregion
 
         #region (de)serialization
@@ -195,7 +196,7 @@ namespace RobotComponents.ABB.Definitions
             switch (split.Length)
             {
                 case 1:
-                    type = "VARwobjdata";
+                    type = $"VAR{_datatype}";
                     value = split[0];
                     break;
                 case 2:
@@ -242,13 +243,13 @@ namespace RobotComponents.ABB.Definitions
             }
 
             // Datatype
-            if (type.StartsWith("wobjdata") == false)
+            if (type.StartsWith(_datatype) == false)
             {
                 throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
             }
 
             // Name
-            _name = type.ReplaceFirst("wobjdata", "");
+            _name = type.ReplaceFirst(_datatype, "");
 
             // Value
             string[] values = value.Split(',');
@@ -431,8 +432,12 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Returns the Configuration Data in RAPID code format, e.g. "[FALSE, TRUE, "", [[0, 0, 0], [1, 0, 0, 0]], [[0.0009, -0.0082, 8.0304], [0.9999999, 0.0005131, 0.0000556, 0]]]"
+        /// Returns the Configuration Data in RAPID code format.
         /// </summary>
+        /// <remarks>
+        /// An example output is 
+        /// "[FALSE, TRUE, "", [[0, 0, 0], [1, 0, 0, 0]], [[0.0009, -0.0082, 8.0304], [0.9999999, 0.0005131, 0.0000556, 0]]]"
+        /// </remarks>
         /// <returns> 
         /// The RAPID data string with work object values. 
         /// </returns>
@@ -475,10 +480,7 @@ namespace RobotComponents.ABB.Definitions
         public string ToRAPIDDeclaration()
         {
             string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-            result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
-            result += $"{_name} := ";
-            result += ToRAPID();
-            result += ";";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
             return result;
         }
@@ -518,6 +520,14 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string DataType
+        {
+            get { return _datatype; }
         }
 
         /// <summary>

@@ -33,7 +33,8 @@ namespace RobotComponents.ABB.Kinematics
         private Plane _endPlane;
         private List<Plane> _axisPlanes;
         private Point3d _wrist;
-        private double _wristOffset;
+        private double _wristOffset1;
+        private double _wristOffset2;
         private double _lowerArmLength;
         private double _upperArmLength;
         private double _axis4offsetAngle;
@@ -42,6 +43,9 @@ namespace RobotComponents.ABB.Kinematics
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; 
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
+
+        private static readonly double _pi = Math.PI;
+        private static readonly double _twoPi = 2 * Math.PI;
         #endregion
 
         #region constructors
@@ -196,11 +200,30 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Other robot info related fields
-                _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
+                _wristOffset1 = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
+                _wristOffset2 = _axisPlanes[5].Origin.Z - _axisPlanes[4].Origin.Z;
                 _lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
                 _upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
                 _axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
-                _wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
+                _wrist = new Point3d(_endPlane.PointAt(0, 0 , _wristOffset1));
+                //_wrist = new Point3d(_endPlane.PointAt(0, _wristOffset2, _wristOffset1));
+            }
+
+            // Check the axis planes
+            CheckAxisPlanes();
+        }
+
+        /// <summary>
+        /// Checks if the axis planes are setup correctly for this inverse kinematics solver.
+        /// </summary>
+        private void CheckAxisPlanes()
+        {
+            Point3d[] points = _axisPlanes.ConvertAll(item => item.Origin).ToArray();
+            Plane.FitPlaneToPoints(points, out _, out double maxDeviations);
+
+            if (maxDeviations > 0.001)
+            {
+                throw new ArgumentException("IK solver cannot be used for this Robot: The origins of the axis planes are not aligned on one plane.");
             }
         }
 
@@ -245,25 +268,21 @@ namespace RobotComponents.ABB.Kinematics
 
             if (_target is RobotTarget robotTarget)
             { 
-                #region wrist center relative to axis 1
-                // Note that this is reversed because the clockwise direction when looking 
-                // down at the XY plane is typically taken as the positive direction for robot axis1
-                // Caculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
+                // Calculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
                 double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _robotJointPositions[0][0] = internalAxisValue1;
-                _robotJointPositions[1][0] = internalAxisValue1;
-                _robotJointPositions[2][0] = internalAxisValue1;
-                _robotJointPositions[3][0] = internalAxisValue1;
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _twoPi; }
+                for (int i = 0; i < 4; i++)
+                {
+                    _robotJointPositions[i][0] = internalAxisValue1;
+                }
 
                 // Rotate the joint position 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
-                internalAxisValue1 += Math.PI;
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _robotJointPositions[4][0] = internalAxisValue1;
-                _robotJointPositions[5][0] = internalAxisValue1;
-                _robotJointPositions[6][0] = internalAxisValue1;
-                _robotJointPositions[7][0] = internalAxisValue1;
-                #endregion
+                internalAxisValue1 += _pi;
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _twoPi; }
+                for (int i = 4; i < 8; i++)
+                {
+                    _robotJointPositions[i][0] = internalAxisValue1;
+                }
 
                 // Generates 4 sets of values for each option of axis 1
                 // i = 0: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
@@ -285,7 +304,7 @@ namespace RobotComponents.ABB.Kinematics
                     internalAxisPoint4.Transform(rot1);
 
                     // Create the elbow projection plane
-                    Vector3d elbowDir = new Vector3d(1, 0, 0);
+                    Vector3d elbowDir = Vector3d.XAxis;
                     elbowDir.Transform(rot1);
                     Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, Vector3d.ZAxis);
 
@@ -302,15 +321,13 @@ namespace RobotComponents.ABB.Kinematics
                     for (int j = 0; j < 2; j++)
                     {
                         // Calculate elbow and wrist variables
-                        Point3d elbowPoint;
-                        if (j == 1) { elbowPoint = intersectPt1; }
-                        else { elbowPoint = intersectPt2; }
+                        Point3d elbowPoint = j == 1 ? intersectPt1 : intersectPt2;
                         elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
                         elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
 
                         // Calculate the position of robot axis 2
                         double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
-                        double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
+                        double internalAxisValue3 = _pi - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
 
                         for (int k = 0; k < 2; k++)
                         {
@@ -318,9 +335,9 @@ namespace RobotComponents.ABB.Kinematics
                             _robotJointPositions[index1][1] = -internalAxisValue2;
 
                             // Calculate the position of robot axis 3
-                            double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
-                            while (internalAxisValue3Wrapped >= Math.PI) { internalAxisValue3Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue3Wrapped < -Math.PI) { internalAxisValue3Wrapped += 2 * Math.PI; }
+                            double internalAxisValue3Wrapped = -internalAxisValue3 + _pi;
+                            while (internalAxisValue3Wrapped >= _pi) { internalAxisValue3Wrapped -= _twoPi; }
+                            while (internalAxisValue3Wrapped < -_pi) { internalAxisValue3Wrapped += _twoPi; }
                             _robotJointPositions[index1][2] = internalAxisValue3Wrapped;
 
                             // Update in index tracker
@@ -339,12 +356,12 @@ namespace RobotComponents.ABB.Kinematics
                             double internalAxisValue4 = Math.Atan2(axis6Y, axis6X);
                             if (k == 1)
                             {
-                                internalAxisValue4 += Math.PI;
-                                if (internalAxisValue4 > Math.PI) { internalAxisValue4 -= 2 * Math.PI; }
+                                internalAxisValue4 += _pi;
+                                if (internalAxisValue4 > _pi) { internalAxisValue4 -= _twoPi; }
                             }
-                            double internalAxisValue4Wrapped = internalAxisValue4 + Math.PI / 2;
-                            while (internalAxisValue4Wrapped >= Math.PI) { internalAxisValue4Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue4Wrapped < -Math.PI) { internalAxisValue4Wrapped += 2 * Math.PI; }
+                            double internalAxisValue4Wrapped = internalAxisValue4 + _pi / 2;
+                            while (internalAxisValue4Wrapped >= _pi) { internalAxisValue4Wrapped -= _twoPi; }
+                            while (internalAxisValue4Wrapped < -_pi) { internalAxisValue4Wrapped += _twoPi; }
                             _robotJointPositions[index2][3] = internalAxisValue4Wrapped;
 
                             // Calculate the position of robot axis 5
@@ -373,7 +390,7 @@ namespace RobotComponents.ABB.Kinematics
                 for (int i = 0; i < 8; i++)
                 {
                     // From radians to degrees
-                    _robotJointPositions[i] *= (180 / Math.PI);
+                    _robotJointPositions[i] *= (180 / _pi);
 
                     // Other corrections
                     _robotJointPositions[i][0] *= -1;

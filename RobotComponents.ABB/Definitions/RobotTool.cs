@@ -8,10 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using System.Text.RegularExpressions;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 
@@ -21,12 +22,12 @@ namespace RobotComponents.ABB.Definitions
     /// Represents a Robot Tool.
     /// </summary>
     [Serializable()]
-    public class RobotTool : ISerializable
+    public class RobotTool : ISerializable, IDeclaration
     {
         #region fields
         private Scope _scope;
         private VariableType _variableType;
-        private const string _datatype = "tooldata";
+        private static readonly string _datatype = "tooldata";
         private string _name;
         private Mesh _mesh; 
         private Plane _attachmentPlane;
@@ -274,6 +275,17 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Returns an exact duplicate of this Robot Tool instance as an IDeclaration.
+        /// </summary>
+        /// <returns> 
+        /// A deep copy of the Robot Tool instance as an IDeclaration. 
+        /// </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new RobotTool(this);
+        }
+
+        /// <summary>
         /// Returns an empty Robot Tool instance.
         /// </summary>
         /// <returns> 
@@ -298,73 +310,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="rapidData"> The RAPID data string. </param>
         private RobotTool(string rapidData)
         {
-            string clean = Regex.Replace(rapidData, @"[\s;:\[\]\(\){}]", "");
-
-            string[] split = clean.Split('=');
-            string type;
-            string value;
-
-            // Check for equal signs
-            switch (split.Length)
-            {
-                case 1:
-                    type = $"VAR{_datatype}";
-                    value = split[0];
-                    break;
-                case 2:
-                    type = split[0];
-                    value = split[1];
-                    break;
-                default:
-                    throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
-            }
-
-            // Scope
-            switch (type)
-            {
-                case string t when t.StartsWith("LOCAL"):
-                    _scope = Scope.LOCAL;
-                    type = type.ReplaceFirst("LOCAL", "");
-                    break;
-                case string t when t.StartsWith("TASK"):
-                    _scope = Scope.TASK;
-                    type = type.ReplaceFirst("TASK", "");
-                    break;
-                default:
-                    _scope = Scope.GLOBAL;
-                    break;
-            }
-
-            // Variable type
-            switch (type)
-            {
-                case string t when t.StartsWith("VAR"):
-                    _variableType = VariableType.VAR;
-                    type = type.ReplaceFirst("VAR", "");
-                    break;
-                case string t when t.StartsWith("CONST"):
-                    _variableType = VariableType.CONST;
-                    type = type.ReplaceFirst("CONST", "");
-                    break;
-                case string t when t.StartsWith("PERS"):
-                    _variableType = VariableType.PERS;
-                    type = type.ReplaceFirst("PERS", "");
-                    break;
-                default:
-                    throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
-            }
-
-            // Datatype
-            if (type.StartsWith(_datatype) == false)
-            {
-                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
-            }
-
-            // Name
-            _name = type.ReplaceFirst(_datatype, "");
-
-            // Value
-            string[] values = value.Split(',');
+            this.SetDataFromString(rapidData, out string[] values);
 
             if (values.Length == 19)
             {
@@ -568,6 +514,44 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Returns the RAPID declaration code line of the this action.
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
+        public string ToRAPIDDeclaration(Robot robot)
+        {
+            if (_name != "" && _name != "tool0")
+            {
+                return ToRAPIDDeclaration();
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
+        public void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        {
+            _loadData.ToRAPIDDeclaration(RAPIDGenerator);
+
+            if (_name != "" && _name != "tool0")
+            {
+                if (!RAPIDGenerator.RobotTools.ContainsKey(_name))
+                {
+                    RAPIDGenerator.RobotTools.Add(_name, this);
+                    RAPIDGenerator.ProgramDeclarationsToolData.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
+            }
+        }
+
+        /// <summary>
         /// Clears all the fields and properties of the current instance.
         /// </summary>
         /// <remarks>
@@ -663,7 +647,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the RAPID datatype. 
         /// </summary>
-        public string DataType
+        public string Datatype
         {
             get { return _datatype; }
         }

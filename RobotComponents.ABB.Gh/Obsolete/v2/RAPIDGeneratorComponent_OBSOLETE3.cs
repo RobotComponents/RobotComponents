@@ -222,12 +222,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Tooldata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsToolData);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[1].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Wobjdata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsWorkObjectData);
             }
         }
 

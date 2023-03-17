@@ -233,17 +233,17 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Loaddata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsLoadData);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[1].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Tooldata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsToolData);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[2].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[2].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Wobjdata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsWorkObjectData);
             }
         }
 
@@ -296,7 +296,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Overwrite Module Name", MenuItemClickProgramName, true, _moduleNameInputParam);
             Menu_AppendItem(menu, "Overwrite Routine Name", MenuItemClickRoutineName, true, _routineNameInputParam);
-            Menu_AppendItem(menu, "Add Load Data", MenuItemClickLoaddata, true, _addTooldataInputParam);
+            Menu_AppendItem(menu, "Add Load Data", MenuItemClickLoaddata, true, _addLoaddataInputParam);
             Menu_AppendItem(menu, "Add Tool Data", MenuItemClickTooldata, true, _addTooldataInputParam);
             Menu_AppendItem(menu, "Add Work Object Data", MenuItemClickWobjdata, true, _addWobjdataInputParam);
             Menu_AppendSeparator(menu);

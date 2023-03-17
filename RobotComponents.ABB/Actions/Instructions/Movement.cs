@@ -706,6 +706,8 @@ namespace RobotComponents.ABB.Actions.Instructions
             _convertedTarget.ToRAPIDDeclaration(RAPIDGenerator);
             _speedData.ToRAPIDDeclaration(RAPIDGenerator);
             _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
+            _robotTool.ToRAPIDDeclaration(RAPIDGenerator);
+            _workObject.ToRAPIDDeclaration(RAPIDGenerator);
 
             if (_movementType == MovementType.MoveC)
             {
@@ -723,24 +725,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
-
-            // Collect unique loaddatas
-            if (!RAPIDGenerator.LoadDatas.ContainsKey(_robotTool.LoadData.Name))
-            {
-                RAPIDGenerator.LoadDatas.Add(_robotTool.LoadData.Name, _robotTool.LoadData);
-            }
-
-            // Collect unique robot tools
-            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
-            {
-                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
-            }
-
-            // Collect unique work objects
-            if (!RAPIDGenerator.WorkObjects.ContainsKey(_workObject.Name))
-            {
-                RAPIDGenerator.WorkObjects.Add(_workObject.Name, _workObject);
-            }
         }
         #endregion
 

@@ -3,8 +3,14 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
+using System.Text.RegularExpressions;
 // Rhino Libs
 using Rhino.Geometry;
+// Robot Components Libs
+using RobotComponents.ABB.Enumerations;
+using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Utils
 {
@@ -13,6 +19,11 @@ namespace RobotComponents.ABB.Utils
     /// </summary>
     public static class HelperMethods
     {
+        #region fields
+        private static readonly Regex _rapidDataRegex = new Regex(@"[\s;:\[\]\(\){}]", RegexOptions.Compiled);
+        #endregion
+
+        #region methods
         /// <summary>
         /// Flips a plane normal to the oposite direction by setting it's x-axis negative.
         /// </summary>
@@ -228,5 +239,91 @@ namespace RobotComponents.ABB.Utils
 
             return text.Substring(0, position) + replace + text.Substring(position + search.Length);
         }
+
+        /// <summary>
+        /// Sets the scope, variable type and variable name from a RAPID data string and outputs the values. 
+        /// </summary>
+        /// <remarks>
+        /// This method is used to parse declarations from a RAPID data string. 
+        /// The values are processed inside the different IDeclaration classes. 
+        /// </remarks>
+        /// <param name="declaration"> The declaration to set the values. </param>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="values"> The values from the RAPID data string. </param>
+        public static void SetDataFromString(this IDeclaration declaration, string rapidData, out string[] values)
+        {
+            string clean = _rapidDataRegex.Replace(rapidData, "");
+
+            string[] split = clean.Split('=');
+            string type;
+            string value;
+
+            // Check for equal signs
+            switch (split.Length)
+            {
+                case 1:
+                    type = $"VAR{declaration.Datatype}";
+                    value = split[0];
+                    break;
+                case 2:
+                    type = split[0];
+                    value = split[1];
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
+            }
+
+            // Scope
+            switch (type)
+            {
+                case string t when t.StartsWith("LOCAL"):
+                    declaration.Scope = Scope.LOCAL;
+                    type = type.ReplaceFirst("LOCAL", "");
+                    break;
+                case string t when t.StartsWith("TASK"):
+                    declaration.Scope = Scope.TASK;
+                    type = type.ReplaceFirst("TASK", "");
+                    break;
+                default:
+                    declaration.Scope = Scope.GLOBAL;
+                    break;
+            }
+
+            // Variable type
+            switch (type)
+            {
+                case string t when t.StartsWith("VAR"):
+                    declaration.VariableType = VariableType.VAR;
+                    type = type.ReplaceFirst("VAR", "");
+                    break;
+                case string t when t.StartsWith("CONST"):
+                    declaration.VariableType = VariableType.CONST;
+                    type = type.ReplaceFirst("CONST", "");
+                    break;
+                case string t when t.StartsWith("PERS"):
+                    declaration.VariableType = VariableType.PERS;
+                    type = type.ReplaceFirst("PERS", "");
+                    break;
+                default:
+                    throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
+            }
+
+            // Datatype
+            if (type.StartsWith(declaration.Datatype) == false)
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
+            }
+
+            // Name
+            declaration.Name = type.ReplaceFirst(declaration.Datatype, "");
+
+            // Values
+            values = value.Split(',');
+        }
+        #endregion
+
+        #region properties
+
+        #endregion
     }
 }

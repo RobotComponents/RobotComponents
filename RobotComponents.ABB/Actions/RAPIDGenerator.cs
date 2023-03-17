@@ -25,8 +25,8 @@ namespace RobotComponents.ABB.Actions
     public class RAPIDGenerator
     {
         #region fields
-        private Robot _robot; // Robot to construct the code for
-        private List<Action> _actions = new List<Action>(); // List that stores all actions used by the RAPIDGenerator
+        private Robot _robot;
+        private List<Action> _actions = new List<Action>(); 
 
         // Dictionaries that collect all declarations that have a variable name defined
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>();
@@ -218,33 +218,6 @@ namespace RobotComponents.ABB.Actions
                     _actions[i].ToRAPIDInstruction(this);
                 }
             }
-
-            // Create the loaddata code lines
-            foreach (KeyValuePair<string, LoadData> entry in _loadDatas)
-            {
-                if (entry.Value.Name != "load0" && entry.Value.Name != null && entry.Value.Name != "")
-                {
-                    _programDeclarationsLoadData.Add(entry.Value.ToRAPIDDeclaration());
-                }
-            }
-
-            // Create the tooldata code lines
-            foreach (KeyValuePair<string, RobotTool> entry in _robotTools)
-            {
-                if (entry.Value.Name != "tool0" && entry.Value.Name != null && entry.Value.Name != "")
-                {
-                    _programDeclarationsToolData.Add(entry.Value.ToRAPIDDeclaration());
-                }
-            }
-
-            // Create the wobjdata code lines
-            foreach (KeyValuePair<string, WorkObject> entry in _workObjects)
-            {
-                if (entry.Value.Name != "wobj0" && entry.Value.Name != null && entry.Value.Name != "")
-                {
-                    _programDeclarationsWorkObjectData.Add(entry.Value.ToRAPIDDeclaration());
-                }
-            }
             #endregion
 
             #region write the module
@@ -262,54 +235,30 @@ namespace RobotComponents.ABB.Actions
             }
 
             // Add loaddata
-            if (addLoaddata == true)
+            if (addLoaddata == true && _programDeclarationsLoadData.Count != 0)
             {
-                if (_programDeclarationsLoadData.Count != 0)
-                {
-                    _programDeclarationsLoadData.Sort();
-                    _module.Add("    " + "! User defined loaddata");
-
-                    for (int i = 0; i != _programDeclarationsLoadData.Count; i++)
-                    {
-                        _module.Add("    " + _programDeclarationsLoadData[i]);
-                    }
-
-                    _module.Add("    ");
-                }
+                _programDeclarationsLoadData.Sort();
+                _module.Add("    " + "! User defined loaddata");
+                _module.AddRange(_programDeclarationsLoadData);
+                _module.Add("    ");
             }
 
             // Add the tooldata
-            if (addTooldata == true)
+            if (addTooldata == true && _programDeclarationsToolData.Count != 0)
             {
-                if (_programDeclarationsToolData.Count != 0)
-                {
-                    _programDeclarationsToolData.Sort();
-                    _module.Add("    " + "! User defined tooldata");
-
-                    for (int i = 0; i != _programDeclarationsToolData.Count; i++)
-                    {
-                        _module.Add("    " + _programDeclarationsToolData[i]);
-                    }
-
-                    _module.Add("    ");
-                }
+                _programDeclarationsToolData.Sort();
+                _module.Add("    " + "! User defined tooldata");
+                _module.AddRange(_programDeclarationsToolData);
+                _module.Add("    ");
             }
 
             // Add the wobjdata
-            if (addWobjdata == true)
+            if (addWobjdata == true && _programDeclarationsWorkObjectData.Count != 0)
             {
-                if (_programDeclarationsWorkObjectData.Count != 0)
-                {
-                    _programDeclarationsWorkObjectData.Sort();
-                    _module.Add("    " + "! User defined wobjdata");
-
-                    for (int i = 0; i != _programDeclarationsWorkObjectData.Count; i++)
-                    {
-                        _module.Add("    " + _programDeclarationsWorkObjectData[i]);
-                    }
-
-                    _module.Add("    ");
-                }
+                _programDeclarationsWorkObjectData.Sort();
+                _module.Add("    " + "! User defined wobjdata");
+                _module.AddRange(_programDeclarationsWorkObjectData);
+                _module.Add("    ");
             }
 
             // Add the custom Code Lines
@@ -632,35 +581,35 @@ namespace RobotComponents.ABB.Actions
         }
 
         /// <summary>
-        /// Gets the program instructions as a list with RAPID code lines.
+        /// Gets the RAPID tooldata code lines as list with RAPID code lines.
         /// </summary>
-        public List<string> ProgramInstructions
-        {
-            get { return _programInstructions; }
-        }
-
-        /// <summary>
-        /// Gets the RAPID tooldata code lines.
-        /// </summary>
-        public List<string> Tooldata
+        public List<string> ProgramDeclarationsToolData
         {
             get { return _programDeclarationsToolData; }
         }
 
         /// <summary>
-        /// Gets the RAPID loaddata code lines.
+        /// Gets the RAPID loaddata code lines as list with RAPID code lines.
         /// </summary>
-        public List<string> Loaddata
+        public List<string> ProgramDeclarationsLoadData
         {
             get { return _programDeclarationsLoadData; }
         }
 
         /// <summary>
-        /// Gets the RAPID wobjdata code lines.
+        /// Gets the RAPID wobjdata code lines as list with RAPID code lines.
         /// </summary>
-        public List<string> Wobjdata
+        public List<string> ProgramDeclarationsWorkObjectData
         {
             get { return _programDeclarationsWorkObjectData; }
+        }
+
+        /// <summary>
+        /// Gets the program instructions as a list with RAPID code lines.
+        /// </summary>
+        public List<string> ProgramInstructions
+        {
+            get { return _programInstructions; }
         }
         #endregion
 
@@ -1132,6 +1081,24 @@ namespace RobotComponents.ABB.Actions
         {
             get { return _isSynchronized; }
             set { _isSynchronized = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID tooldata code lines.
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in v3. Use ProgramDeclarationsToolData instead.", false)]
+        public List<string> Tooldata
+        {
+            get { return _programDeclarationsToolData; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID wobjdata code lines.
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in v3. Use ProgramDeclarationsWorkObjectData instead.", false)]
+        public List<string> Wobjdata
+        {
+            get { return _programDeclarationsWorkObjectData; }
         }
         #endregion
     }

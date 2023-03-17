@@ -9,7 +9,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
@@ -30,7 +29,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         #region fields
         private Scope _scope;
         private VariableType _variableType;
-        private const string _datatype = "speeddata";
+        private static readonly string _datatype = "speeddata";
         private string _name; 
         private double _v_tcp; 
         private double _v_ori; 
@@ -246,82 +245,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"></param>
         private SpeedData(string rapidData)
         {
-            string clean = Regex.Replace(rapidData, @"[\s;:\[\]\(\){}]", "");
+            this.SetDataFromString(rapidData, out string[] values);
 
-            string[] split = clean.Split('=');
-            string type;
-            string value;
-
-            // Check for equal signs
-            switch (split.Length)
-            {
-                case 1:
-                    type = $"VAR{_datatype}";
-                    value = split[0];
-                    break;
-                case 2:
-                    type = split[0];
-                    value = split[1];
-                    break;
-                default:
-                    throw new InvalidCastException("Invalid RAPID data string: More than one equal sign defined.");
-            }
-
-            // Scope
-            switch (type)
-            {
-                case string t when t.StartsWith("LOCAL"):
-                    _scope = Scope.LOCAL;
-                    type = type.ReplaceFirst("LOCAL", "");
-                    break;
-                case string t when t.StartsWith("TASK"):
-                    _scope = Scope.TASK;
-                    type = type.ReplaceFirst("TASK", "");
-                    break;
-                default:
-                    _scope = Scope.GLOBAL;
-                    break;
-            }
-
-            // Variable type
-            switch (type)
-            {
-                case string t when t.StartsWith("VAR"):
-                    _variableType = VariableType.VAR;
-                    type = type.ReplaceFirst("VAR", "");
-                    break;
-                case string t when t.StartsWith("CONST"):
-                    _variableType = VariableType.CONST;
-                    type = type.ReplaceFirst("CONST", "");
-                    break;
-                case string t when t.StartsWith("PERS"):
-                    _variableType = VariableType.PERS;
-                    type = type.ReplaceFirst("PERS", "");
-                    break;
-                default:
-                    throw new InvalidCastException("Invalid RAPID data string: The scope or variable type is incorrect.");
-            }
-
-            // Datatype
-            if (type.StartsWith(_datatype) == false)
-            {
-                throw new InvalidCastException("Invalid RAPID data string: The datatype does not match.");
-            }
-
-            // Name
-            _name = type.ReplaceFirst(_datatype, "");
-
-            if (_validPredefinedNames.Contains(_name))
-            {
-                _predefined = true;
-            }
-            else
-            {
-                _predefined = false;
-            }
-
-            // Value
-            string[] values = value.Split(',');
+            _predefined = _validPredefinedNames.Contains(_name);
 
             if (values.Length == 4)
             {
@@ -512,7 +438,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets the RAPID datatype. 
         /// </summary>
-        public string DataType
+        public string Datatype
         {
             get { return _datatype; }
         }

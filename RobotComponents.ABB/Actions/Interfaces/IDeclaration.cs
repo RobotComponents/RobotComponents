@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets the RAPID datatype. 
         /// </summary>
-        string DataType { get; }
+        string Datatype { get; }
 
         /// <summary>
         /// Gets or sets the variable name of the declaration.

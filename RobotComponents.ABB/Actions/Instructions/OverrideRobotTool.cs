@@ -164,7 +164,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            // We don't write a comment between our declarations.
+            _robotTool.ToRAPIDDeclaration(RAPIDGenerator);
         }
 
         /// <summary>
@@ -177,18 +177,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
-
-            // Collect unique robot tools
-            if (!RAPIDGenerator.RobotTools.ContainsKey(_robotTool.Name))
-            {
-                RAPIDGenerator.RobotTools.Add(_robotTool.Name, _robotTool);
-            }
-
-            // Collect unique loaddatas
-            if (!RAPIDGenerator.LoadDatas.ContainsKey(_robotTool.LoadData.Name))
-            {
-                RAPIDGenerator.LoadDatas.Add(_robotTool.LoadData.Name, _robotTool.LoadData);
-            }
         }
         #endregion
 

@@ -14,7 +14,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents a Set Set Analog Output instruction. 
+    /// Represents a Set Analog Output instruction. 
     /// </summary>
     /// <remarks>
     /// This action is used to set the value of an analog output signal.

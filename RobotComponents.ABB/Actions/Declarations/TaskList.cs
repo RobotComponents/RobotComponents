@@ -347,7 +347,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {

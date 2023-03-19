@@ -38,8 +38,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         private double _zone_ori;
         private double _zone_leax;
         private double _zone_reax;
-        private bool _predefined; 
-        private readonly bool _exactPredefinedValue; 
+        private bool _isPredefined; 
+        private readonly bool _isExactPredefinedValue; 
 
         private static readonly string[] _validPredefinedNames = new string[] { "fine", "z0", "z1", "z5", "z10", "z15", "z20", "z30", "z40", "z50", "z60", "z80", "z100", "z150", "z200" };
         private static readonly double[] _validPredefinedValues = new double[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -69,8 +69,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = (double)info.GetValue("zone_ori", typeof(double));
             _zone_leax = (double)info.GetValue("zone_leax", typeof(double));
             _zone_reax = (double)info.GetValue("zone_reax", typeof(double));
-            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
-            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+            _isPredefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _isExactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             info.AddValue("zone_ori", _zone_ori, typeof(double));
             info.AddValue("zone_leax", _zone_leax, typeof(double));
             info.AddValue("zone_reax", _zone_reax, typeof(double));
-            info.AddValue("Predefined", _predefined, typeof(bool));
-            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+            info.AddValue("Predefined", _isPredefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _isExactPredefinedValue, typeof(bool));
         }
         #endregion
 
@@ -118,7 +118,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-            _exactPredefinedValue = (zone - tcp) == 0;
+            _isExactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
             _name = tcp == -1 ? "fine" : $"z{tcp}";
@@ -135,7 +135,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = -1;
                 _zone_leax = -1;
                 _zone_reax = -1;
-                _predefined = true;
+                _isPredefined = true;
             }
             else
             {
@@ -146,7 +146,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = _predefinedZoneOri[pos];
                 _zone_leax = _predefinedZoneLeax[pos];
                 _zone_reax = _predefinedZoneReax[pos];
-                _predefined = true;
+                _isPredefined = true;
             }
         }
 
@@ -164,7 +164,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-            _exactPredefinedValue = (zone - tcp) == 0;
+            _isExactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
             _name = tcp == -1 ? "fine" : $"z{tcp}";
@@ -181,7 +181,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = -1;
                 _zone_leax = -1;
                 _zone_reax = -1;
-                _predefined = true;
+                _isPredefined = true;
             }
             else
             {
@@ -192,7 +192,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = _predefinedZoneOri[pos];
                 _zone_leax = _predefinedZoneLeax[pos];
                 _zone_reax = _predefinedZoneReax[pos];
-                _predefined = true;
+                _isPredefined = true;
             }
         }
 
@@ -219,8 +219,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zone_ori;
             _zone_leax = zone_leax;
             _zone_reax = zone_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -247,8 +247,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zone_ori;
             _zone_leax = zone_leax;
             _zone_reax = zone_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -267,8 +267,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zonedata.ZoneOrientation;
             _zone_leax = zonedata.ZoneExternalLinearAxes;
             _zone_reax = zonedata.ZoneExternalRotationalAxes;
-            _predefined = zonedata.PreDefined;
-            _exactPredefinedValue = zonedata.ExactPredefinedValue;
+            _isPredefined = zonedata.IsPreDefined;
+            _isExactPredefinedValue = zonedata.IsExactPredefinedValue;
         }
 
         /// <summary>
@@ -326,7 +326,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             this.SetDataFromString(rapidData, out string[] values);
 
-            _predefined = _validPredefinedNames.Contains(_name);
+            _isPredefined = _validPredefinedNames.Contains(_name);
 
             if (values.Length == 7)
             {
@@ -389,7 +389,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 return "Invalid Zone Data";
             }
-            else if (_predefined == true)
+            else if (_isPredefined == true)
             {
                 return $"Predefined Zone Data ({_name})";
             }
@@ -436,7 +436,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != "")
+            if (_isPredefined == false & _name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
                 result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
@@ -468,7 +468,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false)
+            if (_isPredefined == false)
             {
                 if (_name != "")
                 {
@@ -521,7 +521,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {
@@ -621,19 +621,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
         /// </summary>
-        public bool PreDefined
+        public bool IsPreDefined
         {
-            get { return _predefined; }
-            set { _predefined = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this zonedata is a user definied zonedata. 
-        /// </summary>
-        public bool UserDefinied
-        {
-            get { return !_predefined; }
-            set { _predefined = !value; }
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
         }
 
         /// <summary>
@@ -642,9 +633,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <remarks>
         /// If false the nearest predefined zoneata or a custom zonedata was used.
         /// </remarks>
-        public bool ExactPredefinedValue
+        public bool IsExactPredefinedValue
         {
-            get { return _exactPredefinedValue; }
+            get { return _isExactPredefinedValue; }
         }
 
         /// <summary>
@@ -669,6 +660,40 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool PreDefined
+        {
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata is a user definied zonedata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool UserDefinied
+        {
+            get { return !_isPredefined; }
+            set { _isPredefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined zonedata value. 
+        /// </summary>
+        /// <remarks>
+        /// If false the nearest predefined zoneata or a custom zonedata was used.
+        /// </remarks>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
+        public bool ExactPredefinedValue
+        {
+            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

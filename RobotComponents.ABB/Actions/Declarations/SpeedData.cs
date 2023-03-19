@@ -35,8 +35,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         private double _v_ori; 
         private double _v_leax;
         private double _v_reax; 
-        private bool _predefined; 
-        private readonly bool _exactPredefinedValue;
+        private bool _isPredefined; 
+        private readonly bool _isExactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
@@ -59,8 +59,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = (double)info.GetValue("v_ori", typeof(double));
             _v_leax = (double)info.GetValue("v_leax", typeof(double));
             _v_reax = (double)info.GetValue("v_reax", typeof(double));
-            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
-            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+            _isPredefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _isExactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             info.AddValue("v_ori", _v_ori, typeof(double));
             info.AddValue("v_leax", _v_leax, typeof(double));
             info.AddValue("v_reax", _v_reax, typeof(double));
-            info.AddValue("Predefined", _predefined, typeof(bool));
-            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+            info.AddValue("Predefined", _isPredefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _isExactPredefinedValue, typeof(bool));
         }
         #endregion
 
@@ -100,7 +100,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-            _exactPredefinedValue = (v_tcp - tcp) == 0;
+            _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _scope = Scope.GLOBAL;
@@ -110,7 +110,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = 500;
             _v_leax = 5000;
             _v_reax = 1000;
-            _predefined = true;
+            _isPredefined = true;
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-            _exactPredefinedValue = (v_tcp - tcp) == 0;
+            _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _scope = Scope.GLOBAL;
@@ -131,7 +131,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = 500;
             _v_leax = 5000;
             _v_reax = 1000;
-            _predefined = true;
+            _isPredefined = true;
         }
 
         /// <summary>
@@ -150,8 +150,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = v_ori;
             _v_leax = v_leax;
             _v_reax = v_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -171,8 +171,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = v_ori;
             _v_leax = v_leax;
             _v_reax = v_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -188,8 +188,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = speeddata.V_ORI;
             _v_leax = speeddata.V_LEAX;
             _v_reax = speeddata.V_REAX;
-            _predefined = speeddata.PreDefined;
-            _exactPredefinedValue = speeddata.ExactPredefinedValue;
+            _isPredefined = speeddata.IsPreDefined;
+            _isExactPredefinedValue = speeddata.IsExactPredefinedValue;
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             this.SetDataFromString(rapidData, out string[] values);
 
-            _predefined = _validPredefinedNames.Contains(_name);
+            _isPredefined = _validPredefinedNames.Contains(_name);
 
             if (values.Length == 4)
             {
@@ -307,7 +307,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 return "Invalid Speed Data";
             }
-            else if (_predefined == true)
+            else if (_isPredefined == true)
             {
                 return $"Predefined Speed Data ({_name})";
             }
@@ -342,7 +342,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false && _name != "")
+            if (_isPredefined == false && _name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
                 result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
@@ -376,7 +376,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false)
+            if (_isPredefined == false)
             {
                 if (_name != "")
                 {
@@ -427,7 +427,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {
@@ -497,20 +497,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
         /// </summary>
-        public bool PreDefined
+        public bool IsPreDefined
         {
-            get { return _predefined; }
-            set { _predefined = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
-        /// </summary>
-        public bool UserDefinied
-        {
-            get { return !_predefined; }
-            set { _predefined = !value; }
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
         }
 
         /// <summary>
@@ -519,9 +509,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <remarks>
         /// If false, the nearest predefined speedata or a custom speeddata was used. 
         /// </remarks>
-        public bool ExactPredefinedValue
+        public bool IsExactPredefinedValue
         {
-            get { return _exactPredefinedValue; }
+            get { return _isExactPredefinedValue; }
         }
 
         /// <summary>
@@ -546,6 +536,40 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool PreDefined
+        {
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool UserDefinied
+        {
+            get { return !_isPredefined; }
+            set { _isPredefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
+        /// </summary>
+        /// <remarks>
+        /// If false, the nearest predefined speedata or a custom speeddata was used. 
+        /// </remarks>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
+        public bool ExactPredefinedValue
+        {
+            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

@@ -14,7 +14,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents a Set Set Digital Output instruction. 
+    /// Represents a Set Digital Output instruction. 
     /// </summary>
     /// <remarks>
     /// This action is used to set the value (state) of a digital output signal.

@@ -219,7 +219,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the reference type of the syncident.
+        /// Gets or sets the variable type of the syncident.
         /// </summary>
         public VariableType VariableType
         {

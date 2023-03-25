@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     {
         #region fields
         private Controller _controller;
-        private string _status = "";
+        private string _status = "-";
         #endregion
 
         /// <summary>

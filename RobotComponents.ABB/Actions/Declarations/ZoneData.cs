@@ -13,29 +13,33 @@ using System.Collections.Generic;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents a predefined or user definied Zone Data declaration.
-    /// This action is used to specify how a position is to be terminated.
     /// </summary>
+    /// <remarks>
+    /// This action is used to specify how a position is to be terminated.
+    /// </remarks>
     [Serializable()]
     public class ZoneData : Action, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // ZoneData variable name
-        private bool _finep; // Fine point
-        private double _pzone_tcp; // Path zone TCP
-        private double _pzone_ori; // Path zone orientation
-        private double _pzone_eax; // Path zone external axes
-        private double _zone_ori; // Zone orientation
-        private double _zone_leax; // Zone linear external axes
-        private double _zone_reax; // Zone rotational external axes
-        private bool _predefined; // ABB predefinied data (e.g. fine, z1, z5, z10 etc.)?
-        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private VariableType _variableType;
+        private static readonly string _datatype = "zonedata";
+        private string _name;
+        private bool _finep;
+        private double _pzone_tcp; 
+        private double _pzone_ori;
+        private double _pzone_eax;
+        private double _zone_ori;
+        private double _zone_leax;
+        private double _zone_reax;
+        private bool _isPredefined; 
+        private readonly bool _isExactPredefinedValue; 
 
         private static readonly string[] _validPredefinedNames = new string[] { "fine", "z0", "z1", "z5", "z10", "z15", "z20", "z30", "z40", "z50", "z60", "z80", "z100", "z150", "z200" };
         private static readonly double[] _validPredefinedValues = new double[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -65,8 +69,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = (double)info.GetValue("zone_ori", typeof(double));
             _zone_leax = (double)info.GetValue("zone_leax", typeof(double));
             _zone_reax = (double)info.GetValue("zone_reax", typeof(double));
-            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
-            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+            _isPredefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _isExactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
         }
 
         /// <summary>
@@ -87,8 +91,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             info.AddValue("zone_ori", _zone_ori, typeof(double));
             info.AddValue("zone_leax", _zone_leax, typeof(double));
             info.AddValue("zone_reax", _zone_reax, typeof(double));
-            info.AddValue("Predefined", _predefined, typeof(bool));
-            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+            info.AddValue("Predefined", _isPredefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _isExactPredefinedValue, typeof(bool));
         }
         #endregion
 
@@ -102,8 +106,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
-        /// Use -1 to define a fine point.
         /// </summary>
+        /// <remarks>
+        /// Use -1 to define a fine point.
+        /// </remarks>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
@@ -112,7 +118,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-            _exactPredefinedValue = (zone - tcp) == 0;
+            _isExactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
             _name = tcp == -1 ? "fine" : $"z{tcp}";
@@ -129,7 +135,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = -1;
                 _zone_leax = -1;
                 _zone_reax = -1;
-                _predefined = true;
+                _isPredefined = true;
             }
             else
             {
@@ -140,14 +146,16 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = _predefinedZoneOri[pos];
                 _zone_leax = _predefinedZoneLeax[pos];
                 _zone_reax = _predefinedZoneReax[pos];
-                _predefined = true;
+                _isPredefined = true;
             }
         }
 
         /// <summary>
         /// Initializes a new instance of the Zone Data class with predefined values.
-        /// Use -1 to define a fine point.
         /// </summary>
+        /// <remarks>
+        /// Use -1 to define a fine point.
+        /// </remarks>
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
@@ -156,7 +164,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
-            _exactPredefinedValue = (zone - tcp) == 0;
+            _isExactPredefinedValue = (zone - tcp) == 0;
 
             // Check if it is a fly-by-point or a fine-point
             _name = tcp == -1 ? "fine" : $"z{tcp}";
@@ -173,7 +181,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = -1;
                 _zone_leax = -1;
                 _zone_reax = -1;
-                _predefined = true;
+                _isPredefined = true;
             }
             else
             {
@@ -184,7 +192,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 _zone_ori = _predefinedZoneOri[pos];
                 _zone_leax = _predefinedZoneLeax[pos];
                 _zone_reax = _predefinedZoneReax[pos];
-                _predefined = true;
+                _isPredefined = true;
             }
         }
 
@@ -211,8 +219,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zone_ori;
             _zone_leax = zone_leax;
             _zone_reax = zone_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -239,8 +247,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zone_ori;
             _zone_leax = zone_leax;
             _zone_reax = zone_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -259,8 +267,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _zone_ori = zonedata.ZoneOrientation;
             _zone_leax = zonedata.ZoneExternalLinearAxes;
             _zone_reax = zonedata.ZoneExternalRotationalAxes;
-            _predefined = zonedata.PreDefined;
-            _exactPredefinedValue = zonedata.ExactPredefinedValue;
+            _isPredefined = zonedata.IsPreDefined;
+            _isExactPredefinedValue = zonedata.IsExactPredefinedValue;
         }
 
         /// <summary>
@@ -275,7 +283,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance.
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance.
+        /// </returns>
         public ZoneData Duplicate()
         {
             return new ZoneData(this);
@@ -284,7 +294,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new ZoneData(this);
@@ -293,10 +305,74 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Zone Data instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Zone Data instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Zone Data instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new ZoneData(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Zone Data class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        private ZoneData(string rapidData)
+        {
+            this.SetDataFromString(rapidData, out string[] values);
+
+            _isPredefined = _validPredefinedNames.Contains(_name);
+
+            if (values.Length == 7)
+            {
+                _finep = values[0] == "TRUE";
+                _pzone_tcp = double.Parse(values[1]);
+                _pzone_ori = double.Parse(values[2]);
+                _pzone_eax = double.Parse(values[3]);
+                _zone_ori = double.Parse(values[4]);
+                _zone_leax = double.Parse(values[5]);
+                _zone_reax = double.Parse(values[6]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Zone Data instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static ZoneData Parse(string rapidData)
+        {
+            return new ZoneData(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Zone Data instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="zoneData"> The Zone Data intance. </param>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
+        public static bool TryParse(string rapidData, out ZoneData zoneData)
+        {
+            try
+            {
+                zoneData = new ZoneData(rapidData);
+                return true;
+            }
+            catch
+            {
+                zoneData = new ZoneData();
+                return false;
+            }
         }
         #endregion
 
@@ -304,14 +380,16 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
             {
                 return "Invalid Zone Data";
             }
-            else if (_predefined == true)
+            else if (_isPredefined == true)
             {
                 return $"Predefined Zone Data ({_name})";
             }
@@ -326,9 +404,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Zone Data in RAPID code format, e.g. "[FALSE, 0, 0.3, 0.3, 0.3, 0.3, 0.03]".
+        /// Returns the Zone Data in RAPID code format.
         /// </summary>
-        /// <returns> The string with zone data values. </returns>
+        /// <remarks>
+        /// An example output is "[FALSE, 0, 0.3, 0.3, 0.3, 0.3, 0.03]".
+        /// </remarks>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
         public string ToRAPID()
         {
             string code = "";
@@ -348,27 +431,29 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false & _name != "")
+            if (_isPredefined == false & _name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-                result += $"{Enum.GetName(typeof(VariableType), _variableType)} zonedata {_name} := {ToRAPID()};";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
                 return result;
             }
-            else
-            {
-                return string.Empty;
-            }
+                
+            return string.Empty;
         }
 
         /// <summary>
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An emptry string. </returns>
+        /// <returns> 
+        /// An emptry string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -376,12 +461,14 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false)
+            if (_isPredefined == false)
             {
                 if (_name != "")
                 {
@@ -396,8 +483,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -432,12 +521,20 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string Datatype
+        {
+            get { return _datatype; }
         }
 
         /// <summary>
@@ -469,8 +566,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size (the radius) for the tool reorientation. 
-        /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
+        /// <remarks>
+        /// The size is defined as the distance of the TCP from the programmed point in mm.
+        /// </remarks>
         public double PathZoneOrientation
         {
             get { return _pzone_ori; }
@@ -479,8 +578,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size (the radius) for external axes. 
-        /// The size is defined as the distance of the TCP from the programmed point in mm.
         /// </summary>
+        /// <remarks>
+        /// The size is defined as the distance of the TCP from the programmed point in mm.
+        /// </remarks>
         public double PathZoneExternalAxes
         {
             get { return _pzone_eax; }
@@ -489,8 +590,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the zone size for the tool reorientation in degrees. 
-        /// If the robot is holding the work object, this means an angle of rotation for the work object.
         /// </summary>
+        /// <remarks>
+        /// If the robot is holding the work object, this means an angle of rotation for the work object.
+        /// </remarks>
         public double ZoneOrientation
         {
             get { return _zone_ori; }
@@ -518,28 +621,21 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
         /// </summary>
-        public bool PreDefined
+        public bool IsPreDefined
         {
-            get { return _predefined; }
-            set { _predefined = value; }
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this zonedata is a user definied zonedata. 
+        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined zonedata value. 
         /// </summary>
-        public bool UserDefinied
+        /// <remarks>
+        /// If false the nearest predefined zoneata or a custom zonedata was used.
+        /// </remarks>
+        public bool IsExactPredefinedValue
         {
-            get { return !_predefined; }
-            set { _predefined = !value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined speeddata value. 
-        /// If false the nearest predefined speedata or a custom zonedata was used. 
-        /// </summary>
-        public bool ExactPredefinedValue
-        {
-            get { return _exactPredefinedValue; }
+            get { return _isExactPredefinedValue; }
         }
 
         /// <summary>
@@ -564,6 +660,40 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata is a predefined zonedata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool PreDefined
+        {
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata is a user definied zonedata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool UserDefinied
+        {
+            get { return !_isPredefined; }
+            set { _isPredefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this zonedata was constructed from an exact predefined zonedata value. 
+        /// </summary>
+        /// <remarks>
+        /// If false the nearest predefined zoneata or a custom zonedata was used.
+        /// </remarks>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
+        public bool ExactPredefinedValue
+        {
+            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

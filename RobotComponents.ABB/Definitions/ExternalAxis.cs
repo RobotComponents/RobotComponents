@@ -35,25 +35,33 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this External Axis.
         /// </summary>
-        /// <returns> A deep copy of the External Axis. </returns>
+        /// <returns> 
+        /// A deep copy of the External Axis. 
+        /// </returns>
         public abstract ExternalAxis DuplicateExternalAxis();
 
         /// <summary>
         /// Returns an exact duplicate of this External Axis without meshes.
         /// </summary>
-        /// <returns> A deep copy of the External Axis without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the External Axis without meshes. 
+        /// </returns>
         public abstract ExternalAxis DuplicateExternalAxisWithoutMesh();
 
         /// <summary>
         /// Returns an exact duplicate of this Mechanical Unit.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit. 
+        /// </returns>
         public abstract IMechanicalUnit DuplicateMechanicalUnit();
 
         /// <summary>
         /// Returns an exact duplicate of this Mechanical Unit without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit without meshes. 
+        /// </returns>
         public abstract IMechanicalUnit DuplicateMechanicalUnitWithoutMesh();
         #endregion
 
@@ -61,7 +69,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -84,38 +94,54 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Calculates the position of the attachment plane for a given External Joint Position.
-        /// This calculation does not take into account the axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This calculation does not take into account the axis limits. 
+        /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
-        /// <returns> The posed attachement plane. </returns>
+        /// <returns> 
+        /// The posed attachement plane. 
+        /// </returns>
         public abstract Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
-        /// Calculates the the transformation matrix for a given External Joint Position.
-        /// This calculation does not take into account the axis limits. 
+        /// Calculates the the transformation matrix for a given External Joint Position.. 
         /// </summary>
+        /// <remarks>
+        /// This calculation does not take into account the axis limits. 
+        /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
-        /// <returns> The transformation matrix. </returns>
+        /// <returns> 
+        /// The transformation matrix.
+        /// </returns>
         public abstract Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits);
 
         /// <summary>
-        /// Calculates the position of the attachment plane for a given External Joint Position.
-        /// This calculations takes into account the external axis limits. 
-        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used.  
+        /// Calculates the position of the attachment plane for a given External Joint Position..  
         /// </summary>
+        /// <remarks>
+        /// This calculations takes into account the external axis limits. 
+        /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used. 
+        /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <returns> The posed attachement plane. </returns>
+        /// <returns> 
+        /// The posed attachement plane. 
+        /// </returns>
         public abstract Plane CalculatePositionSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
         /// Calculates the the transformation matrix for a given External Joint Position.
+        /// </summary>
+        /// <remarks>
         /// This calculations takes into account the external axis limits. 
         /// If the defined External Joint Posiiton is outside its limits the closest valid external axis value will be used. 
-        /// </summary>
+        /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <returns> The transformation matrix. </returns>
+        /// <returns> 
+        /// The transformation matrix. 
+        /// </returns>
         public abstract Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition);
 
         /// <summary>
@@ -127,14 +153,18 @@ namespace RobotComponents.ABB.Definitions
         /// Calculates and returns the position of the meshes for a given Joint Target.
         /// </summary>
         /// <param name="jointTarget"> The Joint Target. </param>
-        /// <returns> The posed meshes. </returns>
+        /// <returns> 
+        /// The posed meshes. 
+        /// </returns>
         public abstract List<Mesh> PoseMeshes(JointTarget jointTarget);
 
         /// <summary>
         /// Calculates the position of the external axis meshes for a given External Joint Position.
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <returns> The posed meshes. </returns>
+        /// <returns> 
+        /// The posed meshes. 
+        /// </returns>
         public abstract List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition);
 
         /// <summary>
@@ -147,7 +177,9 @@ namespace RobotComponents.ABB.Definitions
         /// Returns the Bounding Box of the object.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         public abstract BoundingBox GetBoundingBox(bool accurate);
         #endregion
 
@@ -179,9 +211,11 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the axis plane.
+        /// </summary>
+        /// <remarks>
         /// In case of a rotational axis the z-axis of the plane defines the rotation center. 
         /// In case of linear axis the z-axis of the plane defines the movement direction.
-        /// </summary>
+        /// </remarks>
         public abstract Plane AxisPlane { get; set; }
 
         /// <summary>

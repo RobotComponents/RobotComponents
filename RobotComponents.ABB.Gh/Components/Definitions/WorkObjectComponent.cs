@@ -21,7 +21,7 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Info component. An inherent from the GH_Component Class.
+    /// RobotComponents Work Object component. An inherent from the GH_Component Class.
     /// </summary>
     public class WorkObjectComponent : GH_Component, IObjectManager
     {
@@ -134,7 +134,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>

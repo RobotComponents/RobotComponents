@@ -59,7 +59,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] parameters = new IGH_Param[2]
+        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[2]
         {
             new Param_Plane() { Name = "Reference Plane", NickName = "RP",  Description = "Reference Plane as a Plane", Access = GH_ParamAccess.item, Optional = true },
             new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The resulting external joint position", Access = GH_ParamAccess.item, Optional = true }
@@ -72,7 +72,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Axis Configuration", "AC", "Axis Configuration as int. This will modify the fourth value of the Robot Configuration Data in the RAPID Movement code line.", GH_ParamAccess.item, 0);
+            pManager.AddParameter(new Param_ConfigurationData(), "Configuration Data", "CD", "Robot configuration as Configuration Data", GH_ParamAccess.item);
+            
+            pManager[2].Optional = true;
         }
 
         /// <summary>
@@ -93,29 +95,29 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             string name = string.Empty;
             Plane plane = Plane.WorldXY;
             Plane referencePlane = Plane.WorldXY;
-            int axisConfig = 0;
+            ConfigurationData configurationData = new ConfigurationData();
             ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch inputs
             if (!DA.GetData(0, ref name)) { return; } // Fixed index
             if (!DA.GetData(1, ref plane)) { return; } // Fixed index
-            if (Params.Input.Any(x => x.Name == parameters[0].Name))
+            if (Params.Input.Any(x => x.Name == _variableInputParameters[0].Name))
             {
-                if (!DA.GetData(parameters[0].Name, ref referencePlane)) { referencePlane = Plane.WorldXY; }
+                if (!DA.GetData(_variableInputParameters[0].Name, ref referencePlane)) { referencePlane = Plane.WorldXY; }
             }
-            if (Params.Input.Any(x => x.Name == "Axis Configuration"))
+            if (Params.Input.Any(x => x.Name == "Configuration Data"))
             {
-                if (!DA.GetData("Axis Configuration", ref axisConfig)) { axisConfig = 0; }
+                if (!DA.GetData("Configuration Data", ref configurationData)) { configurationData = new ConfigurationData(0, 0, 0, 0); }
             }
-            if (Params.Input.Any(x => x.Name == parameters[1].Name))
+            if (Params.Input.Any(x => x.Name == _variableInputParameters[1].Name))
             {
-                if (!DA.GetData(parameters[1].Name, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
+                if (!DA.GetData(_variableInputParameters[1].Name, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
             }
 
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
+            RobotTarget target = new RobotTarget(name, plane, referencePlane, configurationData, externalJointPosition);
 
             // Sets Output
             DA.SetData(0, target);
@@ -191,7 +193,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("A7D3F790-903D-4F62-A547-623E87CBEDE3"); }
+            get { return new Guid("B6FD2D36-E091-40DC-A15C-44FD0310632C"); }
         }
         #endregion
 
@@ -232,7 +234,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             _setReferencePlane = !_setReferencePlane;
 
             // Input parameter
-            IGH_Param parameter = parameters[0];
+            IGH_Param parameter = _variableInputParameters[0];
 
             // If the parameter already exist: unregister it
             if (Params.Input.Any(x => x.Name == parameter.Name))
@@ -248,7 +250,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 int index = 2;
 
                 // Register the input parameter
-                Params.RegisterInputParam(parameters[0], index);
+                Params.RegisterInputParam(_variableInputParameters[0], index);
             }
 
             // Expire solution and refresh parameters since they changed
@@ -268,7 +270,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             _setExternalJointPosition = !_setExternalJointPosition;
 
             // Input parameter
-            IGH_Param parameter = parameters[1];
+            IGH_Param parameter = _variableInputParameters[1];
 
             // If the parameter already exist: unregister it
             if (Params.Input.Any(x => x.Name == parameter.Name))

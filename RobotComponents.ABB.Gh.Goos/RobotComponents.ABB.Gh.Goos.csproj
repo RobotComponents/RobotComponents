@@ -64,6 +64,7 @@
     <Compile Include="Actions\Instructions\GH_PathAccelerationLimitation.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOn.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOff.cs" />
+    <Compile Include="Actions\Instructions\GH_VelocitySet.cs" />
     <Compile Include="Actions\Instructions\GH_WaitAI.cs" />
     <Compile Include="Actions\Instructions\GH_WaitSyncTask.cs" />
     <Compile Include="Actions\Declarations\GH_TaskList.cs" />

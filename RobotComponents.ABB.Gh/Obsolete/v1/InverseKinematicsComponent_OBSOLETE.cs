@@ -226,9 +226,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedRobotMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_forwardKinematics.PosedRobotMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes

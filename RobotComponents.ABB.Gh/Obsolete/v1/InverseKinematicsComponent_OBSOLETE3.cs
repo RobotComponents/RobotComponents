@@ -477,11 +477,11 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     }
 
                     // Display internal axis meshes
-                    for (int j = 0; j < _forwardKinematics[i].PosedInternalAxisMeshes.Count; j++)
+                    for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)
                     {
-                        if (_forwardKinematics[i].PosedInternalAxisMeshes[j].IsValid)
+                        if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedInternalAxisMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
                         }
                     }
 

@@ -439,11 +439,11 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     }
 
                     // Display internal axis meshes
-                    for (int j = 0; j < _forwardKinematics[i].PosedInternalAxisMeshes.Count; j++)
+                    for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)
                     {
-                        if (_forwardKinematics[i].PosedInternalAxisMeshes[j].IsValid)
+                        if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedInternalAxisMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
                         }
                     }
 
@@ -475,7 +475,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             GH_Structure<GH_Mesh> meshes = new GH_Structure<GH_Mesh>();
 
             // Robot pose meshes
-            List<Mesh> posedInternalAxisMeshes = _forwardKinematics[iteration].PosedInternalAxisMeshes;
+            List<Mesh> posedInternalAxisMeshes = _forwardKinematics[iteration].PosedRobotMeshes;
 
             // Data tree path
             GH_Path path = new GH_Path(new int[2] { iteration, 0 });

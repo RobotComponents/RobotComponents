@@ -57,6 +57,10 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(WaitAIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Analog%20Input/" },
             { typeof(WaitDIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Digital%20Input/" },
             { typeof(CirclePathModeComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(PulseDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(PathAccelerationLimitationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(VelocitySetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(AccelerationSetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             // Dynamic
             { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Code/" },
             { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Comment/" },
@@ -99,6 +103,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(DeconstructExternalJointPositionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Actions/Deconstruct%20External%20Joint%20Position/" },
             { typeof(DeconstructRobotJointPosistionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Actions/Deconstruct%20Robot%20Joint%20Position/" },
             { typeof(DeconstructConfigurationDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Actions/" }, // TODO
+            { typeof(DeconstructPathAccelerationLimitationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Actions/" }, // TODO
             // Definitions
             { typeof(DeconstructExternalLinearAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20External%20Linear%20Axis/" },
             { typeof(DeconstructExternalRotationalAxisComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20External%20Rotational%20Axis/" },
@@ -106,7 +111,6 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(DeconstructRobotToolComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20Robot%20Tool/" },
             { typeof(DeconstructWorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/Deconstruct%20Work%20Object/" },
             { typeof(DeconstructLoadDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Deconstruct/Definitions/" },
-            
             #endregion
 
             #region Definitions
@@ -216,6 +220,10 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(Param_ZoneData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Zone%20Data/"},
             { typeof(Param_CirclePathMode), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             { typeof(Param_ConfigurationData), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/"}, // TODO
+            { typeof(Param_PathAccelerationLimitation), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/"}, // TODO
+            { typeof(Param_PulseDigitalOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/"}, // TODO
+            { typeof(Param_VelocitySet), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/"}, // TODO
+            { typeof(Param_AccelerationSet), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/"}, // TODO
             // Multi Move
             { typeof(Param_TaskList), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Task%20List/"},
             { typeof(Param_WaitSyncTask), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Wait%20Sync%20Task/"},

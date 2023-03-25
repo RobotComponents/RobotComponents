@@ -356,7 +356,7 @@ namespace RobotComponents.ABB.Definitions
 
             _forwardKinematics.Calculate(jointTarget.RobotJointPosition, jointTarget.ExternalJointPosition);
 
-            meshes.AddRange(_forwardKinematics.PosedInternalAxisMeshes);
+            meshes.AddRange(_forwardKinematics.PosedRobotMeshes);
 
             for (int i = 0; i < _forwardKinematics.PosedExternalAxisMeshes.Count; i++)
             {

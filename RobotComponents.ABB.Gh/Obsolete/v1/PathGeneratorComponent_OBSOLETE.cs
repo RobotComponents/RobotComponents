@@ -524,7 +524,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         public override void DrawViewportMeshes(IGH_PreviewArgs args)
         {
             // Check if there is a mesh available to display and the onlyTCP function not active
-            if (_forwardKinematics.PosedInternalAxisMeshes != null && _previewMesh)
+            if (_forwardKinematics.PosedRobotMeshes != null && _previewMesh)
             {
                 // Initiate the display color and transparancy of the robot mesh
                 Color color;
@@ -543,9 +543,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 }
 
                 // Display the internal axes of the robot
-                for (int i = 0; i != _forwardKinematics.PosedInternalAxisMeshes.Count; i++)
+                for (int i = 0; i != _forwardKinematics.PosedRobotMeshes.Count; i++)
                 {
-                    args.Display.DrawMeshShaded(_forwardKinematics.PosedInternalAxisMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
+                    args.Display.DrawMeshShaded(_forwardKinematics.PosedRobotMeshes[i], new Rhino.Display.DisplayMaterial(color, trans));
                 }
 
                 // Display the external axes

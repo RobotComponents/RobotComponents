@@ -32,6 +32,8 @@ namespace RobotComponents.ABB.Kinematics
         private bool _hideMesh;
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
+        private Transform[] _trans = new Transform[7];
+        private const double _degreesToRadiansFactor = Math.PI / 180;
         #endregion
 
         #region constructors
@@ -96,6 +98,7 @@ namespace RobotComponents.ABB.Kinematics
             _errorText = new List<string>(forwardKinematics.ErrorText);
             _posedInternalAxisMeshes = forwardKinematics.PosedInternalAxisMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
             _posedExternalAxisMeshes = new List<List<Mesh>>(forwardKinematics.PosedExternalAxisMeshes);
+
             for (int i = 0; i < forwardKinematics.PosedExternalAxisMeshes.Count; i++)
             {
                 for (int j = 0; j < forwardKinematics.PosedExternalAxisMeshes[i].Count; j++)
@@ -103,6 +106,7 @@ namespace RobotComponents.ABB.Kinematics
                     forwardKinematics.PosedExternalAxisMeshes[i][j] = forwardKinematics.PosedExternalAxisMeshes[i][j].DuplicateMesh();
                 }
             }
+
             _posedExternalAxisPlanes = new List<Plane>(forwardKinematics.PosedExternalAxisPlanes).ToArray();
             _inLimits = forwardKinematics.InLimits;
         }
@@ -147,17 +151,47 @@ namespace RobotComponents.ABB.Kinematics
             CheckInternalAxisLimits();
             CheckExternalAxisLimits();
 
-            // Deep copy the mehses if the pose should be calculated
+            // Calculate axis planes
+            _positionPlane = new Plane(_robot.BasePlane);
+            CalculateExternalPlanes();
+            CalculateRobotAxisPlanes();
+
+            // Get posed meshes
             if (_hideMesh == false)
             {
-                _posedInternalAxisMeshes = _robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
-                _posedExternalAxisMeshes = new List<List<Mesh>>();
+                PoseMeshes();
             }
+        }
 
-            // Get initial position plane
-            _positionPlane = new Plane(_robot.BasePlane);
+        /// <summary>
+        /// Calculates the forward kinematics solution with the given Robot Joint Positions and a default External Joint Position (9e9).
+        /// </summary>
+        /// <param name="robotJointPosition"> The Robot Joint Position. </param>
+        public void Calculate(RobotJointPosition robotJointPosition)
+        {
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = new ExternalJointPosition();
+            Calculate();
+        }
 
-            // Count the number of external linear axes that is used: it is now limited to one
+        /// <summary>
+        /// Calculates the forward kinematics solution with the given Joint Positions.
+        /// </summary>
+        /// <param name="robotJointPosition"> The Robot Joint Position. </param>
+        /// <param name="externalJointPosition"> The External Joint Position. </param>
+        public void Calculate(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
+        {
+            _robotJointPosition = robotJointPosition;
+            _externalJointPosition = externalJointPosition;
+            Calculate();
+        }
+
+        /// <summary>
+        /// Calculates the positions of the external axis planes.
+        /// </summary>
+        private void CalculateExternalPlanes()
+        {
+            // Count the number of axes that move the robot
             double count = 0;
 
             // Calculates external axes positions
@@ -167,7 +201,6 @@ namespace RobotComponents.ABB.Kinematics
             {
                 // Get the external axis
                 ExternalAxis externalAxis = _robot.ExternalAxes[i];
-                int logic = _robot.ExternalAxes[i].AxisNumber;
 
                 // Get external axis plane
                 _posedExternalAxisPlanes[i] = externalAxis.CalculatePositionSave(_externalJointPosition);
@@ -179,105 +212,83 @@ namespace RobotComponents.ABB.Kinematics
                     count += 1;
                 }
             }
+        }
 
-            // Move relative to base
-            Transform transNow;
-            transNow = Transform.PlaneToPlane(_robot.BasePlane, _positionPlane);
-
-            // Calculates internal axes
-            // First caculate all tansformations (rotations)
+        /// <summary>
+        /// Calculates the positipn of the robot axis planes and TCP plane.
+        /// </summary>
+        private void CalculateRobotAxisPlanes()
+        {
+            // Base
+            _trans[0] = Transform.PlaneToPlane(_robot.BasePlane, _positionPlane);
             // Axis 1
-            Transform rot1;
             Plane planeAxis1 = new Plane(_robot.InternalAxisPlanes[0]);
-            rot1 = Transform.Rotation(_robotJointPosition[0] * Math.PI / 180, planeAxis1.ZAxis, planeAxis1.Origin);
+            _trans[1] = Transform.Rotation(_robotJointPosition[0] * _degreesToRadiansFactor, planeAxis1.ZAxis, planeAxis1.Origin);
             // Axis 2
-            Transform rot2;
             Plane planeAxis2 = new Plane(_robot.InternalAxisPlanes[1]);
-            planeAxis2.Transform(rot1);
-            rot2 = Transform.Rotation(_robotJointPosition[1] * Math.PI / 180, planeAxis2.ZAxis, planeAxis2.Origin);
+            planeAxis2.Transform(_trans[1]);
+            _trans[2] = Transform.Rotation(_robotJointPosition[1] * _degreesToRadiansFactor, planeAxis2.ZAxis, planeAxis2.Origin);
             // Axis 3
-            Transform rot3;
             Plane planeAxis3 = new Plane(_robot.InternalAxisPlanes[2]);
-            planeAxis3.Transform(rot2 * rot1);
-            rot3 = Transform.Rotation(_robotJointPosition[2] * Math.PI / 180, planeAxis3.ZAxis, planeAxis3.Origin);
+            planeAxis3.Transform(_trans[2] * _trans[1]);
+            _trans[3] = Transform.Rotation(_robotJointPosition[2] * _degreesToRadiansFactor, planeAxis3.ZAxis, planeAxis3.Origin);
             // Axis 4
-            Transform rot4;
             Plane planeAxis4 = new Plane(_robot.InternalAxisPlanes[3]);
-            planeAxis4.Transform(rot3 * rot2 * rot1);
-            rot4 = Transform.Rotation(_robotJointPosition[3] * Math.PI / 180, planeAxis4.ZAxis, planeAxis4.Origin);
+            planeAxis4.Transform(_trans[3] * _trans[2] * _trans[1]);
+            _trans[4] = Transform.Rotation(_robotJointPosition[3] * _degreesToRadiansFactor, planeAxis4.ZAxis, planeAxis4.Origin);
             // Axis 5
-            Transform rot5;
             Plane planeAxis5 = new Plane(_robot.InternalAxisPlanes[4]);
-            planeAxis5.Transform(rot4 * rot3 * rot2 * rot1);
-            rot5 = Transform.Rotation(_robotJointPosition[4] * Math.PI / 180, planeAxis5.ZAxis, planeAxis5.Origin);
+            planeAxis5.Transform(_trans[4] * _trans[3] * _trans[2] * _trans[1]);
+            _trans[5] = Transform.Rotation(_robotJointPosition[4] * _degreesToRadiansFactor, planeAxis5.ZAxis, planeAxis5.Origin);
             // Axis 6
-            Transform rot6;
             Plane planeAxis6 = new Plane(_robot.InternalAxisPlanes[5]);
-            planeAxis6.Transform(rot5 * rot4 * rot3 * rot2 * rot1);
-            rot6 = Transform.Rotation(_robotJointPosition[5] * Math.PI / 180, planeAxis6.ZAxis, planeAxis6.Origin);
-
-            // Apply transformations on tcp plane
+            planeAxis6.Transform(_trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+            _trans[6] = Transform.Rotation(_robotJointPosition[5] * _degreesToRadiansFactor, planeAxis6.ZAxis, planeAxis6.Origin);
+            // TCP plane
             _tcpPlane = new Plane(_robot.ToolPlane);
-            _tcpPlane.Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
+            _tcpPlane.Transform(_trans[0] * _trans[6] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+        }
 
-            // Get posed meshes
-            if (_hideMesh == false)
+        /// <summary>
+        /// Transforms the robot and external axis meshes.
+        /// </summary>
+        private void PoseMeshes()
+        {
+            // Deep copy the mehses
+            _posedInternalAxisMeshes = _robot.Meshes.ConvertAll(mesh => mesh.DuplicateMesh());
+            _posedExternalAxisMeshes = new List<List<Mesh>>();
+
+            // Base link transform
+            _posedInternalAxisMeshes[0].Transform(_trans[0]);
+            // Link_1 tranform 
+            _posedInternalAxisMeshes[1].Transform(_trans[0] * _trans[1]);
+            // Link_2 tranform
+            _posedInternalAxisMeshes[2].Transform(_trans[0] * _trans[2] * _trans[1]);
+            // Link_3 tranform
+            _posedInternalAxisMeshes[3].Transform(_trans[0] * _trans[3] * _trans[2] * _trans[1]);
+            // Link_4 tranform
+            _posedInternalAxisMeshes[4].Transform(_trans[0] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+            // Link_5 tranform
+            _posedInternalAxisMeshes[5].Transform(_trans[0] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+            // Link_6 tranform
+            _posedInternalAxisMeshes[6].Transform(_trans[0] * _trans[6] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+            // End-effector transform
+            _posedInternalAxisMeshes[7].Transform(_trans[0] * _trans[6] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
+
+            // External axis meshes
+            for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
-                // Base link transform
-                _posedInternalAxisMeshes[0].Transform(transNow);
-                // Link_1 tranform 
-                _posedInternalAxisMeshes[1].Transform(transNow * rot1);
-                // Link_2 tranform
-                _posedInternalAxisMeshes[2].Transform(transNow * rot2 * rot1);
-                // Link_3 tranform
-                _posedInternalAxisMeshes[3].Transform(transNow * rot3 * rot2 * rot1);
-                // Link_4 tranform
-                _posedInternalAxisMeshes[4].Transform(transNow * rot4 * rot3 * rot2 * rot1);
-                // Link_5 tranform
-                _posedInternalAxisMeshes[5].Transform(transNow * rot5 * rot4 * rot3 * rot2 * rot1);
-                // Link_6 tranform
-                _posedInternalAxisMeshes[6].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
-                // End-effector transform
-                _posedInternalAxisMeshes[7].Transform(transNow * rot6 * rot5 * rot4 * rot3 * rot2 * rot1);
-
-                // External axis meshes
-                for (int i = 0; i < _robot.ExternalAxes.Count; i++)
-                {
-                    _robot.ExternalAxes[i].PoseMeshes(_externalJointPosition);
-                    _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
-                }
-
-                // Repair the meshes if needed
-                _posedInternalAxisMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh);
-
-                for (int i = 0; i < _robot.ExternalAxes.Count; i++)
-                {
-                    _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh));
-                }
+                _robot.ExternalAxes[i].PoseMeshes(_externalJointPosition);
+                _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.DuplicateMesh()));
             }
-        }
 
-        /// <summary>
-        /// Calculates the forward kinematics solution with the given Robot Joint Positions and a default External Joint Position (9e9).
-        /// </summary>
-        /// <param name="robotJointPosition"> The  Robot Joint Position. </param>
-        public void Calculate(RobotJointPosition robotJointPosition)
-        {
-            _robotJointPosition = robotJointPosition;
-            _externalJointPosition = new ExternalJointPosition();
-            Calculate();
-        }
+            // Repair the meshes if needed
+            _posedInternalAxisMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh);
 
-        /// <summary>
-        /// Calculates the forward kinematics solution with the given Joint Positions.
-        /// </summary>
-        /// <param name="robotJointPosition"> The  Robot Joint Position. </param>
-        /// <param name="externalJointPosition"> The External Joint Position. </param>
-        public void Calculate(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
-        {
-            _robotJointPosition = robotJointPosition;
-            _externalJointPosition = externalJointPosition;
-            Calculate();
+            for (int i = 0; i < _robot.ExternalAxes.Count; i++)
+            {
+                _posedExternalAxisMeshes.Add(_robot.ExternalAxes[i].PosedMeshes.ConvertAll(mesh => mesh.IsValid == false ? MeshPreperation.Repair(mesh, 0.25, false) : mesh));
+            }
         }
 
         /// <summary>
@@ -315,10 +326,12 @@ namespace RobotComponents.ABB.Kinematics
         {
             _errorText.Clear();
             _posedInternalAxisMeshes.Clear();
+            
             for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
             {
                 _posedExternalAxisMeshes[i].Clear();
             }
+            
             _posedExternalAxisMeshes.Clear();
             _positionPlane = Plane.Unset;
             _tcpPlane = Plane.Unset;

@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_SetDigitalOutput : GH_PersistentParam<GH_SetDigitalOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_DigitalOutput> class
+        /// Initializes a new instance of the GH_PersistentParam<GH_SetDigitalOutput> class
         /// </summary>
         public Param_SetDigitalOutput()
           : base(new GH_InstanceDescription("Set Digital Output Parameter", "SDOP",

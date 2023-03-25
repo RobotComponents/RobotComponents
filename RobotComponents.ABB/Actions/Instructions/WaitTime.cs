@@ -56,7 +56,7 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         #region constructors
         /// <summary>
-        /// Initializes an empty instance of the Override Robot Tool class.
+        /// Initializes an empty instance of the Wait Time class.
         /// </summary>
         public WaitTime()
         {
@@ -220,5 +220,4 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
         #endregion
     }
-
 }

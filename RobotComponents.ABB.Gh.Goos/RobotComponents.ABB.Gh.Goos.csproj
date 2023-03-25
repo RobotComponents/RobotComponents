@@ -61,6 +61,7 @@
     <Compile Include="Actions\Instructions\GH_AnalogOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\GH_DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\GH_CirclePathMode.cs" />
+    <Compile Include="Actions\Instructions\GH_PathAccelerationLimitation.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOn.cs" />
     <Compile Include="Actions\Instructions\GH_SyncMoveOff.cs" />
     <Compile Include="Actions\Instructions\GH_WaitAI.cs" />

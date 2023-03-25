@@ -62,6 +62,8 @@
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\ConfigurationDataComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\AccelerationSetComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\PathAccelerationLimitationComponent.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitation.cs" />
     <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructConfigurationDataComponent.cs" />
@@ -263,6 +265,7 @@
     <Compile Include="Obsolete\v2\Param_DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Parameters\Actions\Declarations\Param_ConfigurationData.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_AccelerationSet.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_PathAccelerationLimitation.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOff.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_CirclePathMode.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOn.cs" />

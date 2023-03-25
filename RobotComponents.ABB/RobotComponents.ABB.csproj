@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionGroup.cs" />
     <Compile Include="Actions\Declarations\ConfigurationData.cs" />
+    <Compile Include="Actions\Instructions\AccelerationSet.cs" />
     <Compile Include="Actions\Instructions\AnalogOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\SetAnalogOutput.cs" />
     <Compile Include="Actions\Instructions\CirclePathMode.cs" />

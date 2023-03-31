@@ -259,7 +259,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             else if (Controller.Controllers.Count > 1)
             {
                 PickControllerForm frm = new PickControllerForm(Controller.Controllers.ConvertAll(item => item.Name));
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
                 frm.ShowDialog();
                 int index = frm.Index;
 

@@ -8,6 +8,7 @@ using System;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Special;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
@@ -163,13 +164,22 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private void MenuItemClick(object sender, EventArgs e)
         {
             PickConfigurationDomainPathForm frm = new PickConfigurationDomainPathForm(_controller);
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
             frm.ShowDialog();
 
-            HelperMethods.CreatePanel(this, frm.Domain, 1);
-            HelperMethods.CreatePanel(this, frm.Type, 2);
-            HelperMethods.CreatePanel(this, frm.Instance, 3);
-            HelperMethods.CreatePanel(this, frm.Attribute, 4);
+            string[] values = new string[4] { frm.Domain, frm.Type, frm.Instance, frm.Attribute};
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (this.Params.Input[i + 1].Sources.Count == 1 && this.Params.Input[i + 1].Sources[0] is GH_Panel panel)
+                {
+                    panel.SetUserText(values[i]);
+                }
+                else
+                {
+                    HelperMethods.CreatePanel(this, values[i], i + 1);
+                }
+            }
 
             this.ExpireSolution(true);
         }

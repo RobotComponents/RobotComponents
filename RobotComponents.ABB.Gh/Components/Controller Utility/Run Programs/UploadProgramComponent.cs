@@ -237,7 +237,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             else if (_controller.TaskNames.Count > 1)
             {
                 PickTaskForm frm = new PickTaskForm(_controller);
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
                 frm.ShowDialog();
                 int index = frm.Index;
 

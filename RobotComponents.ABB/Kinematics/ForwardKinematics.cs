@@ -28,9 +28,9 @@ namespace RobotComponents.ABB.Kinematics
         private List<Mesh> _posedRobotMeshes = new List<Mesh>();
         private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>();
         
-        private Transform[] _trans = new Transform[7];
-        private Transform[] _robotTransforms = new Transform[7];
-        private List<List<Transform>> _externalAxisTransforms = new List<List<Transform>>();
+        private readonly Transform[] _trans = new Transform[7];
+        private readonly Transform[] _robotTransforms = new Transform[7];
+        private readonly List<List<Transform>> _externalAxisTransforms = new List<List<Transform>>();
         
         private Plane _positionPlane = Plane.Unset;
         private Plane[] _posedExternalAxisPlanes;

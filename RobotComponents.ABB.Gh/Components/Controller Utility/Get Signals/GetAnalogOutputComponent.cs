@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Special;
 // Robot Components Libs
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
@@ -164,8 +165,15 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             if (this.GetSignal(out string name) == true)
             {
-                this.Params.Input[1].RemoveAllSources();
-                HelperMethods.CreatePanel(this, name, 1);
+                if (this.Params.Input[1].Sources.Count == 1 && this.Params.Input[1].Sources[0] is GH_Panel panel)
+                {
+                    panel.SetUserText(name);
+                }
+                else
+                {
+                    HelperMethods.CreatePanel(this, name, 1);
+                }
+
                 this.ExpireSolution(true);
             }
         }
@@ -196,7 +204,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             else if (signals.Count > 1)
             {
                 PickSignalForm frm = new PickSignalForm(signals);
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
                 frm.ShowDialog();
                 int index = frm.Index;
 

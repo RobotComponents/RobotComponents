@@ -221,7 +221,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             PickRobotForm frm = new PickRobotForm(robotPresets);
 
             // Display the form
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
+            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
             frm.ShowDialog();
 
             // Return the index number of the picked controller

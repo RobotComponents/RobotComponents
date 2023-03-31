@@ -11,8 +11,6 @@ using System.Drawing;
 // Grasshopper Libs
 using Grasshopper;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Special;
 
 namespace RobotComponents.ABB.Gh.Utils

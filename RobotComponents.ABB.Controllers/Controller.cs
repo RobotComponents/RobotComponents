@@ -847,6 +847,26 @@ namespace RobotComponents.ABB.Controllers
         }
 
         /// <summary>
+        /// Picks a task from the controller
+        /// </summary>
+        /// <param name="taskName"> The name of the task. </param>
+        /// <param name="task"> The picked task. </param>
+        /// <returns> True on success, false on failure. </returns>
+        private bool TryPickTask(string taskName, out RapidDomainNS.Task task)
+        {
+            try
+            {
+                task = _controller.Rapid.GetTask(taskName);
+                return true;
+            }
+            catch
+            {
+                task = null;
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Uploads a module to the controller. 
         /// </summary>
         /// <param name="taskName"> The task to upload to. </param>
@@ -864,41 +884,34 @@ namespace RobotComponents.ABB.Controllers
                 return false;
             }
 
-            #region pick task
-            RapidDomainNS.Task task;
-
-            try
-            {
-                task = _controller.Rapid.GetTask(taskName);
-            }
-            catch
+            if (TryPickTask(taskName, out RapidDomainNS.Task task) == false)
             {
                 status = "Could not pick the task from the controller: Invalid task name.";
                 Log(status);
                 return false;
             }
-            #endregion
 
             if (task.ExecutionStatus == RapidDomainNS.TaskExecutionStatus.Running)
             {
                 status = "Could not upload the module. The task is still running.";
+                Log(status);
                 return false;
             }
 
             #region write temporary file
-            string tempDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
+            string userDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
 
-            if (Directory.Exists(tempDirectory))
+            if (Directory.Exists(userDirectory))
             {
-                Directory.Delete(tempDirectory, true);
+                Directory.Delete(userDirectory, true);
             }
                 
-            Directory.CreateDirectory(tempDirectory);
-            
+            Directory.CreateDirectory(userDirectory);
+
             if (module.Count != 0)
             {
-                string programFilePath = Path.Combine(tempDirectory, "temp.mod");
-                using (StreamWriter writer = new StreamWriter(programFilePath, false))
+                string userFilePath = Path.Combine(userDirectory, "temp.mod");
+                using (StreamWriter writer = new StreamWriter(userFilePath, false))
                 {
                     for (int i = 0; i < module.Count; i++)
                     {
@@ -914,28 +927,16 @@ namespace RobotComponents.ABB.Controllers
             }
             #endregion
 
-            // Directory to save the modules on the controller
-            string controllerDirectory = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID");
-
-            // Module file paths
-            string filePath;
-            string directory;
-
             // Stop the program before upload
             StopProgram(out status);
 
-            // Settings for a upload to a physical controller
             if (_controller.IsVirtual == false)
             {
                 _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.WriteFtp);
-                _controller.FileSystem.PutDirectory(tempDirectory, "RAPID", true);
-                directory = controllerDirectory;
             }
-            // Settings for a upload to a virtual controller
-            else
-            {
-                directory = tempDirectory;
-            }
+
+            //_controller.FileSystem.PutDirectory(userDirectory, Path.Combine("Robot Components", "temp"), true);
+            _controller.FileSystem.PutDirectory(userDirectory, Path.Combine("RAPID"), true);
 
             // The real upload
             try
@@ -946,11 +947,9 @@ namespace RobotComponents.ABB.Controllers
                     _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
 
                     // Load the new program from the created file
-                    if (module.Count != 0)
-                    {
-                        filePath = Path.Combine(directory, "temp.mod");
-                        task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
-                    }
+                    //string controllerFilePath = Path.Combine(_controller.FileSystem.RemoteDirectory, "Robot Components", "temp", "temp.mod");
+                    string controllerFilePath = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID", "temp.mod");
+                    task.LoadModuleFromFile(controllerFilePath, RapidDomainNS.RapidLoadMode.Replace);
 
                     // Give back the mastership
                     master.Release();
@@ -965,9 +964,9 @@ namespace RobotComponents.ABB.Controllers
             finally
             {
                 // Delete the temporary files
-                if (Directory.Exists(tempDirectory))
+                if (Directory.Exists(userDirectory))
                 {
-                    Directory.Delete(tempDirectory, true);
+                    Directory.Delete(userDirectory, true);
                 }
             }
 
@@ -1350,24 +1349,7 @@ namespace RobotComponents.ABB.Controllers
 
             try
             {
-                // Controller domain
-                _controller.ConnectionChanged += OnConnectionChangedEvent;
-                _controller.Rapid.MastershipChanged += OnMastershipChangedEvent;
-                _controller.OperatingModeChanged += OnOperatingModeChangeEvent;
-                _controller.StateChanged += OnStateChangedEventArgs;
-
-                // Event log domain
-                // Not implemented
-
-                // Signal domain
-                // Not implemented
-
-                // Motion domain
-                // Not implemented
-
-                // Rapid domain
-                // Not implemented
-
+                _controller.EventLog.MessageWritten += OnMessageWrittenEvent;
                 return true;
             }
             catch
@@ -1376,34 +1358,28 @@ namespace RobotComponents.ABB.Controllers
             }
         }
 
-        private void OnBackupEventArgs(object sender, ControllersNS.BackupEventArgs e)
+        private bool UnSubscribeEvents()
         {
-            // Not implemented
+            if (_isEmpty == true)
+            {
+                Log("Could not unsubscribe any events. The controller is empty.");
+                return false;
+            }
+
+            try
+            {
+                _controller.EventLog.MessageWritten -= OnMessageWrittenEvent;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        private void OnConnectionChangedEvent(object sender, ControllersNS.ConnectionChangedEventArgs e)
+        private void OnMessageWrittenEvent(object sender, ControllersNS.EventLogDomain.MessageWrittenEventArgs e)
         {
-            // Not implemented
-        }
-
-        private void OnControllerEvent(object sender, ControllersNS.ControllerEventArgs e)
-        {
-            // Not implemented
-        }
-
-        private void OnMastershipChangedEvent(object sender, ControllersNS.MastershipChangedEventArgs e)
-        {
-            // Not implemented
-        }
-
-        private void OnOperatingModeChangeEvent(object sender, ControllersNS.OperatingModeChangeEventArgs e)
-        {
-            // Not implemented
-        }
-
-        private void OnStateChangedEventArgs(object sender, ControllersNS.StateChangedEventArgs e)
-        {
-            // Not implemented
+            Log(e.Message.Body);
         }
         #endregion
     }

@@ -56,11 +56,11 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(WaitTimeComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Time/" },
             { typeof(WaitAIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Analog%20Input/" },
             { typeof(WaitDIComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/Wait%20for%20Digital%20Input/" },
-            { typeof(CirclePathModeComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
-            { typeof(PulseDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
-            { typeof(PathAccelerationLimitationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
-            { typeof(VelocitySetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
-            { typeof(AccelerationSetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(CirclePathModeComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/" }, // TODO
+            { typeof(PulseDigitalOutputComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/" }, // TODO
+            { typeof(PathAccelerationLimitationComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/" }, // TODO
+            { typeof(VelocitySetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/" }, // TODO
+            { typeof(AccelerationSetComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Instructive%20Actions/" }, // TODO
             // Dynamic
             { typeof(CodeLineComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Code/" },
             { typeof(CommentComponent) , "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Code%20Generation/Dynamic%20Actions/Comment/" },

@@ -188,8 +188,7 @@ namespace RobotComponents.ABB.Actions
             #region get data
             // Save initial tool and add to used tools
             RobotTool initTool = _robot.Tool.Duplicate();
-            _robotTools.Add(_robot.Tool.Name, _robot.Tool);
-            _loadDatas.Add(_robot.Tool.LoadData.Name, _robot.Tool.LoadData);
+            _robot.Tool.ToRAPIDDeclaration(this);
 
             // Check if the first movement is an Absolute Joint Movement
             _isFirstMovementMoveAbsJ = CheckFirstMovement(_actions);

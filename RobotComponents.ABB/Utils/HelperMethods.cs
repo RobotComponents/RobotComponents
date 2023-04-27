@@ -220,6 +220,20 @@ namespace RobotComponents.ABB.Utils
         }
 
         /// <summary>
+        /// Returns the dot product of two quaternions.
+        /// </summary>
+        /// <param name="quat1"> The first quaternion. </param>
+        /// <param name="quat2"> The second quaternion. </param>
+        /// <returns> The dot product. </returns>
+        public static double DotProduct(this Quaternion quat1, Quaternion quat2)
+        {
+            quat1.Unitize();
+            quat2.Unitize();
+
+            return quat1.A * quat2.A + quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D;
+        }
+
+        /// <summary>
         /// Replaces the first occurence in a string with a new text. 
         /// </summary>
         /// <param name="text"> The text the search and replace in. </param>

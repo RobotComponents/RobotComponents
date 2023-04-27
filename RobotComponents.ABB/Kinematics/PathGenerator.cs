@@ -15,6 +15,7 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Kinematics
 {
@@ -215,9 +216,6 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         CircularMovementFromRobotTarget(movement);
                         counter++;
-
-                        _errorText.Insert(0, "The tool orientation for MoveC instructions is not accurate. " +
-                            "Check you program with a simulation in Robot Studio.");
                     }
                 }
             }
@@ -431,6 +429,26 @@ namespace RobotComponents.ABB.Kinematics
             // Set the correct tool for this movement
             SetRobotTool(movement);
 
+            // Circular path mode
+            CirPathMode cirPathMode = _cirPathMode;
+
+            if (_cirPathMode == CirPathMode.PathFrame)
+            {
+                cirPathMode = CirPathMode.PathFrame;
+            }
+            else if (_cirPathMode == CirPathMode.ObjectFrame)
+            {
+                cirPathMode = CirPathMode.ObjectFrame;
+            }
+            else
+            {
+                _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is not supported by the Path Generator. " +
+                    "\"PathFrame\" mode is used instead. " +
+                    "Check you program with a simulation in Robot Studio for a correct simulation.");
+                
+                cirPathMode = CirPathMode.PathFrame;
+            }
+
             // Points for path
             List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
 
@@ -514,12 +532,22 @@ namespace RobotComponents.ABB.Kinematics
                 }
             }
 
-            // Target plane position and orientation change per interpolation step
-            double paramChange = 1.0 / _interpolations;
+            // Normalized interpolation step
+            double dt = 1.0 / _interpolations;
 
-            // For linear interpolation: Object frame mode
+            // Position interpolation
+            Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;
+
+            // Orientation interpolation
+            // PathFrame mode
             Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations;
             Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations;
+            // ObjectFrame mode
+            Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
+            Quaternion quat2 = HelperMethods.PlaneToQuaternion(plane2);
+            quat1.Unitize();
+            quat2.Unitize();
+            double angle = 2 * Math.Acos(Math.Abs(quat1.DotProduct(quat2)));
 
             // New movement
             Movement newMovement = movement.DuplicateWithoutMesh();
@@ -530,34 +558,53 @@ namespace RobotComponents.ABB.Kinematics
             // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
             for (int i = 0; i < _interpolations; i++)
             {
-                // Point
-                Point3d point = circle.PointAt(paramChange * (i + 1));
+                // Normalized interpolation
+                double t = dt * (i + 1);
 
-                // Orientation
-                // Rotates both target planes to the current position. 
-                double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
-                double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
-                Plane plane3 = new Plane(plane1);
-                Plane plane4 = new Plane(plane2);
-                Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
-                Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
-                plane3.Transform(xform1);
-                plane4.Transform(xform2);
+                // Interpolate position
+                Point3d point = circle.PointAt(t);
 
-                // Weighted average between the two rotated target planes
-                double amount = (i + 1) * paramChange;
-                Vector3d xAxis = plane3.XAxis + amount * (plane4.XAxis - plane3.XAxis);
-                Vector3d yAxis = plane3.YAxis + amount * (plane4.YAxis - plane3.YAxis);
+                // Interpolate orientation
+                Plane plane;
 
-                // New plane
-                Plane plane = new Plane(point, xAxis, yAxis);
+                // PathFrame mode: rotates both planes to the current position and takes the weighted average
+                if (cirPathMode == CirPathMode.PathFrame)
+                {
+                    // Rotates both target planes to the current position. 
+                    double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                    double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                    Plane plane3 = new Plane(plane1);
+                    Plane plane4 = new Plane(plane2);
+                    Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                    Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                    plane3.Transform(xform1);
+                    plane4.Transform(xform2);
+
+                    // Weighted average between the two rotated planes
+                    Vector3d xAxis = plane3.XAxis + t * (plane4.XAxis - plane3.XAxis);
+                    Vector3d yAxis = plane3.YAxis + t * (plane4.YAxis - plane3.YAxis);
+
+                    // New plane
+                    plane = new Plane(point, xAxis, yAxis);
+                }
+                // ObjectFrame mode: Quaternion interpolation (SLERP)
+                else if (cirPathMode == CirPathMode.ObjectFrame)
+                {
+                    Quaternion quat = (quat1 * Math.Sin((1 - t) * angle) + quat2 * Math.Sin(t * angle)) / Math.Sin(angle);
+                    plane = HelperMethods.QuaternionToPlane(point, quat);
+                }
+                // Not implemented
+                else
+                {
+                    throw new Exception($"Circle Path Mode \"{cirPathMode}\" is not implemented in the path generator.");
+                }
 
                 // Update the external joint position
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
                 newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
-                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(paramChange * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
+                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(dt * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
 
                 // Calculate joint positions
                 _robot.InverseKinematics.Movement = newMovement;

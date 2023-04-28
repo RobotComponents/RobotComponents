@@ -440,6 +440,10 @@ namespace RobotComponents.ABB.Kinematics
             {
                 cirPathMode = CirPathMode.ObjectFrame;
             }
+            else if (_cirPathMode == CirPathMode.CirPointOri)
+            {
+                cirPathMode = CirPathMode.CirPointOri;
+            }
             else
             {
                 _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is not supported by the Path Generator. " +
@@ -471,7 +475,7 @@ namespace RobotComponents.ABB.Kinematics
                 throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: No circular point defined.");
             }
 
-            Point3d cirPoint = movement.CircularPoint.Plane.Origin;
+            Plane planeCirPoint = movement.CircularPoint.Plane;
 
             // Second target plane in WORK OBJECT coordinate space 
             RobotTarget robotTarget = movement.Target as RobotTarget;
@@ -490,7 +494,7 @@ namespace RobotComponents.ABB.Kinematics
             plane1.Transform(orient);
 
             // Circular curve
-            Arc arc = new Arc(plane1.Origin, cirPoint, plane2.Origin);
+            Arc arc = new Arc(plane1.Origin, planeCirPoint.Origin, plane2.Origin);
 
             if (arc.IsValid == false)
             {
@@ -512,19 +516,19 @@ namespace RobotComponents.ABB.Kinematics
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
             }
             // Minimum distance between start and CirPoint is 0.1 mm
-            if (plane1.Origin.DistanceTo(cirPoint) < 0.1)
+            if (plane1.Origin.DistanceTo(planeCirPoint.Origin) < 0.1)
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
             }
             // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
-            if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, cirPoint - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
+            if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, planeCirPoint.Origin - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
             }
             // Circle Path Mode specific restrictions
             if (_cirPathMode == CirPathMode.CirPointOri)
             {
-                circle.ClosestPoint(cirPoint, out double param);
+                circle.ClosestPoint(planeCirPoint.Origin, out double param);
 
                 if (param < 0.25 | param > 0.75)
                 {
@@ -533,21 +537,21 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Normalized interpolation step
-            double dt = 1.0 / _interpolations;
+            double dt = (double)1 / _interpolations;
 
             // Position interpolation
             Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;
 
-            // Orientation interpolation
-            // PathFrame mode
-            Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations;
-            Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations;
+            // Orientation interpolation:
             // ObjectFrame mode
             Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
             Quaternion quat2 = HelperMethods.PlaneToQuaternion(plane2);
             quat1.Unitize();
             quat2.Unitize();
-            double angle = 2 * Math.Acos(Math.Abs(quat1.DotProduct(quat2)));
+            //double angle = Math.Acos(2 * Math.Abs(quat1.DotProduct(quat2)));
+            double angle = Math.Acos(2 * quat1.DotProduct(quat2));
+            // CirpointOri mode
+            circle.ClosestPoint(planeCirPoint.Origin, out double cirPointParam);
 
             // New movement
             Movement newMovement = movement.DuplicateWithoutMesh();
@@ -590,8 +594,50 @@ namespace RobotComponents.ABB.Kinematics
                 // ObjectFrame mode: Quaternion interpolation (SLERP)
                 else if (cirPathMode == CirPathMode.ObjectFrame)
                 {
-                    Quaternion quat = (quat1 * Math.Sin((1 - t) * angle) + quat2 * Math.Sin(t * angle)) / Math.Sin(angle);
+                    Quaternion quat = (quat1 * Math.Sin((1.0 - t) * angle) + quat2 * Math.Sin(t * angle)) / Math.Sin(angle);
                     plane = HelperMethods.QuaternionToPlane(point, quat);
+                }
+                else if (cirPathMode == CirPathMode.CirPointOri)
+                {
+                    Vector3d xAxis;
+                    Vector3d yAxis;
+
+                    // Rotates both target planes to the current position. 
+                    if (t < cirPointParam)
+                    {
+                        // Rotates both target planes to the current position. 
+                        double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        double angle2 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        Plane plane3 = new Plane(plane1);
+                        Plane plane4 = new Plane(planeCirPoint);
+                        Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                        Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                        plane3.Transform(xform1);
+                        plane4.Transform(xform2);
+
+                        // Weighted average between the two rotated planes
+                        xAxis = plane3.XAxis + t / cirPointParam * (plane4.XAxis - plane3.XAxis);
+                        yAxis = plane3.YAxis + t / cirPointParam * (plane4.YAxis - plane3.YAxis);
+                    }
+                    else
+                    {
+                        // Rotates both target planes to the current position. 
+                        double angle1 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        Plane plane3 = new Plane(planeCirPoint);
+                        Plane plane4 = new Plane(plane2);
+                        Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                        Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                        plane3.Transform(xform1);
+                        plane4.Transform(xform2);
+
+                        // Weighted average between the two rotated planes
+                        xAxis = plane3.XAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.XAxis - plane3.XAxis);
+                        yAxis = plane3.YAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.YAxis - plane3.YAxis);
+                    }
+
+                    // New plane
+                    plane = new Plane(point, xAxis, yAxis);
                 }
                 // Not implemented
                 else

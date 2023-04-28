@@ -491,7 +491,7 @@ namespace RobotComponents.ABB.Definitions
                 $"{_orientation.C:0.######}, {_orientation.D:0.######}]], ";
 
             // Add tool load < tload of loaddata >
-            result += _loadData.Name != "" ? _loadData.Name : _loadData.ToRAPID();
+            result += _loadData.ToRAPID();
 
             // Close
             result += "]";

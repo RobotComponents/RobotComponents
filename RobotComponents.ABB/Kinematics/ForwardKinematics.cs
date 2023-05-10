@@ -468,11 +468,11 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets the robot transformartions. 
+        /// Gets the latest calculated robot transformations. 
         /// </summary>
         /// <remarks>
-        /// This array contains seven transformation. The transformation of the based and the six joints. 
-        /// Use the last transformation (joint 6) for transform the tool and TCP plane. 
+        /// This array contains seven transformations. The transformation of the base and the six joints. 
+        /// Use the last transformation (joint 6) to transform the tool and TCP plane. 
         /// </remarks>
         public Transform[] RobotTransforms
         {
@@ -480,10 +480,10 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets the external axis transforms.
+        /// Gets the latest calculated external axis transformations.
         /// </summary>
         /// <remarks>
-        /// Contains a trasnformation for each mesh. 
+        /// Contains a transformation for each mesh. 
         /// Including a zero transform of the base mesh of the external axis.
         /// </remarks>
         public List<List<Transform>> ExternalAxisTransforms

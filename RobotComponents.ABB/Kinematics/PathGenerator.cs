@@ -613,7 +613,3 @@ namespace RobotComponents.ABB.Kinematics
     }
 
 }
-
-
-
-

@@ -10,6 +10,8 @@ using System.Security.Permissions;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
+using RobotComponents.ABB.Actions;
+using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 
@@ -19,20 +21,21 @@ namespace RobotComponents.ABB.Definitions
     /// Represents a Work Object.
     /// </summary>
     [Serializable()]
-    public class WorkObject : ISerializable
+    public class WorkObject : ISerializable, IDeclaration
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // The work object name
-        private Plane _plane; // The work object coordinate system
-        private Quaternion _orientation; // The orientation of the work object coordinate system
-        private ExternalAxis _externalAxis; // The coupled mechanical unit
-        private bool _robotHold; // Bool that indicates if the robot holds the work object
-        private bool _fixedFrame; // Bool that indicates if the workobject is fixed (true) or movable (false)
-        private Plane _userFrame; // The user frame coordinate system
-        private Quaternion _userFrameOrientation; // the orienation of the user frame coordinate system
-        private Plane _globalPlane; // global work object plane
+        private VariableType _variableType;
+        private static readonly string _datatype = "wobjdata";
+        private string _name; 
+        private Plane _plane; 
+        private Quaternion _orientation; 
+        private ExternalAxis _externalAxis; 
+        private bool _robotHold;
+        private bool _fixedFrame; 
+        private Plane _userFrame; 
+        private Quaternion _userFrameOrientation; 
+        private Plane _globalPlane; 
         #endregion
 
         #region (de)serialization
@@ -136,7 +139,7 @@ namespace RobotComponents.ABB.Definitions
         public WorkObject(WorkObject workObject, bool duplicateMesh = true)
         {
             _scope = workObject.Scope;
-            _variableType = workObject.ReferenceType;
+            _variableType = workObject.VariableType;
             _name = workObject.Name;
             _plane = new Plane(workObject.Plane);
             _userFrame = new Plane(workObject.UserFrame);
@@ -154,7 +157,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Work Object instance.
         /// </summary>
-        /// <returns> A deep copy of the Work Object instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Work Object instance. 
+        /// </returns>
         public WorkObject Duplicate()
         {
             return new WorkObject(this);
@@ -163,10 +168,104 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Work Object instance without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Work Object instance without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Work Object instance without meshes. 
+        /// </returns>
         public WorkObject DuplicateWithoutMesh()
         {
             return new WorkObject(this, false);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Work Object instance as an IDeclaration.
+        /// </summary>
+        /// <returns> 
+        /// A deep copy of the Work Object instance as an IDeclaration. 
+        /// </returns>
+        public IDeclaration DuplicateDeclaration()
+        {
+            return new WorkObject(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Work Object class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        private WorkObject(string rapidData)
+        {
+            this.SetDataFromString(rapidData, out string[] values);
+
+            if (values.Length == 17)
+            {
+                _robotHold = values[0] == "TRUE";
+                _fixedFrame = values[1] == "TRUE";
+
+                // External axes are ignored. 
+                _externalAxis = null;
+
+                double x = double.Parse(values[3]);
+                double y = double.Parse(values[4]);
+                double z = double.Parse(values[5]);
+                double a = double.Parse(values[6]);
+                double b = double.Parse(values[7]);
+                double c = double.Parse(values[8]);
+                double d = double.Parse(values[9]);
+                _userFrame = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+
+
+                x = double.Parse(values[10]);
+                y = double.Parse(values[11]);
+                z = double.Parse(values[12]);
+                a = double.Parse(values[13]);
+                b = double.Parse(values[14]);
+                c = double.Parse(values[15]);
+                d = double.Parse(values[16]);
+                _plane = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+
+                CalculateOrientation();
+                CalculateUserFrameOrientation();
+                CalculateGlobalWorkObjectPlane();
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Work Object instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static WorkObject Parse(string rapidData)
+        {
+            return new WorkObject(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Work Object instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="workObject"> The Work Object intance. </param>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
+        public static bool TryParse(string rapidData, out WorkObject workObject)
+        {
+            try
+            {
+                workObject = new WorkObject(rapidData);
+                return true;
+            }
+            catch
+            {
+                workObject = new WorkObject();
+                return false;
+            }
         }
         #endregion
 
@@ -174,7 +273,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -194,7 +295,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the quaternion orientation of the work object coordinate system. 
         /// </summary>
-        /// <returns> The quaternion orientation of the work object. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the work object. 
+        /// </returns>
         public Quaternion CalculateOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_plane);
@@ -204,7 +307,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the quaternion orientation of the user frame coordinate system. 
         /// </summary>
-        /// <returns> The quaternion orientation of the user frame. </returns>
+        /// <returns> 
+        /// The quaternion orientation of the user frame. 
+        /// </returns>
         public Quaternion CalculateUserFrameOrientation()
         {
             _userFrameOrientation = HelperMethods.PlaneToQuaternion(_userFrame);
@@ -214,7 +319,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the global work object plane. 
         /// </summary>
-        /// <returns> The global work object plane. </returns>
+        /// <returns> 
+        /// The global work object plane. 
+        /// </returns>
         public Plane CalculateGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
@@ -271,19 +378,18 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Returns the RAPID declaration code line of the this Work Object.
+        /// Returns the Configuration Data in RAPID code format.
         /// </summary>
-        /// <returns> The RAPID code line. </returns>
-        public string ToRAPIDDeclaration()
+        /// <remarks>
+        /// An example output is 
+        /// "[FALSE, TRUE, "", [[0, 0, 0], [1, 0, 0, 0]], [[0.0009, -0.0082, 8.0304], [0.9999999, 0.0005131, 0.0000556, 0]]]"
+        /// </remarks>
+        /// <returns> 
+        /// The RAPID data string with work object values. 
+        /// </returns>
+        public string ToRAPID()
         {
-            // Scope
-            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-
-            // Adds variable type
-            result += $"{Enum.GetName(typeof(VariableType), _variableType)} wobjdata ";
-
-            // Adds work object name
-            result += $"{_name} := ";
+            string result = "";
 
             // Add robot hold < robhold of bool >
             result += _robotHold ? "[TRUE, " : "[FALSE, ";
@@ -293,7 +399,7 @@ namespace RobotComponents.ABB.Definitions
 
             // Add mechanical unit (an external axis or robot) < ufmec of string >
             result += _externalAxis != null ? $"\"{_externalAxis.Name}\", " : "\"\", ";
-            
+
             // Add user frame coordinate < uframe of pose > < trans of pos >
             result += $"[[{_userFrame.Origin.X:0.####}, {_userFrame.Origin.Y:0.####}, {_userFrame.Origin.Z:0.####}], ";
 
@@ -306,9 +412,59 @@ namespace RobotComponents.ABB.Definitions
 
             // Add object frame orientation < oframe of pose > < rot of orient >
             result += $"[{_orientation.A:0.#######}, {_orientation.B:0.#######}, " +
-                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]];";
+                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]]";
 
             return result;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this Work Object.
+        /// </summary>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
+        public string ToRAPIDDeclaration()
+        {
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this action.
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
+        public string ToRAPIDDeclaration(Robot robot)
+        {
+            if (_name != "" && _name != "wobj0")
+            {
+                return ToRAPIDDeclaration();
+            }
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
+        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
+        public void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        {
+            if (_name != "" && _name != "wobj0")
+            {
+                if (!RAPIDGenerator.WorkObjects.ContainsKey(_name))
+                {
+                    RAPIDGenerator.WorkObjects.Add(_name, this);
+                    RAPIDGenerator.ProgramDeclarationsWorkObjectData.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
+                }
+            }
         }
         #endregion
 
@@ -342,10 +498,18 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the variable type. 
         /// </summary>
-        public VariableType ReferenceType
+        public VariableType VariableType
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string Datatype
+        {
+            get { return _datatype; }
         }
 
         /// <summary>
@@ -376,9 +540,12 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the user coordinate system, i.e. the position of the current work surface or fixture.
-        /// If the robot is holding the tool, the user coordinate system is defined in the world coordinate system (in the wrist coordinate system if a stationary tool is used). 
-        /// For movable user frame (FixedFrame = false), the user frame is continuously defined by the system.
         /// </summary>
+        /// <remarks>
+        /// If the robot is holding the tool, the user coordinate system is defined in the 
+        /// world coordinate system (in the wrist coordinate system if a stationary tool is used). 
+        /// For movable user frame (FixedFrame = false), the user frame is continuously defined by the system.
+        /// </remarks>
         public Plane UserFrame
         {
             get 
@@ -394,8 +561,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or set the work object coordinate system as a plane (e.g. the position of the current work object).
-        /// The object coordinate system is defined in the user coordinate system.
         /// </summary>
+        /// <remarks>
+        /// The object coordinate system is defined in the user coordinate system.
+        /// </remarks>
         public Plane Plane
         {
             get 
@@ -411,8 +580,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the external axis (mechanical unit) with which the robot movements are coordinated. 
-        /// Only specified in the case of movable user coordinate systems.
         /// </summary>
+        /// <remarks>
+        /// Only specified in the case of movable user coordinate systems.
+        /// </remarks>
         public ExternalAxis ExternalAxis
         {
             get 
@@ -444,13 +615,27 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets a value indicating whether or not a fixed user coordinate system is used.
-        /// True indicates that the user frame is fixed. 
-        /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).
         /// </summary>
+        /// <remarks>
+        /// True indicates that the user frame is fixed. 
+        /// False indicates that the user coordinate system is movable (e.g. coordinated external axes).s
+        /// </remarks>
         public bool FixedFrame
         {
             get { return _fixedFrame; }
             set { _fixedFrame = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
+        public VariableType ReferenceType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
         }
         #endregion
     }

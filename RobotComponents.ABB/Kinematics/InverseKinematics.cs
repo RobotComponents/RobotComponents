@@ -28,20 +28,24 @@ namespace RobotComponents.ABB.Kinematics
         private RobotTool _robotTool;
         private Movement _movement;
         private ITarget _target;
-        private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
+        private Plane _positionPlane;   
         private Plane _targetPlane;
         private Plane _endPlane;
         private List<Plane> _axisPlanes;
         private Point3d _wrist;
-        private double _wristOffset;
+        private double _wristOffset1;
+        private double _wristOffset2;
         private double _lowerArmLength;
         private double _upperArmLength;
         private double _axis4offsetAngle;
-        private readonly List<string> _errorText = new List<string>(); // Error text
-        private bool _inLimits = true; // Indicates if the joint positions are in limits 
-        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
-        private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
-        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
+        private readonly List<string> _errorText = new List<string>();
+        private bool _inLimits = true; 
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; 
+        private RobotJointPosition _robotJointPosition = new RobotJointPosition();
+        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
+
+        private static readonly double _pi = Math.PI;
+        private static readonly double _twoPi = 2 * Math.PI;
         #endregion
 
         #region constructors
@@ -76,8 +80,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class from a Target.
-        /// The target will be casted to robot movement with a default work object (wobj0). 
         /// </summary>
+        /// <remarks>
+        /// The target will be casted to robot movement with a default work object (wobj0). 
+        /// </remarks>
         /// <param name="target"> The Target </param>
         /// <param name="robot"> The Robot. </param>
         public InverseKinematics(ITarget target, Robot robot)
@@ -119,7 +125,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns an exact duplicate of this Inverse Kinematics instance.
         /// </summary>
-        /// <returns> A deep copy of the Inverse Kinematics instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Inverse Kinematics instance. 
+        /// </returns>
         public InverseKinematics Duplicate()
         {
             return new InverseKinematics(this);
@@ -130,7 +138,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -190,18 +200,39 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Other robot info related fields
-                _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
+                _wristOffset1 = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
+                _wristOffset2 = _axisPlanes[5].Origin.Z - _axisPlanes[4].Origin.Z;
                 _lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
                 _upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
                 _axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
-                _wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
+                _wrist = new Point3d(_endPlane.PointAt(0, 0 , _wristOffset1));
+                //_wrist = new Point3d(_endPlane.PointAt(0, _wristOffset2, _wristOffset1));
+            }
+
+            // Check the axis planes
+            CheckAxisPlanes();
+        }
+
+        /// <summary>
+        /// Checks if the axis planes are setup correctly for this inverse kinematics solver.
+        /// </summary>
+        private void CheckAxisPlanes()
+        {
+            Point3d[] points = _axisPlanes.ConvertAll(item => item.Origin).ToArray();
+            Plane.FitPlaneToPoints(points, out _, out double maxDeviations);
+
+            if (maxDeviations > 0.001)
+            {
+                throw new ArgumentException("IK solver cannot be used for this Robot: The origins of the axis planes are not aligned on one plane.");
             }
         }
 
         /// <summary>
         /// Reinitialize all the fields to construct a valid Inverse Kinematics object. 
-        /// This method also resets the solution. Calculate() has to be called to obtain a new solution. 
         /// </summary>
+        /// <remarks>
+        /// This method also resets the solution. Calculate() has to be called to obtain a new solution.
+        /// </remarks>
         public void ReInitialize()
         {
             Initialize();
@@ -222,8 +253,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the Robot Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the internal axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the internal axis limits.
+        /// </remarks>
         public void CalculateRobotJointPosition()
         {
             // Clear the current solutions before calculating a new ones. 
@@ -235,25 +268,21 @@ namespace RobotComponents.ABB.Kinematics
 
             if (_target is RobotTarget robotTarget)
             { 
-                #region wrist center relative to axis 1
-                // Note that this is reversed because the clockwise direction when looking 
-                // down at the XY plane is typically taken as the positive direction for robot axis1
-                // Caculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
+                // Calculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
                 double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _robotJointPositions[0][0] = internalAxisValue1;
-                _robotJointPositions[1][0] = internalAxisValue1;
-                _robotJointPositions[2][0] = internalAxisValue1;
-                _robotJointPositions[3][0] = internalAxisValue1;
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _twoPi; }
+                for (int i = 0; i < 4; i++)
+                {
+                    _robotJointPositions[i][0] = internalAxisValue1;
+                }
 
                 // Rotate the joint position 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
-                internalAxisValue1 += Math.PI;
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
-                _robotJointPositions[4][0] = internalAxisValue1;
-                _robotJointPositions[5][0] = internalAxisValue1;
-                _robotJointPositions[6][0] = internalAxisValue1;
-                _robotJointPositions[7][0] = internalAxisValue1;
-                #endregion
+                internalAxisValue1 += _pi;
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _twoPi; }
+                for (int i = 4; i < 8; i++)
+                {
+                    _robotJointPositions[i][0] = internalAxisValue1;
+                }
 
                 // Generates 4 sets of values for each option of axis 1
                 // i = 0: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
@@ -275,7 +304,7 @@ namespace RobotComponents.ABB.Kinematics
                     internalAxisPoint4.Transform(rot1);
 
                     // Create the elbow projection plane
-                    Vector3d elbowDir = new Vector3d(1, 0, 0);
+                    Vector3d elbowDir = Vector3d.XAxis;
                     elbowDir.Transform(rot1);
                     Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, Vector3d.ZAxis);
 
@@ -292,15 +321,13 @@ namespace RobotComponents.ABB.Kinematics
                     for (int j = 0; j < 2; j++)
                     {
                         // Calculate elbow and wrist variables
-                        Point3d elbowPoint;
-                        if (j == 1) { elbowPoint = intersectPt1; }
-                        else { elbowPoint = intersectPt2; }
+                        Point3d elbowPoint = j == 1 ? intersectPt1 : intersectPt2;
                         elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
                         elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
 
                         // Calculate the position of robot axis 2
                         double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
-                        double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
+                        double internalAxisValue3 = _pi - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
 
                         for (int k = 0; k < 2; k++)
                         {
@@ -308,9 +335,9 @@ namespace RobotComponents.ABB.Kinematics
                             _robotJointPositions[index1][1] = -internalAxisValue2;
 
                             // Calculate the position of robot axis 3
-                            double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
-                            while (internalAxisValue3Wrapped >= Math.PI) { internalAxisValue3Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue3Wrapped < -Math.PI) { internalAxisValue3Wrapped += 2 * Math.PI; }
+                            double internalAxisValue3Wrapped = -internalAxisValue3 + _pi;
+                            while (internalAxisValue3Wrapped >= _pi) { internalAxisValue3Wrapped -= _twoPi; }
+                            while (internalAxisValue3Wrapped < -_pi) { internalAxisValue3Wrapped += _twoPi; }
                             _robotJointPositions[index1][2] = internalAxisValue3Wrapped;
 
                             // Update in index tracker
@@ -329,12 +356,12 @@ namespace RobotComponents.ABB.Kinematics
                             double internalAxisValue4 = Math.Atan2(axis6Y, axis6X);
                             if (k == 1)
                             {
-                                internalAxisValue4 += Math.PI;
-                                if (internalAxisValue4 > Math.PI) { internalAxisValue4 -= 2 * Math.PI; }
+                                internalAxisValue4 += _pi;
+                                if (internalAxisValue4 > _pi) { internalAxisValue4 -= _twoPi; }
                             }
-                            double internalAxisValue4Wrapped = internalAxisValue4 + Math.PI / 2;
-                            while (internalAxisValue4Wrapped >= Math.PI) { internalAxisValue4Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue4Wrapped < -Math.PI) { internalAxisValue4Wrapped += 2 * Math.PI; }
+                            double internalAxisValue4Wrapped = internalAxisValue4 + _pi / 2;
+                            while (internalAxisValue4Wrapped >= _pi) { internalAxisValue4Wrapped -= _twoPi; }
+                            while (internalAxisValue4Wrapped < -_pi) { internalAxisValue4Wrapped += _twoPi; }
                             _robotJointPositions[index2][3] = internalAxisValue4Wrapped;
 
                             // Calculate the position of robot axis 5
@@ -363,7 +390,7 @@ namespace RobotComponents.ABB.Kinematics
                 for (int i = 0; i < 8; i++)
                 {
                     // From radians to degrees
-                    _robotJointPositions[i] *= (180 / Math.PI);
+                    _robotJointPositions[i] *= (180 / _pi);
 
                     // Other corrections
                     _robotJointPositions[i][0] *= -1;
@@ -381,7 +408,7 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Select solution
-                _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
+                _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
             }
 
             else if (_target is JointTarget jointTarget)
@@ -397,12 +424,16 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates and returns the closest Robot Joint Position to a given previous Robot Joint Position.
+        /// </summary>
+        /// <remarks>
         /// This methods sets and returns the closest Robot Joint Poistion insides this Inverse Kinematics object. 
         /// You first have to calculate the Inverse Kinematics solution before you call this method. 
-        /// This method is typically used for using the Auto Axis Config inside the Path Generator.
-        /// </summary>
+        /// This method is typically used for using Configuration Control inside the Path Generator.
+        /// </remarks>
         /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
-        /// <returns> The closest Robot Joint Position. </returns>
+        /// <returns> 
+        /// The closest Robot Joint Position. 
+        /// </returns>
         public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
         {
             RobotJointPosition diff;
@@ -479,8 +510,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the External Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the external axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the external axis limits. 
+        /// </remarks>
         public void CalculateExternalJointPosition()
         {
             // Clear current solution
@@ -609,7 +642,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="targetPlane"> The global target plane defined in the world coordinate space. </param>
         /// <param name="attachmentPlane"> The attachement plane of the robot defined in the robot coordinate space. </param>
         /// <param name="toolPlane"> The TCP plane. </param>
-        /// <returns> The transfomed tool plane. </returns>
+        /// <returns> 
+        /// The transfomed tool plane. 
+        /// </returns>
         private Plane TransformToolPlane(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
         {
             Plane result = new Plane(attachmentPlane);
@@ -622,7 +657,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns the base position of the robot in world coordinate space if it is moved by an external axis.
         /// </summary>
-        /// <returns> The position of the robot as a plane. </returns>
+        /// <returns> 
+        /// The position of the robot as a plane. 
+        /// </returns>
         private Plane GetPositionPlane()
         {
             // NOTE: Only works for a robot info with an maximum of one external linear axis
@@ -743,8 +780,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets or sets the Movement.
-        /// The target and work object are obtained from this movement.
         /// </summary>
+        /// <remarks>
+        /// The target and work object are obtained from this movement.
+        /// </remarks>
         public Movement Movement
         {
             get 
@@ -760,9 +799,11 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets the tool used by the this Inverse Kinematics.
+        /// </summary>
+        /// <remarks>
         /// By default the tool attached to the robot is used. 
         /// If a tool is set as a property of the movement, this tool will be used. 
-        /// </summary>
+        /// </remarks>
         public RobotTool RobotTool
         {
             get { return _robotTool; }

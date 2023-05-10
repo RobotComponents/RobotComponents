@@ -140,7 +140,7 @@ namespace RobotComponents.ABB.Presets.Robots
             axisLimits.Add(new Interval(-225, 85));
             axisLimits.Add(new Interval(-180, 180));
             axisLimits.Add(new Interval(-180, 180));
-            axisLimits.Add(new Interval(-180, 180));
+            axisLimits.Add(new Interval(-270, 270));
 
             return axisLimits;
         }

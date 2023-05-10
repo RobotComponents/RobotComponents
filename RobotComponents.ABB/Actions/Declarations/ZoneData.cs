@@ -197,7 +197,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Initializes a new instance of the Zone Data class with with custom values. 
+        /// Initializes a new instance of the Zone Data class with custom values. 
         /// </summary>
         /// <param name="finep"> Defines whether the movement is to terminate as a stop point (fine point) or as a fly-by point. </param>
         /// <param name="pzone_tcp"> The size (the radius) of the TCP zone in mm. </param>

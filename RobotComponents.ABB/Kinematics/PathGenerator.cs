@@ -925,7 +925,3 @@ namespace RobotComponents.ABB.Kinematics
         #endregion
     }
 }
-
-
-
-

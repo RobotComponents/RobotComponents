@@ -899,19 +899,17 @@ namespace RobotComponents.ABB.Controllers
             }
 
             #region write temporary file
-            string userDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
+            string localDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
 
-            if (Directory.Exists(userDirectory))
+            if (!Directory.Exists(localDirectory))
             {
-                Directory.Delete(userDirectory, true);
+                Directory.CreateDirectory(localDirectory);
             }
-                
-            Directory.CreateDirectory(userDirectory);
 
             if (module.Count != 0)
             {
-                string userFilePath = Path.Combine(userDirectory, "temp.mod");
-                using (StreamWriter writer = new StreamWriter(userFilePath, false))
+                string filePath = Path.Combine(localDirectory, "temp.mod");
+                using (StreamWriter writer = new StreamWriter(filePath, false))
                 {
                     for (int i = 0; i < module.Count; i++)
                     {
@@ -930,15 +928,10 @@ namespace RobotComponents.ABB.Controllers
             // Stop the program before upload
             StopProgram(out status);
 
-            if (_controller.IsVirtual == false)
-            {
-                _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.WriteFtp);
-            }
+            string remoteDirectory = Path.Combine("Robot Components", "temp");
+            _controller.FileSystem.PutDirectory(localDirectory, remoteDirectory, true);
 
-            //_controller.FileSystem.PutDirectory(userDirectory, Path.Combine("Robot Components", "temp"), true);
-            _controller.FileSystem.PutDirectory(userDirectory, Path.Combine("RAPID"), true);
-
-            // The real upload
+            // Load module to task
             try
             {
                 using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
@@ -946,10 +939,9 @@ namespace RobotComponents.ABB.Controllers
                     // Grant acces
                     _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
 
-                    // Load the new program from the created file
-                    //string controllerFilePath = Path.Combine(_controller.FileSystem.RemoteDirectory, "Robot Components", "temp", "temp.mod");
-                    string controllerFilePath = Path.Combine(_controller.FileSystem.RemoteDirectory, "RAPID", "temp.mod");
-                    task.LoadModuleFromFile(controllerFilePath, RapidDomainNS.RapidLoadMode.Replace);
+                    // Load the new program from the drive
+                    string filePath = Path.Combine(remoteDirectory, "temp.mod");
+                    task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
 
                     // Give back the mastership
                     master.Release();
@@ -961,15 +953,7 @@ namespace RobotComponents.ABB.Controllers
                 Log(status);
                 return false;
             }
-            finally
-            {
-                // Delete the temporary files
-                if (Directory.Exists(userDirectory))
-                {
-                    Directory.Delete(userDirectory, true);
-                }
-            }
-
+            
             status = "Upload succeeded.";
             Log(status);
 

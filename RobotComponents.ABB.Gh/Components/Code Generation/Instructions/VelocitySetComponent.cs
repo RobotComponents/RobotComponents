@@ -39,7 +39,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Override", "O", "Defines the desired velocity as a percentage (0-100) of programmed velocity as a Number", GH_ParamAccess.item, 100);
+            pManager.AddNumberParameter("Override", "O", "Defines the desired velocity as a percentage (0-100) of the programmed velocity as a Number", GH_ParamAccess.item, 100);
             pManager.AddNumberParameter("Max", "M", "Defines the the maximum TCP velocity in mm/s as a Number. ", GH_ParamAccess.item, 250);
         }
 

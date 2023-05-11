@@ -118,12 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="AbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AbsoluteJointMovement_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AbsoluteJointMovement_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ActionGroup_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ActionGroup_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -178,9 +172,6 @@
   <data name="ConfL_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ConfL_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="DeconstructAbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DeconstructAbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="DeconstructConfigurationData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructConfigurationData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -216,9 +207,6 @@
   </data>
   <data name="DeconstructSpeedData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructSpeedData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DeconstructTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\DeconstructTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructWorkObject_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructWorkObject_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -432,6 +420,9 @@
   </data>
   <data name="Plane_Visualizer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Plane_Visualizer_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PulseDigitalOutput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PulseDigitalOutput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="QuatToPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\QuatToPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

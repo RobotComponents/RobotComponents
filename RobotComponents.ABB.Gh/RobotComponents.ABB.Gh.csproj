@@ -366,9 +366,6 @@
     <None Include="Resources\DeconstructSpeedData_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\DeconstructTarget_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\DigitalOutput_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -465,9 +462,6 @@
     <None Include="Resources\PlaneToQuat_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ReadDigitalInput_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Remote_OFF_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -493,9 +487,6 @@
     <None Include="Resources\SpeedData_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Target_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Target_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -509,9 +500,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tool_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ToolData_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ToolPlane_Icon.png" />
@@ -545,9 +533,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Movement_Icon_Old.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Work_Object_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -555,15 +540,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructWorkObject_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AbsoluteJointMovement_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AbsoluteJointMovement_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DeconstructAbsoluteJointMovement_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WikiPage_MenuItem_Icon.png" />
@@ -809,6 +785,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructLoadData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PulseDigitalOutput_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

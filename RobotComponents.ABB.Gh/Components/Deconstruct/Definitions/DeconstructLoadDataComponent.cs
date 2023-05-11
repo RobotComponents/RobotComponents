@@ -106,7 +106,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.DeconstructLoadData_Icon; }
         }
 
         /// <summary>

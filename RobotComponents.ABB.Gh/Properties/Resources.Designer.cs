@@ -233,6 +233,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConfigurationData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfigurationData_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConfJ_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ConfJ_Parameter_Icon", resourceCulture);
@@ -256,6 +266,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap DeconstructAbsoluteJointMovement_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructAbsoluteJointMovement_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructConfigurationData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructConfigurationData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -296,6 +316,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap DeconstructJointTarget_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructJointTarget_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructLoadData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructLoadData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -946,6 +976,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap LinearConfigurationControl_Icon {
             get {
                 object obj = ResourceManager.GetObject("LinearConfigurationControl_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LoadData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("LoadData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

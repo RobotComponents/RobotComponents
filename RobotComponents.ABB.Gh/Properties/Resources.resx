@@ -169,6 +169,9 @@
   <data name="Comment_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Comment_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ConfigurationData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ConfigurationData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ConfJ_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ConfJ_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -177,6 +180,9 @@
   </data>
   <data name="DeconstructAbsoluteJointMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructAbsoluteJointMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeconstructConfigurationData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructConfigurationData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructExternalJointPosition_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructExternalJointPosition_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -189,6 +195,9 @@
   </data>
   <data name="DeconstructJointTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructJointTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeconstructLoadData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructLoadData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DeconstructMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -384,6 +393,9 @@
   </data>
   <data name="LinearConfigurationControl_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\LinearConfigurationControl_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LoadData_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LoadData_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Log_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Log_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

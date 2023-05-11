@@ -759,7 +759,9 @@
   <ItemGroup>
     <None Include="Resources\ReadDatabase_Icon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\ConfigurationData_Icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\GetRobotBaseFrame_Icon.png" />
   </ItemGroup>
@@ -798,6 +800,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ReadRapidDomain_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructConfigurationData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructLoadData_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

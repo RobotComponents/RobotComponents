@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Load Data name as Text.", GH_ParamAccess.item, "load1");
+            pManager.AddTextParameter("Name", "N", "Load Data name as Text.", GH_ParamAccess.item, string.Empty);
             pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number.", GH_ParamAccess.item, 0.001);
             pManager.AddPointParameter("Center of Gravity", "CG", "The center of gravity of the load as a Point.", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Axes of Moment", "AM", "The orientation of the load coordinate system defined by the principal inertial axes of the tool as a Plane.", GH_ParamAccess.item);
@@ -76,7 +76,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
-            string name = "load1";
+            string name = string.Empty;
             double mass = 0.001;
             Point3d centerOfGravity = new Point3d(0, 0, 0.001);
             Plane axesOfMoment = Plane.WorldXY;
@@ -168,7 +168,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.LoadData_Icon; }
         }
 
         /// <summary>

@@ -23,7 +23,9 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class SetDigitalOutput : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _name; 
+        private string _name;
+        private double _delay;
+        private bool _sync;
         private bool _value;
         #endregion
 
@@ -35,8 +37,10 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected SetDigitalOutput(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
+            _delay = version < 2001000 ? 0 : (double)info.GetValue("Delay", typeof(double));
+            _sync = version < 2001000 ? false : (bool)info.GetValue("Sync", typeof(bool));
             _value = (bool)info.GetValue("Value", typeof(bool));
         }
 
@@ -49,6 +53,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Delay", _delay, typeof(double));
+            info.AddValue("Sync", _sync, typeof(bool));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(bool));
         }
@@ -69,6 +75,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="value"> Specifies whether the Digital Output is active. </param>
         public SetDigitalOutput(string name, bool value)
         {
+            _delay = 0;
+            _sync = false;
             _name = name;
             _value = value;
         }
@@ -79,6 +87,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="setDigitalOutput"> The Set Digital Output instance to duplicate. </param>
         public SetDigitalOutput(SetDigitalOutput setDigitalOutput)
         {
+            _delay = setDigitalOutput.Delay;
+            _sync = setDigitalOutput.Sync;
             _name = setDigitalOutput.Name;
             _value = setDigitalOutput.Value;
         }
@@ -161,7 +171,14 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return _value ? $"SetDO {_name}, 1;" : $"SetDO {_name}, 0;";
+            string result = $"SetDO ";
+
+            // Sync and delay cannot be combined. Sync is leading. 
+            result += _sync ? "\\Sync, " : (_delay > 0 ? $"\\SDelay:={_delay:0.###}, " : "");
+            result += $"{ _name}, ";
+            result += _value ? "1;" : "0;";
+
+            return result;
         }
 
         /// <summary>
@@ -209,6 +226,31 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _name; }
             set { _name = value; }
+        }
+
+        /// <summary>
+        /// Gets or set the delay the change for the amount of time given in seconds.
+        /// </summary>
+        /// <remarks>
+        /// The maximum delay is 2000 seconds.
+        /// </remarks>
+        public double Delay
+        {
+            get { return _delay; }
+            set { _delay = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the synchronization value.
+        /// </summary>
+        /// <remarks>
+        /// If this argument is used then the program execution will wait 
+        /// until the signal is physically set to the specified value.
+        /// </remarks>
+        public bool Sync
+        {
+            get { return _sync; }
+            set { _sync = value; }
         }
 
         /// <summary>

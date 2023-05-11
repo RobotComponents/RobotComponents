@@ -26,6 +26,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         private string _name;
         private bool _value;
         private double _maxTime;
+        private bool _timeFlag;
         #endregion
 
         #region (de)serialization
@@ -40,6 +41,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (bool)info.GetValue("Value", typeof(bool));
             _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _timeFlag = version >= 2001000 ? (bool)info.GetValue("Time Flag", typeof(bool)) : false;
         }
 
         /// <summary>
@@ -54,6 +56,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(bool));
             info.AddValue("Max Time", _maxTime, typeof(double));
+            info.AddValue("Time Flag", _timeFlag, typeof(double));
         }
         #endregion
 
@@ -69,13 +72,15 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Initializes a new instance of the Wait DI class.
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
-        /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
+        /// <param name="value"> Specifies whether the Digital Input is enabled. </param>
         /// <param name="maxTime"> The maximum time to wait in seconds. </param>
-        public WaitDI(string name, bool value, double maxTime = -1)
+        /// <param name="timeFlag"> Specifies whether the timeout flag is enabled. </param>
+        public WaitDI(string name, bool value, double maxTime = -1, bool timeFlag = false)
         {
             _name = name;
             _value = value;
             _maxTime = maxTime;
+            _timeFlag = timeFlag;
         }
 
         /// <summary>
@@ -87,6 +92,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _name = waitDI.Name;
             _value = waitDI.Value;
             _maxTime = waitDI.MaxTime;
+            _timeFlag = waitDI.TimeFlag;
         }
 
         /// <summary>
@@ -167,8 +173,19 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"WaitDI {_name}, {(_value ? 1 : 0)}" +
-                $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
+            if (_maxTime > 0)
+            {
+                string result = $"WaitDI {_name}, {(_value ? 1 : 0)} ";
+                result += $"\\MaxTime:={_maxTime:0.###} ";
+                result += $"{(_timeFlag ? $"\\TimeFlag:=TRUE" : $"\\TimeFlag:=FALSE")}";
+                result += ";";
+
+                return result;
+            }
+            else
+            {
+                return $"WaitDI {_name}, {(_value ? 1 : 0)};";
+            }
         }
 
         /// <summary>
@@ -191,7 +208,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -205,14 +222,14 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
         /// <summary>
         /// Gets or sets the desired state of the digital input signal.
         /// </summary>
-        public bool Value 
+        public bool Value
         {
             get { return _value; }
             set { _value = value; }
@@ -221,8 +238,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the name of the digital input signal.
         /// </summary>
-        public string Name 
-        { 
+        public string Name
+        {
             get { return _name; }
             set { _name = value; }
         }
@@ -238,7 +255,15 @@ namespace RobotComponents.ABB.Actions.Instructions
             get { return _maxTime; }
             set { _maxTime = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the timeout flag.
+        /// </summary>
+        public bool TimeFlag
+        {
+            get { return _timeFlag; }
+            set { _timeFlag = value; }
+        }
         #endregion
     }
 }
-

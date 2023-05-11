@@ -15,7 +15,7 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents a Wait for Analo Input instruction.
+    /// Represents a Wait for Analog Input instruction.
     /// </summary>
     /// <remarks>
     /// This action is used to wait until a value of a analog input is set.

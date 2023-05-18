@@ -953,6 +953,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LoadData_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("LoadData_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Log_Icon {
             get {
                 object obj = ResourceManager.GetObject("Log_Icon", resourceCulture);

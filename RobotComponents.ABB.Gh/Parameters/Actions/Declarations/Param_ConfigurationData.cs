@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.ConfigurationData_Parameter_Icon; }
         }
 
         /// <summary>

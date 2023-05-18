@@ -223,6 +223,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConfigurationData_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfigurationData_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConfJ_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ConfJ_Parameter_Icon", resourceCulture);

@@ -99,7 +99,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.CirclePathModeValueList_Icon; }
         }
 
         /// <summary>

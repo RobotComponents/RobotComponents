@@ -148,6 +148,15 @@
   <data name="ChangeTool_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ChangeTool_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CirclePathModeValueList_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CirclePathModeValueList_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CirclePathMode_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CirclePathMode_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CirclePathMode_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CirclePathMode_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CodeLine_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CodeLine_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

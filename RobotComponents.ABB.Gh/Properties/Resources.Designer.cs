@@ -163,6 +163,36 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CirclePathMode_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathMode_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CirclePathMode_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathMode_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CirclePathModeValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathModeValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CodeLine_Icon {
             get {
                 object obj = ResourceManager.GetObject("CodeLine_Icon", resourceCulture);

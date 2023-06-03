@@ -63,6 +63,9 @@ namespace RobotComponents.ABB.Controllers
 
         private bool _isEmpty = true;
         private bool _isInitialized = false;
+
+        private static readonly string _remoteDirectory = Path.Combine("Robot Components", "temp");
+        private static readonly string _localDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
         #endregion
 
         #region constructors
@@ -899,16 +902,14 @@ namespace RobotComponents.ABB.Controllers
             }
 
             #region write temporary file
-            string localDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Robot Components", "temp");
-
-            if (!Directory.Exists(localDirectory))
+            if (!Directory.Exists(_localDirectory))
             {
-                Directory.CreateDirectory(localDirectory);
+                Directory.CreateDirectory(_localDirectory);
             }
 
             if (module.Count != 0)
             {
-                string filePath = Path.Combine(localDirectory, "temp.mod");
+                string filePath = Path.Combine(_localDirectory, "temp.mod");
                 using (StreamWriter writer = new StreamWriter(filePath, false))
                 {
                     for (int i = 0; i < module.Count; i++)
@@ -928,8 +929,7 @@ namespace RobotComponents.ABB.Controllers
             // Stop the program before upload
             StopProgram(out status);
 
-            string remoteDirectory = Path.Combine("Robot Components", "temp");
-            _controller.FileSystem.PutDirectory(localDirectory, remoteDirectory, true);
+            _controller.FileSystem.PutDirectory(_localDirectory, _remoteDirectory, true);
 
             // Load module to task
             try
@@ -940,7 +940,7 @@ namespace RobotComponents.ABB.Controllers
                     _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
 
                     // Load the new program from the drive
-                    string filePath = Path.Combine(remoteDirectory, "temp.mod");
+                    string filePath = Path.Combine(_remoteDirectory, "temp.mod");
                     task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
 
                     // Give back the mastership
@@ -958,6 +958,37 @@ namespace RobotComponents.ABB.Controllers
             Log(status);
 
             return true;
+        }
+
+        /// <summary>
+        /// Removes all the files from the local folder with temporary files. 
+        /// </summary>
+        /// <returns> True on success, false on failure. </returns>
+        public bool ClearLocalTemporaryDirectory()
+        {
+            try
+            {
+                if (Directory.Exists(_localDirectory))
+                {
+                    DirectoryInfo directory = new DirectoryInfo(_localDirectory);
+                    FileInfo[] files = directory.GetFiles();
+
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        files[i].Delete();
+                    }
+                }
+
+                Log("Cleared the local directory with temporary files.");
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log($"Failed to clear the local directory with temporary files. {e.Message}");
+
+                return false;
+            }
         }
 
         /// <summary>

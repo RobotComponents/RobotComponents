@@ -36,12 +36,15 @@ namespace RobotComponents.ABB.Kinematics
         private double _wristOffset;
         private double _lowerArmLength;
         private double _upperArmLength;
+        private double _elbowLength;
         private double _axis4offsetAngle;
         private readonly List<string> _errorText = new List<string>(); // Error text
         private bool _inLimits = true; // Indicates if the joint positions are in limits 
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
         private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
+        private readonly bool[] _elbowSingularities = new bool[8];
+        private bool _elbowSingularity = false;
         #endregion
 
         #region constructors
@@ -181,18 +184,14 @@ namespace RobotComponents.ABB.Kinematics
                 _endPlane.Transform(trans);
 
                 // Deep copy and orient to internal axis planes of the robot. 
-                _axisPlanes = new List<Plane>();
-                for (int i = 0; i < _robot.InternalAxisPlanes.Count; i++)
-                {
-                    Plane plane = new Plane(_robot.InternalAxisPlanes[i]);
-                    plane.Transform(orient);
-                    _axisPlanes.Add(plane);
-                }
+                _axisPlanes = _robot.InternalAxisPlanes.ConvertAll(item => new Plane(item));
+                _axisPlanes.ConvertAll(item => item.Transform(orient));
 
                 // Other robot info related fields
                 _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
-                _lowerArmLength = _axisPlanes[1].Origin.DistanceTo(_axisPlanes[2].Origin);
-                _upperArmLength = _axisPlanes[2].Origin.DistanceTo(_axisPlanes[4].Origin);
+                _lowerArmLength = _robot.LowerArmLength;
+                _upperArmLength = _robot.UpperArmLength;
+                _elbowLength = _robot.ElbowLength;
                 _axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
                 _wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
             }
@@ -274,19 +273,45 @@ namespace RobotComponents.ABB.Kinematics
                     internalAxisPoint2.Transform(rot1);
                     internalAxisPoint4.Transform(rot1);
 
+                    // Check for elbow singularity
+                    bool elbowSingularity = false;
+
+                    if (internalAxisPoint1.DistanceTo(_wrist) > _elbowLength)
+                    {
+                        elbowSingularity = true;
+                    }
+
                     // Create the elbow projection plane
                     Vector3d elbowDir = new Vector3d(1, 0, 0);
                     elbowDir.Transform(rot1);
                     Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, Vector3d.ZAxis);
+                    
+                    // Wrist center and elbow points
+                    Point3d wrist = _wrist;
+                    Point3d intersectPt1;
+                    Point3d intersectPt2;
 
-                    Sphere sphere1 = new Sphere(internalAxisPoint1, _lowerArmLength);
-                    Sphere sphere2 = new Sphere(_wrist, _upperArmLength);
+                    if (elbowSingularity == true)
+                    {
+                        // Adjust wrist in case of elbow singularity
+                        Line line = new Line(internalAxisPoint1, _wrist);
+                        wrist = line.PointAtLength(_elbowLength);
 
-                    Intersection.SphereSphere(sphere1, sphere2, out Circle circ);
-                    Intersection.PlaneCircle(elbowPlane, circ, out double par1, out double par2);
+                        // Elbow position is equal for the two solutions
+                        intersectPt1 = line.PointAtLength(_lowerArmLength);
+                        intersectPt2 = intersectPt1;
+                    }
+                    else
+                    {
+                        Sphere sphere1 = new Sphere(internalAxisPoint1, _lowerArmLength);
+                        Sphere sphere2 = new Sphere(wrist, _upperArmLength);
 
-                    Point3d intersectPt1 = circ.PointAt(par1);
-                    Point3d intersectPt2 = circ.PointAt(par2);
+                        Intersection.SphereSphere(sphere1, sphere2, out Circle circ);
+                        Intersection.PlaneCircle(elbowPlane, circ, out double par1, out double par2);
+
+                        intersectPt1 = circ.PointAt(par1);
+                        intersectPt2 = circ.PointAt(par2);
+                    }
 
                     // Calculates the position of robot axis 2 and 3
                     for (int j = 0; j < 2; j++)
@@ -296,7 +321,7 @@ namespace RobotComponents.ABB.Kinematics
                         if (j == 1) { elbowPoint = intersectPt1; }
                         else { elbowPoint = intersectPt2; }
                         elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
-                        elbowPlane.ClosestParameter(_wrist, out double wristX, out double wristY);
+                        elbowPlane.ClosestParameter(wrist, out double wristX, out double wristY);
 
                         // Calculate the position of robot axis 2
                         double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
@@ -306,6 +331,7 @@ namespace RobotComponents.ABB.Kinematics
                         {
                             // Adds the position of robot axis 2
                             _robotJointPositions[index1][1] = -internalAxisValue2;
+                            _elbowSingularities[index1] = elbowSingularity;
 
                             // Calculate the position of robot axis 3
                             double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
@@ -382,6 +408,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 // Select solution
                 _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
+                _elbowSingularity = _elbowSingularities[robotTarget.AxisConfig];
             }
 
             else if (_target is JointTarget jointTarget)
@@ -455,6 +482,7 @@ namespace RobotComponents.ABB.Kinematics
                                 if (sum < min)
                                 {
                                     _robotJointPosition = _robotJointPositions[i].Duplicate();
+                                    _elbowSingularity = _elbowSingularities[i];
                                     min = sum;
                                 }
 
@@ -687,6 +715,12 @@ namespace RobotComponents.ABB.Kinematics
                     _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
                     _inLimits = false;
                 }
+            }
+
+            if (_elbowSingularity == true)
+            {
+                _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The target is outside reach (elbow singularity).");
+                _inLimits = false;
             }
         }
 

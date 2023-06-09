@@ -20,8 +20,8 @@ namespace RobotComponents.ABB.Actions
     public class ActionGroup : Action, ISerializable
     {
         #region fields
-        private string _name; // the name of the signal to be changed.
-        private List<Action> _actions; // the list with actions
+        private string _name;
+        private List<Action> _actions;
         #endregion
 
         #region (de)serialization
@@ -89,13 +89,15 @@ namespace RobotComponents.ABB.Actions
         public ActionGroup(ActionGroup group)
         {
             _name = group.Name;
-            _actions = group.Actions;
+            _actions = group.Actions.ConvertAll(item => item.DuplicateAction());
         }
 
         /// <summary>
         /// Returns an exact duplicate of this Action Group instance.
         /// </summary>
-        /// <returns> A deep copy of the Action Group instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Action Group instance. 
+        /// </returns>
         public ActionGroup Duplicate()
         {
             return new ActionGroup(this);
@@ -104,7 +106,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns an exact duplicate of this Action Group instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Action Group instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Action Group instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new ActionGroup(this);
@@ -115,7 +119,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -139,7 +145,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns a duplicate of the list with Actions as a list.
         /// </summary>
-        /// <returns> The duplicate of the list with actions. </returns>
+        /// <returns> 
+        /// The duplicate of the list with actions. 
+        /// </returns>
         public List<Action> DuplicateToList()
         {
             return _actions.ConvertAll(action => action.DuplicateAction());
@@ -148,7 +156,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns a duplicate of the list with Actions as an array.
         /// </summary>
-        /// <returns> The duplicate of the list with actions as an array. </returns>
+        /// <returns> 
+        /// The duplicate of the list with actions as an array. 
+        /// </returns>
         public Action[] DuplicateToArray()
         {
             return _actions.ConvertAll(action => action.DuplicateAction()).ToArray();
@@ -184,7 +194,9 @@ namespace RobotComponents.ABB.Actions
         /// Determines the index of a specific item in the list.
         /// </summary>
         /// <param name="action"> The object to locate in the list. </param>
-        /// <returns> The index of value if found in the list; otherwise, -1. </returns>
+        /// <returns> 
+        /// The index of value if found in the list; otherwise, -1. 
+        /// </returns>
         public int IndexOf(Action action)
         {
             return _actions.IndexOf(action);
@@ -204,7 +216,9 @@ namespace RobotComponents.ABB.Actions
         /// Determines whether the list contains a specific value.
         /// </summary>
         /// <param name="action"> The object to locate in the List. </param>
-        /// <returns> True if the Action is found in the list; otherwise, false. </returns>
+        /// <returns> 
+        /// True if the Action is found in the list; otherwise, false. 
+        /// </returns>
         public bool Contains(Action action)
         {
             return _actions.Contains(action);
@@ -241,7 +255,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns the actions inside this group including the actions of the groups that are inside this group.
         /// </summary>
-        /// <returns> List with Actions. </returns>
+        /// <returns> 
+        /// List with Actions. 
+        /// </returns>
         public List<Action> Ungroup()
         {
             List<Action> result = new List<Action>() { };
@@ -265,7 +281,9 @@ namespace RobotComponents.ABB.Actions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// The RAPID data string of all declarative actions as one string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string result = "";
@@ -287,7 +305,9 @@ namespace RobotComponents.ABB.Actions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line of a instructive actions as one string.
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             string result = "";
@@ -307,8 +327,10 @@ namespace RobotComponents.ABB.Actions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -320,8 +342,10 @@ namespace RobotComponents.ABB.Actions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -386,7 +410,9 @@ namespace RobotComponents.ABB.Actions
         /// Gets or sets the Actions through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The Action located at the given index. </returns>
+        /// <returns> 
+        /// The Action located at the given index. 
+        /// </returns>
         public Action this[int index]
         {
             get { return _actions[index]; }

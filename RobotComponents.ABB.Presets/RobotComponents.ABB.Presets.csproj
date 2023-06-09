@@ -1068,8 +1068,5 @@
   <ItemGroup>
     <None Include="Resources\IRB6790_235_2_65_link_2.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

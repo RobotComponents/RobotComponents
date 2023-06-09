@@ -14,27 +14,31 @@ namespace RobotComponents.ABB.Actions.Interfaces
     public interface IInstruction
     {
         #region constructors
-
+        /// <summary>
+        /// Returns an exact duplicate of this Instruction.
+        /// </summary>
+        /// <returns> 
+        /// The exact copy of this Instruction. 
+        /// </returns>
+        IInstruction DuplicateInstruction();
         #endregion
 
         #region methods
         /// <summary>
-        /// Returns an exact duplicate of this Instruction.
-        /// </summary>
-        /// <returns> The exact copy of this Instruction. </returns>
-        IInstruction DuplicateInstruction();
-
-        /// <summary>
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion

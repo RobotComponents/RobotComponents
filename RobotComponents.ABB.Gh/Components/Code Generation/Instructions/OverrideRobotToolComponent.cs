@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public OverrideRobotToolComponent()
-          : base("Override Robot Tool", "Overrides cuurent RobotTool",
+          : base("Override Robot Tool", "Overrides the current Robot Tool",
               "Defines an instruction to change the current robot tool of the ABB robot."
               + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

@@ -222,7 +222,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             if (_controller.TaskNames.Count == 0)
             {
-                _status = "Not task found!";
+                _status = "No task found!";
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task found!");
                 return false;
             }

@@ -37,6 +37,11 @@ namespace RobotComponents.ABB.Definitions
         private readonly ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private List<Plane> _externalAxisPlanes; // The external axis planes
         private List<Interval> _externalAxisLimits; // The external axis limit
+
+        // Kinematics properties
+        private double _upperArmLength;
+        private double _lowerArmLength;
+        private double _elbowLength;
         #endregion
 
         #region (de)serialization
@@ -61,6 +66,8 @@ namespace RobotComponents.ABB.Definitions
 
             _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
             _forwardKinematics = new ForwardKinematics(this);
+
+            UpdateKinematics();
         }
 
         /// <summary>
@@ -115,6 +122,7 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
+            UpdateKinematics();
 
             // Update tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
@@ -155,6 +163,7 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
+            UpdateKinematics();
 
             // Tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
@@ -189,7 +198,8 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = robot.InternalAxisLimits.ConvertAll(item => new Interval(item));
             _basePlane = new Plane(robot.BasePlane);
             _mountingFrame = new Plane(robot.MountingFrame);
-            
+            UpdateKinematics();
+
             // Mesh related fields
             if (duplicateMesh == true)
             {
@@ -315,6 +325,37 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Reinitializes the fields that are related to the kinematics.
+        /// </summary>
+        private void UpdateKinematics()
+        {
+            // Get values in World XY plane
+            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
+            List <Plane> planes = new List<Plane>();
+
+            for (int i = 0; i < _internalAxisPlanes.Count; i++)
+            {
+                Plane plane = new Plane(_internalAxisPlanes[i]);
+                plane.Transform(orient);
+                planes.Add(plane);
+            }
+
+            // Elbow
+            _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
+            _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
+            _elbowLength = _lowerArmLength + _upperArmLength;
+
+            // Params: for future use
+            double a1 = planes[1].Origin.Z;
+            double a2 = planes[2].Origin.Z - planes[1].Origin.Z;
+            double a3 = planes[3].Origin.Z - planes[2].Origin.Z;
+            double a4 = planes[5].Origin.Z - planes[4].Origin.Z;
+            double d1 = planes[1].Origin.X - planes[0].Origin.X;
+            double d2 = planes[4].Origin.X - planes[3].Origin.X;
+            double d3 = planes[5].Origin.X - planes[4].Origin.X;
+        }
+
+        /// <summary>
         /// Returns the attached Robot Tool mesh in robot coordinate space.
         /// </summary>
         /// <returns> 
@@ -327,6 +368,7 @@ namespace RobotComponents.ABB.Definitions
             toolMesh.Transform(trans);
             return toolMesh;
         }
+
 
         /// <summary>
         /// Calculates and returns the TCP plane of the attached Robot Tool in robot coordinate space.
@@ -483,8 +525,16 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public List<Plane> InternalAxisPlanes
         {
-            get { return _internalAxisPlanes; }
-            set { _internalAxisPlanes = value; }
+            get 
+            { 
+                return 
+                    _internalAxisPlanes; 
+            }
+            set 
+            { 
+                _internalAxisPlanes = value;
+                UpdateKinematics();
+            }
         }
 
         /// <summary>
@@ -599,6 +649,32 @@ namespace RobotComponents.ABB.Definitions
         public int NumberOfAxes 
         { 
             get { return _internalAxisPlanes.Count; }
+        }
+
+        /// <summary>
+        /// Gets the length of the lower arm.
+        /// </summary>
+        /// <returns> The length of the lower arm. </returns>
+        public double LowerArmLength
+        {
+            get { return _lowerArmLength; }
+        }
+
+        /// <summary>
+        /// Gets the length of the upper arm.
+        /// </summary>
+        /// <returns> The length of the upper arm. </returns>
+        public double UpperArmLength
+        {
+            get { return _upperArmLength; }
+        }
+
+        /// <summary>
+        /// Gets the total length of the elbow.
+        /// </summary>
+        public double ElbowLength
+        {
+            get { return _elbowLength; }
         }
         #endregion
     }

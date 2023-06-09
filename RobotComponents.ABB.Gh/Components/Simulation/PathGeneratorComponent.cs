@@ -37,6 +37,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         private readonly List<PathGenerator> _pathGenerators = new List<PathGenerator>();
         private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
         private readonly List<bool> _calculated = new List<bool>();
+        private readonly List<double> _interpolations = new List<double>();
         private bool _outputPath = true;
         private bool _outputMovement = false;
         private bool _outputMovements = false;
@@ -116,6 +117,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             base.BeforeSolveInstance();
 
             _forwardKinematics.Clear();
+            _interpolations.Clear();
         }
 
         /// <summary>
@@ -138,6 +140,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (!DA.GetData(2, ref interpolations)) { return; }
             if (!DA.GetData(3, ref interpolationSlider)) { return; }
             if (!DA.GetData(4, ref update)) { return; }
+
+            // Interpolations
+            _interpolations.Add(interpolationSlider);
 
             // Create forward kinematics for mesh display
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
@@ -275,6 +280,11 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (_calculated.Count - 1 > this.RunCount)
             {
                 _calculated.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
+            }
+
+            if (_interpolations.Count - 1 > this.RunCount)
+            {
+                _interpolations.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
             }
         }
 
@@ -734,16 +744,19 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     Color color;
                     double trans;
 
+                    // Interpolation step
+                    int index = (int)(((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]));
+
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == true)
-                    {
-                        color = Color.FromArgb(225, 225, 225);
-                        trans = 0.0;
-                    }
-                    else
+                    if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)
                     {
                         color = Color.FromArgb(150, 0, 0);
                         trans = 0.5;
+                    }
+                    else
+                    {
+                        color = Color.FromArgb(225, 225, 225);
+                        trans = 0.0;
                     }
 
                     // Display internal axis meshes

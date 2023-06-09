@@ -678,6 +678,9 @@ namespace RobotComponents.ABB.Kinematics
                 // Add movement
                 _movements.Add(newMovement.DuplicateWithoutMesh());
 
+                // Axis limits check
+                _inLimits.Add(_robot.InverseKinematics.InLimits);
+
                 // Only add the other point if this point is different
                 if (points[points.Count - 1] != globalPlane.Origin)
                 {

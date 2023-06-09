@@ -323,22 +323,28 @@ namespace RobotComponents.ABB.Definitions
         {
             // Get values in World XY plane
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
-            List<Plane> planes = _internalAxisPlanes.ConvertAll(item => new Plane(item.Origin, item.XAxis, item.YAxis));
-            planes.ConvertAll(item => item.Transform(orient));
+            List <Plane> planes = new List<Plane>();
+
+            for (int i = 0; i < _internalAxisPlanes.Count; i++)
+            {
+                Plane plane = new Plane(_internalAxisPlanes[i]);
+                plane.Transform(orient);
+                planes.Add(plane);
+            }
 
             // Elbow
-            _lowerArmLength = _internalAxisPlanes[1].Origin.DistanceTo(_internalAxisPlanes[2].Origin);
-            _upperArmLength = _internalAxisPlanes[2].Origin.DistanceTo(_internalAxisPlanes[4].Origin);
+            _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
+            _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
             _elbowLength = _lowerArmLength + _upperArmLength;
 
             // Params: for future use
-            double a1 = _internalAxisPlanes[1].Origin.Z;
-            double a2 = _internalAxisPlanes[2].Origin.Z - _internalAxisPlanes[1].Origin.Z;
-            double a3 = _internalAxisPlanes[3].Origin.Z - _internalAxisPlanes[2].Origin.Z;
-            double a4 = _internalAxisPlanes[5].Origin.Z - _internalAxisPlanes[4].Origin.Z;
-            double d1 = _internalAxisPlanes[1].Origin.X - _internalAxisPlanes[0].Origin.X;
-            double d2 = _internalAxisPlanes[4].Origin.X - _internalAxisPlanes[3].Origin.X;
-            double d3 = _internalAxisPlanes[5].Origin.X - _internalAxisPlanes[4].Origin.X;
+            double a1 = planes[1].Origin.Z;
+            double a2 = planes[2].Origin.Z - planes[1].Origin.Z;
+            double a3 = planes[3].Origin.Z - planes[2].Origin.Z;
+            double a4 = planes[5].Origin.Z - planes[4].Origin.Z;
+            double d1 = planes[1].Origin.X - planes[0].Origin.X;
+            double d2 = planes[4].Origin.X - planes[3].Origin.X;
+            double d3 = planes[5].Origin.X - planes[4].Origin.X;
         }
 
         /// <summary>

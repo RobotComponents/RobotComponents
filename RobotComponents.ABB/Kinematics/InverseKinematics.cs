@@ -184,8 +184,14 @@ namespace RobotComponents.ABB.Kinematics
                 _endPlane.Transform(trans);
 
                 // Deep copy and orient to internal axis planes of the robot. 
-                _axisPlanes = _robot.InternalAxisPlanes.ConvertAll(item => new Plane(item));
-                _axisPlanes.ConvertAll(item => item.Transform(orient));
+                _axisPlanes = new List<Plane>();
+
+                for (int i = 0; i < _robot.InternalAxisPlanes.Count; i++)
+                {
+                    Plane plane = new Plane(_robot.InternalAxisPlanes[i]);
+                    plane.Transform(orient);
+                    _axisPlanes.Add(plane);
+                }
 
                 // Other robot info related fields
                 _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;

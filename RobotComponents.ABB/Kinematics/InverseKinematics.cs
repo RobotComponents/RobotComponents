@@ -719,7 +719,7 @@ namespace RobotComponents.ABB.Kinematics
 
             if (_elbowSingularity == true)
             {
-                _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The target is outside reach (elbow singularity).");
+                _errorText.Add($"Movement {Movement.Target.Name}\\{Movement.WorkObject.Name}: The target is out of reach (elbow singularity).");
                 _inLimits = false;
             }
         }

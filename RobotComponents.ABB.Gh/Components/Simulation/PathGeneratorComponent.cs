@@ -281,11 +281,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 _calculated.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
             }
-
-            if (_interpolations.Count - 1 > this.RunCount)
-            {
-                _interpolations.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
-            }
         }
 
         #region properties

@@ -272,14 +272,14 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             base.AfterSolveInstance();
 
-            if (_pathGenerators.Count - 1 > this.RunCount)
+            if (_pathGenerators.Count > RunCount)
             {
-                _pathGenerators.RemoveRange(this.RunCount + 1, _pathGenerators.Count - 1);
+                _pathGenerators.RemoveRange(RunCount, _pathGenerators.Count - 1);
             }
 
-            if (_calculated.Count - 1 > this.RunCount)
+            if (_calculated.Count > RunCount)
             {
-                _calculated.RemoveRange(this.RunCount + 1, _calculated.Count - 1);
+                _calculated.RemoveRange(RunCount, _calculated.Count - 1);
             }
         }
 

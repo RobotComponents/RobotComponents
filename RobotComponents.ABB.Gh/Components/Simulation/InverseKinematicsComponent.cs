@@ -190,9 +190,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             base.AfterSolveInstance();
 
-            if (_previousRobotJointPositions.Count - 1 > this.RunCount)
+            if (_previousRobotJointPositions.Count > RunCount)
             {
-                _previousRobotJointPositions.RemoveRange(this.RunCount  + 1, _previousRobotJointPositions.Count - 1);
+                _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - 1);
             }
         }
 

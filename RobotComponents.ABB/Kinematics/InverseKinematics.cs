@@ -295,8 +295,8 @@ namespace RobotComponents.ABB.Kinematics
                         // The circles are projected on te xz-plane. 
                         // Radius 1 = Lower arm length
                         // Radius 2 = Upper arm length 
-                        // Center 1 = Position of shoulder (use X and Z coordinate)
-                        // Center 2 = Position of wrist (use X and Z coordinate
+                        // Center 1 = Position of shoulder (use the X and Z coordinate)
+                        // Center 2 = Position of wrist (use the X and Z coordinate)
                         
                         double l = (_robot.LowerArmLength * _robot.LowerArmLength - _robot.UpperArmLength * _robot.UpperArmLength + distance * distance) / (2 * distance);
                         double h = Math.Sqrt(_robot.LowerArmLength * _robot.LowerArmLength - l * l);
@@ -617,6 +617,7 @@ namespace RobotComponents.ABB.Kinematics
         {
             ResetRobotJointPositions();
             ResetExternalJointPosition();
+
             _errorText.Clear();
             _inLimits = true;
         }

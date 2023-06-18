@@ -335,7 +335,7 @@ namespace RobotComponents.ABB.Definitions
             }
 
             // Elbow
-            _wristOffset = new Point3d(planes[5].Origin.X - planes[4].Origin.X, planes[5].Origin.Y - planes[4].Origin.Y, planes[5].Origin.Z - planes[4].Origin.Z);
+            _wristOffset = new Point3d(planes[5].Origin.Z - planes[4].Origin.Z, planes[5].Origin.Y - planes[4].Origin.Y, planes[5].Origin.X - planes[4].Origin.X);
             _axis4offsetAngle = Math.Atan2(planes[4].Origin.Z - planes[2].Origin.Z, planes[4].Origin.X - planes[2].Origin.X);
             _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
             _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);

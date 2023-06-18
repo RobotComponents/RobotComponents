@@ -227,7 +227,7 @@ namespace RobotComponents.ABB.Kinematics
                 internalAxisPoint2.Transform(orient);
 
                 // Calculate the position of the wrist center
-                Point3d wristPosition = new Point3d(_endPlane.PointAt(0, 0, _robot.WristOffset.X));
+                Point3d wristPosition = new Point3d(_endPlane.PointAt(0, 0, _robot.WristOffset.Z));
 
                 // Set the shoulder position and elbow plane
                 // The elbow plane is the xz plane

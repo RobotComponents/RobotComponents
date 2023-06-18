@@ -421,8 +421,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Checks the combination between the movement type and the target type.
-        /// Throws an exception if the combination is not valid. 
         /// </summary>
+        /// <remarks>
+        /// Throws an exception if the combination is not valid. 
+        /// </remarks>
         private void CheckCombination()
         {
             if (_movementType != MovementType.MoveAbsJ && _target is JointTarget)
@@ -433,9 +435,11 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Calculates the position and the orientation of the target in world coordinate space. 
+        /// </summary>
+        /// <remarks>
         /// If an external axis is attached to the work object this method returns the pose of the 
         /// target plane in the world coorinate space for axis values equal to zero.
-        /// </summary>
+        /// </remarks>
         /// <returns> The the target plane in world coordinate space. </returns>
         public Plane GetGlobalTargetPlane()
         {
@@ -451,11 +455,16 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 return Plane.Unset;
             }
-        } 
+        }
 
         /// <summary>
         /// Calculates the posed target plane for the defined Robot with attached external axes in world coordinate space.
         /// </summary>
+        /// <remarks>
+        /// Calculates the position and the orientation of the target plane in the world coordinate system. If there is 
+        /// an external axes connected to work object of the movement, the target plane will be re-oriented according to 
+        /// the pose of the this external axis. 
+        /// </remarks>
         /// <returns> The posed target plane in world coordinate space. </returns>
         public Plane GetPosedGlobalTargetPlane()
         {
@@ -680,7 +689,9 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the Target.
+        /// <remarks>
         /// Defines the destination target of the robot and external axes.
+        /// </remarks>
         /// </summary>
         public ITarget Target
         {
@@ -690,8 +701,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the synchronization id for multi move programming. 
+        /// <remarks>
         /// This ID number must be defined for coordinated synchronized movements in multi move systems. 
         /// Set this property to -1 to define normal movements (not coordinated / not synchronized).
+        /// </remarks>
         /// </summary>
         public int SyncID
         {
@@ -710,9 +723,11 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets the the total time which the robot will move in seconds. 
+        /// </summary>
+        /// <remarks>
         /// This overwrites the defined speeddata value.
         /// Set this property to a negative value to not overwrite the speeddata value. 
-        /// </summary>
+        /// </remarks>
         public double Time
         {
             get { return _time; }
@@ -730,8 +745,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets the Robot Tool.
-        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
         /// </summary>
+        /// <remarks>
+        /// If an empty or no Robot Tool is used, the Robot Tool set at the Robot will be used. 
+        /// </remarks>
         public RobotTool RobotTool
         {
             get { return _robotTool; }
@@ -749,10 +766,12 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or set the Digital Output. 
+        /// </summary>
+        /// <remarks>
         /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
         /// If a valid Digital oOutput is combined movement will be created (MoveLDO or MoveJDO). 
         /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
-        /// </summary>
+        /// </remarks>
         public DigitalOutput DigitalOutput
         {
             get { return _digitalOutput; }

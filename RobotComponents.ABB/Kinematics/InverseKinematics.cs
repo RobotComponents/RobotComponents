@@ -22,8 +22,9 @@ namespace RobotComponents.ABB.Kinematics
     /// </summary>
     /// <remarks>
     /// This inverse kinematics solver is a geometrical solver based on the Lobster tool written by Daniel Piker.
-    /// Lobster was distributed with the WTFPL license (Do What the Fuck You Want to Public License).
-    /// More information about Lobster can be found here: https://www.grasshopper3d.com/group/lobster?overrideMobileRedirect=1
+    /// Lobster was distributed with the WTFPL license (Do What the Fuck You Want To Public License).
+    /// The code find in this class is highly modified and extended. These modifications and additions are licensed under the LGPL license (v3.0). 
+    /// More information about Lobster and the orginal code can be found here: https://www.grasshopper3d.com/group/lobster?overrideMobileRedirect=1
     /// </remarks>
     public class InverseKinematics
     {
@@ -32,14 +33,14 @@ namespace RobotComponents.ABB.Kinematics
         private RobotTool _robotTool;
         private Movement _movement;
         private ITarget _target;
-        private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
+        private Plane _positionPlane; 
         private Plane _targetPlane;
         private Plane _endPlane;
-        private readonly List<string> _errorText = new List<string>(); // Error text
-        private bool _inLimits = true; // Indicates if the joint positions are in limits 
-        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
-        private RobotJointPosition _robotJointPosition = new RobotJointPosition(); // Contains the final solution
-        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
+        private readonly List<string> _errorText = new List<string>();
+        private bool _inLimits = true;
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8];
+        private RobotJointPosition _robotJointPosition = new RobotJointPosition();
+        private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
         private readonly bool[] _elbowSingularities = new bool[8];
         private bool _elbowSingularity = false;
 
@@ -79,8 +80,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class from a Target.
-        /// The target will be casted to robot movement with a default work object (wobj0). 
         /// </summary>
+        /// <remarks>
+        /// The target will be casted to a robot movement with a default work object (wobj0).
+        /// </remarks>
         /// <param name="target"> The Target </param>
         /// <param name="robot"> The Robot. </param>
         public InverseKinematics(ITarget target, Robot robot)
@@ -184,8 +187,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Reinitialize all the fields to construct a valid Inverse Kinematics object. 
-        /// This method also resets the solution. Calculate() has to be called to obtain a new solution. 
         /// </summary>
+        /// <remarks>
+        /// This method also resets the solution. The method Calculate() has to be called to obtain a new solution. 
+        /// </remarks>
         public void ReInitialize()
         {
             Initialize();
@@ -405,8 +410,8 @@ namespace RobotComponents.ABB.Kinematics
         /// Corrects the calculated Robot Joint Positions.
         /// </summary>
         /// <remarks>
-        /// The solvers assumes a different home position.
-        /// Converts radions to degrees. 
+        /// The solvers assumes a different home position. This method corrects for that. 
+        /// The converts the calculated radians to degrees. 
         /// </remarks>
         private void Corrections()
         {
@@ -433,10 +438,12 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates and returns the closest Robot Joint Position to a given previous Robot Joint Position.
+        /// </summary>
+        /// <remarks>
         /// This methods sets and returns the closest Robot Joint Poistion insides this Inverse Kinematics object. 
         /// You first have to calculate the Inverse Kinematics solution before you call this method. 
-        /// This method is typically used for using the Auto Axis Config inside the Path Generator.
-        /// </summary>
+        /// This method is typically used for using Linear and Joint Configuration control inside the Path Generator.
+        /// </remarks>
         /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
         /// <returns> The closest Robot Joint Position. </returns>
         public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
@@ -516,8 +523,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the External Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the external axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the external axis limits. 
+        /// </remarks>
         public void CalculateExternalJointPosition()
         {
             // Clear current solution
@@ -787,8 +796,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets or sets the Movement.
-        /// The target and work object are obtained from this movement.
         /// </summary>
+        /// <remarks>
+        /// The target and work object are obtained from this movement.
+        /// </remarks>
         public Movement Movement
         {
             get 
@@ -804,9 +815,11 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets the tool used by the this Inverse Kinematics.
+        /// </summary>
+        /// <remarks>
         /// By default the tool attached to the robot is used. 
         /// If a tool is set as a property of the movement, this tool will be used. 
-        /// </summary>
+        /// </remarks>
         public RobotTool RobotTool
         {
             get { return _robotTool; }

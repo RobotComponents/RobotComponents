@@ -39,6 +39,8 @@ namespace RobotComponents.ABB.Definitions
         private List<Interval> _externalAxisLimits; // The external axis limit
 
         // Kinematics properties
+        private Point3d _wristOffset;
+        private double _axis4offsetAngle;
         private double _upperArmLength;
         private double _lowerArmLength;
         private double _elbowLength;
@@ -333,18 +335,11 @@ namespace RobotComponents.ABB.Definitions
             }
 
             // Elbow
+            _wristOffset = new Point3d(planes[5].Origin.X - planes[4].Origin.X, planes[5].Origin.Y - planes[4].Origin.Y, planes[5].Origin.Z - planes[4].Origin.Z);
+            _axis4offsetAngle = Math.Atan2(planes[4].Origin.Z - planes[2].Origin.Z, planes[4].Origin.X - planes[2].Origin.X);
             _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
             _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
             _elbowLength = _lowerArmLength + _upperArmLength;
-
-            // Params: for future use
-            double a1 = planes[1].Origin.Z;
-            double a2 = planes[2].Origin.Z - planes[1].Origin.Z;
-            double a3 = planes[3].Origin.Z - planes[2].Origin.Z;
-            double a4 = planes[5].Origin.Z - planes[4].Origin.Z;
-            double d1 = planes[1].Origin.X - planes[0].Origin.X;
-            double d2 = planes[4].Origin.X - planes[3].Origin.X;
-            double d3 = planes[5].Origin.X - planes[4].Origin.X;
         }
 
         /// <summary>
@@ -632,6 +627,22 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Gets the wrist offset.
+        /// </summary>
+        public Point3d WristOffset
+        {
+            get { return _wristOffset; }
+        }
+
+        /// <summary>
+        /// Gets the offset angle of axis 4 in radians.
+        /// </summary>
+        public double Axis4OffsetAngle
+        {
+            get { return _axis4offsetAngle; }
+        }
+
+        /// <summary>
         /// Gets the length of the lower arm.
         /// </summary>
         /// <returns> The length of the lower arm. </returns>
@@ -658,5 +669,4 @@ namespace RobotComponents.ABB.Definitions
         }
         #endregion
     }
-
 }

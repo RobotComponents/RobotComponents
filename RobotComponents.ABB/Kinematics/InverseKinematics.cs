@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Kinematics
     /// <remarks>
     /// This inverse kinematics solver is a geometrical solver based on the Lobster tool written by Daniel Piker.
     /// Lobster was distributed with the WTFPL license (Do What the Fuck You Want to Public License).
-    /// More information about Lobseter can be found here: https://www.grasshopper3d.com/group/lobster?overrideMobileRedirect=1
+    /// More information about Lobster can be found here: https://www.grasshopper3d.com/group/lobster?overrideMobileRedirect=1
     /// </remarks>
     public class InverseKinematics
     {

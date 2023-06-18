@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
-using Rhino.Geometry.Intersect;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Interfaces;
@@ -21,6 +20,11 @@ namespace RobotComponents.ABB.Kinematics
     /// <summary>
     /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
+    /// <remarks>
+    /// This inverse kinematics solver is a geometrical solver based on the Lobster tool written by Daniel Piker.
+    /// Lobster was distributed with the WTFPL license (Do What the Fuck You Want to Public License).
+    /// More information about Lobseter can be found here: https://www.grasshopper3d.com/group/lobster?overrideMobileRedirect=1
+    /// </remarks>
     public class InverseKinematics
     {
         #region fields
@@ -31,13 +35,6 @@ namespace RobotComponents.ABB.Kinematics
         private Plane _positionPlane; // The real position of the robot if an external axis is used in world coorindate space    
         private Plane _targetPlane;
         private Plane _endPlane;
-        private List<Plane> _axisPlanes;
-        private Point3d _wrist;
-        private double _wristOffset;
-        private double _lowerArmLength;
-        private double _upperArmLength;
-        private double _elbowLength;
-        private double _axis4offsetAngle;
         private readonly List<string> _errorText = new List<string>(); // Error text
         private bool _inLimits = true; // Indicates if the joint positions are in limits 
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8]; // Contains all the eight solutions
@@ -45,6 +42,9 @@ namespace RobotComponents.ABB.Kinematics
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition(); // Contains the final solution
         private readonly bool[] _elbowSingularities = new bool[8];
         private bool _elbowSingularity = false;
+
+        private static readonly double _pi = Math.PI;
+        private static readonly double _2pi = 2 * _pi;
         #endregion
 
         #region constructors
@@ -167,39 +167,18 @@ namespace RobotComponents.ABB.Kinematics
             if (_target is RobotTarget)
             {
                 // Calculate the position and the orientation of the target plane in the world coordinate system
-                // If there is an external axes connected to work object of the movement the 
-                // target plane will be re-oriented according to the pose of the this external axes. 
                 _targetPlane = _movement.GetPosedGlobalTargetPlane();
 
                 // Update the base plane / position plane
                 _positionPlane = GetPositionPlane();
-                Transform trans = Transform.PlaneToPlane(_positionPlane, Plane.WorldXY);
-
-                // Needed for transformation from the robot world coordinate system to the local robot coordinate system
-                Transform orient = Transform.PlaneToPlane(_robot.BasePlane, Plane.WorldXY);
 
                 // Orient the target plane to the robot coordinate system 
                 _targetPlane = TransformToolPlane(_targetPlane, _robotTool.AttachmentPlane, _robotTool.ToolPlane);
-                _endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); //rotates, flips plane for TCP Offset moving in the right direction
+
+                // End plane of joint 6
+                Transform trans = Transform.PlaneToPlane(_positionPlane, Plane.WorldXY);
+                _endPlane = new Plane(_targetPlane.Origin, _targetPlane.YAxis, _targetPlane.XAxis); // Rotates and flips the plane for TCP offset in the right direction
                 _endPlane.Transform(trans);
-
-                // Deep copy and orient to internal axis planes of the robot. 
-                _axisPlanes = new List<Plane>();
-
-                for (int i = 0; i < _robot.InternalAxisPlanes.Count; i++)
-                {
-                    Plane plane = new Plane(_robot.InternalAxisPlanes[i]);
-                    plane.Transform(orient);
-                    _axisPlanes.Add(plane);
-                }
-
-                // Other robot info related fields
-                _wristOffset = _axisPlanes[5].Origin.X - _axisPlanes[4].Origin.X;
-                _lowerArmLength = _robot.LowerArmLength;
-                _upperArmLength = _robot.UpperArmLength;
-                _elbowLength = _robot.ElbowLength;
-                _axis4offsetAngle = Math.Atan2(_axisPlanes[4].Origin.Z - _axisPlanes[2].Origin.Z, _axisPlanes[4].Origin.X - _axisPlanes[2].Origin.X);
-                _wrist = new Point3d(_endPlane.PointAt(0, 0, _wristOffset));
             }
         }
 
@@ -227,33 +206,48 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Calculates the Robot Joint Position of the Inverse Kinematics solution.
-        /// This method does not check the internal axis limits. 
         /// </summary>
+        /// <remarks>
+        /// This method does not check the internal axis limits.
+        /// </remarks>
         public void CalculateRobotJointPosition()
         {
             // Clear the current solutions before calculating a new ones. 
             ResetRobotJointPositions();
 
-            // Tracks the index of the axis configuration
-            int index1 = 0;
-            int index2 = 0;
-
             if (_target is RobotTarget robotTarget)
-            { 
+            {
+                // Tracks the index of the axis configuration
+                int index1 = 0;
+                int index2 = 0;
+
+                // Internal axis plane 2
+                Transform orient = Transform.PlaneToPlane(_robot.BasePlane, Plane.WorldXY);
+                Point3d internalAxisPoint2 = new Point3d(_robot.InternalAxisPlanes[1].Origin);
+                internalAxisPoint2.Transform(orient);
+
+                // Calculate the position of the wrist center
+                Point3d wristPosition = new Point3d(_endPlane.PointAt(0, 0, _robot.WristOffset.X));
+
+                // Set the shoulder position and elbow plane
+                // The elbow plane is the xz plane
+                Point3d shoulderPosition = new Point3d(internalAxisPoint2);
+                Plane elbowPlane = new Plane(shoulderPosition, Vector3d.XAxis, Vector3d.ZAxis);
+
                 #region wrist center relative to axis 1
                 // Note that this is reversed because the clockwise direction when looking 
                 // down at the XY plane is typically taken as the positive direction for robot axis1
                 // Caculate the position of robot axis 1: Wrist center relative to axis 1 in front of robot (configuration 0, 1, 2, 3)
-                double internalAxisValue1 = -1 * Math.Atan2(_wrist.Y, _wrist.X);
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
+                double internalAxisValue1 = -1 * Math.Atan2(wristPosition.Y, wristPosition.X);
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _2pi; }
                 _robotJointPositions[0][0] = internalAxisValue1;
                 _robotJointPositions[1][0] = internalAxisValue1;
                 _robotJointPositions[2][0] = internalAxisValue1;
                 _robotJointPositions[3][0] = internalAxisValue1;
 
                 // Rotate the joint position 180 degrees (pi radians): Wrist center relative to axis 1 behind robot (configuration 4, 5, 6, 7)
-                internalAxisValue1 += Math.PI;
-                if (internalAxisValue1 > Math.PI) { internalAxisValue1 -= 2 * Math.PI; }
+                internalAxisValue1 += _pi;
+                if (internalAxisValue1 > _pi) { internalAxisValue1 -= _2pi; }
                 _robotJointPositions[4][0] = internalAxisValue1;
                 _robotJointPositions[5][0] = internalAxisValue1;
                 _robotJointPositions[6][0] = internalAxisValue1;
@@ -268,70 +262,65 @@ namespace RobotComponents.ABB.Kinematics
                     // Get the position of robot axis 1
                     internalAxisValue1 = _robotJointPositions[i * 4][0];
 
-                    // Get the elbow points
-                    Point3d internalAxisPoint1 = new Point3d(_axisPlanes[1].Origin);
-                    Point3d internalAxisPoint2 = new Point3d(_axisPlanes[2].Origin); 
-                    Point3d internalAxisPoint4 = new Point3d(_axisPlanes[4].Origin);
+                    // Initialize the elbow and wrist positions
+                    Point3d wristPositionCorrected = new Point3d(wristPosition);
+                    Point3d[] elbowPositions = new Point3d[2];
 
-                    // Rotate the points to the correction position
-                    Transform rot1 = Transform.Rotation(-1 * internalAxisValue1, Point3d.Origin);
-                    internalAxisPoint1.Transform(rot1);
-                    internalAxisPoint2.Transform(rot1);
-                    internalAxisPoint4.Transform(rot1);
+                    // Initialize end plane
+                    Plane endPlane = new Plane(_endPlane);
+
+                    // Correction: This rotates the end plane and wrist position to the xz-plane
+                    Transform rot1 = Transform.Rotation(internalAxisValue1, Point3d.Origin);
+                    wristPositionCorrected.Transform(rot1);
+                    endPlane.Transform(rot1);
 
                     // Check for elbow singularity
-                    bool elbowSingularity = false;
+                    double distance = shoulderPosition.DistanceTo(wristPositionCorrected);
+                    bool elbowSingularity = distance > _robot.ElbowLength;
 
-                    if (internalAxisPoint1.DistanceTo(_wrist) > _elbowLength)
-                    {
-                        elbowSingularity = true;
-                    }
-
-                    // Create the elbow projection plane
-                    Vector3d elbowDir = new Vector3d(1, 0, 0);
-                    elbowDir.Transform(rot1);
-                    Plane elbowPlane = new Plane(internalAxisPoint1, elbowDir, Vector3d.ZAxis);
-                    
-                    // Wrist center and elbow points
-                    Point3d wrist = _wrist;
-                    Point3d intersectPt1;
-                    Point3d intersectPt2;
-
+                    // Calculate the elbow positions
                     if (elbowSingularity == true)
                     {
                         // Adjust wrist in case of elbow singularity
-                        Line line = new Line(internalAxisPoint1, _wrist);
-                        wrist = line.PointAtLength(_elbowLength);
+                        Line line = new Line(shoulderPosition, wristPositionCorrected);
+                        wristPositionCorrected = line.PointAtLength(_robot.ElbowLength);
 
                         // Elbow position is equal for the two solutions
-                        intersectPt1 = line.PointAtLength(_lowerArmLength);
-                        intersectPt2 = intersectPt1;
+                        elbowPositions[0] = line.PointAtLength(_robot.LowerArmLength);
+                        elbowPositions[1] = elbowPositions[0];
                     }
                     else
                     {
-                        Sphere sphere1 = new Sphere(internalAxisPoint1, _lowerArmLength);
-                        Sphere sphere2 = new Sphere(wrist, _upperArmLength);
+                        // Calculation of the two intersection points between two circles. 
+                        // The circles are projected on te xz-plane. 
+                        // Radius 1 = Lower arm length
+                        // Radius 2 = Upper arm length 
+                        // Center 1 = Position of shoulder (use X and Z coordinate)
+                        // Center 2 = Position of wrist (use X and Z coordinate
+                        
+                        double l = (_robot.LowerArmLength * _robot.LowerArmLength - _robot.UpperArmLength * _robot.UpperArmLength + distance * distance) / (2 * distance);
+                        double h = Math.Sqrt(_robot.LowerArmLength * _robot.LowerArmLength - l * l);
 
-                        Intersection.SphereSphere(sphere1, sphere2, out Circle circ);
-                        Intersection.PlaneCircle(elbowPlane, circ, out double par1, out double par2);
-
-                        intersectPt1 = circ.PointAt(par1);
-                        intersectPt2 = circ.PointAt(par2);
+                        elbowPositions[1] = new Point3d(
+                            l / distance * (wristPositionCorrected.X - shoulderPosition.X) + h / distance * (wristPositionCorrected.Z - shoulderPosition.Z) + shoulderPosition.X, 0,
+                            l / distance * (wristPositionCorrected.Z - shoulderPosition.Z) - h / distance * (wristPositionCorrected.X - shoulderPosition.X) + shoulderPosition.Z); 
+                        elbowPositions[0] = new Point3d(
+                            l / distance * (wristPositionCorrected.X - shoulderPosition.X) - h / distance * (wristPositionCorrected.Z - shoulderPosition.Z) + shoulderPosition.X, 0,
+                            l / distance * (wristPositionCorrected.Z - shoulderPosition.Z) + h / distance * (wristPositionCorrected.X - shoulderPosition.X) + shoulderPosition.Z);
                     }
 
                     // Calculates the position of robot axis 2 and 3
                     for (int j = 0; j < 2; j++)
                     {
                         // Calculate elbow and wrist variables
-                        Point3d elbowPoint;
-                        if (j == 1) { elbowPoint = intersectPt1; }
-                        else { elbowPoint = intersectPt2; }
-                        elbowPlane.ClosestParameter(elbowPoint, out double elbowX, out double elbowY);
-                        elbowPlane.ClosestParameter(wrist, out double wristX, out double wristY);
+                        double elbowX = elbowPositions[j].X - elbowPlane.Origin.X;
+                        double elbowZ = elbowPositions[j].Z - elbowPlane.Origin.Z;
+                        double wristX = wristPositionCorrected.X - elbowPlane.Origin.X;
+                        double wristZ = wristPositionCorrected.Z - elbowPlane.Origin.Z;
 
                         // Calculate the position of robot axis 2
-                        double internalAxisValue2 = Math.Atan2(elbowY, elbowX); 
-                        double internalAxisValue3 = Math.PI - internalAxisValue2 + Math.Atan2(wristY - elbowY, wristX - elbowX) - _axis4offsetAngle;
+                        double internalAxisValue2 = Math.Atan2(elbowZ, elbowX); 
+                        double internalAxisValue3 = _pi - internalAxisValue2 + Math.Atan2(wristZ - elbowZ, wristX - elbowX) - _robot.Axis4OffsetAngle;
 
                         for (int k = 0; k < 2; k++)
                         {
@@ -340,9 +329,9 @@ namespace RobotComponents.ABB.Kinematics
                             _elbowSingularities[index1] = elbowSingularity;
 
                             // Calculate the position of robot axis 3
-                            double internalAxisValue3Wrapped = -internalAxisValue3 + Math.PI;
-                            while (internalAxisValue3Wrapped >= Math.PI) { internalAxisValue3Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue3Wrapped < -Math.PI) { internalAxisValue3Wrapped += 2 * Math.PI; }
+                            double internalAxisValue3Wrapped = -internalAxisValue3 + _pi;
+                            while (internalAxisValue3Wrapped >= _pi) { internalAxisValue3Wrapped -= _2pi; }
+                            while (internalAxisValue3Wrapped < -_pi) { internalAxisValue3Wrapped += _2pi; }
                             _robotJointPositions[index1][2] = internalAxisValue3Wrapped;
 
                             // Update in index tracker
@@ -352,36 +341,38 @@ namespace RobotComponents.ABB.Kinematics
                         for (int k = 0; k < 2; k++)
                         {
                             // Calculate the position of robot axis 4
-                            Vector3d axis4 = new Vector3d(_wrist - elbowPoint);
-                            axis4.Rotate(-_axis4offsetAngle, elbowPlane.ZAxis);
+                            Vector3d axis4 = new Vector3d(wristPositionCorrected - elbowPositions[j]);
+                            axis4.Rotate(-_robot.Axis4OffsetAngle, elbowPlane.ZAxis);
                             Plane tempPlane = new Plane(elbowPlane);
                             tempPlane.Rotate(internalAxisValue2 + internalAxisValue3, tempPlane.ZAxis);
-                            Plane internalAxisPlane4 = new Plane(_wrist, tempPlane.ZAxis, -1.0 * tempPlane.YAxis);
-                            internalAxisPlane4.ClosestParameter(_endPlane.Origin, out double axis6X, out double axis6Y);
+                            Plane internalAxisPlane4 = new Plane(wristPositionCorrected, tempPlane.ZAxis, -1.0 * tempPlane.YAxis);
+                            internalAxisPlane4.ClosestParameter(endPlane.Origin, out double axis6X, out double axis6Y);
                             double internalAxisValue4 = Math.Atan2(axis6Y, axis6X);
+                            
                             if (k == 1)
                             {
-                                internalAxisValue4 += Math.PI;
-                                if (internalAxisValue4 > Math.PI) { internalAxisValue4 -= 2 * Math.PI; }
+                                internalAxisValue4 += _pi;
+                                if (internalAxisValue4 > _pi) { internalAxisValue4 -= _2pi; }
                             }
-                            double internalAxisValue4Wrapped = internalAxisValue4 + Math.PI / 2;
-                            while (internalAxisValue4Wrapped >= Math.PI) { internalAxisValue4Wrapped -= 2 * Math.PI; }
-                            while (internalAxisValue4Wrapped < -Math.PI) { internalAxisValue4Wrapped += 2 * Math.PI; }
+                            
+                            double internalAxisValue4Wrapped = internalAxisValue4 + _pi / 2;
+                            while (internalAxisValue4Wrapped >= _pi) { internalAxisValue4Wrapped -= _2pi; }
+                            while (internalAxisValue4Wrapped < -_pi) { internalAxisValue4Wrapped += _2pi; }
                             _robotJointPositions[index2][3] = internalAxisValue4Wrapped;
 
                             // Calculate the position of robot axis 5
                             Plane internalAxisPlane5 = new Plane(internalAxisPlane4);
                             internalAxisPlane5.Rotate(internalAxisValue4, internalAxisPlane4.ZAxis);
-                            internalAxisPlane5 = new Plane(_wrist, -internalAxisPlane5.ZAxis, internalAxisPlane5.XAxis);
-                            internalAxisPlane5.ClosestParameter(_endPlane.Origin, out axis6X, out axis6Y);
+                            internalAxisPlane5 = new Plane(wristPositionCorrected, -internalAxisPlane5.ZAxis, internalAxisPlane5.XAxis);
+                            internalAxisPlane5.ClosestParameter(endPlane.Origin, out axis6X, out axis6Y);
                             double internalAxisValue5 = Math.Atan2(axis6Y, axis6X);
                             _robotJointPositions[index2][4] = internalAxisValue5;
 
                             // Calculate the position of robot axis 6
                             Plane internalAxisPlane6 = new Plane(internalAxisPlane5);
                             internalAxisPlane6.Rotate(internalAxisValue5, internalAxisPlane5.ZAxis);
-                            internalAxisPlane6 = new Plane(_wrist, -internalAxisPlane6.YAxis, internalAxisPlane6.ZAxis);
-                            internalAxisPlane6.ClosestParameter(_endPlane.PointAt(0, -1), out double endX, out double endY);
+                            internalAxisPlane6 = new Plane(wristPositionCorrected, -internalAxisPlane6.YAxis, internalAxisPlane6.ZAxis);
+                            internalAxisPlane6.ClosestParameter(endPlane.PointAt(0, -1), out double endX, out double endY);
                             double internalAxisValue6 = Math.Atan2(endY, endX);
                             _robotJointPositions[index2][5] = internalAxisValue6;
 
@@ -392,25 +383,7 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Corrections
-                for (int i = 0; i < 8; i++)
-                {
-                    // From radians to degrees
-                    _robotJointPositions[i] *= (180 / Math.PI);
-
-                    // Other corrections
-                    _robotJointPositions[i][0] *= -1;
-                    _robotJointPositions[i][1] += 90;
-                    _robotJointPositions[i][2] -= 90;
-                    _robotJointPositions[i][3] *= -1;
-                    if (_robotJointPositions[i][5] <= 0)
-                    {
-                        _robotJointPositions[i][5] = -180 - _robotJointPositions[i][5];
-                    }
-                    else
-                    {
-                        _robotJointPositions[i][5] = 180 - _robotJointPositions[i][5];
-                    }
-                }
+                Corrections();
 
                 // Select solution
                 _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
@@ -425,6 +398,36 @@ namespace RobotComponents.ABB.Kinematics
             else
             {
                 _robotJointPosition = new RobotJointPosition();
+            }
+        }
+
+        /// <summary>
+        /// Corrects the calculated Robot Joint Positions.
+        /// </summary>
+        /// <remarks>
+        /// The solvers assumes a different home position.
+        /// Converts radions to degrees. 
+        /// </remarks>
+        private void Corrections()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                // From radians to degrees
+                _robotJointPositions[i] *= (180 / _pi);
+
+                // Other corrections
+                _robotJointPositions[i][0] *= -1;
+                _robotJointPositions[i][1] += 90;
+                _robotJointPositions[i][2] -= 90;
+                _robotJointPositions[i][3] *= -1;
+                if (_robotJointPositions[i][5] <= 0)
+                {
+                    _robotJointPositions[i][5] = -180 - _robotJointPositions[i][5];
+                }
+                else
+                {
+                    _robotJointPositions[i][5] = 180 - _robotJointPositions[i][5];
+                }
             }
         }
 
@@ -647,7 +650,7 @@ namespace RobotComponents.ABB.Kinematics
         private Plane TransformToolPlane(Plane targetPlane, Plane attachmentPlane, Plane toolPlane)
         {
             Plane result = new Plane(attachmentPlane);
-            result.Rotate(Math.PI, attachmentPlane.ZAxis); // Flips the plane
+            result.Rotate(_pi, attachmentPlane.ZAxis); // Flips the plane
             Transform trans = Transform.PlaneToPlane(toolPlane, targetPlane);
             result.Transform(trans);
             return result;

@@ -44,6 +44,15 @@ namespace RobotComponents.ABB.Definitions
         private double _upperArmLength;
         private double _lowerArmLength;
         private double _elbowLength;
+
+        // OPW Kinematics parameters
+        private double _a1;
+        private double _a2;
+        private double _b;
+        private double _c1;
+        private double _c2;
+        private double _c3;
+        private double _c4;
         #endregion
 
         #region (de)serialization
@@ -340,6 +349,15 @@ namespace RobotComponents.ABB.Definitions
             _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
             _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
             _elbowLength = _lowerArmLength + _upperArmLength;
+
+            // OPW Kinematics parameters
+            _a1 = planes[1].Origin.X - planes[1].Origin.X;
+            _a2 = planes[3].Origin.Z - planes[2].Origin.Z;
+            _b = planes[0].Origin.Y - planes[5].Origin.Y;
+            _c1 = planes[1].Origin.Z - planes[0].Origin.Z;
+            _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
+            _c3 = planes[4].Origin.X - planes[2].Origin.X;
+            _c4 = planes[5].Origin.X - planes[4].Origin.X;
         }
 
         /// <summary>
@@ -353,7 +371,6 @@ namespace RobotComponents.ABB.Definitions
             toolMesh.Transform(trans);
             return toolMesh;
         }
-
 
         /// <summary>
         /// Calculates and returns the TCP plane of the attached Robot Tool in robot coordinate space.
@@ -666,6 +683,62 @@ namespace RobotComponents.ABB.Definitions
         public double ElbowLength
         {
             get { return _elbowLength; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter A1.
+        /// </summary>
+        public double A1
+        {
+            get { return _a1; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter A2.
+        /// </summary>
+        public double A2
+        {
+            get { return _a2; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter B.
+        /// </summary>
+        public double B
+        {
+            get { return _b; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter C1.
+        /// </summary>
+        public double C1
+        {
+            get { return _c1; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter C2.
+        /// </summary>
+        public double C2
+        {
+            get { return _c2; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter c3.
+        /// </summary>
+        public double C3
+        {
+            get { return _c3; }
+        }
+
+        /// <summary>
+        /// OPW kinematics parameter C4.
+        /// </summary>
+        public double C4
+        {
+            get { return _c4; }
         }
         #endregion
     }

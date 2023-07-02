@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Definitions
         private double _lowerArmLength;
         private double _elbowLength;
 
-        // OPW Kinematics parameters
+        // OPW kinematics parameters
         private double _a1;
         private double _a2;
         private double _b;
@@ -351,10 +351,10 @@ namespace RobotComponents.ABB.Definitions
             _elbowLength = _lowerArmLength + _upperArmLength;
 
             // OPW Kinematics parameters
-            _a1 = planes[1].Origin.X - planes[1].Origin.X;
-            _a2 = planes[3].Origin.Z - planes[2].Origin.Z;
+            _a1 = planes[1].Origin.X;
+            _a2 = -(planes[5].Origin.Z - planes[2].Origin.Z);
             _b = planes[0].Origin.Y - planes[5].Origin.Y;
-            _c1 = planes[1].Origin.Z - planes[0].Origin.Z;
+            _c1 = planes[1].Origin.Z;
             _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
             _c3 = planes[4].Origin.X - planes[2].Origin.X;
             _c4 = planes[5].Origin.X - planes[4].Origin.X;

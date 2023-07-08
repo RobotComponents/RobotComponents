@@ -32,7 +32,9 @@ namespace RobotComponents.ABB.Kinematics
         private Plane _localEndPlane;
         private bool _inLimits = true;
         private bool _elbowSingularity = false;
-        private readonly bool[] _elbowSingularities = new bool[8];
+        private bool _wristSingularity = false;
+        private readonly bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private readonly bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly List<string> _errorText = new List<string>();
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8];
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
@@ -283,22 +285,23 @@ namespace RobotComponents.ABB.Kinematics
                 // Calculate joint postion 4, 5 and 6
                 for (int i = 0; i < 8; i++)
                 {
-                    double s1_pq = Math.Sin(_theta1[i]);
-                    double s23_pq = Math.Sin(_theta2[i] + _theta3[i]);
-                    double c1_pq = Math.Cos(_theta1[i]);
-                    double c23_pq = Math.Cos(_theta2[i] + _theta3[i]);
-                    double m_pq = e13 * s23_pq * c1_pq + e23 * s23_pq * s1_pq + e33 * c23_pq;
+                    double sin1 = Math.Sin(_theta1[i]);
+                    double sin23 = Math.Sin(_theta2[i] + _theta3[i]);
+                    double cos1 = Math.Cos(_theta1[i]);
+                    double cos23 = Math.Cos(_theta2[i] + _theta3[i]);
+                    double m = e13 * sin23 * cos1 + e23 * sin23 * sin1 + e33 * cos23;
 
                     // Joint 4
-                    double theta4_p = Math.Atan2(e23 * c1_pq - e13 * s1_pq, e13 * c23_pq * c1_pq + e23 * c23_pq * s1_pq - e33 * s23_pq);
+                    double theta4_p = Math.Atan2(e23 * cos1 - e13 * sin1, e13 * cos23 * cos1 + e23 * cos23 * sin1 - e33 * sin23);
                     _theta4[i] = i < 4 ? theta4_p : theta4_p + _pi;
 
                     // Joint 5
-                    double theta5_p = Math.Atan2(Math.Sqrt(1 - m_pq * m_pq), m_pq);
+                    double theta5_p = Math.Atan2(Math.Sqrt(1 - m * m), m);
                     _theta5[i] = i < 4 ? theta5_p : -theta5_p;
+                    _wristSingularities[i] = Math.Abs(_theta5[i]) < 1e-3;
 
                     // Joint 6
-                    double theta6_p = Math.Atan2(e12 * s23_pq * c1_pq + e22 * s23_pq * s1_pq + e32 * c23_pq, -e11 * s23_pq * c1_pq - e21 * s23_pq * s1_pq - e31 * c23_pq);
+                    double theta6_p = Math.Atan2(e12 * sin23 * cos1 + e22 * sin23 * sin1 + e32 * cos23, -e11 * sin23 * cos1 - e21 * sin23 * sin1 - e31 * cos23);
                     _theta6[i] = i < 4 ? theta6_p : theta6_p - _pi;
                 }
 
@@ -307,29 +310,29 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _elbowSingularities[0] = true;
                     _elbowSingularities[1] = true;
-                    _elbowSingularities[2] = true;
-                    _elbowSingularities[3] = true;
+                    _elbowSingularities[4] = true;
+                    _elbowSingularities[5] = true;
                 }
                 else
                 {
                     _elbowSingularities[0] = false;
                     _elbowSingularities[1] = false;
-                    _elbowSingularities[2] = false;
-                    _elbowSingularities[3] = false;
+                    _elbowSingularities[4] = false;
+                    _elbowSingularities[5] = false;
                 }
                 if (acos2 == 0)
                 {
-                    _elbowSingularities[4] = true;
-                    _elbowSingularities[5] = true;
+                    _elbowSingularities[2] = true;
+                    _elbowSingularities[3] = true;
                     _elbowSingularities[6] = true;
                     _elbowSingularities[7] = true;
                 }
                 else
                 {
+                    _elbowSingularities[2] = false;
                     _elbowSingularities[3] = false;
-                    _elbowSingularities[4] = false;
-                    _elbowSingularities[5] = false;
                     _elbowSingularities[6] = false;
+                    _elbowSingularities[7] = false;
                 }
 
                 // Check if the values are within -pi till pi
@@ -362,7 +365,8 @@ namespace RobotComponents.ABB.Kinematics
 
                 // Select solution
                 _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
-                _elbowSingularity = _elbowSingularities[robotTarget.AxisConfig];
+                _wristSingularity = _wristSingularities[_order[robotTarget.AxisConfig]];
+                _elbowSingularity = _elbowSingularities[_order[robotTarget.AxisConfig]];
             }
 
             else if (_movement.Target is JointTarget jointTarget)
@@ -438,7 +442,8 @@ namespace RobotComponents.ABB.Kinematics
                                 if (sum < min)
                                 {
                                     _robotJointPosition = _robotJointPositions[i].Duplicate();
-                                    _elbowSingularity = _elbowSingularities[i];
+                                    _wristSingularity = _wristSingularities[_order[i]];
+                                    _elbowSingularity = _elbowSingularities[_order[i]];
                                     min = sum;
                                 }
 
@@ -569,6 +574,18 @@ namespace RobotComponents.ABB.Kinematics
 
             _errorText.Clear();
             _inLimits = true;
+            _wristSingularity = false;
+            _elbowSingularity = false;
+
+            for (int i = 0; i < 8; i++)
+            {
+                _elbowSingularities[i] = false;
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                _wristSingularities[i] = false;
+            }
         }
 
         /// <summary>
@@ -579,11 +596,6 @@ namespace RobotComponents.ABB.Kinematics
             for (int i = 0; i < 8; i++)
             {
                 _robotJointPositions[i].Reset();
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                _elbowSingularities[i] = false;
             }
         }
 
@@ -675,6 +687,11 @@ namespace RobotComponents.ABB.Kinematics
                     _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
                     _inLimits = false;
                 }
+            }
+
+            if (_wristSingularity == true)
+            {
+                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is close to wrist singularity.");
             }
 
             if (_elbowSingularity == true)

@@ -502,11 +502,16 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 return Plane.Unset;
             }
-        } 
+        }
 
         /// <summary>
         /// Calculates the posed target plane for the defined Robot with attached external axes in world coordinate space.
         /// </summary>
+        /// <remarks>
+        /// Calculates the position and the orientation of the target plane in the world coordinate system. If there is 
+        /// an external axes connected to work object of the movement, the target plane will be re-oriented according to 
+        /// the pose of the this external axis. 
+        /// </remarks>
         /// <returns> 
         /// The posed target plane in world coordinate space. 
         /// </returns>
@@ -807,11 +812,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets the the total time which the robot will move in seconds.  
+        /// Gets the the total time which the robot will move in seconds. 
         /// </summary>
         /// <remarks>
         /// This overwrites the defined speeddata value.
-        /// Set this property to a negative value to not overwrite the speeddata value.
+        /// Set this property to a negative value to not overwrite the speeddata value. 
         /// </remarks>
         public double Time
         {
@@ -850,7 +855,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the Digital Output. 
+        /// Gets or set the Digital Output. 
         /// </summary>
         /// <remarks>
         /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 

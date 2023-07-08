@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generic\Kinematics\OPWKinematics.cs" />
     <Compile Include="Utils\MeshPreperation.cs" />
     <Compile Include="Utils\Serialization.cs" />
     <Compile Include="VersionNumbering.cs" />

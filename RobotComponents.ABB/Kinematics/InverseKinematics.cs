@@ -46,8 +46,8 @@ namespace RobotComponents.ABB.Kinematics
         private const double _rad2deg = 180 / _pi;
 
         // OPW kinematics solver fields
-        private readonly double[] _signs = new double[6] { 1, 1, 1, 1, 1, 1 };
-        private readonly double[] _offsets = new double[6] { 0, 0, _pi / 2, 0, 0, 0 };
+        private readonly double[] _offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
+        private readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
         private readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
         private readonly double[] _theta1 = new double[8];
         private readonly double[] _theta2 = new double[8];
@@ -355,12 +355,12 @@ namespace RobotComponents.ABB.Kinematics
                 // Set Robot Joint Positions
                 for (int i = 0; i < 8; i++)
                 {
-                    _robotJointPositions[i][0] = _signs[0] * _rad2deg * (_theta1[_order[i]] - _offsets[0]);
-                    _robotJointPositions[i][1] = _signs[1] * _rad2deg * (_theta2[_order[i]] - _offsets[1]);
-                    _robotJointPositions[i][2] = _signs[2] * _rad2deg * (_theta3[_order[i]] - _offsets[2]);
-                    _robotJointPositions[i][3] = _signs[3] * _rad2deg * (_theta4[_order[i]] - _offsets[3]);
-                    _robotJointPositions[i][4] = _signs[4] * _rad2deg * (_theta5[_order[i]] - _offsets[4]);
-                    _robotJointPositions[i][5] = _signs[5] * _rad2deg * (_theta6[_order[i]] - _offsets[5]);
+                    _robotJointPositions[i][0] = _signs[0] * _rad2deg * (_theta1[_order[i]] + _offsets[0]);
+                    _robotJointPositions[i][1] = _signs[1] * _rad2deg * (_theta2[_order[i]] + _offsets[1]);
+                    _robotJointPositions[i][2] = _signs[2] * _rad2deg * (_theta3[_order[i]] + _offsets[2]);
+                    _robotJointPositions[i][3] = _signs[3] * _rad2deg * (_theta4[_order[i]] + _offsets[3]);
+                    _robotJointPositions[i][4] = _signs[4] * _rad2deg * (_theta5[_order[i]] + _offsets[4]);
+                    _robotJointPositions[i][5] = _signs[5] * _rad2deg * (_theta6[_order[i]] + _offsets[5]);
                 }
 
                 // Select solution

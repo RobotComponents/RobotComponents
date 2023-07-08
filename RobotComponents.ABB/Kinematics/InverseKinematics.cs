@@ -44,8 +44,9 @@ namespace RobotComponents.ABB.Kinematics
         private readonly bool[] _elbowSingularities = new bool[8];
         private bool _elbowSingularity = false;
 
-        private static readonly double _pi = Math.PI;
-        private static readonly double _2pi = 2 * _pi;
+        // Constants
+        private const double _pi = Math.PI;
+        private const double _2pi = 2 * _pi;
         #endregion
 
         #region constructors
@@ -626,6 +627,11 @@ namespace RobotComponents.ABB.Kinematics
         {
             ResetRobotJointPositions();
             ResetExternalJointPosition();
+
+            for (int i = 0; i < 8; i++)
+            {
+                _elbowSingularities[i] = false;
+            }
 
             _errorText.Clear();
             _inLimits = true;

@@ -334,7 +334,7 @@ namespace RobotComponents.ABB.Definitions
         {
             // Get values in World XY plane
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
-            List <Plane> planes = new List<Plane>();
+            List<Plane> planes = new List<Plane>();
 
             for (int i = 0; i < _internalAxisPlanes.Count; i++)
             {

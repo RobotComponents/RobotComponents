@@ -4,6 +4,7 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 // Rhino Libs
@@ -14,14 +15,17 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Kinematics
 {
     /// <summary>
     /// Represent the Path Generator.
+    /// </summary>
+    /// <remarks>
     /// This class is used to approximate of the path the Robot will follow for a given set of Actions. 
     /// Speed Datas and Zone Datas are neglected. 
-    /// </summary>
+    /// </remarks>
     public class PathGenerator
     {
         #region fields
@@ -34,11 +38,12 @@ namespace RobotComponents.ABB.Kinematics
         private readonly List<bool> _inLimits; // Indicates whether or not the joint positions are within their limits
         private List<string> _errorText = new List<string>(); // List with collected error messages
 
-        private bool _firstMovementIsMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
+        private bool _isFirstMovementMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
         private readonly RobotTool _initialTool; // Defines the first tool that will be used
         private RobotTool _currentTool; // Defines the default robot tool
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
+        private CirPathMode _cirPathMode; // Defines the circle path mode
         private int _interpolations; // Defines the number of interpolations between two targets
         private double _time; // Estimate of the total program time
         #endregion
@@ -72,7 +77,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -103,7 +110,8 @@ namespace RobotComponents.ABB.Kinematics
             _currentTool = _initialTool;
             _linearConfigurationControl = true;
             _jointConfigurationControl = true;
-            _firstMovementIsMoveAbsJ = false;
+            _isFirstMovementMoveAbsJ = false;
+            _cirPathMode = CirPathMode.PathFrame;
             _time = 0;
 
             // Add initial positions
@@ -129,7 +137,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<ABB.Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -137,7 +145,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Action> ungrouped = new List<Action>() { };
+            List<Actions.Action> ungrouped = new List<Actions.Action>() { };
 
             for (int i = 0; i < actions.Count; i++)
             {
@@ -152,7 +160,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Check fist movement
-            _firstMovementIsMoveAbsJ = CheckFirstMovement(ungrouped);
+            _isFirstMovementMoveAbsJ = CheckFirstMovement(ungrouped);
 
             // Get path from the list with actions
             for (int i = 0; i < ungrouped.Count; i++)
@@ -170,6 +178,11 @@ namespace RobotComponents.ABB.Kinematics
                 else if (ungrouped[i] is LinearConfigurationControl linearConfigurationControl)
                 {
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
+                }
+
+                else if (ungrouped[i] is CirclePathMode circlePathMode)
+                {
+                    _cirPathMode = circlePathMode.Mode;
                 }
 
                 else if (ungrouped[i] is WaitTime waitTime)
@@ -200,6 +213,12 @@ namespace RobotComponents.ABB.Kinematics
                     else if (movement.Target is JointTarget && movement.MovementType == MovementType.MoveAbsJ)
                     {
                         JointMovementFromJointTarget(movement);
+                        counter++;
+                    }
+
+                    else if (movement.Target is RobotTarget && movement.MovementType == MovementType.MoveC)
+                    {
+                        CircularMovementFromRobotTarget(movement);
                         counter++;
                     }
                 }
@@ -353,7 +372,7 @@ namespace RobotComponents.ABB.Kinematics
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
-                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.AxisConfig, newExternalJointPosition);
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
 
                 // Calculate joint positions
                 _robot.InverseKinematics.Movement = newMovement;
@@ -402,6 +421,286 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _time += movement.Time;
                 }    
+            }
+            else
+            {
+                _paths.Add(null);
+            }
+        }
+
+        /// <summary>
+        /// Calculates the interpolated path for a circular movement.
+        /// </summary>
+        /// <param name="movement"> The movement as a linear movement type. </param>
+        private void CircularMovementFromRobotTarget(Movement movement)
+        {
+            // Set the correct tool for this movement
+            SetRobotTool(movement);
+
+            // Circular path mode
+            CirPathMode cirPathMode = _cirPathMode;
+
+            if (_cirPathMode == CirPathMode.PathFrame)
+            {
+                cirPathMode = CirPathMode.PathFrame;
+            }
+            else if (_cirPathMode == CirPathMode.ObjectFrame)
+            {
+                cirPathMode = CirPathMode.ObjectFrame;
+            }
+            else if (_cirPathMode == CirPathMode.CirPointOri)
+            {
+                cirPathMode = CirPathMode.CirPointOri;
+            }
+            else
+            {
+                _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is not supported by the Path Generator. " +
+                    "\"PathFrame\" mode is used instead. " +
+                    "Check you program with a simulation in Robot Studio for a correct simulation.");
+                
+                cirPathMode = CirPathMode.PathFrame;
+            }
+
+            // Points for path
+            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
+
+            // Get the final external joint positions of this movement
+            _robot.InverseKinematics.Movement = movement;
+            _robot.InverseKinematics.CalculateExternalJointPosition();
+            ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
+
+            // External Joint Position change
+            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
+            externalJointPositionChange.Substract(_externalJointPositions.Last());
+            externalJointPositionChange.Divide(_interpolations);
+
+            // First target plane in WORLD coordinate space
+            Plane plane1 = _planes.Last();
+
+            // Circular point in WORK OBJECT coordinate space
+            if (movement.CircularPoint.Plane == Plane.Unset)
+            {
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: No circular point defined.");
+            }
+
+            Plane planeCirPoint = movement.CircularPoint.Plane;
+
+            // Second target plane in WORK OBJECT coordinate space 
+            RobotTarget robotTarget = movement.Target as RobotTarget;
+            Plane plane2 = robotTarget.Plane;
+
+            // Correction for rotation of the target plane on a movable work object
+            if (movement.WorkObject.ExternalAxis != null)
+            {
+                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
+                plane1.Transform(trans);
+            }
+
+            // Re-orient the starting plane to the work object coordinate space of the second target plane
+            Transform orient = Transform.ChangeBasis(Plane.WorldXY, movement.WorkObject.GlobalWorkObjectPlane);
+            plane1.Transform(orient);
+
+            // Circular curve
+            Arc arc = new Arc(plane1.Origin, planeCirPoint.Origin, plane2.Origin);
+
+            if (arc.IsValid == false)
+            {
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
+            }
+
+            if (arc.AngleDegrees > 240)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
+            }
+
+            Curve circle = arc.ToNurbsCurve();
+            circle.Domain = new Interval(0, 1);
+            
+            // Check the RAPID conditions
+            // Minimum distance between start and ToPoint is 0.1 mm
+            if (plane1.Origin.DistanceTo(plane2.Origin) < 0.1)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
+            }
+            // Minimum distance between start and CirPoint is 0.1 mm
+            if (plane1.Origin.DistanceTo(planeCirPoint.Origin) < 0.1)
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
+            }
+            // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
+            if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, planeCirPoint.Origin - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
+            {
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
+            }
+            // Circle Path Mode specific restrictions
+            if (_cirPathMode == CirPathMode.CirPointOri)
+            {
+                circle.ClosestPoint(planeCirPoint.Origin, out double param);
+
+                if (param < 0.25 | param > 0.75)
+                {
+                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
+                }
+            }
+
+            // Normalized interpolation step
+            double dt = (double)1 / _interpolations;
+
+            // Position interpolation
+            Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;
+
+            // Orientation interpolation:
+            // ObjectFrame mode
+            Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
+            Quaternion quat2 = HelperMethods.PlaneToQuaternion(plane2);
+            quat1.Unitize();
+            quat2.Unitize();
+            //double angle = Math.Acos(2 * Math.Abs(quat1.DotProduct(quat2)));
+            double angle = Math.Acos(2 * quat1.DotProduct(quat2));
+            // CirpointOri mode
+            circle.ClosestPoint(planeCirPoint.Origin, out double cirPointParam);
+
+            // New movement
+            Movement newMovement = movement.DuplicateWithoutMesh();
+
+            // New external joint position
+            ExternalJointPosition newExternalJointPosition = _externalJointPositions.Last().Duplicate();
+
+            // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
+            for (int i = 0; i < _interpolations; i++)
+            {
+                // Normalized interpolation
+                double t = dt * (i + 1);
+
+                // Interpolate position
+                Point3d point = circle.PointAt(t);
+
+                // Interpolate orientation
+                Plane plane;
+
+                // PathFrame mode: rotates both planes to the current position and takes the weighted average
+                if (cirPathMode == CirPathMode.PathFrame)
+                {
+                    // Rotates both target planes to the current position. 
+                    double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                    double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                    Plane plane3 = new Plane(plane1);
+                    Plane plane4 = new Plane(plane2);
+                    Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                    Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                    plane3.Transform(xform1);
+                    plane4.Transform(xform2);
+
+                    // Weighted average between the two rotated planes
+                    Vector3d xAxis = plane3.XAxis + t * (plane4.XAxis - plane3.XAxis);
+                    Vector3d yAxis = plane3.YAxis + t * (plane4.YAxis - plane3.YAxis);
+
+                    // New plane
+                    plane = new Plane(point, xAxis, yAxis);
+                }
+                // ObjectFrame mode: Quaternion interpolation (SLERP)
+                else if (cirPathMode == CirPathMode.ObjectFrame)
+                {
+                    Quaternion quat = (quat1 * Math.Sin((1.0 - t) * angle) + quat2 * Math.Sin(t * angle)) / Math.Sin(angle);
+                    plane = HelperMethods.QuaternionToPlane(point, quat);
+                }
+                else if (cirPathMode == CirPathMode.CirPointOri)
+                {
+                    Vector3d xAxis;
+                    Vector3d yAxis;
+
+                    // Rotates both target planes to the current position. 
+                    if (t < cirPointParam)
+                    {
+                        // Rotates both target planes to the current position. 
+                        double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        double angle2 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        Plane plane3 = new Plane(plane1);
+                        Plane plane4 = new Plane(planeCirPoint);
+                        Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                        Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                        plane3.Transform(xform1);
+                        plane4.Transform(xform2);
+
+                        // Weighted average between the two rotated planes
+                        xAxis = plane3.XAxis + t / cirPointParam * (plane4.XAxis - plane3.XAxis);
+                        yAxis = plane3.YAxis + t / cirPointParam * (plane4.YAxis - plane3.YAxis);
+                    }
+                    else
+                    {
+                        // Rotates both target planes to the current position. 
+                        double angle1 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
+                        Plane plane3 = new Plane(planeCirPoint);
+                        Plane plane4 = new Plane(plane2);
+                        Transform xform1 = Transform.Rotation(angle1, arc.Plane.ZAxis, arc.Plane.Origin);
+                        Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
+                        plane3.Transform(xform1);
+                        plane4.Transform(xform2);
+
+                        // Weighted average between the two rotated planes
+                        xAxis = plane3.XAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.XAxis - plane3.XAxis);
+                        yAxis = plane3.YAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.YAxis - plane3.YAxis);
+                    }
+
+                    // New plane
+                    plane = new Plane(point, xAxis, yAxis);
+                }
+                // Not implemented
+                else
+                {
+                    throw new Exception($"Circle Path Mode \"{cirPathMode}\" is not implemented in the path generator.");
+                }
+
+                // Update the external joint position
+                newExternalJointPosition.Add(externalJointPositionChange);
+
+                // Update movement
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
+                newMovement.CircularPoint.Plane = new Plane(circle.PointAt(dt * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
+
+                // Calculate joint positions
+                _robot.InverseKinematics.Movement = newMovement;
+                _robot.InverseKinematics.Calculate();
+
+                // Add te calculated joint positions and plane to the class property
+                _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
+                _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
+
+                // Add error messages (check axis limits)
+                _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
+
+                // Add the target plane in WORLD coordinate space
+                Plane globalPlane = newMovement.GetPosedGlobalTargetPlane();
+                _planes.Add(globalPlane);
+
+                // Add movement
+                _movements.Add(newMovement.DuplicateWithoutMesh());
+
+                // Axis limits check
+                _inLimits.Add(_robot.InverseKinematics.InLimits);
+
+                // Only add the other point if this point is different
+                if (points[points.Count - 1] != globalPlane.Origin)
+                {
+                    points.Add(globalPlane.Origin);
+                }
+            }
+
+            // Generate path curve
+            if (points.Count > 1)
+            {
+                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+
+                if (movement.Time < 0)
+                {
+                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _time += movement.Time;
+                }
             }
             else
             {
@@ -515,11 +814,15 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Checks whether the first movement type is an absolute joint movement.
-        /// Returns true if no movements were defined. 
+        /// Checks whether the first movement type is an absolute joint movement. 
         /// </summary>
-        /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
-        private bool CheckFirstMovement(IList<Action> actions)
+        /// <remarks>
+        /// Returns true if no movements are defined. 
+        /// </remarks>
+        /// <returns> 
+        /// Specifies whether the first movement type is an absolute joint movement. 
+        /// </returns>
+        private bool CheckFirstMovement(IList<Actions.Action> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {
@@ -556,7 +859,7 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets or sets the Robot.
+        /// Gets the Robot.
         /// </summary>
         public Robot Robot
         {
@@ -573,8 +876,10 @@ namespace RobotComponents.ABB.Kinematics
 
         /// <summary>
         /// Gets the path curve as list with curve.
-        /// For every move instruction a curve is constructed. 
         /// </summary>
+        /// <remarks>
+        /// For every move instruction a curve is constructed. 
+        /// </remarks>
         public List<Curve> Paths 
         {
             get { return _paths; }
@@ -623,11 +928,21 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
         /// </summary>
+        public bool IsFirstMovementMoveAbsJ
+        {
+            get { return _isFirstMovementMoveAbsJ; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
+        /// </summary>
+        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsFirstMovementMoveAbsJ instead.", false)]
         public bool FirstMovementIsMoveAbsJ
         {
-            get { return _firstMovementIsMoveAbsJ; }
+            get { return _isFirstMovementMoveAbsJ; }
         }
         #endregion
     }
-
 }

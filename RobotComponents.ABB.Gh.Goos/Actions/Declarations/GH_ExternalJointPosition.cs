@@ -195,32 +195,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
-            //Cast from Text
-            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
-            {
-                string text = (source as GH_String).Value;
-
-                string[] values = text.Split(',');
-
-                try
-                {
-                    ExternalJointPosition externalJointPosition = new ExternalJointPosition();
-
-                    for (int i = 0; i < Math.Min(values.Length, 6); i++)
-                    {
-                        externalJointPosition[i] = System.Convert.ToDouble(values[i]);
-                    }
-
-                    Value = externalJointPosition;
-                    return true;
-                }
-
-                catch
-                {
-                    return false;
-                }
-            }
-
             //Cast from ExternalJointPosition
             if (typeof(ExternalJointPosition).IsAssignableFrom(source.GetType()))
             {
@@ -267,6 +241,40 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 {
                     Value = jointPosition;
                     return true;
+                }
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = ExternalJointPosition.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    try
+                    {
+                        string[] values = text.Split(',');
+
+                        ExternalJointPosition externalJointPosition = new ExternalJointPosition();
+
+                        for (int i = 0; i < Math.Min(values.Length, 6); i++)
+                        {
+                            externalJointPosition[i] = System.Convert.ToDouble(values[i]);
+                        }
+
+                        Value = externalJointPosition;
+                        return true;
+                    }
+
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
 

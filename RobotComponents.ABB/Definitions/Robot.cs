@@ -718,7 +718,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets OPW kinematics parameter C2.
+        /// Gets the OPW kinematics parameter C2.
         /// </summary>
         public double C2
         {
@@ -726,7 +726,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the OPW kinematics parameter c3.
+        /// Gets the OPW kinematics parameter C3.
         /// </summary>
         public double C3
         {

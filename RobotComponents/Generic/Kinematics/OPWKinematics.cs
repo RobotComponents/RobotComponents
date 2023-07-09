@@ -15,7 +15,7 @@ namespace RobotComponents.Generic.Kinematics
     /// Represents the OPW Kinematics class.
     /// </summary>
     /// <remarks>
-    /// Based on the paper of 'An Analytical Solution of the Inverse Kinematics Problem of 
+    /// Based on the paper 'An Analytical Solution of the Inverse Kinematics Problem of 
     /// Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist' 
     /// by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
     /// </remarks>
@@ -317,7 +317,7 @@ namespace RobotComponents.Generic.Kinematics
         }
 
         /// <summary>
-        /// Gets or sets the OPW kinematics parameter c3.
+        /// Gets or sets the OPW kinematics parameter C3.
         /// </summary>
         public double C3
         {

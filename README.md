@@ -41,6 +41,8 @@ Robot Components is an open source project initiated by the chair of [Experiment
 
 Robot Components uses the ABB PC SDK for real-time connection to ABB Robots, you can find the SDK used in this project [here](https://developercenter.robotstudio.com/pc-sdk).
 
+Robot Components uses the OPW kinematics solver as described in the paper '_An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist_' by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
+
 We would like to acknowledge [Jose Luis Garcia del Castillo](https://github.com/garciadelcastillo) and [Vicente Soler](https://github.com/visose) for making their Grasshopper plugins [RobotExMachina](https://github.com/RobotExMachina) and [Robots](https://github.com/visose/Robots) available. Even our approach is different it was helpful for us to see how you implemented certain functionalities and approached certain issues. 
 
 ## Known Issues

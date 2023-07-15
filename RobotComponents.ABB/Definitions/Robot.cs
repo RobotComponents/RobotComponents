@@ -652,14 +652,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the offset angle of axis 4 in radians.
-        /// </summary>
-        public double Axis4OffsetAngle
-        {
-            get { return _axis4offsetAngle; }
-        }
-
-        /// <summary>
         /// Gets the length of the lower arm.
         /// </summary>
         /// <returns> The length of the lower arm. </returns>

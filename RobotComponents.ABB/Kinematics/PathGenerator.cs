@@ -670,6 +670,12 @@ namespace RobotComponents.ABB.Kinematics
                 _robot.InverseKinematics.Movement = newMovement;
                 _robot.InverseKinematics.Calculate();
 
+                // Check for wrist singularity
+                if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
+                {
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                }
+
                 // Add te calculated joint positions and plane to the class property
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());

@@ -63,26 +63,6 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AbsoluteJointMovement_Icon {
-            get {
-                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AbsoluteJointMovement_Parameter_Icon {
-            get {
-                object obj = ResourceManager.GetObject("AbsoluteJointMovement_Parameter_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Action_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Action_Parameter_Icon", resourceCulture);
@@ -183,6 +163,36 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CirclePathMode_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathMode_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CirclePathMode_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathMode_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CirclePathModeValueList_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CirclePathModeValueList_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CodeLine_Icon {
             get {
                 object obj = ResourceManager.GetObject("CodeLine_Icon", resourceCulture);
@@ -233,6 +243,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConfigurationData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfigurationData_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConfigurationData_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("ConfigurationData_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConfJ_Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("ConfJ_Parameter_Icon", resourceCulture);
@@ -253,9 +283,9 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DeconstructAbsoluteJointMovement_Icon {
+        internal static System.Drawing.Bitmap DeconstructConfigurationData_Icon {
             get {
-                object obj = ResourceManager.GetObject("DeconstructAbsoluteJointMovement_Icon", resourceCulture);
+                object obj = ResourceManager.GetObject("DeconstructConfigurationData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -296,6 +326,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap DeconstructJointTarget_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructJointTarget_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeconstructLoadData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructLoadData_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -356,16 +396,6 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap DeconstructSpeedData_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructSpeedData_Icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap DeconstructTarget_Icon {
-            get {
-                object obj = ResourceManager.GetObject("DeconstructTarget_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -953,6 +983,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LoadData_Icon {
+            get {
+                object obj = ResourceManager.GetObject("LoadData_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LoadData_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("LoadData_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Log_Icon {
             get {
                 object obj = ResourceManager.GetObject("Log_Icon", resourceCulture);
@@ -1066,6 +1116,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap PlaneToQuat_Icon {
             get {
                 object obj = ResourceManager.GetObject("PlaneToQuat_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PulseDigitalOutput_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PulseDigitalOutput_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PulseDigitalOutput_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PulseDigitalOutput_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

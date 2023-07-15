@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.senary; }
+            get { return GH_Exposure.septenary; }
         }
 
         /// <summary>

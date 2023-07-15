@@ -6,6 +6,7 @@
 // System Libs 
 using System;
 using System.Linq;
+using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
 
@@ -67,10 +68,104 @@ namespace RobotComponents.Generic.Kinematics
         }
 
         /// <summary>
+        /// Calculates the end plane of joint 6 for a given pose.
+        /// </summary>
+        /// <param name="pose"> The pose as a collection with 6 rotations in radians. </param>
+        /// <param name="wristPosition"> The wrist position for the given pose. </param>
+        /// <returns> The end plane of the 6th joint. </returns>
+        public Plane Forward(IList<double> pose, out Point3d wristPosition)
+        {
+            // Check
+            if (pose.Count < 6) { throw new Exception("Pose does not contain six rotation values."); }
+
+            // Pose
+            double[] theta = pose.ToArray();
+
+            // Corrections
+            theta[0] = theta[0] * Math.Sign(_signs[0]) - _offsets[0];
+            theta[1] = theta[1] * Math.Sign(_signs[1]) - _offsets[1];
+            theta[2] = theta[2] * Math.Sign(_signs[2]) - _offsets[2];
+            theta[3] = theta[3] * Math.Sign(_signs[3]) - _offsets[3];
+            theta[4] = theta[4] * Math.Sign(_signs[4]) - _offsets[4];
+            theta[5] = theta[5] * Math.Sign(_signs[5]) - _offsets[5];
+
+            // Params
+            double psi3 = Math.Atan2(_a2, _c3);
+            double k = Math.Sqrt(_a2 * _a2 + _c3 * _c3);
+
+            // Sine values
+            double sin1 = Math.Sin(theta[0]);
+            double sin2 = Math.Sin(theta[1]);
+            double sin3 = Math.Sin(theta[2]);
+            double sin4 = Math.Sin(theta[3]);
+            double sin5 = Math.Sin(theta[4]);
+            double sin6 = Math.Sin(theta[5]);
+
+            // Cosine values
+            double cos1 = Math.Cos(theta[0]);
+            double cos2 = Math.Cos(theta[1]);
+            double cos3 = Math.Cos(theta[2]);
+            double cos4 = Math.Cos(theta[3]);
+            double cos5 = Math.Cos(theta[4]);
+            double cos6 = Math.Cos(theta[5]);
+
+            // Wrist position on plane
+            double cx1 = _c2 * sin2 + k * Math.Sin(theta[1] + theta[2] + psi3) + _a1;
+            double cy1 = _b;
+            double cz1 = _c2 * cos2 + k * Math.Cos(theta[1] + theta[2] + psi3);
+
+            // Wrist position
+            double cx0 = cx1 * cos1 - cy1 * sin2;
+            double cy0 = cx1 * sin1 + cy1 * cos2;
+            double cz0 = cz1 + _c1;
+            wristPosition = new Point3d(cx0, cy0, cz0);
+
+            // Matrix Rce: Wrist orientation
+            Matrix rce = new Matrix(3, 3);
+            rce[0, 0] = cos4 * cos5 * cos6 - sin4 * sin6;
+            rce[0, 1] = -cos4 * cos5 * sin6 - sin4 * cos6;
+            rce[0, 2] = cos4 * sin5;
+            rce[1, 0] = sin4 * cos5 * cos6 + cos4 * sin6;
+            rce[1, 1] = -sin4 * cos5 * sin6 + cos4 * cos6;
+            rce[1, 2] = sin4 * sin5;
+            rce[2, 0] = -sin5 * cos6;
+            rce[2, 1] = sin5 * sin6;
+            rce[2, 2] = cos5;
+
+            // Matrix Roc
+            Matrix roc = new Matrix(3, 3);
+            roc[0, 0] = cos1 * cos2 * cos3 - cos1 * sin2 * sin3;
+            roc[0, 1] = -sin1;
+            roc[0, 2] = cos1 * cos2 * sin3 + cos1 * sin2 * cos3;
+            roc[1, 0] = sin1 * cos2 * cos3 - sin1 * sin2 * sin3;
+            roc[1, 1] = cos1;
+            roc[1, 2] = sin1 * cos2 * sin3 + sin1 * sin2 * cos3;
+            roc[2, 0] = -sin2 * cos3 - cos2 * sin3;
+            roc[2, 1] = 0;
+            roc[2, 2] = -sin2 * sin3 + cos2 * cos3;
+
+            // Matrix Roe: End plane orientation
+            Matrix roe = roc * rce;
+
+            // End plane position
+            double ux0 = cx0 + _c4 * roe[0, 2];
+            double uy0 = cy0 + _c4 * roe[1, 2];
+            double uz0 = cz0 + _c4 * roe[2, 2];
+
+            // Conver to plane
+            Point3d origin = new Point3d(ux0, uy0, uz0);
+            Vector3d xAxis = new Vector3d(roe[0, 0], roe[1, 0], roe[2, 0]);
+            Vector3d yAxis = new Vector3d(roe[0, 1], roe[1, 1], roe[2, 1]);
+            Plane endPlane = new Plane(origin, xAxis, yAxis);
+
+            return endPlane;
+        }
+
+        /// <summary>
         /// Calculates the inverse kinematic solutions.
         /// </summary>
         /// <param name="endPlane"> The end plane of joint 6. </param>
-        public void CalculateInverseKinematics(Plane endPlane)
+        public void Inverse(Plane endPlane)
         {
             // Wrist position
             Point3d c = new Point3d(endPlane.PointAt(0, 0, -_c4));
@@ -213,7 +308,7 @@ namespace RobotComponents.Generic.Kinematics
             {
                 for (int j = 0; j < 6; j++)
                 {
-                    _solutions[i][j] = _signs[j] * (_solutions[i][j] + _offsets[j]);
+                    _solutions[i][j] = Math.Sign( _signs[j]) * (_solutions[i][j] + _offsets[j]);
                 }
             }
         }
@@ -235,7 +330,6 @@ namespace RobotComponents.Generic.Kinematics
         {
             get { return _solutions; }
         }
-
 
         /// <summary>
         /// Gets a value indicating whether or not the solutions have an elbow singularity.

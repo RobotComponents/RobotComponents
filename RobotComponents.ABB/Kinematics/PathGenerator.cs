@@ -4,6 +4,7 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 // Rhino Libs
@@ -129,7 +130,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<ABB.Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.Action> actions, int interpolations)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -137,7 +138,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Action> ungrouped = new List<Action>() { };
+            List<Actions.Action> ungrouped = new List<Actions.Action>() { };
 
             for (int i = 0; i < actions.Count; i++)
             {
@@ -364,7 +365,13 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
                 }
-
+                
+                // Check for wrist singularity
+                if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
+                { 
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                }
+                
                 // Add te calculated joint positions and plane to the class property
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
@@ -519,7 +526,7 @@ namespace RobotComponents.ABB.Kinematics
         /// Returns true if no movements were defined. 
         /// </summary>
         /// <returns> Specifies whether the first movement type is an absolute joint movement. </returns>
-        private bool CheckFirstMovement(IList<Action> actions)
+        private bool CheckFirstMovement(IList<Actions.Action> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {

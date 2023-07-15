@@ -678,7 +678,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets OPW kinematics parameter A1.
+        /// Gets the OPW kinematics parameter A1.
         /// </summary>
         public double A1
         {

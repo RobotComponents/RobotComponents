@@ -95,6 +95,7 @@
     <Compile Include="Actions\RAPIDGenerator.cs" />
     <Compile Include="Definitions\IMechanicalUnit.cs" />
     <Compile Include="Definitions\RobotTool.cs" />
+    <Compile Include="Kinematics\InverseKinematics.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -108,7 +109,6 @@
     <Compile Include="Actions\Instructions\WaitDI.cs" />
     <Compile Include="Actions\Instructions\SetDigitalOutput.cs" />
     <Compile Include="Kinematics\ForwardKinematics.cs" />
-    <Compile Include="Kinematics\InverseKinematics.cs" />
     <Compile Include="Kinematics\PathGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Definitions\Robot.cs" />

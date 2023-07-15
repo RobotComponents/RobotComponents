@@ -672,14 +672,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the offset angle of axis 4 in radians.
-        /// </summary>
-        public double Axis4OffsetAngle
-        {
-            get { return _axis4offsetAngle; }
-        }
-
-        /// <summary>
         /// Gets the length of the lower arm.
         /// </summary>
         /// <returns> The length of the lower arm. </returns>
@@ -706,7 +698,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter A1.
+        /// Gets the OPW kinematics parameter A1.
         /// </summary>
         public double A1
         {
@@ -714,7 +706,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter A2.
+        /// Gets the OPW kinematics parameter A2.
         /// </summary>
         public double A2
         {
@@ -722,7 +714,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter B.
+        /// Gets the OPW kinematics parameter B.
         /// </summary>
         public double B
         {
@@ -730,7 +722,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter C1.
+        /// Gets the OPW kinematics parameter C1.
         /// </summary>
         public double C1
         {
@@ -738,7 +730,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter C2.
+        /// Gets the OPW kinematics parameter C2.
         /// </summary>
         public double C2
         {
@@ -746,7 +738,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter c3.
+        /// Gets the OPW kinematics parameter C3.
         /// </summary>
         public double C3
         {
@@ -754,7 +746,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// OPW kinematics parameter C4.
+        /// Gets the OPW kinematics parameter C4.
         /// </summary>
         public double C4
         {

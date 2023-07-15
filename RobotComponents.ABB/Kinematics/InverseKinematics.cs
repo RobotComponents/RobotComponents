@@ -355,12 +355,12 @@ namespace RobotComponents.ABB.Kinematics
                 // Set Robot Joint Positions
                 for (int i = 0; i < 8; i++)
                 {
-                    _robotJointPositions[i][0] = _signs[0] * _rad2deg * (_theta1[_order[i]] + _offsets[0]);
-                    _robotJointPositions[i][1] = _signs[1] * _rad2deg * (_theta2[_order[i]] + _offsets[1]);
-                    _robotJointPositions[i][2] = _signs[2] * _rad2deg * (_theta3[_order[i]] + _offsets[2]);
-                    _robotJointPositions[i][3] = _signs[3] * _rad2deg * (_theta4[_order[i]] + _offsets[3]);
-                    _robotJointPositions[i][4] = _signs[4] * _rad2deg * (_theta5[_order[i]] + _offsets[4]);
-                    _robotJointPositions[i][5] = _signs[5] * _rad2deg * (_theta6[_order[i]] + _offsets[5]);
+                    _robotJointPositions[i][0] = Math.Sign(_signs[0]) * _rad2deg * (_theta1[_order[i]] + _offsets[0]);
+                    _robotJointPositions[i][1] = Math.Sign(_signs[1]) * _rad2deg * (_theta2[_order[i]] + _offsets[1]);
+                    _robotJointPositions[i][2] = Math.Sign(_signs[2]) * _rad2deg * (_theta3[_order[i]] + _offsets[2]);
+                    _robotJointPositions[i][3] = Math.Sign(_signs[3]) * _rad2deg * (_theta4[_order[i]] + _offsets[3]);
+                    _robotJointPositions[i][4] = Math.Sign(_signs[4]) * _rad2deg * (_theta5[_order[i]] + _offsets[4]);
+                    _robotJointPositions[i][5] = Math.Sign(_signs[5]) * _rad2deg * (_theta6[_order[i]] + _offsets[5]);
                 }
 
                 // Select solution

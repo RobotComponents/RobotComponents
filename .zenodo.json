@@ -11,13 +11,16 @@
 			"name": "Benedikt Wannemacher"
 		},
 		{
-			"name": "Mohamed Dawod"
+			"name": "Mohamed Dawod",
+			"orcid": "0000-0003-2171-2966"
 		},
 		{
-			"name": "Zuardin Akbar"
+			"name": "Zuardin Akbar",
+			"orcid": "0000-0002-8606-5483"
 		},
 		{
-			"name": "Andrea Rossi"
+			"name": "Andrea Rossi",
+			"orcid": "0000-0003-1680-7717"
 		}
 	],
 
@@ -29,6 +32,10 @@
 
 	"description": "Robot Components is a plugin for intuitive robot programming for ABB robots inside of Rhinoceros Grasshopper. Robot Components offers a wide set of tools to create tool paths, simulate robotic motion, and generate RAPID code within Grasshopper.",
 
+	"references": [
+      		"Brandstötter, M., Angerer, A. & Hofbaur, M. (2014). An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist. In: Proceedings of the Austrian Robotics Workshop, Linz, Austria."
+    	], 
+	
 	"keywords": [
 		"robots",
 		"rhinoceros",

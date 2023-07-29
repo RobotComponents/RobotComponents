@@ -20,11 +20,11 @@ namespace RobotComponents.ABB.Presets.Forms
     /// </summary>
     public class PickRobotForm : Dialog<Boolean>
     {
-		#region fields
-		private List<RobotPreset> _robotPresets;
+        #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
+        private List<RobotPreset> _robotPresets;
         private Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right };
-        private ComboBox _box = new ComboBox() { Width = 460 };
+        private ComboBox _box = new ComboBox();
         #endregion
 
         #region constructors
@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Presets.Forms
         public PickRobotForm()
 		{
             // Main layout
-            Title = "Pick a Robot Preset";
+            Title = "Robot preset";
             MinimumSize = new Size(600, 420);
             Resizable = false;
             Padding = 20;
@@ -44,25 +44,29 @@ namespace RobotComponents.ABB.Presets.Forms
             _robotPresets = _robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
 
             // Controls
-            Button button = new Button() { Text = "OK", Width = 460 };
+            Button button = new Button() { Text = "OK" };
             _box = new ComboBox()
             {
                 DataStore = _robotPresets.ConvertAll(item => GetRobotPresetName(item)),
                 SelectedIndex = 0,
-                Width = 460
             };
 
             // Assign events
             button.Click += ButtonClick;
             _box.SelectedIndexChanged += IndexChanged;
 
+            // Labels
+            Label selectLabel = new Label() { Text = "Select a robot preset", Font = new Font(SystemFont.Bold) };
+            Label robotInfoLabel = new Label() { Text = "Robot info", Font = new Font(SystemFont.Bold) };
+
+            // Layout
             DynamicLayout layout = new DynamicLayout();
             layout.Padding = 0;
             layout.Spacing = new Size(10, 5);
-            layout.AddSeparateRow("Choose a robot preset");
+            layout.AddSeparateRow(selectLabel);
             layout.AddSeparateRow(_box);
             layout.AddSeparateRow(" ");
-            layout.AddSeparateRow("Robot info");
+            layout.AddSeparateRow(robotInfoLabel);
             layout.AddSeparateRow("Name", _labelName);
             layout.AddSeparateRow(" ");
             layout.AddSeparateRow(" ");

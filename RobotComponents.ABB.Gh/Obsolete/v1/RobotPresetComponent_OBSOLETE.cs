@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -13,6 +12,7 @@ using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
+using Rhino.UI;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -223,28 +223,26 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// <returns> The picked Robot preset. </returns>
         private RobotPreset GetRobotPreset()
         {
-            // Create the form with all the available robot presets
-            List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
-            robotPresets.Remove(RobotPreset.EMPTY);
-            robotPresets = robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
-            PickRobotForm frm = new PickRobotForm(robotPresets);
+            RobotPreset robotPreset;
 
-            // Display the form
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnEditor(frm, false);
-            frm.ShowDialog();
+            PickRobotForm form = new PickRobotForm();
+            bool result = form.ShowModal(RhinoEtoApp.MainWindow);
 
-            // Return the index number of the picked controller
-            int index = frm.Index;
-
-            // Return a null value when the picked index is incorrect. 
-            if (index < 0)
+            if (result)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
-                return RobotPreset.EMPTY;
+                robotPreset = form.RobotPreset;
+            }
+            else
+            {
+                robotPreset = _robotPreset;
             }
 
-            // Select the picked robot
-            return robotPresets[index];
+            if (robotPreset == RobotPreset.EMPTY)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
+            }
+
+            return robotPreset;
         }
         #endregion
     }

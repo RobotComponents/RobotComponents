@@ -6,7 +6,10 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Linq;
+// Eto libs
+using Eto.Forms;
+using Eto.Drawing;
 // Robot Components Libs
 using RobotComponents.ABB.Presets.Enumerations;
 
@@ -15,41 +18,78 @@ namespace RobotComponents.ABB.Presets.Forms
     /// <summary>
     /// Represents the pick robot preset form class.
     /// </summary>
-    public partial class PickRobotForm : Form
+    public class PickRobotForm : Dialog<Boolean>
     {
-        #region fields
-        private readonly List<RobotPreset> _robotPresets;
-        private int _index = 0;
+		#region fields
+		private List<RobotPreset> _robotPresets;
+        private RobotPreset _robotPreset = RobotPreset.EMPTY;
+        private Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right };
+        private ComboBox _box = new ComboBox() { Width = 460 };
         #endregion
 
         #region constructors
         /// <summary>
-        /// Constructs the form from a given list with items.
+        /// Constructs the form.
         /// </summary>
-        /// <param name="items"> Items to fill the form with. </param>
-        public PickRobotForm(List<RobotPreset> items)
-        {
-            InitializeComponent();
+        public PickRobotForm()
+		{
+            // Main layout
+            Title = "Pick a Robot Preset";
+            MinimumSize = new Size(600, 420);
+            Resizable = false;
+            Padding = 20;
 
-            for (int i = 0; i < items.Count; i++)
+            // Presets
+            _robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
+            _robotPresets = _robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
+
+            // Controls
+            Button button = new Button() { Text = "OK", Width = 460 };
+            _box = new ComboBox()
             {
-                comboBox1.Items.Add(GetRobotPresetName(items[i]));
-            }
+                DataStore = _robotPresets.ConvertAll(item => GetRobotPresetName(item)),
+                SelectedIndex = 0,
+                Width = 460
+            };
 
-            _robotPresets = items;
+            // Assign events
+            button.Click += ButtonClick;
+            _box.SelectedIndexChanged += IndexChanged;
+
+            DynamicLayout layout = new DynamicLayout();
+            layout.Padding = 0;
+            layout.Spacing = new Size(10, 5);
+            layout.AddSeparateRow("Choose a robot preset");
+            layout.AddSeparateRow(_box);
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow("Robot info");
+            layout.AddSeparateRow("Name", _labelName);
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(button);
+
+            Content = layout;
         }
         #endregion
 
         #region methods
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void IndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = GetRobotPresetName(_robotPresets[comboBox1.SelectedIndex]);
+            _labelName.Text = GetRobotPresetName(_robotPresets[_box.SelectedIndex]);
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            _index = comboBox1.SelectedIndex;
-            this.Close();
+            _robotPreset = _robotPresets[_box.SelectedIndex];
+            Close(true);
         }
 
         /// <summary>
@@ -104,11 +144,11 @@ namespace RobotComponents.ABB.Presets.Forms
 
         #region properties
         /// <summary>
-        /// Gets the picked index.
+        /// Gets the picked robot preset.
         /// </summary>
-        public int Index
+        public RobotPreset RobotPreset
         {
-            get { return _index; }
+            get { return _robotPreset; }
         }
         #endregion
     }

@@ -54,12 +54,7 @@
   <ItemGroup>
     <Compile Include="Enumerations\Enumerations.cs" />
     <Compile Include="Factory.cs" />
-    <Compile Include="Forms\PickRobotForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickRobotForm.designer.cs">
-      <DependentUpon>PickRobotForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Forms\PickRobotForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -123,9 +118,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\PickRobotForm.resx">
-      <DependentUpon>PickRobotForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

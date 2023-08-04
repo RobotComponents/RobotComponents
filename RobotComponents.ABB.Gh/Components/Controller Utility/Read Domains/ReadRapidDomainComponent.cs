@@ -160,26 +160,28 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            PickRapidDomainPathForm frm = new PickRapidDomainPathForm(_controller);
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
+            PickRapidDomainPathForm form = new PickRapidDomainPathForm(_controller);
+            //bool result = form.ShowModal(Instances.EtoDocumentEditor); // Rhino 7 or higher
+            bool result = form.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
 
-            frm.ShowDialog();
-
-            string[] values = new string[3] { frm.Task, frm.Module, frm.Symbol };
-
-            for (int i = 0; i < 3; i++)
+            if (result)
             {
-                if (this.Params.Input[i + 1].Sources.Count == 1 && this.Params.Input[i + 1].Sources[0] is GH_Panel panel)
-                {
-                    panel.SetUserText(values[i]);
-                }
-                else
-                {
-                    HelperMethods.CreatePanel(this, values[i], i + 1);
-                }
-            }
+                string[] values = new string[3] { form.Task, form.Module, form.Symbol };
 
-            this.ExpireSolution(true);
+                for (int i = 0; i < 3; i++)
+                {
+                    if (this.Params.Input[i + 1].Sources.Count == 1 && this.Params.Input[i + 1].Sources[0] is GH_Panel panel)
+                    {
+                        panel.SetUserText(values[i]);
+                    }
+                    else
+                    {
+                        HelperMethods.CreatePanel(this, values[i], i + 1);
+                    }
+                }
+
+                this.ExpireSolution(true);
+            }
         }
         #endregion
     }

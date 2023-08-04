@@ -22,9 +22,11 @@ namespace RobotComponents.ABB.Presets.Forms
     {
         #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
-        private List<RobotPreset> _robotPresets;
-        private Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right };
-        private ComboBox _box = new ComboBox();
+        private readonly List<RobotPreset> _robotPresets;
+        private readonly Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly ComboBox _box = new ComboBox() { Height = _height };
+
+        private const int _height = 21;
         #endregion
 
         #region constructors
@@ -49,6 +51,7 @@ namespace RobotComponents.ABB.Presets.Forms
             {
                 DataStore = _robotPresets.ConvertAll(item => GetRobotPresetName(item)),
                 SelectedIndex = 0,
+                Height = _height
             };
 
             // Assign events
@@ -56,28 +59,23 @@ namespace RobotComponents.ABB.Presets.Forms
             _box.SelectedIndexChanged += IndexChanged;
 
             // Labels
-            Label selectLabel = new Label() { Text = "Select a robot preset", Font = new Font(SystemFont.Bold) };
-            Label robotInfoLabel = new Label() { Text = "Robot info", Font = new Font(SystemFont.Bold) };
+            Label selectLabel = new Label() { Text = "Select a robot preset", Font = new Font(SystemFont.Bold), Height = _height };
+            Label infoLabel = new Label() { Text = "Robot info", Font = new Font(SystemFont.Bold), Height = _height };
 
             // Layout
-            DynamicLayout layout = new DynamicLayout();
-            layout.Padding = 0;
-            layout.Spacing = new Size(10, 5);
+            DynamicLayout layout = new DynamicLayout() { Padding = 0, Spacing = new Size(8, 4) };
             layout.AddSeparateRow(selectLabel);
             layout.AddSeparateRow(_box);
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(robotInfoLabel);
-            layout.AddSeparateRow("Name", _labelName);
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
-            layout.AddSeparateRow(" ");
+            layout.AddSeparateRow(new Label() { Height = _height });
+            layout.AddSeparateRow(infoLabel);
+            layout.AddSeparateRow(new Label() { Text = "Name", Height = _height }, _labelName);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
             layout.AddSeparateRow(button);
 
             Content = layout;

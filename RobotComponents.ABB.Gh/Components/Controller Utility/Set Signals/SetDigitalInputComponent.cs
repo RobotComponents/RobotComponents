@@ -225,20 +225,18 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (signals.Count > 1)
             {
-                PickSignalForm frm = new PickSignalForm(signals);
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-                frm.ShowDialog();
-                int index = frm.Index;
+                PickSignalForm form = new PickSignalForm(signals);
+                //bool result = form.ShowModal(Instances.EtoDocumentEditor); // Rhino 7 or higher
+                bool result = form.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
 
-                if (index < 0)
+                if (result)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No signal picked from the menu!");
-                    return false;
+                    name = form.Signal.Name;
+                    return true;
                 }
                 else
                 {
-                    name = signals[index].Name;
-                    return true;
+                    return false;
                 }
             }
 

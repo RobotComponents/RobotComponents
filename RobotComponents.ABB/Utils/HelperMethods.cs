@@ -221,6 +221,7 @@ namespace RobotComponents.ABB.Utils
 
             // Angle
             double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+            double sign = cosTheta < 0 ? -1.0 : 1.0;
             cosTheta = Math.Abs(cosTheta);
 
             // Interpolation ratios of quaternion 1 and 2
@@ -232,13 +233,13 @@ namespace RobotComponents.ABB.Utils
             {
                 // Simple linear interpolation
                 ratio1 = 1.0 - t;
-                ratio2 = Math.Sign(cosTheta) * t;
+                ratio2 = sign * t;
             }
             else
             {
                 double theta = Math.Acos(cosTheta);
                 ratio1 = Math.Sin((1.0 - t) * theta) / Math.Sin(theta);
-                ratio2 = Math.Sign(cosTheta) * Math.Sin(t * theta) / Math.Sin(theta);
+                ratio2 = sign * Math.Sin(t * theta) / Math.Sin(theta);
             }
 
             // Interpolation

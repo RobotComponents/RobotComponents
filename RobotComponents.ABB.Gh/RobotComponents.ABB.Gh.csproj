@@ -61,9 +61,28 @@
   <ItemGroup>
     <Compile Include="Components\Code Generation\Declarations\ExternalJointPositionComponent.cs" />
     <Compile Include="Components\Code Generation\Declarations\JointTargetComponent.cs" />
+    <Compile Include="Components\Code Generation\Declarations\ConfigurationDataComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\AccelerationSetComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\PathAccelerationLimitationComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\PulseDigitalOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\VelocitySetComponent.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitation.cs" />
+    <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructConfigurationDataComponent.cs" />
+    <Compile Include="Obsolete\v2\RAPIDGeneratorComponent_OBSOLETE3.cs" />
+    <Compile Include="Components\Code Generation\Instructions\CirclePathModeComponent.cs" />
+    <Compile Include="Components\Code Generation\Value Lists\CirclePathModeValueList.cs" />
+    <Compile Include="Components\Deconstruct\Definitions\DeconstructLoadDataComponent.cs" />
+    <Compile Include="Obsolete\v2\DeconstructRobotToolComponent_OBSOLETE.cs" />
+    <Compile Include="Components\Definitions\LoadDataComponent.cs" />
+    <Compile Include="Obsolete\v2\RobotToolComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\WaitTimeComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\MoveComponent_OBSOLETE.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetJointTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Get Poses - Mechanical Unit\GetRobotTargetsComponent.cs" />
     <Compile Include="Components\Controller Utility\Read Domains\ReadRapidDomainComponent.cs" />
+    <Compile Include="Obsolete\v2\DeconstructMovementComponent_OBSOLETE2.cs" />
     <Compile Include="Obsolete\v1\ForwardKinematicsComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE4.cs" />
     <Compile Include="Obsolete\v1\PathGeneratorComponent_OBSOLETE2.cs" />
@@ -149,7 +168,7 @@
     <Compile Include="Components\Utilities\GroupActionsComponent.cs" />
     <Compile Include="Components\Utilities\RobotToolCalibrationComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\CodeTypeValueList.cs" />
-    <Compile Include="Components\Code Generation\Instructions\AnalogOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\SetAnalogOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Value Lists\MovementTypeValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\ZoneDataValueList.cs" />
     <Compile Include="Components\Code Generation\Value Lists\SpeedDataValueList.cs" />
@@ -170,7 +189,7 @@
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
     <Compile Include="Components\Code Generation\Dynamic\CodeLineComponent.cs" />
     <Compile Include="Components\Code Generation\Dynamic\CommentComponent.cs" />
-    <Compile Include="Components\Code Generation\Instructions\DigitalOutputComponent.cs" />
+    <Compile Include="Components\Code Generation\Instructions\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\MoveComponent.cs" />
     <Compile Include="Obsolete\v1\ZoneDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructZoneDataComponent.cs" />
@@ -245,14 +264,23 @@
     <Compile Include="Components\Utilities\InfoComponent.cs" />
     <Compile Include="Components\Utilities\PlaneToQuaternionComponent.cs" />
     <Compile Include="Components\Utilities\PlaneVisualizerComponent.cs" />
+    <Compile Include="Obsolete\v2\Param_AnalogOutput_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v2\Param_DigitalOutput_OBSOLETE.cs" />
+    <Compile Include="Parameters\Actions\Declarations\Param_ConfigurationData.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_AccelerationSet.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_PathAccelerationLimitation.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_PulseDigitalOutput.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOff.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_CirclePathMode.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_SyncMoveOn.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_VelocitySet.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_WaitAI.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_WaitSyncTask.cs" />
     <Compile Include="Parameters\Actions\Declarations\Param_TaskList.cs" />
     <Compile Include="Parameters\Controllers\Param_Controller.cs" />
     <Compile Include="Parameters\Controllers\Param_Signal.cs" />
     <Compile Include="Parameters\Definitions\Param_MechanicalUnit.cs" />
+    <Compile Include="Parameters\Definitions\Param_LoadData.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -263,7 +291,7 @@
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />
-    <Compile Include="Parameters\Actions\Instructions\Param_AnalogOutput.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_SetAnalogOutput.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_LinearConfigurationControl.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_JointConfigurationControl.cs" />
     <Compile Include="Parameters\Actions\Declarations\Param_ExternalJointPosition.cs" />
@@ -276,7 +304,7 @@
     <Compile Include="Parameters\Definitions\Param_WorkObject.cs" />
     <Compile Include="Parameters\Actions\Dynamic\Param_CodeLine.cs" />
     <Compile Include="Parameters\Actions\Dynamic\Param_Comment.cs" />
-    <Compile Include="Parameters\Actions\Instructions\Param_DigitalOutput.cs" />
+    <Compile Include="Parameters\Actions\Instructions\Param_SetDigitalOutput.cs" />
     <Compile Include="Parameters\Definitions\Param_ExternalLinearAxis.cs" />
     <Compile Include="Parameters\Definitions\Param_ExternalRotationalAxis.cs" />
     <Compile Include="Parameters\Actions\Instructions\Param_Movement.cs" />
@@ -339,9 +367,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructSpeedData_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DeconstructTarget_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DigitalOutput_Icon.png" />
@@ -440,9 +465,6 @@
     <None Include="Resources\PlaneToQuat_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ReadDigitalInput_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Remote_OFF_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -468,9 +490,6 @@
     <None Include="Resources\SpeedData_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Target_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Target_Parameter_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -484,9 +503,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Tool_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ToolData_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ToolPlane_Icon.png" />
@@ -520,9 +536,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Movement_Icon_Old.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Work_Object_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -530,15 +543,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DeconstructWorkObject_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AbsoluteJointMovement_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\AbsoluteJointMovement_Parameter_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DeconstructAbsoluteJointMovement_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WikiPage_MenuItem_Icon.png" />
@@ -735,7 +739,7 @@
     <None Include="Resources\ReadDatabase_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Obsolete\v2\" />
+    <None Include="Resources\ConfigurationData_Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\GetRobotBaseFrame_Icon.png" />
@@ -775,6 +779,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ReadRapidDomain_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructConfigurationData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructLoadData_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PulseDigitalOutput_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LoadData_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConfigurationData_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PulseDigitalOutput_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CirclePathMode_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CirclePathModeValueList_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CirclePathMode_Parameter_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -231,7 +231,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     externalJointPosition = externalJointPositions[externalJointPositionCounter];
                 }
 
-                RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
+                RobotTarget target = new RobotTarget(name, plane, referencePlane, new ConfigurationData(0, 0, 0, axisConfig), externalJointPosition);
                 targets.Add(target);
             }
 

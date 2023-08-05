@@ -32,7 +32,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns an exact duplicate of this Action.
         /// </summary>
-        /// <returns> The exact copy of this Action. </returns>
+        /// <returns> 
+        /// The exact copy of this Action. 
+        /// </returns>
         public abstract Action DuplicateAction();
         #endregion
 
@@ -40,7 +42,9 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -73,27 +77,35 @@ namespace RobotComponents.ABB.Actions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public abstract string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public abstract string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public abstract void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public abstract void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion

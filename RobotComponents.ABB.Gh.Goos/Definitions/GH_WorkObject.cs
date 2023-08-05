@@ -11,7 +11,9 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Definitions
@@ -170,6 +172,22 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Declaration Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_Declaration(); }
+                else { target = (Q)(object)new GH_Declaration(Value); }
+                return true;
+            }
+
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
             //Cast to External Axis Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
@@ -230,6 +248,43 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast from Declaration
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
+            {
+                if (source is WorkObject workObject)
+                {
+                    Value = workObject;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration Goo
+            if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
+            {
+                GH_Declaration declarationGoo = source as GH_Declaration;
+                if (declarationGoo.Value is WorkObject workObject)
+                {
+                    Value = workObject;
+                    return true;
+                }
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = WorkObject.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            
             return false;
         }
         #endregion

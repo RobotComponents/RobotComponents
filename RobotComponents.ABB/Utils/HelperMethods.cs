@@ -255,6 +255,68 @@ namespace RobotComponents.ABB.Utils
         }
 
         /// <summary>
+        /// Interpolates between two quaternions using spherical linear interpolation.
+        /// </summary>
+        /// <param name="quat1"> The first quaternion. </param>
+        /// <param name="quat2"> The second quaternion. </param>
+        /// <param name="t"> The interpolation parameter in the range [0, 1]. </param>
+        /// <returns> The interpolated quaternion. </returns>
+        public static Quaternion Slerp(Quaternion quat1, Quaternion quat2, double t)
+        {
+            // Input validation
+            if (t < 0) { t = 0; }
+            if (t > 1) { t = 1; }
+
+            // Angle
+            double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+            cosTheta = Math.Abs(cosTheta);
+
+            // Interpolation ratios of quaternion 1 and 2
+            double ratio1;
+            double ratio2;
+
+            // Check for alignment (avoid division by zero by sin(theta))
+            if (cosTheta > (1.0 - 1e-6))
+            {
+                // Simple linear interpolation
+                ratio1 = 1.0 - t;
+                ratio2 = Math.Sign(cosTheta) * t;
+            }
+            else
+            {
+                double theta = Math.Acos(cosTheta);
+                ratio1 = Math.Sin((1.0 - t) * theta) / Math.Sin(theta);
+                ratio2 = Math.Sign(cosTheta) * Math.Sin(t * theta) / Math.Sin(theta);
+            }
+
+            // Interpolation
+            Quaternion result = quat1 * ratio1 + quat2 * ratio2;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Interpolates between two quaternions using linear interpolation.
+        /// </summary>
+        /// <param name="quat1"> The first quaternion. </param>
+        /// <param name="quat2"> The second quaternion. </param>
+        /// <param name="t"> The interpolation parameter in the range [0, 1]. </param>
+        /// <returns> The interpolated quaternion. </returns>
+        public static Quaternion Lerp(Quaternion quat1, Quaternion quat2, double t)
+        {
+            // Input validation
+            if (t < 0) { t = 0; }
+            if (t > 1) { t = 1; }
+            
+            // Angle
+            double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+
+            // Interpolation
+            Quaternion result = quat1 * (1.0 - t) + quat2 * (Math.Sign(cosTheta) * t);
+
+            return result;
+        }
+
         /// Sets the scope, variable type and variable name from a RAPID data string and outputs the values. 
         /// </summary>
         /// <remarks>

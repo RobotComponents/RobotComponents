@@ -15,6 +15,7 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Kinematics
 {
@@ -333,10 +334,14 @@ namespace RobotComponents.ABB.Kinematics
             Transform orient = Transform.ChangeBasis(Plane.WorldXY, movement.WorkObject.GlobalWorkObjectPlane);
             plane1.Transform(orient);
 
-            // Target plane position and orientation change per interpolation step
-            Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;
-            Vector3d xAxisChange = (plane2.XAxis - plane1.XAxis) / _interpolations;
-            Vector3d yAxisChange = (plane2.YAxis - plane1.YAxis) / _interpolations;
+            // Quaternion orientations
+            Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
+            Quaternion quat2 = HelperMethods.PlaneToQuaternion(plane2);
+            quat1.Unitize();
+            quat2.Unitize();
+
+            // Normalized increment
+            double dt = (double)1 / _interpolations;
 
             // New movement
             Movement newMovement = movement.DuplicateWithoutMesh();
@@ -347,8 +352,15 @@ namespace RobotComponents.ABB.Kinematics
             // Create the sub target planes, robot joint positions and external joint positions for every interpolation step
             for (int i = 0; i < _interpolations; i++)
             {
+                // Normalized interpolation parameter
+                double t = dt * (i + 1);
+
+                // Interpolate position and orientation
+                Point3d point = (1 - t) * plane1.Origin + t * plane2.Origin;
+                Quaternion quat = HelperMethods.Slerp(quat1, quat2, t);
+
                 // Plane: the target plane in WORK OBJECT coordinate space
-                Plane plane = new Plane(plane1.Origin + posChange * (i + 1), plane1.XAxis + xAxisChange * (i + 1), plane1.YAxis + yAxisChange * (i + 1));
+                Plane plane = HelperMethods.QuaternionToPlane(point, quat);
 
                 // Update the external joint position
                 newExternalJointPosition.Add(externalJointPositionChange);

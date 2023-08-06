@@ -263,9 +263,10 @@ namespace RobotComponents.ABB.Utils
             
             // Angle
             double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+            double sign = cosTheta < 0 ? -1.0 : 1.0;
 
             // Interpolation
-            Quaternion result = quat1 * (1.0 - t) + quat2 * (Math.Sign(cosTheta) * t);
+            Quaternion result = quat1 * (1.0 - t) + quat2 * (sign * t);
 
             return result;
         }

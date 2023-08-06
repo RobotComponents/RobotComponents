@@ -165,7 +165,7 @@ namespace RobotComponents.ABB.Controllers
             if (_isEmpty == true)
             {
                 _isInitialized = false;
-                Log("Could not initialize the controller class. There is no ABB controller defined.");
+                Log("Could not initialize the controller instance: There is no ABB controller defined.");
             }
 
             #region mechanical units
@@ -283,21 +283,20 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log("Logon failed. The controller is empty.");
+                Log("Could not logon: The controller is empty.");
                 return false;
             }
 
             try
             {
                 _controller.Logon(_userInfo);
-                Log($"Logon with username {_userName} succeeded.");
+                Log($"Logged in with username {_userName}.");
                 return true;
             }
 
             catch (Exception e)
             {
-                Log($"Logon with username {_userName} failed.");
-                Log($"{e.Message}.");
+                Log($"Could not logon with username {_userName}: {e.Message}.");
                 return false;
             }
         }
@@ -312,21 +311,20 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log("Logoff failed. The controller is empty.");
+                Log("Could not logoff: The controller is empty.");
                 return false;
             }
 
             try
             {
                 _controller.Logoff();
-                Log("Logoff succeeded.");
+                Log("Logged out.");
                 return true;
             }
 
             catch (Exception e)
             {
-                Log("Logoff failed.");
-                Log($"{e.Message}.");
+                Log($"Could not logoff: {e.Message}.");
                 return false;
             }
         }
@@ -341,7 +339,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Failed to dispose the controller object. The controller is empty.");
+                Log($"Could not dispose the controller object: The controller is empty.");
                 return false;
             }
 
@@ -361,8 +359,7 @@ namespace RobotComponents.ABB.Controllers
 
             catch (Exception e)
             {
-                Log($"Failed to dispose the controller object.");
-                Log($"{e.Message}.");
+                Log($"Could not dispose the controller object: {e.Message}.");
                 return false;
             }
         }
@@ -379,7 +376,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (_isEmpty == true)
             {
-                Log($"Could not get the robot base frames. The controller is empty.");
+                Log($"Could not get the robot base frames: The controller is empty.");
                 return result;
             }
 
@@ -419,7 +416,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the robot tool planes. The controller is empty.");
+                Log($"Could not get the robot tool planes: The controller is empty.");
                 return _robotToolPlanes;
             }
 
@@ -452,7 +449,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the external axis planes. The controller is empty.");
+                Log($"Could not get the external axis planes: The controller is empty.");
                 return _externalAxisPlanes;
             }
 
@@ -498,7 +495,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the robot joint positions. The controller is empty.");
+                Log($"Could not get the robot joint positions: The controller is empty.");
                 return _robotJointPositions;
             }
 
@@ -527,7 +524,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the external joint positions. The controller is empty.");
+                Log($"Could not get the external joint positions: The controller is empty.");
                 return _externalJointPositions;
             }
 
@@ -564,7 +561,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the joint targets. The controller is empty.");
+                Log($"Could not get the joint targets: The controller is empty.");
                 return _jointTargets;
             }
 
@@ -603,7 +600,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the robot targets. The controller is empty.");
+                Log($"Could not get the robot targets: The controller is empty.");
                 return _robotTargets;
             }
 
@@ -649,7 +646,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the analog outputs. The controller is empty.");
+                Log($"Could not get the analog outputs: The controller is empty.");
                 return new List<Signal>();
             }
 
@@ -674,7 +671,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the digital outputs. The controller is empty.");
+                Log($"Could not get the digital outputs: The controller is empty.");
                 return new List<Signal>();
             }
             
@@ -699,7 +696,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the analog inputs. The controller is empty.");
+                Log($"Could not get the analog inputs: The controller is empty.");
                 return new List<Signal>();
             }
 
@@ -724,7 +721,7 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not get the digital inputs. The controller is empty.");
+                Log($"Could not get the digital inputs: The controller is empty.");
                 return new List<Signal>();
             }
 
@@ -748,14 +745,21 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log($"Could not set the user {name}. The controller is empty.");
+                Log("Could not set the user info: The controller is empty.");
             }
 
-            _userName = name;
-            _password = password;
+            try
+            {
+                _userName = name;
+                _password = password;
 
-            _userInfo = new ControllersNS.UserInfo(_userName, _password);
-            Log($"Username set to {_userName}");
+                _userInfo = new ControllersNS.UserInfo(_userName, _password);
+                Log($"User info set to {_userName}.");
+            }
+            catch (Exception e)
+            {
+                Log($"Could not set the user info: {e.Message}.");
+            }
         }
 
         /// <summary>
@@ -765,13 +769,13 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                Log("Could not set the default user. The controller is empty.");
+                Log("Could not set the default user: The controller is empty.");
             }
 
             _userName = ControllersNS.UserInfo.DefaultUser.Name;
             _password = ControllersNS.UserInfo.DefaultUser.Password;
 
-            Log("User Info set to DefaultUser.");
+            Log("User info set to DefaultUser.");
         }
 
         /// <summary>
@@ -787,7 +791,7 @@ namespace RobotComponents.ABB.Controllers
             if (_isEmpty == true)
             {
                 index = -1;
-                Log($"Could not get the signal {name}. The controller is empty.");
+                Log($"Could not get the signal {name}: The controller is empty.");
                 return new Signal();
             }
 
@@ -795,7 +799,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (index == -1)
             {
-                Log($"Could not get the signal {name}. Signal not found.");
+                Log($"Could not get the signal {name}: Signal not found.");
                 return new Signal();
             }
             else
@@ -817,7 +821,7 @@ namespace RobotComponents.ABB.Controllers
             if (_isEmpty == true)
             {
                 index = -1;
-                Log($"Could not get the signal {name}. The controller is empty.");
+                Log($"Could not get the signal {name}: The controller is empty.");
                 return new Signal();
             }
 
@@ -825,7 +829,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (index == -1)
             {
-                Log($"Could not get the signal {name}. Signal not found.");
+                Log($"Could not get the signal {name}: Signal not found.");
                 return new Signal();
             }
             else
@@ -847,7 +851,7 @@ namespace RobotComponents.ABB.Controllers
             if (_isEmpty == true)
             {
                 index = -1;
-                Log($"Could not get the signal {name}. The controller is empty.");
+                Log($"Could not get the signal {name}: The controller is empty.");
                 return new Signal();
             }
 
@@ -855,7 +859,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (index == -1)
             {
-                Log($"Could not get the signal {name}. Signal not found.");
+                Log($"Could not get the signal {name}: Signal not found.");
                 return new Signal();
             }
             else
@@ -877,7 +881,7 @@ namespace RobotComponents.ABB.Controllers
             if (_isEmpty == true)
             {
                 index = -1;
-                Log($"Could not get the signal {name}. The controller is empty.");
+                Log($"Could not get the signal {name}: The controller is empty.");
                 return new Signal();
             }
 
@@ -885,7 +889,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (index == -1)
             {
-                Log($"Could not get the signal {name}. Signal not found.");
+                Log($"Could not get the signal {name}: Signal not found.");
                 return new Signal();
             }
             else
@@ -925,58 +929,92 @@ namespace RobotComponents.ABB.Controllers
         /// </returns>
         public bool UploadModule(string taskName, List<string> module, out string status)
         {
-            status = "";
+            status = "Started the upload of the RAPID module.";
+            Log(status);
 
             if (_isEmpty == true)
             {
-                status = "Could not upload the module. The controller is empty.";
+                status = "Could not upload the module: The controller is empty.";
                 Log(status);
                 return false;
             }
 
             if (TryPickTask(taskName, out RapidDomainNS.Task task) == false)
             {
-                status = "Could not pick the task from the controller: Invalid task name.";
+                status = "Could not pick the task from the controller: The task name is invalid.";
                 Log(status);
                 return false;
             }
 
             if (task.ExecutionStatus == RapidDomainNS.TaskExecutionStatus.Running)
             {
-                status = "Could not upload the module. The task is still running.";
+                status = "Could not upload the module: The task is still running.";
                 Log(status);
                 return false;
             }
 
             #region write temporary file
-            if (!Directory.Exists(_localDirectory))
+            try
             {
-                Directory.CreateDirectory(_localDirectory);
-            }
-
-            if (module.Count != 0)
-            {
-                string filePath = Path.Combine(_localDirectory, "temp.mod");
-                using (StreamWriter writer = new StreamWriter(filePath, false))
+                if (!Directory.Exists(_localDirectory))
                 {
-                    for (int i = 0; i < module.Count; i++)
-                    {
-                        writer.WriteLine(module[i]);
-                    }
+                    Directory.CreateDirectory(_localDirectory);
+
+                    status = $"Created the local temporary directory: {_localDirectory}";
+                    Log(status);
                 }
             }
-            else
+            catch 
             {
-                status = "Upload failed: No module defined.";
+                status = $"Could not create the local temporary directory: {_localDirectory}";
+                Log(status);
+                return false;
+            }
+
+            try 
+            {
+                if (module.Count != 0)
+                {
+                    string filePath = Path.Combine(_localDirectory, "temp.mod");
+                    using (StreamWriter writer = new StreamWriter(filePath, false))
+                    {
+                        for (int i = 0; i < module.Count; i++)
+                        {
+                            writer.WriteLine(module[i]);
+                        }
+                    }
+
+                    status = "Wrote the module to the local temporary directory.";
+                    Log(status);
+                }
+                else
+                {
+                    status = "Could not upload the module: No module defined.";
+                    Log(status);
+                    return false;
+                }
+            }
+            catch
+            {
+                status = "Could not write the module to the local temporary directory.";
                 Log(status);
                 return false;
             }
             #endregion
 
-            // Stop the program before upload
-            StopProgram(out status);
+            try
+            {
+                _controller.FileSystem.PutDirectory(_localDirectory, _remoteDirectory, true);
 
-            _controller.FileSystem.PutDirectory(_localDirectory, _remoteDirectory, true);
+                status = "Put the local temporary directory to the filesytem of the controller.";
+                Log(status);
+            }
+            catch
+            {
+                status = $"Could not put the local temporary directory to the filesystem of the controller.";
+                Log(status);
+                return false;
+            }
 
             // Load module to task
             try
@@ -993,15 +1031,18 @@ namespace RobotComponents.ABB.Controllers
                     // Give back the mastership
                     master.Release();
                 }
+
+                status = "Loaded the module from the filesystem of the controller to the controller task.";
+                Log(status);
             }
             catch (Exception e)
             {
-                status = $"Could not upload the module. {e.Message}.";
+                status = $"Could not load the module from the filesystem of the controller to the controller task: {e.Message}.";
                 Log(status);
                 return false;
             }
             
-            status = "Upload succeeded.";
+            status = "Uploaded the RAPID module.";
             Log(status);
 
             return true;
@@ -1032,7 +1073,7 @@ namespace RobotComponents.ABB.Controllers
             }
             catch (Exception e)
             {
-                Log($"Failed to clear the local directory with temporary files. {e.Message}");
+                Log($"Failed to clear the local directory with temporary files: {e.Message}");
 
                 return false;
             }
@@ -1067,7 +1108,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (_isEmpty == true)
             {
-                status = "Could not reset the program pointers. The controller is empty.";
+                status = "Failed to reset the program pointers. The controller is empty.";
                 Log(status);
                 return succeeded;
             }
@@ -1095,9 +1136,8 @@ namespace RobotComponents.ABB.Controllers
                     }
                     catch (Exception e)
                     {
-                        status = "Could not reset the program pointers.";
+                        status = $"Could not reset the program pointers: {e.Message}";
                         Log(status);
-                        Log(e.Message);
 
                         succeeded = false;
                     }
@@ -1127,7 +1167,7 @@ namespace RobotComponents.ABB.Controllers
 
             if (_isEmpty == true)
             {
-                status = "Could not reset the program pointer. The controller is empty.";
+                status = "Could not reset the program pointer: The controller is empty.";
                 Log(status);
                 return succeeded;
             }
@@ -1151,10 +1191,9 @@ namespace RobotComponents.ABB.Controllers
                     }
                     catch (Exception e)
                     {
-                        status = "Could not reset the program pointer.";
+                        status = $"Could not reset the program pointer: {e.Message}";
                         Log(status);
-                        Log(e.Message);
-
+                        
                         succeeded = false;
                     }
                     finally
@@ -1179,21 +1218,21 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                status = "Could not start the program. The controller is empty.";
+                status = "Could not start the program: The controller is empty.";
                 Log(status);
                 return false;
             }
 
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
             {
-                status = "Could not start the program. The controller is not set in automatic mode.";
+                status = "Could not start the program: The controller is not set in automatic mode.";
                 Log(status);
                 return false;
             }
 
             else if (_controller.State != ControllersNS.ControllerState.MotorsOn)
             {
-                status = "Could not start the program. The motors are not on.";
+                status = "Could not start the program: The motors are not on.";
                 Log(status);
                 return false;
             }
@@ -1224,14 +1263,14 @@ namespace RobotComponents.ABB.Controllers
         {
             if (_isEmpty == true)
             {
-                status = "Could not stop the program. The controller is empty.";
+                status = "Could not stop the program: The controller is empty.";
                 Log(status);
                 return false;
             }
 
             if (_controller.OperatingMode != ControllersNS.ControllerOperatingMode.Auto)
             {
-                status = "Could not stop the program. The controller is not set in automatic mode.";
+                status = "Could not stop the program: The controller is not set in automatic mode.";
                 Log(status);
                 return false;
             }

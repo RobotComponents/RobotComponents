@@ -64,7 +64,7 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite all versions of Robot Components in publications use:
 
 ```
-Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2022). 
+Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2023). 
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```

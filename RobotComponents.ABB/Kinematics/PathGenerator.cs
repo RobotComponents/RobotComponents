@@ -218,7 +218,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Set first path as null
-            _paths[0] = null;
+            _paths.RemoveAt(0);
             
             // Remove duplicates from error text
             _errorText = _errorText.Distinct().ToList();

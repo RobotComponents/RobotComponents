@@ -19,7 +19,7 @@ namespace RobotComponents
         /// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
         /// x.x.0 ---> BUILD version when you make backwards compatible bug fixes
         /// </remarks>
-        public const string CurrentVersion = "2.1.1";
+        public const string CurrentVersion = "2.2.0";
 
         /// <summary>
         /// Gets the current version as an int. 
@@ -29,6 +29,6 @@ namespace RobotComponents
         /// For internal use only. Not recommended to use. 
         /// Used logic: major*10^6 + minor*10^3 + build.
         /// </remarks>
-        public const int CurrentVersionAsInt = 2 * 1000000 + 1 * 1000 + 1;
+        public const int CurrentVersionAsInt = 2 * 1000000 + 2 * 1000 + 0;
     }
 }

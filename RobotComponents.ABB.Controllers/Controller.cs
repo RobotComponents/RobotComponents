@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -932,6 +932,7 @@ namespace RobotComponents.ABB.Controllers
             status = "Started the upload of the RAPID module.";
             Log(status);
 
+            #region checks
             if (_isEmpty == true)
             {
                 status = "Could not upload the module: The controller is empty.";
@@ -952,8 +953,9 @@ namespace RobotComponents.ABB.Controllers
                 Log(status);
                 return false;
             }
+            #endregion
 
-            #region write temporary file
+            #region write temporary file to local directory
             try
             {
                 if (!Directory.Exists(_localDirectory))
@@ -1002,6 +1004,20 @@ namespace RobotComponents.ABB.Controllers
             }
             #endregion
 
+            #region put local directy on controller
+            try
+            {
+                _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.WriteFtp);
+                status = "Acquired the WriteFTP grant.";
+                Log(status);
+            }
+            catch
+            {
+                status = "Could not acquire the WriteFTP grant for the current user.";
+                Log(status);
+                
+                // No return false: keep trying to the put the local directory on the controller disk.
+            }
             try
             {
                 _controller.FileSystem.PutDirectory(_localDirectory, _remoteDirectory, true);
@@ -1015,8 +1031,9 @@ namespace RobotComponents.ABB.Controllers
                 Log(status);
                 return false;
             }
+            #endregion
 
-            // Load module to task
+            #region load module from directory
             try
             {
                 using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
@@ -1041,7 +1058,8 @@ namespace RobotComponents.ABB.Controllers
                 Log(status);
                 return false;
             }
-            
+            #endregion
+
             status = "Uploaded the RAPID module.";
             Log(status);
 

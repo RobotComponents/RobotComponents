@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -60,7 +60,16 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + "Mohamed Dawod, Zuardin Akbar, and Andrea Rossi."
                 + Environment.NewLine
                 + Environment.NewLine
+                + "----------"
+                + Environment.NewLine
+                + Environment.NewLine
                 + "The components of the controller utility category use the ABB PC SDK (version 2022.3). For more information, see https://developercenter.robotstudio.com/pc-sdk."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "Robot Components uses the OPW kinematics solver as described in the paper " 
+                + "'An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial " 
+                + "Manipulators with an Ortho-parallel Basis and a Spherical Wrist' by Mathias " 
+                + "Brandstötter, Arthur Angerer, and Michael Hofbaur."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"
@@ -70,16 +79,19 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is free software; you can redistribute it and/or modify it under "
-                + "the terms of the GNU Lesser General Public License version 3.0 (LGPL v3.0) as published by the Free Software Foundation."
+                + "the terms of the GNU General Public License version 3.0 (GPL v3.0) as published by the Free Software Foundation."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; "
                 + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
-                + "See the GNU Lesser General Public License version 3.0 (LGPL v3.0) for more details."
+                + "See the GNU General Public License version 3.0 (GPL v3.0) for more details."
                 + Environment.NewLine
                 + Environment.NewLine
-                + "You should have received a copy of the GNU Lesser General Public License (LGPL) along with Robot Components; "
+                + "You should have received a copy of the GNU General Public License (GPL) along with Robot Components; "
                 + "If not, see http://www.gnu.org/licenses/."
+                + Environment.NewLine
+                + Environment.NewLine
+                + "@license GPL-3.0 https://www.gnu.org/licenses/gpl-3.0.html"
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"

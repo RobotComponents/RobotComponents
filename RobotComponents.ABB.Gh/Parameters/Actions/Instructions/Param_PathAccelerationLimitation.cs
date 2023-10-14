@@ -58,7 +58,8 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.tertiary | GH_Exposure.obscure; ; }
+            //get { return GH_Exposure.tertiary | GH_Exposure.obscure; ; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>

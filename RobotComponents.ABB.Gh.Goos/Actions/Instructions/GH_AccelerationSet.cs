@@ -3,6 +3,8 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
+// System Libs
+using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
@@ -18,6 +20,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
     /// <summary>
     /// Acceleration Set Goo wrapper class, makes sure the Acceleration Set class can be used in Grasshopper.
     /// </summary>
+    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class GH_AccelerationSet : GH_Goo<AccelerationSet>, GH_ISerializable
     {
         #region constructors
@@ -151,7 +154,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.Action)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -195,7 +198,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(ABB.Actions.Action).IsAssignableFrom(source.GetType()))
             {
                 if (source is AccelerationSet action)
                 {

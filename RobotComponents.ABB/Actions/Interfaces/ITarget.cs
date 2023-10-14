@@ -16,35 +16,40 @@ namespace RobotComponents.ABB.Actions.Interfaces
     public interface ITarget
     {
         #region constructors
-
-        #endregion
-
-        #region methods
         /// <summary>
         /// Returns an exact duplicate of this Target.
         /// </summary>
         /// <returns> The exact copy of this Target. </returns>
         ITarget DuplicateTarget();
+        #endregion
+
+        #region methods
 
         /// <summary>
         /// Returns the Target in RAPID code format.
         /// </summary>
-        /// <returns> The string with target values. </returns>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
         string ToRAPID();
 
         /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-       void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
+        void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties
@@ -54,7 +59,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the Reference Type.
+        /// Gets or sets the Variable Type.
         /// </summary>
         VariableType VariableType { get; set;}
 
@@ -68,6 +73,6 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// Gets or sets the External Joint Position.
         /// </summary>
         ExternalJointPosition ExternalJointPosition { get; set; }
-        #endregion 
+        #endregion
     }
 }

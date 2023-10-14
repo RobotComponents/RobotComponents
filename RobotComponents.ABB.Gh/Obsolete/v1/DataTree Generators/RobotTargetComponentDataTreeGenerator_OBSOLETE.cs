@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
-            RobotTarget target = new RobotTarget(name, plane, referencePlane, axisConfig, externalJointPosition);
+            RobotTarget target = new RobotTarget(name, plane, referencePlane, new ConfigurationData(0, 0, 0, axisConfig), externalJointPosition);
 
             // Sets Output
             DA.SetData(0, target);

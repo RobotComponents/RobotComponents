@@ -182,6 +182,14 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
+            //Cast to Bool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Boolean(Value.InPosition); }
+                return true;
+            }
+
             target = default;
             return false;
         }

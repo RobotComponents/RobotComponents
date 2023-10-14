@@ -15,41 +15,49 @@ namespace RobotComponents.ABB.Actions.Interfaces
     public interface IDynamic
     {
         #region constructors
-
+        /// <summary>
+        /// Returns an exact duplicate of this dynamic action.
+        /// </summary>
+        /// <returns> 
+        /// The exact copy of this dynamic action.
+        /// </returns>
+        IDynamic DuplicateDynamic();
         #endregion
 
         #region methods
         /// <summary>
-        /// Returns an exact duplicate of this dynamic action.
-        /// </summary>
-        /// <returns> The exact copy of this dynamic action. </returns>
-        IDynamic DuplicateDynamic();
-
-        /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
         #endregion
@@ -61,7 +69,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the Reference Type.
+        /// Gets or sets the Code Type.
         /// </summary>
         CodeType Type { get; set;}
         #endregion 

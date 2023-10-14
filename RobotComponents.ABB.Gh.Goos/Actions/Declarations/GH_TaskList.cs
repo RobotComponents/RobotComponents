@@ -236,6 +236,22 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 }
             }
 
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = TaskList.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
             return false;
         }
         #endregion

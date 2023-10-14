@@ -13,26 +13,30 @@ using System.Collections.Generic;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents a predefined or user definied Speed Data declaration.
-    /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </summary>
+    /// <remarks>
+    /// This action is used to specify the velocity at which both the robot and the external axes move.
+    /// </remarks>
     [Serializable()]
     public class SpeedData : Action, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // SpeeData variable name
-        private double _v_tcp; // Tool center point speed
-        private double _v_ori; // Re-orientation speed
-        private double _v_leax; // External linear axis speed
-        private double _v_reax; // External rotational axis speed
-        private bool _predefined; // ABB predefined data (e.g. v5, v10, v20, v30)?
-        private readonly bool _exactPredefinedValue; // field that indicates if the exact predefined value was selected
+        private VariableType _variableType;
+        private static readonly string _datatype = "speeddata";
+        private string _name; 
+        private double _v_tcp; 
+        private double _v_ori; 
+        private double _v_leax;
+        private double _v_reax; 
+        private bool _isPredefined; 
+        private readonly bool _isExactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
         private static readonly double[] _validPredefinedValues = new double[] { 5, 10, 20, 30, 40, 50, 60, 80, 100, 150, 200, 300, 400, 500, 600, 800, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000 };
@@ -55,8 +59,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = (double)info.GetValue("v_ori", typeof(double));
             _v_leax = (double)info.GetValue("v_leax", typeof(double));
             _v_reax = (double)info.GetValue("v_reax", typeof(double));
-            _predefined = (bool)info.GetValue("Predefined", typeof(bool));
-            _exactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
+            _isPredefined = (bool)info.GetValue("Predefined", typeof(bool));
+            _isExactPredefinedValue = (bool)info.GetValue("Exact Predefined Value", typeof(bool));
         }
 
         /// <summary>
@@ -75,8 +79,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             info.AddValue("v_ori", _v_ori, typeof(double));
             info.AddValue("v_leax", _v_leax, typeof(double));
             info.AddValue("v_reax", _v_reax, typeof(double));
-            info.AddValue("Predefined", _predefined, typeof(bool));
-            info.AddValue("Exact Predefined Value", _exactPredefinedValue, typeof(bool));
+            info.AddValue("Predefined", _isPredefined, typeof(bool));
+            info.AddValue("Exact Predefined Value", _isExactPredefinedValue, typeof(bool));
         }
         #endregion
 
@@ -96,7 +100,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-            _exactPredefinedValue = (v_tcp - tcp) == 0;
+            _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _scope = Scope.GLOBAL;
@@ -106,7 +110,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = 500;
             _v_leax = 5000;
             _v_reax = 1000;
-            _predefined = true;
+            _isPredefined = true;
         }
 
         /// <summary>
@@ -117,7 +121,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             // Get nearest predefined speeddata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - v_tcp) < Math.Abs(y - v_tcp) ? x : y);
-            _exactPredefinedValue = (v_tcp - tcp) == 0;
+            _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
             _scope = Scope.GLOBAL;
@@ -127,7 +131,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = 500;
             _v_leax = 5000;
             _v_reax = 1000;
-            _predefined = true;
+            _isPredefined = true;
         }
 
         /// <summary>
@@ -146,8 +150,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = v_ori;
             _v_leax = v_leax;
             _v_reax = v_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -167,8 +171,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = v_ori;
             _v_leax = v_leax;
             _v_reax = v_reax;
-            _predefined = false;
-            _exactPredefinedValue = false;
+            _isPredefined = false;
+            _isExactPredefinedValue = false;
         }
 
         /// <summary>
@@ -184,8 +188,8 @@ namespace RobotComponents.ABB.Actions.Declarations
             _v_ori = speeddata.V_ORI;
             _v_leax = speeddata.V_LEAX;
             _v_reax = speeddata.V_REAX;
-            _predefined = speeddata.PreDefined;
-            _exactPredefinedValue = speeddata.ExactPredefinedValue;
+            _isPredefined = speeddata.IsPreDefined;
+            _isExactPredefinedValue = speeddata.IsExactPredefinedValue;
         }
 
         /// <summary>
@@ -200,7 +204,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Speed Data instance.
         /// </summary>
-        /// <returns> A deep copy of the Speed Data instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Speed Data instance. 
+        /// </returns>
         public SpeedData Duplicate()
         {
             return new SpeedData(this);
@@ -209,7 +215,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Speed Data instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the SpeedData instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the SpeedData instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new SpeedData(this);
@@ -218,10 +226,71 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Spee Data instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Speed Data instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Speed Data instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new SpeedData(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Speed Data class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private SpeedData(string rapidData)
+        {
+            this.SetDataFromString(rapidData, out string[] values);
+
+            _isPredefined = _validPredefinedNames.Contains(_name);
+
+            if (values.Length == 4)
+            {
+                _v_tcp = double.Parse(values[0]);
+                _v_ori = double.Parse(values[1]);
+                _v_leax = double.Parse(values[2]);
+                _v_reax = double.Parse(values[3]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Speed Data instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static SpeedData Parse(string rapidData)
+        {
+            return new SpeedData(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Speed Data instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="speedData"> The Speed Data intance. </param>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
+        public static bool TryParse(string rapidData, out SpeedData speedData)
+        {
+            try
+            {
+                speedData = new SpeedData(rapidData);
+                return true;
+            }
+            catch
+            {
+                speedData = new SpeedData();
+                return false;
+            }
         }
         #endregion
 
@@ -229,14 +298,16 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
             {
                 return "Invalid Speed Data";
             }
-            else if (_predefined == true)
+            else if (_isPredefined == true)
             {
                 return $"Predefined Speed Data ({_name})";
             }
@@ -251,8 +322,11 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Speed Data in RAPID code format, e.g. "[200, 500, 5000, 1000]".
+        /// Returns the Speed Data in RAPID code format.
         /// </summary>
+        /// <remarks>
+        /// An example output is "[200, 500, 5000, 1000]".s
+        /// </remarks>
         /// <returns> The string with speed data values. </returns>
         public string ToRAPID()
         {
@@ -263,13 +337,15 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined.
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
-            if (_predefined == false && _name != "")
+            if (_isPredefined == false && _name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-                result += $"{Enum.GetName(typeof(VariableType), _variableType)} speeddata {_name} := {ToRAPID()};";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
                 return result;
             }
@@ -283,7 +359,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -291,12 +369,14 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
-            if (_predefined == false)
+            if (_isPredefined == false)
             {
                 if (_name != "")
                 {
@@ -311,8 +391,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -345,12 +427,20 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string Datatype
+        {
+            get { return _datatype; }
         }
 
         /// <summary>
@@ -364,8 +454,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the velocity of the tool center point (TCP) in mm/s.
-        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
+        /// <remarks>
+        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
+        /// </remarks>
         public double V_TCP
         {
             get { return _v_tcp; }
@@ -374,8 +466,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Gets or sets the reorientation velocity of the TCP expressed in degrees/s. 
-        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
         /// </summary>
+        /// <remarks>
+        /// If a stationary tool or coordinated external axes are used, the velocity is specified relative to the work object.
+        /// </remarks>
         public double V_ORI
         {
             get { return _v_ori; }
@@ -403,44 +497,36 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
         /// </summary>
-        public bool PreDefined
+        public bool IsPreDefined
         {
-            get { return _predefined; }
-            set { _predefined = value; }
-        }
-
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
-        /// </summary>
-        public bool UserDefinied
-        {
-            get { return !_predefined; }
-            set { _predefined = !value; }
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
-        /// If false the nearest predefined speedata or a custom speeddata was used. 
         /// </summary>
-        public bool ExactPredefinedValue
+        /// <remarks>
+        /// If false, the nearest predefined speedata or a custom speeddata was used. 
+        /// </remarks>
+        public bool IsExactPredefinedValue
         {
-            get { return _exactPredefinedValue; }
+            get { return _isExactPredefinedValue; }
         }
 
         /// <summary>
         /// Gets the valid predefined speeddata variable names.
         /// </summary>
-        public static string[] ValidPredefinedNames 
-        { 
+        public static string[] ValidPredefinedNames
+        {
             get { return _validPredefinedNames; }
         }
 
         /// <summary>
         /// Gets the valid predefined speeddata values.
         /// </summary>
-        public static double[] ValidPredefinedValues 
-        { 
+        public static double[] ValidPredefinedValues
+        {
             get { return _validPredefinedValues; }
         }
 
@@ -450,6 +536,40 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool PreDefined
+        {
+            get { return _isPredefined; }
+            set { _isPredefined = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
+        public bool UserDefinied
+        {
+            get { return !_isPredefined; }
+            set { _isPredefined = !value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
+        /// </summary>
+        /// <remarks>
+        /// If false, the nearest predefined speedata or a custom speeddata was used. 
+        /// </remarks>
+        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
+        public bool ExactPredefinedValue
+        {
+            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

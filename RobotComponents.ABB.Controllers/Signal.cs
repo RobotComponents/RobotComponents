@@ -15,8 +15,10 @@ namespace RobotComponents.ABB.Controllers
 {
     /// <summary>
     /// Represents the Signal class. 
-    /// This class is a wrapper around the ABB Signal class. 
     /// </summary>
+    /// <remarks>
+    /// This class is a wrapper around the ABB Signal class. 
+    /// </remarks>
     public class Signal
     {
         #region fields
@@ -71,7 +73,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (_isEmpty == true)
@@ -130,7 +134,9 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         /// <param name="value"> The desired signal state. </param>
         /// <param name="msg"> The status message. </param>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool SetValue(float value, out string msg)
         {
             msg = "";
@@ -162,7 +168,9 @@ namespace RobotComponents.ABB.Controllers
         /// <summary>
         /// Disposes the current signal object inside this instance.
         /// </summary>
-        /// <returns> True on success, false on failure. </returns>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
         public bool Dispose()
         {
             if (_isEmpty == true)

@@ -127,7 +127,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns an exact duplicate of this Forward Kinematics instance.
         /// </summary>
-        /// <returns> A deep copy of the Forward Kinematics instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Forward Kinematics instance. 
+        /// </returns>
         public ForwardKinematics Duplicate()
         {
             return new ForwardKinematics(this);
@@ -138,7 +140,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -315,7 +319,9 @@ namespace RobotComponents.ABB.Kinematics
         /// Returns the Bounding Box of the posed meshes.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         public BoundingBox GetBoundingBox(bool accurate)
         {
             BoundingBox result = new BoundingBox();

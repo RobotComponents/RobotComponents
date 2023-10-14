@@ -201,7 +201,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 _systemModule = _rapidGenerator.SystemModule;
 
                 // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
+                _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
 
                 // Raise warnings?
                 if (_rapidGenerator.ErrorText.Count != 0)

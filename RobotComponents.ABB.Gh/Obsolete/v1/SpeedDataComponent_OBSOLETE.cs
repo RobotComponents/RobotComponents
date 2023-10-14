@@ -1,21 +1,20 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// under the terms of GNU Lesser General Public License (LGPL
-// published by the 
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace RobotComponents.ABB.Gh.Obsolete
 {

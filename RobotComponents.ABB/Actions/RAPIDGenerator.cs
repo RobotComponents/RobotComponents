@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -170,7 +170,7 @@ namespace RobotComponents.ABB.Actions
             _module.Add("    ");
 
             // Add comment lines for tracking which version of RC was used
-            _module.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (LGPL v3)");
+            _module.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (GPL v3)");
             _module.Add("    " + "! Visit www.github.com/RobotComponents for more information");
             _module.Add("    ");
 
@@ -676,7 +676,7 @@ namespace RobotComponents.ABB.Actions
             _module.Add("    ");
 
             // Add comment lines for tracking which version of RC was used
-            _module.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (LGPL v3)");
+            _module.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (GPL v3)");
             _module.Add("    " + "! Visit www.github.com/RobotComponents for more information");
             _module.Add("    ");
 
@@ -829,7 +829,7 @@ namespace RobotComponents.ABB.Actions
             }
 
             // Version number
-            _systemModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (LGPL v3)");
+            _systemModule.Add("    " + $"! This RAPID code was generated with RobotComponents v{VersionNumbering.CurrentVersion} (GPL v3)");
             _systemModule.Add("    " + "! Visit www.github.com/RobotComponents for more information");
             _systemModule.Add("    ");
 

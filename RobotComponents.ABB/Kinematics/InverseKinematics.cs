@@ -364,9 +364,9 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Select solution
-                _robotJointPosition = _robotJointPositions[robotTarget.AxisConfig];
-                _wristSingularity = _wristSingularities[_order[robotTarget.AxisConfig]];
-                _elbowSingularity = _elbowSingularities[_order[robotTarget.AxisConfig]];
+                _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                _wristSingularity = _wristSingularities[_order[robotTarget.ConfigurationData.Cfx]];
+                _elbowSingularity = _elbowSingularities[_order[robotTarget.ConfigurationData.Cfx]];
             }
 
             else if (_movement.Target is JointTarget jointTarget)

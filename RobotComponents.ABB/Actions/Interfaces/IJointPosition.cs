@@ -8,7 +8,6 @@ using System.Collections.Generic;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions;
 
 namespace RobotComponents.ABB.Actions.Interfaces
 {
@@ -17,36 +16,56 @@ namespace RobotComponents.ABB.Actions.Interfaces
     /// </summary>
     public interface IJointPosition
     {
+        #region constructors
+        /// <summary>
+        /// Returns an exact duplicate of this IJointPosition.
+        /// </summary>
+        /// <returns> 
+        /// The exact copy of this IJointPosition. 
+        /// </returns>
+        IJointPosition DuplicateJointPosition();
+        #endregion
+
         #region methods
         /// <summary>
         /// Returns the Joint Position as an array with axis values.
         /// </summary>
-        /// <returns> The array containing the axis values of the joint position. </returns>
+        /// <returns> 
+        /// The array containing the joint positions. 
+        /// </returns>
         double[] ToArray();
 
         /// <summary>
         /// Returns the Joint Position as a list with axis values.
         /// </summary>
-        /// <returns> The list containing the axis values of the joint position. </returns>
+        /// <returns> 
+        /// The list containing the the joint positions. 
+        /// </returns>
         List<double> ToList();
 
         /// <summary>
         /// Returns the Joint Position in RAPID code format, e.g. "[0, 0, 0, 0, 45, 0]".
         /// </summary>
-        /// <returns> The string with axis values. </returns>
+        /// <returns> 
+        /// The string with joint positions. 
+        /// </returns>
         string ToRAPID();
 
         /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         string ToRAPIDDeclaration(Robot robot);
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
 
@@ -59,8 +78,10 @@ namespace RobotComponents.ABB.Actions.Interfaces
         #region properties
         /// <summary>
         /// Gets or sets the Joint Position variable name.
-        /// Each Joint Position variable name has to be unique.
         /// </summary>
+        /// <remarks>
+        /// Each variable name has to be unique.
+        /// </remarks>
         string Name { get; set; }
 
         /// <summary>
@@ -74,10 +95,12 @@ namespace RobotComponents.ABB.Actions.Interfaces
         int Length { get; }
 
         /// <summary>
-        /// Gets or sets the axis values through the indexer. 
+        /// Gets or sets the joint position through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The axis value located at the given index. </returns>
+        /// <returns> 
+        /// The joint position located at the given index. 
+        /// </returns>
         double this[int index] { get; set; }
 
         /// <summary>

@@ -48,13 +48,14 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.Register_IntegerParam("Type", "TY", "Type as Integer");
+            pManager.RegisterParam(new Param_RobotTarget(), "Circular Point", "CP", "Circular Point for MoveC instructions as Robot Target");
             pManager.RegisterParam(new Param_Target(), "Target", "TA", "Target as Target");
             pManager.RegisterParam(new Param_SpeedData(), "Speed Data", "SD", "Speed Data as Speed Data");
             pManager.Register_DoubleParam("Time", "TI", "The total movement time in seconds as Number");
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data");
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool");
             pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Work Object as Work Object");
-            pManager.RegisterParam(new Param_DigitalOutput(), "Digital Output", "DO", "Digital Output as Digital Output");
+            pManager.RegisterParam(new Param_SetDigitalOutput(), "Digital Output", "DO", "Set Digital Output as Set Digital Output");
         }
 
         /// <summary>
@@ -79,13 +80,14 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
 
                 // Output
                 DA.SetData(0, (int)movement.MovementType);
-                DA.SetData(1, movement.Target);
-                DA.SetData(2, movement.SpeedData);
-                DA.SetData(3, movement.Time);
-                DA.SetData(4, movement.ZoneData);
-                DA.SetData(5, movement.RobotTool);
-                DA.SetData(6, movement.WorkObject);
-                DA.SetData(7, movement.DigitalOutput);
+                DA.SetData(1, movement.CircularPoint);
+                DA.SetData(2, movement.Target);
+                DA.SetData(3, movement.SpeedData);
+                DA.SetData(4, movement.Time);
+                DA.SetData(5, movement.ZoneData);
+                DA.SetData(6, movement.RobotTool);
+                DA.SetData(7, movement.WorkObject);
+                DA.SetData(8, movement.SetDigitalOutput);
             }
         }
 
@@ -96,7 +98,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.secondary; }
         }
 
         /// <summary>
@@ -120,7 +122,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("3A5719AC-9CDB-4255-BD25-425144C36D8A"); }
+            get { return new Guid("BD74F43E-107B-4C6A-901F-7ADF2CE13039"); }
         }
         #endregion
 

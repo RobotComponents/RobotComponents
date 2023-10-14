@@ -51,7 +51,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] variableInputParameters = new IGH_Param[2]
+        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[2]
         {
             new Param_String() { Name = "Axis Logic Number", NickName = "AL", Description = "Axis Logic Number as Text", Access = GH_ParamAccess.item, Optional = true},
             new Param_Boolean() { Name = "Moves Robot", NickName = "MR", Description = "Moves Robot as Boolean", Access = GH_ParamAccess.item, Optional = true },
@@ -106,16 +106,16 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             if (!DA.GetDataList(5, linkMeshes)) { linkMeshes = new List<Mesh>() { new Mesh() }; }
 
             // Catch the input data from the variable parameteres
-            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
+            if (Params.Input.Any(x => x.Name == _variableInputParameters[0].Name))
             {
-                if (!DA.GetData(variableInputParameters[0].Name, ref axisLogic))
+                if (!DA.GetData(_variableInputParameters[0].Name, ref axisLogic))
                 {
                     axisLogic = "-1";
                 }
             }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
+            if (Params.Input.Any(x => x.Name == _variableInputParameters[1].Name))
             {
-                if (!DA.GetData(variableInputParameters[1].Name, ref movesRobot))
+                if (!DA.GetData(_variableInputParameters[1].Name, ref movesRobot))
                 {
                     movesRobot = true; 
                 }
@@ -247,8 +247,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         private void AddParameter(int index)
         {
             // Pick the parameter
-            IGH_Param parameter = variableInputParameters[index];
-            string name = variableInputParameters[index].Name;
+            IGH_Param parameter = _variableInputParameters[index];
+            string name = _variableInputParameters[index].Name;
 
             // If the parameter already exist: remove it
             if (Params.Input.Any(x => x.Name == name))
@@ -265,7 +265,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
                 // Check if other parameters are already added and correct the insert index
                 for (int i = 0; i < index; i++)
                 {
-                    if (Params.Input.Any(x => x.Name == variableInputParameters[i].Name))
+                    if (Params.Input.Any(x => x.Name == _variableInputParameters[i].Name))
                     {
                         insertIndex += 1;
                     }

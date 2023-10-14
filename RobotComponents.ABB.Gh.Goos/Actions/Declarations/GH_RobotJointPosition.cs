@@ -188,32 +188,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         {
             if (source == null) { return false; }
 
-            //Cast from Text
-            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
-            {
-                string text = (source as GH_String).Value;
-
-                string[] values = text.Split(',');
-
-                try
-                {
-                    RobotJointPosition robotJointPosition = new RobotJointPosition();
-
-                    for (int i = 0; i < Math.Min(values.Length, 6); i++)
-                    {
-                        robotJointPosition[i] = System.Convert.ToDouble(values[i]);
-                    }
-
-                    Value = robotJointPosition;
-                    return true;
-                }
-
-                catch
-                {
-                    return false;
-                }
-            }
-
             //Cast from RobotJointPosition
             if (typeof(RobotJointPosition).IsAssignableFrom(source.GetType()))
             {
@@ -260,6 +234,40 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 {
                     Value = jointPosition;
                     return true;
+                }
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = RobotJointPosition.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    try
+                    {
+                        string[] values = text.Split(',');
+
+                        RobotJointPosition robotJointPosition = new RobotJointPosition();
+
+                        for (int i = 0; i < Math.Min(values.Length, 6); i++)
+                        {
+                            robotJointPosition[i] = System.Convert.ToDouble(values[i]);
+                        }
+
+                        Value = robotJointPosition;
+                        return true;
+                    }
+
+                    catch
+                    {
+                        return false;
+                    }
                 }
             }
 

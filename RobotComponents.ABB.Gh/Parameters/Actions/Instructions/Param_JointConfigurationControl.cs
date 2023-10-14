@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public Param_JointConfigurationControl()
           : base(new GH_InstanceDescription("Joint Configuration Control Parameter", "JCCP",
-                "Contains the data of a Set Joint Configuration Control instruction."
+                "Contains the data of a Joint Configuration Control instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))

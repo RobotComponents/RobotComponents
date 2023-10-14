@@ -5,13 +5,16 @@
 
 // System Libs
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+using System.Text.RegularExpressions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
@@ -23,9 +26,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     {
         #region fields
         private Scope _scope;
-        private VariableType _variableType; // variable type
-        private string _name; // the name of the set with tasks
-        private readonly List<string> _taskNames; // the set with tasks as a list with task names
+        private VariableType _variableType;
+        private static readonly string _datatype = "tasks";
+        private string _name; 
+        private readonly List<string> _taskNames; 
         #endregion
 
         #region (de)serialization
@@ -95,7 +99,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Tasks instance.
         /// </summary>
-        /// <returns> A deep copy of the Tasks instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Tasks instance. 
+        /// </returns>
         public TaskList Duplicate()
         {
             return new TaskList(this);
@@ -104,7 +110,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Tasks instance as IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Tasks instance as an IDelcaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Tasks instance as an IDelcaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new TaskList(this);
@@ -113,10 +121,75 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Tasks instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Tasks instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Tasks instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new TaskList(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Task List class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        private TaskList(string rapidData)
+        {
+            // Replace value between curly braces
+            rapidData = Regex.Replace(rapidData, @"\{.+?\}", "");
+
+            this.SetDataFromString(rapidData, out string[] values);
+
+            if (values.Length == 1 & values[0] == "")
+            {
+                throw new InvalidCastException("Invalid RAPID data string: No task names defined.");
+            }
+            else
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = values[i].Replace('"', '\0');
+                }
+                
+                _taskNames = values.ToList();
+            }
+        }
+
+
+        /// <summary>
+        /// Returns a Task List instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static TaskList Parse(string rapidData)
+        {
+            return new TaskList(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Task List instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="taskList"> The Task List intance. </param>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
+        public static bool TryParse(string rapidData, out TaskList taskList)
+        {
+            try
+            {
+                taskList = new TaskList(rapidData);
+                return true;
+            }
+            catch
+            {
+                taskList = new TaskList();
+                return false;
+            }
         }
         #endregion
 
@@ -124,7 +197,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -140,7 +215,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns the Tasks as an array with task names.
         /// </summary>
-        /// <returns> The array containing the task names. </returns>
+        /// <returns> 
+        /// The array containing the task names. 
+        /// </returns>
         public string[] ToArray()
         {
             return _taskNames.ToArray();
@@ -149,36 +226,57 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns the Tasks as an array with task names.
         /// </summary>
-        /// <returns> The array containing the task names. </returns>
+        /// <returns> 
+        /// The array containing the task names. 
+        /// </returns>
         public List<string> ToList()
         {
             return _taskNames.ConvertAll(item => item);
         }
 
         /// <summary>
-        /// Returns the RAPID declaration code line of the this action.
+        /// Returns the Task List in RAPID code format. 
         /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        /// <remarks>
+        /// An example output is "["T_ROB1", "T_ROB2"]".
+        /// </remarks>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
+        public string ToRAPID()
         {
-            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-            result += Enum.GetName(typeof(VariableType), _variableType);
-            result += " tasks ";
-            result += _name;
-            result += "{" + _taskNames.Count.ToString() + "} := [";
+            string code = "[";
 
             for (int i = 0; i < _taskNames.Count; i++)
             {
-                result += "[\"" + _taskNames[i] + "\"]";
+                code += "[\"" + _taskNames[i] + "\"]";
 
                 if (i < _taskNames.Count - 1)
                 {
-                    result += ", ";
+                    code += ", ";
+                }
+                else
+                {
+                    code += "]";
                 }
             }
-            
-            result += "];";
+
+            return code;
+        }
+
+        /// <summary>
+        /// Returns the RAPID declaration code line of the this action.
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
+        public override string ToRAPIDDeclaration(Robot robot)
+        {
+            string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
+            result += $"{ Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name}";
+            result += "{" + _taskNames.Count.ToString() + "} := ";
+            result += $"{ ToRAPID()};";
 
             return result;
         }
@@ -187,7 +285,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// An empty string.  
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -195,8 +295,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -209,8 +311,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -243,12 +347,20 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the reference type.
+        /// Gets or sets the variable type.
         /// </summary>
         public VariableType VariableType
         {
             get { return _variableType; }
             set { _variableType = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID datatype. 
+        /// </summary>
+        public string Datatype
+        {
+            get { return _datatype; }
         }
 
         /// <summary>
@@ -272,7 +384,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Gets or sets the task names through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The task name located at the given index. </returns>
+        /// <returns> 
+        /// The task name located at the given index. 
+        /// </returns>
         public string this[int index]
         {
             get { return _taskNames[index]; }

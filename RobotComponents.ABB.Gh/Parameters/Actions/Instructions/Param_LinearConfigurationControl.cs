@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public Param_LinearConfigurationControl()
           : base(new GH_InstanceDescription("Linear Configuration Control Parameter", "LCCP",
-                "Contains the data of a Set Linear Configuration Control instruction."
+                "Contains the data of a Linear Configuration Control instruction."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
                 "Robot Components ABB", "Parameters"))

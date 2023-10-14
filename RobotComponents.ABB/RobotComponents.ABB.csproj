@@ -66,7 +66,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionGroup.cs" />
-    <Compile Include="Actions\Instructions\AnalogOutput.cs" />
+    <Compile Include="Actions\Declarations\ConfigurationData.cs" />
+    <Compile Include="Actions\Instructions\AccelerationSet.cs" />
+    <Compile Include="Actions\Instructions\AnalogOutput_OBSOLETE.cs" />
+    <Compile Include="Actions\Instructions\PathAccelerationLimitation.cs" />
+    <Compile Include="Actions\Instructions\PulseDigitalOutput.cs" />
+    <Compile Include="Actions\Instructions\SetAnalogOutput.cs" />
+    <Compile Include="Actions\Instructions\CirclePathMode.cs" />
+    <Compile Include="Actions\Instructions\DigitalOutput_OBSOLETE.cs" />
+    <Compile Include="Actions\Instructions\VelocitySet.cs" />
     <Compile Include="Actions\Interfaces\ISyncident.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOff.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOn.cs" />
@@ -84,6 +92,7 @@
     <Compile Include="Actions\Interfaces\IJointPosition.cs" />
     <Compile Include="Actions\Declarations\ExternalJointPosition.cs" />
     <Compile Include="Actions\Declarations\ZoneData.cs" />
+    <Compile Include="Definitions\LoadData.cs" />
     <Compile Include="Definitions\ExternalAxis.cs" />
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\Dynamic\CodeLine.cs" />
@@ -104,7 +113,7 @@
     <Compile Include="Definitions\ExternalRotationalAxis.cs" />
     <Compile Include="Actions\Declarations\SpeedData.cs" />
     <Compile Include="Actions\Instructions\WaitDI.cs" />
-    <Compile Include="Actions\Instructions\DigitalOutput.cs" />
+    <Compile Include="Actions\Instructions\SetDigitalOutput.cs" />
     <Compile Include="Kinematics\ForwardKinematics.cs" />
     <Compile Include="Kinematics\PathGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

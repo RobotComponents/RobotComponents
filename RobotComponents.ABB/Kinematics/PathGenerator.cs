@@ -459,6 +459,9 @@ namespace RobotComponents.ABB.Kinematics
 
             if (_cirPathMode == CirPathMode.PathFrame)
             {
+                _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is roughly estimated by the Path Generator. " +
+                    "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
+
                 cirPathMode = CirPathMode.PathFrame;
             }
             else if (_cirPathMode == CirPathMode.ObjectFrame)
@@ -467,14 +470,17 @@ namespace RobotComponents.ABB.Kinematics
             }
             else if (_cirPathMode == CirPathMode.CirPointOri)
             {
+                _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is roughly estimated by the Path Generator. " +
+                    "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
+
                 cirPathMode = CirPathMode.CirPointOri;
             }
             else
             {
                 _errorText.Insert(0, $"Circular Path Mode \"{_cirPathMode}\" is not supported by the Path Generator. " +
                     "\"PathFrame\" mode is used instead. " +
-                    "Check you program with a simulation in Robot Studio for a correct simulation.");
-                
+                    "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
+
                 cirPathMode = CirPathMode.PathFrame;
             }
 
@@ -564,17 +570,12 @@ namespace RobotComponents.ABB.Kinematics
             // Normalized interpolation step
             double dt = (double)1 / _interpolations;
 
-            // Position interpolation
-            Vector3d posChange = (plane2.Origin - plane1.Origin) / _interpolations;
-
-            // Orientation interpolation:
-            // ObjectFrame mode
+            // Orientation interpolation
             Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
             Quaternion quat2 = HelperMethods.PlaneToQuaternion(plane2);
             quat1.Unitize();
             quat2.Unitize();
-            //double angle = Math.Acos(2 * Math.Abs(quat1.DotProduct(quat2)));
-            double angle = Math.Acos(2 * quat1.DotProduct(quat2));
+
             // CirpointOri mode
             circle.ClosestPoint(planeCirPoint.Origin, out double cirPointParam);
 
@@ -608,28 +609,34 @@ namespace RobotComponents.ABB.Kinematics
                     Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
                     plane3.Transform(xform1);
                     plane4.Transform(xform2);
+                    Quaternion quat3 = HelperMethods.PlaneToQuaternion(plane3);
+                    Quaternion quat4 = HelperMethods.PlaneToQuaternion(plane4);
+                    quat3.Unitize();
+                    quat4.Unitize();
 
-                    // Weighted average between the two rotated planes
-                    Vector3d xAxis = plane3.XAxis + t * (plane4.XAxis - plane3.XAxis);
-                    Vector3d yAxis = plane3.YAxis + t * (plane4.YAxis - plane3.YAxis);
+                    // Interpolate orientation
+                    Quaternion quat = HelperMethods.Slerp(quat3, quat4, t);
 
-                    // New plane
-                    plane = new Plane(point, xAxis, yAxis);
+                    // Plane: the target plane in WORK OBJECT coordinate space
+                    plane = HelperMethods.QuaternionToPlane(point, quat);
                 }
                 // ObjectFrame mode: Quaternion interpolation (SLERP)
                 else if (cirPathMode == CirPathMode.ObjectFrame)
                 {
-                    Quaternion quat = (quat1 * Math.Sin((1.0 - t) * angle) + quat2 * Math.Sin(t * angle)) / Math.Sin(angle);
+                    // Interpolate orientation
+                    Quaternion quat = HelperMethods.Slerp(quat1, quat2, t);
+
+                    // Plane: the target plane in WORK OBJECT coordinate space
                     plane = HelperMethods.QuaternionToPlane(point, quat);
                 }
                 else if (cirPathMode == CirPathMode.CirPointOri)
                 {
-                    Vector3d xAxis;
-                    Vector3d yAxis;
-
                     // Rotates both target planes to the current position. 
                     if (t < cirPointParam)
                     {
+                        // Interpolation parameter
+                        double param = t / cirPointParam;
+
                         // Rotates both target planes to the current position. 
                         double angle1 = Vector3d.VectorAngle(arc.StartPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
                         double angle2 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
@@ -639,13 +646,22 @@ namespace RobotComponents.ABB.Kinematics
                         Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
                         plane3.Transform(xform1);
                         plane4.Transform(xform2);
+                        Quaternion quat3 = HelperMethods.PlaneToQuaternion(plane3);
+                        Quaternion quat4 = HelperMethods.PlaneToQuaternion(plane4);
+                        quat3.Unitize();
+                        quat4.Unitize();
 
-                        // Weighted average between the two rotated planes
-                        xAxis = plane3.XAxis + t / cirPointParam * (plane4.XAxis - plane3.XAxis);
-                        yAxis = plane3.YAxis + t / cirPointParam * (plane4.YAxis - plane3.YAxis);
+                        // Interpolate orientation
+                        Quaternion quat = HelperMethods.Slerp(quat3, quat4, param);
+
+                        // Plane: the target plane in WORK OBJECT coordinate space
+                        plane = HelperMethods.QuaternionToPlane(point, quat);
                     }
                     else
                     {
+                        // Interpolation parameter
+                        double param = (t - cirPointParam) / (1.0 - cirPointParam);
+
                         // Rotates both target planes to the current position. 
                         double angle1 = Vector3d.VectorAngle(planeCirPoint.Origin - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
                         double angle2 = Vector3d.VectorAngle(arc.EndPoint - arc.Plane.Origin, point - arc.Plane.Origin, arc.Plane);
@@ -655,14 +671,17 @@ namespace RobotComponents.ABB.Kinematics
                         Transform xform2 = Transform.Rotation(angle2, arc.Plane.ZAxis, arc.Plane.Origin);
                         plane3.Transform(xform1);
                         plane4.Transform(xform2);
+                        Quaternion quat3 = HelperMethods.PlaneToQuaternion(plane3);
+                        Quaternion quat4 = HelperMethods.PlaneToQuaternion(plane4);
+                        quat3.Unitize();
+                        quat4.Unitize();
 
-                        // Weighted average between the two rotated planes
-                        xAxis = plane3.XAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.XAxis - plane3.XAxis);
-                        yAxis = plane3.YAxis + (t - cirPointParam) / (1 - cirPointParam) * (plane4.YAxis - plane3.YAxis);
+                        // Interpolate orientation
+                        Quaternion quat = HelperMethods.Slerp(quat3, quat4, param);
+
+                        // Plane: the target plane in WORK OBJECT coordinate space
+                        plane = HelperMethods.QuaternionToPlane(point, quat);
                     }
-
-                    // New plane
-                    plane = new Plane(point, xAxis, yAxis);
                 }
                 // Not implemented
                 else

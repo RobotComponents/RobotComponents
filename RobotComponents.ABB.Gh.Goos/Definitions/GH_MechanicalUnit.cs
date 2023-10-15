@@ -226,6 +226,24 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to External Axis Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
+                else if (Value is ExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as ExternalAxis); }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value is ExternalAxis) { target = (Q)(object)Value; }
+                else { target = default; }
+                return true;
+            }
+
             target = default;
             return false;
         }

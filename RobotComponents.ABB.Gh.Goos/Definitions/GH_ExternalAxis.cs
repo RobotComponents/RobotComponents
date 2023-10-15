@@ -212,6 +212,22 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Mechanical Unit Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_MechanicalUnit)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_MechanicalUnit(); }
+                else { target = (Q)(object)new GH_MechanicalUnit(Value); }
+                return true;
+            }
+
+            //Cast to Mechanical Unit
+            if (typeof(Q).IsAssignableFrom(typeof(IMechanicalUnit)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
             //Cast to Plane
             if (typeof(Q).IsAssignableFrom(typeof(GH_Plane)))
             {

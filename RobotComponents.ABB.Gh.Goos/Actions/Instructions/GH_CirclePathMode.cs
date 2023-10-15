@@ -11,6 +11,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
+using RobotComponents.ABB.Enumerations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
@@ -234,6 +235,14 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                     Value = instruction;
                     return true;
                 }
+            }
+
+            //Cast from Integer
+            if (typeof(GH_Integer).IsAssignableFrom(source.GetType()))
+            {
+                int mode = (source as GH_Integer).Value;
+                Value = new CirclePathMode((CirPathMode)mode);
+                return true;
             }
 
             return false;

@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -132,7 +132,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             {
                 if (Value == null) { return "No internal Speed Data instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Speed Data instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?"; 
+                return "Invalid Speed Data instance: Did you define a name, v_tcp, v_ori, v_leax and v_reax?";
             }
         }
 
@@ -296,37 +296,43 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 }
             }
 
-            //Cast from Text: Predefined Speed Data
+            //Cast from Text
             if (typeof(GH_String).IsAssignableFrom(source.GetType()))
             {
                 string text = (source as GH_String).Value;
 
-                if (text.Contains("v"))
-                {
-                    if (SpeedData.ValidPredefinedNames.Contains(text))
-                    {
-                        try
-                        {
-                            text = text.Replace("v", string.Empty); // Changes v5 to 5, v10 to 10 etc. 
-                            double number = System.Convert.ToDouble(text);
-                            Value = new SpeedData(number);
-                            return true;
-                        }
-                        catch
-                        {
-                            return false;
-                        }
-                    }
-                }
-
-                else
+                // Predefined Speed Data
+                if (SpeedData.ValidPredefinedNames.Contains(text))
                 {
                     try
                     {
+                        text = text.Replace("v", string.Empty); // Changes v5 to 5, v10 to 10 etc. 
                         double number = System.Convert.ToDouble(text);
                         Value = new SpeedData(number);
                         return true;
                     }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+
+                // The text is a number
+                try
+                {
+                    double number = System.Convert.ToDouble(text);
+                    Value = new SpeedData(number);
+                    return true;
+                }
+                catch
+                {
+                    // The text is a RAPID data string
+                    try
+                    {
+                        Value = SpeedData.Parse(text);
+                        return true;
+                    }
+
                     catch
                     {
                         return false;

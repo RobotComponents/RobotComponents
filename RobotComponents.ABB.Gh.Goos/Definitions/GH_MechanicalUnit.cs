@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -222,6 +222,24 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else if (Value is ExternalRotationalAxis) { target = (Q)(object)Value; }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to External Axis Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
+                else if (Value is ExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as ExternalAxis); }
+                else { target = default; }
+                return true;
+            }
+
+            //Cast to External Axis
+            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else if (Value is ExternalAxis) { target = (Q)(object)Value; }
                 else { target = default; }
                 return true;
             }

@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -192,6 +192,22 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
+            //Cast to Configuration Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_ConfigurationData)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_ConfigurationData(); }
+                else { target = (Q)(object)new GH_ConfigurationData(Value.ConfigurationData); }
+                return true;
+            }
+
+            //Cast to Configuration Data
+            if (typeof(Q).IsAssignableFrom(typeof(ConfigurationData)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.ConfigurationData; }
+                return true;
+            }
+
             //Cast to External Joint Position Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalJointPosition)))
             {
@@ -329,6 +345,38 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 GH_Plane planeGoo = (GH_Plane)source;
                 Value = new RobotTarget(planeGoo.Value);
                 return true;
+            }
+
+            //Cast from Point
+            if (typeof(Point3d).IsAssignableFrom(source.GetType()))
+            {
+                Point3d point = (Point3d)source;
+                Value = new RobotTarget(new Plane(point, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
+            //Cast from Point Goo
+            if (typeof(GH_Point).IsAssignableFrom(source.GetType()))
+            {
+                GH_Point pointGoo = (GH_Point)source;
+                Value = new RobotTarget(new Plane(pointGoo.Value, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = RobotTarget.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
 
             return false;

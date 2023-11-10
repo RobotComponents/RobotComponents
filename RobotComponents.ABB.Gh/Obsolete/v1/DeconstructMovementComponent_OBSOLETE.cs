@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // see <https://github.com/EDEK-UniKassel/RobotComponents>.
 
@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             pManager.RegisterParam(new Param_ZoneData(), "Zone Data", "ZD", "Zone Data as Zone Data");
             pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Robot Tool as Robot Tool");
             pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Work Object as Work Object");
-            pManager.RegisterParam(new Param_DigitalOutput(), "Digital Output", "DO", "Digital Output as Digital Output");
+            pManager.RegisterParam(new Param_SetDigitalOutput(), "Digital Output", "DO", "Digital Output as Digital Output");
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 DA.SetData(3, movement.ZoneData);
                 DA.SetData(4, movement.RobotTool);
                 DA.SetData(5, movement.WorkObject);
-                DA.SetData(6, movement.DigitalOutput);
+                DA.SetData(6, movement.SetDigitalOutput);
             }
         }
 

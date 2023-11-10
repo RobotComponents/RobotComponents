@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -15,15 +15,18 @@ namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
     /// Represents a Wait for Digital Input instruction.
-    /// This action is used to wait until a digital input is set.
     /// </summary>
+    /// <remarks>
+    /// This action is used to wait until a digital input is set.
+    /// </remarks>
     [Serializable()]
     public class WaitDI : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _name; // The name of the digital input signal
-        private bool _value; // The desired state / value of the digital input signal
+        private string _name;
+        private bool _value;
         private double _maxTime;
+        private bool _timeFlag;
         #endregion
 
         #region (de)serialization
@@ -38,6 +41,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (bool)info.GetValue("Value", typeof(bool));
             _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _timeFlag = version >= 2001000 ? (bool)info.GetValue("Time Flag", typeof(bool)) : false;
         }
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(bool));
             info.AddValue("Max Time", _maxTime, typeof(double));
+            info.AddValue("Time Flag", _timeFlag, typeof(double));
         }
         #endregion
 
@@ -67,13 +72,15 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Initializes a new instance of the Wait DI class.
         /// </summary>
         /// <param name="name"> The name of the signal. </param>
-        /// <param name="value"> Specifies whether the Digital Input is enabled.</param>
+        /// <param name="value"> Specifies whether the Digital Input is enabled. </param>
         /// <param name="maxTime"> The maximum time to wait in seconds. </param>
-        public WaitDI(string name, bool value, double maxTime = -1)
+        /// <param name="timeFlag"> Specifies whether the timeout flag is enabled. </param>
+        public WaitDI(string name, bool value, double maxTime = -1, bool timeFlag = false)
         {
             _name = name;
             _value = value;
             _maxTime = maxTime;
+            _timeFlag = timeFlag;
         }
 
         /// <summary>
@@ -85,12 +92,15 @@ namespace RobotComponents.ABB.Actions.Instructions
             _name = waitDI.Name;
             _value = waitDI.Value;
             _maxTime = waitDI.MaxTime;
+            _timeFlag = waitDI.TimeFlag;
         }
 
         /// <summary>
         /// Returns an exact duplicate of this Wait DI instance.
         /// </summary>
-        /// <returns> A deep copy of the Wait DI instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait DI instance.
+        /// </returns>
         public WaitDI Duplicate()
         {
             return new WaitDI(this);
@@ -99,7 +109,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Wait DI instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Wait DI instance as an IInstruction. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait DI instance as an IInstruction. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new WaitDI(this);
@@ -108,7 +120,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Wait DI instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Wait Di instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Wait Di instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new WaitDI(this);
@@ -119,7 +133,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (_name == null)
@@ -140,7 +156,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
@@ -150,17 +168,32 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
-            return $"WaitDI {_name}, {(_value ? 1 : 0)}" +
-                $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
+            if (_maxTime > 0)
+            {
+                string result = $"WaitDI {_name}, {(_value ? 1 : 0)} ";
+                result += $"\\MaxTime:={_maxTime:0.###} ";
+                result += $"{(_timeFlag ? $"\\TimeFlag:=TRUE" : $"\\TimeFlag:=FALSE")}";
+                result += ";";
+
+                return result;
+            }
+            else
+            {
+                return $"WaitDI {_name}, {(_value ? 1 : 0)};";
+            }
         }
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -168,12 +201,14 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -187,14 +222,14 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
         /// <summary>
         /// Gets or sets the desired state of the digital input signal.
         /// </summary>
-        public bool Value 
+        public bool Value
         {
             get { return _value; }
             set { _value = value; }
@@ -203,22 +238,32 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the name of the digital input signal.
         /// </summary>
-        public string Name 
-        { 
+        public string Name
+        {
             get { return _name; }
             set { _name = value; }
         }
 
         /// <summary>
-        /// Gets or sets te max. time to wait in seconds. Set a negative value to wait for ever (default is -1).
+        /// Gets or sets te max. time to wait in seconds.
         /// </summary>
+        /// <remarks>
+        /// Set a negative value to wait forever (default is -1).
+        /// </remarks>
         public double MaxTime
         {
             get { return _maxTime; }
             set { _maxTime = value; }
         }
+
+        /// <summary>
+        /// Gets or sets the timeout flag.
+        /// </summary>
+        public bool TimeFlag
+        {
+            get { return _timeFlag; }
+            set { _timeFlag = value; }
+        }
         #endregion
     }
-
 }
-

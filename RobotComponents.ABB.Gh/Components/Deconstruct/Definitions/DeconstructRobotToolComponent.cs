@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -45,13 +45,11 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("Name", "N", "Robot Tool Name as String", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "N", "Robot Tool Name as Text", GH_ParamAccess.item);
             pManager.AddMeshParameter("Mesh", "M", "Robot Tool Mesh as Mesh", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Attachment Plane", "AP", "Robot Tool Attachment Plane as Plane", GH_ParamAccess.item);
             pManager.AddPlaneParameter("Tool Plane", "TP", "Robot Tool Plane as Plane", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Mass", "M", "The weight of the load in kg as a Number", GH_ParamAccess.item);
-            pManager.AddPlaneParameter("Center of Gravity", "CG", "The center of gravity of the toal load as a Plane.", GH_ParamAccess.item);
-            pManager.AddVectorParameter("Moment of Inertia", "MI", "Moment of intertia of the load in kgm2 as a Vector.", GH_ParamAccess.item);
+            pManager.AddParameter(new Param_LoadData(), "Load Data", "LD", "The tool loaddata as Load Data.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -79,9 +77,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
                 DA.SetData(1, robotTool.Mesh);
                 DA.SetData(2, robotTool.AttachmentPlane);
                 DA.SetData(3, robotTool.ToolPlane);
-                DA.SetData(4, robotTool.Mass);
-                DA.SetData(5, robotTool.CenterOfGravity);
-                DA.SetData(6, robotTool.Inertia);
+                DA.SetData(4, robotTool.LoadData);
             }
         }
 
@@ -92,7 +88,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.secondary; }
+            get { return GH_Exposure.quarternary; }
         }
 
         /// <summary>
@@ -115,8 +111,8 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid
-        { 
-            get { return new Guid("830CC56C-ACEB-448D-A513-89AAA5414145"); }
+        {
+            get { return new Guid("DA380F54-54A2-400D-A573-7E8F7DA54A91"); }
         }
         #endregion
 

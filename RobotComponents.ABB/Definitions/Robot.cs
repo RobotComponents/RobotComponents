@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -240,7 +240,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Robot instance.
         /// </summary>
-        /// <returns> A deep copy of the Robot instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot instance. 
+        /// </returns>
         public Robot Duplicate()
         {
             return new Robot(this);
@@ -249,7 +251,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Robot as a Mechanical Unit.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit. 
+        /// </returns>
         public IMechanicalUnit DuplicateMechanicalUnit()
         {
             return new Robot(this);
@@ -258,7 +262,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Robot as Mechanical Unit without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit without meshes. 
+        /// </returns>
         public IMechanicalUnit DuplicateMechanicalUnitWithoutMesh()
         {
             return new Robot(this, false);
@@ -269,7 +275,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -363,7 +371,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns the attached Robot Tool mesh in robot coordinate space.
         /// </summary>
-        /// <returns> The tool mesh in the robot coordinate space. </returns>
+        /// <returns> 
+        /// The tool mesh in the robot coordinate space. 
+        /// </returns>
         public Mesh GetAttachedToolMesh()
         {
             Mesh toolMesh = _tool.Mesh.DuplicateMesh();
@@ -375,7 +385,9 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the TCP plane of the attached Robot Tool in robot coordinate space.
         /// </summary>
-        /// <returns> The TCP plane in robot coordinate space. </returns>
+        /// <returns> 
+        /// The TCP plane in robot coordinate space. 
+        /// </returns>
         public Plane CalculateAttachedToolPlane()
         {
             _toolPlane = new Plane(_tool.ToolPlane);
@@ -389,7 +401,9 @@ namespace RobotComponents.ABB.Definitions
         /// Calculates and returns the position of the meshes for a given Joint Target.
         /// </summary>
         /// <param name="jointTarget"> The Joint Target. </param>
-        /// <returns> The posed meshes. </returns>
+        /// <returns> 
+        /// The posed meshes. 
+        /// </returns>
         public List<Mesh> PoseMeshes(JointTarget jointTarget)
         {
             List<Mesh> meshes = new List<Mesh>();
@@ -408,8 +422,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Transforms the robot spatial properties (planes and meshes).
-        /// NOTE: The attached external axes will not be transformed. 
         /// </summary>
+        /// <remarks>
+        /// The attached external axes will not be transformed.
+        /// </remarks>
         /// <param name="xform"> Spatial deform. </param>
         public void Transform(Transform xform)
         {
@@ -436,7 +452,9 @@ namespace RobotComponents.ABB.Definitions
         /// Returns the Bounding Box of the object.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         public BoundingBox GetBoundingBox(bool accurate)
         {
             if (_meshes == null)
@@ -513,8 +531,10 @@ namespace RobotComponents.ABB.Definitions
 
         /// <summary>
         /// Gets or sets the internal axis planes.
-        /// The Z-axes of the planes define the rotation centers. 
         /// </summary>
+        /// <remarks>
+        /// The Z-axes of the planes define the rotation centers.
+        /// </remarks>
         public List<Plane> InternalAxisPlanes
         {
             get 

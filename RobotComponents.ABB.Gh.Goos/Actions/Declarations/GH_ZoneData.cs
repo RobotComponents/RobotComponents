@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -302,28 +302,12 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                     return true;
                 }
 
-                else if (text.Contains("z"))
-                {
-                    if (ZoneData.ValidPredefinedNames.Contains(text))
-                    {
-                        try
-                        {
-                            text = text.Replace("z", string.Empty); // Changes z1 to 1, z5 to 5 etc. 
-                            double number = System.Convert.ToDouble(text);
-                            Value = new ZoneData(number);
-                            return true;
-                        }
-                        catch
-                        {
-                            return false;
-                        }
-                    }
-                }
-                
-                else
+                // Predefined Speed Data
+                if (ZoneData.ValidPredefinedNames.Contains(text))
                 {
                     try
                     {
+                        text = text.Replace("z", string.Empty); // Changes z1 to 1, z5 to 5 etc. 
                         double number = System.Convert.ToDouble(text);
                         Value = new ZoneData(number);
                         return true;
@@ -334,6 +318,27 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                     }
                 }
 
+                // The text is a number
+                try
+                {
+                    double number = System.Convert.ToDouble(text);
+                    Value = new ZoneData(number);
+                    return true;
+                }
+                catch
+                {
+                    // The text is a RAPID data string
+                    try
+                    {
+                        Value = ZoneData.Parse(text);
+                        return true;
+                    }
+
+                    catch
+                    {
+                        return false;
+                    }
+                }
             }
 
             return false;

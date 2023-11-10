@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public LinearConfigurationControlComponent()
-          : base("Set Linear Configuration Control", "SLCC",
+          : base("Linear Configuration Control", "LCC",
               "Defines an instruction to activate or deactivate linear configuration control for all following MoveL instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -47,7 +47,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_LinearConfigurationControl(), "Set Linear Configuration Control", "SLCC", "Resulting Set Linear Configuration Control instruction");   
+            pManager.RegisterParam(new Param_LinearConfigurationControl(), "Linear Configuration Control", "LCC", "Resulting Linear Configuration Control instruction");   
         }
 
         /// <summary>

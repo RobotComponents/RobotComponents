@@ -64,7 +64,7 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 Robot Components is a free to use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate if you would cite if you used. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite all versions of Robot Components in publications use:
 
 ```
-Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2022). 
+Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2023). 
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```
@@ -127,14 +127,12 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 [3DCP TU/e - Design concepts for 3D Concrete Printed spiral staircase using SHCC and helical reinforcement](https://www.youtube.com/watch?v=18HOe7LmMvg)
 
 ## License
-Robot Components
-
 Copyright (c) 2018-2023 [The Robot Components authors and / or their affiliations](AUTHORS.md)
 
-Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License version 3.0 as published by the Free Software Foundation. 
+Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 
-Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public License along with Robot Components; If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with Robot Components; If not, see <http://www.gnu.org/licenses/>.
 
-@license LGPL-3.0 <https://www.gnu.org/licenses/lgpl-3.0.html>
+@license GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.html>

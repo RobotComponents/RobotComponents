@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -11,7 +11,9 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Definitions
@@ -172,6 +174,38 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return true;
             }
 
+            //Cast to Load Data Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_LoadData)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_LoadData(); }
+                else { target = (Q)(object)new GH_LoadData(Value.LoadData); }
+                return true;
+            }
+
+            //Cast to Load Data
+            if (typeof(Q).IsAssignableFrom(typeof(LoadData)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value.LoadData; }
+                return true;
+            }
+
+            //Cast to Declaration Goo
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Declaration)))
+            {
+                if (Value == null) { target = (Q)(object)new GH_Declaration(); }
+                else { target = (Q)(object)new GH_Declaration(Value); }
+                return true;
+            }
+
+            //Cast to Declaration
+            if (typeof(Q).IsAssignableFrom(typeof(IDeclaration)))
+            {
+                if (Value == null) { target = (Q)(object)null; }
+                else { target = (Q)(object)Value; }
+                return true;
+            }
+
             //Cast to Mesh
             if (typeof(Q).IsAssignableFrom(typeof(GH_Mesh)))
             {
@@ -185,6 +219,22 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Plane(Value.ToolPlane); }
+                return true;
+            }
+
+            //Cast to Point
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Point)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Point(Value.ToolPlane.Origin); }
+                return true;
+            }
+
+            //Cast to Vector
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Vector(Value.ToolPlane.ZAxis); }
                 return true;
             }
 
@@ -214,6 +264,43 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             {
                 Value = source as RobotTool;
                 return true;
+            }
+
+            //Cast from Declaration
+            if (typeof(IDeclaration).IsAssignableFrom(source.GetType()))
+            {
+                if (source is RobotTool robotTool)
+                {
+                    Value = robotTool;
+                    return true;
+                }
+            }
+
+            //Cast from Declaration Goo
+            if (typeof(GH_Declaration).IsAssignableFrom(source.GetType()))
+            {
+                GH_Declaration declarationGoo = source as GH_Declaration;
+                if (declarationGoo.Value is RobotTool robotTool)
+                {
+                    Value = robotTool;
+                    return true;
+                }
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = RobotTool.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
 
             return false;

@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -32,14 +32,16 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private bool _firstMovementIsMoveAbsJ = true;
         private bool _moduleNameInputParam = false;
         private bool _routineNameInputParam = false;
+        private bool _addLoaddataInputParam = false;
         private bool _addTooldataInputParam = false;
         private bool _addWobjdataInputParam = false;
         private readonly int _fixedParamNumInput = 2;
+        private bool _loaddataOutputParam = false;
         private bool _tooldataOutputParam = false;
         private bool _wobjdataOutputParam = false;
         private readonly int _fixedParamNumOutput = 1;
         #endregion
-
+        
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -59,10 +61,11 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable input parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[5]
+        private readonly IGH_Param[] _variableInputParameters = new IGH_Param[6]
         {
             new Param_String() { Name = "Module Name", NickName = "MN", Description = "The name of the module as a text. The default name is MainModule.", Access = GH_ParamAccess.item, Optional = true},
             new Param_String() { Name = "Procedure Name", NickName = "RN", Description = "The name of the RAPID routine as a text. The default name is main.", Access = GH_ParamAccess.item, Optional = true},
+            new Param_Boolean() { Name = "Add loaddata", NickName = "AL", Description = "Indicates if the loaddata should be added to the RAPID module.", Access = GH_ParamAccess.item, Optional = true},
             new Param_Boolean() { Name = "Add tooldata", NickName = "AT", Description = "Indicates if the tooldata should be added to the RAPID module.", Access = GH_ParamAccess.item, Optional = true},
             new Param_Boolean() { Name = "Add wobjdata", NickName = "AW", Description = "Indicates if the wobjdata should be added the RAPID module.", Access = GH_ParamAccess.item, Optional = true},
             new Param_Boolean() { Name = "Update", NickName = "U", Description = "Updates the RAPID module based on a boolean value. To increase performance, only update when changes were made.", Access = GH_ParamAccess.item, Optional = true }
@@ -71,8 +74,9 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// <summary>
         /// Stores the variable output parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[2]
+        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[3]
         {
+            new Param_String() { Name = "Loaddata", NickName = "L", Description = "The RAPID loaddata as a list with text.", Access = GH_ParamAccess.list},
             new Param_String() { Name = "Tooldata", NickName = "T", Description = "The RAPID tooldata as a list with text.", Access = GH_ParamAccess.list},
             new Param_String() { Name = "Wobjdata", NickName = "W", Description = "The RAPID wobjdata as a list with text.", Access = GH_ParamAccess.list}
         };
@@ -85,7 +89,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             pManager.AddParameter(new Param_Robot(), "Robot", "R", "Robot that is used as Robot.", GH_ParamAccess.item);
             pManager.AddParameter(new Param_Action(), "Actions", "A", "Actions as list of instructive and declarative Actions.", GH_ParamAccess.list);
 
-            AddInputParameter(4);
+            AddInputParameter(5);
         }
 
         /// <summary>
@@ -109,6 +113,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             string moduleName = "MainModule";
             string routineName = "main";
             bool addTooldata = true;
+            bool addLoaddata = true;
             bool addWobjdata = true;
             bool update = true;
 
@@ -133,21 +138,28 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             }
             if (Params.Input.Any(x => x.Name == _variableInputParameters[2].Name))
             {
-                if (!DA.GetData(_variableInputParameters[2].Name, ref addTooldata))
+                if (!DA.GetData(_variableInputParameters[2].Name, ref addLoaddata))
                 {
-                    addTooldata = true;
+                    addLoaddata = true;
                 }
             }
             if (Params.Input.Any(x => x.Name == _variableInputParameters[3].Name))
             {
-                if (!DA.GetData(_variableInputParameters[3].Name, ref addWobjdata))
+                if (!DA.GetData(_variableInputParameters[3].Name, ref addTooldata))
                 {
-                    addWobjdata = true;
+                    addTooldata = true;
                 }
             }
             if (Params.Input.Any(x => x.Name == _variableInputParameters[4].Name))
             {
-                if (!DA.GetData(_variableInputParameters[4].Name, ref update))
+                if (!DA.GetData(_variableInputParameters[4].Name, ref addWobjdata))
+                {
+                    addWobjdata = true;
+                }
+            }
+            if (Params.Input.Any(x => x.Name == _variableInputParameters[5].Name))
+            {
+                if (!DA.GetData(_variableInputParameters[5].Name, ref update))
                 {
                     update = true;
                 }
@@ -190,10 +202,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
                 _rapidGenerator = new RAPIDGenerator(robot, actions, moduleName, routineName);
 
                 // Generator code
-                _rapidGenerator.CreateModule(addTooldata, addWobjdata);
+                _rapidGenerator.CreateModule(addTooldata, addWobjdata, addLoaddata);
 
                 // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbsJ = _rapidGenerator.FirstMovementIsMoveAbsJ;
+                _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
             }
 
             // Checks if first Movement is MoveAbsJ
@@ -221,12 +233,17 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Tooldata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsLoadData);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[1].NickName)))
             {
                 int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
-                DA.SetDataList(ind, _rapidGenerator.Wobjdata);
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsToolData);
+            }
+            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[2].NickName)))
+            {
+                int ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[2].NickName));
+                DA.SetDataList(ind, _rapidGenerator.ProgramDeclarationsWorkObjectData);
             }
         }
 
@@ -255,7 +272,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return RobotComponents.ABB.Gh.Properties.Resources.RAPID_Icon; }
+            get { return Properties.Resources.RAPID_Icon; }
         }
 
         /// <summary>
@@ -265,7 +282,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("98554C6D-C877-4037-B2C2-1AA016715932"); }
+            get { return new Guid("0BA943C5-D728-4FBC-861B-07F1EB184AFD"); }
         }
         #endregion
 
@@ -279,9 +296,11 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Overwrite Module Name", MenuItemClickProgramName, true, _moduleNameInputParam);
             Menu_AppendItem(menu, "Overwrite Routine Name", MenuItemClickRoutineName, true, _routineNameInputParam);
+            Menu_AppendItem(menu, "Add Load Data", MenuItemClickLoaddata, true, _addLoaddataInputParam);
             Menu_AppendItem(menu, "Add Tool Data", MenuItemClickTooldata, true, _addTooldataInputParam);
             Menu_AppendItem(menu, "Add Work Object Data", MenuItemClickWobjdata, true, _addWobjdataInputParam);
             Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Output Load Data", MenuItemClickOutputLoaddata, true, _loaddataOutputParam);
             Menu_AppendItem(menu, "Output Tool Data", MenuItemClickOutputTooldata, true, _tooldataOutputParam);
             Menu_AppendItem(menu, "Output Work Object Data", MenuItemClickOutputWobjdata, true, _wobjdataOutputParam);
             Menu_AppendSeparator(menu);
@@ -315,6 +334,18 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         }
 
         /// <summary>
+        /// Handles the event when the custom menu item "Add Load Data" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickLoaddata(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Add Load Data");
+            _addLoaddataInputParam = !_addLoaddataInputParam;
+            AddInputParameter(2);
+        }
+
+        /// <summary>
         /// Handles the event when the custom menu item "Add Tool Data" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -323,7 +354,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Add Tool Data");
             _addTooldataInputParam = !_addTooldataInputParam;
-            AddInputParameter(2);
+            AddInputParameter(3);
         }
 
         /// <summary>
@@ -335,7 +366,19 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Add Work Object Data");
             _addWobjdataInputParam = !_addWobjdataInputParam;
-            AddInputParameter(3);
+            AddInputParameter(4);
+        }
+
+        /// <summary>
+        /// Handles the event when the custom menu item "Output Load Data" is clicked. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        private void MenuItemClickOutputLoaddata(object sender, EventArgs e)
+        {
+            RecordUndoEvent("Output Load Data");
+            _loaddataOutputParam = !_loaddataOutputParam;
+            AddOutputParameter(0);
         }
 
         /// <summary>
@@ -347,7 +390,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Output Tool Data");
             _tooldataOutputParam = !_tooldataOutputParam;
-            AddOutputParameter(0);
+            AddOutputParameter(1);
         }
 
         /// <summary>
@@ -359,7 +402,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             RecordUndoEvent("Output Work Object Data");
             _wobjdataOutputParam = !_wobjdataOutputParam;
-            AddOutputParameter(1);
+            AddOutputParameter(2);
         }
 
         /// <summary>
@@ -425,8 +468,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             writer.SetBoolean("Module Name", _moduleNameInputParam);
             writer.SetBoolean("Routine Name", _routineNameInputParam);
+            writer.SetBoolean("Add loaddata", _addLoaddataInputParam);
             writer.SetBoolean("Add tooldata", _addTooldataInputParam);
             writer.SetBoolean("Add wobjdata", _addWobjdataInputParam);
+            writer.SetBoolean("Output loaddata", _loaddataOutputParam);
             writer.SetBoolean("Output tooldata", _tooldataOutputParam);
             writer.SetBoolean("Output wobjdata", _wobjdataOutputParam);
             return base.Write(writer);
@@ -441,8 +486,10 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             _moduleNameInputParam = reader.GetBoolean("Module Name");
             _routineNameInputParam = reader.GetBoolean("Routine Name");
+            _addLoaddataInputParam = reader.GetBoolean("Add loaddata");
             _addTooldataInputParam = reader.GetBoolean("Add tooldata");
             _addWobjdataInputParam = reader.GetBoolean("Add wobjdata");
+            _loaddataOutputParam = reader.GetBoolean("Output loaddata");
             _tooldataOutputParam = reader.GetBoolean("Output tooldata");
             _wobjdataOutputParam = reader.GetBoolean("Output wobjdata");
             return base.Read(reader);

@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -14,14 +14,16 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents the Configuration Linear instruction. 
-    /// This action is used to switch on or off the monitoring of linear movements.  
+    /// Represents the Linear Configuration Control instruction.  
     /// </summary>
+    /// <remarks>
+    /// This action is used to switch on or off the monitoring of linear movements. 
+    /// </remarks>
     [Serializable()]
     public class LinearConfigurationControl : Action, IInstruction, ISerializable
     {
         #region fields
-        private bool _isActive; // boolean that indicates if the linear configuration control is active
+        private bool _isActive;
         #endregion
 
         #region (de)serialization
@@ -78,7 +80,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Linear Configuration Control instance.
         /// </summary>
-        /// <returns> A deep copy of the Linear Configuration Control instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Linear Configuration Control instance. 
+        /// </returns>
         public LinearConfigurationControl Duplicate()
         {
             return new LinearConfigurationControl(this);
@@ -87,7 +91,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Linear Configuration Control instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the Linear Configuration Control instance as an IInstruction. </returns>
+        /// <returns> 
+        /// A deep copy of the Linear Configuration Control instance as an IInstruction. 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new LinearConfigurationControl(this);
@@ -96,7 +102,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Linear Configuration Control instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Linear Configuration Control instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Linear Configuration Control instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new LinearConfigurationControl(this);
@@ -107,7 +115,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -128,7 +138,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
@@ -138,7 +150,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return _isActive == true ? "ConfL\\on;" : "ConfL\\off;";
@@ -146,8 +160,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -155,8 +171,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -183,5 +201,4 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
         #endregion
     }
-
 }

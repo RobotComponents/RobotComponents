@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -25,13 +25,17 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns an exact duplicate of this Mechanical Unit.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit.
+        /// </returns>
         IMechanicalUnit DuplicateMechanicalUnit();
 
         /// <summary>
         /// Returns an exact duplicate of this Mechanical Unit without meshes.
         /// </summary>
-        /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
+        /// <returns> 
+        /// A deep copy of the Mechanical Unit without meshes. 
+        /// </returns>
         IMechanicalUnit DuplicateMechanicalUnitWithoutMesh();
         #endregion
 
@@ -39,14 +43,18 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object.
+        /// </returns>
         string ToString();
 
         /// <summary>
         /// Calculates and returns the position of the meshes for a given Joint Target.
         /// </summary>
         /// <param name="jointTarget"> The Joint Target. </param>
-        /// <returns> The posed meshes. </returns>
+        /// <returns> 
+        /// The posed meshes. 
+        /// </returns>
         List<Mesh> PoseMeshes(JointTarget jointTarget);
        
         /// <summary>
@@ -59,7 +67,9 @@ namespace RobotComponents.ABB.Definitions
         /// Returns the Bounding Box of the object.
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
-        /// <returns> The Bounding Box. </returns>
+        /// <returns> 
+        /// The Bounding Box. 
+        /// </returns>
         BoundingBox GetBoundingBox(bool accurate);
         #endregion
 

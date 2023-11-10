@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -13,6 +13,7 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
@@ -215,6 +216,84 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 GH_Declaration declarationGoo = source as GH_Declaration;
                 Value = declarationGoo.Value;
                 return true;
+            }
+
+            //Cast from Text
+            if (typeof(GH_String).IsAssignableFrom(source.GetType()))
+            {
+                string text = (source as GH_String).Value;
+
+                try
+                {
+                    Value = ExternalJointPosition.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = JointTarget.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = RobotJointPosition.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = RobotTarget.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = SpeedData.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = TaskList.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                try
+                {
+                    Value = ZoneData.Parse(text);
+                    return true;
+                }
+                catch
+                {
+                    // pass
+                }
+
+                return false;
             }
 
             return false;

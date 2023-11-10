@@ -1,5 +1,5 @@
-// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -17,9 +17,11 @@ namespace RobotComponents.ABB.Utils
 {
 	/// <summary>
 	/// Represents the Robot Tool Calibration class.
+	/// </summary>
+	/// <remarks>
 	/// This class uses Newton's method and numerical differentiation to calculate the TCP from given Joint Positions. 
 	/// If desired, the parameters for this optimization can be changed via the properties of this class.
-	/// </summary>
+	/// </remarks>
 	public class RobotToolCalibration
 	{
 		#region fields
@@ -53,9 +55,11 @@ namespace RobotComponents.ABB.Utils
         }
 
 		/// <summary>
-		/// Initializes a new instance of the Robot Tool Calibration class from given Robot Joint Positions.
-		/// The External Joint Positions are set with default values (9e9).
+		/// Initializes a new instance of the Robot Tool Calibration class from given Robot Joint Positions..
 		/// </summary>
+		/// <remarks>
+		/// The External Joint Positions are set with default values (9e9).
+		/// </remarks>
 		/// <param name="robot"> The Robot the Joint Positions are given for. </param>
 		/// <param name="robotJointPositions"> The Robot Joint Positions as a list. </param>
 		public RobotToolCalibration(Robot robot, IList<RobotJointPosition> robotJointPositions)
@@ -112,7 +116,9 @@ namespace RobotComponents.ABB.Utils
 		/// <summary>
 		/// Returns an exact duplicate of this Robot Tool Calibration instance.
 		/// </summary>
-		/// <returns> A deep copy of the Robot Tool Calibration instance. </returns>
+		/// <returns> 
+		/// A deep copy of the Robot Tool Calibration instance. 
+		/// </returns>
 		public RobotToolCalibration Duplicate()
         {
 			return new RobotToolCalibration(this);
@@ -175,7 +181,9 @@ namespace RobotComponents.ABB.Utils
 		/// <summary>
 		/// Checks if the given Joint Positions are within the axis limits of the robot.
 		/// </summary>
-		/// <returns> A list with erros messages. When the list is empty, all the joint positions are within the limits. </returns>
+		/// <returns> 
+		/// A list with erros messages. When the list is empty, all the joint positions are within the limits. 
+		/// </returns>
 		public List<string> CheckJointPositionsAxisLimits()
         {
 			List<string> errors = new List<string>();
@@ -460,8 +468,10 @@ namespace RobotComponents.ABB.Utils
 
 		/// <summary>
 		/// Gets the target point in world coordinate space. 
-		/// This is the average point that is obtained from the given Robot Joint Positions and the calculated TCP.
 		/// </summary>
+		/// <remarks>
+		/// This is the average point that is obtained from the given Robot Joint Positions and the calculated TCP.
+		/// </remarks>
 		public Point3d TargetPoint
         {
             get { return _averagePoint; }

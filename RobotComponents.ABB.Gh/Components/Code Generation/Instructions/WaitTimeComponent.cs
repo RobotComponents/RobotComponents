@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public WaitTimeComponent()
-          : base("Wait for Time", "WT",
+          : base("Wait Time", "WT",
               "Defines an instruction to wait a given amount of time between two other RAPID instructions."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -39,7 +39,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Duration", "D", "Duration in seconds as a number", GH_ParamAccess.item, 1);
+            pManager.AddBooleanParameter("In Position", "P", "Specifies whether or not the mechanial units must have come to a standstill before the wait time starts.", GH_ParamAccess.item, false);
+            pManager.AddNumberParameter("Duration", "D", "Duration in seconds as a number", GH_ParamAccess.item, 1.0);
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_WaitTime(), "WaitTime", "WT", "Resulting Wait for Time instruction");   
+            pManager.RegisterParam(new Param_WaitTime(), "Wait Time", "WT", "Resulting Wait Time instruction");   
         }
 
         /// <summary>
@@ -58,13 +59,15 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Input variables
+            bool inPosition = false;
             double duration = 0;
 
             // Catch the input variables
-            if (!DA.GetData(0, ref duration)) { return; }
+            if (!DA.GetData(0, ref inPosition)) { return; }
+            if (!DA.GetData(1, ref duration)) { return; }
 
             // Create the action
-            WaitTime timer = new WaitTime(duration);
+            WaitTime timer = new WaitTime(duration, inPosition);
 
             // Output
             DA.SetData(0, timer);
@@ -104,7 +107,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("86776D1A-672D-44F5-B655-B60D2FCE58AA"); }
+            get { return new Guid("9523BCFA-3657-452B-88AC-73851F486286"); }
         }
         #endregion
 

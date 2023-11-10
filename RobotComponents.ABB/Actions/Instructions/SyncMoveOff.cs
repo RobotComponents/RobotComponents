@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -21,8 +21,8 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class SyncMoveOff : Action, IInstruction, ISyncident, ISerializable
     {
         #region fields
-        private VariableType _variableType; // variable type for sync identification
-        private string _syncident; // the sync identification name
+        private VariableType _variableType;
+        private string _syncident;
         private double _timeOut;
         #endregion
 
@@ -81,7 +81,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="SyncMoveOff"> The SyncMoveOff instance to duplicate. </param>
         public SyncMoveOff(SyncMoveOff SyncMoveOff)
         {
-            _variableType = SyncMoveOff.ReferenceType;
+            _variableType = SyncMoveOff.VariableType;
             _syncident = SyncMoveOff.SyncID;
             _timeOut = SyncMoveOff.TimeOut;
         }
@@ -89,7 +89,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this SyncMoveOff instance.
         /// </summary>
-        /// <returns> A deep copy of the SyncMoveOff instance. </returns>
+        /// <returns> 
+        /// A deep copy of the SyncMoveOff instance. 
+        /// </returns>
         public SyncMoveOff Duplicate()
         {
             return new SyncMoveOff(this);
@@ -98,7 +100,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this SyncMoveOff instance as IInstruction.
         /// </summary>
-        /// <returns> A deep copy of the SyncMoveOff instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the SyncMoveOff instance as an IInstructions 
+        /// </returns>
         public IInstruction DuplicateInstruction()
         {
             return new SyncMoveOff(this);
@@ -107,7 +111,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this SyncMoveOff instance as ISyncident.
         /// </summary>
-        /// <returns> A deep copy of the SyncMoveOff instance as an ISyncident. </returns>
+        /// <returns> 
+        /// A deep copy of the SyncMoveOff instance as an ISyncident.
+        /// </returns>
         public ISyncident DuplicateSyncident()
         {
             return new SyncMoveOff(this);
@@ -116,7 +122,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns an exact duplicate of this Tasks instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Tasks instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Tasks instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new SyncMoveOff(this);
@@ -127,7 +135,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -144,7 +154,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// The RAPID code line.
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return $"{Enum.GetName(typeof(VariableType), _variableType)} syncident {_syncident};";
@@ -154,7 +166,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return $"SyncMoveOff {_syncident}{(_timeOut > 0 ? $"\\TimeOut:={_timeOut:0.###}" : "")};";
@@ -162,8 +176,10 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -176,13 +192,15 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
-            RAPIDGenerator.SynchronizedMovements = false;
+            RAPIDGenerator.IsSynchronized = false;
         }
         #endregion
 
@@ -201,9 +219,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Gets or sets the reference type of the syncident.
+        /// Gets or sets the variable type of the syncident.
         /// </summary>
-        public VariableType ReferenceType
+        public VariableType VariableType
         {
             get { return _variableType; }
             set { _variableType = value; }
@@ -220,12 +238,26 @@ namespace RobotComponents.ABB.Actions.Instructions
 
         /// <summary>
         /// Gets or sets te max. time to wait for the other program tasks to reach the synchronization point.
-        /// Set a negative value to wait for ever (default is -1).
         /// </summary>
+        /// <remarks>
+        /// Set a negative value to wait for ever (default is -1).
+        /// </remarks>
         public double TimeOut
         {
             get { return _timeOut; }
             set { _timeOut = value; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or sets the variable type. 
+        /// </summary>
+        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
+        public VariableType ReferenceType
+        {
+            get { return _variableType; }
+            set { _variableType = value; }
         }
         #endregion
     }

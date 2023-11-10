@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -47,7 +47,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         {
             pManager.Register_StringParam("Name", "N", "Name as string");
             pManager.Register_PlaneParam("Plane", "P", "Plane as Plane");
-            pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
+            pManager.RegisterParam(new Param_ConfigurationData(), "Configuration Data", "CD", "The robot configuration as Configuration Data");
             pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The positions of the external logical axes as an External Joint Position");
         }
    
@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
                 // Output
                 DA.SetData(0, target.Name);
                 DA.SetData(1, target.Plane);
-                DA.SetData(2, target.AxisConfig);
+                DA.SetData(2, target.ConfigurationData);
                 DA.SetData(3, target.ExternalJointPosition);
             }
         }
@@ -110,7 +110,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("2EE07DDD-B0F2-4111-BFD3-B88364B55415"); }
+            get { return new Guid("BD810C50-2530-4F3B-A693-B43BB49FDDF0"); }
         }
         #endregion
 

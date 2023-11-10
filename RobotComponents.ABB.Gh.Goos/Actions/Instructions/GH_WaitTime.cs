@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -179,6 +179,14 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Number(Value.Duration); }
+                return true;
+            }
+
+            //Cast to Bool
+            if (typeof(Q).IsAssignableFrom(typeof(GH_Boolean)))
+            {
+                if (Value == null) { target = default; }
+                else { target = (Q)(object)new GH_Boolean(Value.InPosition); }
                 return true;
             }
 

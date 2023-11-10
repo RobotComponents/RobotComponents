@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -12,19 +12,23 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents the Robot Joint Position declaration.
-    /// This action is used to define the robot axis positions in degrees.
     /// </summary>
+    /// <remarks>
+    /// This action is used to define the robot axis positions in degrees.
+    /// </remarks>
     [Serializable()]
     public class RobotJointPosition : Action, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
         private Scope _scope;
         private VariableType _variableType;
+        private static readonly string _datatype = "robjoint";
         private string _name;
         private double _val1;
         private double _val2;
@@ -79,7 +83,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         #region constructors
         /// <summary>
-        /// Initializes a new instance of the Robot Joint Position class with an empty name an all axis values set to zero. 
+        /// Initializes a new instance of the Robot Joint Position class with an empty name an all joint positions set to zero. 
         /// </summary>
         public RobotJointPosition()
         {
@@ -110,25 +114,25 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = "";
 
-            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
-            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
-            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
-            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
-            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
-            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
+            _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
+            _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
+            _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
+            _val4 = double.IsNaN(rax_4) ? _defaultValue : rax_4;
+            _val5 = double.IsNaN(rax_5) ? _defaultValue : rax_5;
+            _val6 = double.IsNaN(rax_6) ? _defaultValue : rax_6;
         }
 
         /// <summary>
         /// Initializes a new instance of the Robot Joint Position class with an empty name from a collection with values 
         /// </summary>
-        /// <param name="internalAxisValues"> The user defined internal axis values as a collection.</param>
-        public RobotJointPosition(IList<double> internalAxisValues)
+        /// <param name="internalJointPositions"> The user defined internal joint positions as a collection.</param>
+        public RobotJointPosition(IList<double> internalJointPositions)
         {
             _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = "";
 
-            double[] values = CheckAxisValues(internalAxisValues);
+            double[] values = CheckAxisValues(internalJointPositions);
 
             _val1 = values[0];
             _val2 = values[1];
@@ -154,26 +158,26 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = name;
 
-            _val1 = rax_1 == double.NaN ? _defaultValue : rax_1;
-            _val2 = rax_2 == double.NaN ? _defaultValue : rax_2;
-            _val3 = rax_3 == double.NaN ? _defaultValue : rax_3;
-            _val4 = rax_4 == double.NaN ? _defaultValue : rax_4;
-            _val5 = rax_5 == double.NaN ? _defaultValue : rax_5;
-            _val6 = rax_6 == double.NaN ? _defaultValue : rax_6;
+            _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
+            _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
+            _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
+            _val4 = double.IsNaN(rax_4) ? _defaultValue : rax_4;
+            _val5 = double.IsNaN(rax_5) ? _defaultValue : rax_5;
+            _val6 = double.IsNaN(rax_6) ? _defaultValue : rax_6;
         }
 
         /// <summary>
         /// Initializes a new instance of the Robot Joint Position class from a collection with values.
         /// </summary>
         /// <param name="name"> The robot joint position name, must be unique. </param>
-        /// <param name="internalAxisValues"> The user defined internal axis values as a colection.</param>
-        public RobotJointPosition(string name, IList<double> internalAxisValues)
+        /// <param name="internalJointPositions"> The user defined internal joint positions as a colection.</param>
+        public RobotJointPosition(string name, IList<double> internalJointPositions)
         {
             _scope = Scope.GLOBAL;
             _variableType = VariableType.VAR;
             _name = name;
 
-            double[] values = CheckAxisValues(internalAxisValues);
+            double[] values = CheckAxisValues(internalJointPositions);
             
             _val1 = values[0];
             _val2 = values[1];
@@ -203,7 +207,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Joint Position instance.
         /// </summary>
-        /// <returns> A deep copy of the Robot Joint Position instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Joint Position instance. 
+        /// </returns>
         public RobotJointPosition Duplicate()
         {
             return new RobotJointPosition(this);
@@ -212,7 +218,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Joint Position instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Robot Joint Position instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Joint Position instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new RobotJointPosition(this);
@@ -221,10 +229,82 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns an exact duplicate of this Robot Joint Position instance as an IDeclaration.
         /// </summary>
-        /// <returns> A deep copy of the Robot Joint Position instance as an IDeclaration. </returns>
+        /// <returns> 
+        /// A deep copy of the Robot Joint Position instance as an IDeclaration. 
+        /// </returns>
         public IDeclaration DuplicateDeclaration()
         {
             return new RobotJointPosition(this);
+        }
+
+        /// <summary>
+        /// Returns an exact duplicate of this Robot Joint Position instance as an IJointPosition.
+        /// </summary>
+        /// <returns> 
+        /// A deep copy of the Robot Joint Position instance as an IJointPosition. 
+        /// </returns>
+        public IJointPosition DuplicateJointPosition()
+        {
+            return new RobotJointPosition(this);
+        }
+        #endregion
+
+        #region parse
+        /// <summary>
+        /// Initializes a new instance of the Robot Joint Position class from a rapid data string.
+        /// </summary>
+        /// <remarks>
+        /// Only used for the Parse and TryParse methods. Therefore, this constructor is private. 
+        /// </remarks>
+        /// <param name="rapidData"></param>
+        private RobotJointPosition(string rapidData)
+        {
+            this.SetDataFromString(rapidData, out string[] values);
+
+            if (values.Length == 6)
+            {
+                _val1 = values[0] == "9E9" ? 9e9 : double.Parse(values[0]);
+                _val2 = values[1] == "9E9" ? 9e9 : double.Parse(values[1]);
+                _val3 = values[2] == "9E9" ? 9e9 : double.Parse(values[2]);
+                _val4 = values[3] == "9E9" ? 9e9 : double.Parse(values[3]);
+                _val5 = values[4] == "9E9" ? 9e9 : double.Parse(values[4]);
+                _val6 = values[5] == "9E9" ? 9e9 : double.Parse(values[5]);
+            }
+            else
+            {
+                throw new InvalidCastException("Invalid RAPID data string: The number of values does not match.");
+            }
+        }
+
+        /// <summary>
+        /// Returns a Robot Joint Position instance constructed from a RAPID data string. 
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. s</param>
+        public static RobotJointPosition Parse(string rapidData)
+        {
+            return new RobotJointPosition(rapidData);
+        }
+
+        /// <summary>
+        /// Attempts to parse a RAPID data string into a Robot Joint Position instance.  
+        /// </summary>
+        /// <param name="rapidData"> The RAPID data string. </param>
+        /// <param name="robotJointPosition"> The Robot Joint Position intance. </param>
+        /// <returns> 
+        /// True on success, false on failure. 
+        /// </returns>
+        public static bool TryParse(string rapidData, out RobotJointPosition robotJointPosition)
+        {
+            try
+            {
+                robotJointPosition = new RobotJointPosition(rapidData);
+                return true;
+            }
+            catch
+            {
+                robotJointPosition = new RobotJointPosition();
+                return false;
+            }
         }
         #endregion
 
@@ -232,7 +312,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (!IsValid)
@@ -255,18 +337,20 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Robot Joint Position as an array with axis values.
+        /// Returns the Robot Joint Position as an array with joint positions.
         /// </summary>
-        /// <returns> The array containing the axis values of the robot joint position. </returns>
+        /// <returns> 
+        /// The array containing the the robot joint positions. 
+        /// </returns>
         public double[] ToArray()
         {
             return new double[] { _val1, _val2, _val3, _val4, _val5, _val6 };
         }
 
         /// <summary>
-        /// Returns the Robot Joint Position as an array with axis values.
+        /// Returns the Robot Joint Position as an array with joint positions.
         /// </summary>
-        /// <returns> The list containing the axis values of the robot joint position. </returns>
+        /// <returns> The list containing of the robot joint positions. </returns>
         public List<double> ToList()
         {
             return new List<double>() { _val1, _val2, _val3, _val4, _val5, _val6 };
@@ -275,7 +359,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Computes the sum of the values in this joint position.
         /// </summary>
-        /// <returns> The sum of the values in the joint position. </returns>
+        /// <returns> 
+        /// The sum of the values in the joint position. 
+        /// </returns>
         public double Sum()
         {
             return _val1 + _val2 + _val3 + _val4 + _val5 + _val6;
@@ -284,7 +370,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Computes the norm of this joint position.
         /// </summary>
-        /// <returns> The norm of the joint position. </returns>
+        /// <returns> 
+        /// The norm of the joint position. 
+        /// </returns>
         public double Norm()
         {
             return Math.Sqrt(NormSq());
@@ -293,7 +381,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Computes the square norm of this joint position.
         /// </summary>
-        /// <returns> he square norm of this joint position. </returns>
+        /// <returns> 
+        /// The square norm of this joint position. 
+        /// </returns>
         public double NormSq()
         {
             return (_val1 * _val1) + (_val2 * _val2) + (_val3 * _val3) + (_val4 * _val4) + (_val5 * _val5) + (_val6 * _val6);
@@ -316,7 +406,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Adds a constant number to all the values inside this Joint Position.
         /// </summary>
-        /// <param name="value"> The number to be added. </param>
+        /// <param name="value"> 
+        /// The number to be added. 
+        /// </param>
         public void Add(double value)
         {
             for (int i = 0; i < 6; i++)
@@ -327,8 +419,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Adds the values of an Robot Joint Position to the values inside this Joint Position. 
-        /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
         /// </summary>
+        /// <remarks>
+        /// Value 1 + value 1, value 2 + value 2, value 3 + value 3 etc.
+        /// </remarks>
         /// <param name="jointPosition"> The Robot Joint Position to be added. </param>
         public void Add(RobotJointPosition jointPosition)
         {
@@ -352,8 +446,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Substracts the values of an Robot Joint Position from the values inside this Joint Position. 
-        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </summary>
+        /// <remarks>
+        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
+        /// </remarks>
         /// <param name="jointPosition"> The Robot Joint Position to be substracted. </param>
         public void Substract(RobotJointPosition jointPosition)
         {
@@ -377,8 +473,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Multiplies the values inside this Joint Position with the values from another Robot Joint Position.
-        /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
         /// </summary>
+        /// <remarks>
+        /// Value 1 * value 1, value 2 * value 2, value 3 * value 3 etc.
+        /// </remarks>
         /// <param name="jointPosition"> The multiplier as a Robot Joint Position. </param>
         public void Multiply(RobotJointPosition jointPosition)
         {
@@ -407,8 +505,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Divides the values inside this Joint Position with the values from another Robot Joint Position.
-        /// Value 1 / value 1, value 2 / value 2, value 3 / value 3 etc.
         /// </summary>
+        /// <remarks>
+        /// Value 1 / value 1, value 2 / value 2, value 3 / value 3 etc.
+        /// </remarks>
         /// <param name="jointPosition"> The divider as an Robot Joint Position. </param>
         public void Divide(RobotJointPosition jointPosition)
         {
@@ -423,24 +523,28 @@ namespace RobotComponents.ABB.Actions.Declarations
             }
         }
 
-        /// <summary></summary>
-        /// Cecks the array with internal axis values. 
-        /// Always returns a list with 6 internal axis values. 
-        /// For missing values 0.0 is used. 
-        /// <param name="axisValues"> The list with the internal axis values. </param>
-        /// <returns> The array with 6 axis values. </returns>
-        private double[] CheckAxisValues(IList<double> axisValues)
+        /// <summary>
+        /// Cecks the array with internal joint positions. 
+        /// </summary>
+        /// <remarks>
+        /// Always returns a list with 6 internal joint positions. 
+        /// For missing values 0.0 is used. </remarks>
+        /// <param name="jointPositions"> The list with the internal joint positions. </param>
+        /// <returns> 
+        /// The array with 6 joint positions. 
+        /// </returns>
+        private double[] CheckAxisValues(IList<double> jointPositions)
         {
             double[] result = new double[6];
-            int n = Math.Min(axisValues.Count, 6);
+            int n = Math.Min(jointPositions.Count, 6);
 
-            // Copy and check definied axis values
+            // Copy and check definied joint positions
             for (int i = 0; i < n; i++)
             {
-                result[i] = axisValues[i] == double.NaN ? _defaultValue : axisValues[i];
+                result[i] = double.IsNaN(jointPositions[i]) ? _defaultValue : jointPositions[i];
             }
 
-            // Add missing axis values
+            // Add missing joint positions
             for (int i = n; i < 6; i++)
             {
                 result[i] = _defaultValue;
@@ -450,9 +554,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Returns the Joint Position in RAPID code format, e.g. "[0, 0, 0, 0, 45, 0]".
+        /// Returns the Joint Position in RAPID code format, e.g. 
         /// </summary>
-        /// <returns> The string with axis values. </returns>
+        /// <remarks>
+        /// An example output is "[0, 0, 0, 0, 45, 0]".
+        /// </remarks>
+        /// <returns> 
+        /// The string with joint positions. 
+        /// </returns>
         public string ToRAPID()
         {
             string code = "";
@@ -471,13 +580,15 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// The RAPID code line in case a variable name is defined. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
                 string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-                result += $"{Enum.GetName(typeof(VariableType), _variableType)} robjoint {_name} := {ToRAPID()};";
+                result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name} := {ToRAPID()};";
 
                 return result;
             }
@@ -489,7 +600,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> An empty string. </returns>
+        /// <returns> 
+        /// An empty string. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
@@ -497,8 +610,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -514,8 +629,10 @@ namespace RobotComponents.ABB.Actions.Declarations
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {
@@ -530,12 +647,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             get 
             { 
-                if (_val1 == double.NaN) { return false; }
-                if (_val2 == double.NaN) { return false; }
-                if (_val3 == double.NaN) { return false; }
-                if (_val4 == double.NaN) { return false; }
-                if (_val5 == double.NaN) { return false; }
-                if (_val6 == double.NaN) { return false; }
+                if (double.IsNaN(_val1)) { return false; }
+                if (double.IsNaN(_val2)) { return false; }
+                if (double.IsNaN(_val3)) { return false; }
+                if (double.IsNaN(_val4)) { return false; }
+                if (double.IsNaN(_val5)) { return false; }
+                if (double.IsNaN(_val6)) { return false; }
                 return true; 
             }
         }
@@ -559,9 +676,19 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the Robot Joint Position variable name.
-        /// Each Robot Joint Position variable name has to be unique.
+        /// Gets the RAPID datatype. 
         /// </summary>
+        public string Datatype
+        {
+            get { return _datatype; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Robot Joint Position variable name.
+        /// </summary>
+        /// <remarks>
+        /// Each variable name has to be unique.
+        /// </remarks>
         public string Name
         {
             get { return _name; }
@@ -577,10 +704,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Gets or sets the axis values through the indexer. 
+        /// Gets or sets the joint positions through the indexer. 
         /// </summary>
         /// <param name="index"> The index number. </param>
-        /// <returns> The axis value located at the given index. </returns>
+        /// <returns> 
+        /// The joint position located at the given index. 
+        /// </returns>
         public double this[int index]
         {
             get
@@ -601,12 +730,12 @@ namespace RobotComponents.ABB.Actions.Declarations
             {
                 switch (index)
                 {
-                    case 0: _val1 = value == double.NaN ? _defaultValue : value; break;
-                    case 1: _val2 = value == double.NaN ? _defaultValue : value; break;
-                    case 2: _val3 = value == double.NaN ? _defaultValue : value; break;
-                    case 3: _val4 = value == double.NaN ? _defaultValue : value; break;
-                    case 4: _val5 = value == double.NaN ? _defaultValue : value; break;
-                    case 5: _val6 = value == double.NaN ? _defaultValue : value; break;
+                    case 0: _val1 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 1: _val2 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 2: _val3 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 3: _val4 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 4: _val5 = double.IsNaN(value) ? _defaultValue : value; break;
+                    case 5: _val6 = double.IsNaN(value) ? _defaultValue : value; break;
                     default: throw new IndexOutOfRangeException();
                 }
             }
@@ -627,7 +756,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p"> The Robot Joint Position. </param>
         /// <param name="num"> The value to add. </param>
-        /// <returns> The Robot Joint Position with added values. </returns>
+        /// <returns> 
+        /// The Robot Joint Position with added values. 
+        /// </returns>
         public static RobotJointPosition operator +(RobotJointPosition p, double num)
         {
             return new RobotJointPosition(p.Name, p[0] + num, p[1] + num, p[2] + num, p[3] + num, p[4] + num, p[5] + num);
@@ -638,7 +769,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p"> The Robot Joint Position. </param>
         /// <param name="num"> The number to substract. </param>
-        /// <returns> The Robot Joint Position with divide values. </returns>
+        /// <returns> 
+        /// The Robot Joint Position with divide values.
+        /// </returns>
         public static RobotJointPosition operator -(RobotJointPosition p, double num)
         {
             return new RobotJointPosition(p.Name, p[0] - num, p[1] - num, p[2] - num, p[3] - num, p[4] - num, p[5] - num);
@@ -649,7 +782,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p"> The Robot Joint Position. </param>
         /// <param name="num"> The value to multiply by. </param>
-        /// <returns> The Robot Joint Position with multiplied values. </returns>
+        /// <returns> 
+        /// The Robot Joint Position with multiplied values. 
+        /// </returns>
         public static RobotJointPosition operator *(RobotJointPosition p, double num)
         {
             return new RobotJointPosition(p.Name, p[0] * num, p[1] * num, p[2] * num, p[3] * num, p[4] * num, p[5] * num);
@@ -660,7 +795,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p"> The Robot Joint Position. </param>
         /// <param name="num"> The number to divide by. </param>
-        /// <returns> The Robot Joint Position with divide values. </returns>
+        /// <returns> 
+        /// The Robot Joint Position with divide values. 
+        /// </returns>
         public static RobotJointPosition operator /(RobotJointPosition p, double num)
         {
             if (num == 0)
@@ -676,7 +813,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
-        /// <returns> The addition of the two Robot Joint Poistion</returns>
+        /// <returns> 
+        /// The addition of the two Robot Joint Poistion.
+        /// </returns>
         public static RobotJointPosition operator +(RobotJointPosition p1, RobotJointPosition p2)
         {
             return new RobotJointPosition(p1[0] + p2[0], p1[1] + p2[1], p1[2] + p2[2], p1[3] + p2[3], p1[4] + p2[4], p1[5] + p2[5]);
@@ -687,7 +826,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
-        /// <returns> The first robot Joint Position minus the second Robot Joint Position. </returns>
+        /// <returns> 
+        /// The first robot Joint Position minus the second Robot Joint Position. 
+        /// </returns>
         public static RobotJointPosition operator -(RobotJointPosition p1, RobotJointPosition p2)
         {
             return new RobotJointPosition(p1[0] - p2[0], p1[1] - p2[1], p1[2] - p2[2], p1[3] - p2[3], p1[4] - p2[4], p1[5] - p2[5]);
@@ -698,7 +839,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
-        /// <returns> The multiplicaton of the two Robot Joint Positions. </returns>
+        /// <returns> 
+        /// The multiplicaton of the two Robot Joint Positions. 
+        /// </returns>
         public static RobotJointPosition operator *(RobotJointPosition p1, RobotJointPosition p2)
         {
             return new RobotJointPosition(p1[0] * p2[0], p1[1] * p2[1], p1[2] * p2[2], p1[3] * p2[3], p1[4] * p2[4], p1[5] * p2[5]);
@@ -709,7 +852,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         /// <param name="p1"> The first Robot Joint Position. </param>
         /// <param name="p2"> The second Robot Joint Position. </param>
-        /// <returns> The first Robot Joint Position divided by the second Robot Joint Position. </returns>
+        /// <returns> 
+        /// The first Robot Joint Position divided by the second Robot Joint Position. 
+        /// </returns>
         public static RobotJointPosition operator /(RobotJointPosition p1, RobotJointPosition p2)
         {
             if (p2[0] == 0 || p2[1] == 0 || p2[2] == 0 || p2[3] == 0 || p2[4] == 0 || p2[5] == 0)
@@ -721,5 +866,4 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
         #endregion
     }
-
 }

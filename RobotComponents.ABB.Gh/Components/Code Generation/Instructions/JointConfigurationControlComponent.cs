@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public JointConfigurationControlComponent()
-          : base("Set Joint Configuration Control", "SJCC",
+          : base("Joint Configuration Control", "JCC",
               "Defines an instruction to activate or deactivate joint configuration control for all following MoveJ instructions."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -47,7 +47,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_JointConfigurationControl(), "Set Joint Configuration Control", "SJCC", "Resulting Set Joint Configuration Control instruction");   
+            pManager.RegisterParam(new Param_JointConfigurationControl(), "Joint Configuration Control", "JCC", "Resulting Joint Configuration Control instruction");   
         }
 
         /// <summary>

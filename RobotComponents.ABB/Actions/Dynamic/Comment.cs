@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -15,16 +15,18 @@ using RobotComponents.ABB.Actions.Interfaces;
 namespace RobotComponents.ABB.Actions.Dynamic
 {
     /// <summary>
-    /// Represents a comment in RAPID Code.
+    /// Represents a comment in RAPID code.
+    /// </summary>
+    /// <remarks>
     /// This action is only used to make the program easier to understand. 
     /// It has no effect on the execution of the program.
-    /// </summary>
+    /// </remarks>
     [Serializable()]
     public class Comment : Action, IDynamic, ISerializable
     {
         #region fields
-        private string _comment; // the comment as a string
-        private CodeType _type; // the comment type as a CodeType enum
+        private string _comment;
+        private CodeType _type;
         #endregion
 
         #region (de)serialization
@@ -96,7 +98,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Comment instance.
         /// </summary>
-        /// <returns> A deep copy of the Comment instance. </returns>
+        /// <returns> 
+        /// A deep copy of the Comment instance. 
+        /// </returns>
         public Comment Duplicate()
         {
             return new Comment(this);
@@ -105,7 +109,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Comment instance as IDynamic. 
         /// </summary>
-        /// <returns> A deep copy of the Comment instance as an IDynamic. </returns>
+        /// <returns> 
+        /// A deep copy of the Comment instance as an IDynamic. 
+        /// </returns>
         public IDynamic DuplicateDynamic()
         {
             return new Comment(this);
@@ -114,7 +120,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns an exact duplicate of this Comment instance as an Action. 
         /// </summary>
-        /// <returns> A deep copy of the Comment instance as an Action. </returns>
+        /// <returns> 
+        /// A deep copy of the Comment instance as an Action. 
+        /// </returns>
         public override Action DuplicateAction()
         {
             return new Comment(this);
@@ -125,7 +133,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
-        /// <returns> A string that represents the current object. </returns>
+        /// <returns> 
+        /// A string that represents the current object. 
+        /// </returns>
         public override string ToString()
         {
             if (string.IsNullOrWhiteSpace(_comment))
@@ -146,7 +156,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDDeclaration(Robot robot)
         {
             return _type == CodeType.Declaration ? $"! {_comment}" : "";
@@ -156,7 +168,9 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
         public override string ToRAPIDInstruction(Robot robot)
         {
             return _type == CodeType.Instruction ? $"! {_comment}" : "";
@@ -164,8 +178,10 @@ namespace RobotComponents.ABB.Actions.Dynamic
 
         /// <summary>
         /// Creates declarations in the RAPID program module inside the RAPID Generator. 
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
         {
@@ -184,8 +200,10 @@ namespace RobotComponents.ABB.Actions.Dynamic
 
         /// <summary>
         /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// This method is called inside the RAPID generator.
         /// </summary>
+        /// <remarks>
+        /// This method is called inside the RAPID generator.
+        /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
         public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
         {

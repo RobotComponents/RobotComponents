@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -322,6 +322,22 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
                 return true;
             }
 
+            //Cast from Point
+            if (typeof(Point3d).IsAssignableFrom(source.GetType()))
+            {
+                Point3d point = (Point3d)source;
+                Value = new RobotTarget(new Plane(point, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
+            //Cast from Point Goo
+            if (typeof(GH_Point).IsAssignableFrom(source.GetType()))
+            {
+                GH_Point pointGoo = (GH_Point)source;
+                Value = new RobotTarget(new Plane(pointGoo.Value, new Vector3d(1, 0, 0), new Vector3d(0, 1, 0)));
+                return true;
+            }
+
             //Cast from Robot Joint Position
             if (typeof(RobotJointPosition).IsAssignableFrom(source.GetType()))
             {
@@ -343,24 +359,51 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             {
                 string text = (source as GH_String).Value;
 
-                string[] values = text.Split(',');
-
                 try
                 {
-                    RobotJointPosition robotJointPosition = new RobotJointPosition();
-
-                    for (int i = 0; i < Math.Min(values.Length, 6); i++)
-                    {
-                        robotJointPosition[i] = System.Convert.ToDouble(values[i]);
-                    }
-
-                    Value = new JointTarget(robotJointPosition);
+                    Value = JointTarget.Parse(text);
                     return true;
                 }
-
                 catch
                 {
-                    return false;
+                    try
+                    {
+                        Value = RobotTarget.Parse(text);
+                        return true;
+                    }
+                    catch
+                    {
+                        string clean = text.Replace("[", "");
+                        clean = clean.Replace("]", "");
+                        clean = clean.Replace("(", "");
+                        clean = clean.Replace(")", "");
+                        clean = clean.Replace("{", "");
+                        clean = clean.Replace("}", "");
+                        clean = clean.Replace(" ", "");
+
+                        string[] values = clean.Split(',');
+
+                        if (values.Length == 6)
+                        {
+                            try
+                            {
+                                RobotJointPosition robotJointPosition = new RobotJointPosition();
+
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    robotJointPosition[i] = Convert.ToDouble(values[i]);
+                                }
+
+                                Value = new JointTarget(robotJointPosition);
+                                return true;
+                            }
+
+                            catch
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
 

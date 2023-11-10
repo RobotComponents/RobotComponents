@@ -1,5 +1,5 @@
-﻿// This file is part of Robot Components. Robot Components is licensed under 
-// the terms of GNU Lesser General Public License version 3.0 (LGPL v3.0)
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             new Param_RobotTool() { Name = "Robot Tool", NickName = "RT", Description = "Robot Tool as list", Access = GH_ParamAccess.item, Optional = true},
             new Param_WorkObject() { Name = "Work Object", NickName = "WO", Description = "Work Object as list", Access = GH_ParamAccess.item, Optional = true },
-            new Param_DigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
+            new Param_SetDigitalOutput() { Name = "Digital Output", NickName = "DO", Description = "Digital Output as list. For creation of MoveLDO and MoveJDO", Access = GH_ParamAccess.item, Optional = true }
         };
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             ZoneData zoneData = new ZoneData();
             RobotTool robotTool = RobotTool.GetEmptyRobotTool();
             WorkObject workObject = new WorkObject();
-            DigitalOutput digitalOutput = new DigitalOutput();
+            SetDigitalOutput digitalOutput = new SetDigitalOutput();
 
             // Catch the input data from the fixed parameters
             if (!DA.GetData(0, ref target)) { return; }
@@ -139,7 +139,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetData(variableInputParameters[2].Name, ref digitalOutput))
                 {
-                    digitalOutput = new DigitalOutput();
+                    digitalOutput = new SetDigitalOutput();
                 }
             }
 
@@ -154,7 +154,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Check if an exact predefined zonedata value is used
-            if (zoneData.ExactPredefinedValue == false & zoneData.PreDefined == true)
+            if (zoneData.IsExactPredefinedValue == false & zoneData.IsPreDefined == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined zonedata value is invalid. " +
                     "The nearest valid predefined speeddata value is used. Valid predefined zonedata values are -1, " +
@@ -163,7 +163,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Check if an exact predefined speeddata value is used
-            if (speedData.ExactPredefinedValue == false & speedData.PreDefined == true)
+            if (speedData.IsExactPredefinedValue == false & speedData.IsPreDefined == true)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Predefined speeddata value is invalid. " +
                     "The nearest valid predefined speed data value is used. Valid predefined speeddata values are 5, 10, " +

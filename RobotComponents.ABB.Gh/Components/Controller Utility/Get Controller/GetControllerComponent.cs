@@ -259,8 +259,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             else if (Controller.Controllers.Count > 1)
             {
                 PickControllerForm form = new PickControllerForm();
-                //bool result = form.ShowModal(Instances.EtoDocumentEditor); // Rhino 7 or higher
-                bool result = form.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
+                bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
                 if (result)
                 {

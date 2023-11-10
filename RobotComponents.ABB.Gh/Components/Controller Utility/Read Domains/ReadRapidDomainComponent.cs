@@ -161,8 +161,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private void MenuItemClick(object sender, EventArgs e)
         {
             PickRapidDomainPathForm form = new PickRapidDomainPathForm(_controller);
-            //bool result = form.ShowModal(Instances.EtoDocumentEditor); // Rhino 7 or higher
-            bool result = form.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
+            bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
             if (result)
             {

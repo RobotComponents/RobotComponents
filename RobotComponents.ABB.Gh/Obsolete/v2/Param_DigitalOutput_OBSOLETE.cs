@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// Digital Output parameter
     /// </summary>
     [Obsolete("This class is obsolete and will be removed in v3. Use Param_SetDigitalOutput instead.", false)]
-    public class Param_DigitalOutput : GH_PersistentParam<GH_DigitalOutput>
+    public class Param_DigitalOutput : GH_PersistentParam<GH_SetDigitalOutput>
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentParam<GH_DigitalOutput> class
@@ -81,12 +81,12 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_DigitalOutput> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SetDigitalOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_DigitalOutput value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SetDigitalOutput value)
         {
             return GH_GetterResult.cancel;
         }

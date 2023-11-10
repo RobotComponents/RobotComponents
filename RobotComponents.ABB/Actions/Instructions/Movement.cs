@@ -58,16 +58,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
-
-            if (version >= 2001000)
-            {
-                _setDigitalOutput = (SetDigitalOutput)info.GetValue("Set Digital Output", typeof(SetDigitalOutput));
-            }
-            else
-            {
-                DigitalOutput digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
-                _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            }
+            _setDigitalOutput = (SetDigitalOutput)info.GetValue("Set Digital Output", typeof(SetDigitalOutput));
         }
 
         /// <summary>
@@ -866,98 +857,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _setDigitalOutput; }
             set { _setDigitalOutput = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data.</param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
-            _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Movement class with a default Work Object (wobj0). 
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data. </param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = robotTool;
-            _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Movement class.
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data. </param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="workObject"> The Work Object. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = robotTool;
-            _workObject = workObject;
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Gets or sets the Digital Output. 
-        /// </summary>
-        /// <remarks>
-        /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
-        /// If a valid Digital Output is combined movement will be created (MoveLDO or MoveJDO). 
-        /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
-        /// </remarks>
-        [Obsolete("This property is obsolete and will be removed in v3. Use SetDigitalOutput instead.", false)]
-        public DigitalOutput DigitalOutput
-        {
-            get { return new DigitalOutput(_setDigitalOutput.Name, _setDigitalOutput.Value); }
-            set { _setDigitalOutput = new SetDigitalOutput(value.Name, value.IsActive); }
         }
         #endregion
     }

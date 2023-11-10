@@ -63,7 +63,6 @@
     <Compile Include="Actions\GH_Action.cs" />
     <Compile Include="Actions\GH_Syncident.cs" />
     <Compile Include="Actions\Instructions\GH_AccelerationSet.cs" />
-    <Compile Include="Actions\Instructions\GH_DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\GH_CirclePathMode.cs" />
     <Compile Include="Actions\Instructions\GH_PathAccelerationLimitation.cs" />
     <Compile Include="Actions\Instructions\GH_PulseDigitalOutput.cs" />

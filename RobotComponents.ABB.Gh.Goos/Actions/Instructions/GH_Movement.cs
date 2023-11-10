@@ -345,22 +345,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
-            //Cast to Digital Output Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_DigitalOutput(); }
-                else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
-                return true;
-            }
-
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value.DigitalOutput; }
-                return true;
-            }
-
             //Cast to Set Digital Output Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_SetDigitalOutput)))
             {

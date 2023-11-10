@@ -72,7 +72,6 @@
     <Compile Include="Actions\Instructions\PulseDigitalOutput.cs" />
     <Compile Include="Actions\Instructions\SetAnalogOutput.cs" />
     <Compile Include="Actions\Instructions\CirclePathMode.cs" />
-    <Compile Include="Actions\Instructions\DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\VelocitySet.cs" />
     <Compile Include="Actions\Interfaces\ISyncident.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOff.cs" />

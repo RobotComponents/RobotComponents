@@ -68,7 +68,6 @@
     <Compile Include="Actions\ActionGroup.cs" />
     <Compile Include="Actions\Declarations\ConfigurationData.cs" />
     <Compile Include="Actions\Instructions\AccelerationSet.cs" />
-    <Compile Include="Actions\Instructions\AnalogOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\PathAccelerationLimitation.cs" />
     <Compile Include="Actions\Instructions\PulseDigitalOutput.cs" />
     <Compile Include="Actions\Instructions\SetAnalogOutput.cs" />
@@ -137,9 +136,7 @@
       <Name>RobotComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actions\Generators\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

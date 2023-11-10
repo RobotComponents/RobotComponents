@@ -63,37 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enumerations\Enumerations.cs" />
-    <Compile Include="Forms\PickRapidDomainPathForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickRapidDomainPathForm.designer.cs">
-      <DependentUpon>PickRapidDomainPathForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickSignalForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickSignalForm.designer.cs">
-      <DependentUpon>PickSignalForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickConfigurationDomainPathForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickConfigurationDomainPathForm.designer.cs">
-      <DependentUpon>PickConfigurationDomainPathForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PickTaskForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickTaskForm.designer.cs">
-      <DependentUpon>PickTaskForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Forms\PickRapidDomainPathForm.cs" />
+    <Compile Include="Forms\PickConfigurationDomainPathForm.cs" />
+    <Compile Include="Forms\PickControllerForm.cs" />
+    <Compile Include="Forms\PickSignalForm.cs" />
+    <Compile Include="Forms\PickTaskForm.cs" />
     <Compile Include="Controller.cs" />
-    <Compile Include="Forms\PickControllerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PickControllerForm.designer.cs">
-      <DependentUpon>PickControllerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -103,25 +78,6 @@
     <Compile Include="Signal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\PickRapidDomainPathForm.resx">
-      <DependentUpon>PickRapidDomainPathForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickSignalForm.resx">
-      <DependentUpon>PickSignalForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickConfigurationDomainPathForm.resx">
-      <DependentUpon>PickConfigurationDomainPathForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickControllerForm.resx">
-      <DependentUpon>PickControllerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PickTaskForm.resx">
-      <DependentUpon>PickTaskForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -258,22 +258,24 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (Controller.Controllers.Count > 1)
             {
-                PickControllerForm frm = new PickControllerForm(Controller.Controllers.ConvertAll(item => item.Name));
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-                frm.ShowDialog();
-                int index = frm.Index;
+                PickControllerForm form = new PickControllerForm();
+                //bool result = form.ShowModal(Instances.EtoDocumentEditor); // Rhino 7 or higher
+                bool result = form.ShowModal(Rhino.UI.RhinoEtoApp.MainWindow);
 
-                if (index < 0)
+                if (result)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
-                    _controller = new Controller();
+                    _controller = form.Controller;
+                    _controller.Initiliaze();
+                    return true;
+                }
+                else if (_controller.IsEmpty)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from menu!");
                     return false;
                 }
                 else
                 {
-                    _controller = Controller.Controllers[index];
-                    _controller.Initiliaze();
-                    return true;
+                    return false;
                 }
             }
 

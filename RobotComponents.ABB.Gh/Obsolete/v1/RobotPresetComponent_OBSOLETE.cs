@@ -226,7 +226,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             RobotPreset robotPreset;
 
             PickRobotForm form = new PickRobotForm();
-            bool result = form.ShowModal(RhinoEtoApp.MainWindow);
+            bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
             if (result)
             {

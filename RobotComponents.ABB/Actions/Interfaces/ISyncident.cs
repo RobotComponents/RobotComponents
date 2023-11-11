@@ -78,13 +78,5 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// </summary>
         string SyncID { get; set; }
         #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        VariableType ReferenceType { get; set; }
-        #endregion
     }
 }

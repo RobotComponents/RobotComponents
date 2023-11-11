@@ -35,9 +35,9 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitTime(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _duration = (double)info.GetValue("Duration", typeof(double));
-            _inPosition = version >= 1004000 ? (bool)info.GetValue("In Position", typeof(bool)) : false;
+            _inPosition = (bool)info.GetValue("In Position", typeof(bool));
         }
 
         /// <summary>

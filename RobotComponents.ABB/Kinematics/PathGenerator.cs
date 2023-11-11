@@ -975,16 +975,5 @@ namespace RobotComponents.ABB.Kinematics
             get { return _isFirstMovementMoveAbsJ; }
         }
         #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsFirstMovementMoveAbsJ instead.", false)]
-        public bool FirstMovementIsMoveAbsJ
-        {
-            get { return _isFirstMovementMoveAbsJ; }
-        }
-        #endregion
     }
 }

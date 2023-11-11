@@ -37,10 +37,10 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected SetDigitalOutput(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
-            _delay = version < 2001000 ? 0 : (double)info.GetValue("Delay", typeof(double));
-            _sync = version < 2001000 ? false : (bool)info.GetValue("Sync", typeof(bool));
+            _delay = (double)info.GetValue("Delay", typeof(double));
+            _sync = (bool)info.GetValue("Sync", typeof(bool));
             _value = (bool)info.GetValue("Value", typeof(bool));
         }
 

@@ -109,12 +109,6 @@ namespace RobotComponents.ABB.Actions
             _robot = generator.Robot.Duplicate();
             _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _isFirstMovementMoveAbsJ = generator.IsFirstMovementMoveAbsJ;
-
-            // OBSOLETE
-            _filePath = generator._filePath;
-            _saveToFile = generator._saveToFile;
-            _systemModule = generator._systemModule.ConvertAll(line => line);
-            _systemModuleName = generator._systemModuleName;
         }
 
         /// <summary>
@@ -616,8 +610,6 @@ namespace RobotComponents.ABB.Actions
 
         #region OBSOLETE
         private readonly List<string> _systemModule = new List<string>(); // System module as a list with code lines
-        private string _filePath = ""; // File path to save the code
-        private bool _saveToFile = false; // Bool that indicates if the files should be saved
         private string _systemModuleName = "BASE"; // The module name of the rapid system code
 
         /// <summary>
@@ -636,30 +628,6 @@ namespace RobotComponents.ABB.Actions
             _moduleName = programModuleName;
             _systemModuleName = systemModuleName;
             _procedureName = procedureName;
-            _filePath = "";
-            _saveToFile = false;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the RAPID Generator class with a main procedure.
-        /// </summary>
-        /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        /// <param name="programModuleName"> The name of the program module </param>
-        /// <param name="systemModuleName"> The name of the system module </param>
-        /// <param name="procedureName"> The name of the RAPID procedure </param>
-        /// <param name="filePath"> The path where the code files should be saved. </param>
-        /// <param name="saveToFile"> A boolean that indicates if the file should be saved. </param>
-        [Obsolete("This constructor is OBSOLETE and will be removed in v2 or later.", false)]
-        public RAPIDGenerator(Robot robot, IList<Action> actions, string programModuleName, string systemModuleName, string procedureName, string filePath, bool saveToFile)
-        {
-            _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
-            _actions = new List<Action>(actions);
-            _moduleName = programModuleName;
-            _systemModuleName = systemModuleName;
-            _procedureName = procedureName;
-            _filePath = filePath;
-            _saveToFile = saveToFile;
         }
 
         /// <summary>
@@ -783,12 +751,6 @@ namespace RobotComponents.ABB.Actions
 
             // Closes Module
             _module.Add("ENDMODULE");
-
-            // Write to file
-            if (_saveToFile == true)
-            {
-                WriteProgramCodeToFile();
-            }
 
             // Return
             return _module;
@@ -918,12 +880,6 @@ namespace RobotComponents.ABB.Actions
             // End Module
             _systemModule.Add("ENDMODULE");
 
-            // Write to file
-            if (_saveToFile == true)
-            {
-                WriteSystemCodeToFile();
-            }
-
             // Return
             return _systemModule;
         }
@@ -969,62 +925,6 @@ namespace RobotComponents.ABB.Actions
         }
 
         /// <summary>
-        /// Writes the RAPID program code to a file if a file path is set.
-        /// </summary>
-        [Obsolete("This method is OBSOLETE and will be removed in v2 or later.", false)]
-        public void WriteProgramCodeToFile()
-        {
-            if (_filePath != null && _filePath != "" && _filePath != "null")
-            {
-                using (StreamWriter writer = new StreamWriter($"{_filePath}\\{_moduleName}.mod", false))
-                {
-                    for (int i = 0; i != _module.Count; i++)
-                    {
-                        writer.WriteLine(_module[i]);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Writes the RAPID system code to a file if a file path is set.
-        /// </summary>
-        [Obsolete("This method is OBSOLETE and will be removed in v2 or later.", false)]
-        public void WriteSystemCodeToFile()
-        {
-            if (_filePath != null && _filePath != "" && _filePath != "null")
-            {
-                using (StreamWriter writer = new StreamWriter($"{_filePath}\\{_systemModuleName}.sys", false))
-                {
-                    for (int i = 0; i != _systemModule.Count; i++)
-                    {
-                        writer.WriteLine(_systemModule[i]);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the RAPID program module.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v2 or later.", false)]
-        public string ProgramModuleName
-        {
-            get { return _moduleName; }
-            set { _moduleName = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the RAPID system module.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v2 or later.", false)]
-        public string SystemModuleName
-        {
-            get { return _systemModuleName; }
-            set { _systemModuleName = value; }
-        }
-
-        /// <summary>
         /// Gest he RAPID code of the program module as a list with code lines.
         /// </summary>
         [Obsolete("This property is OBSOLETE and will be removed in v2 or later.", false)]
@@ -1040,66 +940,6 @@ namespace RobotComponents.ABB.Actions
         public List<string> SystemModule
         {
             get { return _systemModule; }
-        }
-
-        /// <summary>
-        /// Gets or sets the file path for saving the program and system module.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v2 or later.", false)]
-        public string FilePath
-        {
-            get { return _filePath; }
-            set { _filePath = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the program and system module should be saved to a file.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v2 or later.", false)]
-        public bool SaveToFile
-        {
-            get { return _saveToFile; }
-            set { _saveToFile = value; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsFirstMovementMoveAbsJ instead.", false)]
-        public bool FirstMovementIsMoveAbsJ
-        {
-            get { return _isFirstMovementMoveAbsJ; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not the movements are synchronized. 
-        /// </summary>
-        /// <remarks>
-        /// Value is set inside the SyncMoveOn and SyncMoveOff instructions.
-        /// </remarks>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsSynchronized instead.", false)]
-        public bool SynchronizedMovements
-        {
-            get { return _isSynchronized; }
-            set { _isSynchronized = value; }
-        }
-
-        /// <summary>
-        /// Gets the RAPID tooldata code lines.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use ProgramDeclarationsToolData instead.", false)]
-        public List<string> Tooldata
-        {
-            get { return _programDeclarationsToolData; }
-        }
-
-        /// <summary>
-        /// Gets the RAPID wobjdata code lines.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use ProgramDeclarationsWorkObjectData instead.", false)]
-        public List<string> Wobjdata
-        {
-            get { return _programDeclarationsWorkObjectData; }
         }
         #endregion
     }

@@ -48,13 +48,13 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected Movement(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int));
+            //int version = (int)info.GetValue("Version", typeof(int));
             _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
-            _cirPoint = version >= 2001000 ? (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget)) : new RobotTarget();
+            _cirPoint = (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget));
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
-            _time = version >= 1004000 ? (double)info.GetValue("Time", typeof(double)) : -1;
+            _time = (double)info.GetValue("Time", typeof(double));
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));

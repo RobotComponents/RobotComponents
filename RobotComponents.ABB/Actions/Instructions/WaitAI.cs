@@ -38,11 +38,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitAI(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (double)info.GetValue("Value", typeof(double));
             _inequalitySymbol = (InequalitySymbol)info.GetValue("Inequality Symbol", typeof(InequalitySymbol));
-            _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _maxTime = (double)info.GetValue("Max Time", typeof(double));
         }
 
         /// <summary>

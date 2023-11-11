@@ -47,8 +47,8 @@ namespace RobotComponents.ABB.Definitions
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
             int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
@@ -624,18 +624,6 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _fixedFrame; }
             set { _fixedFrame = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
         }
         #endregion
     }

@@ -48,9 +48,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization.</param>
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Value 1", typeof(double));
             _val2 = (double)info.GetValue("Value 2", typeof(double));

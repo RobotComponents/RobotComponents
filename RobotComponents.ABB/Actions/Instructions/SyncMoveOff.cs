@@ -34,10 +34,10 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected SyncMoveOff(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _syncident = (string)info.GetValue("Sync ID", typeof(string));
-            _timeOut = version >= 1004000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
+            _timeOut = (double)info.GetValue("Time Out", typeof(double));
         }
 
         /// <summary>
@@ -246,18 +246,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _timeOut; }
             set { _timeOut = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
         }
         #endregion
     }

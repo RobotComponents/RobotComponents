@@ -3,7 +3,7 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System lib
+// System Libs
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -43,9 +43,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected JointTarget(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _robotJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
             _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));

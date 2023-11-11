@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitTime(SerializationInfo info, StreamingContext context)
         {
-            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _duration = (double)info.GetValue("Duration", typeof(double));
             _inPosition = (bool)info.GetValue("In Position", typeof(bool));
         }
@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Duration", _duration, typeof(double));
             info.AddValue("In Postion", _inPosition, typeof(bool));
         }

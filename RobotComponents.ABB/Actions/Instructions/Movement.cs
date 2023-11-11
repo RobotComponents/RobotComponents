@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected Movement(SerializationInfo info, StreamingContext context)
         {
-            //int version = (int)info.GetValue("Version", typeof(int));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
             _cirPoint = (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget));
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
@@ -69,7 +69,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Movement Type", _movementType, typeof(MovementType));
             info.AddValue("Circle Point", _cirPoint, typeof(RobotTarget));
             info.AddValue("Target", _target, typeof(ITarget));

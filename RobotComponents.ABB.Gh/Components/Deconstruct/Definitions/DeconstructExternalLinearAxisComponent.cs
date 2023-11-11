@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
     public class DeconstructExternalLinearAxisComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructExternalLinearAxisComponent class.
         /// </summary>
         public DeconstructExternalLinearAxisComponent()
           : base("Deconstruct External Linear Axis", "DeConELA", 

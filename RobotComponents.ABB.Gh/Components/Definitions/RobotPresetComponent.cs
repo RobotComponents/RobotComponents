@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
 
         public RobotPresetComponent()
           : base("Robot Preset", "RobPres",
-              "Defines a robot which is needed for Code Generation and Simulation"
+              "Defines a robot which is needed for code generation and simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")

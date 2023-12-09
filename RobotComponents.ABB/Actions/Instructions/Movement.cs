@@ -689,37 +689,27 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             ConvertTarget(RAPIDGenerator);
 
-            _convertedTarget.ToRAPIDDeclaration(RAPIDGenerator);
-            _speedData.ToRAPIDDeclaration(RAPIDGenerator);
-            _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
-            _robotTool.ToRAPIDDeclaration(RAPIDGenerator);
-            _workObject.ToRAPIDDeclaration(RAPIDGenerator);
+            _convertedTarget.ToRAPIDGenerator(RAPIDGenerator);
+            _speedData.ToRAPIDGenerator(RAPIDGenerator);
+            _zoneData.ToRAPIDGenerator(RAPIDGenerator);
+            _robotTool.ToRAPIDGenerator(RAPIDGenerator);
+            _workObject.ToRAPIDGenerator(RAPIDGenerator);
 
             if (_movementType == MovementType.MoveC)
             {
-                _cirPoint.ToRAPIDDeclaration(RAPIDGenerator);
+                _cirPoint.ToRAPIDGenerator(RAPIDGenerator);
             }
-        }
 
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.s
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion

@@ -519,15 +519,15 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
-            _loadData.ToRAPIDDeclaration(RAPIDGenerator);
+            _loadData.ToRAPIDGenerator(RAPIDGenerator);
 
             if (_name != "" && _name != "tool0")
             {

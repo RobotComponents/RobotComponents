@@ -326,28 +326,13 @@ namespace RobotComponents.ABB.Actions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
-        {
-            for (int i = 0; i < _actions.Count; i++)
-            {
-                _actions[i].ToRAPIDDeclaration(RAPIDGenerator);
-            }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -356,13 +341,14 @@ namespace RobotComponents.ABB.Actions
 
             for (int i = 0; i < _actions.Count; i++)
             {
-                _actions[i].ToRAPIDInstruction(RAPIDGenerator);
+                _actions[i].ToRAPIDGenerator(RAPIDGenerator);
             }
 
             if (_name != "")
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! End of group: {_name}");
             }
+
         }
         #endregion
 

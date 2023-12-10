@@ -20,7 +20,6 @@ namespace RobotComponents.Generic.Kinematics
     /// Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist' 
     /// by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
     /// </remarks>
-    [Obsolete("BETA: This class is under development and might heavily change within the current major release.", false)]
     public class OPWKinematics
     {
         #region fields
@@ -46,7 +45,10 @@ namespace RobotComponents.Generic.Kinematics
         /// </summary>
         public OPWKinematics()
         {
-
+            for (int i = 0; i < 8; i++)
+            {
+                _solutions[i] = new double[6];
+            }
         }
         #endregion
 
@@ -170,7 +172,7 @@ namespace RobotComponents.Generic.Kinematics
             // Wrist position
             Point3d c = new Point3d(endPlane.PointAt(0, 0, -_c4));
 
-            // Positioning part parameters: part 1
+            // Positioning parameters: part 1
             double nx1 = Math.Sqrt(c.X * c.X + c.Y * c.Y - _b * _b) - _a1;
             double k_2 = _a2 * _a2 + _c3 * _c3;
             double k = Math.Sqrt(k_2);
@@ -187,7 +189,7 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[6][0] = theta1_ii;
             _solutions[7][0] = theta1_ii;
 
-            // Positioning part parameters: part 2
+            // Positioning parameters: part 2
             double s1_2 = nx1 * nx1 + (c.Z - _c1) * (c.Z - _c1);
             double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (c.Z - _c1) * (c.Z - _c1);
             double s1 = Math.Sqrt(s1_2);
@@ -246,7 +248,7 @@ namespace RobotComponents.Generic.Kinematics
                 double sin1 = Math.Sin(_solutions[i][0]);
                 double sin23 = Math.Sin(_solutions[i][1] + _solutions[i][2]);
                 double cos1 = Math.Cos(_solutions[i][0]);
-                double cos23 = Math.Cos(_solutions[i][1] + _solutions[i][3]);
+                double cos23 = Math.Cos(_solutions[i][1] + _solutions[i][2]);
                 double m = e13 * sin23 * cos1 + e23 * sin23 * sin1 + e33 * cos23;
 
                 // Joint 4
@@ -256,7 +258,7 @@ namespace RobotComponents.Generic.Kinematics
                 // Joint 5
                 double theta5_p = Math.Atan2(Math.Sqrt(1 - m * m), m);
                 _solutions[i][4] = i < 4 ? theta5_p : -theta5_p;
-                _wristSingularities[i] = Math.Abs(_solutions[i][5]) < 1e-3;
+                _wristSingularities[i] = Math.Abs(_solutions[i][4]) < 1e-3;
 
                 // Joint 6
                 double theta6_p = Math.Atan2(e12 * sin23 * cos1 + e22 * sin23 * sin1 + e32 * cos23, -e11 * sin23 * cos1 - e21 * sin23 * sin1 - e31 * cos23);
@@ -293,22 +295,17 @@ namespace RobotComponents.Generic.Kinematics
                 _elbowSingularities[7] = false;
             }
 
-            // Check if the values are within -pi till pi
+            // Corrections
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 6; j++)
                 {
+                    // Check if the values are within - pi till pi
                     _solutions[i][j] = _solutions[i][j] > _pi ? _solutions[i][j] - _2pi : _solutions[i][j];
                     _solutions[i][j] = _solutions[i][j] < -_pi ? _solutions[i][j] + _2pi : _solutions[i][j];
-                }
-            }
 
-            // Offset and sign corrections
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 6; j++)
-                {
-                    _solutions[i][j] = Math.Sign( _signs[j]) * (_solutions[i][j] + _offsets[j]);
+                    // Offset and sign corrections
+                    _solutions[i][j] = Math.Sign(_signs[j]) * (_solutions[i][j] + _offsets[j]);
                 }
             }
         }
@@ -324,7 +321,7 @@ namespace RobotComponents.Generic.Kinematics
         }
 
         /// <summary>
-        /// Gets the inverse kinematics solutions.
+        /// Gets the inverse kinematics solutions in radians.
         /// </summary>
         public double[][] Solutions
         {

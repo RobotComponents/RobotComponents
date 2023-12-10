@@ -319,6 +319,7 @@ namespace RobotComponents.ABB.Utils
             return result;
         }
 
+        /// <summary>
         /// Sets the scope, variable type and variable name from a RAPID data string and outputs the values. 
         /// </summary>
         /// <remarks>

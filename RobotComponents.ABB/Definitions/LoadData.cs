@@ -20,6 +20,7 @@ namespace RobotComponents.ABB.Definitions
     /// <summary>
     /// Represent Load Data.
     /// </summary>
+    [Serializable()]
     public class LoadData : ISerializable, IDeclaration
     {
         #region fields

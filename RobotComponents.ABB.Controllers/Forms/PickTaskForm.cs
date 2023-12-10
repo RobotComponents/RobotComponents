@@ -5,60 +5,104 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+// Eto libs
+using Eto.Forms;
+using Eto.Drawing;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
     /// <summary>
     /// Represents the pick task form class.
     /// </summary>
-    public partial class PickTaskForm : Form
+    public class PickTaskForm : Dialog<Boolean>
     {
         #region fields
         private readonly Controller _controller = new Controller();
-        private int _index = 0;
+        private string _taskName = "-";
+        private readonly List<string> _taskNames;
+        private readonly Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelType = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelEnabled = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly ComboBox _box = new ComboBox() { Height = _height };
+
+        private const int _height = 21;
         #endregion
 
         #region constructors
         /// <summary>
-        /// Creates a pick task form.
+        /// Constructs the form.
         /// </summary>
         /// <param name="controller"> The controller to pick a task from. </param>
         public PickTaskForm(Controller controller)
-        {
-            InitializeComponent();
+		{
+            // Main layout
+            Title = "Controller task";
+            MinimumSize = new Size(600, 420);
+            Resizable = false;
+            Padding = 20;
 
+            // Task names
             _controller = controller;
+            _taskNames = _controller.TasksABB.ConvertAll(item => item.Name);
 
-            for (int i = 0; i < _controller.TasksABB.Count; i++)
-            {
-                comboBox.Items.Add(_controller.TasksABB[i].Name);
-            }
+            // Controls
+            Button button = new Button() { Text = "OK" };
+            _box = new ComboBox() { DataStore = _taskNames, Height = _height };
+
+            // Assign events
+            button.Click += ButtonClick;
+            _box.SelectedIndexChanged += IndexChanged;
+
+            // Select index
+            _box.SelectedIndex = 0;
+
+            // Labels
+            Label selectLabel = new Label() { Text = "Select a task", Font = new Font(SystemFont.Bold), Height = _height };
+            Label infoLabel = new Label() { Text = "Task info", Font = new Font(SystemFont.Bold), Height = _height };
+
+            // Layout
+            DynamicLayout layout = new DynamicLayout() { Padding = 0, Spacing = new Size(8, 4) };
+            layout.AddSeparateRow(selectLabel);
+            layout.AddSeparateRow(_box);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(infoLabel);
+            layout.AddSeparateRow(new Label() { Text = "Name", Height = _height }, _labelName);
+            layout.AddSeparateRow(new Label() { Text = "Type", Height = _height }, _labelType);
+            layout.AddSeparateRow(new Label() { Text = "Enabled", Height = _height }, _labelEnabled);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(button);
+
+            Content = layout;
         }
         #endregion
 
         #region methods
-        private void Button1Click(object sender, EventArgs e)
+        private void IndexChanged(object sender, EventArgs e)
         {
-            _index = comboBox.SelectedIndex;
-            this.Close();
+            _labelName.Text = _controller.TasksABB[_box.SelectedIndex].Name;
+            _labelType.Text = _controller.TasksABB[_box.SelectedIndex].Type.ToString();
+            _labelEnabled.Text = _controller.TasksABB[_box.SelectedIndex].Enabled.ToString();
         }
 
-        private void ComboBoxSelectedIndexChanged(object sender, EventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].Name.ToString();
-            this.labelTaskTypeInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].TaskType.ToString();
-            this.labelEnabledInfo.Text = _controller.TasksABB[comboBox.SelectedIndex].Enabled.ToString();
+            _taskName = _taskNames[_box.SelectedIndex];
+            Close(true);
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// Gets the selected index.
+        /// Gets the picked task name.
         /// </summary>
-        public int Index
+        public string TaskName
         {
-            get { return _index; }
+            get { return _taskName; }
         }
         #endregion
     }

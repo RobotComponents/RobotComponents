@@ -36,7 +36,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected PulseDigitalOutput(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _high = (bool)info.GetValue("High", typeof(bool));
             _length = (double)info.GetValue("Length", typeof(double));
             _name = (string)info.GetValue("Name", typeof(string));
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("High", _name, typeof(bool));
             info.AddValue("Length", _name, typeof(double));
             info.AddValue("Name", _name, typeof(string));
@@ -178,24 +178,13 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
-        {
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }

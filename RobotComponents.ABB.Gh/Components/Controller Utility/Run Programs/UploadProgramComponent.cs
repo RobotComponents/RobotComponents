@@ -236,22 +236,23 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (_controller.TaskNames.Count > 1)
             {
-                PickTaskForm frm = new PickTaskForm(_controller);
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-                frm.ShowDialog();
-                int index = frm.Index;
+                PickTaskForm form = new PickTaskForm(_controller);
+                bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
-                if (index < 0)
+                if (result)
                 {
-                    _status = "No task picked from the menu!";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from the menu!");
+                    _status = "Task picked from the controller.";
+                    _taskName = form.TaskName;
+                    return true;
+                }
+                else if (_taskName == "-")
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from menu!");
                     return false;
                 }
                 else
                 {
-                    _status = "Task picked from the controller.";
-                    _taskName = _controller.TaskNames[index];
-                    return true;
+                    return false;
                 }
             }
 

@@ -538,16 +538,5 @@ namespace RobotComponents.ABB.Kinematics
             set { _hideMesh = value; }
         }
         #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets the latest calculated posed internal axis meshes.
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed v3. Use PosedRobotMeshes instead.", false)]
-        public List<Mesh> PosedInternalAxisMeshes
-        {
-            get { return _posedRobotMeshes; }
-        }
-        #endregion
     }
 }

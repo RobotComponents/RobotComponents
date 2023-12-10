@@ -46,9 +46,9 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
             _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -449,13 +449,13 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "" && _name != "wobj0")
             {
@@ -624,18 +624,6 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _fixedFrame; }
             set { _fixedFrame = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
         }
         #endregion
     }

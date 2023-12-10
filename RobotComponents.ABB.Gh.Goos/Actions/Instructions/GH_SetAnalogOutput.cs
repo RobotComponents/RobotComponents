@@ -184,10 +184,10 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Analog Output
-            if (typeof(Q).IsAssignableFrom(typeof(AnalogOutput)))
+            if (typeof(Q).IsAssignableFrom(typeof(SetAnalogOutput)))
             {
                 if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)new AnalogOutput(Value.Name, Value.Value); }
+                else { target = (Q)(object)new SetAnalogOutput(Value.Name, Value.Value); }
                 return true;
             }
 
@@ -259,22 +259,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                     Value = instruction;
                     return true;
                 }
-            }
-
-            //Cast from Analog Output Goo
-            if (typeof(GH_AnalogOutput).IsAssignableFrom(source.GetType()))
-            {
-                GH_AnalogOutput analogOutputGoo = source as GH_AnalogOutput;
-                Value = new SetAnalogOutput(analogOutputGoo.Value.Name, analogOutputGoo.Value.Value);
-                return true;
-            }
-
-            //Cast from Analog Output
-            if (typeof(AnalogOutput).IsAssignableFrom(source.GetType()))
-            {
-                AnalogOutput analogOutput = source as AnalogOutput;
-                Value = new SetAnalogOutput(analogOutput.Name, analogOutput.Value);
-                return true;
             }
 
             return false;

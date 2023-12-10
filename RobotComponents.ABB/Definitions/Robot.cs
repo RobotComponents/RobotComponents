@@ -89,8 +89,8 @@ namespace RobotComponents.ABB.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Meshes", _meshes, typeof(List<Mesh>));
             info.AddValue("Internal Axis Planes", _internalAxisPlanes, typeof(List<Plane>));

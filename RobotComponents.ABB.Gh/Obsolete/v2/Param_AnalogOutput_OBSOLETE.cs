@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// Analog Output parameter
     /// </summary>
     [Obsolete("This class is obsolete and will be removed in v3. Use Param_SetAnalogOutput instead.", false)]
-    public class Param_AnalogOutput : GH_PersistentParam<GH_AnalogOutput>
+    public class Param_AnalogOutput : GH_PersistentParam<GH_SetAnalogOutput>
     {
         /// <summary>
         /// Initializes a new instance of the GH_PersistentParam<GH_AnalogOutput> class
@@ -81,12 +81,12 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_AnalogOutput> values)
+        protected override GH_GetterResult Prompt_Plural(ref List<GH_SetAnalogOutput> values)
         {
             return GH_GetterResult.cancel;
         }
 
-        protected override GH_GetterResult Prompt_Singular(ref GH_AnalogOutput value)
+        protected override GH_GetterResult Prompt_Singular(ref GH_SetAnalogOutput value)
         {
             return GH_GetterResult.cancel;
         }

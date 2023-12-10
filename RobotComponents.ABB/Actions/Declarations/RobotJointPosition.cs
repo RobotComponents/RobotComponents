@@ -48,9 +48,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
@@ -68,7 +68,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -609,13 +609,13 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -625,17 +625,6 @@ namespace RobotComponents.ABB.Actions.Declarations
                     RAPIDGenerator.ProgramDeclarations.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
         }
         #endregion
 

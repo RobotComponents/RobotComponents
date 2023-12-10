@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Components.CodeGeneration;
 using RobotComponents.ABB.Gh.Components.ControllerUtility;
@@ -249,10 +250,25 @@ namespace RobotComponents.ABB.Gh.Utils
         {
             try
             {
-                Process.Start(url);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Process.Start(url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else
+                {
+                    Process.Start(url);
+                }
             }
             catch
-            { 
+            {
                 // We do nothing if the browser could not be opened
             }
         }

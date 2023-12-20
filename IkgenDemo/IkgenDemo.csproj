@@ -80,17 +80,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="RobotComponents">
-      <HintPath>..\..\RobotComponents\RobotComponents\bin\Debug\RobotComponents.dll</HintPath>
-    </Reference>
-    <Reference Include="RobotComponents.ABB">
-      <HintPath>..\..\RobotComponents\RobotComponents.ABB.Presets\bin\Debug\RobotComponents.ABB.dll</HintPath>
-    </Reference>
-    <Reference Include="RobotComponents.ABB.Presets">
-      <HintPath>..\..\RobotComponents\RobotComponents.ABB.Presets\bin\Debug\RobotComponents.ABB.Presets.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="libblas.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -109,6 +98,20 @@
     <Content Include="rcik.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.ABB.Presets\RobotComponents.ABB.Presets.csproj">
+      <Project>{15938314-61c9-44e9-b0e9-6e5cb15825f6}</Project>
+      <Name>RobotComponents.ABB.Presets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
+      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
+      <Name>RobotComponents.ABB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+      <Project>{f7ea2eb3-c653-4839-8843-f82c828a4b21}</Project>
+      <Name>RobotComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

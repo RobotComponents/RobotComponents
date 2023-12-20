@@ -9,7 +9,6 @@ using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
 
-
 namespace IkgenDemo
 {
     class Robot_CRB15000_5_095
@@ -29,15 +28,15 @@ namespace IkgenDemo
                 using (new RhinoCore(args))
                 {
                     InverseKinematicsDemo();
-
-                    Console.WriteLine("press any key to exit");
-                    Console.ReadKey();
                 }
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
             }
+
+            Console.WriteLine("press any key to exit");
+            Console.ReadKey();
         }
 
         static void InverseKinematicsDemo()

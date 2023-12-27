@@ -228,6 +228,11 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// <summary>
         /// IRB1010ID-1.5/0.37
         /// </summary>
-        IRB1010_1_5_037
+        IRB1010_1_5_037,
+
+        /// <summary>
+        /// CRB15000-5/0.95 (GoFa 5)
+        /// </summary>
+        CRB15000_5_095
     }
 }

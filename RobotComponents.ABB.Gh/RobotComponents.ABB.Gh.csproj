@@ -67,6 +67,7 @@
     <Compile Include="Components\Code Generation\Instructions\PulseDigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\VelocitySetComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitation.cs" />
+    <Compile Include="Components\Definitions\Presets\CRB15000_5_0_95_Component.cs" />
     <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructConfigurationDataComponent.cs" />
@@ -809,6 +810,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CirclePathMode_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

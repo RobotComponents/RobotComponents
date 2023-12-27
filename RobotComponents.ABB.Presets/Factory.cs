@@ -218,6 +218,10 @@ namespace RobotComponents.ABB.Presets
             {
                 return IRB7600_500_255.GetRobot(positionPlane, tool, externalAxes);
             }
+            else if (preset == RobotPreset.CRB15000_5_095)
+            {
+                return CRB15000_5_095.GetRobot(positionPlane, tool, externalAxes);
+            }
             else
             {
                 throw new Exception("Could not find the data of the defined Robot preset type.");

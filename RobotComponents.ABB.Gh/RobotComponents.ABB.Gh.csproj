@@ -820,7 +820,15 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>Copy "$(TargetPath)" "$(TargetDir)$(ProjectName).gha"
-Erase "$(TargetPath)"</PostBuildEvent>
+Erase "$(TargetPath)"
+
+Copy "$(SolutionDir)\DLLs\ikfast\libblas.dll" "$(TargetDir)\libblas.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh_64-1.dll" "$(TargetDir)\libgcc_s_seh_64-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran_64-3.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>

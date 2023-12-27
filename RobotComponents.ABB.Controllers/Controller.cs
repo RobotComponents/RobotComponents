@@ -973,11 +973,12 @@ namespace RobotComponents.ABB.Controllers
                 return false;
             }
 
-            try 
+            if (module.Count != 0)
             {
-                if (module.Count != 0)
+                string filePath = Path.Combine(_localDirectory, "temp.mod");
+
+                try
                 {
-                    string filePath = Path.Combine(_localDirectory, "temp.mod");
                     using (StreamWriter writer = new StreamWriter(filePath, false))
                     {
                         for (int i = 0; i < module.Count; i++)
@@ -989,22 +990,22 @@ namespace RobotComponents.ABB.Controllers
                     status = "Wrote the module to the local temporary directory.";
                     Log(status);
                 }
-                else
+                catch (Exception ex)
                 {
-                    status = "Could not upload the module: No module defined.";
+                    status = $"Could not write the module to the local temporary directory: {ex.Message}";
                     Log(status);
                     return false;
                 }
             }
-            catch
+            else
             {
-                status = "Could not write the module to the local temporary directory.";
+                status = "Could not upload the module: No module defined.";
                 Log(status);
                 return false;
             }
             #endregion
 
-            #region put local directy on controller
+            #region put local directory on controller
             try
             {
                 _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.WriteFtp);
@@ -1034,9 +1035,9 @@ namespace RobotComponents.ABB.Controllers
             #endregion
 
             #region load module from directory
-            try
+            using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
             {
-                using (ControllersNS.Mastership master = ControllersNS.Mastership.Request(_controller))
+                try
                 {
                     // Grant acces
                     _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
@@ -1045,18 +1046,19 @@ namespace RobotComponents.ABB.Controllers
                     string filePath = Path.Combine(_remoteDirectory, "temp.mod");
                     task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
 
-                    // Give back the mastership
+                    status = "Loaded the module from the filesystem of the controller to the controller task.";
+                    Log(status);
+                }
+                catch (Exception e)
+                {
+                    status = $"Could not load the module from the filesystem of the controller to the controller task: {e.Message}.";
+                    Log(status);
+                    return false;
+                }
+                finally
+                {
                     master.Release();
                 }
-
-                status = "Loaded the module from the filesystem of the controller to the controller task.";
-                Log(status);
-            }
-            catch (Exception e)
-            {
-                status = $"Could not load the module from the filesystem of the controller to the controller task: {e.Message}.";
-                Log(status);
-                return false;
             }
             #endregion
 
@@ -1164,7 +1166,6 @@ namespace RobotComponents.ABB.Controllers
                         master.Release();
                     }
                 }
-
             }
 
             return succeeded;

@@ -145,32 +145,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\DLLs\libblas.dll">
-      <Link>libblas.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DLLs\libgcc_s_seh_64-1.dll">
-      <Link>libgcc_s_seh_64-1.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DLLs\libgfortran_64-3.dll">
-      <Link>libgfortran_64-3.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DLLs\liblapack.dll">
-      <Link>liblapack.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DLLs\liblapacke.dll">
-      <Link>liblapacke.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\DLLs\rcik.dll">
-      <Link>rcik.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -180,8 +154,13 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>Copy "$(SolutionDir)\DLLs\ikfast\libblas.dll" "$(TargetDir)\libblas.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh_64-1.dll" "$(TargetDir)\libgcc_s_seh_64-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran_64-3.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|AnyCPU' ">
     <StartArguments>

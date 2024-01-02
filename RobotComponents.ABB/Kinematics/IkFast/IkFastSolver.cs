@@ -4,17 +4,17 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-// Rhin Libs
-using Rhino.Geometry;
-// Robot Components Libs
-using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Kinematics.IkFast.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+// Rhino Libs
+using Rhino.Geometry;
+// Robot Components Libs
+using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Kinematics.IKFast.Geometry;
 
-namespace RobotComponents.ABB.Kinematics.IkFast
+namespace RobotComponents.ABB.Kinematics.IKFast
 {
     /// <summary>
     /// Inverse kinematics for the CRB15000-5/0.95 robot (GoFa 5).
@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Kinematics.IkFast
     /// This class wraps the ikfast library generated for the CRB15000-5/0.95 robot (GoFa 5). 
     /// So far, this is the only robot supported.
     /// </remarks>
-    internal class IkFastSolver
+    internal class IKFastSolver
     {
         #region
         private int _numSolutions = 0;
@@ -41,7 +41,7 @@ namespace RobotComponents.ABB.Kinematics.IkFast
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
-        public IkFastSolver()
+        public IKFastSolver()
         {
 
         }
@@ -61,17 +61,23 @@ namespace RobotComponents.ABB.Kinematics.IkFast
         /// <param name="endPlane"> The robot end plane. </param>
         public void Compute(Plane endPlane)
         {
+            // Check if system is 64-bit
+            if (!System.Environment.Is64BitOperatingSystem)
+            {
+                throw new Exception("The IKFast Kinematics Solver cannot be used. The operating system is not 64-bit.");
+            }
+
             // Reset the solution
             Reset();
 
             // Position
-            IkFast.Geometry.Vector3d position = new IkFast.Geometry.Vector3d(endPlane.Origin);
+            IKFast.Geometry.Vector3d position = new IKFast.Geometry.Vector3d(endPlane.Origin);
 
             // Orientation as quaternion
             Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, endPlane);
             Rhino.Geometry.Quaternion quaternionCorrection = new Rhino.Geometry.Quaternion(_cos45, 0.0, _cos45, 0.0); // Unkown 90 degrees correction
             Rhino.Geometry.Quaternion quaternionCorrected = quaternion * quaternionCorrection.Inverse;
-            IkFast.Geometry.Quaternion orientation = new IkFast.Geometry.Quaternion(quaternionCorrected);
+            IKFast.Geometry.Quaternion orientation = new IKFast.Geometry.Quaternion(quaternionCorrected);
 
             RobotJointPosition robotJointPosition;
 
@@ -120,8 +126,7 @@ namespace RobotComponents.ABB.Kinematics.IkFast
 
         #region dll import
         [DllImport("rcik.dll", EntryPoint = "computeInverseKinematics")]
-        private static unsafe extern Vector6d* computeInverseKinematics(ref IkFast.Geometry.Vector3d eePos, ref IkFast.Geometry.Quaternion eeOri, out int n_sol);
+        private static unsafe extern Vector6d* computeInverseKinematics(ref IKFast.Geometry.Vector3d eePos, ref IKFast.Geometry.Quaternion eeOri, out int n_sol);
         #endregion
     }
 }
-

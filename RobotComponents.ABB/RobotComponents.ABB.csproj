@@ -102,10 +102,10 @@
     <Compile Include="Actions\RAPIDGenerator.cs" />
     <Compile Include="Definitions\IMechanicalUnit.cs" />
     <Compile Include="Definitions\RobotTool.cs" />
-    <Compile Include="Kinematics\IkFast\Geometry\Quaternion.cs" />
-    <Compile Include="Kinematics\IkFast\Geometry\Vector3d.cs" />
-    <Compile Include="Kinematics\IkFast\Geometry\Vector6d.cs" />
-    <Compile Include="Kinematics\IkFast\IkFastSolver.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Quaternion.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Vector3d.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Vector6d.cs" />
+    <Compile Include="Kinematics\IKFast\IKFastSolver.cs" />
     <Compile Include="Kinematics\InverseKinematics.cs" />
     <Compile Include="Kinematics\InverseKinematicsIkgen.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

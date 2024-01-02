@@ -8,7 +8,7 @@ using System.Collections.Generic;
 // Robot Components Libs
 using RobotComponents.ABB.Actions.Declarations;
 
-namespace RobotComponents.ABB.Kinematics.IkFast.Geometry
+namespace RobotComponents.ABB.Kinematics.IKFast.Geometry
 {
     /// <summary>
     /// Represents the internal Vector6d class.

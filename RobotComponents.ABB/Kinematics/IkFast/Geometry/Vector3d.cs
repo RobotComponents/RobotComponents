@@ -3,7 +3,7 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-namespace RobotComponents.ABB.Kinematics.IkFast.Geometry
+namespace RobotComponents.ABB.Kinematics.IKFast.Geometry
 {
     /// <summary>
     /// Represents the internal Vector3d class.

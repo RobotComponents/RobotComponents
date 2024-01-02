@@ -15,7 +15,7 @@ using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Kinematics.IkFast;
+using RobotComponents.ABB.Kinematics.IKFast;
 
 namespace RobotComponents.ABB.Kinematics
 {
@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Kinematics
         private OPWKinematics _opw = new OPWKinematics();
 
         //IKFast solver fields
-        private IkFastSolver _ikfast = new IkFastSolver();
+        private IKFastSolver _ikfast = new IKFastSolver();
         #endregion
 
         #region constructors

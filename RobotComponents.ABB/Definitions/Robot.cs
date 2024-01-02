@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
 
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
 
             UpdateKinematics();
@@ -150,7 +150,7 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
         }
 
@@ -192,7 +192,7 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
         }
 
@@ -233,7 +233,7 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisLimits = robot.ExternalAxisLimits.ConvertAll(item => new Interval(item));
 
             // Kinematics
-            _inverseKinematics = new InverseKinematics(robot.InverseKinematics.Movement.Duplicate(), this);
+            _inverseKinematics = new InverseKinematics(this, robot.InverseKinematics.Movement.Duplicate());
             _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
         }
 

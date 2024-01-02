@@ -65,10 +65,67 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Initializes a new instance of the Inverse Kinematics.
+        /// </summary>
+        /// <param name="robot"> The Robot. </param>
+        public InverseKinematics(Robot robot)
+        {
+            _robot = robot;
+            _movement = new Movement(Plane.WorldXY);
+
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Inverse Kinematics class from a Movement.
+        /// </summary>
+        /// <param name="robot"> The Robot. </param>
+        /// <param name="movement"> The Movement. </param>
+        public InverseKinematics(Robot robot, Movement movement)
+        {
+            _robot = robot;
+            _movement = movement;
+
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Inverse Kinematics class from a Target.
+        /// </summary>
+        /// <remarks>
+        /// The target will be casted to a robot movement with a default work object (wobj0).
+        /// </remarks>
+        /// <param name="robot"> The Robot. </param>
+        /// <param name="target"> The Target </param>
+        public InverseKinematics(Robot robot, ITarget target)
+        {
+            _robot = robot;
+            _movement = new Movement(target);
+
+            for (int i = 0; i < 8; i++)
+            {
+                _robotJointPositions[i] = new RobotJointPosition();
+            }
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class from a Movement.
         /// </summary>
         /// <param name="movement"> The Movement. </param>
         /// <param name="robot"> The Robot. </param>
+        [Obsolete("This constructor is OBSOLETE and will be removed in v3.", false)]
         public InverseKinematics(Movement movement, Robot robot)
         {
             _robot = robot;
@@ -90,6 +147,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </remarks>
         /// <param name="target"> The Target </param>
         /// <param name="robot"> The Robot. </param>
+        [Obsolete("This constructor is OBSOLETE and will be removed in v3.", false)]
         public InverseKinematics(ITarget target, Robot robot)
         {
             _robot = robot;

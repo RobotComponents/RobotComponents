@@ -278,8 +278,8 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         _ikfast.Compute(_localEndPlane);
 
-                        // Writ results in Rhino command line: DEBUG
-                        Rhino.RhinoApp.WriteLine($"ikfast found {0} solutions (joint positions in deg) .", _ikfast.NumSolutions);
+                        #region DEBUG: Write results in Rhino command line
+                        Rhino.RhinoApp.WriteLine($"IKFast found {_ikfast.NumSolutions} solutions (joint positions in deg).");
 
                         for (int i = 0; i < _ikfast.RobotJointPositions.Count; i++)
                         {
@@ -287,6 +287,7 @@ namespace RobotComponents.ABB.Kinematics
                         }
 
                         Rhino.RhinoApp.WriteLine("");
+                        #endregion
 
                     }
                     catch (Exception e)
@@ -294,9 +295,21 @@ namespace RobotComponents.ABB.Kinematics
                         _errorText.Add(e.Message);
                     }
 
-                    // Select solution: TODO! 
-                    // _robotJointPositions = ??;
-                    _robotJointPosition = _ikfast.RobotJointPosition;
+                    // Select solution: Needs to be improved (match with configuratin data of ABB, check with RobotStudio)
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if (i > _ikfast.NumSolutions - 1)
+                        {
+                            // High values to make it certain the solution will not be selected by the "CalculateClosestRobotJointPosition" method
+                            _robotJointPositions[i] = new RobotJointPosition(9e9, 9e9, 9e9, 9e9, 9e9, 9e9);
+                        }
+                        else
+                        {
+                            _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
+                        }
+                    }
+
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
                     _wristSingularity = false;
                     _elbowSingularity = false;
                 }

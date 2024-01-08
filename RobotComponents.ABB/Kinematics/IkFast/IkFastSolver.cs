@@ -34,7 +34,6 @@ namespace RobotComponents.ABB.Kinematics.IKFast
         // Constants
         private const double _pi = Math.PI;
         private const double _rad2deg = 180.0 / _pi;
-        private const double _cos45 = 0.70710678118;
         #endregion
 
         #region constructor
@@ -70,14 +69,16 @@ namespace RobotComponents.ABB.Kinematics.IKFast
             // Reset the solution
             Reset();
 
+            // Target rotated 90 degrees (unknown reason)
+            Plane target = new Plane(endPlane);
+            target.Rotate(0.5 * _pi, target.ZAxis, target.Origin);
+
             // Position
-            IKFast.Geometry.Vector3d position = new IKFast.Geometry.Vector3d(endPlane.Origin);
+            IKFast.Geometry.Vector3d position = new IKFast.Geometry.Vector3d(target.Origin);
 
             // Orientation as quaternion
-            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, endPlane);
-            Rhino.Geometry.Quaternion quaternionCorrection = new Rhino.Geometry.Quaternion(_cos45, 0.0, _cos45, 0.0); // Unkown 90 degrees correction
-            Rhino.Geometry.Quaternion quaternionCorrected = quaternion * quaternionCorrection.Inverse;
-            IKFast.Geometry.Quaternion orientation = new IKFast.Geometry.Quaternion(quaternionCorrected);
+            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, target);
+            IKFast.Geometry.Quaternion orientation = new IKFast.Geometry.Quaternion(quaternion);
 
             RobotJointPosition robotJointPosition;
 

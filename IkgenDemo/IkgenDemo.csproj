@@ -97,7 +97,11 @@
   <PropertyGroup>
     <PostBuildEvent>Copy "$(SolutionDir)\DLLs\ikfast\libblas.dll" "$(TargetDir)\libblas.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh_64-1.dll" "$(TargetDir)\libgcc_s_seh_64-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh-1.dll" "$(TargetDir)\libgcc_s_seh-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libstdc++-6.dll" "$(TargetDir)\libstdc++-6.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran_64-3.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthread-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"

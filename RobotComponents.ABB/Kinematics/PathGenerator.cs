@@ -234,7 +234,7 @@ namespace RobotComponents.ABB.Kinematics
                 _inLimits.RemoveRange(0, interpolations);
             }
 
-            // Set first path as null
+            // Remove first path
             _paths.RemoveAt(0);
             
             // Remove duplicates from error text

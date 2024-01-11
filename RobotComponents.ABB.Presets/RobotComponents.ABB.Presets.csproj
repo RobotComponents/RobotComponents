@@ -19,11 +19,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\RobotComponents.ABB.Presets.xml</DocumentationFile>
+    <DocumentationFile>bin\RobotComponents.ABB.Presets.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,6 +64,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Robots\CRB15000_10_152.cs" />
+    <Compile Include="Robots\CRB15000_12_127.cs" />
     <Compile Include="Robots\CRB15000_5_095.cs" />
     <Compile Include="Robots\IRB1010_15_037.cs" />
     <Compile Include="Robots\IRB1100_4_0475.cs" />
@@ -1072,6 +1074,48 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IRB6790_235_2_65_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_12_1_27_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CRB15000_10_1_52_link_5.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />

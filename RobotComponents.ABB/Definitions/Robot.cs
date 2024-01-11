@@ -360,7 +360,7 @@ namespace RobotComponents.ABB.Definitions
 
             // OPW Kinematics parameters
             _a1 = planes[1].Origin.X;
-            _a2 = -(planes[5].Origin.Z - planes[2].Origin.Z);
+            _a2 = -(planes[4].Origin.Z - planes[2].Origin.Z);
             _b = planes[0].Origin.Y - planes[5].Origin.Y;
             _c1 = planes[1].Origin.Z;
             _c2 = planes[2].Origin.Z - planes[1].Origin.Z;

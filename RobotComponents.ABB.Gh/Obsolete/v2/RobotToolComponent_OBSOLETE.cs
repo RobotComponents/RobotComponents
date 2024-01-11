@@ -144,7 +144,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the Robot Tool
-            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, true, mass, centerOfGravity, momentOfInertia);
+
+            LoadData loadData = new LoadData("", mass, centerOfGravity.Origin, ABB.Utils.HelperMethods.PlaneToQuaternion(Plane.WorldXY, centerOfGravity), momentOfInertia);
+            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, loadData);
 
             // Outputs
             DA.SetData(0, robotTool);

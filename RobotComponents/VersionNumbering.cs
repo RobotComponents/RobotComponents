@@ -1,7 +1,10 @@
-﻿// This file is part of Robot Components. Robot Components is licensed 
+// This file is part of Robot Components. Robot Components is licensed 
 // under the terms of GNU General Public License version 3.0 (GPL v3.0)
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+
+// System Libs
+using System;
 
 namespace RobotComponents
 {
@@ -22,13 +25,14 @@ namespace RobotComponents
         public const string CurrentVersion = "2.2.2";
 
         /// <summary>
-        /// Gets the current version as an int. 
+        /// Gets the current version.
         /// </summary>
         /// <remarks>
-        /// Typically used to check the version number inside the code.
-        /// For internal use only. Not recommended to use. 
-        /// Used logic: major*10^6 + minor*10^3 + build.
+        /// Has to be manually updated each time. 
+        /// 0.x.x ---> MAJOR version when you make incompatible API changes
+        /// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
+        /// x.x.0 ---> BUILD version when you make backwards compatible bug fixes
         /// </remarks>
-        public const int CurrentVersionAsInt = 2 * 1000000 + 2 * 1000 + 2;
+        public static Version Version = new Version(2, 2, 2);
     }
 }

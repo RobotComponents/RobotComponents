@@ -48,26 +48,17 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected Movement(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _movementType = (MovementType)info.GetValue("Movement Type", typeof(MovementType));
-            _cirPoint = version >= 2001000 ? (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget)) : new RobotTarget();
+            _cirPoint = (RobotTarget)info.GetValue("Circle Point", typeof(RobotTarget));
             _target = (ITarget)info.GetValue("Target", typeof(ITarget));
             _id = (int)info.GetValue("ID", typeof(int));
             _speedData = (SpeedData)info.GetValue("Speed Data", typeof(SpeedData));
-            _time = version >= 1004000 ? (double)info.GetValue("Time", typeof(double)) : -1;
+            _time = (double)info.GetValue("Time", typeof(double));
             _zoneData = (ZoneData)info.GetValue("Zone Data", typeof(ZoneData));
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
             _workObject = (WorkObject)info.GetValue("Work Object", typeof(WorkObject));
-
-            if (version >= 2001000)
-            {
-                _setDigitalOutput = (SetDigitalOutput)info.GetValue("Set Digital Output", typeof(SetDigitalOutput));
-            }
-            else
-            {
-                DigitalOutput digitalOutput = (DigitalOutput)info.GetValue("Digital Output", typeof(DigitalOutput));
-                _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            }
+            _setDigitalOutput = (SetDigitalOutput)info.GetValue("Set Digital Output", typeof(SetDigitalOutput));
         }
 
         /// <summary>
@@ -78,7 +69,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Movement Type", _movementType, typeof(MovementType));
             info.AddValue("Circle Point", _cirPoint, typeof(RobotTarget));
             info.AddValue("Target", _target, typeof(ITarget));
@@ -698,37 +689,27 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             ConvertTarget(RAPIDGenerator);
 
-            _convertedTarget.ToRAPIDDeclaration(RAPIDGenerator);
-            _speedData.ToRAPIDDeclaration(RAPIDGenerator);
-            _zoneData.ToRAPIDDeclaration(RAPIDGenerator);
-            _robotTool.ToRAPIDDeclaration(RAPIDGenerator);
-            _workObject.ToRAPIDDeclaration(RAPIDGenerator);
+            _convertedTarget.ToRAPIDGenerator(RAPIDGenerator);
+            _speedData.ToRAPIDGenerator(RAPIDGenerator);
+            _zoneData.ToRAPIDGenerator(RAPIDGenerator);
+            _robotTool.ToRAPIDGenerator(RAPIDGenerator);
+            _workObject.ToRAPIDGenerator(RAPIDGenerator);
 
             if (_movementType == MovementType.MoveC)
             {
-                _cirPoint.ToRAPIDDeclaration(RAPIDGenerator);
+                _cirPoint.ToRAPIDGenerator(RAPIDGenerator);
             }
-        }
 
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.s
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
@@ -866,98 +847,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _setDigitalOutput; }
             set { _setDigitalOutput = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Initializes a new instance of the Movement class with an empty Robot Tool (no override) and a default Work Object (wobj0)
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data.</param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = RobotTool.GetEmptyRobotTool(); // Empty Robot Tool
-            _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Movement class with a default Work Object (wobj0). 
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data. </param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = robotTool;
-            _workObject = new WorkObject(); // Default work object wobj0
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Movement class.
-        /// </summary>
-        /// <param name="movementType"> The Movement Type. </param>
-        /// <param name="target"> The Target. </param>
-        /// <param name="speedData"> The Speed Data. </param>
-        /// <param name="zoneData"> The Zone Data. </param>
-        /// <param name="robotTool"> The Robot Tool. This will override the set default tool. </param>
-        /// <param name="workObject"> The Work Object. </param>
-        /// <param name="digitalOutput"> The Digital Output. When set this will define a MoveLDO or a MoveJDO instruction. </param>
-        [Obsolete("This constructor is obsolete and will be removed in v3.", false)]
-        public Movement(MovementType movementType, ITarget target, SpeedData speedData, ZoneData zoneData, RobotTool robotTool, WorkObject workObject, DigitalOutput digitalOutput)
-        {
-            _movementType = movementType;
-            _cirPoint = new RobotTarget(Plane.Unset);
-            _target = target;
-            _id = -1;
-            _speedData = speedData;
-            _time = -1;
-            _zoneData = zoneData;
-            _robotTool = robotTool;
-            _workObject = workObject;
-            _setDigitalOutput = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-            CheckCombination();
-        }
-
-        /// <summary>
-        /// Gets or sets the Digital Output. 
-        /// </summary>
-        /// <remarks>
-        /// If an empty or invalid Digital Output is set a normal movement will be set (MoveAbsJ, MoveL or MoveJ). 
-        /// If a valid Digital Output is combined movement will be created (MoveLDO or MoveJDO). 
-        /// If as Movement Type an MoveAbsJ is set an extra RAPID code line will be added that sets the Digital Output (SetDO).
-        /// </remarks>
-        [Obsolete("This property is obsolete and will be removed in v3. Use SetDigitalOutput instead.", false)]
-        public DigitalOutput DigitalOutput
-        {
-            get { return new DigitalOutput(_setDigitalOutput.Name, _setDigitalOutput.Value); }
-            set { _setDigitalOutput = new SetDigitalOutput(value.Name, value.IsActive); }
         }
         #endregion
     }

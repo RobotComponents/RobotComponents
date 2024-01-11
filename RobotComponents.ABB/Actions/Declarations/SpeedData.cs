@@ -51,9 +51,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected SpeedData(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
             _v_ori = (double)info.GetValue("v_ori", typeof(double));
@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Name", _name, typeof(string));
@@ -368,13 +368,13 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_isPredefined == false)
             {
@@ -387,17 +387,6 @@ namespace RobotComponents.ABB.Actions.Declarations
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
         }
         #endregion
 
@@ -536,40 +525,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
-        public bool PreDefined
-        {
-            get { return _isPredefined; }
-            set { _isPredefined = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
-        public bool UserDefinied
-        {
-            get { return !_isPredefined; }
-            set { _isPredefined = !value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
-        /// </summary>
-        /// <remarks>
-        /// If false, the nearest predefined speedata or a custom speeddata was used. 
-        /// </remarks>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
-        public bool ExactPredefinedValue
-        {
-            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

@@ -44,22 +44,13 @@ namespace RobotComponents.ABB.Actions.Interfaces
         string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator);
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator);
+        void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator);
         #endregion
 
         #region properties
@@ -77,14 +68,6 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// Gets or sets the name of the synchronization (meeting) point (syncident).
         /// </summary>
         string SyncID { get; set; }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        VariableType ReferenceType { get; set; }
         #endregion
     }
 }

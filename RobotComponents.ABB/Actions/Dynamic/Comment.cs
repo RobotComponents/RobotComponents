@@ -37,7 +37,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <param name="context"> The context of this deserialization. </param>
         protected Comment(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _comment = (string)info.GetValue("Comment", typeof(string));
             _type = (CodeType)info.GetValue("Code Type", typeof(CodeType));
         }
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Comment", _comment, typeof(string));
             info.AddValue("Code Type", _type, typeof(CodeType));
         }
@@ -177,13 +177,13 @@ namespace RobotComponents.ABB.Actions.Dynamic
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_type == CodeType.Declaration)
             {
@@ -196,18 +196,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
                     RAPIDGenerator.ProgramDeclarationComments.Add("    ");
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-            if (_type == CodeType.Instruction)
+            else if (_type == CodeType.Instruction)
             {
                 if (_comment != "")
                 {
@@ -254,5 +243,4 @@ namespace RobotComponents.ABB.Actions.Dynamic
         }
         #endregion
     }
-
 }

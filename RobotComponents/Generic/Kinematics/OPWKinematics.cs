@@ -23,13 +23,11 @@ namespace RobotComponents.Generic.Kinematics
     public class OPWKinematics
     {
         #region fields
-        private readonly double[][] _solutions = Enumerable.Repeat(new double[6], 8).ToArray();
+        private readonly double[][] _solutions = Enumerable.Range(0, 8).Select(item => new double[6]).ToArray();
         private readonly bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private double[] _offsets = Enumerable.Repeat(0.0, 6).ToArray();
         private int[] _signs = Enumerable.Repeat(1, 6).ToArray();
-        private const double _pi = Math.PI;
-        private const double _2pi = 2 * _pi;
         private double _a1 = 0;
         private double _a2 = 0;
         private double _b = 0;
@@ -37,6 +35,10 @@ namespace RobotComponents.Generic.Kinematics
         private double _c2 = 0;
         private double _c3 = 0;
         private double _c4 = 0;
+
+        // Constants
+        private const double _pi = Math.PI;
+        private const double _2pi = 2 * _pi;
         #endregion
 
         #region constructors
@@ -45,10 +47,7 @@ namespace RobotComponents.Generic.Kinematics
         /// </summary>
         public OPWKinematics()
         {
-            for (int i = 0; i < 8; i++)
-            {
-                _solutions[i] = new double[6];
-            }
+
         }
         #endregion
 
@@ -67,6 +66,16 @@ namespace RobotComponents.Generic.Kinematics
             {
                 return "OPW Kinematics";
             }
+        }
+
+        /// <summary>
+        /// Calculates the end plane of joint 6 for a given pose.
+        /// </summary>
+        /// <param name="pose"> The pose as a collection with 6 rotations in radians. </param>
+        /// <returns> The end plane of the 6th joint. </returns>
+        public Plane Forward(IList<double> pose)
+        {
+            return Forward(pose, out _);
         }
 
         /// <summary>
@@ -154,7 +163,7 @@ namespace RobotComponents.Generic.Kinematics
             double uy0 = cy0 + _c4 * roe[1, 2];
             double uz0 = cz0 + _c4 * roe[2, 2];
 
-            // Conver to plane
+            // Convert to plane
             Point3d origin = new Point3d(ux0, uy0, uz0);
             Vector3d xAxis = new Vector3d(roe[0, 0], roe[1, 0], roe[2, 0]);
             Vector3d yAxis = new Vector3d(roe[0, 1], roe[1, 1], roe[2, 1]);
@@ -266,34 +275,17 @@ namespace RobotComponents.Generic.Kinematics
             }
 
             // Elbow singularities
-            if (acos1 == 0)
-            {
-                _elbowSingularities[0] = true;
-                _elbowSingularities[1] = true;
-                _elbowSingularities[4] = true;
-                _elbowSingularities[5] = true;
-            }
-            else
-            {
-                _elbowSingularities[0] = false;
-                _elbowSingularities[1] = false;
-                _elbowSingularities[4] = false;
-                _elbowSingularities[5] = false;
-            }
-            if (acos2 == 0)
-            {
-                _elbowSingularities[2] = true;
-                _elbowSingularities[3] = true;
-                _elbowSingularities[6] = true;
-                _elbowSingularities[7] = true;
-            }
-            else
-            {
-                _elbowSingularities[2] = false;
-                _elbowSingularities[3] = false;
-                _elbowSingularities[6] = false;
-                _elbowSingularities[7] = false;
-            }
+            bool test1 = acos1 == 0;
+            bool test2 = acos2 == 0;
+
+            _elbowSingularities[0] = test1;
+            _elbowSingularities[1] = test1;
+            _elbowSingularities[2] = test2;
+            _elbowSingularities[3] = test2;
+            _elbowSingularities[4] = test1;
+            _elbowSingularities[5] = test1;
+            _elbowSingularities[6] = test2;
+            _elbowSingularities[7] = test2;
 
             // Corrections
             for (int i = 0; i < 8; i++)

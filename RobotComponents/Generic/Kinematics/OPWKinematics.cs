@@ -28,6 +28,8 @@ namespace RobotComponents.Generic.Kinematics
         private readonly bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private double[] _offsets = Enumerable.Repeat(0.0, 6).ToArray();
         private int[] _signs = Enumerable.Repeat(1, 6).ToArray();
+
+        // Robot parameters
         private double _a1 = 0;
         private double _a2 = 0;
         private double _b = 0;
@@ -35,6 +37,9 @@ namespace RobotComponents.Generic.Kinematics
         private double _c2 = 0;
         private double _c3 = 0;
         private double _c4 = 0;
+        private double _k = 0;
+        private double _k2 = 0;
+        private double _psi3 = 0;
 
         // Constants
         private const double _pi = Math.PI;
@@ -69,6 +74,19 @@ namespace RobotComponents.Generic.Kinematics
         }
 
         /// <summary>
+        /// Updates the robot parameters.
+        /// </summary>
+        /// <remarks>
+        /// Method is called when the property A2 or C3 changes. 
+        /// </remarks>
+        private void UpdateRobotParameters()
+        {
+            _psi3 = Math.Atan2(_a2, _c3);
+            _k2 = _a2 * _a2 + _c3 * _c3;
+            _k = Math.Sqrt(_k2);
+        }
+
+        /// <summary>
         /// Calculates the end plane of joint 6 for a given pose.
         /// </summary>
         /// <param name="pose"> The pose as a collection with 6 rotations in radians. </param>
@@ -100,10 +118,6 @@ namespace RobotComponents.Generic.Kinematics
             theta[4] = theta[4] * Math.Sign(_signs[4]) - _offsets[4];
             theta[5] = theta[5] * Math.Sign(_signs[5]) - _offsets[5];
 
-            // Params
-            double psi3 = Math.Atan2(_a2, _c3);
-            double k = Math.Sqrt(_a2 * _a2 + _c3 * _c3);
-
             // Sine values
             double sin1 = Math.Sin(theta[0]);
             double sin2 = Math.Sin(theta[1]);
@@ -121,15 +135,14 @@ namespace RobotComponents.Generic.Kinematics
             double cos6 = Math.Cos(theta[5]);
 
             // Wrist position on plane
-            double cx1 = _c2 * sin2 + k * Math.Sin(theta[1] + theta[2] + psi3) + _a1;
+            double cx1 = _c2 * sin2 + _k * Math.Sin(theta[1] + theta[2] + _psi3) + _a1;
             double cy1 = _b;
-            double cz1 = _c2 * cos2 + k * Math.Cos(theta[1] + theta[2] + psi3);
+            double cz1 = _c2 * cos2 + _k * Math.Cos(theta[1] + theta[2] + _psi3);
 
             // Wrist position
             double cx0 = cx1 * cos1 - cy1 * sin2;
             double cy0 = cx1 * sin1 + cy1 * cos2;
             double cz0 = cz1 + _c1;
-            wristPosition = new Point3d(cx0, cy0, cz0);
 
             // Matrix Rce: Wrist orientation
             Matrix rce = new Matrix(3, 3);
@@ -163,7 +176,10 @@ namespace RobotComponents.Generic.Kinematics
             double uy0 = cy0 + _c4 * roe[1, 2];
             double uz0 = cz0 + _c4 * roe[2, 2];
 
-            // Convert to plane
+            // Return wrist position via out param
+            wristPosition = new Point3d(cx0, cy0, cz0);
+
+            // Return end plane
             Point3d origin = new Point3d(ux0, uy0, uz0);
             Vector3d xAxis = new Vector3d(roe[0, 0], roe[1, 0], roe[2, 0]);
             Vector3d yAxis = new Vector3d(roe[0, 1], roe[1, 1], roe[2, 1]);
@@ -178,17 +194,33 @@ namespace RobotComponents.Generic.Kinematics
         /// <param name="endPlane"> The end plane of joint 6. </param>
         public void Inverse(Plane endPlane)
         {
+            // Position
+            double ux0 = endPlane.Origin.X;
+            double uy0 = endPlane.Origin.Y;
+            double uz0 = endPlane.Origin.Z;
+
+            // Orientation
+            double e11 = endPlane.XAxis.X;
+            double e12 = endPlane.YAxis.X;
+            double e13 = endPlane.ZAxis.X;
+            double e21 = endPlane.XAxis.Y;
+            double e22 = endPlane.YAxis.Y;
+            double e23 = endPlane.ZAxis.Y;
+            double e31 = endPlane.XAxis.Z;
+            double e32 = endPlane.YAxis.Z;
+            double e33 = endPlane.ZAxis.Z;
+
             // Wrist position
-            Point3d c = new Point3d(endPlane.PointAt(0, 0, -_c4));
+            double cx0 = ux0 - e31 * _c4;
+            double cy0 = uy0 - e32 * _c4;
+            double cz0 = uz0 - e33 * _c4;
 
             // Positioning parameters: part 1
-            double nx1 = Math.Sqrt(c.X * c.X + c.Y * c.Y - _b * _b) - _a1;
-            double k_2 = _a2 * _a2 + _c3 * _c3;
-            double k = Math.Sqrt(k_2);
+            double nx1 = Math.Sqrt(cx0 * cx0 + cy0 * cy0 - _b * _b) - _a1;
 
             // Joint position 1
-            double theta1_i = Math.Atan2(c.Y, c.X) - Math.Atan2(_b, nx1 + _a1);
-            double theta1_ii = Math.Atan2(c.Y, c.X) + Math.Atan2(_b, nx1 + _a1) - _pi;
+            double theta1_i = Math.Atan2(cy0, cx0) - Math.Atan2(_b, nx1 + _a1);
+            double theta1_ii = Math.Atan2(cy0, cx0) + Math.Atan2(_b, nx1 + _a1) - _pi;
             _solutions[0][0] = theta1_i;
             _solutions[1][0] = theta1_i;
             _solutions[2][0] = theta1_ii;
@@ -199,20 +231,20 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[7][0] = theta1_ii;
 
             // Positioning parameters: part 2
-            double s1_2 = nx1 * nx1 + (c.Z - _c1) * (c.Z - _c1);
-            double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (c.Z - _c1) * (c.Z - _c1);
+            double s1_2 = nx1 * nx1 + (cz0 - _c1) * (cz0 - _c1);
+            double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (cz0 - _c1) * (cz0 - _c1);
             double s1 = Math.Sqrt(s1_2);
             double s2 = Math.Sqrt(s2_2);
 
             // Joint position 2
-            double acos1 = Math.Acos((s1_2 + _c2 * _c2 - k_2) / (2.0 * s1 * _c2));
-            double acos2 = Math.Acos((s2_2 + _c2 * _c2 - k_2) / (2.0 * s2 * _c2));
+            double acos1 = Math.Acos((s1_2 + _c2 * _c2 - _k2) / (2.0 * s1 * _c2));
+            double acos2 = Math.Acos((s2_2 + _c2 * _c2 - _k2) / (2.0 * s2 * _c2));
             if (double.IsNaN(acos1)) { acos1 = 0; }
             if (double.IsNaN(acos2)) { acos2 = 0; }
-            double theta2_i = -acos1 + Math.Atan2(nx1, c.Z - _c1);
-            double theta2_ii = acos1 + Math.Atan2(nx1, c.Z - _c1);
-            double theta2_iii = -acos2 - Math.Atan2(nx1 + 2.0 * _a1, c.Z - _c1);
-            double theta2_iv = acos2 - Math.Atan2(nx1 + 2.0 * _a1, c.Z - _c1);
+            double theta2_i = -acos1 + Math.Atan2(nx1, cz0 - _c1);
+            double theta2_ii = acos1 + Math.Atan2(nx1, cz0 - _c1);
+            double theta2_iii = -acos2 - Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
+            double theta2_iv = acos2 - Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
             _solutions[0][1] = theta2_i;
             _solutions[1][1] = theta2_ii;
             _solutions[2][1] = theta2_iii;
@@ -223,8 +255,8 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[7][1] = theta2_iv;
 
             // Joint position 3
-            double acos3 = Math.Acos((s1_2 - _c2 * _c2 - k_2) / (2.0 * _c2 * k));
-            double acos4 = Math.Acos((s2_2 - _c2 * _c2 - k_2) / (2.0 * _c2 * k));
+            double acos3 = Math.Acos((s1_2 - _c2 * _c2 - _k2) / (2.0 * _c2 * _k));
+            double acos4 = Math.Acos((s2_2 - _c2 * _c2 - _k2) / (2.0 * _c2 * _k));
             if (double.IsNaN(acos3)) { acos3 = 0; }
             if (double.IsNaN(acos4)) { acos4 = 0; }
             double theta3_i = acos3 - Math.Atan2(_a2, _c3);
@@ -239,17 +271,6 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[5][2] = theta3_ii;
             _solutions[6][2] = theta3_iii;
             _solutions[7][2] = theta3_iv;
-
-            // Orientation part parameters
-            double e11 = endPlane.XAxis.X;
-            double e12 = endPlane.YAxis.X;
-            double e13 = endPlane.ZAxis.X;
-            double e21 = endPlane.XAxis.Y;
-            double e22 = endPlane.YAxis.Y;
-            double e23 = endPlane.ZAxis.Y;
-            double e31 = endPlane.XAxis.Z;
-            double e32 = endPlane.YAxis.Z;
-            double e33 = endPlane.ZAxis.Z;
 
             // Calculate joint postion 4, 5 and 6
             for (int i = 0; i < 8; i++)
@@ -369,7 +390,7 @@ namespace RobotComponents.Generic.Kinematics
         public double A2
         {
             get { return _a2; }
-            set { _a2 = value; }
+            set { _a2 = value; UpdateRobotParameters(); }
         }
 
         /// <summary>
@@ -405,7 +426,7 @@ namespace RobotComponents.Generic.Kinematics
         public double C3
         {
             get { return _c3; }
-            set { _c3 = value; }
+            set { _c3 = value; UpdateRobotParameters(); }
         }
 
         /// <summary>

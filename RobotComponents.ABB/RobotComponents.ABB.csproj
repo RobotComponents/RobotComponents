@@ -107,7 +107,6 @@
     <Compile Include="Kinematics\IKFast\Geometry\Vector6d.cs" />
     <Compile Include="Kinematics\IKFast\IKFastSolver.cs" />
     <Compile Include="Kinematics\InverseKinematics.cs" />
-    <Compile Include="Kinematics\InverseKinematicsIkgen.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

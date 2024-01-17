@@ -15,7 +15,7 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Presets;
 
-namespace IkgenDemo
+namespace IkfastDemo
 {
     class Robot_CRB15000_5_095
     {

@@ -277,6 +277,7 @@ namespace RobotComponents.ABB.Kinematics
                     try
                     {
                         _ikfast.Compute(_localEndPlane);
+                        _ikfast.SortJointPositions();
 
                         #region DEBUG: Write results in Rhino command line
                         Rhino.RhinoApp.WriteLine($"IKFast found {_ikfast.NumSolutions} solutions (joint positions in deg).");

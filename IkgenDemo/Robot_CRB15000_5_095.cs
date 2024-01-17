@@ -86,8 +86,6 @@ namespace IkgenDemo
                 Console.WriteLine($"Recomputed end-effector plane: " +
                     $"{fkrc.TCPPlane.Origin:F2}\t{fkrc.TCPPlane.Normal:F2}");
             }
-
-
         }
 
         static void PrintJointPositions(RobotJointPosition joints)

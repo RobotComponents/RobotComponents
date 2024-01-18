@@ -835,8 +835,8 @@ Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthrea
 Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
-Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"
-</PostBuildEvent>
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_5_095.dll" "$(TargetDir)\rcik_CRB15000_5_095.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_10_152.dll" "$(TargetDir)\rcik_CRB15000_10_152.dll"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>

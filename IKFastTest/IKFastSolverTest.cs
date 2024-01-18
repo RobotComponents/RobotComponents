@@ -1,11 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿// This file is part of Robot Components. Robot Components is licensed 
+// under the terms of GNU General Public License version 3.0 (GPL v3.0)
+// as published by the Free Software Foundation. For more information and 
+// the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
+
+// System Libs
 using System;
 using System.Security.Claims;
-
-using RobotComponents.ABB.Kinematics;
-using RobotComponents.ABB.Actions.Declarations;
 using System.Collections.Generic;
 using System.Linq;
+// Microsoft Libs
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+// Robot Components Libs
+using RobotComponents.ABB.Kinematics;
+using RobotComponents.ABB.Actions.Declarations;
 
 namespace IKFastTest
 {
@@ -50,7 +57,6 @@ namespace IKFastTest
                 // SequenceEqual seems to work only on array level
                 Assert.IsTrue(posList[i].ToArray().SequenceEqual(posList_sorted[i].ToArray()));
             }
-
         }
     }
 }

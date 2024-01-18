@@ -107,7 +107,6 @@
     <Compile Include="Kinematics\IKFast\Geometry\Vector6d.cs" />
     <Compile Include="Kinematics\IKFast\IKFastSolver.cs" />
     <Compile Include="Kinematics\InverseKinematics.cs" />
-    <Compile Include="Kinematics\InverseKinematicsIkgen.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -166,8 +165,10 @@ Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran
 Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthread-1.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
-Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
-Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll" 
+
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_5_095.dll" "$(TargetDir)\rcik_CRB15000_5_095.dll" 
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_10_152.dll" "$(TargetDir)\rcik_CRB15000_10_152.dll"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|AnyCPU' ">

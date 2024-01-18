@@ -15,12 +15,12 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Presets;
 
-namespace IkgenDemo
+namespace IkfastDemo
 {
-    class Robot_CRB15000_5_095
+    class InverseKinematicsDemo
     {
         #region Program static constructor
-        static Robot_CRB15000_5_095()
+        static InverseKinematicsDemo()
         {
             RhinoInside.Resolver.Initialize();
         }
@@ -33,7 +33,7 @@ namespace IkgenDemo
             {
                 using (new RhinoCore(args))
                 {
-                    InverseKinematicsDemo();
+                    RunDemo();
                 }
             }
             catch (Exception ex)
@@ -47,15 +47,25 @@ namespace IkgenDemo
             Console.ReadKey();
         }
 
-        static void InverseKinematicsDemo()
+        static void RunDemo()
         {
             Console.WriteLine("*** Inverse Kinematics Demo ***");
             Console.WriteLine("");
 
-            // Initialize robot
             Plane tcp = new Plane(new Point3d(20, 40, 80), Vector3d.XAxis, Vector3d.YAxis);
             RobotTool tool1 = new RobotTool("tool1", new Mesh(), Plane.WorldXY, tcp);
-            Robot robot = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldYZ, tool1);
+
+            Robot robot_CRB15000_5_095 = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldYZ, tool1);
+            //Robot robot_CRB15000_10_152 = Factory.GetRobotPreset(RobotPreset.CRB15000_10_152, Plane.WorldYZ, tool1);
+
+            ShowRobotIK(robot_CRB15000_5_095);
+            //ShowRobotIK(robot_CRB15000_10_152);
+        }
+
+        static void ShowRobotIK(Robot robot)
+        {
+            Console.WriteLine($"Robot {robot.Name}");
+            Console.WriteLine("");
 
             // Initialize kinematics solvers
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);

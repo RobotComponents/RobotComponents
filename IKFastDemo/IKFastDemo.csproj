@@ -52,9 +52,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="RhinoInsideExample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Robot_CRB15000_5_095.cs" />
+    <Compile Include="InverseKinematicsDemo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -103,8 +102,10 @@ Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran
 Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthread-1.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
 Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
-Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll"
-Copy "$(SolutionDir)\DLLs\ikfast\rcik.dll" "$(TargetDir)\rcik.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll" 
+
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_5_095.dll" "$(TargetDir)\rcik_CRB15000_5_095.dll" 
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_10_152.dll" "$(TargetDir)\rcik_CRB15000_10_152.dll"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

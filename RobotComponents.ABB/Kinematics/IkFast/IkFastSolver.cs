@@ -5,7 +5,9 @@
 
 // System Libs
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 // Rhino Libs
@@ -55,10 +57,10 @@ namespace RobotComponents.ABB.Kinematics.IKFast
         }
 
         /// <summary>
-        /// Computes the inverse kinematics.
+        /// Computes the inverse kinematics for robot CRB15000_5_095.
         /// </summary>
         /// <param name="endPlane"> The robot end plane. </param>
-        public void Compute(Plane endPlane)
+        public void Compute_CRB15000_5_095(Plane endPlane)
         {
             // Check if system is 64-bit
             if (!System.Environment.Is64BitOperatingSystem)
@@ -84,7 +86,7 @@ namespace RobotComponents.ABB.Kinematics.IKFast
 
             unsafe
             {
-                Vector6d* joints_ikgen = computeInverseKinematics(ref position, ref orientation, out _numSolutions);
+                Vector6d* joints_ikgen = computeIK_CRB15000_5_095(ref position, ref orientation, out _numSolutions);
 
                 for (int i = 0; i < _numSolutions; i++)
                 {
@@ -96,6 +98,62 @@ namespace RobotComponents.ABB.Kinematics.IKFast
             }
 
             _robotJointPosition = _robotJointPositions.DefaultIfEmpty(new RobotJointPosition()).Last();
+        }
+
+        /// <summary>
+        /// Computes the inverse kinematics for robot CRB15000_10_152.
+        /// </summary>
+        /// <param name="endPlane"> The robot end plane. </param>
+        public void Compute_CRB15000_10_152(Plane endPlane)
+        {
+            // Check if system is 64-bit
+            if (!System.Environment.Is64BitOperatingSystem)
+            {
+                throw new Exception("The IKFast Kinematics Solver cannot be used. The operating system is not 64-bit.");
+            }
+
+            // Reset the solution
+            Reset();
+
+            // Target rotated 90 degrees (unknown reason)
+            Plane target = new Plane(endPlane);
+            target.Rotate(0.5 * _pi, target.ZAxis, target.Origin);
+
+            // Position
+            IKFast.Geometry.Vector3d position = new IKFast.Geometry.Vector3d(target.Origin);
+
+            // Orientation as quaternion
+            Rhino.Geometry.Quaternion quaternion = Rhino.Geometry.Quaternion.Rotation(_base, target);
+            IKFast.Geometry.Quaternion orientation = new IKFast.Geometry.Quaternion(quaternion);
+
+            RobotJointPosition robotJointPosition;
+
+            unsafe
+            {
+                Vector6d* joints_ikgen = computeIK_CRB15000_10_152(ref position, ref orientation, out _numSolutions);
+
+                for (int i = 0; i < _numSolutions; i++)
+                {
+                    robotJointPosition = joints_ikgen[i].ToRobotJointPosition();
+                    robotJointPosition.Multiply(_rad2deg); // Radians to degrees
+
+                    _robotJointPositions.Add(robotJointPosition);
+                }
+            }
+
+            _robotJointPosition = _robotJointPositions.DefaultIfEmpty(new RobotJointPosition()).Last();
+        }
+
+        /// <summary>
+        /// Sort the list of robot joint positions according to a policy.
+        /// </summary>
+        public void SortJointPositions()
+        {
+            // Use this policy
+            Comparer<RobotJointPosition> comparer = new ConfigurationComparer();
+
+            // Sort list of join positions in place
+            _robotJointPositions.Sort(comparer);
         }
         #endregion
 
@@ -126,8 +184,76 @@ namespace RobotComponents.ABB.Kinematics.IKFast
         #endregion
 
         #region dll import
-        [DllImport("rcik.dll", EntryPoint = "computeInverseKinematics")]
-        private static unsafe extern Vector6d* computeInverseKinematics(ref IKFast.Geometry.Vector3d eePos, ref IKFast.Geometry.Quaternion eeOri, out int n_sol);
+        [DllImport("rcik_CRB15000_5_095.dll", EntryPoint = "computeInverseKinematics")]
+        private static unsafe extern Vector6d* computeIK_CRB15000_5_095(ref IKFast.Geometry.Vector3d eePos, ref IKFast.Geometry.Quaternion eeOri, out int n_sol);
+
+        [DllImport("rcik_CRB15000_10_152.dll", EntryPoint = "computeInverseKinematics")]
+        private static unsafe extern Vector6d* computeIK_CRB15000_10_152(ref IKFast.Geometry.Vector3d eePos, ref IKFast.Geometry.Quaternion eeOri, out int n_sol);
         #endregion
+    }
+
+    /// <summary>
+    /// Comparer defining the sorting policy of RobotJointPositions
+    /// </summary>
+    /// <remarks>
+    /// The policy is: The quadrants of the axes follow the order: 
+    /// third, fourth, first, second; this corresponds to 
+    /// (-2, -1, 0, 1) in the coding sheme of ABB's RobotStudio; and 
+    /// priority decreases with increasing axis number
+    /// </remarks>
+    public class ConfigurationComparer : Comparer<RobotJointPosition>
+    {
+        public override int Compare(RobotJointPosition px, RobotJointPosition py)
+        {
+            // Convert to configuration data
+            var x = JointPositionToConfigurationArray( px );
+            var y = JointPositionToConfigurationArray( py );
+
+            Debug.Assert(x.Length == y.Length);
+
+            // Compare each element and proceed to the next only if equal
+            for (int i = 0; i < x.Length; i++)
+            {
+                if (x[i] > y[i])
+                    return 1;
+
+                if (x[i] < y[i])
+                    return -1;
+            }
+
+            // All elements are equal
+            return 0;
+        }
+
+        private static int[] JointPositionToConfigurationArray(RobotJointPosition joints)
+        {
+            // Determine the quadrant of robot axis 1, 4, and 6
+
+            // Convert angle into integer indicating the quadrant following 
+            // coding sheme of ABB's RobotStudio.
+            Func<double, int> classifyQuadrant = delegate (double angle)
+            {
+                // First quadrant
+                if (0.0 <= angle && angle < 90.0)
+                    return 0;
+
+                // Second quadrant
+                if (90.0 <= angle && angle <= 180.0)
+                    return 1;
+
+                // Third quadrant, excluding -180
+                if (-180.0 < angle && angle < -90.0)
+                    return -2;
+
+                // Fourth quadrant
+                if (-90.0 <= angle && angle < 0.0)
+                    return -1;
+
+                throw new Exception("angle not within valid range (-180, 180]");
+            };
+
+            return new int[] { classifyQuadrant(joints[0]), classifyQuadrant(joints[3]), classifyQuadrant(joints[5]) };
+        }
+
     }
 }

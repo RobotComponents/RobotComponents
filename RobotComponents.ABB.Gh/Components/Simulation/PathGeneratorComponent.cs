@@ -176,7 +176,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             // Get the index number of the current target
             int index = (int)(((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider));
 
-            // Calculate foward kinematics
+            // Calculate forward kinematics
             if (_previewMesh == true | _outputMesh == true)
             {
                 forwardKinematics.HideMesh = false;

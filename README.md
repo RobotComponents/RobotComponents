@@ -129,7 +129,7 @@ Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/r
 [3DCP TU/e - Design concepts for 3D Concrete Printed spiral staircase using SHCC and helical reinforcement](https://www.youtube.com/watch?v=18HOe7LmMvg)
 
 ## License
-Copyright (c) 2018-2023 [The Robot Components authors and / or their affiliations](AUTHORS.md)
+Copyright (c) 2018-2024 [The Robot Components authors and / or their affiliations](AUTHORS.md)
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 

@@ -211,8 +211,8 @@ namespace RobotComponents.Generic.Kinematics
             double e33 = endPlane.ZAxis.Z;
 
             // Wrist position
-            double cx0 = ux0 - e31 * _c4;
-            double cy0 = uy0 - e32 * _c4;
+            double cx0 = ux0 - e13 * _c4;
+            double cy0 = uy0 - e23 * _c4;
             double cz0 = uz0 - e33 * _c4;
 
             // Positioning parameters: part 1

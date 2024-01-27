@@ -19,6 +19,20 @@ namespace RobotComponents.Generic.Kinematics
     /// Based on the paper 'An Analytical Solution of the Inverse Kinematics Problem of 
     /// Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist' 
     /// by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
+    /// 
+    /// Solution order:
+    /// 
+    /// Sol.    Wrist center            Wrist center            Axis 5 angle
+    ///         relative to axis 1      relative to lower arm
+    ///         
+    /// 0       In front of             In front of             Positive
+    /// 1       In front of             Behind                  Positive
+    /// 2       Behind                  In front of             Positive
+    /// 3       Behind                  Behind                  Positive
+    /// 4       In front of             In front of             Negative
+    /// 5       In front of             Behind                  Negative 
+    /// 6       Behind                  In front of             Negative
+    /// 7       Behind                  Behind                  Negative        
     /// </remarks>
     public class OPWKinematics
     {
@@ -111,12 +125,12 @@ namespace RobotComponents.Generic.Kinematics
             double[] theta = pose.ToArray();
 
             // Corrections
-            theta[0] = theta[0] * Math.Sign(_signs[0]) - _offsets[0];
-            theta[1] = theta[1] * Math.Sign(_signs[1]) - _offsets[1];
-            theta[2] = theta[2] * Math.Sign(_signs[2]) - _offsets[2];
-            theta[3] = theta[3] * Math.Sign(_signs[3]) - _offsets[3];
-            theta[4] = theta[4] * Math.Sign(_signs[4]) - _offsets[4];
-            theta[5] = theta[5] * Math.Sign(_signs[5]) - _offsets[5];
+            theta[0] = theta[0] * _signs[0] - _offsets[0];
+            theta[1] = theta[1] * _signs[1] - _offsets[1];
+            theta[2] = theta[2] * _signs[2] - _offsets[2];
+            theta[3] = theta[3] * _signs[3] - _offsets[3];
+            theta[4] = theta[4] * _signs[4] - _offsets[4];
+            theta[5] = theta[5] * _signs[5] - _offsets[5];
 
             // Sine values
             double sin1 = Math.Sin(theta[0]);
@@ -157,16 +171,16 @@ namespace RobotComponents.Generic.Kinematics
             rce[2, 2] = cos5;
 
             // Matrix Roc
-            Matrix roc = new Matrix(3, 3);
-            roc[0, 0] = cos1 * cos2 * cos3 - cos1 * sin2 * sin3;
+            Matrix roc = new Matrix(3, 3);                          // Alternative form
+            roc[0, 0] = cos1 * cos2 * cos3 - cos1 * sin2 * sin3;    // cos(x1) cos(x2 + x3)
             roc[0, 1] = -sin1;
-            roc[0, 2] = cos1 * cos2 * sin3 + cos1 * sin2 * cos3;
-            roc[1, 0] = sin1 * cos2 * cos3 - sin1 * sin2 * sin3;
+            roc[0, 2] = cos1 * cos2 * sin3 + cos1 * sin2 * cos3;    // cos(x1) sin(x2 + x3)
+            roc[1, 0] = sin1 * cos2 * cos3 - sin1 * sin2 * sin3;    // sin(x1) cos(x2 + x3)
             roc[1, 1] = cos1;
-            roc[1, 2] = sin1 * cos2 * sin3 + sin1 * sin2 * cos3;
-            roc[2, 0] = -sin2 * cos3 - cos2 * sin3;
+            roc[1, 2] = sin1 * cos2 * sin3 + sin1 * sin2 * cos3;    // sin(x1) sin(x2 + x3)
+            roc[2, 0] = -sin2 * cos3 - cos2 * sin3;                 // -sin(x2 + x3)
             roc[2, 1] = 0;
-            roc[2, 2] = -sin2 * sin3 + cos2 * cos3;
+            roc[2, 2] = -sin2 * sin3 + cos2 * cos3;                 // cos(x2 + x3)
 
             // Matrix Roe: End plane orientation
             Matrix roe = roc * rce;
@@ -215,12 +229,30 @@ namespace RobotComponents.Generic.Kinematics
             double cy0 = uy0 - e23 * _c4;
             double cz0 = uz0 - e33 * _c4;
 
-            // Positioning parameters: part 1
+            // Positioning parameters for joint 1, 2 and 3
             double nx1 = Math.Sqrt(cx0 * cx0 + cy0 * cy0 - _b * _b) - _a1;
+            double s1_2 = nx1 * nx1 + (cz0 - _c1) * (cz0 - _c1);
+            double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (cz0 - _c1) * (cz0 - _c1);
+            double s1 = Math.Sqrt(s1_2);
+            double s2 = Math.Sqrt(s2_2);
+            double psi1 = Math.Atan2(nx1, cz0 - _c1);
+            double psi2_i = Math.Acos((s1_2 + _c2 * _c2 - _k2) / (2.0 * s1 * _c2));
+            double psi2_ii = Math.Acos((s2_2 + _c2 * _c2 - _k2) / (2.0 * s2 * _c2));
+            double acos1 = Math.Acos((s1_2 - _c2 * _c2 - _k2) / (2.0 * _k * _c2));
+            double acos2 = Math.Acos((s2_2 - _c2 * _c2 - _k2) / (2.0 * _k * _c2));
+            double atan1 = Math.Atan2(cy0, cx0);
+            double atan2 = Math.Atan2(_b, nx1 + _a1);
+            double atan3 = Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
+
+            // Check for Nan values (singularities)
+            if (double.IsNaN(acos1)) { acos1 = 0; }
+            if (double.IsNaN(acos2)) { acos2 = 0; }
+            if (double.IsNaN(psi2_i)) { psi2_i = 0; }
+            if (double.IsNaN(psi2_ii)) { psi2_ii = 0; }
 
             // Joint position 1
-            double theta1_i = Math.Atan2(cy0, cx0) - Math.Atan2(_b, nx1 + _a1);
-            double theta1_ii = Math.Atan2(cy0, cx0) + Math.Atan2(_b, nx1 + _a1) - _pi;
+            double theta1_i = atan1 - atan2;
+            double theta1_ii = atan1 + atan2 - _pi;
             _solutions[0][0] = theta1_i;
             _solutions[1][0] = theta1_i;
             _solutions[2][0] = theta1_ii;
@@ -230,21 +262,11 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[6][0] = theta1_ii;
             _solutions[7][0] = theta1_ii;
 
-            // Positioning parameters: part 2
-            double s1_2 = nx1 * nx1 + (cz0 - _c1) * (cz0 - _c1);
-            double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (cz0 - _c1) * (cz0 - _c1);
-            double s1 = Math.Sqrt(s1_2);
-            double s2 = Math.Sqrt(s2_2);
-
             // Joint position 2
-            double acos1 = Math.Acos((s1_2 + _c2 * _c2 - _k2) / (2.0 * s1 * _c2));
-            double acos2 = Math.Acos((s2_2 + _c2 * _c2 - _k2) / (2.0 * s2 * _c2));
-            if (double.IsNaN(acos1)) { acos1 = 0; }
-            if (double.IsNaN(acos2)) { acos2 = 0; }
-            double theta2_i = -acos1 + Math.Atan2(nx1, cz0 - _c1);
-            double theta2_ii = acos1 + Math.Atan2(nx1, cz0 - _c1);
-            double theta2_iii = -acos2 - Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
-            double theta2_iv = acos2 - Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
+            double theta2_i = -psi2_i + psi1;
+            double theta2_ii = psi2_i + psi1;
+            double theta2_iii = -psi2_ii - atan3;
+            double theta2_iv = psi2_ii - atan3;
             _solutions[0][1] = theta2_i;
             _solutions[1][1] = theta2_ii;
             _solutions[2][1] = theta2_iii;
@@ -255,14 +277,10 @@ namespace RobotComponents.Generic.Kinematics
             _solutions[7][1] = theta2_iv;
 
             // Joint position 3
-            double acos3 = Math.Acos((s1_2 - _c2 * _c2 - _k2) / (2.0 * _c2 * _k));
-            double acos4 = Math.Acos((s2_2 - _c2 * _c2 - _k2) / (2.0 * _c2 * _k));
-            if (double.IsNaN(acos3)) { acos3 = 0; }
-            if (double.IsNaN(acos4)) { acos4 = 0; }
-            double theta3_i = acos3 - Math.Atan2(_a2, _c3);
-            double theta3_ii = -acos3 - Math.Atan2(_a2, _c3);
-            double theta3_iii = acos4 - Math.Atan2(_a2, _c3);
-            double theta3_iv = -acos4 - Math.Atan2(_a2, _c3);
+            double theta3_i = acos1 - _psi3;
+            double theta3_ii = -acos1 - _psi3;
+            double theta3_iii = acos2 - _psi3;
+            double theta3_iv = -acos2 - _psi3;
             _solutions[0][2] = theta3_i;
             _solutions[1][2] = theta3_ii;
             _solutions[2][2] = theta3_iii;
@@ -296,17 +314,17 @@ namespace RobotComponents.Generic.Kinematics
             }
 
             // Elbow singularities
-            bool test1 = acos1 == 0;
-            bool test2 = acos2 == 0;
+            bool singularity1 = psi2_i == 0;
+            bool singularity2 = psi2_ii == 0;
 
-            _elbowSingularities[0] = test1;
-            _elbowSingularities[1] = test1;
-            _elbowSingularities[2] = test2;
-            _elbowSingularities[3] = test2;
-            _elbowSingularities[4] = test1;
-            _elbowSingularities[5] = test1;
-            _elbowSingularities[6] = test2;
-            _elbowSingularities[7] = test2;
+            _elbowSingularities[0] = singularity1;
+            _elbowSingularities[1] = singularity1;
+            _elbowSingularities[2] = singularity2;
+            _elbowSingularities[3] = singularity2;
+            _elbowSingularities[4] = singularity1;
+            _elbowSingularities[5] = singularity1;
+            _elbowSingularities[6] = singularity2;
+            _elbowSingularities[7] = singularity2;
 
             // Corrections
             for (int i = 0; i < 8; i++)
@@ -318,7 +336,7 @@ namespace RobotComponents.Generic.Kinematics
                     _solutions[i][j] = _solutions[i][j] < -_pi ? _solutions[i][j] + _2pi : _solutions[i][j];
 
                     // Offset and sign corrections
-                    _solutions[i][j] = Math.Sign(_signs[j]) * (_solutions[i][j] + _offsets[j]);
+                    _solutions[i][j] = _signs[j] * (_solutions[i][j] + _offsets[j]);
                 }
             }
         }
@@ -360,19 +378,22 @@ namespace RobotComponents.Generic.Kinematics
         /// <summary>
         /// Gets or sets the offset corrections.
         /// </summary>
-        public double[] Offsets
+        public IList<double> Offsets
         {
             get { return _offsets; }
-            set { _offsets = value; }
+            set { _offsets = value.ToArray(); }
         }
 
         /// <summary>
         /// Gets or sets the sign corrections.
         /// </summary>
-        public int[] Signs
+        /// <remarks>
+        /// This property also checks the input values and adjusts them to -1 or 1 if needed.
+        /// </remarks>
+        public IList<int> Signs
         {
             get { return _signs; }
-            set { _signs = value; }
+            set { _signs = value.ToList().ConvertAll(x => Math.Sign(x)).ToArray(); }
         }
 
         /// <summary>

@@ -744,11 +744,11 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     // Set the display color and transparancy of the robot mesh
                     if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)
                     {
-                        displayMaterial = Settings.DisplayMaterialOutsideLimits;
+                        displayMaterial = DisplaySettings.DisplayMaterialOutsideLimits;
                     }
                     else
                     {
-                        displayMaterial = Settings.DisplayMaterialInLimits;
+                        displayMaterial = DisplaySettings.DisplayMaterialInLimits;
                     }
 
                     // Display internal axis meshes

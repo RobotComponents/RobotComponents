@@ -8,12 +8,12 @@ using System.Drawing;
 // Rhino Libs
 using Rhino.Display;
 
-namespace RobotComponents.ABB.Gh
+namespace RobotComponents.ABB.Gh.Utils
 {
     /// <summary>
     /// Represents the class that contains the Robot Components Grasshopper settings.
     /// </summary>
-    internal class Settings
+    internal class DisplaySettings
     {
         #region fields
         private static readonly DisplayMaterial _displayMaterialInLimits = new DisplayMaterial(Color.FromArgb(225, 225, 225), 0.0);

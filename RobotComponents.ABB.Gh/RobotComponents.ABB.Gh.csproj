@@ -293,7 +293,7 @@
     </Compile>
     <Compile Include="RobotComponentsIcon.cs" />
     <Compile Include="RobotComponentsInfo.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Utils\DisplaySettings.cs" />
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />

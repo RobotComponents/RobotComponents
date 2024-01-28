@@ -533,7 +533,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
                     // Initiate the display color and transparancy of the mechanical unit mesh
-                    DisplayMaterial displayMaterial = _inverseKinematics[i].InLimits ? Settings.DisplayMaterialInLimits : Settings.DisplayMaterialOutsideLimits;
+                    DisplayMaterial displayMaterial = _inverseKinematics[i].InLimits ? DisplaySettings.DisplayMaterialInLimits : DisplaySettings.DisplayMaterialOutsideLimits;
 
                     // Display internal axis meshes
                     for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)

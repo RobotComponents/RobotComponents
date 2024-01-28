@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Utils
         public static ObjectManager GetDocumentObjectManager(GH_Document document)
         {
             // Gets Document ID
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(document);
+            string documentID = GetRobotComponentsDocumentID(document);
 
             // Checks if ObjectManager for this document already exists. If not it creates a new one. 
             if (!ObjectManagers.ContainsKey(documentID))
@@ -61,6 +61,17 @@ namespace RobotComponents.ABB.Gh.Utils
             {
                 ObjectManagers.Remove(documentID);
             }
+        }
+
+        /// <summary>
+        /// Method to get the document identifier for RobotComponents.
+        /// The identifier is created based on the Grasshopper document ID and the file path. 
+        /// </summary>
+        /// <param name="document"> The Grasshopper document as GH_Document. </param>
+        /// <returns>The RobotComponents document identifier</returns>
+        public static string GetRobotComponentsDocumentID(GH_Document document)
+        {
+            return GetRobotComponentsDocumentID(document, document.FilePath);
         }
 
         /// <summary>
@@ -109,17 +120,6 @@ namespace RobotComponents.ABB.Gh.Utils
 
             // Return
             return grasshopperDocID + "-" + filePathHash;
-        }
-
-        /// <summary>
-        /// Method to get the document identifier for RobotComponents.
-        /// The identifier is created based on the Grasshopper document ID and the file path. 
-        /// </summary>
-        /// <param name="document"> The Grasshopper document as GH_Document. </param>
-        /// <returns>The RobotComponents document identifier</returns>
-        public static string GetRobotComponentsDocumentID(GH_Document document)
-        {
-            return GetRobotComponentsDocumentID(document, document.FilePath);
         }
     }
 }

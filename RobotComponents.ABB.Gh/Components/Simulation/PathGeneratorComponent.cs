@@ -6,11 +6,11 @@
 // System Libs
 using System;
 using System.Linq;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Rhino Libs
 using Rhino.Geometry;
+using Rhino.Display;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -735,9 +735,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
-                    // Initiate the display color and transparancy of the robot mesh
-                    Color color;
-                    double trans;
+                    // Initiate the display color and transparancy of the mechanical unit mesh
+                    DisplayMaterial displayMaterial;
 
                     // Interpolation step
                     int index = (int)(((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]));
@@ -745,13 +744,11 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     // Set the display color and transparancy of the robot mesh
                     if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)
                     {
-                        color = Color.FromArgb(150, 0, 0);
-                        trans = 0.5;
+                        displayMaterial = Settings.DisplayMaterialOutsideLimits;
                     }
                     else
                     {
-                        color = Color.FromArgb(225, 225, 225);
-                        trans = 0.0;
+                        displayMaterial = Settings.DisplayMaterialInLimits;
                     }
 
                     // Display internal axis meshes
@@ -759,7 +756,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     {
                         if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
                         }
                     }
 
@@ -770,7 +767,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                         {
                             if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
                             {
-                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], new Rhino.Display.DisplayMaterial(color, trans));
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], displayMaterial);
                             }
                         }
                     }

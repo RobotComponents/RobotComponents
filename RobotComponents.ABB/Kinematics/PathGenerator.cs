@@ -137,7 +137,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.Action> actions, int interpolations = 5)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -936,7 +936,7 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets the calculated Robot Joint Position.
+        /// Gets the calculated Robot Joint Positions.
         /// </summary>
         public List<RobotJointPosition> RobotJointPositions
         {

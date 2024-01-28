@@ -39,15 +39,12 @@ namespace RobotComponents.ABB.Definitions
         private List<Interval> _externalAxisLimits; // The external axis limit
 
         // Kinematics properties
-        private Point3d _wristOffset;
-        private double _axis4offsetAngle;
         private double _upperArmLength;
         private double _lowerArmLength;
         private double _elbowLength;
-
-        // OPW kinematics parameters
         private double _a1;
         private double _a2;
+        private double _a3;
         private double _b;
         private double _c1;
         private double _c2;
@@ -75,7 +72,7 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
 
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
             _forwardKinematics = new ForwardKinematics(this);
 
             UpdateKinematics();
@@ -150,7 +147,7 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
             _forwardKinematics = new ForwardKinematics(this);
         }
 
@@ -192,7 +189,7 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(new RobotTarget("init", Plane.WorldXY), this);
+            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
             _forwardKinematics = new ForwardKinematics(this);
         }
 
@@ -233,7 +230,7 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisLimits = robot.ExternalAxisLimits.ConvertAll(item => new Interval(item));
 
             // Kinematics
-            _inverseKinematics = new InverseKinematics(robot.InverseKinematics.Movement.Duplicate(), this);
+            _inverseKinematics = new InverseKinematics(this, robot.InverseKinematics.Movement.Duplicate());
             _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
         }
 
@@ -352,8 +349,6 @@ namespace RobotComponents.ABB.Definitions
             }
 
             // Elbow
-            _wristOffset = new Point3d(planes[5].Origin.Z - planes[4].Origin.Z, planes[5].Origin.Y - planes[4].Origin.Y, planes[5].Origin.X - planes[4].Origin.X);
-            _axis4offsetAngle = Math.Atan2(planes[4].Origin.Z - planes[2].Origin.Z, planes[4].Origin.X - planes[2].Origin.X);
             _lowerArmLength = planes[1].Origin.DistanceTo(planes[2].Origin);
             _upperArmLength = planes[2].Origin.DistanceTo(planes[4].Origin);
             _elbowLength = _lowerArmLength + _upperArmLength;
@@ -361,6 +356,7 @@ namespace RobotComponents.ABB.Definitions
             // OPW Kinematics parameters
             _a1 = planes[1].Origin.X;
             _a2 = -(planes[4].Origin.Z - planes[2].Origin.Z);
+            _a3 = -(planes[5].Origin.Z - planes[4].Origin.Z);
             _b = planes[0].Origin.Y - planes[5].Origin.Y;
             _c1 = planes[1].Origin.Z;
             _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
@@ -664,14 +660,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the wrist offset.
-        /// </summary>
-        public Point3d WristOffset
-        {
-            get { return _wristOffset; }
-        }
-
-        /// <summary>
         /// Gets the length of the lower arm.
         /// </summary>
         /// <returns> The length of the lower arm. </returns>
@@ -711,6 +699,14 @@ namespace RobotComponents.ABB.Definitions
         public double A2
         {
             get { return _a2; }
+        }
+
+        /// <summary>
+        /// Gets the wrist offset kinematics parameter A3.
+        /// </summary>
+        public double A3
+        {
+            get { return _a3; }
         }
 
         /// <summary>

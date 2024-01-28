@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Static class that contains all the data (e.g. links to pages) that is relevant for our documentation.
     /// </summary>
-    public static class Documentation
+    internal static class Documentation
     {
         /// <summary>
         /// Dictionary that contains all the links to the documention of the different component types.

@@ -13,7 +13,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Document Manager class
     /// </summary>
-    public static class DocumentManager
+    internal static class DocumentManager
     {
         /// <summary>
         /// Dictionary that stores the objects managers of the unique documents.
@@ -41,7 +41,7 @@ namespace RobotComponents.ABB.Gh.Utils
             }
 
             // Gets ObjectManager of this document
-            ObjectManager objectManager = DocumentManager.ObjectManagers[documentID];
+            ObjectManager objectManager = ObjectManagers[documentID];
 
             // Return the object manager of this document
             return objectManager;
@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Utils
         /// <param name="e"> The event data. </param>
         private static void OnContextChanged(object sender, GH_DocContextEventArgs e)
         {
-            string documentID = DocumentManager.GetRobotComponentsDocumentID(e.Document);
+            string documentID = GetRobotComponentsDocumentID(e.Document);
 
             if (e.Context == GH_DocumentContext.Close && ObjectManagers.ContainsKey(documentID))
             {
@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Utils
         private static void OnFilePathChanged(object sender, GH_DocFilePathEventArgs e)
         {
             // Remove the old object manager (id is changed)
-            string oldId = DocumentManager.GetRobotComponentsDocumentID(e.Document, e.OldFilePath);
+            string oldId = GetRobotComponentsDocumentID(e.Document, e.OldFilePath);
 
             if (ObjectManagers.ContainsKey(oldId))
             {
@@ -122,5 +122,4 @@ namespace RobotComponents.ABB.Gh.Utils
             return GetRobotComponentsDocumentID(document, document.FilePath);
         }
     }
-
 }

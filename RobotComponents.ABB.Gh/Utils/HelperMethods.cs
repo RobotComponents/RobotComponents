@@ -18,7 +18,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Helper methods and properties
     /// </summary>
-    public static class HelperMethods
+    internal static class HelperMethods
     {
         #region fields
         #endregion

@@ -203,6 +203,17 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Calculates the forward kinematics solution with the given Joint Target.
+        /// </summary>
+        /// <param name="jointTarget"> The Joint Target. </param>
+        public void Calculate(JointTarget jointTarget)
+        {
+            _robotJointPosition = jointTarget.RobotJointPosition;
+            _externalJointPosition = jointTarget.ExternalJointPosition;
+            Calculate();
+        }
+
+        /// <summary>
         /// Calculates the positions of the external axis planes.
         /// </summary>
         private void CalculateExternalPlanes()

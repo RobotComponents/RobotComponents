@@ -161,7 +161,7 @@ namespace RobotComponents.ABB.Presets.Robots
                 new Point3d(185 + 45, 0, 190 + 185),
                 new Vector3d(1, 0, 0));
 
-            mountingFrame.Rotate(Math.PI* -0.5, mountingFrame.Normal);
+            mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);
 
             return mountingFrame;
         }

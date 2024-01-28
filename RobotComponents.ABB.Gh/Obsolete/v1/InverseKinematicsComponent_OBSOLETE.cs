@@ -74,14 +74,14 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robot = null;
-            Movement Movement = null;
+            Movement movement = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref robot)) { return; }
-            if (!DA.GetData(1, ref Movement)) { return; }
+            if (!DA.GetData(1, ref movement)) { return; }
 
             // Calculate the robot pose
-            _inverseKinematics = new InverseKinematics(Movement, robot);
+            _inverseKinematics = new InverseKinematics(robot, movement);
             _inverseKinematics.Calculate();
 
             // Check the values

@@ -21,6 +21,21 @@ namespace RobotComponents.ABB.Kinematics
     /// <summary>
     /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
+    /// <remarks>
+    /// Solution order:
+    /// 
+    /// Sol.    Wrist center            Wrist center            Axis 5 angle
+    /// Cfx     relative to axis 1      relative to lower arm
+    ///         
+    /// 0       In front of             In front of             Positive
+    /// 1       In front of             In front of             Negative
+    /// 2       In front of             Behind                  Positive
+    /// 3       In front of             Behind                  Negative     
+    /// 4       Behind                  In front of             Positive
+    /// 5       Behind                  In front of             Negative
+    /// 6       Behind                  Behind                  Positive
+    /// 7       Behind                  Behind                  Negative
+    /// </remarks>
     public class InverseKinematics
     {
         #region fields
@@ -63,9 +78,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class from a Movement.
         /// </summary>
-        /// <param name="movement"> The Movement. </param>
         /// <param name="robot"> The Robot. </param>
-        public InverseKinematics(Movement movement, Robot robot)
+        /// <param name="movement"> The Movement. </param>
+        public InverseKinematics(Robot robot, Movement movement)
         {
             _robot = robot;
             _movement = movement;
@@ -84,9 +99,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// The target will be casted to a robot movement with a default work object (wobj0).
         /// </remarks>
-        /// <param name="target"> The Target </param>
         /// <param name="robot"> The Robot. </param>
-        public InverseKinematics(ITarget target, Robot robot)
+        /// <param name="target"> The Target </param>
+        public InverseKinematics(Robot robot, ITarget target)
         {
             _robot = robot;
             _movement = new Movement(target);

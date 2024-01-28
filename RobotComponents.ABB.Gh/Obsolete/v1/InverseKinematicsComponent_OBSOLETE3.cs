@@ -137,7 +137,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
             
             // Calculate the robot pose
-            _inverseKinematics.Add(new InverseKinematics(movement, robot));
+            _inverseKinematics.Add(new InverseKinematics(robot, movement));
             _inverseKinematics[DA.Iteration].Calculate();
 
             // Closest Robot Joint Position

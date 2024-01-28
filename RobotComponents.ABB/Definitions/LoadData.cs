@@ -151,7 +151,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="rapidData"></param>
         private LoadData(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 11)
             {

@@ -245,7 +245,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"></param>
         private SpeedData(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             _isPredefined = _validPredefinedNames.Contains(_name);
 

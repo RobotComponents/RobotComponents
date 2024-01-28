@@ -143,7 +143,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             // Replace value between curly braces
             rapidData = Regex.Replace(rapidData, @"\{.+?\}", "");
 
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 1 & values[0] == "")
             {

@@ -329,7 +329,7 @@ namespace RobotComponents.ABB.Utils
         /// <param name="declaration"> The declaration to set the values. </param>
         /// <param name="rapidData"> The RAPID data string. </param>
         /// <param name="values"> The values from the RAPID data string. </param>
-        public static void SetDataFromString(this IDeclaration declaration, string rapidData, out string[] values)
+        internal static void SetRapidDataFromString(this IDeclaration declaration, string rapidData, out string[] values)
         {
             string clean = _rapidDataRegex.Replace(rapidData, "");
 

@@ -17,7 +17,7 @@ using RobotComponents.ABB.Utils;
 namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
-    /// Represents an External Joint Position declaration.. 
+    /// Represents an External Joint Position declaration.
     /// </summary>
     /// <remarks>
     /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators.

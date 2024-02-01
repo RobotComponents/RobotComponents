@@ -8,8 +8,15 @@
 
 [Özdemir E, Saeidi N, Javadian A, Rossi A, Nolte N, Ren S, Dwan A, Acosta I, Hebel DE, Wurm J, Eversmann P. Wood-Veneer-Reinforced Mycelium Composites for Sustainable Building Components. Biomimetics. 2022; 7(2):39. https://doi.org/10.3390/biomimetics7020039](https://www.mdpi.com/2313-7673/7/2/39)
 
+[L. Hass, K. Nefs, F.P. Bos, T.A.M. Salet, Application potential of combining strain hardening cementitious composites and helical reinforcement for 3D concrete printed structures: Case study of a spiral staircase, Journal of Building Engineering, Volume 80, 2023, 107926, ISSN 2352-7102, https://doi.org/10.1016/j.jobe.2023.107926.](https://doi.org/10.1016/j.jobe.2023.107926)
+
+[Lauri Hass, F.P. Bos, T.A.M. Salet, Characterizing the bond properties of automatically placed helical reinforcement in 3D printed concrete, Construction and Building Materials, Volume 355,
+2022, 129228, ISSN 0950-0618, https://doi.org/10.1016/j.conbuildmat.2022.129228.](https://doi.org/10.1016/j.conbuildmat.2022.129228)
+
 ## Conference contributions
 [Dawod, M. et al. (2020). Continuous Timber Fibre Placement. In: Gengnagel, C., Baverel, O., Burry, J., Ramsgaard Thomsen, M., Weinzierl, S. (eds) Impact: Design With All Senses. DMSB 2019. Springer, Cham. https://doi.org/10.1007/978-3-030-29829-6_36](https://link.springer.com/chapter/10.1007/978-3-030-29829-6_36)
+
+[Rossi, A. et al. (2023). An Open Approach to Robotic Prototyping for Architectural Design and Construction. In: Gengnagel, C., Baverel, O., Betti, G., Popescu, M., Thomsen, M.R., Wurm, J. (eds) Towards Radical Regeneration. DMS 2022. Springer, Cham. https://doi.org/10.1007/978-3-031-13249-0_9](http://dx.doi.org/10.1007/978-3-031-13249-0_9)
 
 ## Workshops
 [Robot Wood Printing Workshop at the Design Modeling Symposium 2019](https://design-modelling-symposium.de/workshops/robotic-wood-printing-workshop/)

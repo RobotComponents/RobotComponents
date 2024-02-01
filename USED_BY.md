@@ -47,6 +47,10 @@
 
 [EDEK Thesis Project - Wood Printing: The Possibility Of Printing Wood In 3D Space](https://vimeo.com/371587446)
 
-[ROASD Master Thesis Project - Winding with robots](https://www.youtube.com/watch?v=Ec1l9zdstBo)
+[ROASD TU/e - Winding with robots](https://www.youtube.com/watch?v=Ec1l9zdstBo)
+
+[ROASD TU/e - Robotic assembly and screwing](https://www.youtube.com/watch?v=pPmoHg2plUk)
+
+[ROASD TU/e - Robotic winding of sisal rope](https://www.youtube.com/watch?v=DpgVfv6k-qY)
 
 [3DCP TU/e - Design concepts for 3D Concrete Printed spiral staircase using SHCC and helical reinforcement](https://www.youtube.com/watch?v=18HOe7LmMvg)

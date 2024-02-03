@@ -12,7 +12,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.Generic.Kinematics;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 
@@ -42,7 +41,7 @@ namespace RobotComponents.ABB.Kinematics
         private Robot _robot;
         private RobotTool _robotTool;
         private Movement _movement;
-        private Plane _positionPlane; 
+        private Plane _positionPlane;
         private Plane _globalTargetPlane;
         private Plane _globalEndPlane;
         private Plane _localEndPlane;
@@ -50,7 +49,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _elbowSingularity = false;
         private bool _wristSingularity = false;
         private readonly List<string> _errorText = new List<string>();
-        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8];
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8].Select(item => new RobotJointPosition()).ToArray();
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
 
@@ -69,48 +68,15 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         public InverseKinematics()
         {
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
         }
 
         /// <summary>
-        /// Initializes a new instance of the Inverse Kinematics class from a Movement.
+        /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
         /// <param name="robot"> The Robot. </param>
-        /// <param name="movement"> The Movement. </param>
-        public InverseKinematics(Robot robot, Movement movement)
+        public InverseKinematics(Robot robot)
         {
             _robot = robot;
-            _movement = movement;
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Inverse Kinematics class from a Target.
-        /// </summary>
-        /// <remarks>
-        /// The target will be casted to a robot movement with a default work object (wobj0).
-        /// </remarks>
-        /// <param name="robot"> The Robot. </param>
-        /// <param name="target"> The Target </param>
-        public InverseKinematics(Robot robot, ITarget target)
-        {
-            _robot = robot;
-            _movement = new Movement(target);
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
             Initialize();
         }
 
@@ -120,21 +86,13 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="inverseKinematics"> The Inverse Kinematics instance to duplicate. </param>
         public InverseKinematics(InverseKinematics inverseKinematics)
         {
-            _robot = inverseKinematics.Robot.Duplicate();
-            _movement = inverseKinematics.Movement.Duplicate();
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
-            Initialize();
-
+            _robot = inverseKinematics.Robot.Duplicate();            
+            _robotJointPositions = inverseKinematics.RobotJointPositions.Select(item => item.Duplicate()).ToArray();
             _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
             _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
-
             _errorText = new List<string>(inverseKinematics.ErrorText);
             _inLimits = inverseKinematics.InLimits;
+            Initialize();
         }
 
         /// <summary>
@@ -169,15 +127,6 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         private void Initialize()
         {
-            _robotTool = _movement.RobotTool.Name == "" ? _robot.Tool : _movement.RobotTool;
-
-            if (_movement.Target is RobotTarget)
-            {
-                _globalTargetPlane = _movement.GetPosedGlobalTargetPlane();
-                GetPositionPlane();
-                GetEndPlanes();
-            }
-
             _opw.Signs = new int[6] { 1, 1, 1, 1, 1, 1 };
             _opw.Offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
             _opw.A1 = _robot.A1;
@@ -204,13 +153,32 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Calculates the inverse kinematics solution.
         /// </summary>
-        public void Calculate()
+        /// <param name="movement"> The movement to calculate the solution for. </param>
+        public void Calculate(Movement movement)
         {
             ClearCurrentSolutions();
+            SetMovement(movement);
             CalculateRobotJointPosition();
             CalculateExternalJointPosition();
             CheckInternalAxisLimits();
             CheckExternalAxisLimits();
+        }
+
+        /// <summary>
+        /// Sets the movement and associated fields.
+        /// </summary>
+        /// <param name="movement"> The movement to be set. </param>
+        private void SetMovement(Movement movement)
+        {
+            _movement = movement;
+            _globalTargetPlane = _movement.GetPosedGlobalTargetPlane();
+            _robotTool = _movement.RobotTool.Name == "" ? _robot.Tool : _movement.RobotTool;
+
+            if (_movement.Target is RobotTarget)
+            {
+                GetPositionPlane();
+                GetEndPlanes();
+            }
         }
 
         /// <summary>
@@ -219,28 +187,50 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// This method does not check the internal axis limits.
         /// </remarks>
-        public void CalculateRobotJointPosition()
+        private void CalculateRobotJointPosition()
         {
             ResetRobotJointPositions();
 
             if (_movement.Target is RobotTarget robotTarget)
             {
-                // Calculate inverse kinematics
-                _opw.Inverse(_localEndPlane);
-
-                // Set Robot Joint Positions
-                for (int i = 0; i < 8; i++)
+                if (_robot.A3 == 0)
                 {
-                    for (int j = 0; j < 6; j++)
-                    {
-                        _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];
-                    }
-                }
+                    // Calculate inverse kinematics
+                    _opw.Inverse(_localEndPlane);
 
-                // Select solution
-                _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
-                _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
-                _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    // Set Robot Joint Positions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];
+                        }
+                    }
+
+                    // Select solution
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                }
+                else
+                {
+                    // Calculate inverse kinematics
+                    _opw.Inverse(_localEndPlane); // TODO: Replace for Offset Wrist kinematics solver! 
+
+                    // Set Robot Joint Positions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];
+                        }
+                    }
+
+                    // Select solution
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                }
             }
 
             else if (_movement.Target is JointTarget jointTarget)
@@ -339,6 +329,20 @@ namespace RobotComponents.ABB.Kinematics
 
             return _robotJointPosition;
         }
+        
+        /// <summary>
+        /// Calculates the External Joint Position for a given movement.
+        /// </summary>
+        /// <param name="movement"> The movement to calculate the external joint position for. </param>
+        /// <remarks>
+        /// Interally used in situation where only the external joint positions needs to be 
+        /// computed and not the robot joint position. 
+        /// </remarks>
+        internal void CalculateExternalJointPosition(Movement movement)
+        {
+            SetMovement(movement);
+            CalculateExternalJointPosition();
+        }
 
         /// <summary>
         /// Calculates the External Joint Position of the Inverse Kinematics solution.
@@ -346,7 +350,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// This method does not check the external axis limits. 
         /// </remarks>
-        public void CalculateExternalJointPosition()
+        private void CalculateExternalJointPosition()
         {
             // Clear current solution
             ResetExternalJointPosition();
@@ -605,34 +609,8 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         public Robot Robot
         {
-            get 
-            { 
-                return _robot; 
-            }
-            set 
-            { 
-                _robot = value;
-                ReInitialize();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the Movement.
-        /// </summary>
-        /// <remarks>
-        /// The target and work object are obtained from this movement.
-        /// </remarks>
-        public Movement Movement
-        {
-            get 
-            { 
-                return _movement; 
-            }
-            set 
-            { 
-                _movement = value;
-                ReInitialize();
-            }
+            get { return _robot; }
+            set { _robot = value; ReInitialize(); }
         }
 
         /// <summary>

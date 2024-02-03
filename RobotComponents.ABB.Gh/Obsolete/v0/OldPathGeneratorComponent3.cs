@@ -168,8 +168,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Output
             DA.SetData(0, _forwardKinematics.TCPPlane);
             DA.SetDataList(1, _forwardKinematics.PosedExternalAxisPlanes);
-            DA.SetData(2, _forwardKinematics.RobotJointPosition);
-            DA.SetData(3, _forwardKinematics.ExternalJointPosition);
+            DA.SetData(2, _robotJointPositions[index]);
+            DA.SetData(3, _externalJointPositions[index]);
             if (_previewCurve == true) { DA.SetDataList(4, _paths); }
             else { DA.SetDataList(4, null); }
         }

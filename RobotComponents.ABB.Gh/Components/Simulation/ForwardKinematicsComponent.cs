@@ -114,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
 
             // Calcuate the robot pose
 
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition);
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
             
             if (_hideMesh == false | _outputMeshParameter == true)
             {
@@ -125,7 +125,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                 forwardKinematics.HideMesh = true;
             }
             
-            forwardKinematics.Calculate();
+            forwardKinematics.Calculate(robotJointPosition, externalJointPosition);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)

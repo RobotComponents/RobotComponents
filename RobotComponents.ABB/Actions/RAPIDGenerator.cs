@@ -26,7 +26,6 @@ namespace RobotComponents.ABB.Actions
     {
         #region fields
         private Robot _robot;
-        private List<Action> _actions = new List<Action>(); 
 
         // Dictionaries that collect all declarations that have a variable name defined
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>();
@@ -73,11 +72,9 @@ namespace RobotComponents.ABB.Actions
         /// Initializes a new instance of the RAPID Generator class with a main routine.
         /// </summary>
         /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
-        public RAPIDGenerator(Robot robot, IList<Action> actions)
+        public RAPIDGenerator(Robot robot)
         {
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
-            _actions = new List<Action>(actions);
             _moduleName = "MainModule";
             _procedureName = "main";
         }
@@ -86,13 +83,11 @@ namespace RobotComponents.ABB.Actions
         /// Initializes a new instance of the RAPID Generator class with custom names.
         /// </summary>
         /// <param name="robot"> The robot info wherefore the code should be created. </param>
-        /// <param name="actions"> The list with robot actions wherefore the code should be created. </param>
         /// <param name="moduleName"> The name of the program module </param>
         /// <param name="routineName"> The name of the RAPID procedure </param>
-        public RAPIDGenerator(Robot robot, IList<Action> actions, string moduleName, string routineName)
+        public RAPIDGenerator(Robot robot, string moduleName, string routineName)
         {
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
-            _actions = new List<Action>(actions);
             _moduleName = moduleName;
             _procedureName = routineName;
         }
@@ -107,7 +102,6 @@ namespace RobotComponents.ABB.Actions
             _moduleName = generator.ModuleName;
             _procedureName = generator.ProcedureName;
             _robot = generator.Robot.Duplicate();
-            _actions = generator.Actions.ConvertAll(action => action.DuplicateAction());
             _isFirstMovementMoveAbsJ = generator.IsFirstMovementMoveAbsJ;
         }
 
@@ -145,13 +139,14 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Returns the RAPID module.
         /// </summary>
+        /// <param name="actions"> The list with robot actions wherefore the code will be created. </param>
         /// <param name="addTooldata"> Specifies if the tooldata should be added to the RAPID module. </param>
         /// <param name="addWobjdata"> Specifies if the wobjdata should be added to the RAPID module. </param>
         /// <param name="addLoaddata"> Specifies if the loaddata should be added to the RAPID module. </param>
         /// <returns> 
         /// The RAPID module as a list with code lines.
         /// </returns>
-        public List<string> CreateModule(bool addTooldata = true, bool addWobjdata = true, bool addLoaddata = true)
+        public List<string> CreateModule(IList<Action> actions, bool addTooldata = true, bool addWobjdata = true, bool addLoaddata = true)
         {
             // Reset the fields            
             _programDeclarations.Clear();
@@ -183,7 +178,7 @@ namespace RobotComponents.ABB.Actions
             _robot.Tool.ToRAPIDGenerator(this);
 
             // Check if the first movement is an Absolute Joint Movement
-            _isFirstMovementMoveAbsJ = CheckFirstMovement(_actions);
+            _isFirstMovementMoveAbsJ = CheckFirstMovement(actions);
 
             // Initial tool
             _robot.Tool.ToRAPIDGenerator(this);
@@ -192,18 +187,18 @@ namespace RobotComponents.ABB.Actions
             int syncID = 10;
 
             // Creates the code lines
-            for (int i = 0; i != _actions.Count; i++)
+            for (int i = 0; i != actions.Count; i++)
             {
-                if (_isSynchronized == true && _actions[i] is Movement movement)
+                if (_isSynchronized == true && actions[i] is Movement movement)
                 {
                     movement.SyncID = syncID;
-                    _actions[i].ToRAPIDGenerator(this);
+                    actions[i].ToRAPIDGenerator(this);
                     movement.SyncID = -1;
                     syncID += 10;
                 }
                 else
                 {
-                    _actions[i].ToRAPIDGenerator(this);
+                    actions[i].ToRAPIDGenerator(this);
                 }
             }
             #endregion
@@ -379,7 +374,6 @@ namespace RobotComponents.ABB.Actions
         {
             get
             {
-                if (_actions == null) { return false; }
                 if (_robot == null) { return false; }
                 if (_robot.IsValid == false) { return false; }
                 return true;
@@ -393,23 +387,6 @@ namespace RobotComponents.ABB.Actions
         {
             get { return _robot; }
             set { _robot = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the Actions. 
-        /// </summary>
-        public List<Action> Actions
-        {
-            get { return _actions; }
-            set { _actions = value; }
-        }
-
-        /// <summary>
-        /// Gets the RAPID module as a list with code lines.
-        /// </summary>
-        public List<string> Module
-        {
-            get { return _module; }
         }
 
         /// <summary>
@@ -428,6 +405,14 @@ namespace RobotComponents.ABB.Actions
         {
             get { return _procedureName; }
             set { _procedureName = value; }
+        }
+
+        /// <summary>
+        /// Gets the RAPID module as a list with code lines.
+        /// </summary>
+        public List<string> Module
+        {
+            get { return _module; }
         }
 
         /// <summary>
@@ -455,7 +440,7 @@ namespace RobotComponents.ABB.Actions
         public bool IsSynchronized
         {
             get { return _isSynchronized; }
-            set { _isSynchronized = value; }
+            internal set { _isSynchronized = value; }
         }
 
         /// <summary>

@@ -101,8 +101,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
-            forwardKinematics.Calculate();
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, _hideMesh);
+            forwardKinematics.Calculate(robotJointPosition, externalJointPosition);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)

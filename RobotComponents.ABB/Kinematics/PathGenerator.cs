@@ -44,7 +44,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private CirPathMode _cirPathMode; // Defines the circle path mode
-        private int _interpolations; // Defines the number of interpolations between two targets
+        private int _interpolations = 5; // Defines the number of interpolations between two targets
         private double _time; // Estimate of the total program time
         #endregion
 
@@ -290,8 +290,7 @@ namespace RobotComponents.ABB.Kinematics
             SetRobotTool(movement);
 
             // Get the final joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.Calculate();
+            _robot.InverseKinematics.Calculate(movement);
 
             // Joint configuration control
             if (_jointConfigurationControl == false && movement.MovementType != MovementType.MoveAbsJ)
@@ -323,8 +322,7 @@ namespace RobotComponents.ABB.Kinematics
             List<Point3d> points = new List<Point3d>() { _planes.Last().Origin};
 
             // Get the final external joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.CalculateExternalJointPosition();
+            _robot.InverseKinematics.CalculateExternalJointPosition(movement);
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
@@ -386,8 +384,7 @@ namespace RobotComponents.ABB.Kinematics
                 newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
 
                 // Calculate joint positions
-                _robot.InverseKinematics.Movement = newMovement;
-                _robot.InverseKinematics.Calculate();
+                _robot.InverseKinematics.Calculate(newMovement);
 
                 // Configuration control
                 if (_linearConfigurationControl == false)
@@ -488,8 +485,7 @@ namespace RobotComponents.ABB.Kinematics
             List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
 
             // Get the final external joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.CalculateExternalJointPosition();
+            _robot.InverseKinematics.CalculateExternalJointPosition(movement);
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
@@ -697,8 +693,7 @@ namespace RobotComponents.ABB.Kinematics
                 newMovement.CircularPoint.Plane = new Plane(circle.PointAt(dt * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
 
                 // Calculate joint positions
-                _robot.InverseKinematics.Movement = newMovement;
-                _robot.InverseKinematics.Calculate();
+                _robot.InverseKinematics.Calculate(newMovement);
 
                 // Check for wrist singularity
                 if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)

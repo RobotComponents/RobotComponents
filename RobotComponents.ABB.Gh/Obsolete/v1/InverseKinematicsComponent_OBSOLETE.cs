@@ -81,8 +81,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!DA.GetData(1, ref movement)) { return; }
 
             // Calculate the robot pose
-            _inverseKinematics = new InverseKinematics(robot, movement);
-            _inverseKinematics.Calculate();
+            _inverseKinematics = new InverseKinematics(robot);
+            _inverseKinematics.Calculate(movement);
 
             // Check the values
             for (int i = 0; i < _inverseKinematics.ErrorText.Count; i++)

@@ -188,10 +188,10 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(robot, actions, moduleName, routineName);
+                _rapidGenerator = new RAPIDGenerator(robot, moduleName, routineName);
 
                 // Generator code
-                _rapidGenerator.CreateModule(addTooldata, addWobjdata, addTooldata);
+                _rapidGenerator.CreateModule(actions, addTooldata, addWobjdata, addTooldata);
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;

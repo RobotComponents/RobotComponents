@@ -544,14 +544,11 @@ namespace RobotComponents.ABB.Actions.Instructions
                 // Duplicate original target
                 _convertedTarget = _target.DuplicateTarget();
 
-                // Update the movement of the inverse kinematics
-                RAPIDGenerator.Robot.InverseKinematics.Movement = this;
-
                 // Convert the robot target to a joint target
                 if (_movementType == MovementType.MoveAbsJ)
                 {
                     // Calculate the axis values from the robot target
-                    RAPIDGenerator.Robot.InverseKinematics.Calculate();
+                    RAPIDGenerator.Robot.InverseKinematics.Calculate(this);
                     RAPIDGenerator.ErrorText.AddRange(new List<string>(RAPIDGenerator.Robot.InverseKinematics.ErrorText));
 
                     // Create a joint target from the axis values
@@ -568,7 +565,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 // Calculate the external joint position for the robot target
                 else
                 {
-                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition();
+                    RAPIDGenerator.Robot.InverseKinematics.CalculateExternalJointPosition(this);
                     _convertedTarget.ExternalJointPosition = RAPIDGenerator.Robot.InverseKinematics.ExternalJointPosition.Duplicate();
                     _convertedTarget.ExternalJointPosition.Name = _target.ExternalJointPosition.Name;
                     _convertedTarget.Name = robotTarget.Name;

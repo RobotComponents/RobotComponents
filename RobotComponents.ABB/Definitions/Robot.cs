@@ -72,7 +72,7 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
 
-            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
 
             UpdateKinematics();
@@ -130,7 +130,6 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
-            UpdateKinematics();
 
             // Update tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
@@ -147,8 +146,9 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
+            UpdateKinematics();
         }
 
         /// <summary>
@@ -171,7 +171,6 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = new List<Interval>(internalAxisLimits);
             _basePlane = basePlane;
             _mountingFrame = mountingFrame;
-            UpdateKinematics();
 
             // Tool related fields
             _tool = tool.Duplicate(); // Make a deep copy since we transform it later
@@ -189,8 +188,9 @@ namespace RobotComponents.ABB.Definitions
             _tool.Transform(trans);
 
             // Set kinematics
-            _inverseKinematics = new InverseKinematics(this, new RobotTarget(Plane.WorldXY));
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
+            UpdateKinematics();
         }
 
         /// <summary>
@@ -206,7 +206,6 @@ namespace RobotComponents.ABB.Definitions
             _internalAxisLimits = robot.InternalAxisLimits.ConvertAll(item => new Interval(item));
             _basePlane = new Plane(robot.BasePlane);
             _mountingFrame = new Plane(robot.MountingFrame);
-            UpdateKinematics();
 
             // Mesh related fields
             if (duplicateMesh == true)
@@ -230,8 +229,9 @@ namespace RobotComponents.ABB.Definitions
             _externalAxisLimits = robot.ExternalAxisLimits.ConvertAll(item => new Interval(item));
 
             // Kinematics
-            _inverseKinematics = new InverseKinematics(this, robot.InverseKinematics.Movement.Duplicate());
+            _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
+            UpdateKinematics();
         }
 
         /// <summary>
@@ -362,6 +362,9 @@ namespace RobotComponents.ABB.Definitions
             _c2 = planes[2].Origin.Z - planes[1].Origin.Z;
             _c3 = planes[4].Origin.X - planes[2].Origin.X;
             _c4 = planes[5].Origin.X - planes[4].Origin.X;
+
+            // Update kinematics solvers
+            _inverseKinematics.ReInitialize();
         }
 
         /// <summary>
@@ -384,7 +387,7 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> 
         /// The TCP plane in robot coordinate space. 
         /// </returns>
-        public Plane CalculateAttachedToolPlane()
+        private Plane CalculateAttachedToolPlane()
         {
             _toolPlane = new Plane(_tool.ToolPlane);
             Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
@@ -533,16 +536,8 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public List<Plane> InternalAxisPlanes
         {
-            get 
-            { 
-                return 
-                    _internalAxisPlanes; 
-            }
-            set 
-            { 
-                _internalAxisPlanes = value;
-                UpdateKinematics();
-            }
+            get { return _internalAxisPlanes; }
+            set { _internalAxisPlanes = value; UpdateKinematics(); }
         }
 
         /// <summary>
@@ -568,15 +563,8 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public Plane MountingFrame
         {
-            get
-            {
-                return _mountingFrame;
-            }
-            set
-            {
-                _mountingFrame = value;
-                CalculateAttachedToolPlane();
-            }
+            get { return _mountingFrame; }
+            set { _mountingFrame = value; CalculateAttachedToolPlane(); }
         }
 
         /// <summary>
@@ -592,14 +580,8 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public RobotTool Tool
         {
-            get
-            {
-                return _tool;
-            }
-            set
-            {
-                _tool = value;
-                CalculateAttachedToolPlane();
+            get { return _tool; }
+            set { _tool = value; CalculateAttachedToolPlane();
             }
         }
 
@@ -608,15 +590,8 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public List<ExternalAxis> ExternalAxes
         {
-            get
-            {
-                return _externalAxes;
-            }
-            set
-            {
-                _externalAxes = value;
-                UpdateExternalAxisFields();
-            }
+            get { return _externalAxes; }
+            set { _externalAxes = value; UpdateExternalAxisFields(); }
         }
 
         /// <summary>

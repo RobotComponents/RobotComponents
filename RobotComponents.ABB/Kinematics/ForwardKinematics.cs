@@ -40,7 +40,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _hideMesh;
         private bool _inLimits = true;
                 
-        private const double _degreesToRadiansFactor = Math.PI / 180;
+        private const double _deg2rad = Math.PI / 180;
         #endregion
 
         #region constructors
@@ -63,35 +63,6 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Initializes a new instance of the Forward Kinematics class with defined Joint Positions.
-        /// </summary>
-        /// <param name="robot"> The Robot. </param>
-        /// <param name="robotJointPosition"> The Robot Joint Position. </param>
-        /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="hideMesh"> Specifies whether the mesh will be supressed. </param>
-        public ForwardKinematics(Robot robot, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition, bool hideMesh = false)
-        {
-            _robot = robot;
-            _hideMesh = hideMesh;
-            _robotJointPosition = robotJointPosition;
-            _externalJointPosition = externalJointPosition;
-        }
-
-        /// <summary>
-        /// Defines a Forward Kinematic object from a Joint Target with defined Joint Positions obtained from a Joint Target.
-        /// </summary>
-        /// <param name="robot"> The Robot. </param>
-        /// <param name="jointTarget"> The Joint Target. </param>
-        /// <param name="hideMesh"> Specifies whether the mesh will be supressed. </param>
-        public ForwardKinematics(Robot robot, JointTarget jointTarget, bool hideMesh = false)
-        {
-            _robot = robot;
-            _hideMesh = hideMesh;
-            _robotJointPosition = jointTarget.RobotJointPosition;
-            _externalJointPosition = jointTarget.ExternalJointPosition;
-        }
-
-        /// <summary>
         /// Initializes a new instance of the Forward Kinematics class by duplicating an existing Forward Kinematics instance. 
         /// </summary>
         /// <param name="forwardKinematics"> The Forward Kinematics instance to duplicate. </param>
@@ -99,8 +70,6 @@ namespace RobotComponents.ABB.Kinematics
         {
             _robot = forwardKinematics.Robot.Duplicate();
             _hideMesh = forwardKinematics.HideMesh;
-            _robotJointPosition = forwardKinematics.RobotJointPosition.Duplicate();
-            _externalJointPosition = forwardKinematics.ExternalJointPosition.Duplicate();
             _tcpPlane = new Plane(forwardKinematics.TCPPlane);
             _errorText = new List<string>(forwardKinematics.ErrorText);
             _posedRobotMeshes = forwardKinematics.PosedRobotMeshes.ConvertAll(mesh => mesh.DuplicateMesh());
@@ -156,12 +125,42 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Reinitialize all the fields to construct a valid Forward Kinematics object. 
+        /// </summary>
+        /// <remarks>
+        /// This method also resets the solution. The method Calculate() has to be called to obtain a new solution. 
+        /// </remarks>
+        public void ReInitialize()
+        {
+            _errorText.Clear();
+            _posedRobotMeshes.Clear();
+            _positionPlane = Plane.Unset;
+            _tcpPlane = Plane.Unset;
+            _inLimits = true;
+
+            for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
+            {
+                _posedExternalAxisMeshes[i].Clear();
+            }
+
+            _posedExternalAxisMeshes.Clear();
+
+            for (int i = 0; i < _externalAxisTransforms.Count; i++)
+            {
+                _externalAxisTransforms[i].Clear();
+            }
+
+            _externalAxisTransforms.Clear();
+
+        }
+
+        /// <summary>
         /// Calculates the forward kinematics solution with the Joint Positions stored inside this Forward Kinematics instance.
         /// </summary>
-        public void Calculate()
+        private void Calculate()
         {
             // Clear current solution
-            Clear();
+            ReInitialize();
 
             // Check axis limits
             CheckInternalAxisLimits();
@@ -256,32 +255,32 @@ namespace RobotComponents.ABB.Kinematics
             _robotTransforms[0] = _trans[0];
             // Axis 1
             Plane planeAxis1 = new Plane(_robot.InternalAxisPlanes[0]);
-            _trans[1] = Transform.Rotation(_robotJointPosition[0] * _degreesToRadiansFactor, planeAxis1.ZAxis, planeAxis1.Origin);
+            _trans[1] = Transform.Rotation(_robotJointPosition[0] * _deg2rad, planeAxis1.ZAxis, planeAxis1.Origin);
             _robotTransforms[1] = _trans[0] * _trans[1];
             // Axis 2
             Plane planeAxis2 = new Plane(_robot.InternalAxisPlanes[1]);
             planeAxis2.Transform(_trans[1]);
-            _trans[2] = Transform.Rotation(_robotJointPosition[1] * _degreesToRadiansFactor, planeAxis2.ZAxis, planeAxis2.Origin);
+            _trans[2] = Transform.Rotation(_robotJointPosition[1] * _deg2rad, planeAxis2.ZAxis, planeAxis2.Origin);
             _robotTransforms[2] = _trans[0] * _trans[2] * _trans[1];
             // Axis 3
             Plane planeAxis3 = new Plane(_robot.InternalAxisPlanes[2]);
             planeAxis3.Transform(_trans[2] * _trans[1]);
-            _trans[3] = Transform.Rotation(_robotJointPosition[2] * _degreesToRadiansFactor, planeAxis3.ZAxis, planeAxis3.Origin);
+            _trans[3] = Transform.Rotation(_robotJointPosition[2] * _deg2rad, planeAxis3.ZAxis, planeAxis3.Origin);
             _robotTransforms[3] = _trans[0] * _trans[3] * _trans[2] * _trans[1];
             // Axis 4
             Plane planeAxis4 = new Plane(_robot.InternalAxisPlanes[3]);
             planeAxis4.Transform(_trans[3] * _trans[2] * _trans[1]);
-            _trans[4] = Transform.Rotation(_robotJointPosition[3] * _degreesToRadiansFactor, planeAxis4.ZAxis, planeAxis4.Origin);
+            _trans[4] = Transform.Rotation(_robotJointPosition[3] * _deg2rad, planeAxis4.ZAxis, planeAxis4.Origin);
             _robotTransforms[4] = _trans[0] * _trans[4] * _trans[3] * _trans[2] * _trans[1];
             // Axis 5
             Plane planeAxis5 = new Plane(_robot.InternalAxisPlanes[4]);
             planeAxis5.Transform(_trans[4] * _trans[3] * _trans[2] * _trans[1]);
-            _trans[5] = Transform.Rotation(_robotJointPosition[4] * _degreesToRadiansFactor, planeAxis5.ZAxis, planeAxis5.Origin);
+            _trans[5] = Transform.Rotation(_robotJointPosition[4] * _deg2rad, planeAxis5.ZAxis, planeAxis5.Origin);
             _robotTransforms[5] = _trans[0] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1];
             // Axis 6
             Plane planeAxis6 = new Plane(_robot.InternalAxisPlanes[5]);
             planeAxis6.Transform(_trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1]);
-            _trans[6] = Transform.Rotation(_robotJointPosition[5] * _degreesToRadiansFactor, planeAxis6.ZAxis, planeAxis6.Origin);
+            _trans[6] = Transform.Rotation(_robotJointPosition[5] * _deg2rad, planeAxis6.ZAxis, planeAxis6.Origin);
             _robotTransforms[6] = _trans[0] * _trans[6] * _trans[5] * _trans[4] * _trans[3] * _trans[2] * _trans[1];
             // TCP plane
             _tcpPlane = new Plane(_robot.ToolPlane);
@@ -357,33 +356,6 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Clears the current solution.
-        /// </summary>
-        public void Clear()
-        {
-            _errorText.Clear();
-            _posedRobotMeshes.Clear();
-            _positionPlane = Plane.Unset;
-            _tcpPlane = Plane.Unset;
-            _inLimits = true;
-
-            for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
-            {
-                _posedExternalAxisMeshes[i].Clear();
-            }
-            
-            _posedExternalAxisMeshes.Clear();
-
-            for (int i = 0; i < _externalAxisTransforms.Count; i++)
-            {
-                _externalAxisTransforms[i].Clear();
-            }
-
-            _externalAxisTransforms.Clear();
-
-        }
-
-        /// <summary>
         /// Checks if the positions of the robot axes are inside its limits.
         /// </summary>
         private void CheckInternalAxisLimits()
@@ -448,24 +420,6 @@ namespace RobotComponents.ABB.Kinematics
         {
             get { return _robot; }
             set { _robot = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the Robot Joint Position.
-        /// </summary>
-        public RobotJointPosition RobotJointPosition
-        {
-            get { return _robotJointPosition; }
-            set { _robotJointPosition = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the External Joint Position.
-        /// </summary>
-        public ExternalJointPosition ExternalJointPosition
-        {
-            get { return _externalJointPosition; }
-            set { _externalJointPosition = value; }
         }
 
         /// <summary>

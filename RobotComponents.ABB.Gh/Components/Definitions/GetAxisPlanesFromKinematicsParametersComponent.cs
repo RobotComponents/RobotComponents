@@ -55,6 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
             pManager.AddPlaneParameter("Axis Planes", "AP", "The Axis Planes as a list with Planes.", GH_ParamAccess.list);
+            pManager.AddPlaneParameter("Mounting Frame", "MF", "The tool mounting frame as a Plane.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -86,11 +87,11 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             if (!DA.GetData(8, ref c4)) { return; }
 
             // Axis Planes
-            Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(plane, a1, a2, a3, b, c1, c2, c3, c4);
+            Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(plane, a1, a2, a3, b, c1, c2, c3, c4, out Plane mountingFrame);
 
             // Output
             DA.SetDataList(0, axisPlanes);
-
+            DA.SetData(1, mountingFrame);
         }
 
         #region properties

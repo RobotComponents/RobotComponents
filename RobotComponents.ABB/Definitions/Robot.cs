@@ -281,10 +281,11 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="c2"> Kinematics parameter C2. </param>
         /// <param name="c3"> Kinematics parameter C3. </param>
         /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <param name="mountingFrame"> The tool mounting frame. </param>
         /// <returns> The axis planes. </returns>
-        public static Plane[] GetAxisPlanesFromKinematicsParameters(Plane basePlane, double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4)
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(Plane basePlane, double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
         {
-            Plane[] planes = GetAxisPlanesFromKinematicsParameters(a1, a2, a3, b, c1, c2, c3, c4);
+            Plane[] planes = GetAxisPlanesFromKinematicsParameters(a1, a2, a3, b, c1, c2, c3, c4, out mountingFrame);
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, basePlane);
 
             for (int i = 0; i < planes.Length; i++)
@@ -306,8 +307,9 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="c2"> Kinematics parameter C2. </param>
         /// <param name="c3"> Kinematics parameter C3. </param>
         /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <param name="mountingFrame"> The tool mounting frame. </param>
         /// <returns> The axis planes. </returns>
-        public static Plane[] GetAxisPlanesFromKinematicsParameters(double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4)
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4, out Plane mountingFrame)
         {
             Plane[] planes = new Plane[6];
 
@@ -317,6 +319,8 @@ namespace RobotComponents.ABB.Definitions
             planes[3] = new Plane(new Point3d(a1, -b, c1 + c2 - a2), new Vector3d(1, 0, 0));
             planes[4] = new Plane(new Point3d(a1 + c3, -b, c1 + c2 - a2), new Vector3d(0, 1, 0));
             planes[5] = new Plane(new Point3d(a1 + c3 + c4, -b, c1 + c2 - a2 - a3), new Vector3d(1, 0, 0));
+
+            mountingFrame = new Plane(new Point3d(planes[5].Origin), -Vector3d.ZAxis, Vector3d.YAxis);
 
             return planes;
         }

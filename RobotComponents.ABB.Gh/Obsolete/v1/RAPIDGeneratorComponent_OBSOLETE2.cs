@@ -14,7 +14,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -29,9 +28,6 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class RAPIDGeneratorComponent_OBSOLETE2 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private RAPIDGenerator _rapidGenerator;
-        private bool _firstMovementIsMoveAbsJ = true;
-        private bool _raiseWarnings = false;
         private bool _programName = false;
         private bool _systemName = false;
         private bool _procedureName = false;

@@ -11,7 +11,6 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -26,9 +25,6 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class RAPIDGeneratorComponent_OBSOLETE : GH_Component
     {
         #region fields
-        private RAPIDGenerator _rapidGenerator;
-        private bool _firstMovementIsMoveAbsJ = true;
-        private bool _raiseWarnings = false;
         private List<string> _programModule = new List<string>();
         private List<string> _systemModule = new List<string>();
         #endregion

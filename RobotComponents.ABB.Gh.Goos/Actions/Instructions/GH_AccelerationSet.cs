@@ -20,7 +20,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
     /// <summary>
     /// Acceleration Set Goo wrapper class, makes sure the Acceleration Set class can be used in Grasshopper.
     /// </summary>
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class GH_AccelerationSet : GH_Goo<AccelerationSet>, GH_ISerializable
     {
         #region constructors

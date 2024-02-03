@@ -21,7 +21,6 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// acceleration and/or TCP deceleration along the movement path.
     /// </remarks>
     [Serializable()]
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class PathAccelerationLimitation : Action, IInstruction, ISerializable
     {
         #region fields

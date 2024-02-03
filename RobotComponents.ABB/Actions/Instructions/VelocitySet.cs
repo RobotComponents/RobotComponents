@@ -20,7 +20,6 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// This action is used to override and limit the speed. 
     /// </remarks>
     [Serializable()]
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class VelocitySet : Action, IInstruction, ISerializable
     {
         #region fields

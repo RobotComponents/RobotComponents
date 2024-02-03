@@ -20,7 +20,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
     /// <summary>
     /// Path Acceleration Limitation Goo wrapper class, makes sure the Path Acceleration Limitation class can be used in Grasshopper.
     /// </summary>
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class GH_PathAccelerationLimitation : GH_Goo<PathAccelerationLimitation>, GH_ISerializable
     {
         #region constructors

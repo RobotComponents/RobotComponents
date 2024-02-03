@@ -20,7 +20,6 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// This action is used to adjust the acceleration and decceleration values.
     /// </remarks>
     [Serializable()]
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class AccelerationSet : Action, IInstruction, ISerializable
     {
         #region fields

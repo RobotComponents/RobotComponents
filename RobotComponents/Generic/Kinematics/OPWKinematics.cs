@@ -57,7 +57,7 @@ namespace RobotComponents.Generic.Kinematics
 
         // Constants
         private const double _pi = Math.PI;
-        private const double _2pi = 2 * _pi;
+        private const double _twoPi = 2 * Math.PI;
         #endregion
 
         #region constructors
@@ -332,8 +332,8 @@ namespace RobotComponents.Generic.Kinematics
                 for (int j = 0; j < 6; j++)
                 {
                     // Check if the values are within - pi till pi
-                    _solutions[i][j] = _solutions[i][j] > _pi ? _solutions[i][j] - _2pi : _solutions[i][j];
-                    _solutions[i][j] = _solutions[i][j] < -_pi ? _solutions[i][j] + _2pi : _solutions[i][j];
+                    _solutions[i][j] = _solutions[i][j] > _pi ? _solutions[i][j] - _twoPi : _solutions[i][j];
+                    _solutions[i][j] = _solutions[i][j] < -_pi ? _solutions[i][j] + _twoPi : _solutions[i][j];
 
                     // Offset and sign corrections
                     _solutions[i][j] = _signs[j] * (_solutions[i][j] + _offsets[j]);

@@ -268,6 +268,60 @@ namespace RobotComponents.ABB.Definitions
         }
         #endregion
 
+        #region static methods
+        /// <summary>
+        /// Returns the axis planes for the given kinematics parameters in world coordinate space. 
+        /// </summary>
+        /// <param name="basePlane"> The position and orientation of the robot base in the world coordinate space. </param>
+        /// <param name="a1"> Kinematics parameter A1. </param>
+        /// <param name="a2"> Kinematics parameter A2. </param>
+        /// <param name="a3"> Kinematics parameter A3. </param>
+        /// <param name="b"> Kinematics parameter B. </param>
+        /// <param name="c1"> Kinematics parameter C1. </param>
+        /// <param name="c2"> Kinematics parameter C2. </param>
+        /// <param name="c3"> Kinematics parameter C3. </param>
+        /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <returns> The axis planes. </returns>
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(Plane basePlane, double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4)
+        {
+            Plane[] planes = GetAxisPlanesFromKinematicsParameters(a1, a2, a3, b, c1, c2, c3, c4);
+            Transform orient = Rhino.Geometry.Transform.PlaneToPlane(Plane.WorldXY, basePlane);
+
+            for (int i = 0; i < planes.Length; i++)
+            {
+                planes[i].Transform(orient);
+            }
+
+            return planes;
+        }
+
+        /// <summary>
+        /// Returns the axis planes for the given kinematics parameters in local coordinate space. 
+        /// </summary>
+        /// <param name="a1"> Kinematics parameter A1. </param>
+        /// <param name="a2"> Kinematics parameter A2. </param>
+        /// <param name="a3"> Kinematics parameter A3. </param>
+        /// <param name="b"> Kinematics parameter B. </param>
+        /// <param name="c1"> Kinematics parameter C1. </param>
+        /// <param name="c2"> Kinematics parameter C2. </param>
+        /// <param name="c3"> Kinematics parameter C3. </param>
+        /// <param name="c4"> Kinematics parameter C4. </param>
+        /// <returns> The axis planes. </returns>
+        public static Plane[] GetAxisPlanesFromKinematicsParameters(double a1, double a2, double a3, double b, double c1, double c2, double c3, double c4)
+        {
+            Plane[] planes = new Plane[6];
+
+            planes[0] = new Plane(new Point3d(0, 0, 0), new Vector3d(0, 0, 1));
+            planes[1] = new Plane(new Point3d(a1, 0, c1), new Vector3d(0, 1, 0));
+            planes[2] = new Plane(new Point3d(a1, 0, c1 + c2), new Vector3d(0, 1, 0));
+            planes[3] = new Plane(new Point3d(a1, -b, c1 + c2 - a2), new Vector3d(1, 0, 0));
+            planes[4] = new Plane(new Point3d(a1 + c3, -b, c1 + c2 - a2), new Vector3d(0, 1, 0));
+            planes[5] = new Plane(new Point3d(a1 + c3 + c4, -b, c1 + c2 - a2 - a3), new Vector3d(1, 0, 0));
+
+            return planes;
+        }
+        #endregion
+
         #region methods
         /// <summary>
         /// Returns a string that represents the current object.

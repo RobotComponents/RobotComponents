@@ -122,6 +122,8 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(RobotToolComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool/" },
             { typeof(WorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Work%20Object/" },
             { typeof(LoadDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
+            { typeof(GetKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
+            { typeof(GetAxisPlanesFromKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
             #endregion
 
             #region Definitions: Robot presets

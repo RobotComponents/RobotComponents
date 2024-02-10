@@ -68,6 +68,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Check the operating system
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is only supported on Windows operating systems.");
+                return;
+            }
+
             // Input variables      
             string name = "";
             double value = 0.0;

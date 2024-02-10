@@ -1,6 +1,8 @@
-
 <p align="center">
-  <img src="Utility/Logo/rc_logo_black.png">
+  <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="Utility/Logo/rc_logo_white.png">
+   <img alt="Light color mode" src="Utility/Logo/rc_logo_black.png">
+  </picture>
 </p>
 
 <p align="center">
@@ -34,8 +36,14 @@ You can find a collection of example files demonstrating the main features of Ro
 For easy sharing of the download link and the documentation (with e.g. students) you can also use our [linktree](https://linktr.ee/RobotComponents).
 
 ## Credits
-[![EDEK_logo](/Utility/Logo/edek_logo_black.png)](https://www.uni-kassel.de/fb06/institute/architektur/fachgebiete/experimentelles-und-digitales-entwerfen-und-konstruieren/home)
-[![Arjen_logo](/Utility/Logo/logo_arjen_black.png)](http://www.arjendeetman.nl)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="Utility/Logo/edek_logo_white.png">
+  <img alt="Light color mode" src="Utility/Logo/edek_logo_black.png">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="Utility/Logo/logo_arjen_white.png">
+  <img alt="Light color mode" src="Utility/Logo/logo_arjen_black.png">
+</picture>
 
 Robot Components is an open-source project that was initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://www.uni-kassel.de/fb06/institute/architektur/fachgebiete/experimentelles-und-digitales-entwerfen-und-konstruieren/home). The plugin is currently further developed and maintained by [Arjen Deetman](http://www.arjendeetman.nl). All developers and contributors are listed [here](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md).
 

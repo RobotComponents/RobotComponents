@@ -114,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines an External Joint Position"); }
+            get { return "Defines an External Joint Position"; }
         }
         #endregion
 
@@ -155,7 +155,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
             {
                 if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value; } 
+                else { target = (Q)(object)Value; }
                 return true;
             }
 

@@ -56,7 +56,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment", GH_ParamAccess.list);   
+            pManager.RegisterParam(new Param_Comment(), "Comment", "C", "Resulting Comment", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             }
 
             // Split input if enter is used
-            string[] lines = text.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+            string[] lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
             // Create output
             List<Comment> comments = new List<Comment>();

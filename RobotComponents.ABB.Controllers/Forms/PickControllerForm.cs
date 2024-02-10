@@ -14,7 +14,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick controller form class.
     /// </summary>
-    public class PickControllerForm : Dialog<Boolean>
+    public class PickControllerForm : Dialog<bool>
     {
         #region fields
         private Controller _controller;
@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         /// Constructs the form.
         /// </summary>
         public PickControllerForm()
-		{
+        {
             // Main layout
             Title = "Controller";
             MinimumSize = new Size(600, 420);

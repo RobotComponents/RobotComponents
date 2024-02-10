@@ -23,9 +23,9 @@ namespace RobotComponents.ABB.Actions.Instructions
     {
         #region fields
         private VariableType _variableType;
-        private bool _inPosition; 
+        private bool _inPosition;
         private string _syncident;
-        private TaskList _taskList; 
+        private TaskList _taskList;
         private double _timeOut;
         #endregion
 
@@ -219,7 +219,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 if (_syncident == null) { return false; }
                 if (_syncident == "") { return false; }
-                if (_taskList.IsValid == false ) { return false; }
+                if (_taskList.IsValid == false) { return false; }
                 return true;
             }
         }

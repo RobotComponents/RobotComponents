@@ -30,12 +30,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         private Scope _scope;
         private VariableType _variableType;
         private static readonly string _datatype = "speeddata";
-        private string _name; 
-        private double _v_tcp; 
-        private double _v_ori; 
+        private string _name;
+        private double _v_tcp;
+        private double _v_ori;
         private double _v_leax;
-        private double _v_reax; 
-        private bool _isPredefined; 
+        private double _v_reax;
+        private bool _isPredefined;
         private readonly bool _isExactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };

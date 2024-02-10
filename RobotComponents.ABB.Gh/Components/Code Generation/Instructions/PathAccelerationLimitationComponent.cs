@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_PathAccelerationLimitation(), "Path Acceleration Limitation", "PAL", "Resulting Path Acceleration Limitation instruction");   
+            pManager.RegisterParam(new Param_PathAccelerationLimitation(), "Path Acceleration Limitation", "PAL", "Resulting Path Acceleration Limitation instruction");
         }
 
         /// <summary>

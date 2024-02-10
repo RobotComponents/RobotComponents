@@ -28,8 +28,8 @@ namespace RobotComponents.ABB.Actions.Declarations
         private Scope _scope;
         private VariableType _variableType;
         private static readonly string _datatype = "tasks";
-        private string _name; 
-        private readonly List<string> _taskNames; 
+        private string _name;
+        private readonly List<string> _taskNames;
         #endregion
 
         #region (de)serialization
@@ -155,7 +155,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 {
                     values[i] = values[i].Replace('"', '\0');
                 }
-                
+
                 _taskNames = values.ToList();
             }
         }
@@ -274,9 +274,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         public override string ToRAPIDDeclaration(Robot robot)
         {
             string result = _scope == Scope.GLOBAL ? "" : $"{Enum.GetName(typeof(Scope), _scope)} ";
-            result += $"{ Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name}";
+            result += $"{Enum.GetName(typeof(VariableType), _variableType)} {_datatype} {_name}";
             result += "{" + _taskNames.Count.ToString() + "} := ";
-            result += $"{ ToRAPID()};";
+            result += $"{ToRAPID()};";
 
             return result;
         }

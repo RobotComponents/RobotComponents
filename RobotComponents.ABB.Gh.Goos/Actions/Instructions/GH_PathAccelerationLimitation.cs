@@ -3,14 +3,12 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
+
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
@@ -88,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Path Acceleration Limitation instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Path Acceleration Limitation instance: Did you set a bool?";  
+                return "Invalid Path Acceleration Limitation instance: Did you set a bool?";
             }
         }
 
@@ -107,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Path Acceleration Limitation"); }
+            get { return "Path Acceleration Limitation"; }
         }
 
         /// <summary>
@@ -115,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Path Acceleration Limitation."); }
+            get { return "Defines a Path Acceleration Limitation."; }
         }
         #endregion
 
@@ -246,7 +244,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
         private const string IoKey = "Path Acceleration Limitation";
-        
+
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
         /// </summary>

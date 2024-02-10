@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_PulseDigitalOutput(), "Pulse Digital Output", "PDO", "Resulting Pulse Digital Output instruction");   
+            pManager.RegisterParam(new Param_PulseDigitalOutput(), "Pulse Digital Output", "PDO", "Resulting Pulse Digital Output instruction");
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             bool high = false;
             double length = 0.2;
             string name = "";
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref high)) { return; }
             if (!DA.GetData(1, ref length)) { return; }

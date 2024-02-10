@@ -24,14 +24,14 @@ namespace RobotComponents.ABB.Kinematics
         private Robot _robot;
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
-        
+
         private List<Mesh> _posedRobotMeshes = new List<Mesh>();
         private List<List<Mesh>> _posedExternalAxisMeshes = new List<List<Mesh>>();
-        
+
         private readonly Transform[] _trans = new Transform[7];
         private readonly Transform[] _robotTransforms = new Transform[7];
         private readonly List<List<Transform>> _externalAxisTransforms = new List<List<Transform>>();
-        
+
         private Plane _positionPlane = Plane.Unset;
         private Plane[] _posedExternalAxisPlanes;
         private Plane _tcpPlane = Plane.Unset;
@@ -39,7 +39,7 @@ namespace RobotComponents.ABB.Kinematics
         private readonly List<string> _errorText = new List<string>();
         private bool _hideMesh;
         private bool _inLimits = true;
-                
+
         private const double _deg2rad = Math.PI / 180;
         #endregion
 
@@ -229,7 +229,7 @@ namespace RobotComponents.ABB.Kinematics
                 ExternalAxis externalAxis = _robot.ExternalAxes[i];
 
                 // Get transformation matrices
-                List<Transform> transforms = new List<Transform>() { Transform.Translation(0,0,0)};
+                List<Transform> transforms = new List<Transform>() { Transform.Translation(0, 0, 0) };
                 transforms.Add(externalAxis.CalculateTransformationMatrixSave(_externalJointPosition));
                 _externalAxisTransforms.Add(transforms);
 

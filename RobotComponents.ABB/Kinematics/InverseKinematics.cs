@@ -59,7 +59,7 @@ namespace RobotComponents.ABB.Kinematics
 
         // OPW kinematics solver fields
         private readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
-        private OPWKinematics _opw = new OPWKinematics();
+        private readonly OPWKinematics _opw = new OPWKinematics();
         #endregion
 
         #region constructors
@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="inverseKinematics"> The Inverse Kinematics instance to duplicate. </param>
         public InverseKinematics(InverseKinematics inverseKinematics)
         {
-            _robot = inverseKinematics.Robot.Duplicate();            
+            _robot = inverseKinematics.Robot.Duplicate();
             _robotJointPositions = inverseKinematics.RobotJointPositions.Select(item => item.Duplicate()).ToArray();
             _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
             _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
@@ -268,7 +268,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             double min = diff.Sum();
-    
+
             _robotJointPosition = _robotJointPosition.Duplicate();
 
             // Check for flipping axis 4 and 6 (if this is within the axis limits)
@@ -329,7 +329,7 @@ namespace RobotComponents.ABB.Kinematics
 
             return _robotJointPosition;
         }
-        
+
         /// <summary>
         /// Calculates the External Joint Position for a given movement.
         /// </summary>
@@ -551,7 +551,7 @@ namespace RobotComponents.ABB.Kinematics
             for (int i = 0; i < _robotJointPosition.Length; i++)
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
-                { 
+                {
                     _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
                     _inLimits = false;
                 }

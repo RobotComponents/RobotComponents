@@ -174,7 +174,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             }
 
             // Get the index number of the current target
-            int index = (int)(((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider));
+            int index = (int)((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider);
 
             // Calculate forward kinematics
             if (_previewMesh == true | _outputMesh == true)
@@ -739,7 +739,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     DisplayMaterial displayMaterial;
 
                     // Interpolation step
-                    int index = (int)(((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]));
+                    int index = (int)((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]);
 
                     // Set the display color and transparancy of the robot mesh
                     if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)

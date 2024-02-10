@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Variables
             string name = string.Empty;
             RobotJointPosition robotJointPosition = new RobotJointPosition();
-            ExternalJointPosition externalJointPosition = new ExternalJointPosition(); 
+            ExternalJointPosition externalJointPosition = new ExternalJointPosition();
 
             // Catch input data
             if (!DA.GetData(0, ref name)) { return; }

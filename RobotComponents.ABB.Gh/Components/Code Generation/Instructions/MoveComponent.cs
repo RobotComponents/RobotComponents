@@ -93,7 +93,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");   
+            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");
         }
 
         /// <summary>

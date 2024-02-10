@@ -93,7 +93,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _variableType = VariableType.VAR;
             _name = "";
             _plane = plane;
-            _configurationData = new ConfigurationData(0 ,0, 0, 0);
+            _configurationData = new ConfigurationData(0, 0, 0, 0);
             _externalJointPosition = new ExternalJointPosition();
             _quat = HelperMethods.PlaneToQuaternion(_plane);
         }
@@ -455,12 +455,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public Plane Plane
         {
-            get 
-            { 
-                return _plane; 
+            get
+            {
+                return _plane;
             }
-            set 
-            { 
+            set
+            {
                 _plane = value;
                 _quat = HelperMethods.PlaneToQuaternion(_plane);
             }
@@ -471,13 +471,13 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public Quaternion Quat
         {
-            get 
-            { 
-                return _quat; 
+            get
+            {
+                return _quat;
             }
-            set 
-            { 
-                _quat = value; 
+            set
+            {
+                _quat = value;
                 _plane = HelperMethods.QuaternionToPlane(_plane.Origin, _quat);
             }
         }

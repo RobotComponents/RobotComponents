@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the variable type. 
         /// </summary>
-        VariableType VariableType { get; set;  }
+        VariableType VariableType { get; set; }
 
         /// <summary>
         /// Gets the number of elements in the joint position.

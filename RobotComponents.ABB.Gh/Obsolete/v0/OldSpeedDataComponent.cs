@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public OldSpeedDataComponent()
-          : base("Speed Data", "SD", 
+          : base("Speed Data", "SD",
               "Defines a speed data declaration for Move components."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

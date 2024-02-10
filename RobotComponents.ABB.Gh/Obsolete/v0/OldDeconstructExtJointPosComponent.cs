@@ -101,7 +101,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; } 
+            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; }
         }
 
         /// <summary>

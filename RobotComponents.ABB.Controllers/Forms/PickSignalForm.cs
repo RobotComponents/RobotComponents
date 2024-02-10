@@ -15,7 +15,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick signal form class.
     /// </summary>
-    public class PickSignalForm : Dialog<Boolean>
+    public class PickSignalForm : Dialog<bool>
     {
         #region fields
         private readonly List<Signal> _signals;
@@ -37,7 +37,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         /// </summary>
         /// <param name="signals"> List with signals to pick an item from. </param>
         public PickSignalForm(List<Signal> signals)
-		{
+        {
             // Main layout
             Title = "Controller signals";
             MinimumSize = new Size(600, 420);

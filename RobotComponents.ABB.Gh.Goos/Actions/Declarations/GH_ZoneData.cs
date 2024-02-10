@@ -127,7 +127,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             {
                 if (Value == null) { return "No internal ZoneData instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid ZoneData instance: Did you define a name and pzone_tcp?"; 
+                return "Invalid ZoneData instance: Did you define a name and pzone_tcp?";
             }
         }
 

@@ -78,7 +78,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="decelerationMax"> The absolute value of the deceleration limitation in m/s^2. </param>
         public PathAccelerationLimitation(bool accelerationLimitation, double accelerationMax, bool decelerationLimitation, double decelerationMax)
         {
-            _accelerationLimitation = accelerationLimitation; 
+            _accelerationLimitation = accelerationLimitation;
             _accelerationMax = accelerationMax;
             _decelerationLimitation = decelerationLimitation;
             _decelerationMax = decelerationMax;

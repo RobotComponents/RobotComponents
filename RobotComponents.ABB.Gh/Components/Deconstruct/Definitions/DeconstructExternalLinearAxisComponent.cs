@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// Initializes a new instance of the DeconstructExternalLinearAxisComponent class.
         /// </summary>
         public DeconstructExternalLinearAxisComponent()
-          : base("Deconstruct External Linear Axis", "DeConELA", 
+          : base("Deconstruct External Linear Axis", "DeConELA",
               "Deconstructs an External Linear Axis component into its parameters."
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

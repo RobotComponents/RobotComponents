@@ -442,7 +442,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 }
                 else if (_movementType == MovementType.MoveJ)
                 {
-                return $"Coordinated synchronized Joint Movement ({_target.Name}\\{_workObject.Name})";
+                    return $"Coordinated synchronized Joint Movement ({_target.Name}\\{_workObject.Name})";
                 }
                 else if (_movementType == MovementType.MoveC)
                 {
@@ -605,14 +605,14 @@ namespace RobotComponents.ABB.Actions.Instructions
             string toolName;
 
             // Check first if a tool is set
-            if (_robotTool == null || _robotTool.Name == null ||_robotTool.Name == "") 
-            { 
-                toolName = robot.Tool.Name; 
+            if (_robotTool == null || _robotTool.Name == null || _robotTool.Name == "")
+            {
+                toolName = robot.Tool.Name;
             }
             // Otherwise: Last overwrite is used that is combined with the movement.
-            else 
-            { 
-                toolName = _robotTool.Name; 
+            else
+            {
+                toolName = _robotTool.Name;
             }
 
             // Check the movement and target type
@@ -725,7 +725,7 @@ namespace RobotComponents.ABB.Actions.Instructions
                 if (_speedData.IsValid == false) { return false; }
                 if (_zoneData == null) { return false; }
                 if (_zoneData.IsValid == false) { return false; }
-                if (_workObject == null) { return false;  }
+                if (_workObject == null) { return false; }
                 if (_workObject.IsValid == false) { return false; }
                 if (_target is JointTarget && MovementType == MovementType.MoveL) { return false; }
                 if (_target is JointTarget && MovementType == MovementType.MoveJ) { return false; }

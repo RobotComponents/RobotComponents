@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (update || _fromMenu)
             {
                 bool succeeded = this.GetController();
-                
+
                 if (succeeded)
                 {
                     _picked = true;

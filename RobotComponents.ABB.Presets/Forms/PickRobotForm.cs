@@ -18,7 +18,7 @@ namespace RobotComponents.ABB.Presets.Forms
     /// <summary>
     /// Represents the pick robot preset form class.
     /// </summary>
-    public class PickRobotForm : Dialog<Boolean>
+    public class PickRobotForm : Dialog<bool>
     {
         #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Presets.Forms
         /// Constructs the form.
         /// </summary>
         public PickRobotForm()
-		{
+        {
             // Main layout
             Title = "Robot preset";
             MinimumSize = new Size(600, 420);

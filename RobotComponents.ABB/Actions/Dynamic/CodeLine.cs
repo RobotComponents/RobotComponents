@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
     {
         #region fields
         private string _code;
-        private CodeType _type; 
+        private CodeType _type;
         #endregion
 
         #region (de)serialization
@@ -198,11 +198,11 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// </summary>
         public override bool IsValid
         {
-            get 
-            { 
+            get
+            {
                 if (_code == null) { return false; }
                 if (_code == "") { return false; }
-                return true; 
+                return true;
             }
         }
 

@@ -27,7 +27,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns> The Robot preset. </returns>
         public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<ExternalAxis> externalAxes = null)
-        { 
+        {
             string name = "IRB1200-5/0.9";
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
@@ -158,7 +158,7 @@ namespace RobotComponents.ABB.Presets.Robots
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(
-                new Point3d(533, 0, 889.1), 
+                new Point3d(533, 0, 889.1),
                 new Vector3d(1, 0, 0));
 
             mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);

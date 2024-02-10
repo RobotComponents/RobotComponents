@@ -12,7 +12,6 @@ using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
-using Rhino.UI;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -226,7 +225,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             {
                 robotPreset = _robotPreset;
             }
-            
+
             if (robotPreset == RobotPreset.EMPTY)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");

@@ -115,7 +115,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             // Calcuate the robot pose
 
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-            
+
             if (_hideMesh == false | _outputMeshParameter == true)
             {
                 forwardKinematics.HideMesh = false;
@@ -124,13 +124,13 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 forwardKinematics.HideMesh = true;
             }
-            
+
             forwardKinematics.Calculate(robotJointPosition, externalJointPosition);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
             {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
             }
 
             // Add to list with FK
@@ -466,7 +466,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
 
             // Data tree path
             GH_Path path = new GH_Path(new int[2] { iteration, 0 });
-            
+
             // Save the posed meshes
             for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
             {

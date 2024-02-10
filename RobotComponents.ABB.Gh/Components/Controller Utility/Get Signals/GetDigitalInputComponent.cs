@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             try
             {
-                Signal signal  = _controller.GetDigitalInput(name, out int index);
+                Signal signal = _controller.GetDigitalInput(name, out int index);
 
                 if (index == -1)
                 {

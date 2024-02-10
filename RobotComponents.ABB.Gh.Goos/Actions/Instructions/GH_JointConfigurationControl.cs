@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Joint Configuration Control instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Joint Configuration Control instance: Did you set a bool?";  
+                return "Invalid Joint Configuration Control instance: Did you set a bool?";
             }
         }
 
@@ -105,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Joint Configuration Control"); }
+            get { return "Joint Configuration Control"; }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Joint Configuration Control."); }
+            get { return "Defines a Joint Configuration Control."; }
         }
         #endregion
 
@@ -260,7 +260,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
         private const string IoKey = "Joint Configuration Control";
-        
+
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
         /// </summary>

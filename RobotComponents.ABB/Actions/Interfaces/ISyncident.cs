@@ -3,8 +3,6 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
 // Robot Component Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;

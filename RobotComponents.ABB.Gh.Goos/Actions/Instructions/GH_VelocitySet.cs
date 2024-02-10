@@ -3,14 +3,11 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
@@ -88,7 +85,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Velocity Set instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Velocity Set instance: Did you define the override and max value?";  
+                return "Invalid Velocity Set instance: Did you define the override and max value?";
             }
         }
 
@@ -107,7 +104,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Velocity Set"); }
+            get { return "Velocity Set"; }
         }
 
         /// <summary>
@@ -115,7 +112,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Velocity Set."); }
+            get { return "Defines a Velocity Set."; }
         }
         #endregion
 
@@ -246,7 +243,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
         private const string IoKey = "Velocity Set";
-        
+
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
         /// </summary>

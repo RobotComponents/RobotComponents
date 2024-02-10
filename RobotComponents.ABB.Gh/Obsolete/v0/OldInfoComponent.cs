@@ -26,12 +26,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
         [Obsolete("This component is obsolete and will be removed in the future.", false)]
         public OldInfoComponent()
           : base("Info", "I",
-              "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinoceros Grasshopper. " 
+              "Robot Components is a Plugin for intuitive Robot Programming for ABB robots inside Rhinoceros Grasshopper. "
                 + "This open source project is initiated by the chair of Experimental and Digital Design and Construction "
                 + "of the University of Kassel led by Prof. Eversmann. The technical development is initiated and executed "
                 + "by the research associates and student assistants."
-                + Environment.NewLine 
-                + Environment.NewLine 
+                + Environment.NewLine
+                + Environment.NewLine
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 + "the terms of the GNU General Public License (GPL version 3.0 as published by the Free Software Foundation."
                 + Environment.NewLine
                 + Environment.NewLine
-                + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; " 
+                + "Robot Components is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; "
                 + "without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
                 + "See the GNU General Public License (GPL) for more details."
                 + Environment.NewLine
@@ -54,10 +54,10 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "More information can be found here: " 
-                + Environment.NewLine 
+                + "More information can be found here: "
+                + Environment.NewLine
                 + "https://github.com/RobotComponents/RobotComponents/"
-                + System.Environment.NewLine 
+                + System.Environment.NewLine
                 + System.Environment.NewLine
                 + "----------"
                 + Environment.NewLine
@@ -90,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-        
+
         }
 
         #region properties

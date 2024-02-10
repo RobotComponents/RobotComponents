@@ -726,7 +726,7 @@ namespace RobotComponents.ABB.Definitions
             {
                 if (_attachmentPlane == null) { return false; }
                 if (_attachmentPlane == Plane.Unset) { return false; }
-                if (_axisPlane == null) { return false;  }
+                if (_axisPlane == null) { return false; }
                 if (_axisPlane == Plane.Unset) { return false; }
                 if (_axisLimits == null) { return false; }
                 return true;
@@ -747,12 +747,12 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public override Plane AttachmentPlane
         {
-            get 
-            { 
-                return _attachmentPlane; 
+            get
+            {
+                return _attachmentPlane;
             }
-            set 
-            { 
+            set
+            {
                 _attachmentPlane = value;
                 _axisPlane = value;
                 ReInitialize();
@@ -764,12 +764,12 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public override Plane AxisPlane
         {
-            get 
-            { 
-                return _axisPlane; 
+            get
+            {
+                return _axisPlane;
             }
-            set 
-            { 
+            set
+            {
                 _axisPlane = value;
                 _attachmentPlane = value;
                 ReInitialize();
@@ -779,14 +779,14 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis limits in degrees.
         /// </summary>
-        public override Interval AxisLimits 
-        { 
-            get 
-            { 
-                return _axisLimits; 
+        public override Interval AxisLimits
+        {
+            get
+            {
+                return _axisLimits;
             }
-            set 
-            { 
+            set
+            {
                 _axisLimits = value;
                 ReInitialize();
             }
@@ -846,8 +846,8 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the Axis Type.
         /// </summary>
-        public override AxisType AxisType 
-        { 
+        public override AxisType AxisType
+        {
             get { return AxisType.ROTATIONAL; }
         }
 
@@ -886,8 +886,8 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets latest calculated posed axis meshes.
         /// </summary>
-        public override List<Mesh> PosedMeshes 
-        { 
+        public override List<Mesh> PosedMeshes
+        {
             get { return _posedMeshes; }
         }
 

@@ -105,7 +105,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeName
         {
-            get { return ("Configuration Data"); }
+            get { return "Configuration Data"; }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Configuration Data"); }
+            get { return "Defines a Configuration Data"; }
         }
         #endregion
 

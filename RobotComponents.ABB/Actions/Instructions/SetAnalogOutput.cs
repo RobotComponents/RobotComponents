@@ -23,8 +23,8 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class SetAnalogOutput : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _name; 
-        private double _value; 
+        private string _name;
+        private double _value;
         #endregion
 
         #region (de)serialization
@@ -80,7 +80,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         public SetAnalogOutput(SetAnalogOutput setAnalogOutput)
         {
             _name = setAnalogOutput.Name;
-            _value= setAnalogOutput.Value;
+            _value = setAnalogOutput.Value;
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             }
             else
             {
-                return $"Set Analog  Output ({ _name}\\{_value})";
+                return $"Set Analog  Output ({_name}\\{_value})";
             }
         }
 

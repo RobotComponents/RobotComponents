@@ -236,7 +236,7 @@ namespace RobotComponents.ABB.Kinematics
 
             // Remove first path
             _paths.RemoveAt(0);
-            
+
             // Remove duplicates from error text
             _errorText = _errorText.Distinct().ToList();
         }
@@ -308,7 +308,7 @@ namespace RobotComponents.ABB.Kinematics
             // Interpolate
             InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition, movement, _robot.InverseKinematics.InLimits);
         }
-        
+
         /// <summary>
         /// Calculates the interpolated path for a linear movement.
         /// </summary>
@@ -319,7 +319,7 @@ namespace RobotComponents.ABB.Kinematics
             SetRobotTool(movement);
 
             // Points for path
-            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin};
+            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
 
             // Get the final external joint positions of this movement
             _robot.InverseKinematics.CalculateExternalJointPosition(movement);
@@ -329,13 +329,13 @@ namespace RobotComponents.ABB.Kinematics
             ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
             externalJointPositionChange.Substract(_externalJointPositions.Last());
             externalJointPositionChange.Divide(_interpolations);
-                                          
+
             // First target plane in WORLD coordinate space
             Plane plane1 = _planes.Last();
 
             // Second target plane in WORK OBJECT coordinate space 
             RobotTarget robotTarget = movement.Target as RobotTarget;
-            Plane plane2 = robotTarget.Plane; 
+            Plane plane2 = robotTarget.Plane;
 
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
@@ -371,7 +371,7 @@ namespace RobotComponents.ABB.Kinematics
                 double t = dt * (i + 1);
 
                 // Interpolate position and orientation
-                Point3d point = (1 - t) * plane1.Origin + t * plane2.Origin;
+                Point3d point = ((1 - t) * plane1.Origin) + (t * plane2.Origin);
                 Quaternion quat = HelperMethods.Slerp(quat1, quat2, t);
 
                 // Plane: the target plane in WORK OBJECT coordinate space
@@ -391,13 +391,13 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
                 }
-                
+
                 // Check for wrist singularity
                 if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
-                { 
-                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                {
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The robot is near a wrist singularity.");
                 }
-                
+
                 // Add te calculated joint positions and plane to the class property
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
@@ -434,7 +434,7 @@ namespace RobotComponents.ABB.Kinematics
                 else
                 {
                     _time += movement.Time;
-                }    
+                }
             }
             else
             {
@@ -499,7 +499,7 @@ namespace RobotComponents.ABB.Kinematics
             // Circular point in WORK OBJECT coordinate space
             if (movement.CircularPoint.Plane == Plane.Unset)
             {
-                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: No circular point defined.");
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: No circular point defined.");
             }
 
             Plane planeCirPoint = movement.CircularPoint.Plane;
@@ -525,32 +525,32 @@ namespace RobotComponents.ABB.Kinematics
 
             if (arc.IsValid == false)
             {
-                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
             }
 
             if (arc.AngleDegrees > 240)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
             }
 
             Curve circle = arc.ToNurbsCurve();
             circle.Domain = new Interval(0, 1);
-            
+
             // Check the RAPID conditions
             // Minimum distance between start and ToPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(plane2.Origin) < 0.1)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
             }
             // Minimum distance between start and CirPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(planeCirPoint.Origin) < 0.1)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
             }
             // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
             if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, planeCirPoint.Origin - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
             }
             // Circle Path Mode specific restrictions
             if (_cirPathMode == CirPathMode.CirPointOri)
@@ -559,7 +559,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 if (param < 0.25 | param > 0.75)
                 {
-                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
+                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
                 }
             }
 
@@ -698,7 +698,7 @@ namespace RobotComponents.ABB.Kinematics
                 // Check for wrist singularity
                 if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
                 {
-                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The robot is near a wrist singularity.");
                 }
 
                 // Add te calculated joint positions and plane to the class property
@@ -917,7 +917,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// For every move instruction a curve is constructed. 
         /// </remarks>
-        public List<Curve> Paths 
+        public List<Curve> Paths
         {
             get { return _paths; }
         }

@@ -178,7 +178,7 @@ namespace RobotComponents.ABB.Actions.Declarations
             _name = name;
 
             double[] values = CheckAxisValues(internalJointPositions);
-            
+
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];
@@ -518,7 +518,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 {
                     new DivideByZeroException();
                 }
-                
+
                 this[i] /= jointPosition[i];
             }
         }
@@ -566,12 +566,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             string code = "";
 
-            code += $"[{ _val1:0.##}, ";
-            code += $"{ _val2:0.##}, ";
-            code += $"{ _val3:0.##}, ";
-            code += $"{ _val4:0.##}, ";
-            code += $"{ _val5:0.##}, ";
-            code += $"{ _val6:0.##}]";
+            code += $"[{_val1:0.##}, ";
+            code += $"{_val2:0.##}, ";
+            code += $"{_val3:0.##}, ";
+            code += $"{_val4:0.##}, ";
+            code += $"{_val5:0.##}, ";
+            code += $"{_val6:0.##}]";
 
             return code;
         }
@@ -634,15 +634,15 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public override bool IsValid
         {
-            get 
-            { 
+            get
+            {
                 if (double.IsNaN(_val1)) { return false; }
                 if (double.IsNaN(_val2)) { return false; }
                 if (double.IsNaN(_val3)) { return false; }
                 if (double.IsNaN(_val4)) { return false; }
                 if (double.IsNaN(_val5)) { return false; }
                 if (double.IsNaN(_val6)) { return false; }
-                return true; 
+                return true;
             }
         }
 

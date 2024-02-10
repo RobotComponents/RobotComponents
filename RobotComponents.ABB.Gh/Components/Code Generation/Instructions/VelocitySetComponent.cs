@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_VelocitySet(), "Velocity Set", "VS", "Resulting Velocity Set instruction");   
+            pManager.RegisterParam(new Param_VelocitySet(), "Velocity Set", "VS", "Resulting Velocity Set instruction");
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             // Input variables
             double @override = 100;
             double max = 250;
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref @override)) { return; }
             if (!DA.GetData(1, ref max)) { return; }

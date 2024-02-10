@@ -52,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Dynamic
         {
             get
             {
-                return Properties.Resources.Comment_Parameter_Icon; 
+                return Properties.Resources.Comment_Parameter_Icon;
             }
         }
 

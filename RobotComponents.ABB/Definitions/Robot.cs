@@ -639,7 +639,10 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool Tool
         {
             get { return _tool; }
-            set { _tool = value; CalculateAttachedToolPlane();
+            set
+            {
+                _tool = value;
+                CalculateAttachedToolPlane();
             }
         }
 
@@ -687,8 +690,8 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the number of axes for the mechanical unit.
         /// </summary>
-        public int NumberOfAxes 
-        { 
+        public int NumberOfAxes
+        {
             get { return _internalAxisPlanes.Count; }
         }
 

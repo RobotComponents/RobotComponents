@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Wait AI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Wait AI instance: Did you define the Analog input name and value?"; 
+                return "Invalid Wait AI instance: Did you define the Analog input name and value?";
             }
         }
 

@@ -92,7 +92,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             // Set forward kinematics (for visualization)
             _forwardKinematics = new ForwardKinematics(robot);
-            
+
             // Output
             DA.SetData(0, _inverseKinematics.RobotJointPosition);
             DA.SetData(1, _inverseKinematics.ExternalJointPosition);

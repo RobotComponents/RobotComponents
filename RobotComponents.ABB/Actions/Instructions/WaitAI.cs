@@ -24,9 +24,9 @@ namespace RobotComponents.ABB.Actions.Instructions
     public class WaitAI : Action, IInstruction, ISerializable
     {
         #region fields
-        private string _name; 
-        private double _value; 
-        private InequalitySymbol _inequalitySymbol; 
+        private string _name;
+        private double _value;
+        private InequalitySymbol _inequalitySymbol;
         private double _maxTime;
         #endregion
 
@@ -200,14 +200,14 @@ namespace RobotComponents.ABB.Actions.Instructions
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
         /// <summary>
         /// Gets or sets the desired state of the analog input signal.
         /// </summary>
-        public double Value 
+        public double Value
         {
             get { return _value; }
             set { _value = value; }
@@ -216,8 +216,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the name of the analog input signal.
         /// </summary>
-        public string Name 
-        { 
+        public string Name
+        {
             get { return _name; }
             set { _name = value; }
         }

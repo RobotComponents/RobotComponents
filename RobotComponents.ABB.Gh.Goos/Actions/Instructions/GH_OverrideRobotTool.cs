@@ -51,7 +51,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 overrideRobotToolGoo = new GH_OverrideRobotTool();
             }
-                
+
             this.Value = overrideRobotToolGoo.Value;
         }
 

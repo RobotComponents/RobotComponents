@@ -175,7 +175,7 @@ namespace RobotComponents.ABB.Actions.Instructions
 
             // Sync and delay cannot be combined. Sync is leading. 
             result += _sync ? "\\Sync, " : (_delay > 0 ? $"\\SDelay:={_delay:0.###}, " : "");
-            result += $"{ _name}, ";
+            result += $"{_name}, ";
             result += _value ? "1;" : "0;";
 
             return result;

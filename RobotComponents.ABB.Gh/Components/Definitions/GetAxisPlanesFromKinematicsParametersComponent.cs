@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// Initializes a new instance of the KinematicsParametersToAxisPlanesComponent class.
         /// </summary>
         public GetAxisPlanesFromKinematicsParametersComponent()
-          : base("Get Axis Planes from Kinematics Parameters", "KiPa2AxPl", 
+          : base("Get Axis Planes from Kinematics Parameters", "KiPa2AxPl",
               "Gets the robot axis planes from the given robot kinematics parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

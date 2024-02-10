@@ -173,7 +173,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 else { target = (Q)(object)new GH_Point(Value.CenterOfGravity); }
                 return true;
             }
-            
+
             //Cast to Vector
             if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
             {

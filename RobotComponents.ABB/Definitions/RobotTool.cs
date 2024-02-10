@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Definitions
         private VariableType _variableType;
         private static readonly string _datatype = "tooldata";
         private string _name;
-        private Mesh _mesh; 
+        private Mesh _mesh;
         private Plane _attachmentPlane;
         private Plane _toolPlane;
         private bool _robotHold;
@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Definitions
             _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
             _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
             _loadData = (LoadData)info.GetValue("Load Data", typeof(LoadData));
-            
+
             Initialize();
         }
 
@@ -92,7 +92,7 @@ namespace RobotComponents.ABB.Definitions
             _attachmentPlane = Plane.WorldXY;
             _toolPlane = Plane.WorldXY;
             _robotHold = true;
-            
+
             _loadData = new LoadData
             {
                 Name = ""
@@ -120,7 +120,7 @@ namespace RobotComponents.ABB.Definitions
             _attachmentPlane = attachmentPlane;
             _toolPlane = toolPlane;
             _robotHold = true;
-            
+
             _loadData = new LoadData
             {
                 Name = ""
@@ -145,16 +145,16 @@ namespace RobotComponents.ABB.Definitions
             _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
-            
-            for (int i = 0; i < meshes.Count; i++) 
-            { 
-                _mesh.Append(meshes[i]); 
+
+            for (int i = 0; i < meshes.Count; i++)
+            {
+                _mesh.Append(meshes[i]);
             }
-            
+
             _attachmentPlane = attachmentPlane;
             _toolPlane = toolPlane;
             _robotHold = true;
-            
+
             _loadData = new LoadData
             {
                 Name = ""
@@ -438,7 +438,7 @@ namespace RobotComponents.ABB.Definitions
             toolPlane.Transform(orient);
 
             _position = new Point3d(toolPlane.Origin);
-            
+
             return _position;
         }
 
@@ -555,7 +555,7 @@ namespace RobotComponents.ABB.Definitions
             _robotHold = false;
             _position = Point3d.Unset;
             _orientation = Quaternion.Zero;
-            
+
             _loadData = new LoadData
             {
                 Name = ""
@@ -666,12 +666,12 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public Plane AttachmentPlane
         {
-            get 
-            { 
-                return _attachmentPlane; 
+            get
+            {
+                return _attachmentPlane;
             }
-            set 
-            { 
+            set
+            {
                 _attachmentPlane = value;
                 ReInitialize();
             }
@@ -682,12 +682,12 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public Plane ToolPlane
         {
-            get 
+            get
             {
-                return _toolPlane; 
+                return _toolPlane;
             }
-            set 
-            { 
+            set
+            {
                 _toolPlane = value;
                 ReInitialize();
             }

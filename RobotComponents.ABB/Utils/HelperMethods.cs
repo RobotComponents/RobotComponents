@@ -230,7 +230,7 @@ namespace RobotComponents.ABB.Utils
             quat1.Unitize();
             quat2.Unitize();
 
-            return quat1.A * quat2.A + quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D;
+            return (quat1.A * quat2.A) + (quat1.B * quat2.B) + (quat1.C * quat2.C) + (quat1.D * quat2.D);
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace RobotComponents.ABB.Utils
             if (t > 1) { t = 1; }
 
             // Angle
-            double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+            double cosTheta = (quat1.B * quat2.B) + (quat1.C * quat2.C) + (quat1.D * quat2.D) + (quat1.A * quat2.A);
             double sign = cosTheta < 0 ? -1.0 : 1.0;
             cosTheta = Math.Abs(cosTheta);
 
@@ -291,7 +291,7 @@ namespace RobotComponents.ABB.Utils
             }
 
             // Interpolation
-            Quaternion result = quat1 * ratio1 + quat2 * ratio2;
+            Quaternion result = (quat1 * ratio1) + (quat2 * ratio2);
 
             return result;
         }
@@ -308,13 +308,13 @@ namespace RobotComponents.ABB.Utils
             // Input validation
             if (t < 0) { t = 0; }
             if (t > 1) { t = 1; }
-            
+
             // Angle
-            double cosTheta = quat1.B * quat2.B + quat1.C * quat2.C + quat1.D * quat2.D + quat1.A * quat2.A;
+            double cosTheta = (quat1.B * quat2.B) + (quat1.C * quat2.C) + (quat1.D * quat2.D) + (quat1.A * quat2.A);
             double sign = cosTheta < 0 ? -1.0 : 1.0;
 
             // Interpolation
-            Quaternion result = quat1 * (1.0 - t) + quat2 * (sign * t);
+            Quaternion result = (quat1 * (1.0 - t)) + (quat2 * (sign * t));
 
             return result;
         }

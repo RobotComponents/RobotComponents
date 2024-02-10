@@ -27,15 +27,15 @@ namespace RobotComponents.ABB.Definitions
         private Scope _scope;
         private VariableType _variableType;
         private static readonly string _datatype = "wobjdata";
-        private string _name; 
-        private Plane _plane; 
-        private Quaternion _orientation; 
-        private ExternalAxis _externalAxis; 
+        private string _name;
+        private Plane _plane;
+        private Quaternion _orientation;
+        private ExternalAxis _externalAxis;
         private bool _robotHold;
-        private bool _fixedFrame; 
-        private Plane _userFrame; 
-        private Quaternion _userFrameOrientation; 
-        private Plane _globalPlane; 
+        private bool _fixedFrame;
+        private Plane _userFrame;
+        private Quaternion _userFrameOrientation;
+        private Plane _globalPlane;
         #endregion
 
         #region (de)serialization
@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Plane", _plane, typeof(Plane));
             info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));
             info.AddValue("Robot Hold", _robotHold, typeof(bool));
-            info.AddValue("User Frame", _userFrame , typeof(Plane));
+            info.AddValue("User Frame", _userFrame, typeof(Plane));
         }
         #endregion
 
@@ -151,7 +151,7 @@ namespace RobotComponents.ABB.Definitions
 
             if (workObject.ExternalAxis == null) { _externalAxis = null; }
             else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); }
-            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); }          
+            else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); }
         }
 
         /// <summary>
@@ -476,12 +476,12 @@ namespace RobotComponents.ABB.Definitions
         {
             get
             {
-                if (_name == null) { return false;  }
+                if (_name == null) { return false; }
                 if (_name == "") { return false; }
                 if (_plane == null) { return false; }
                 if (_plane == Plane.Unset) { return false; }
-                if (_userFrame == null) {return false; }
-                if (_userFrame == Plane.Unset) { return false;  }
+                if (_userFrame == null) { return false; }
+                if (_userFrame == Plane.Unset) { return false; }
                 return true;
             }
         }
@@ -548,12 +548,12 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public Plane UserFrame
         {
-            get 
-            { 
-                return _userFrame; 
+            get
+            {
+                return _userFrame;
             }
-            set 
-            { 
+            set
+            {
                 _userFrame = value;
                 ReInitialize();
             }
@@ -567,12 +567,12 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public Plane Plane
         {
-            get 
-            { 
-                return _plane; 
+            get
+            {
+                return _plane;
             }
-            set 
-            { 
+            set
+            {
                 _plane = value;
                 ReInitialize();
             }
@@ -586,12 +586,12 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public ExternalAxis ExternalAxis
         {
-            get 
-            { 
-                return _externalAxis; 
+            get
+            {
+                return _externalAxis;
             }
-            set 
-            { 
+            set
+            {
                 _externalAxis = value;
                 ReInitialize();
             }

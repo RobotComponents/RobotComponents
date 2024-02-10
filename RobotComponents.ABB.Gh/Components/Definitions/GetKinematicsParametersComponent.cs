@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// Initializes a new instance of the GetRobotKinematicsParametersComponent class.
         /// </summary>
         public GetKinematicsParametersComponent()
-          : base("Get Kinematics Parameters", "GetKiParams", 
+          : base("Get Kinematics Parameters", "GetKiParams",
               "Gets the kinematics parameters from a robot."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

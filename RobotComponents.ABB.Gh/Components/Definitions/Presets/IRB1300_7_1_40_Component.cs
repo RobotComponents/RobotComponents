@@ -102,7 +102,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions.Presets
         {
             get { return false; }
         }
-        
+
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>

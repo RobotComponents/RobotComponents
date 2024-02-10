@@ -49,8 +49,8 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             if (externalRotationalAxisGoo == null)
             {
                 externalRotationalAxisGoo = new GH_ExternalRotationalAxis();
-            } 
-               
+            }
+
             this.Value = externalRotationalAxisGoo.Value;
         }
 
@@ -115,7 +115,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Rotational Axis"); }
+            get { return "External Rotational Axis"; }
         }
 
         /// <summary>
@@ -352,9 +352,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             if (Value.BaseMesh != null)

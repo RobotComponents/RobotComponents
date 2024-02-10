@@ -144,7 +144,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private GH_Structure<GH_Number> ToDataTree(Dictionary<string, double[]> data)
         {
             GH_Structure<GH_Number> result = new GH_Structure<GH_Number>();
-            
+
             int counter = 0;
 
             foreach (KeyValuePair<string, double[]> entry in data)
@@ -155,7 +155,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 {
                     result.Append(new GH_Number(entry.Value[i]), path);
                 }
-                
+
                 counter++;
             }
 

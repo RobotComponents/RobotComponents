@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             try
             {
                 Signal signal = _controller.GetAnalogInput(name, out int index);
-                
+
                 if (index == -1)
                 {
                     if (_controller.IsEmpty == true)

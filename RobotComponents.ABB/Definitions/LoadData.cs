@@ -44,7 +44,7 @@ namespace RobotComponents.ABB.Definitions
         {
             //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _scope = (Scope)info.GetValue("Scope", typeof(Scope));
-            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType)); 
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _mass = (double)info.GetValue("Mass", typeof(double));
             _centerOfGravity = (Point3d)info.GetValue("Center of Gravity", typeof(Point3d));

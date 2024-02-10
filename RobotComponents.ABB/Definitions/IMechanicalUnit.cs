@@ -56,7 +56,7 @@ namespace RobotComponents.ABB.Definitions
         /// The posed meshes. 
         /// </returns>
         List<Mesh> PoseMeshes(JointTarget jointTarget);
-       
+
         /// <summary>
         /// Transforms the external axis spatial properties (planes and meshes). 
         /// </summary>

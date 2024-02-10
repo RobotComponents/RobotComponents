@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// Initializes a new instance of the DeconstructrobotComponent class.
         /// </summary>
         public DeconstructRobotComponent()
-          : base("Deconstruct Robot", "DeRob", 
+          : base("Deconstruct Robot", "DeRob",
               "Deconstructs a Robot component into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

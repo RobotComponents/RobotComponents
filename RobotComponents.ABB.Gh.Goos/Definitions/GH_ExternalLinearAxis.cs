@@ -213,7 +213,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
 
             //Cast to Axis vector
             if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
-            { 
+            {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Vector(Value.AxisPlane.ZAxis); }
                 return true;
@@ -373,9 +373,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             if (Value.BaseMesh != null)

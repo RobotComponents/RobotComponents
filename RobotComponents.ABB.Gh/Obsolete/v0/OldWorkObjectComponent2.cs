@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Resulting Work Object");   
+            pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Resulting Work Object");
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
               "Converts a plane to quaternion values."
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
                 + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
-                + System.Environment.NewLine + System.Environment.NewLine 
+                + System.Environment.NewLine + System.Environment.NewLine
                 + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Utility")
         {

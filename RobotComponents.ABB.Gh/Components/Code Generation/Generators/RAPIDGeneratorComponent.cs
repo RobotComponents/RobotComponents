@@ -41,7 +41,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private bool _wobjdataOutputParam = false;
         private readonly int _fixedParamNumOutput = 1;
         #endregion
-        
+
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
@@ -97,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Module", "M", "The RAPID Module as list with strings", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Module", "M", "The RAPID Module as list with strings", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             {
                 if (!DA.GetData(_variableInputParameters[1].Name, ref routineName))
                 {
-                     routineName= "main";
+                    routineName = "main";
                 }
             }
             if (Params.Input.Any(x => x.Name == _variableInputParameters[2].Name))
@@ -317,7 +317,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         private void MenuItemClickProgramName(object sender, EventArgs e)
         {
             RecordUndoEvent("Overwrite Module Name");
-            _moduleNameInputParam= !_moduleNameInputParam;
+            _moduleNameInputParam = !_moduleNameInputParam;
             AddInputParameter(0);
         }
 

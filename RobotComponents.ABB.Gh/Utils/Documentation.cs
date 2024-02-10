@@ -189,7 +189,7 @@ namespace RobotComponents.ABB.Gh.Utils
             #region Utilities
             { typeof(FlipPlaneXComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20Y/" },
-            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, 
+            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" },
             { typeof(PlaneToQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },
@@ -207,7 +207,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(Param_ExternalJointPosition), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
             { typeof(Param_Action), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
             { typeof(Param_ActionGroup), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action%20Group/"},
-            { typeof(Param_SetAnalogOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
+            { typeof(Param_SetAnalogOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" },
             { typeof(Param_LinearConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
             { typeof(Param_JointConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},
             { typeof(Param_CodeLine), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Code%20Line/"},

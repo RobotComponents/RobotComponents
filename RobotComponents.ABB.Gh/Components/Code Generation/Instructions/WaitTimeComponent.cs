@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_WaitTime(), "Wait Time", "WT", "Resulting Wait Time instruction");   
+            pManager.RegisterParam(new Param_WaitTime(), "Wait Time", "WT", "Resulting Wait Time instruction");
         }
 
         /// <summary>

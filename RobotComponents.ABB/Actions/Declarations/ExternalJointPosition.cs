@@ -562,7 +562,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Copy definied joint positions
             for (int i = 0; i < n; i++)
-            {   
+            {
                 result[i] = double.IsNaN(axisValues[i]) ? _defaultValue : axisValues[i];
             }
 

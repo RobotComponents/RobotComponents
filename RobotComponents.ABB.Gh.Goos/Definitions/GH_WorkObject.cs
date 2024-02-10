@@ -143,7 +143,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; 
+            return BoundingBox.Empty;
         }
         #endregion
 
@@ -284,7 +284,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                     return false;
                 }
             }
-            
+
             return false;
         }
         #endregion

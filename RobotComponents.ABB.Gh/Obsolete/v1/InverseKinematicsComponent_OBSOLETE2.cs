@@ -266,7 +266,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
-            
+
             try
             {
                 _previousRobotJointPosition = (RobotJointPosition)RobotComponents.Utils.Serialization.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Position"));

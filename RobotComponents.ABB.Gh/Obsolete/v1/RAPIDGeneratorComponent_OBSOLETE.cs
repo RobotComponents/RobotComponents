@@ -25,8 +25,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class RAPIDGeneratorComponent_OBSOLETE : GH_Component
     {
         #region fields
-        private List<string> _programModule = new List<string>();
-        private List<string> _systemModule = new List<string>();
+        private readonly List<string> _programModule = new List<string>();
+        private readonly List<string> _systemModule = new List<string>();
         #endregion
 
         /// <summary>
@@ -66,8 +66,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list);
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list);
         }
 
         /// <summary>

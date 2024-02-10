@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected OverrideRobotTool(SerializationInfo info, StreamingContext context)
         {
-            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _robotTool = (RobotTool)info.GetValue("Robot Tool", typeof(RobotTool));
         }
 
@@ -141,7 +141,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             return string.Empty; // We don't write a comment between our declarations.
         }
-        
+
         /// <summary>
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>

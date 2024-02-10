@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_RobotTarget() 
+        public GH_RobotTarget()
         {
             this.Value = null;
         }

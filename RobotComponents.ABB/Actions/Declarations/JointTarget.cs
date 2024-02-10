@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         private Scope _scope;
         private VariableType _variableType;
         private static readonly string _datatype = "jointtarget";
-        private string _name; 
+        private string _name;
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
         #endregion

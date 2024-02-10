@@ -178,7 +178,7 @@ namespace RobotComponents.ABB.Gh.Utils
                 if (entry.Value is IObjectManager component)
                 {
                     result.AddRange(component.Registered);
-                }   
+                }
             }
 
             return result;

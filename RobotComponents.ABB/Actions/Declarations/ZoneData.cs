@@ -32,14 +32,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         private static readonly string _datatype = "zonedata";
         private string _name;
         private bool _finep;
-        private double _pzone_tcp; 
+        private double _pzone_tcp;
         private double _pzone_ori;
         private double _pzone_eax;
         private double _zone_ori;
         private double _zone_leax;
         private double _zone_reax;
-        private bool _isPredefined; 
-        private readonly bool _isExactPredefinedValue; 
+        private bool _isPredefined;
+        private readonly bool _isExactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "fine", "z0", "z1", "z5", "z10", "z15", "z20", "z30", "z40", "z50", "z60", "z80", "z100", "z150", "z200" };
         private static readonly double[] _validPredefinedValues = new double[] { -1, 0, 1, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100, 150, 200 };
@@ -443,7 +443,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
                 return result;
             }
-                
+
             return string.Empty;
         }
 

@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Wait DI instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Wait DI instance: Did you define the digital input name and value?"; 
+                return "Invalid Wait DI instance: Did you define the digital input name and value?";
             }
         }
 

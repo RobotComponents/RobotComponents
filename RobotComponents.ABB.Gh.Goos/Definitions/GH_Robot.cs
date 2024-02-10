@@ -131,7 +131,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// </summary>
         public override BoundingBox Boundingbox
         {
-            get { return GetBoundingBox(new Transform()); }            
+            get { return GetBoundingBox(new Transform()); }
         }
 
         /// <summary>
@@ -291,9 +291,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             // Robot meshes

@@ -146,7 +146,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 _previousRobotJointPositions.Add(new RobotJointPosition());
             }
-            
+
             // Calculate the robot pose
             _inverseKinematics.Add(new InverseKinematics(robot));
             _inverseKinematics[DA.Iteration].Calculate(movement);
@@ -169,7 +169,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (_hideMesh == false | _outputMeshParameter == true)
             {
                 ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition); 
+                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition);
                 _forwardKinematics.Add(forwardKinematics);
             }
 

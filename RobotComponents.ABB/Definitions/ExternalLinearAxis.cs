@@ -67,7 +67,7 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Attachment Plane", _attachmentPlane, typeof(Plane));
-            info.AddValue("Axis Plane", _axisPlane , typeof(Plane));
+            info.AddValue("Axis Plane", _axisPlane, typeof(Plane));
             info.AddValue("Axis Limits", _axisLimits, typeof(Interval));
             info.AddValue("Axis Number", _axisNumber, typeof(int));
             info.AddValue("Moves Robot", _movesRobot, typeof(bool));
@@ -804,7 +804,7 @@ namespace RobotComponents.ABB.Definitions
         /// </returns>
         public Curve GetAxisCurve()
         {
-            Line line = new Line(_attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Min, _attachmentPlane.Origin + _axisPlane.ZAxis * _axisLimits.Max);
+            Line line = new Line(_attachmentPlane.Origin + (_axisPlane.ZAxis * _axisLimits.Min), _attachmentPlane.Origin + (_axisPlane.ZAxis * _axisLimits.Max));
             _axisCurve = line.ToNurbsCurve();
             _axisCurve.Domain = _axisLimits;
 
@@ -1058,14 +1058,14 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the attachment plane to attach a robot or work object.
         /// </summary>
-        public override Plane AttachmentPlane 
+        public override Plane AttachmentPlane
         {
-            get 
-            { 
-                return _attachmentPlane; 
+            get
+            {
+                return _attachmentPlane;
             }
-            set 
-            { 
+            set
+            {
                 _attachmentPlane = value;
                 ReInitialize();
             }
@@ -1077,14 +1077,14 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// The z-axis of the place defines the positive movement direction of the external linear axis.
         /// </remarks>
-        public override Plane AxisPlane 
-        { 
-            get 
-            { 
-                return _axisPlane; 
+        public override Plane AxisPlane
+        {
+            get
+            {
+                return _axisPlane;
             }
-            set 
-            { 
+            set
+            {
                 _axisPlane = value;
                 ReInitialize();
             }
@@ -1093,13 +1093,13 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis limits in meters.
         /// </summary>
-        public override Interval AxisLimits 
-        { 
-            get 
-            { 
-                return _axisLimits; 
+        public override Interval AxisLimits
+        {
+            get
+            {
+                return _axisLimits;
             }
-            set 
+            set
             {
                 _axisLimits = value;
                 ReInitialize();
@@ -1109,8 +1109,8 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis logic as a number (-1, 0, 1, 2, 3, 4, 5).
         /// </summary>
-        public override int AxisNumber 
-        { 
+        public override int AxisNumber
+        {
             get { return _axisNumber; }
             set { _axisNumber = value; }
         }
@@ -1136,7 +1136,7 @@ namespace RobotComponents.ABB.Definitions
             }
             set
             {
-                switch(value)
+                switch (value)
                 {
                     case 'a': _axisNumber = 0; break;
                     case 'b': _axisNumber = 1; break;
@@ -1160,22 +1160,22 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the Axis Type.
         /// </summary>
-        public override AxisType AxisType 
-        { 
+        public override AxisType AxisType
+        {
             get { return AxisType.LINEAR; }
         }
 
         /// <summary>
         /// Gets or sets the fixed base mesh of the external axis. 
         /// </summary>
-        public override Mesh BaseMesh 
-        { 
-            get 
-            { 
-                return _baseMesh; 
+        public override Mesh BaseMesh
+        {
+            get
+            {
+                return _baseMesh;
             }
-            set 
-            { 
+            set
+            {
                 _baseMesh = value;
                 _posedMeshes = new List<Mesh>();
             }
@@ -1184,14 +1184,14 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the movable link mesh of the external axis posed for external axis value set to 0.
         /// </summary>
-        public override Mesh LinkMesh 
-        { 
-            get 
-            { 
-                return _linkMesh; 
+        public override Mesh LinkMesh
+        {
+            get
+            {
+                return _linkMesh;
             }
-            set 
-            { 
+            set
+            {
                 _linkMesh = value;
                 _posedMeshes = new List<Mesh>();
             }
@@ -1203,24 +1203,24 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// The direction of the curve defines the movement direction and the spatial limits of the attachement plane.
         /// </remarks>
-        public Curve AxisCurve 
-        { 
+        public Curve AxisCurve
+        {
             get { return _axisCurve; }
         }
 
         /// <summary>
         /// Gets latest calculated posed axis meshes.
         /// </summary>
-        public override List<Mesh> PosedMeshes 
-        { 
+        public override List<Mesh> PosedMeshes
+        {
             get { return _posedMeshes; }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether or not this External Linear Axis moves the Robot.
         /// </summary>
-        public override bool MovesRobot 
-        { 
+        public override bool MovesRobot
+        {
             get { return _movesRobot; }
             set { _movesRobot = value; }
         }

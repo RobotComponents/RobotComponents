@@ -12,7 +12,6 @@ using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
-using Rhino.UI;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -207,7 +206,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 _robotPreset = (RobotPreset)RobotComponents.Utils.Serialization.ByteArrayToObject(array);
             }
-            catch 
+            catch
             {
                 _robotPreset = RobotPreset.EMPTY;
             }

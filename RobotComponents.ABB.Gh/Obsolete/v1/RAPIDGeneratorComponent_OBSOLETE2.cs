@@ -32,8 +32,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private bool _systemName = false;
         private bool _procedureName = false;
         private bool _customCode = false;
-        private List<string> _programModule = new List<string>();
-        private List<string> _systemModule = new List<string>();
+        private readonly List<string> _programModule = new List<string>();
+        private readonly List<string> _systemModule = new List<string>();
         private readonly int _fixedParamNumInput = 2;
         #endregion
 
@@ -81,8 +81,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list);
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private void MenuItemClickProgramName(object sender, EventArgs e)
         {
             RecordUndoEvent("Overwrite Program Module Name");
-            _programName= !_programName;
+            _programName = !_programName;
             AddParameter(0);
         }
 

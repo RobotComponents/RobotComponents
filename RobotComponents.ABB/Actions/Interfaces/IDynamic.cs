@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the Code Type.
         /// </summary>
-        CodeType Type { get; set;}
+        CodeType Type { get; set; }
         #endregion 
     }
 }

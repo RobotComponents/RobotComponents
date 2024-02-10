@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Presets.Robots
             {
                 externalAxes = new List<ExternalAxis>() { };
             }
-            
+
             // Override the position plane when an external axis is coupled that moves the robot
             for (int i = 0; i < externalAxes.Count; i++)
             {

@@ -96,7 +96,7 @@ namespace RobotComponents.Generic.Kinematics
         private void UpdateRobotParameters()
         {
             _psi3 = Math.Atan2(_a2, _c3);
-            _k2 = _a2 * _a2 + _c3 * _c3;
+            _k2 = (_a2 * _a2) + (_c3 * _c3);
             _k = Math.Sqrt(_k2);
         }
 
@@ -125,12 +125,12 @@ namespace RobotComponents.Generic.Kinematics
             double[] theta = pose.ToArray();
 
             // Corrections
-            theta[0] = theta[0] * _signs[0] - _offsets[0];
-            theta[1] = theta[1] * _signs[1] - _offsets[1];
-            theta[2] = theta[2] * _signs[2] - _offsets[2];
-            theta[3] = theta[3] * _signs[3] - _offsets[3];
-            theta[4] = theta[4] * _signs[4] - _offsets[4];
-            theta[5] = theta[5] * _signs[5] - _offsets[5];
+            theta[0] = (theta[0] * _signs[0]) - _offsets[0];
+            theta[1] = (theta[1] * _signs[1]) - _offsets[1];
+            theta[2] = (theta[2] * _signs[2]) - _offsets[2];
+            theta[3] = (theta[3] * _signs[3]) - _offsets[3];
+            theta[4] = (theta[4] * _signs[4]) - _offsets[4];
+            theta[5] = (theta[5] * _signs[5]) - _offsets[5];
 
             // Sine values
             double sin1 = Math.Sin(theta[0]);
@@ -149,46 +149,46 @@ namespace RobotComponents.Generic.Kinematics
             double cos6 = Math.Cos(theta[5]);
 
             // Wrist position on plane
-            double cx1 = _c2 * sin2 + _k * Math.Sin(theta[1] + theta[2] + _psi3) + _a1;
+            double cx1 = (_c2 * sin2) + (_k * Math.Sin(theta[1] + theta[2] + _psi3)) + _a1;
             double cy1 = _b;
-            double cz1 = _c2 * cos2 + _k * Math.Cos(theta[1] + theta[2] + _psi3);
+            double cz1 = (_c2 * cos2) + (_k * Math.Cos(theta[1] + theta[2] + _psi3));
 
             // Wrist position
-            double cx0 = cx1 * cos1 - cy1 * sin2;
-            double cy0 = cx1 * sin1 + cy1 * cos2;
+            double cx0 = (cx1 * cos1) - (cy1 * sin2);
+            double cy0 = (cx1 * sin1) + (cy1 * cos2);
             double cz0 = cz1 + _c1;
 
             // Matrix Rce: Wrist orientation
             Matrix rce = new Matrix(3, 3);
-            rce[0, 0] = cos4 * cos5 * cos6 - sin4 * sin6;
-            rce[0, 1] = -cos4 * cos5 * sin6 - sin4 * cos6;
+            rce[0, 0] = (cos4 * cos5 * cos6) - (sin4 * sin6);
+            rce[0, 1] = (-cos4 * cos5 * sin6) - (sin4 * cos6);
             rce[0, 2] = cos4 * sin5;
-            rce[1, 0] = sin4 * cos5 * cos6 + cos4 * sin6;
-            rce[1, 1] = -sin4 * cos5 * sin6 + cos4 * cos6;
+            rce[1, 0] = (sin4 * cos5 * cos6) + (cos4 * sin6);
+            rce[1, 1] = (-sin4 * cos5 * sin6) + (cos4 * cos6);
             rce[1, 2] = sin4 * sin5;
             rce[2, 0] = -sin5 * cos6;
             rce[2, 1] = sin5 * sin6;
             rce[2, 2] = cos5;
 
             // Matrix Roc
-            Matrix roc = new Matrix(3, 3);                          // Alternative form
-            roc[0, 0] = cos1 * cos2 * cos3 - cos1 * sin2 * sin3;    // cos(x1) cos(x2 + x3)
+            Matrix roc = new Matrix(3, 3);                              // Alternative form
+            roc[0, 0] = (cos1 * cos2 * cos3) - (cos1 * sin2 * sin3);    // cos(x1) cos(x2 + x3)
             roc[0, 1] = -sin1;
-            roc[0, 2] = cos1 * cos2 * sin3 + cos1 * sin2 * cos3;    // cos(x1) sin(x2 + x3)
-            roc[1, 0] = sin1 * cos2 * cos3 - sin1 * sin2 * sin3;    // sin(x1) cos(x2 + x3)
+            roc[0, 2] = (cos1 * cos2 * sin3) + (cos1 * sin2 * cos3);    // cos(x1) sin(x2 + x3)
+            roc[1, 0] = (sin1 * cos2 * cos3) - (sin1 * sin2 * sin3);    // sin(x1) cos(x2 + x3)
             roc[1, 1] = cos1;
-            roc[1, 2] = sin1 * cos2 * sin3 + sin1 * sin2 * cos3;    // sin(x1) sin(x2 + x3)
-            roc[2, 0] = -sin2 * cos3 - cos2 * sin3;                 // -sin(x2 + x3)
+            roc[1, 2] = (sin1 * cos2 * sin3) + (sin1 * sin2 * cos3);    // sin(x1) sin(x2 + x3)
+            roc[2, 0] = (-sin2 * cos3) - (cos2 * sin3);                 // -sin(x2 + x3)
             roc[2, 1] = 0;
-            roc[2, 2] = -sin2 * sin3 + cos2 * cos3;                 // cos(x2 + x3)
+            roc[2, 2] = (-sin2 * sin3) + (cos2 * cos3);                 // cos(x2 + x3)
 
             // Matrix Roe: End plane orientation
             Matrix roe = roc * rce;
 
             // End plane position
-            double ux0 = cx0 + _c4 * roe[0, 2];
-            double uy0 = cy0 + _c4 * roe[1, 2];
-            double uz0 = cz0 + _c4 * roe[2, 2];
+            double ux0 = cx0 + (_c4 * roe[0, 2]);
+            double uy0 = cy0 + (_c4 * roe[1, 2]);
+            double uz0 = cz0 + (_c4 * roe[2, 2]);
 
             // Return wrist position via out param
             wristPosition = new Point3d(cx0, cy0, cz0);
@@ -225,24 +225,24 @@ namespace RobotComponents.Generic.Kinematics
             double e33 = endPlane.ZAxis.Z;
 
             // Wrist position
-            double cx0 = ux0 - e13 * _c4;
-            double cy0 = uy0 - e23 * _c4;
-            double cz0 = uz0 - e33 * _c4;
+            double cx0 = ux0 - (e13 * _c4);
+            double cy0 = uy0 - (e23 * _c4);
+            double cz0 = uz0 - (e33 * _c4);
 
             // Positioning parameters for joint 1, 2 and 3
-            double nx1 = Math.Sqrt(cx0 * cx0 + cy0 * cy0 - _b * _b) - _a1;
-            double s1_2 = nx1 * nx1 + (cz0 - _c1) * (cz0 - _c1);
-            double s2_2 = (nx1 + 2.0 * _a1) * (nx1 + 2.0 * _a1) + (cz0 - _c1) * (cz0 - _c1);
+            double nx1 = Math.Sqrt((cx0 * cx0) + (cy0 * cy0) - (_b * _b)) - _a1;
+            double s1_2 = (nx1 * nx1) + ((cz0 - _c1) * (cz0 - _c1));
+            double s2_2 = ((nx1 + (2.0 * _a1)) * (nx1 + (2.0 * _a1))) + ((cz0 - _c1) * (cz0 - _c1));
             double s1 = Math.Sqrt(s1_2);
             double s2 = Math.Sqrt(s2_2);
             double psi1 = Math.Atan2(nx1, cz0 - _c1);
-            double psi2_i = Math.Acos((s1_2 + _c2 * _c2 - _k2) / (2.0 * s1 * _c2));
-            double psi2_ii = Math.Acos((s2_2 + _c2 * _c2 - _k2) / (2.0 * s2 * _c2));
-            double acos1 = Math.Acos((s1_2 - _c2 * _c2 - _k2) / (2.0 * _k * _c2));
-            double acos2 = Math.Acos((s2_2 - _c2 * _c2 - _k2) / (2.0 * _k * _c2));
+            double psi2_i = Math.Acos((s1_2 + (_c2 * _c2) - _k2) / (2.0 * s1 * _c2));
+            double psi2_ii = Math.Acos((s2_2 + (_c2 * _c2) - _k2) / (2.0 * s2 * _c2));
+            double acos1 = Math.Acos((s1_2 - (_c2 * _c2) - _k2) / (2.0 * _k * _c2));
+            double acos2 = Math.Acos((s2_2 - (_c2 * _c2) - _k2) / (2.0 * _k * _c2));
             double atan1 = Math.Atan2(cy0, cx0);
             double atan2 = Math.Atan2(_b, nx1 + _a1);
-            double atan3 = Math.Atan2(nx1 + 2.0 * _a1, cz0 - _c1);
+            double atan3 = Math.Atan2(nx1 + (2.0 * _a1), cz0 - _c1);
 
             // Check for Nan values (singularities)
             if (double.IsNaN(acos1)) { acos1 = 0; }
@@ -297,19 +297,19 @@ namespace RobotComponents.Generic.Kinematics
                 double sin23 = Math.Sin(_solutions[i][1] + _solutions[i][2]);
                 double cos1 = Math.Cos(_solutions[i][0]);
                 double cos23 = Math.Cos(_solutions[i][1] + _solutions[i][2]);
-                double m = e13 * sin23 * cos1 + e23 * sin23 * sin1 + e33 * cos23;
+                double m = (e13 * sin23 * cos1) + (e23 * sin23 * sin1) + (e33 * cos23);
 
                 // Joint 4
-                double theta4_p = Math.Atan2(e23 * cos1 - e13 * sin1, e13 * cos23 * cos1 + e23 * cos23 * sin1 - e33 * sin23);
+                double theta4_p = Math.Atan2((e23 * cos1) - (e13 * sin1), (e13 * cos23 * cos1) + (e23 * cos23 * sin1) - (e33 * sin23));
                 _solutions[i][3] = i < 4 ? theta4_p : theta4_p + _pi;
 
                 // Joint 5
-                double theta5_p = Math.Atan2(Math.Sqrt(1 - m * m), m);
+                double theta5_p = Math.Atan2(Math.Sqrt(1 - (m * m)), m);
                 _solutions[i][4] = i < 4 ? theta5_p : -theta5_p;
                 _wristSingularities[i] = Math.Abs(_solutions[i][4]) < 1e-3;
 
                 // Joint 6
-                double theta6_p = Math.Atan2(e12 * sin23 * cos1 + e22 * sin23 * sin1 + e32 * cos23, -e11 * sin23 * cos1 - e21 * sin23 * sin1 - e31 * cos23);
+                double theta6_p = Math.Atan2((e12 * sin23 * cos1) + (e22 * sin23 * sin1) + (e32 * cos23), (-e11 * sin23 * cos1) - (e21 * sin23 * sin1) - (e31 * cos23));
                 _solutions[i][5] = i < 4 ? theta6_p : theta6_p - _pi;
             }
 

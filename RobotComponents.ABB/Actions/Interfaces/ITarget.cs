@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// <summary>
         /// Gets or sets the Variable Type.
         /// </summary>
-        VariableType VariableType { get; set;}
+        VariableType VariableType { get; set; }
 
         /// <summary>
         /// Gets or sets the Target variable name.

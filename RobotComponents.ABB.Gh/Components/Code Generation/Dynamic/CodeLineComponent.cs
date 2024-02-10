@@ -56,7 +56,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_CodeLine(), "Code", "C", "Resulting Code", GH_ParamAccess.list);   
+            pManager.RegisterParam(new Param_CodeLine(), "Code", "C", "Resulting Code", GH_ParamAccess.list);
         }
 
         /// <summary>

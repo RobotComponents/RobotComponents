@@ -13,7 +13,7 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
- 
+
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
 {
     /// <summary>
@@ -98,7 +98,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         public override string ToString()
         {
             if (Value == null) { return "Null Robot Joint Position"; }
-            else { return Value.ToString(); }  
+            else { return Value.ToString(); }
         }
 
         /// <summary>

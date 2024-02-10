@@ -216,11 +216,11 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// </summary>
         public override bool IsValid
         {
-            get 
+            get
             {
                 if (_comment == null) { return false; }
                 if (_comment == "") { return false; }
-                return true; 
+                return true;
             }
         }
 

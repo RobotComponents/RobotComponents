@@ -134,7 +134,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Get the index number of the current target
-            int index = (int)(((_pathGenerator.Planes.Count - 1) * interpolationSlider));
+            int index = (int)((_pathGenerator.Planes.Count - 1) * interpolationSlider);
 
             // Calculate foward kinematics
             _forwardKinematics.HideMesh = !_previewMesh;

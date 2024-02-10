@@ -47,7 +47,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_JointConfigurationControl(), "Joint Configuration Control", "JCC", "Resulting Joint Configuration Control instruction");   
+            pManager.RegisterParam(new Param_JointConfigurationControl(), "Joint Configuration Control", "JCC", "Resulting Joint Configuration Control instruction");
         }
 
         /// <summary>

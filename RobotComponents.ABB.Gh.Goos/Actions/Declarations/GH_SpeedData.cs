@@ -4,7 +4,6 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.Linq;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeName
         {
-            get { return ("Speed Data"); }
+            get { return "Speed Data"; }
         }
 
         /// <summary>
@@ -159,7 +158,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Speed Data"); }
+            get { return "Defines a Speed Data"; }
         }
         #endregion
 

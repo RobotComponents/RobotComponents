@@ -114,7 +114,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Joint Target"); }
+            get { return "Defines a single Joint Target"; }
         }
         #endregion
 

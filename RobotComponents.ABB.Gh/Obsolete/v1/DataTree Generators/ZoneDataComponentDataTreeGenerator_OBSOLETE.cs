@@ -102,7 +102,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         public override GH_Exposure Exposure
         {
             // This component is hidden. It is only used to create a datatree inside the real Zone Data component
-            get { return GH_Exposure.hidden; } 
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>

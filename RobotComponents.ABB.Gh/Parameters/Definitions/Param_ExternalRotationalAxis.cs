@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         {
             get
             {
-                return GH_Exposure.senary; 
+                return GH_Exposure.senary;
             }
         }
 

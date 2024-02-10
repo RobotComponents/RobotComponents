@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ConfigurationData()
         {
-        
+
         }
 
         /// <summary>

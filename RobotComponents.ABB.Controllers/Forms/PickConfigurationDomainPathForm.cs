@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick configuration domain form class.
     /// </summary>
-    public class PickConfigurationDomainPathForm : Dialog<Boolean>
+    public class PickConfigurationDomainPathForm : Dialog<bool>
     {
         #region fields
         private readonly Controller _controller;

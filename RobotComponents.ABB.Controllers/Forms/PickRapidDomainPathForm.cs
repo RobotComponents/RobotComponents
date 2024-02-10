@@ -17,7 +17,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick RAPID domain form class.
     /// </summary>
-    public class PickRapidDomainPathForm : Dialog<Boolean>
+    public class PickRapidDomainPathForm : Dialog<bool>
     {
         #region fields
         private readonly Controller _controller;
@@ -70,7 +70,7 @@ namespace RobotComponents.ABB.Controllers.Forms
             PopulateTasks();
 
             // Labels
-            Label selectLabel = new Label() { Text = "Select a path", Font = new Font(SystemFont.Bold), Height =_height };
+            Label selectLabel = new Label() { Text = "Select a path", Font = new Font(SystemFont.Bold), Height = _height };
             Label infoLabel = new Label() { Text = "RAPID data info", Font = new Font(SystemFont.Bold), Height = _height };
 
             // Layout

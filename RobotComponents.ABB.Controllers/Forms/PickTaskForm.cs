@@ -15,7 +15,7 @@ namespace RobotComponents.ABB.Controllers.Forms
     /// <summary>
     /// Represents the pick task form class.
     /// </summary>
-    public class PickTaskForm : Dialog<Boolean>
+    public class PickTaskForm : Dialog<bool>
     {
         #region fields
         private readonly Controller _controller = new Controller();
@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Controllers.Forms
         /// </summary>
         /// <param name="controller"> The controller to pick a task from. </param>
         public PickTaskForm(Controller controller)
-		{
+        {
             // Main layout
             Title = "Controller task";
             MinimumSize = new Size(600, 420);

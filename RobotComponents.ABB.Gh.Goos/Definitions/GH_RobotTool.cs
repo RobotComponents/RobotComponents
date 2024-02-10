@@ -371,9 +371,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
+            if (Value == null)
             {
-                return; 
+                return;
             }
 
             if (Value.Mesh != null)

@@ -4,7 +4,6 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.IO;
 using System.Collections.Generic;
 // RobotComponents Libs
@@ -29,11 +28,11 @@ namespace RobotComponents.ABB.Actions
 
         // Dictionaries that collect all declarations that have a variable name defined
         private readonly Dictionary<string, SpeedData> _speedDatas = new Dictionary<string, SpeedData>();
-        private readonly Dictionary<string, ConfigurationData> _configurationDatas = new Dictionary<string, ConfigurationData>(); 
-        private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>(); 
-        private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>(); 
-        private readonly Dictionary<string, LoadData> _loadDatas = new Dictionary<string, LoadData>(); 
-        private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>(); 
+        private readonly Dictionary<string, ConfigurationData> _configurationDatas = new Dictionary<string, ConfigurationData>();
+        private readonly Dictionary<string, ZoneData> _zoneDatas = new Dictionary<string, ZoneData>();
+        private readonly Dictionary<string, RobotTool> _robotTools = new Dictionary<string, RobotTool>();
+        private readonly Dictionary<string, LoadData> _loadDatas = new Dictionary<string, LoadData>();
+        private readonly Dictionary<string, WorkObject> _workObjects = new Dictionary<string, WorkObject>();
         private readonly Dictionary<string, TaskList> _taskLists = new Dictionary<string, TaskList>();
         private readonly Dictionary<string, IJointPosition> _jointPositions = new Dictionary<string, IJointPosition>();
         private readonly Dictionary<string, ITarget> _targets = new Dictionary<string, ITarget>();
@@ -44,8 +43,8 @@ namespace RobotComponents.ABB.Actions
         private readonly List<string> _programDeclarationsLoadData = new List<string>();
         private readonly List<string> _programDeclarationsToolData = new List<string>();
         private readonly List<string> _programDeclarationsWorkObjectData = new List<string>();
-        private readonly List<string> _programDeclarationsComments = new List<string>(); 
-        private readonly List<string> _programDeclarationsCustom = new List<string>(); 
+        private readonly List<string> _programDeclarationsComments = new List<string>();
+        private readonly List<string> _programDeclarationsCustom = new List<string>();
         private readonly List<string> _programDeclarationsMultiMove = new List<string>();
         private readonly List<string> _programInstructions = new List<string>();
 
@@ -157,7 +156,7 @@ namespace RobotComponents.ABB.Actions
             _programDeclarationsCustom.Clear();
             _programDeclarationsMultiMove.Clear();
             _programInstructions.Clear();
-            
+
             _configurationDatas.Clear();
             _speedDatas.Clear();
             _jointPositions.Clear();

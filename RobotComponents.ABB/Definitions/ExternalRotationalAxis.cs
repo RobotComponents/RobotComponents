@@ -702,13 +702,19 @@ namespace RobotComponents.ABB.Definitions
                 // Base mesh
                 if (_baseMesh != null)
                 {
-                    boundingBox.Union(_baseMesh.GetBoundingBox(accurate));
+                    if (_baseMesh.IsValid) 
+                    {
+                        boundingBox.Union(_baseMesh.GetBoundingBox(accurate));
+                    }
                 }
 
                 // Link mesh
                 if (_linkMesh != null)
                 {
-                    boundingBox.Union(_baseMesh.GetBoundingBox(accurate));
+                    if (_linkMesh.IsValid)
+                    {
+                        boundingBox.Union(_linkMesh.GetBoundingBox(accurate));
+                    }
                 }
 
                 return boundingBox;

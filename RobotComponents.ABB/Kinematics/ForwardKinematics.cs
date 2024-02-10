@@ -340,14 +340,26 @@ namespace RobotComponents.ABB.Kinematics
             {
                 for (int i = 0; i != _posedRobotMeshes.Count; i++)
                 {
-                    result.Union(_posedRobotMeshes[i].GetBoundingBox(accurate));
+                    if (_posedRobotMeshes[i] != null)
+                    {
+                        if (_posedRobotMeshes[i].IsValid)
+                        {
+                            result.Union(_posedRobotMeshes[i].GetBoundingBox(accurate));
+                        }
+                    }
                 }
 
                 for (int i = 0; i != _posedExternalAxisMeshes.Count; i++)
                 {
                     for (int j = 0; j != _posedExternalAxisMeshes[i].Count; j++)
                     {
-                        result.Union(_posedExternalAxisMeshes[i][j].GetBoundingBox(accurate));
+                        if (_posedExternalAxisMeshes[i][j] != null)
+                        {
+                            if (_posedExternalAxisMeshes[i][j].IsValid)
+                            {
+                                result.Union(_posedExternalAxisMeshes[i][j].GetBoundingBox(accurate));
+                            }
+                        }
                     }
                 }
             }

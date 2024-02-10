@@ -754,9 +754,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     // Display internal axis meshes
                     for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)
                     {
-                        if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                        if (_forwardKinematics[i].PosedRobotMeshes[j] != null)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
+                            if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                            {
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
+                            }
                         }
                     }
 
@@ -765,9 +768,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     {
                         for (int k = 0; k < _forwardKinematics[i].PosedExternalAxisMeshes[j].Count; k++)
                         {
-                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k] != null)
                             {
-                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], displayMaterial);
+                                if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                                {
+                                    args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], displayMaterial);
+                                }
                             }
                         }
                     }

@@ -527,7 +527,13 @@ namespace RobotComponents.ABB.Definitions
                 // Make the bounding box of the robot meshes
                 for (int i = 0; i != _meshes.Count; i++)
                 {
-                    boundingBox.Union(_meshes[i].GetBoundingBox(accurate));
+                    if (_meshes[i] != null)
+                    {
+                        if (_meshes[i].IsValid)
+                        {
+                            boundingBox.Union(_meshes[i].GetBoundingBox(accurate));
+                        }
+                    }
                 }
 
                 // Make the bounding box of the external axes
@@ -540,7 +546,10 @@ namespace RobotComponents.ABB.Definitions
                 }
 
                 // Make the bounding box of the robot tool
-                boundingBox.Union(_tool.GetBoundingBox(accurate));
+                if (_tool.IsValid)
+                {
+                    boundingBox.Union(_tool.GetBoundingBox(accurate));
+                }
 
                 return boundingBox;
             }

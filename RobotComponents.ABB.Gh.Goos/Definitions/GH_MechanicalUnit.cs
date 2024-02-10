@@ -399,7 +399,13 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 {
                     for (int i = 0; i != robot.Meshes.Count; i++)
                     {
-                        args.Pipeline.DrawMeshShaded(robot.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        if (robot.Meshes[i] != null)
+                        {
+                            if (robot.Meshes[i].IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
+                        }
                     }
                 }
 
@@ -410,12 +416,18 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                     {
                         if (robot.ExternalAxes[i].BaseMesh != null)
                         {
-                            args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            if (robot.ExternalAxes[i].BaseMesh.IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
                         }
 
                         if (robot.ExternalAxes[i].LinkMesh != null)
                         {
-                            args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            if (robot.ExternalAxes[i].LinkMesh.IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
                         }
                     }
                 }
@@ -424,12 +436,18 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             {
                 if (externalAxis.BaseMesh != null)
                 {
-                    args.Pipeline.DrawMeshShaded(externalAxis.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    if (externalAxis.BaseMesh.IsValid)
+                    {
+                        args.Pipeline.DrawMeshShaded(externalAxis.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
 
                 if (externalAxis.LinkMesh != null)
                 {
-                    args.Pipeline.DrawMeshShaded(externalAxis.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    if (externalAxis.LinkMesh.IsValid)
+                    {
+                        args.Pipeline.DrawMeshShaded(externalAxis.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
             }
         }

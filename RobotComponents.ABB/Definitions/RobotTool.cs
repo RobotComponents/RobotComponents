@@ -588,7 +588,10 @@ namespace RobotComponents.ABB.Definitions
 
             if (_mesh != null)
             {
-                boundingBox.Union(_mesh.GetBoundingBox(accurate));
+                if (_mesh.IsValid)
+                {
+                    boundingBox.Union(_mesh.GetBoundingBox(accurate));
+                }
             }
 
             return boundingBox;

@@ -46,8 +46,12 @@ namespace RobotComponents.ABB.Kinematics
         private Plane _globalEndPlane;
         private Plane _localEndPlane;
         private bool _inLimits = true;
+        private bool _shoulderSingularity = false;
         private bool _elbowSingularity = false;
         private bool _wristSingularity = false;
+        private bool[] _shoulderSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly List<string> _errorText = new List<string>();
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8].Select(item => new RobotJointPosition()).ToArray();
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
@@ -193,6 +197,7 @@ namespace RobotComponents.ABB.Kinematics
 
             if (_movement.Target is RobotTarget robotTarget)
             {
+                // OPW kinematics solver
                 if (_robot.A3 == 0)
                 {
                     // Calculate inverse kinematics
@@ -209,9 +214,17 @@ namespace RobotComponents.ABB.Kinematics
 
                     // Select solution
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+
+                    _shoulderSingularities = _order.Select(index => _shoulderSingularities[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _elbowSingularities[index]).ToArray();
+                    _wristSingularities = _order.Select(index => _wristSingularities[index]).ToArray();
+
                     _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
                     _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    _shoulderSingularity = _opw.IsShoulderSingularity[_order[robotTarget.ConfigurationData.Cfx]];
                 }
+
+                // Offset Wrist kinematics solver
                 else
                 {
                     // Calculate inverse kinematics
@@ -222,14 +235,20 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];
+                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];  // TODO: Replace for Offset Wrist kinematics solver! 
                         }
                     }
 
                     // Select solution
-                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
-                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
-                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx]; // TODO: Replace for Offset Wrist kinematics solver! 
+
+                    _wristSingularities = _order.Select(index => _opw.IsWristSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
+                    _elbowSingularities = _order.Select(index => _opw.IsElbowSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
+                    _shoulderSingularities = _order.Select(index => _opw.IsShoulderSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
+
+                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
+                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
+                    _shoulderSingularity = _opw.IsShoulderSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
                 }
             }
 
@@ -306,8 +325,9 @@ namespace RobotComponents.ABB.Kinematics
                                 if (sum < min)
                                 {
                                     _robotJointPosition = _robotJointPositions[i].Duplicate();
-                                    _wristSingularity = _opw.IsWristSingularity[_order[i]];
-                                    _elbowSingularity = _opw.IsElbowSingularity[_order[i]];
+                                    _shoulderSingularity = _shoulderSingularities[i];
+                                    _wristSingularity = _wristSingularities[i];
+                                    _elbowSingularity = _elbowSingularities[i];
                                     min = sum;
                                 }
 
@@ -454,6 +474,7 @@ namespace RobotComponents.ABB.Kinematics
             _inLimits = true;
             _wristSingularity = false;
             _elbowSingularity = false;
+            _shoulderSingularity = false;
         }
 
         /// <summary>
@@ -552,20 +573,25 @@ namespace RobotComponents.ABB.Kinematics
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
-                    _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
+                    _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot joint {i + 1} is not in range.");
                     _inLimits = false;
                 }
             }
 
             if (_wristSingularity == true)
             {
-                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is close to wrist singularity.");
+                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The robot is near a wrist singularity.");
             }
 
             if (_elbowSingularity == true)
             {
                 _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is out of reach (elbow singularity).");
                 _inLimits = false;
+            }
+
+            if (_shoulderSingularity == true) 
+            {
+                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The robot is near a shoulder singularity.");
             }
         }
 

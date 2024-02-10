@@ -38,6 +38,7 @@ namespace RobotComponents.Generic.Kinematics
     {
         #region fields
         private readonly double[][] _solutions = Enumerable.Range(0, 8).Select(item => new double[6]).ToArray();
+        private readonly bool[] _shoulderSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private double[] _offsets = Enumerable.Repeat(0.0, 6).ToArray();
@@ -326,6 +327,16 @@ namespace RobotComponents.Generic.Kinematics
             _elbowSingularities[6] = singularity2;
             _elbowSingularities[7] = singularity2;
 
+            // Shoulder singularity
+            if ((Math.Abs(cx0) < 1e-3) & (Math.Abs(cy0) < 1e-3))
+            {
+                _shoulderSingularities.Select(item => item = true);
+            }
+            else
+            {
+                _shoulderSingularities.Select(item => item = false);
+            }
+
             // Corrections
             for (int i = 0; i < 8; i++)
             {
@@ -357,6 +368,14 @@ namespace RobotComponents.Generic.Kinematics
         public double[][] Solutions
         {
             get { return _solutions; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether or not the solutions have a shoulder singularity.
+        /// </summary>>
+        public bool[] IsShoulderSingularity
+        {
+            get { return _shoulderSingularities; }
         }
 
         /// <summary>

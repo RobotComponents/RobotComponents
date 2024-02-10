@@ -589,7 +589,7 @@ namespace RobotComponents.ABB.Kinematics
                 _inLimits = false;
             }
 
-            if (_shoulderSingularity == true) 
+            if (_shoulderSingularity == true)
             {
                 _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The robot is near a shoulder singularity.");
             }

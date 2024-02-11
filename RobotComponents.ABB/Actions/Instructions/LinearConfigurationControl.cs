@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -20,7 +19,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// This action is used to switch on or off the monitoring of linear movements. 
     /// </remarks>
     [Serializable()]
-    public class LinearConfigurationControl : Action, IInstruction, ISerializable
+    public class LinearConfigurationControl : IAction, IInstruction, ISerializable
     {
         #region fields
         private bool _isActive;
@@ -105,7 +104,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Linear Configuration Control instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new LinearConfigurationControl(this);
         }
@@ -141,7 +140,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -153,7 +152,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return _isActive == true ? "ConfL\\on;" : "ConfL\\off;";
         }
@@ -165,7 +164,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
@@ -175,7 +174,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get { return true; }
         }

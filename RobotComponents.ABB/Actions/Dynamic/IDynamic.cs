@@ -7,32 +7,24 @@
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Dynamic
 {
     /// <summary>
-    /// Represents the interface for different declaration action types.
+    /// Represents the interface for different dynamic action types.
     /// </summary>
-    public interface IDeclaration
+    public interface IDynamic
     {
         #region constructors
         /// <summary>
-        /// Returns an exact duplicate of this Declaration.
+        /// Returns an exact duplicate of this dynamic action.
         /// </summary>
         /// <returns> 
-        /// The exact copy of this Declaration. 
+        /// The exact copy of this dynamic action.
         /// </returns>
-        IDeclaration DuplicateDeclaration();
+        IDynamic DuplicateDynamic();
         #endregion
 
         #region methods
-        /// <summary>
-        /// Returns the Declaration in RAPID code format.
-        /// </summary>
-        /// <returns> 
-        /// The RAPID data string. 
-        /// </returns>
-        string ToRAPID();
-
         /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
@@ -41,6 +33,15 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// The RAPID code line. 
         /// </returns>
         string ToRAPIDDeclaration(Robot robot);
+
+        /// <summary>
+        /// Returns the RAPID instruction code line of the this action. 
+        /// </summary>
+        /// <param name="robot"> The Robot were the code is generated for. </param>
+        /// <returns> 
+        /// The RAPID code line. 
+        /// </returns>
+        string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
         /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
@@ -59,27 +60,9 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the scope
+        /// Gets or sets the Code Type.
         /// </summary>
-        Scope Scope { get; set; }
-
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        VariableType VariableType { get; set; }
-
-        /// <summary>
-        /// Gets the RAPID datatype. 
-        /// </summary>
-        string Datatype { get; }
-
-        /// <summary>
-        /// Gets or sets the variable name of the declaration.
-        /// </summary>
-        /// <remarks>
-        /// Each variable name has to be unique. 
-        /// </remarks>
-        string Name { get; set; }
+        CodeType Type { get; set; }
         #endregion 
     }
 }

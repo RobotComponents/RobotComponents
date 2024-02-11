@@ -6,7 +6,7 @@
 // Robot Component Libs
 using RobotComponents.ABB.Definitions;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
     /// Represents the interface for different instruction action types.

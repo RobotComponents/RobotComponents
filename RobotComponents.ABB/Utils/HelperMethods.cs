@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Utils
 {

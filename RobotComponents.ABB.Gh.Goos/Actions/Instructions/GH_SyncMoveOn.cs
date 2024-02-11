@@ -9,7 +9,6 @@ using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)Value; }
@@ -211,7 +210,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is SyncMoveOn action)
                 {

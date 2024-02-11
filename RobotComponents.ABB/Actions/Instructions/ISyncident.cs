@@ -7,21 +7,21 @@
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Instructions
 {
     /// <summary>
-    /// Represents the interface for different dynamic action types.
+    /// Represents the interface for actions that contain a synchronization identity.
     /// </summary>
-    public interface IDynamic
+    public interface ISyncident
     {
         #region constructors
         /// <summary>
-        /// Returns an exact duplicate of this dynamic action.
+        /// Returns an exact duplicate of this Syncident.
         /// </summary>
-        /// <returns> 
-        /// The exact copy of this dynamic action.
+        /// <returns>
+        /// The exact copy of this Syncident.
         /// </returns>
-        IDynamic DuplicateDynamic();
+        ISyncident DuplicateSyncident();
         #endregion
 
         #region methods
@@ -38,9 +38,7 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// Returns the RAPID instruction code line of the this action. 
         /// </summary>
         /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> 
-        /// The RAPID code line. 
-        /// </returns>
+        /// <returns> The RAPID code line. </returns>
         string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
@@ -60,9 +58,14 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the Code Type.
+        /// Gets or sets the variable type of the syncident.
         /// </summary>
-        CodeType Type { get; set; }
-        #endregion 
+        VariableType VariableType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the synchronization (meeting) point (syncident).
+        /// </summary>
+        string SyncID { get; set; }
+        #endregion
     }
 }

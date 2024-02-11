@@ -434,7 +434,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                             {
                                 args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
                             }
-                        }    
+                        }
                     }
 
                     // Display external axis meshes

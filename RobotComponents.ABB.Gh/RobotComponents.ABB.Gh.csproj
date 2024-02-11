@@ -71,7 +71,7 @@
     <Compile Include="Components\Code Generation\Instructions\PathAccelerationLimitationComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\PulseDigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\VelocitySetComponent.cs" />
-    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitation.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitationComponent.cs" />
     <Compile Include="Components\Definitions\GetAxisPlanesFromKinematicsParametersComponent.cs" />
     <Compile Include="Components\Definitions\GetKinematicsParametersComponent.cs" />
     <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />

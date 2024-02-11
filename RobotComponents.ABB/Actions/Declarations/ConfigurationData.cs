@@ -11,7 +11,6 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
@@ -19,7 +18,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// Represents the Configuration Data declaration. 
     /// </summary>
     [Serializable()]
-    public class ConfigurationData : Action, IDeclaration, ISerializable
+    public class ConfigurationData : IAction, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
@@ -156,7 +155,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Configuration Data instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new ConfigurationData(this);
         }
@@ -263,7 +262,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -283,7 +282,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An emptry string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
@@ -295,7 +294,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -312,7 +311,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

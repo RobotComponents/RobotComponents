@@ -11,7 +11,7 @@ using System.Security.Permissions;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 

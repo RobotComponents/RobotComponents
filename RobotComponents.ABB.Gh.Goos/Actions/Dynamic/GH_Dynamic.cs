@@ -12,7 +12,7 @@ using GH_IO.Serialization;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Dynamic;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
@@ -161,12 +161,12 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
                 if (Value == null) { target = (Q)(object)new GH_Action(); }
-                else { target = (Q)(object)new GH_Action(Value as Action); }
+                else { target = (Q)(object)new GH_Action(Value as IAction); }
                 return true;
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)Value; }

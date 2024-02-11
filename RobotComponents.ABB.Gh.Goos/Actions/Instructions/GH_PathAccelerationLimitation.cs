@@ -9,7 +9,6 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -195,7 +194,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(ABB.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(ABB.Actions.IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is PathAccelerationLimitation action)
                 {

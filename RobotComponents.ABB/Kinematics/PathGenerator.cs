@@ -137,7 +137,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<Actions.Action> actions, int interpolations = 5)
+        public void Calculate(IList<Actions.IAction> actions, int interpolations = 5)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -145,7 +145,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Actions.Action> ungrouped = new List<Actions.Action>() { };
+            List<Actions.IAction> ungrouped = new List<Actions.IAction>() { };
 
             for (int i = 0; i < actions.Count; i++)
             {
@@ -859,7 +859,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <returns> 
         /// Specifies whether the first movement type is an absolute joint movement. 
         /// </returns>
-        private bool CheckFirstMovement(IList<Actions.Action> actions)
+        private bool CheckFirstMovement(IList<Actions.IAction> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {

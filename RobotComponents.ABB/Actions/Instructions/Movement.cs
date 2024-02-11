@@ -13,7 +13,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Actions.Instructions
@@ -22,7 +21,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// Represents several Move instructions (MoveAbsJ, MoveL, MoveJ, MoveC, MoveLDO, MoveJDO and MoveC). 
     /// </summary>
     [Serializable()]
-    public class Movement : Action, IInstruction, ISerializable
+    public class Movement : IAction, IInstruction, ISerializable
     {
         #region fields
         private MovementType _movementType;
@@ -386,7 +385,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Movement instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new Movement(this);
         }
@@ -587,7 +586,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -599,7 +598,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             // Set tool name
             string toolName;
@@ -692,7 +691,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             ConvertTarget(RAPIDGenerator);
 
@@ -715,7 +714,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

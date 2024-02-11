@@ -7,24 +7,31 @@
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
-    /// Represents the interface for actions that contain a synchronization identity.
+    /// Represents the interface for different target types.
     /// </summary>
-    public interface ISyncident
+    public interface ITarget
     {
         #region constructors
         /// <summary>
-        /// Returns an exact duplicate of this Syncident.
+        /// Returns an exact duplicate of this Target.
         /// </summary>
-        /// <returns>
-        /// The exact copy of this Syncident.
-        /// </returns>
-        ISyncident DuplicateSyncident();
+        /// <returns> The exact copy of this Target. </returns>
+        ITarget DuplicateTarget();
         #endregion
 
         #region methods
+
+        /// <summary>
+        /// Returns the Target in RAPID code format.
+        /// </summary>
+        /// <returns> 
+        /// The RAPID data string. 
+        /// </returns>
+        string ToRAPID();
+
         /// <summary>
         /// Returns the RAPID declaration code line of the this action.
         /// </summary>
@@ -33,13 +40,6 @@ namespace RobotComponents.ABB.Actions.Interfaces
         /// The RAPID code line. 
         /// </returns>
         string ToRAPIDDeclaration(Robot robot);
-
-        /// <summary>
-        /// Returns the RAPID instruction code line of the this action. 
-        /// </summary>
-        /// <param name="robot"> The Robot were the code is generated for. </param>
-        /// <returns> The RAPID code line. </returns>
-        string ToRAPIDInstruction(Robot robot);
 
         /// <summary>
         /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
@@ -58,14 +58,20 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the variable type of the syncident.
+        /// Gets or sets the Variable Type.
         /// </summary>
         VariableType VariableType { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the synchronization (meeting) point (syncident).
+        /// Gets or sets the Target variable name.
+        /// Each Target variable name has to be unique.
         /// </summary>
-        string SyncID { get; set; }
+        string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the External Joint Position.
+        /// </summary>
+        ExternalJointPosition ExternalJointPosition { get; set; }
         #endregion
     }
 }

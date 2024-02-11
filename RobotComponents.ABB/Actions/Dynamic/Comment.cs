@@ -10,7 +10,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Dynamic
 {
@@ -22,7 +21,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
     /// It has no effect on the execution of the program.
     /// </remarks>
     [Serializable()]
-    public class Comment : Action, IDynamic, ISerializable
+    public class Comment : IAction, IDynamic, ISerializable
     {
         #region fields
         private string _comment;
@@ -123,7 +122,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// A deep copy of the Comment instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new Comment(this);
         }
@@ -159,7 +158,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return _type == CodeType.Declaration ? $"! {_comment}" : "";
         }
@@ -171,7 +170,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return _type == CodeType.Instruction ? $"! {_comment}" : "";
         }
@@ -183,7 +182,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_type == CodeType.Declaration)
             {
@@ -214,7 +213,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

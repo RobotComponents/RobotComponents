@@ -1016,7 +1016,7 @@ namespace RobotComponents.ABB.Definitions
                 // Link mesh
                 if (_linkMesh != null)
                 {
-                    if (_linkMesh.IsValid) 
+                    if (_linkMesh.IsValid)
                     {
                         boundingBox.Union(_linkMesh.GetBoundingBox(accurate));
                     }
@@ -1025,7 +1025,7 @@ namespace RobotComponents.ABB.Definitions
                 // Axis curve
                 if (_axisCurve != null)
                 {
-                    if (_axisCurve.IsValid) 
+                    if (_axisCurve.IsValid)
                     {
                         boundingBox.Union(_axisCurve.GetBoundingBox(accurate));
                     }

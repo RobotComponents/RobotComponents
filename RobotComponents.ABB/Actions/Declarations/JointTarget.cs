@@ -12,7 +12,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
@@ -24,7 +23,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </remarks>
     [Serializable()]
-    public class JointTarget : Action, ITarget, IDeclaration, ISerializable
+    public class JointTarget : IAction, ITarget, IDeclaration, ISerializable
     {
         #region fields
         private Scope _scope;
@@ -184,7 +183,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Joint Target instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new JointTarget(this);
         }
@@ -370,7 +369,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined.
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -390,7 +389,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
@@ -402,7 +401,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             _robotJointPosition.ToRAPIDGenerator(RAPIDGenerator);
             _externalJointPosition.ToRAPIDGenerator(RAPIDGenerator);
@@ -422,7 +421,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

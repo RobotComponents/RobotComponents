@@ -6,27 +6,27 @@
 // Robot Component Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Declarations;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
-    /// Represents the interface for different target types.
+    /// Represents the interface for different declaration action types.
     /// </summary>
-    public interface ITarget
+    public interface IDeclaration
     {
         #region constructors
         /// <summary>
-        /// Returns an exact duplicate of this Target.
+        /// Returns an exact duplicate of this Declaration.
         /// </summary>
-        /// <returns> The exact copy of this Target. </returns>
-        ITarget DuplicateTarget();
+        /// <returns> 
+        /// The exact copy of this Declaration. 
+        /// </returns>
+        IDeclaration DuplicateDeclaration();
         #endregion
 
         #region methods
-
         /// <summary>
-        /// Returns the Target in RAPID code format.
+        /// Returns the Declaration in RAPID code format.
         /// </summary>
         /// <returns> 
         /// The RAPID data string. 
@@ -59,20 +59,27 @@ namespace RobotComponents.ABB.Actions.Interfaces
         bool IsValid { get; }
 
         /// <summary>
-        /// Gets or sets the Variable Type.
+        /// Gets or sets the scope
+        /// </summary>
+        Scope Scope { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variable type. 
         /// </summary>
         VariableType VariableType { get; set; }
 
         /// <summary>
-        /// Gets or sets the Target variable name.
-        /// Each Target variable name has to be unique.
+        /// Gets the RAPID datatype. 
         /// </summary>
-        string Name { get; set; }
+        string Datatype { get; }
 
         /// <summary>
-        /// Gets or sets the External Joint Position.
+        /// Gets or sets the variable name of the declaration.
         /// </summary>
-        ExternalJointPosition ExternalJointPosition { get; set; }
-        #endregion
+        /// <remarks>
+        /// Each variable name has to be unique. 
+        /// </remarks>
+        string Name { get; set; }
+        #endregion 
     }
 }

@@ -79,7 +79,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robInfo = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             string programName = "";
             string systemName = "";
             List<string> customCodeLines = new List<string>() { };

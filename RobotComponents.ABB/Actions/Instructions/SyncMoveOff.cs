@@ -10,7 +10,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -18,7 +17,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// Represents the SyncMoveOff instruction to end a sequence of synchronized movements.
     /// </summary>
     [Serializable()]
-    public class SyncMoveOff : Action, IInstruction, ISyncident, ISerializable
+    public class SyncMoveOff : IAction, IInstruction, ISyncident, ISerializable
     {
         #region fields
         private VariableType _variableType;
@@ -125,7 +124,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Tasks instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new SyncMoveOff(this);
         }
@@ -157,7 +156,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line.
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return $"{Enum.GetName(typeof(VariableType), _variableType)} syncident {_syncident};";
         }
@@ -169,7 +168,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return $"SyncMoveOff {_syncident}{(_timeOut > 0 ? $"\\TimeOut:={_timeOut:0.###}" : "")};";
         }
@@ -181,7 +180,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (!RAPIDGenerator.Syncidents.ContainsKey(_syncident))
             {
@@ -198,7 +197,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

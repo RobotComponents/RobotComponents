@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 
-namespace RobotComponents.ABB.Actions.Interfaces
+namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
     /// Represents the interface for different Joint Positions.

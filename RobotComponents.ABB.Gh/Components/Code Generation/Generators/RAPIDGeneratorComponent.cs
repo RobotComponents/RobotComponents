@@ -109,7 +109,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             string moduleName = "MainModule";
             string routineName = "main";
             bool addTooldata = true;

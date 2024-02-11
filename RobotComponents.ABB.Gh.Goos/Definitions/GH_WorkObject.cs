@@ -11,7 +11,7 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;

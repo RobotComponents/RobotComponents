@@ -9,7 +9,6 @@ using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Instructions;
 
@@ -145,7 +144,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The RAPID module as a list with code lines.
         /// </returns>
-        public List<string> CreateModule(IList<Action> actions, bool addTooldata = true, bool addWobjdata = true, bool addLoaddata = true)
+        public List<string> CreateModule(IList<IAction> actions, bool addTooldata = true, bool addWobjdata = true, bool addLoaddata = true)
         {
             // Reset the fields            
             _programDeclarations.Clear();
@@ -329,9 +328,9 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// Specifies whether the first movement type is an absolute joint movement. 
         /// </returns>
-        private bool CheckFirstMovement(IList<Action> actions)
+        private bool CheckFirstMovement(IList<IAction> actions)
         {
-            List<Action> ungrouped = new List<Action>() { };
+            List<IAction> ungrouped = new List<IAction>() { };
 
             for (int i = 0; i != actions.Count; i++)
             {

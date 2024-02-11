@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -21,7 +20,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// acceleration and/or TCP deceleration along the movement path.
     /// </remarks>
     [Serializable()]
-    public class PathAccelerationLimitation : Action, IInstruction, ISerializable
+    public class PathAccelerationLimitation : IAction, IInstruction, ISerializable
     {
         #region fields
         private bool _accelerationLimitation;
@@ -124,7 +123,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Path Acceleration Limitation instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new PathAccelerationLimitation(this);
         }
@@ -156,7 +155,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -168,7 +167,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             string acceleration = _accelerationLimitation == false ? "FALSE" : $"TRUE\\AccMax:={_accelerationMax}";
             string deceleration = _decelerationLimitation == false ? "FALSE" : $"TRUE\\DecelMax:={_decelerationMax}";
@@ -182,7 +181,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
@@ -192,7 +191,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

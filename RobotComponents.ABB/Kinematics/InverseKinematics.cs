@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Kinematics
         private Plane _globalTargetPlane;
         private Plane _globalEndPlane;
         private Plane _localEndPlane;
-        private bool _inLimits = true;
+        private bool _isInLimits = true;
         private bool _shoulderSingularity = false;
         private bool _elbowSingularity = false;
         private bool _wristSingularity = false;
@@ -95,7 +95,7 @@ namespace RobotComponents.ABB.Kinematics
             _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
             _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
             _errorText = new List<string>(inverseKinematics.ErrorText);
-            _inLimits = inverseKinematics.InLimits;
+            _isInLimits = inverseKinematics.IsInLimits;
             Initialize();
         }
 
@@ -471,7 +471,7 @@ namespace RobotComponents.ABB.Kinematics
             ResetExternalJointPosition();
 
             _errorText.Clear();
-            _inLimits = true;
+            _isInLimits = true;
             _wristSingularity = false;
             _elbowSingularity = false;
             _shoulderSingularity = false;
@@ -574,7 +574,7 @@ namespace RobotComponents.ABB.Kinematics
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
                     _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot joint {i + 1} is not in range.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
             }
 
@@ -586,7 +586,7 @@ namespace RobotComponents.ABB.Kinematics
             if (_elbowSingularity == true)
             {
                 _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is out of reach (elbow singularity).");
-                _inLimits = false;
+                _isInLimits = false;
             }
 
             if (_shoulderSingularity == true)
@@ -608,7 +608,7 @@ namespace RobotComponents.ABB.Kinematics
                 if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
                     _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of external logical axis {logic} is not in range.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
             }
         }
@@ -686,9 +686,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets a value indicating whether or not the internal and external values are within their limits.
         /// </summary>
-        public bool InLimits
+        public bool IsInLimits
         {
-            get { return _inLimits; }
+            get { return _isInLimits; }
         }
         #endregion
     }

@@ -64,11 +64,11 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits. 
         /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> 
         /// The posed attachement plane. 
         /// </returns>
-        Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits);
+        Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool isInLimits);
 
         /// <summary>
         /// Calculates the the transformation matrix for a given External Joint Position.. 
@@ -77,11 +77,11 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits. 
         /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> 
         /// The transformation matrix.
         /// </returns>
-        Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits);
+        Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool isInLimits);
 
         /// <summary>
         /// Calculates the position of the attachment plane for a given External Joint Position..  

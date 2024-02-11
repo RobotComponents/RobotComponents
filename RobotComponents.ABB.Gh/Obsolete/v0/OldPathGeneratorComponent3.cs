@@ -268,7 +268,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 double trans;
 
                 // Set the display color and transparancy of the robot mesh
-                if (_forwardKinematics.InLimits == true)
+                if (_forwardKinematics.IsInLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;

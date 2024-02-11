@@ -818,13 +818,13 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits.
         /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> 
         /// The posed attachement plane. 
         /// </returns>
-        public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool isInLimits)
         {
-            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out inLimits);
+            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out isInLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
@@ -838,11 +838,11 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits. 
         /// </remarks>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> 
         /// The transformation matrix. 
         /// </returns>
-        public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool isInLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
 
@@ -852,7 +852,7 @@ namespace RobotComponents.ABB.Definitions
             }
             
             Transform transform = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
-            inLimits = !(axisValue > AxisLimits.Max || axisValue < AxisLimits.Min);
+            isInLimits = !(axisValue > AxisLimits.Max || axisValue < AxisLimits.Min);
 
             return transform;
         }

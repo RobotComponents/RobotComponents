@@ -739,10 +739,10 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     DisplayMaterial displayMaterial;
 
                     // Interpolation step
-                    int index = (int)((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]);
+                    int index = (int)((_pathGenerators[i].IsInLimits.Count - 1) * _interpolations[i]);
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)
+                    if (_forwardKinematics[i].IsInLimits == false | _pathGenerators[i].IsInLimits[index] == false)
                     {
                         displayMaterial = DisplaySettings.DisplayMaterialOutsideLimits;
                     }

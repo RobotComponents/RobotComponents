@@ -38,7 +38,7 @@ namespace RobotComponents.ABB.Kinematics
 
         private readonly List<string> _errorText = new List<string>();
         private bool _hideMesh;
-        private bool _inLimits = true;
+        private bool _isInLimits = true;
 
         private const double _deg2rad = Math.PI / 180;
         #endregion
@@ -77,7 +77,7 @@ namespace RobotComponents.ABB.Kinematics
             _posedExternalAxisPlanes = new List<Plane>(forwardKinematics.PosedExternalAxisPlanes).ToArray();
             _robotTransforms = new List<Transform>(forwardKinematics.RobotTransforms).ToArray();
             _externalAxisTransforms = forwardKinematics.ExternalAxisTransforms;
-            _inLimits = forwardKinematics.InLimits;
+            _isInLimits = forwardKinematics.IsInLimits;
 
             for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
             {
@@ -136,7 +136,7 @@ namespace RobotComponents.ABB.Kinematics
             _posedRobotMeshes.Clear();
             _positionPlane = Plane.Unset;
             _tcpPlane = Plane.Unset;
-            _inLimits = true;
+            _isInLimits = true;
 
             for (int i = 0; i < _posedExternalAxisMeshes.Count; i++)
             {
@@ -377,7 +377,7 @@ namespace RobotComponents.ABB.Kinematics
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
                 {
                     _errorText.Add($"The position of robot axis {i + 1} is not in range.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
             }
         }
@@ -395,13 +395,13 @@ namespace RobotComponents.ABB.Kinematics
                 if (_externalJointPosition[index] == 9e9)
                 {
                     _errorText.Add($"The position of external logical axis {logic} is not definied.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
 
                 else if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[index], false) == false)
                 {
                     _errorText.Add($"The position of external logical axis  {logic} is not in range.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
             }
         }
@@ -501,9 +501,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets a value indicating whether or not the internal and external values are within their limits.
         /// </summary>
-        public bool InLimits
+        public bool IsInLimits
         {
-            get { return _inLimits; }
+            get { return _isInLimits; }
         }
 
         /// <summary>

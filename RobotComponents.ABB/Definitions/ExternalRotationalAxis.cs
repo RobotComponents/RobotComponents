@@ -533,11 +533,11 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits. 
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
-        public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool isInLimits)
         {
-            Transform orientNow = CalculateTransformationMatrix(externalJointPosition, out inLimits);
+            Transform orientNow = CalculateTransformationMatrix(externalJointPosition, out isInLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
@@ -549,9 +549,9 @@ namespace RobotComponents.ABB.Definitions
         /// This calculation does not take into account the axis limits. 
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
-        /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
+        /// <param name="isInLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The transformation matrix. </returns>
-        public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool isInLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
 
@@ -562,7 +562,7 @@ namespace RobotComponents.ABB.Definitions
 
             double radians = axisValue / 180 * PI;
             Transform transform = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
-            inLimits = !(axisValue < _axisLimits.Min || axisValue > _axisLimits.Max);
+            isInLimits = !(axisValue < _axisLimits.Min || axisValue > _axisLimits.Max);
 
             return transform;
         }

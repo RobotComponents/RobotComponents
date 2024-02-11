@@ -94,7 +94,7 @@
     <Compile Include="Actions\Declarations\ExternalJointPosition.cs" />
     <Compile Include="Actions\Declarations\ZoneData.cs" />
     <Compile Include="Definitions\LoadData.cs" />
-    <Compile Include="Definitions\ExternalAxis.cs" />
+    <Compile Include="Definitions\IExternalAxis.cs" />
     <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\Dynamic\CodeLine.cs" />
     <Compile Include="Actions\Dynamic\Comment.cs" />

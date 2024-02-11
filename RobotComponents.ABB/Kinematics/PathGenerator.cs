@@ -340,7 +340,7 @@ namespace RobotComponents.ABB.Kinematics
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                IExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
                 Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
                 plane1.Transform(trans);
             }
@@ -511,7 +511,7 @@ namespace RobotComponents.ABB.Kinematics
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                IExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
                 Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
                 plane1.Transform(trans);
             }
@@ -807,7 +807,7 @@ namespace RobotComponents.ABB.Kinematics
                     // Correction for rotation of the target plane on a movable work object
                     if (newMovement.WorkObject.ExternalAxis != null)
                     {
-                        ExternalAxis externalAxis = newMovement.WorkObject.ExternalAxis;
+                        IExternalAxis externalAxis = newMovement.WorkObject.ExternalAxis;
                         Transform trans2 = externalAxis.CalculateTransformationMatrix(newExternalJointPosition * -1, out _);
                         plane.Transform(trans2);
                     }

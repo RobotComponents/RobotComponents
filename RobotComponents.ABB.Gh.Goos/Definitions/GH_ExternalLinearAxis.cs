@@ -180,7 +180,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -296,7 +296,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            if (typeof(IExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 if (source is ExternalLinearAxis externalLinearAxis)
                 {

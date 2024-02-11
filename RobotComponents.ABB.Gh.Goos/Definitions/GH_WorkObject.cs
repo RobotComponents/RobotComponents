@@ -197,7 +197,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value.ExternalAxis; }

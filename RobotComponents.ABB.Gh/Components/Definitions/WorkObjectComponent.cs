@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             // Input variables
             string name = "wobj1";
             Plane plane = Plane.WorldXY;
-            ExternalAxis externalAxis = null;
+            IExternalAxis externalAxis = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }

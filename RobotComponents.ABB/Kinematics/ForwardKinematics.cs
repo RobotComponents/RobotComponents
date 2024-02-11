@@ -226,7 +226,7 @@ namespace RobotComponents.ABB.Kinematics
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
                 // Get the external axis
-                ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                IExternalAxis externalAxis = _robot.ExternalAxes[i];
 
                 // Get transformation matrices
                 List<Transform> transforms = new List<Transform>() { Transform.Translation(0, 0, 0) };

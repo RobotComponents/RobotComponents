@@ -40,6 +40,16 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         }
 
         /// <summary>
+        /// Data constructor: Creates an Mechanical Unit Goo instance from an Mechanical Unit instance.
+        /// </summary>
+        /// <param name="externalAxis"> External Axis Value to store inside this Goo instance. </param>
+        public GH_MechanicalUnit(IExternalAxis externalAxis)
+        {
+            this.Value = externalAxis as IMechanicalUnit;
+        }
+
+
+        /// <summary>
         /// Data constructor: Creates a Mechanical Unit Goo instance from another Mechanical Unit Goo instance.
         /// This creates a shallow copy of the passed Mechanical Unit Goo instance. 
         /// </summary>
@@ -230,16 +240,16 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
-                else if (Value is ExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as ExternalAxis); }
+                else if (Value is IExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as IExternalAxis); }
                 else { target = default; }
                 return true;
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
-                else if (Value is ExternalAxis) { target = (Q)(object)Value; }
+                else if (Value is IExternalAxis) { target = (Q)(object)Value; }
                 else { target = default; }
                 return true;
             }
@@ -432,7 +442,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                     }
                 }
             }
-            else if (Value is ExternalAxis externalAxis)
+            else if (Value is IExternalAxis externalAxis)
             {
                 if (externalAxis.BaseMesh != null)
                 {

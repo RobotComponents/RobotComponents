@@ -30,7 +30,7 @@ namespace RobotComponents.ABB.Definitions
         private string _name;
         private Plane _plane;
         private Quaternion _orientation;
-        private ExternalAxis _externalAxis;
+        private IExternalAxis _externalAxis;
         private bool _robotHold;
         private bool _fixedFrame;
         private Plane _userFrame;
@@ -51,7 +51,7 @@ namespace RobotComponents.ABB.Definitions
             _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _plane = (Plane)info.GetValue("Plane", typeof(Plane));
-            _externalAxis = (ExternalAxis)info.GetValue("External Axis", typeof(ExternalAxis));
+            _externalAxis = (IExternalAxis)info.GetValue("External Axis", typeof(IExternalAxis));
             _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
             _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
 
@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Plane", _plane, typeof(Plane));
-            info.AddValue("External Axis", _externalAxis, typeof(ExternalAxis));
+            info.AddValue("External Axis", _externalAxis, typeof(IExternalAxis));
             info.AddValue("Robot Hold", _robotHold, typeof(bool));
             info.AddValue("User Frame", _userFrame, typeof(Plane));
         }
@@ -118,7 +118,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="name"> The work object name, must be unique. </param>
         /// <param name="plane"> The work object coordinate system. </param>
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
-        public WorkObject(string name, Plane plane, ExternalAxis externalAxis)
+        public WorkObject(string name, Plane plane, IExternalAxis externalAxis)
         {
             _scope = Scope.GLOBAL;
             _variableType = VariableType.PERS;
@@ -584,7 +584,7 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// Only specified in the case of movable user coordinate systems.
         /// </remarks>
-        public ExternalAxis ExternalAxis
+        public IExternalAxis ExternalAxis
         {
             get
             {

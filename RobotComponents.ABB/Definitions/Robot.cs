@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Definitions
         private Plane _mountingFrame; // The tool mounting frame
         private RobotTool _tool; // The attached robot tool
         private Plane _toolPlane; // The TCP plane
-        private List<ExternalAxis> _externalAxes; // The attached external axes
+        private List<IExternalAxis> _externalAxes; // The attached external axes
         private readonly InverseKinematics _inverseKinematics; // Robot inverse kinematics
         private readonly ForwardKinematics _forwardKinematics; // Robot forward kinematics
         private List<Plane> _externalAxisPlanes; // The external axis planes
@@ -68,7 +68,7 @@ namespace RobotComponents.ABB.Definitions
             _mountingFrame = (Plane)info.GetValue("Mounting Frame", typeof(Plane));
             _tool = (RobotTool)info.GetValue("RobotTool", typeof(RobotTool));
             _toolPlane = (Plane)info.GetValue("Tool Plane", typeof(Plane));
-            _externalAxes = (List<ExternalAxis>)info.GetValue("External Axis", typeof(List<ExternalAxis>));
+            _externalAxes = (List<IExternalAxis>)info.GetValue("External Axis", typeof(List<IExternalAxis>));
             _externalAxisPlanes = (List<Plane>)info.GetValue("External Axis Planes", typeof(List<Plane>));
             _externalAxisLimits = (List<Interval>)info.GetValue("External Axis Limits", typeof(List<Interval>));
 
@@ -96,7 +96,7 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Mounting Frame", _mountingFrame, typeof(Plane));
             info.AddValue("RobotTool", _tool, typeof(RobotTool));
             info.AddValue("Tool Plane", _toolPlane, typeof(Plane));
-            info.AddValue("External Axis", _externalAxes, typeof(List<ExternalAxis>));
+            info.AddValue("External Axis", _externalAxes, typeof(List<IExternalAxis>));
             info.AddValue("External Axis Planes", _externalAxisPlanes, typeof(List<Plane>));
             info.AddValue("External Axis Limits", _externalAxisLimits, typeof(List<Interval>));
         }
@@ -137,7 +137,7 @@ namespace RobotComponents.ABB.Definitions
             CalculateAttachedToolPlane();
 
             // Update external axis related fields
-            _externalAxes = new List<ExternalAxis>();
+            _externalAxes = new List<IExternalAxis>();
             _externalAxisPlanes = Enumerable.Repeat(Plane.Unset, 6).ToList();
             _externalAxisLimits = Enumerable.Repeat(new Interval(), 6).ToList();
 
@@ -162,7 +162,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="mountingFrame"> The tool mounting frame definied in the world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The attached external axes. </param>
-        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, IList<ExternalAxis> externalAxes)
+        public Robot(string name, IList<Mesh> meshes, IList<Plane> internalAxisPlanes, IList<Interval> internalAxisLimits, Plane basePlane, Plane mountingFrame, RobotTool tool, IList<IExternalAxis> externalAxes)
         {
             // Robot related fields
             _name = name;
@@ -178,7 +178,7 @@ namespace RobotComponents.ABB.Definitions
             CalculateAttachedToolPlane();
 
             // External axis related fields
-            _externalAxes = new List<ExternalAxis>(externalAxes);
+            _externalAxes = new List<IExternalAxis>(externalAxes);
             _externalAxisPlanes = new List<Plane>();
             _externalAxisLimits = new List<Interval>();
             UpdateExternalAxisFields();
@@ -658,7 +658,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the attached external axes.
         /// </summary>
-        public List<ExternalAxis> ExternalAxes
+        public List<IExternalAxis> ExternalAxes
         {
             get { return _externalAxes; }
             set { _externalAxes = value; UpdateExternalAxisFields(); }

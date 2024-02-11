@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Definitions
     /// Represents an External Rotational Axis.
     /// </summary>
     [Serializable()]
-    public class ExternalRotationalAxis : ExternalAxis, ISerializable, IMechanicalUnit
+    public class ExternalRotationalAxis : IExternalAxis, ISerializable, IMechanicalUnit
     {
         #region fields
         private string _name; // The name of the external axis
@@ -432,7 +432,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns an exact duplicate of this External Rotational Axis instance as an External Axis.
         /// </summary>
         /// <returns> A deep copy of the External Rotational Axis instance as an External Axis. </returns>
-        public override ExternalAxis DuplicateExternalAxis()
+        public IExternalAxis DuplicateExternalAxis()
         {
             return new ExternalRotationalAxis(this);
         }
@@ -441,7 +441,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns an exact duplicate of this External Rotational Axis instance as an External Axis without meshes.
         /// </summary>
         /// <returns> A deep copy of the External Rotational Axis instance as an External Axis without meshes. </returns>
-        public override ExternalAxis DuplicateExternalAxisWithoutMesh()
+        public IExternalAxis DuplicateExternalAxisWithoutMesh()
         {
             return new ExternalRotationalAxis(this, false);
         }
@@ -450,7 +450,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns an exact duplicate of this External Rotational Axis as a Mechanical Unit.
         /// </summary>
         /// <returns> A deep copy of the Mechanical Unit. </returns>
-        public override IMechanicalUnit DuplicateMechanicalUnit()
+        public IMechanicalUnit DuplicateMechanicalUnit()
         {
             return new ExternalRotationalAxis(this);
         }
@@ -459,7 +459,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns an exact duplicate of this External Rotational Axis as Mechanical Unit without meshes.
         /// </summary>
         /// <returns> A deep copy of the Mechanical Unit without meshes. </returns>
-        public override IMechanicalUnit DuplicateMechanicalUnitWithoutMesh()
+        public IMechanicalUnit DuplicateMechanicalUnitWithoutMesh()
         {
             return new ExternalRotationalAxis(this, false);
         }
@@ -470,7 +470,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns> A string that represents the current object. </returns>
-        public override string ToString()
+        public string ToString()
         {
             if (!IsValid)
             {
@@ -535,7 +535,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The posed attachement plane. </returns>
-        public override Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             Transform orientNow = CalculateTransformationMatrix(externalJointPosition, out bool isInLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
@@ -552,7 +552,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <param name="inLimits"> Specifies whether the External Joint Position is inside its limits. </param>
         /// <returns> The transformation matrix. </returns>
-        public override Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
+        public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
             bool isInLimits;
@@ -586,7 +586,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed attachement plane. </returns>
-        public override Plane CalculatePositionSave(ExternalJointPosition externalJointPosition)
+        public Plane CalculatePositionSave(ExternalJointPosition externalJointPosition)
         {
             Transform orientNow = CalculateTransformationMatrixSave(externalJointPosition);
             Plane positionPlane = new Plane(AttachmentPlane);
@@ -602,7 +602,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The transformation matrix. </returns>
-        public override Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition)
+        public Transform CalculateTransformationMatrixSave(ExternalJointPosition externalJointPosition)
         {
             double axisValue = externalJointPosition[_axisNumber];
             double value;
@@ -633,7 +633,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="jointTarget"> The Joint Target. </param>
         /// <returns> The posed meshes. </returns>
-        public override List<Mesh> PoseMeshes(JointTarget jointTarget)
+        public List<Mesh> PoseMeshes(JointTarget jointTarget)
         {
             return this.PoseMeshes(jointTarget.ExternalJointPosition);
         }
@@ -643,7 +643,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         /// <returns> The posed meshes. </returns>
-        public override List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition)
+        public List<Mesh> PoseMeshes(ExternalJointPosition externalJointPosition)
         {
             _posedMeshes.Clear();
             _posedMeshes.Add(_baseMesh.DuplicateMesh());
@@ -666,7 +666,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Reinitializes the fields and properties to construct a valid External Rotational Axis instance. 
         /// </summary>
-        public override void ReInitialize()
+        public void ReInitialize()
         {
             Initialize();
             _posedMeshes.Clear();
@@ -676,7 +676,7 @@ namespace RobotComponents.ABB.Definitions
         /// Transforms the external rotational axis spatial properties (planes and meshes). 
         /// </summary>
         /// <param name="xform"> Spatial deform. </param>
-        public override void Transform(Transform xform)
+        public void Transform(Transform xform)
         {
             _attachmentPlane.Transform(xform);
             _axisPlane.Transform(xform);
@@ -694,7 +694,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         /// <param name="accurate"> If true, a physically accurate bounding box will be computed. If not, a bounding box estimate will be computed. </param>
         /// <returns> The Bounding Box. </returns>
-        public override BoundingBox GetBoundingBox(bool accurate)
+        public BoundingBox GetBoundingBox(bool accurate)
         {
             {
                 BoundingBox boundingBox = BoundingBox.Empty;
@@ -726,7 +726,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {
@@ -742,7 +742,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the external axis name.
         /// </summary>
-        public override string Name
+        public string Name
         {
             get { return _name; }
             set { _name = value; }
@@ -751,7 +751,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the attachment plane to attach a robot or work object. 
         /// </summary>
-        public override Plane AttachmentPlane
+        public Plane AttachmentPlane
         {
             get
             {
@@ -768,7 +768,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis plane.
         /// </summary>
-        public override Plane AxisPlane
+        public Plane AxisPlane
         {
             get
             {
@@ -785,7 +785,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis limits in degrees.
         /// </summary>
-        public override Interval AxisLimits
+        public Interval AxisLimits
         {
             get
             {
@@ -801,7 +801,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the axis logic as a number (-1, 0, 1, 2, 3, 4, 5). 
         /// </summary>
-        public override int AxisNumber
+        public int AxisNumber
         {
             get { return _axisNumber; }
             set { _axisNumber = value; }
@@ -810,7 +810,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the axis logic as a char (-, A, B, C, D, E, F).
         /// </summary>
-        public override char AxisLogic
+        public char AxisLogic
         {
             get
             {
@@ -852,7 +852,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the Axis Type.
         /// </summary>
-        public override AxisType AxisType
+        public AxisType AxisType
         {
             get { return AxisType.ROTATIONAL; }
         }
@@ -860,7 +860,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the fixed base mesh of the external axis. 
         /// </summary>
-        public override Mesh BaseMesh
+        public Mesh BaseMesh
         {
             get
             {
@@ -876,7 +876,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets the movable link mesh of the external axis posed for external axis value set to 0.
         /// </summary>
-        public override Mesh LinkMesh
+        public Mesh LinkMesh
         {
             get
             {
@@ -892,7 +892,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets latest calculated posed axis meshes.
         /// </summary>
-        public override List<Mesh> PosedMeshes
+        public List<Mesh> PosedMeshes
         {
             get { return _posedMeshes; }
         }
@@ -900,7 +900,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets or sets a value indicating whether or not this External Rotational Axis moves the Robot.
         /// </summary>
-        public override bool MovesRobot
+        public bool MovesRobot
         {
             get { return _movesRobot; }
             set { _movesRobot = value; }
@@ -909,7 +909,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Gets the number of axes for the mechanical unit.
         /// </summary>
-        public override int NumberOfAxes
+        public int NumberOfAxes
         {
             get { return 1; }
         }

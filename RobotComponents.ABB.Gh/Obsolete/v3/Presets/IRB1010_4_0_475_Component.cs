@@ -66,11 +66,11 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             Plane positionPlane = Plane.WorldXY;
             RobotTool tool = null;
-            List<ExternalAxis> externalAxis = new List<ExternalAxis>();
+            List<IExternalAxis> externalAxis = new List<IExternalAxis>();
 
             if (!DA.GetData(0, ref positionPlane)) { return; }
             if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
-            if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
+            if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<IExternalAxis>() { }; }
 
             Robot robot = new Robot();
 

@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Presets
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns></returns>
-        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool = null, IList<ExternalAxis> externalAxes = null)
+        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
             // Check Robot Tool data
             if (tool == null)
@@ -39,7 +39,7 @@ namespace RobotComponents.ABB.Presets
             // Check External Axes 
             if (externalAxes == null)
             {
-                externalAxes = new List<ExternalAxis>() { };
+                externalAxes = new List<IExternalAxis>() { };
             }
 
             else if (preset == RobotPreset.EMPTY)

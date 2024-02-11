@@ -383,7 +383,7 @@ namespace RobotComponents.ABB.Kinematics
                 // Calculates the position of the external axes for each external axis
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
-                    ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                    IExternalAxis externalAxis = _robot.ExternalAxes[i];
                     Interval axisLimits = _robot.ExternalAxes[i].AxisLimits;
                     int logic = externalAxis.AxisNumber;
 
@@ -523,7 +523,7 @@ namespace RobotComponents.ABB.Kinematics
             // Check if an external axis is attached to the robot 
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
-                ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                IExternalAxis externalAxis = _robot.ExternalAxes[i];
                 int logic = externalAxis.AxisNumber;
 
                 // Moves Robot?

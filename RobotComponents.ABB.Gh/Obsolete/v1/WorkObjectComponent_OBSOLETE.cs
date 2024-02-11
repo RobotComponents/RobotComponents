@@ -73,12 +73,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Input variables
             List<string> names = new List<string>();
             List<Plane> planes = new List<Plane>();
-            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
+            List<IExternalAxis> externalAxes = new List<IExternalAxis>();
 
             // Catch the input data
             if (!DA.GetDataList(0, names)) { return; }
             if (!DA.GetDataList(1, planes)) { return; }
-            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<ExternalAxis>() { null }; }
+            if (!DA.GetDataList(2, externalAxes)) { externalAxes = new List<IExternalAxis>() { null }; }
 
             // Replace spaces
             names = HelperMethods.ReplaceSpacesAndRemoveNewLines(names);
@@ -103,7 +103,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 string name = "";
                 Plane plane = new Plane();
-                ExternalAxis externalAxis = null;
+                IExternalAxis externalAxis = null;
 
                 // Names counter
                 if (i < sizeValues[0])

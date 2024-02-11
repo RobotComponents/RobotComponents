@@ -736,7 +736,7 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> 
         /// A string that represents the current object. 
         /// </returns>
-        public string ToString()
+        public override string ToString()
         {
             if (!IsValid)
             {
@@ -824,11 +824,10 @@ namespace RobotComponents.ABB.Definitions
         /// </returns>
         public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
-            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out bool isInLimits);
+            Transform translateNow = CalculateTransformationMatrix(externalJointPosition, out inLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(translateNow);
 
-            inLimits = isInLimits;
             return positionPlane;
         }
 
@@ -846,25 +845,14 @@ namespace RobotComponents.ABB.Definitions
         public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
-            bool isInLimits;
 
-            if (axisValue == 9e9) { axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); }
-
-            if (axisValue < AxisLimits.Min)
-            {
-                isInLimits = false;
+            if (axisValue == 9e9)
+            { 
+                axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); 
             }
-            else if (axisValue > AxisLimits.Max)
-            {
-                isInLimits = false;
-            }
-            else
-            {
-                isInLimits = true;
-            }
-
+            
             Transform transform = Rhino.Geometry.Transform.Translation(_axisPlane.ZAxis * axisValue);
-            inLimits = isInLimits;
+            inLimits = !(axisValue > AxisLimits.Max || axisValue < AxisLimits.Min);
 
             return transform;
         }

@@ -26,10 +26,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class SpeedData : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "speeddata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "speeddata";
+        private string _name = "";
         private double _v_tcp;
         private double _v_ori;
         private double _v_leax;
@@ -102,8 +102,6 @@ namespace RobotComponents.ABB.Actions.Declarations
             _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -123,8 +121,6 @@ namespace RobotComponents.ABB.Actions.Declarations
             _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -142,9 +138,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _v_tcp = v_tcp;
             _v_ori = v_ori;
             _v_leax = v_leax;
@@ -163,8 +156,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _v_tcp = v_tcp;
             _v_ori = v_ori;

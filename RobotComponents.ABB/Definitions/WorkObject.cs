@@ -24,18 +24,18 @@ namespace RobotComponents.ABB.Definitions
     public class WorkObject : ISerializable, IDeclaration
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "wobjdata";
-        private string _name;
-        private Plane _plane;
-        private Quaternion _orientation;
-        private IExternalAxis _externalAxis;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.PERS;
+        private const string _datatype = "wobjdata";
+        private string _name = "";
         private bool _robotHold;
         private bool _fixedFrame;
+        private Plane _plane;
         private Plane _userFrame;
-        private Quaternion _userFrameOrientation;
         private Plane _globalPlane;
+        private Quaternion _orientation;
+        private Quaternion _userFrameOrientation;
+        private IExternalAxis _externalAxis;
         #endregion
 
         #region (de)serialization
@@ -83,8 +83,6 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public WorkObject()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = "wobj0";
             _plane = Plane.WorldXY;
             _externalAxis = null;
@@ -101,8 +99,6 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="plane"> The work object coordinate system. </param>
         public WorkObject(string name, Plane plane)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = null;
@@ -120,8 +116,6 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
         public WorkObject(string name, Plane plane, IExternalAxis externalAxis)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _plane = plane;
             _externalAxis = externalAxis;
@@ -144,14 +138,14 @@ namespace RobotComponents.ABB.Definitions
             _plane = new Plane(workObject.Plane);
             _userFrame = new Plane(workObject.UserFrame);
             _globalPlane = new Plane(workObject.GlobalWorkObjectPlane);
-            _userFrameOrientation = workObject.UserFrameOrientation;
-            _orientation = workObject.Orientation;
             _robotHold = workObject.RobotHold;
             _fixedFrame = workObject.FixedFrame;
 
             if (workObject.ExternalAxis == null) { _externalAxis = null; }
             else if (duplicateMesh == true) { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxis(); }
             else { _externalAxis = workObject.ExternalAxis.DuplicateExternalAxisWithoutMesh(); }
+
+            Initialize();
         }
 
         /// <summary>
@@ -295,34 +289,23 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the quaternion orientation of the work object coordinate system. 
         /// </summary>
-        /// <returns> 
-        /// The quaternion orientation of the work object. 
-        /// </returns>
-        public Quaternion CalculateOrientation()
+        private void CalculateOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_plane);
-            return _orientation;
         }
 
         /// <summary>
         /// Calculates and returns the quaternion orientation of the user frame coordinate system. 
         /// </summary>
-        /// <returns> 
-        /// The quaternion orientation of the user frame. 
-        /// </returns>
-        public Quaternion CalculateUserFrameOrientation()
+        private void CalculateUserFrameOrientation()
         {
             _userFrameOrientation = HelperMethods.PlaneToQuaternion(_userFrame);
-            return _userFrameOrientation;
         }
 
         /// <summary>
         /// Calculates and returns the global work object plane. 
         /// </summary>
-        /// <returns> 
-        /// The global work object plane. 
-        /// </returns>
-        public Plane CalculateGlobalWorkObjectPlane()
+        private void CalculateGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
             _globalPlane = new Plane(_plane);
@@ -339,8 +322,6 @@ namespace RobotComponents.ABB.Definitions
                 Transform orient2 = Transform.PlaneToPlane(Plane.WorldXY, _externalAxis.AttachmentPlane);
                 _globalPlane.Transform(orient2);
             }
-
-            return _globalPlane;
         }
 
         /// <summary>
@@ -353,14 +334,7 @@ namespace RobotComponents.ABB.Definitions
             CalculateGlobalWorkObjectPlane();
 
             // Set to a movable frame if an exernal axes is coupled
-            if (_externalAxis != null)
-            {
-                _fixedFrame = false;
-            }
-            else
-            {
-                _fixedFrame = true;
-            }
+            _fixedFrame = _externalAxis == null;
 
             // Check if the external axis moves the robot
             if (_externalAxis != null && _externalAxis.MovesRobot == true)
@@ -531,14 +505,6 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the global work object plane.
-        /// </summary>
-        public Plane GlobalWorkObjectPlane
-        {
-            get { return _globalPlane; }
-        }
-
-        /// <summary>
         /// Gets or sets the user coordinate system, i.e. the position of the current work surface or fixture.
         /// </summary>
         /// <remarks>
@@ -548,15 +514,8 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public Plane UserFrame
         {
-            get
-            {
-                return _userFrame;
-            }
-            set
-            {
-                _userFrame = value;
-                ReInitialize();
-            }
+            get { return _userFrame; }
+            set { _userFrame = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -567,15 +526,8 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public Plane Plane
         {
-            get
-            {
-                return _plane;
-            }
-            set
-            {
-                _plane = value;
-                ReInitialize();
-            }
+            get { return _plane; }
+            set { _plane = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -586,31 +538,8 @@ namespace RobotComponents.ABB.Definitions
         /// </remarks>
         public IExternalAxis ExternalAxis
         {
-            get
-            {
-                return _externalAxis;
-            }
-            set
-            {
-                _externalAxis = value;
-                ReInitialize();
-            }
-        }
-
-        /// <summary>
-        /// Gets the Quaternion orientation of the work object coordinate system.
-        /// </summary>
-        public Quaternion Orientation
-        {
-            get { return _orientation; }
-        }
-
-        /// <summary>
-        /// Gets the Quaternion orientation of the user frame coordinate system.
-        /// </summary>
-        public Quaternion UserFrameOrientation
-        {
-            get { return _userFrameOrientation; }
+            get { return _externalAxis; }
+            set { _externalAxis = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -624,6 +553,14 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _fixedFrame; }
             set { _fixedFrame = value; }
+        }
+
+        /// <summary>
+        /// Gets the global work object plane.
+        /// </summary>
+        public Plane GlobalWorkObjectPlane
+        {
+            get { return _globalPlane; }
         }
         #endregion
     }

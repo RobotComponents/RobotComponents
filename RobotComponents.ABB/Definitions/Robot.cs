@@ -75,7 +75,7 @@ namespace RobotComponents.ABB.Definitions
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
 
-            UpdateKinematics();
+            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace RobotComponents.ABB.Definitions
             // Set kinematics
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
-            UpdateKinematics();
+            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace RobotComponents.ABB.Definitions
             // Set kinematics
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this);
-            UpdateKinematics();
+            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace RobotComponents.ABB.Definitions
             // Kinematics
             _inverseKinematics = new InverseKinematics(this);
             _forwardKinematics = new ForwardKinematics(this, robot.ForwardKinematics.HideMesh);
-            UpdateKinematics();
+            UpdateKinematicsParameters();
         }
 
         /// <summary>
@@ -393,7 +393,7 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Reinitializes the fields that are related to the kinematics.
         /// </summary>
-        private void UpdateKinematics()
+        private void UpdateKinematicsParameters()
         {
             // Get values in World XY plane
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_basePlane, Plane.WorldXY);
@@ -442,16 +442,11 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Calculates and returns the TCP plane of the attached Robot Tool in robot coordinate space.
         /// </summary>
-        /// <returns> 
-        /// The TCP plane in robot coordinate space. 
-        /// </returns>
-        private Plane CalculateAttachedToolPlane()
+        private void CalculateAttachedToolPlane()
         {
             _toolPlane = new Plane(_tool.ToolPlane);
             Transform trans = Rhino.Geometry.Transform.PlaneToPlane(_tool.AttachmentPlane, _mountingFrame);
             _toolPlane.Transform(trans);
-
-            return _toolPlane;
         }
 
         /// <summary>
@@ -604,7 +599,7 @@ namespace RobotComponents.ABB.Definitions
         public List<Plane> InternalAxisPlanes
         {
             get { return _internalAxisPlanes; }
-            set { _internalAxisPlanes = value; UpdateKinematics(); }
+            set { _internalAxisPlanes = value; UpdateKinematicsParameters(); }
         }
 
         /// <summary>
@@ -648,10 +643,7 @@ namespace RobotComponents.ABB.Definitions
         public RobotTool Tool
         {
             get { return _tool; }
-            set
-            {
-                _tool = value;
-                CalculateAttachedToolPlane();
+            set { _tool = value; CalculateAttachedToolPlane();
             }
         }
 

@@ -21,10 +21,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ConfigurationData : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "confdata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "confdata";
+        private string _name = "";
         private int _cf1;
         private int _cf4;
         private int _cf6;
@@ -86,9 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="cfx"> The current robot configuration. </param>
         public ConfigurationData(int cf1, int cf4, int cf6, int cfx)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _cf1 = cf1;
             _cf4 = cf4;
             _cf6 = cf6;
@@ -105,8 +102,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="cfx"> The current robot configuration. </param>
         public ConfigurationData(string name, int cf1, int cf4, int cf6, int cfx)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _cf1 = cf1;
             _cf4 = cf4;

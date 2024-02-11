@@ -25,10 +25,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ExternalJointPosition : IAction, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "extjoint";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "extjoint";
+        private string _name = "";
         private double _val1;
         private double _val2;
         private double _val3;
@@ -86,10 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ExternalJointPosition()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -110,10 +106,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
             _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
             _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
@@ -128,10 +120,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPositions"> The list with the positions of the external logical axes. </param>
         public ExternalJointPosition(IList<double> externalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             double[] values = CheckAxisValues(new List<double>(externalJointPositions).ToArray());
 
             _val1 = values[0];
@@ -154,10 +142,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
-
             _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
             _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
             _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
@@ -173,12 +158,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPositions"> The collection with the position of the external logical axes. </param>
         public ExternalJointPosition(string name, IList<double> externalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
             double[] values = CheckAxisValues(externalJointPositions);
 
+            _name = name;
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];

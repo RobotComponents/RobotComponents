@@ -26,10 +26,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class ZoneData : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "zonedata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "zonedata";
+        private string _name = "";
         private bool _finep;
         private double _pzone_tcp;
         private double _pzone_ori;
@@ -112,9 +112,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(double zone)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
             _isExactPredefinedValue = (zone - tcp) == 0;
@@ -158,9 +155,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="zone"> The size (the radius) of the TCP zone in mm. </param>
         public ZoneData(int zone)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-
             // Get nearest predefined zonedata value
             double tcp = _validPredefinedValues.Aggregate((x, y) => Math.Abs(x - zone) < Math.Abs(y - zone) ? x : y);
             _isExactPredefinedValue = (zone - tcp) == 0;
@@ -208,9 +202,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _finep = finep;
             _pzone_tcp = pzone_tcp;
             _pzone_ori = pzone_ori;
@@ -236,8 +227,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         public ZoneData(string name, bool finep, double pzone_tcp = 0, double pzone_ori = 0, double pzone_eax = 0,
             double zone_ori = 0, double zone_leax = 0, double zone_reax = 0)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _finep = finep;
             _pzone_tcp = pzone_tcp;

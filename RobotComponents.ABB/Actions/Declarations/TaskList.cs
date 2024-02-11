@@ -24,10 +24,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class TaskList : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "tasks";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.PERS;
+        private const string _datatype = "tasks";
+        private string _name = "";
         private readonly List<string> _taskNames;
         #endregion
 
@@ -77,8 +77,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="tasks"> The tasks names as a collection with strings. </param>
         public TaskList(string name, IList<string> tasks)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _taskNames = new List<string>(tasks);
         }

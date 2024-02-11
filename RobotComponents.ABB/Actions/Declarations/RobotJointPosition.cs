@@ -25,10 +25,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotJointPosition : IAction, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "robjoint";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "robjoint";
+        private string _name = "";
         private double _val1;
         private double _val2;
         private double _val3;
@@ -86,10 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public RobotJointPosition()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -109,10 +105,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
             _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
             _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
@@ -127,10 +119,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalJointPositions"> The user defined internal joint positions as a collection.</param>
         public RobotJointPosition(IList<double> internalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             double[] values = CheckAxisValues(internalJointPositions);
 
             _val1 = values[0];
@@ -153,10 +141,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
-
             _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
             _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
             _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
@@ -172,12 +157,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalJointPositions"> The user defined internal joint positions as a colection.</param>
         public RobotJointPosition(string name, IList<double> internalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
             double[] values = CheckAxisValues(internalJointPositions);
-
+            
+            _name = name;
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];

@@ -27,10 +27,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class RobotTarget : IAction, ITarget, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "robtarget";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "robtarget";
+        private string _name = "";
         private Plane _plane;
         private Quaternion _quat;
         private ConfigurationData _configurationData;
@@ -88,9 +88,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(Plane plane)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _plane = plane;
             _configurationData = new ConfigurationData(0, 0, 0, 0);
             _externalJointPosition = new ExternalJointPosition();
@@ -104,8 +101,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="plane"> The target plane. </param>
         public RobotTarget(string name, Plane plane)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _configurationData = new ConfigurationData(0, 0, 0, 0);
@@ -122,8 +117,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, ConfigurationData configurationData, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _configurationData = configurationData;
@@ -144,8 +137,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position. </param>
         public RobotTarget(string name, Plane plane, Plane referencePlane, ConfigurationData configurationData, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _plane = plane;
             _configurationData = configurationData;

@@ -470,7 +470,7 @@ namespace RobotComponents.ABB.Definitions
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns> A string that represents the current object. </returns>
-        public string ToString()
+        public override string ToString()
         {
             if (!IsValid)
             {
@@ -537,11 +537,10 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> The posed attachement plane. </returns>
         public Plane CalculatePosition(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
-            Transform orientNow = CalculateTransformationMatrix(externalJointPosition, out bool isInLimits);
+            Transform orientNow = CalculateTransformationMatrix(externalJointPosition, out inLimits);
             Plane positionPlane = new Plane(AttachmentPlane);
             positionPlane.Transform(orientNow);
 
-            inLimits = isInLimits;
             return positionPlane;
         }
 
@@ -555,27 +554,16 @@ namespace RobotComponents.ABB.Definitions
         public Transform CalculateTransformationMatrix(ExternalJointPosition externalJointPosition, out bool inLimits)
         {
             double axisValue = externalJointPosition[_axisNumber];
-            bool isInLimits;
 
-            if (axisValue == 9e9) { axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); }
-
-            if (axisValue < _axisLimits.Min)
-            {
-                isInLimits = false;
-            }
-            else if (axisValue > _axisLimits.Max)
-            {
-                isInLimits = false;
-            }
-            else
-            {
-                isInLimits = true;
+            if (axisValue == 9e9)
+            { 
+                axisValue = Math.Max(0, Math.Min(_axisLimits.Min, _axisLimits.Max)); 
             }
 
             double radians = axisValue / 180 * PI;
             Transform transform = Rhino.Geometry.Transform.Rotation(radians, _axisPlane.ZAxis, _axisPlane.Origin);
+            inLimits = !(axisValue < _axisLimits.Min || axisValue > _axisLimits.Max);
 
-            inLimits = isInLimits;
             return transform;
         }
 
@@ -635,7 +623,7 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> The posed meshes. </returns>
         public List<Mesh> PoseMeshes(JointTarget jointTarget)
         {
-            return this.PoseMeshes(jointTarget.ExternalJointPosition);
+            return PoseMeshes(jointTarget.ExternalJointPosition);
         }
 
         /// <summary>

@@ -25,10 +25,10 @@ namespace RobotComponents.ABB.Definitions
     public class RobotTool : ISerializable, IDeclaration
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "tooldata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.PERS;
+        private const string _datatype = "tooldata";
+        private string _name = "";
         private Mesh _mesh;
         private Plane _attachmentPlane;
         private Plane _toolPlane;
@@ -85,18 +85,12 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public RobotTool()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = "tool0";
             _mesh = new Mesh();
             _attachmentPlane = Plane.WorldXY;
             _toolPlane = Plane.WorldXY;
             _robotHold = true;
-
-            _loadData = new LoadData
-            {
-                Name = ""
-            };
+            _loadData = new LoadData { Name = "" };
 
             Initialize();
         }
@@ -113,18 +107,12 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
             _toolPlane = toolPlane;
             _robotHold = true;
-
-            _loadData = new LoadData
-            {
-                Name = ""
-            };
+            _loadData = new LoadData { Name = "" };
 
             Initialize();
         }
@@ -141,24 +129,17 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="toolPlane"> The tool center point and tool orientation as a plane. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+            _robotHold = true;
+            _loadData = new LoadData { Name = "" };
 
             for (int i = 0; i < meshes.Count; i++)
             {
                 _mesh.Append(meshes[i]);
             }
-
-            _attachmentPlane = attachmentPlane;
-            _toolPlane = toolPlane;
-            _robotHold = true;
-
-            _loadData = new LoadData
-            {
-                Name = ""
-            };
 
             Initialize();
         }
@@ -176,8 +157,6 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="loadData"> The tool loaddata as load data. </param>
         public RobotTool(string name, Mesh mesh, Plane attachmentPlane, Plane toolPlane, LoadData loadData)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _mesh = mesh;
             _attachmentPlane = attachmentPlane;
@@ -201,20 +180,17 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="loadData"> The tool loaddata as load data. </param>
         public RobotTool(string name, IList<Mesh> meshes, Plane attachmentPlane, Plane toolPlane, LoadData loadData)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _mesh = new Mesh();
+            _attachmentPlane = attachmentPlane;
+            _toolPlane = toolPlane;
+            _robotHold = true;
+            _loadData = loadData.Duplicate();
 
             for (int i = 0; i < meshes.Count; i++)
             {
                 _mesh.Append(meshes[i]);
             }
-
-            _attachmentPlane = attachmentPlane;
-            _toolPlane = toolPlane;
-            _robotHold = true;
-            _loadData = loadData.Duplicate();
 
             Initialize();
         }
@@ -233,11 +209,11 @@ namespace RobotComponents.ABB.Definitions
             _toolPlane = new Plane(robotTool.ToolPlane);
             _robotHold = robotTool.RobotHold;
             _loadData = robotTool.LoadData.Duplicate();
-            _position = new Point3d(robotTool.Position);
-            _orientation = robotTool.Orientation;
-
+            
             if (duplicateMesh == true) { _mesh = robotTool.Mesh.DuplicateMesh(); }
             else { } //_mesh = new Mesh(); }
+            
+            Initialize();
         }
 
         /// <summary>
@@ -431,28 +407,20 @@ namespace RobotComponents.ABB.Definitions
         /// <returns> 
         /// The tool center point. 
         /// </returns>
-        public Point3d CalculateToolPosition()
+        private void CalculateToolPosition()
         {
             Plane toolPlane = new Plane(_toolPlane);
             Transform orient = Rhino.Geometry.Transform.PlaneToPlane(_attachmentPlane, Plane.WorldXY);
             toolPlane.Transform(orient);
-
             _position = new Point3d(toolPlane.Origin);
-
-            return _position;
         }
 
         /// <summary>
         /// Calculates and returns the tool center orientation relative to the defined attachment plane. 
         /// </summary>
-        /// <returns> 
-        /// The quaternion orientation of the tool center plane. 
-        /// </returns>
-        public Quaternion CalculateToolOrientation()
+        private void CalculateToolOrientation()
         {
             _orientation = HelperMethods.PlaneToQuaternion(_attachmentPlane, _toolPlane);
-
-            return _orientation;
         }
 
         /// <summary>
@@ -669,15 +637,8 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public Plane AttachmentPlane
         {
-            get
-            {
-                return _attachmentPlane;
-            }
-            set
-            {
-                _attachmentPlane = value;
-                ReInitialize();
-            }
+            get { return _attachmentPlane; }
+            set { _attachmentPlane = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -685,15 +646,8 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public Plane ToolPlane
         {
-            get
-            {
-                return _toolPlane;
-            }
-            set
-            {
-                _toolPlane = value;
-                ReInitialize();
-            }
+            get { return _toolPlane; }
+            set { _toolPlane = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -707,22 +661,6 @@ namespace RobotComponents.ABB.Definitions
         {
             get { return _robotHold; }
             set { _robotHold = value; }
-        }
-
-        /// <summary>
-        /// Gets the position of the the tool center point which is the offset between the tool center plane and the attachment plane.
-        /// </summary>
-        public Point3d Position
-        {
-            get { return _position; }
-        }
-
-        /// <summary>
-        /// Gets the orientation of the tool center point as a Quaternion.
-        /// </summary>
-        public Quaternion Orientation
-        {
-            get { return _orientation; }
         }
 
         /// <summary>

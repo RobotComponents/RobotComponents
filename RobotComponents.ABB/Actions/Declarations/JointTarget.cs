@@ -26,10 +26,10 @@ namespace RobotComponents.ABB.Actions.Declarations
     public class JointTarget : IAction, ITarget, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "jointtarget";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "jointtarget";
+        private string _name = "";
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
         #endregion
@@ -81,9 +81,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(RobotJointPosition robotJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
         }
@@ -95,8 +92,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
@@ -109,9 +104,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
         }
@@ -124,8 +116,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;

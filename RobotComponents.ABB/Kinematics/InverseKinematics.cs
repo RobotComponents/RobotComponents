@@ -61,9 +61,12 @@ namespace RobotComponents.ABB.Kinematics
         private const double _pi = Math.PI;
         private const double _rad2deg = 180 / _pi;
 
-        // OPW kinematics solver fields
-        private readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
+        // Kinematics solver fields
+        private static readonly double[] _offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
+        private static readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
+        private static readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
         private readonly OPWKinematics _opw = new OPWKinematics();
+        private readonly OPWKinematics _wok = new OPWKinematics();
         #endregion
 
         #region constructors
@@ -131,8 +134,8 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         private void Initialize()
         {
-            _opw.Signs = new int[6] { 1, 1, 1, 1, 1, 1 };
-            _opw.Offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
+            _opw.Signs = _signs;
+            _opw.Offsets = _offsets;
             _opw.A1 = _robot.A1;
             _opw.A2 = _robot.A2;
             _opw.B = _robot.B;
@@ -140,6 +143,17 @@ namespace RobotComponents.ABB.Kinematics
             _opw.C2 = _robot.C2;
             _opw.C3 = _robot.C3;
             _opw.C4 = _robot.C4;
+
+            _wok.Signs = _signs;
+            _wok.Offsets = _offsets;
+            _wok.A1 = _robot.A1;
+            _wok.A2 = _robot.A2;
+            //_wok.A3 = _robot.A3;
+            _wok.B = _robot.B;
+            _wok.C1 = _robot.C1;
+            _wok.C2 = _robot.C2;
+            _wok.C3 = _robot.C3;
+            _wok.C4 = _robot.C4;
         }
 
         /// <summary>
@@ -215,40 +229,40 @@ namespace RobotComponents.ABB.Kinematics
                     // Select solution
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
 
-                    _shoulderSingularities = _order.Select(index => _shoulderSingularities[index]).ToArray();
-                    _elbowSingularities = _order.Select(index => _elbowSingularities[index]).ToArray();
-                    _wristSingularities = _order.Select(index => _wristSingularities[index]).ToArray();
+                    _wristSingularities = _order.Select(index => _opw.IsWristSingularity[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _opw.IsElbowSingularity[index]).ToArray();
+                    _shoulderSingularities = _order.Select(index => _opw.IsShoulderSingularity[index]).ToArray();
 
-                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]];
-                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]];
-                    _shoulderSingularity = _opw.IsShoulderSingularity[_order[robotTarget.ConfigurationData.Cfx]];
+                    _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
+                    _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
+                    _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
                 }
 
-                // Offset Wrist kinematics solver
+                // Wrist Offset kinematics solver
                 else
                 {
                     // Calculate inverse kinematics
-                    _opw.Inverse(_localEndPlane); // TODO: Replace for Offset Wrist kinematics solver! 
+                    _wok.Inverse(_localEndPlane);
 
                     // Set Robot Joint Positions
                     for (int i = 0; i < 8; i++)
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];  // TODO: Replace for Offset Wrist kinematics solver! 
+                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j]; 
                         }
                     }
 
                     // Select solution
-                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx]; // TODO: Replace for Offset Wrist kinematics solver! 
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
 
-                    _wristSingularities = _order.Select(index => _opw.IsWristSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
-                    _elbowSingularities = _order.Select(index => _opw.IsElbowSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
-                    _shoulderSingularities = _order.Select(index => _opw.IsShoulderSingularity[index]).ToArray(); // TODO: Replace for Offset Wrist kinematics solver! 
+                    _wristSingularities = _order.Select(index => _wok.IsWristSingularity[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _wok.IsElbowSingularity[index]).ToArray();
+                    _shoulderSingularities = _order.Select(index => _wok.IsShoulderSingularity[index]).ToArray();
 
-                    _wristSingularity = _opw.IsWristSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
-                    _elbowSingularity = _opw.IsElbowSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
-                    _shoulderSingularity = _opw.IsShoulderSingularity[_order[robotTarget.ConfigurationData.Cfx]]; // TODO: Replace for Offset Wrist kinematics solver! 
+                    _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
+                    _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
+                    _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
                 }
             }
 

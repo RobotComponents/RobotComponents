@@ -76,7 +76,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             try
             {
-                robot = IRB1660ID_X_155.GetRobot(positionPlane, tool, externalAxis);
+                robot = IRB1660ID_4_155.GetRobot(positionPlane, tool, externalAxis);
             }
             catch (Exception ex)
             {

@@ -15,12 +15,12 @@ using RobotComponents.Utils;
 namespace RobotComponents.ABB.Presets.Robots
 {
     /// <summary>
-    /// Represents a collection of methods to get the IRB1600-X/1.20 Robot instance.
+    /// Represents a collection of methods to get the IRB1600-6/1.20 Robot instance.
     /// </summary>
-    public static class IRB1600_X_120
+    public static class IRB1600_6_120
     {
         /// <summary>
-        /// Returns a new IRB1600-X/1.20 Robot instance.
+        /// Returns a new IRB1600-6/1.20 Robot instance.
         /// </summary>
         /// <param name="positionPlane"> The position and orientation of the Robot in world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The Robot preset. </returns>
         public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
-            string name = "IRB1600-X/1.2";
+            string name = "IRB1600-6/1.2";
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
             List<Interval> axisLimits = GetAxisLimits();

@@ -15,12 +15,12 @@ using RobotComponents.Utils;
 namespace RobotComponents.ABB.Presets.Robots
 {
     /// <summary>
-    /// Represents a collection of methods to get the IRB4600-X/2.05 Robot instance.
+    /// Represents a collection of methods to get the IRB1660ID-6/1.55 Robot instance.
     /// </summary>
-    public static class IRB4600_X_205
+    public static class IRB1660ID_6_155
     {
         /// <summary>
-        /// Returns a new IRB4600-X/2.05 Robot instance.
+        /// Returns a new IRB1660ID-6/1.55 Robot instance.
         /// </summary>
         /// <param name="positionPlane"> The position and orientation of the Robot in world coordinate space. </param>
         /// <param name="tool"> The Robot Tool. </param>
@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The Robot preset. </returns>
         public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
-            string name = "IRB4600-X/2.05";
+            string name = "IRB1660ID-6/1.55";
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
             List<Interval> axisLimits = GetAxisLimits();
@@ -73,25 +73,25 @@ namespace RobotComponents.ABB.Presets.Robots
             string linkString;
 
             // Base
-            linkString = Properties.Resources.IRB4600_X_2_05_link_0;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_0;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = Properties.Resources.IRB4600_X_2_05_link_1;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_1;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = Properties.Resources.IRB4600_X_2_05_link_2;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_2;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 3
-            linkString = Properties.Resources.IRB4600_X_2_05_link_3;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_3;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 4
-            linkString = Properties.Resources.IRB4600_X_2_05_link_4;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_4;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 5
-            linkString = Properties.Resources.IRB4600_X_2_05_link_5;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_5;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 6
-            linkString = Properties.Resources.IRB4600_X_2_05_link_6;
+            linkString = Properties.Resources.IRB1660ID_X_1_55_link_6;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
 
             return meshes;
@@ -111,23 +111,23 @@ namespace RobotComponents.ABB.Presets.Robots
                 new Vector3d(0, 0, 1)));
             // Axis 2
             axisPlanes.Add(new Plane(
-                new Point3d(175.0, 0, 495),
+                new Point3d(150.0, 0, 486.5),
                 new Vector3d(0, 1, 0)));
             // Axis 3
             axisPlanes.Add(new Plane(
-                new Point3d(175, 0, 495.00 + 900),
+                new Point3d(150.0, 0, 1186.5),
                 new Vector3d(0, 1, 0)));
             // Axis 4
             axisPlanes.Add(new Plane(
-                new Point3d(505.60, 0, 495.00 + 900.00 + 175),
+                new Point3d(284, 0, 1296.5),
                 new Vector3d(1, 0, 0)));
             // Axis 5
             axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0, 0, 495.00 + 900.00 + 175),
+                new Point3d(828.0, 0, 1296.5),
                 new Vector3d(0, 1, 0)));
             // Axis 6
             axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
+                new Point3d(963.0, 0, 1296.5),
                 new Vector3d(1, 0, 0)));
 
             return axisPlanes;
@@ -143,9 +143,9 @@ namespace RobotComponents.ABB.Presets.Robots
 
             axisLimits.Add(new Interval(-180, 180));
             axisLimits.Add(new Interval(-90, 150));
-            axisLimits.Add(new Interval(-180, 75));
-            axisLimits.Add(new Interval(-400, 400));
-            axisLimits.Add(new Interval(-125, 120));
+            axisLimits.Add(new Interval(-238, 79));
+            axisLimits.Add(new Interval(-175, 175));
+            axisLimits.Add(new Interval(-120, 120));
             axisLimits.Add(new Interval(-400, 400));
 
             return axisLimits;
@@ -158,7 +158,7 @@ namespace RobotComponents.ABB.Presets.Robots
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
+                new Point3d(963.0, 0, 1296.5),
                 new Vector3d(1, 0, 0));
 
             mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);

@@ -110,7 +110,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.GetKinematicsParameters_Icon; }
         }
 
         /// <summary>

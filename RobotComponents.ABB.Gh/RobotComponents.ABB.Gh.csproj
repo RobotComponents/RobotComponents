@@ -818,6 +818,18 @@
   <ItemGroup>
     <None Include="Resources\CirclePathMode_Parameter_Icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AccelerationSet_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VelocitySet_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AccelerationSet_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VelocitySet_Parameter_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

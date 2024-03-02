@@ -594,12 +594,6 @@
     <None Include="Resources\IRB6790_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\OldCodeLine_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\OldComment_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\JointTarget_Icon.png" />
   </ItemGroup>
   <ItemGroup>

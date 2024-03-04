@@ -373,6 +373,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructPathAccelerationLimitation_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructPathAccelerationLimitation_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructRobotInfoComponent_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructRobotInfoComponent_Icon", resourceCulture);
@@ -1116,6 +1126,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap Parameter_Icon {
             get {
                 object obj = ResourceManager.GetObject("Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PathAccelerationLimitation_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PathAccelerationLimitation_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PathAccelerationLimitation_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PathAccelerationLimitation_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

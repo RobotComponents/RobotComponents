@@ -9,7 +9,6 @@ using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.Utils;
@@ -51,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 overrideRobotToolGoo = new GH_OverrideRobotTool();
             }
-                
+
             this.Value = overrideRobotToolGoo.Value;
         }
 
@@ -153,7 +152,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -221,7 +220,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is OverrideRobotTool action)
                 {

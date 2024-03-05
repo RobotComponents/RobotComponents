@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// Initializes a new instance of the DeconstructSpeedData class.
         /// </summary>
         public DeconstructSpeedDataComponent()
-          : base("Deconstruct Speed Data", "DeConSpeed", 
+          : base("Deconstruct Speed Data", "DeConSpeed",
               "Deconstructs a Speed Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -45,7 +45,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Name", "N", "Name as string",GH_ParamAccess.item);
+            pManager.Register_StringParam("Name", "N", "Name as string", GH_ParamAccess.item);
             pManager.Register_DoubleParam("TCP Velocity", "vTCP", "tcp velocity in mm/s as a number");
             pManager.Register_DoubleParam("ORI Velocity", "vORI", "reorientation velocity of the tool in degree/s as a number");
             pManager.Register_DoubleParam("LEAX Velocity", "vLEAX", "linear external axes velocity in mm/s as a number");

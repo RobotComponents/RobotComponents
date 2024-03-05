@@ -49,14 +49,17 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto, Version=2.3.6591.18824, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Eto.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Rhino.UI, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\Rhino.UI.dll</HintPath>
+    <Reference Include="Rhino.UI, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Rhino.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="RhinoCommon, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\RhinoCommon.dll</HintPath>
+    <Reference Include="RhinoCommon, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,14 +71,12 @@
     <Compile Include="Actions\ActionGroup.cs" />
     <Compile Include="Actions\Declarations\ConfigurationData.cs" />
     <Compile Include="Actions\Instructions\AccelerationSet.cs" />
-    <Compile Include="Actions\Instructions\AnalogOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\PathAccelerationLimitation.cs" />
     <Compile Include="Actions\Instructions\PulseDigitalOutput.cs" />
     <Compile Include="Actions\Instructions\SetAnalogOutput.cs" />
     <Compile Include="Actions\Instructions\CirclePathMode.cs" />
-    <Compile Include="Actions\Instructions\DigitalOutput_OBSOLETE.cs" />
     <Compile Include="Actions\Instructions\VelocitySet.cs" />
-    <Compile Include="Actions\Interfaces\ISyncident.cs" />
+    <Compile Include="Actions\Instructions\ISyncident.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOff.cs" />
     <Compile Include="Actions\Instructions\SyncMoveOn.cs" />
     <Compile Include="Actions\Instructions\WaitAI.cs" />
@@ -83,18 +84,18 @@
     <Compile Include="Actions\Declarations\TaskList.cs" />
     <Compile Include="Actions\Instructions\LinearConfigurationControl.cs" />
     <Compile Include="Actions\Instructions\JointConfigurationControl.cs" />
-    <Compile Include="Actions\Interfaces\IInstruction.cs" />
-    <Compile Include="Actions\Interfaces\IDeclaration.cs" />
-    <Compile Include="Actions\Interfaces\IDynamic.cs" />
-    <Compile Include="Actions\Interfaces\ITarget.cs" />
+    <Compile Include="Actions\Instructions\IInstruction.cs" />
+    <Compile Include="Actions\Declarations\IDeclaration.cs" />
+    <Compile Include="Actions\Dynamic\IDynamic.cs" />
+    <Compile Include="Actions\Declarations\ITarget.cs" />
     <Compile Include="Actions\Declarations\JointTarget.cs" />
     <Compile Include="Actions\Declarations\RobotJointPosition.cs" />
-    <Compile Include="Actions\Interfaces\IJointPosition.cs" />
+    <Compile Include="Actions\Declarations\IJointPosition.cs" />
     <Compile Include="Actions\Declarations\ExternalJointPosition.cs" />
     <Compile Include="Actions\Declarations\ZoneData.cs" />
     <Compile Include="Definitions\LoadData.cs" />
-    <Compile Include="Definitions\ExternalAxis.cs" />
-    <Compile Include="Actions\Action.cs" />
+    <Compile Include="Definitions\IExternalAxis.cs" />
+    <Compile Include="Actions\IAction.cs" />
     <Compile Include="Actions\Dynamic\CodeLine.cs" />
     <Compile Include="Actions\Dynamic\Comment.cs" />
     <Compile Include="Actions\Instructions\Movement.cs" />
@@ -137,9 +138,7 @@
       <Name>RobotComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Actions\Generators\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
@@ -173,11 +172,11 @@
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\RobotComponents.ABB.xml</DocumentationFile>
   </PropertyGroup>
-  <Import Project="..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets')" />
+  <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets'))" />
+    <Error Condition="!Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets'))" />
   </Target>
 </Project>

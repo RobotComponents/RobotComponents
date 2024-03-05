@@ -40,6 +40,16 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         }
 
         /// <summary>
+        /// Data constructor: Creates an Mechanical Unit Goo instance from an Mechanical Unit instance.
+        /// </summary>
+        /// <param name="externalAxis"> External Axis Value to store inside this Goo instance. </param>
+        public GH_MechanicalUnit(IExternalAxis externalAxis)
+        {
+            this.Value = externalAxis as IMechanicalUnit;
+        }
+
+
+        /// <summary>
         /// Data constructor: Creates a Mechanical Unit Goo instance from another Mechanical Unit Goo instance.
         /// This creates a shallow copy of the passed Mechanical Unit Goo instance. 
         /// </summary>
@@ -70,7 +80,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         public GH_MechanicalUnit DuplicateMechanicalUnitGoo()
         {
             if (Value == null) { return new GH_MechanicalUnit(); }
-            else  { return new GH_MechanicalUnit(Value.DuplicateMechanicalUnit()); }
+            else { return new GH_MechanicalUnit(Value.DuplicateMechanicalUnit()); }
         }
         #endregion
 
@@ -230,16 +240,16 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             if (typeof(Q).IsAssignableFrom(typeof(GH_ExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)new GH_ExternalAxis(); }
-                else if (Value is ExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as ExternalAxis); }
+                else if (Value is IExternalAxis) { target = (Q)(object)new GH_ExternalAxis(Value as IExternalAxis); }
                 else { target = default; }
                 return true;
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
-                else if (Value is ExternalAxis) { target = (Q)(object)Value; }
+                else if (Value is IExternalAxis) { target = (Q)(object)Value; }
                 else { target = default; }
                 return true;
             }
@@ -387,9 +397,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             if (Value is Robot robot)
@@ -399,7 +409,13 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 {
                     for (int i = 0; i != robot.Meshes.Count; i++)
                     {
-                        args.Pipeline.DrawMeshShaded(robot.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                        if (robot.Meshes[i] != null)
+                        {
+                            if (robot.Meshes[i].IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.Meshes[i], new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
+                        }
                     }
                 }
 
@@ -410,26 +426,38 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                     {
                         if (robot.ExternalAxes[i].BaseMesh != null)
                         {
-                            args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            if (robot.ExternalAxes[i].BaseMesh.IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
                         }
 
                         if (robot.ExternalAxes[i].LinkMesh != null)
                         {
-                            args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            if (robot.ExternalAxes[i].LinkMesh.IsValid)
+                            {
+                                args.Pipeline.DrawMeshShaded(robot.ExternalAxes[i].LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                            }
                         }
                     }
                 }
             }
-            else if (Value is ExternalAxis externalAxis)
+            else if (Value is IExternalAxis externalAxis)
             {
                 if (externalAxis.BaseMesh != null)
                 {
-                    args.Pipeline.DrawMeshShaded(externalAxis.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    if (externalAxis.BaseMesh.IsValid)
+                    {
+                        args.Pipeline.DrawMeshShaded(externalAxis.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
 
                 if (externalAxis.LinkMesh != null)
                 {
-                    args.Pipeline.DrawMeshShaded(externalAxis.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    if (externalAxis.LinkMesh.IsValid)
+                    {
+                        args.Pipeline.DrawMeshShaded(externalAxis.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                    }
                 }
             }
         }

@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent()
-          : base("Deconstruct Move", "DeConMove", 
+          : base("Deconstruct Move", "DeConMove",
               "Deconstructs a Move component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

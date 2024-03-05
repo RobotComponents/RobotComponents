@@ -59,7 +59,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_SyncMoveOff(), "Sync Move Off", "SMOFF", "Resulting Sync Move Off instruction.");   
+            pManager.RegisterParam(new Param_SyncMoveOff(), "Sync Move Off", "SMOFF", "Resulting Sync Move Off instruction.");
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         {
             // Input variables
             string name = "";
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
 

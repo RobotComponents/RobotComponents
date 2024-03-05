@@ -18,7 +18,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Helper methods and properties
     /// </summary>
-    public static class HelperMethods
+    internal static class HelperMethods
     {
         #region fields
         #endregion
@@ -286,7 +286,7 @@ namespace RobotComponents.ABB.Gh.Utils
                 obj.ExpireSolution(true);
 
                 //Return that it's created
-                return true; 
+                return true;
             }
             catch
             {
@@ -331,7 +331,7 @@ namespace RobotComponents.ABB.Gh.Utils
         {
             try
             {
-                obj.Attributes.Pivot = new PointF(location.X - obj.Attributes.Bounds.Width / 4, location.Y - obj.Attributes.Bounds.Height / 2);
+                obj.Attributes.Pivot = new PointF(location.X - (obj.Attributes.Bounds.Width / 4), location.Y - (obj.Attributes.Bounds.Height / 2));
                 Instances.ActiveCanvas.Document.AddObject(obj, false);
                 obj.Attributes.ExpireLayout();
                 obj.Attributes.PerformLayout();

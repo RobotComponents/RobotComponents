@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         public OldNameGeneratorComponent()
           : base("Name Generator", "NG",
               "This components can be used to generate the datatree for the target, speed data and zone data names if datatrees are used."
-                + System.Environment.NewLine + System.Environment.NewLine  + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
+                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "RobotComponents", "Utility")
         {
         }

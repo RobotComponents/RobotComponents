@@ -9,7 +9,6 @@ using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
@@ -134,7 +133,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
-            //Cast to Digital Output
+            //Cast to Set Digital Output
             if (typeof(Q).IsAssignableFrom(typeof(SetDigitalOutput)))
             {
                 if (Value == null) { target = (Q)(object)null; }
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -179,14 +178,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { target = default; }
                 else { target = (Q)(object)new GH_Boolean(Value.Value); }
-                return true;
-            }
-
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)new DigitalOutput(Value.Name, Value.Value); }
                 return true;
             }
 
@@ -219,7 +210,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is SetDigitalOutput action)
                 {
@@ -258,22 +249,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                     Value = instruction;
                     return true;
                 }
-            }
-
-            //Cast from Digital Output Goo
-            if (typeof(GH_DigitalOutput).IsAssignableFrom(source.GetType()))
-            {
-                GH_DigitalOutput digitalOutputGoo = source as GH_DigitalOutput;
-                Value = new SetDigitalOutput(digitalOutputGoo.Value.Name, digitalOutputGoo.Value.IsActive);
-                return true;
-            }
-
-            //Cast from Digital Output
-            if (typeof(DigitalOutput).IsAssignableFrom(source.GetType()))
-            {
-                DigitalOutput digitalOutput = source as DigitalOutput;
-                Value = new SetDigitalOutput(digitalOutput.Name, digitalOutput.IsActive);
-                return true;
             }
 
             return false;

@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_PathAccelerationLimitation(), "Path Acceleration Limitation", "PAL", "Resulting Path Acceleration Limitation instruction");   
+            pManager.RegisterParam(new Param_PathAccelerationLimitation(), "Path Acceleration Limitation", "PAL", "Resulting Path Acceleration Limitation instruction");
         }
 
         /// <summary>
@@ -86,8 +86,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            //get { return GH_Exposure.secondary | GH_Exposure.obscure; }
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary | GH_Exposure.obscure; }
         }
 
         /// <summary>
@@ -104,7 +103,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.PathAccelerationLimitation_Icon; }
         }
 
         /// <summary>

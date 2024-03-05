@@ -65,6 +65,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Check the operating system
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is only supported on Windows operating systems.");
+                return;
+            }
+
             // Catch input data
             if (!DA.GetData(0, ref _controller)) { return; }
 
@@ -144,7 +151,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         private GH_Structure<GH_Number> ToDataTree(Dictionary<string, double[]> data)
         {
             GH_Structure<GH_Number> result = new GH_Structure<GH_Number>();
-            
+
             int counter = 0;
 
             foreach (KeyValuePair<string, double[]> entry in data)
@@ -155,7 +162,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                 {
                     result.Append(new GH_Number(entry.Value[i]), path);
                 }
-                
+
                 counter++;
             }
 

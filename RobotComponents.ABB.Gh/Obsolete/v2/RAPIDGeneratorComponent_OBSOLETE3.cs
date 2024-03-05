@@ -94,7 +94,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Module", "M", "The RAPID Module as list with strings", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Module", "M", "The RAPID Module as list with strings", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             string moduleName = "MainModule";
             string routineName = "main";
             bool addTooldata = true;
@@ -129,7 +129,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetData(_variableInputParameters[1].Name, ref routineName))
                 {
-                     routineName= "main";
+                    routineName = "main";
                 }
             }
             if (Params.Input.Any(x => x.Name == _variableInputParameters[2].Name))
@@ -188,10 +188,10 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (update == true)
             {
                 // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(robot, actions, moduleName, routineName);
+                _rapidGenerator = new RAPIDGenerator(robot, moduleName, routineName);
 
                 // Generator code
-                _rapidGenerator.CreateModule(addTooldata, addWobjdata, addTooldata);
+                _rapidGenerator.CreateModule(actions, addTooldata, addWobjdata, addTooldata);
 
                 // Check if the first movement is an absolute joint movement. 
                 _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
@@ -299,7 +299,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private void MenuItemClickProgramName(object sender, EventArgs e)
         {
             RecordUndoEvent("Overwrite Module Name");
-            _moduleNameInputParam= !_moduleNameInputParam;
+            _moduleNameInputParam = !_moduleNameInputParam;
             AddInputParameter(0);
         }
 

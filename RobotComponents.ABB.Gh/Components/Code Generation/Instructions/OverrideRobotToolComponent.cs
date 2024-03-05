@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_OverrideRobotTool(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool instruction");   
+            pManager.RegisterParam(new Param_OverrideRobotTool(), "Override Robot Tool", "ORT", "Resulting Override Robot Tool instruction");
         }
 
         /// <summary>

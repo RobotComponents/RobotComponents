@@ -14,7 +14,6 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -29,15 +28,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class RAPIDGeneratorComponent_OBSOLETE2 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
-        private RAPIDGenerator _rapidGenerator;
-        private bool _firstMovementIsMoveAbsJ = true;
-        private bool _raiseWarnings = false;
         private bool _programName = false;
         private bool _systemName = false;
         private bool _procedureName = false;
         private bool _customCode = false;
-        private List<string> _programModule = new List<string>();
-        private List<string> _systemModule = new List<string>();
+        private readonly List<string> _programModule = new List<string>();
+        private readonly List<string> _systemModule = new List<string>();
         private readonly int _fixedParamNumInput = 2;
         #endregion
 
@@ -85,8 +81,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list);
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -98,139 +94,13 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
-            string programName = "MainModule";
-            string systemName = "BASE";
-            string procedureName = "main";
-            List<string> customCodeLines = new List<string>() { };
-            bool update = true;
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
 
             // Catch the input data
             if (!DA.GetData(0, ref robot)) { return; }
             if (!DA.GetDataList(1, actions)) { return; }
 
-            // Catch the input data from the variable parameteres
-            if (Params.Input.Any(x => x.Name == variableInputParameters[0].Name))
-            {
-                if (!DA.GetData(variableInputParameters[0].Name, ref programName))
-                {
-                    programName = "MainModule";
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
-            {
-                if (!DA.GetData(variableInputParameters[1].Name, ref systemName))
-                {
-                    systemName = "BASE";
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[2].Name))
-            {
-                if (!DA.GetData(variableInputParameters[2].Name, ref procedureName))
-                {
-                     procedureName= "main";
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[3].Name))
-            {
-                if (!DA.GetDataList(variableInputParameters[3].Name, customCodeLines))
-                {
-                    customCodeLines = new List<string>() { };
-                }
-            }
-            if (Params.Input.Any(x => x.Name == variableInputParameters[4].Name))
-            {
-                if (!DA.GetData(variableInputParameters[4].Name, ref update))
-                {
-                    update = true;
-                }
-            }
-
-            // Checks if module name exceeds max character limit for RAPID Code
-            if (HelperMethods.StringExeedsCharacterLimit32(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name exceeds character limit of 32 characters.");
-            }
-            if (HelperMethods.StringExeedsCharacterLimit32(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name exceeds character limit of 32 characters.");
-            }
-            if (HelperMethods.StringExeedsCharacterLimit32(procedureName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name exceeds character limit of 32 characters.");
-            }
-
-            // Checks if module name starts with a number
-            if (HelperMethods.StringStartsWithNumber(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name starts with a number which is not allowed in RAPID Code.");
-            }
-            if (HelperMethods.StringStartsWithNumber(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name starts with a number which is not allowed in RAPID Code.");
-            }
-            if (HelperMethods.StringStartsWithNumber(procedureName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name starts with a number which is not allowed in RAPID Code.");
-            }
-
-            // Check if module name contains special character
-            if (HelperMethods.StringStartsWithNumber(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name contains special characters.");
-            }
-            if (HelperMethods.StringStartsWithNumber(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name contains special characters.");
-            }
-            if (HelperMethods.StringStartsWithNumber(procedureName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Procedure name contains special characters.");
-            }
-
-            // Updates the rapid Progam and System code
-            if (update == true)
-            {
-                // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(robot, actions, programName, systemName, procedureName);
-
-                // Generator code
-                _rapidGenerator.CreateProgramModule();
-                _rapidGenerator.CreateSystemModule(customCodeLines);
-                _programModule = _rapidGenerator.ProgramModule;
-                _systemModule = _rapidGenerator.SystemModule;
-
-                // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
-
-                // Raise warnings?
-                if (_rapidGenerator.ErrorText.Count != 0)
-                {
-                    _raiseWarnings = true;
-                }
-                else
-                {
-                    _raiseWarnings = false;
-                }
-            }
-
-            // Checks if first Movement is MoveAbsJ
-            if (_firstMovementIsMoveAbsJ == false)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
-            }
-
-            // Show warning messages
-            if (_raiseWarnings == true)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only axis values of absolute joint movements are checked.");
-
-                for (int i = 0; i < _rapidGenerator.ErrorText.Count; i++)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _rapidGenerator.ErrorText[i]);
-                    if (i == 30) { break; }
-                }
-            }
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE and is not operational anymore. Please select the new component from the toolbar.");
 
             // Output
             DA.SetDataList(0, _programModule);
@@ -302,7 +172,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private void MenuItemClickProgramName(object sender, EventArgs e)
         {
             RecordUndoEvent("Overwrite Program Module Name");
-            _programName= !_programName;
+            _programName = !_programName;
             AddParameter(0);
         }
 

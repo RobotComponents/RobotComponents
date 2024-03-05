@@ -49,8 +49,8 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             if (externalRotationalAxisGoo == null)
             {
                 externalRotationalAxisGoo = new GH_ExternalRotationalAxis();
-            } 
-               
+            }
+
             this.Value = externalRotationalAxisGoo.Value;
         }
 
@@ -115,7 +115,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// </summary>
         public override string TypeName
         {
-            get { return ("External Rotational Axis"); }
+            get { return "External Rotational Axis"; }
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -275,7 +275,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            if (typeof(IExternalAxis).IsAssignableFrom(source.GetType()))
             {
                 if (source is ExternalRotationalAxis externalRotationalAxis)
                 {
@@ -352,19 +352,25 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             if (Value.BaseMesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                if (Value.BaseMesh.IsValid)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
             }
 
             if (Value.LinkMesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                if (Value.LinkMesh.IsValid)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
             }
         }
 

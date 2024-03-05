@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
@@ -82,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");   
+            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");
         }
 
         /// <summary>
@@ -144,7 +143,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Movement constructor
-                Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
+            Movement movement = new Movement((MovementType)movementType, target, speedData, zoneData, robotTool, workObject, digitalOutput);
 
             // Check if a right value is used for the movement type
             if (movementType != 0 && movementType != 1 && movementType != 2)

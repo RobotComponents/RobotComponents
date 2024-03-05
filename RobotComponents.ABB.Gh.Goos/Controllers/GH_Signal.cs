@@ -157,7 +157,7 @@ namespace RobotComponents.ABB.Gh.Goos.Controllers
                 if (Value == null)
                     target = default;
                 else
-                    target = (Q)(object)new GH_Boolean((Value.Value != 0));
+                    target = (Q)(object)new GH_Boolean(Value.Value != 0);
                 return true;
             }
 

@@ -238,7 +238,7 @@ namespace RobotComponents.ABB.Controllers
             _mechanicalUnits.Clear();
             _robots.Clear();
             _externalAxes.Clear();
-            
+
             _mechanicalUnitsPerTask.Clear();
             _robotsPerTask.Clear();
             _externalAxesPerTask.Clear();
@@ -425,7 +425,7 @@ namespace RobotComponents.ABB.Controllers
             for (int i = 0; i < _robots.Count; i++)
             {
                 RapidDomainNS.RobTarget robTarget = _robots[i].GetPosition(coordinateSystem);
-                   
+
                 _robotToolPlanes[_robots[i].Name] = HelperMethods.QuaternionToPlane(
                     robTarget.Trans.X,
                     robTarget.Trans.Y,
@@ -433,7 +433,7 @@ namespace RobotComponents.ABB.Controllers
                     robTarget.Rot.Q1,
                     robTarget.Rot.Q2,
                     robTarget.Rot.Q3,
-                    robTarget.Rot.Q4); 
+                    robTarget.Rot.Q4);
             }
 
             return _robotToolPlanes;
@@ -674,7 +674,7 @@ namespace RobotComponents.ABB.Controllers
                 Log($"Could not get the digital outputs: The controller is empty.");
                 return new List<Signal>();
             }
-            
+
             IOSystemDomainNS.SignalCollection signals = _controller.IOSystem.GetSignals(filter: IOSystemDomainNS.IOFilterTypes.Output | IOSystemDomainNS.IOFilterTypes.Digital);
             List<Signal> result = new List<Signal>();
 
@@ -966,7 +966,7 @@ namespace RobotComponents.ABB.Controllers
                     Log(status);
                 }
             }
-            catch 
+            catch
             {
                 status = $"Could not create the local temporary directory: {_localDirectory}";
                 Log(status);
@@ -1016,7 +1016,7 @@ namespace RobotComponents.ABB.Controllers
             {
                 status = "Could not acquire the WriteFTP grant for the current user.";
                 Log(status);
-                
+
                 // No return false: keep trying to the put the local directory on the controller disk.
             }
             try
@@ -1212,7 +1212,7 @@ namespace RobotComponents.ABB.Controllers
                     {
                         status = $"Could not reset the program pointer: {e.Message}";
                         Log(status);
-                        
+
                         succeeded = false;
                     }
                     finally
@@ -1266,7 +1266,7 @@ namespace RobotComponents.ABB.Controllers
 
                 status = "Program started.";
                 Log(status);
-                
+
                 return true;
             }
         }
@@ -1343,7 +1343,7 @@ namespace RobotComponents.ABB.Controllers
                 return "";
             }
 
-            return _controller.Rapid.GetRapidData(task, module, variable).StringValue;   
+            return _controller.Rapid.GetRapidData(task, module, variable).StringValue;
         }
         #endregion
 
@@ -1368,7 +1368,7 @@ namespace RobotComponents.ABB.Controllers
         public bool IsValid
         {
             get
-            { 
+            {
                 if (_controller == null) return false;
                 return true;
             }

@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
             }
             if (errors.Count != 0)
             {
-                for (int i = 0; i < errors.Count; i++ )
+                for (int i = 0; i < errors.Count; i++)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, errors[i]);
                 }
@@ -127,7 +127,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         {
             get { return Properties.Resources.ToolCalibration_Icon; }
         }
- 
+
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
         /// It is vital this Guid doesn't change otherwise old ghx files 

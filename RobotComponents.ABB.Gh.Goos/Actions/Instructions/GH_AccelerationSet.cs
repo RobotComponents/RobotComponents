@@ -3,15 +3,11 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
 // Grasshopper Libs
 using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.Utils;
 
@@ -20,7 +16,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
     /// <summary>
     /// Acceleration Set Goo wrapper class, makes sure the Acceleration Set class can be used in Grasshopper.
     /// </summary>
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
     public class GH_AccelerationSet : GH_Goo<AccelerationSet>, GH_ISerializable
     {
         #region constructors
@@ -89,7 +84,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             {
                 if (Value == null) { return "No internal Acceleration Set instance"; }
                 if (Value.IsValid) { return string.Empty; }
-                return "Invalid Acceleration Set instance: Did you define the acceleration and ramp value?";  
+                return "Invalid Acceleration Set instance: Did you define the acceleration and ramp value?";
             }
         }
 
@@ -108,7 +103,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeName
         {
-            get { return ("Acceleration Set"); }
+            get { return "Acceleration Set"; }
         }
 
         /// <summary>
@@ -116,7 +111,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Acceleration Set."); }
+            get { return "Defines a Acceleration Set."; }
         }
         #endregion
 
@@ -154,7 +149,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(ABB.Actions.IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -198,7 +193,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(ABB.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(ABB.Actions.IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is AccelerationSet action)
                 {
@@ -247,7 +242,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// IO key for (de)serialisation of the value inside this Goo.
         /// </summary>
         private const string IoKey = "Acceleration Set";
-        
+
         /// <summary>
         /// This method is called whenever the instance is required to serialize itself.
         /// </summary>

@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         {
             // Declare info
             string text = "Robot Components is a plugin for intuitive robot programming for ABB robots inside Rhinoceros Grasshopper. "
-                + "This open source project is initiated by the chair of Experimental and Digital Design and Construction (EDEK) "
+                + "This open source project was initiated by the chair of Experimental and Digital Design and Construction (EDEK) "
                 + "of the University of Kassel. The technical development is executed by Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, "
                 + "Mohamed Dawod, Zuardin Akbar, and Andrea Rossi."
                 + Environment.NewLine
@@ -63,19 +63,19 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "The components of the controller utility category use the ABB PC SDK (version 2022.3). For more information, see https://developercenter.robotstudio.com/pc-sdk."
+                + "The components of the controller utility category use the ABB PC SDK (version 2024.1). For more information, see https://developercenter.robotstudio.com/pc-sdk."
                 + Environment.NewLine
                 + Environment.NewLine
-                + "Robot Components uses the OPW kinematics solver as described in the paper " 
-                + "'An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial " 
-                + "Manipulators with an Ortho-parallel Basis and a Spherical Wrist' by Mathias " 
+                + "Robot Components uses the OPW kinematics solver as described in the paper "
+                + "'An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial "
+                + "Manipulators with an Ortho-parallel Basis and a Spherical Wrist' by Mathias "
                 + "Brandstötter, Arthur Angerer, and Michael Hofbaur."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "Copyright (c) 2018-2024 The Robot Components authors and / or their affiliations"
+                + "Copyright (c) 2018-2024 The Robot Components authors and/or their affiliations"
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is free software; you can redistribute it and/or modify it under "

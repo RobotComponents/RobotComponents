@@ -14,7 +14,7 @@ using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
-{ 
+{
     /// <summary>
     /// RobotComponents Deconstruct External Joint Position component. An inherent from the GH_Component Class.
     /// </summary>
@@ -108,7 +108,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; } 
+            get { return Properties.Resources.DeconstructExternalJointPosition_Icon; }
         }
 
         /// <summary>

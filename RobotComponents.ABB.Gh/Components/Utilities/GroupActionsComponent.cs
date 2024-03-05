@@ -57,7 +57,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         {
             // Input variables
             string name = "";
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }

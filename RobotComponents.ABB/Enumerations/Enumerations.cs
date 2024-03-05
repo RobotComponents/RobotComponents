@@ -9,11 +9,11 @@ namespace RobotComponents.ABB.Enumerations
     /// Defines if the axis moves linear or rotational.
     /// </summary>
     public enum AxisType : int
-    { 
+    {
         /// <summary>
         /// Linear motion
         /// </summary>
-        LINEAR = 0, 
+        LINEAR = 0,
 
         /// <summary>
         /// Rotational motion

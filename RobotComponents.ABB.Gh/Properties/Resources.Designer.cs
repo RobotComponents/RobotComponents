@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,26 @@ namespace RobotComponents.ABB.Gh.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccelerationSet_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AccelerationSet_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccelerationSet_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("AccelerationSet_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -353,6 +373,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DeconstructPathAccelerationLimitation_Icon {
+            get {
+                object obj = ResourceManager.GetObject("DeconstructPathAccelerationLimitation_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructRobotInfoComponent_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructRobotInfoComponent_Icon", resourceCulture);
@@ -563,6 +593,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GetAxisPlanesFromKinematicsParameters_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetAxisPlanesFromKinematicsParameters_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap GetAxisValues_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetAxisValues_Icon", resourceCulture);
@@ -626,6 +666,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap GetJointTarget_Icon {
             get {
                 object obj = ResourceManager.GetObject("GetJointTarget_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GetKinematicsParameters_Icon {
+            get {
+                object obj = ResourceManager.GetObject("GetKinematicsParameters_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1083,6 +1133,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PathAccelerationLimitation_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PathAccelerationLimitation_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PathAccelerationLimitation_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("PathAccelerationLimitation_Parameter_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PathGen_Icon {
             get {
                 object obj = ResourceManager.GetObject("PathGen_Icon", resourceCulture);
@@ -1506,6 +1576,26 @@ namespace RobotComponents.ABB.Gh.Properties {
         internal static System.Drawing.Bitmap Upload_Icon {
             get {
                 object obj = ResourceManager.GetObject("Upload_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VelocitySet_Icon {
+            get {
+                object obj = ResourceManager.GetObject("VelocitySet_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VelocitySet_Parameter_Icon {
+            get {
+                object obj = ResourceManager.GetObject("VelocitySet_Parameter_Icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

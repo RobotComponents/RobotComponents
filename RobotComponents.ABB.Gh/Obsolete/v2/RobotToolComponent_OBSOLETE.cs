@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool");
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 if (!DA.GetData(variableInputParameters[0].Name, ref mass))
                 {
-                    mass = 0.001; 
+                    mass = 0.001;
                 }
             }
             if (Params.Input.Any(x => x.Name == variableInputParameters[1].Name))
@@ -139,12 +139,14 @@ namespace RobotComponents.ABB.Gh.Obsolete
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Tool mass cannot be negative.");
             }
-           
+
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the Robot Tool
-            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, true, mass, centerOfGravity, momentOfInertia);
+
+            LoadData loadData = new LoadData("", mass, centerOfGravity.Origin, ABB.Utils.HelperMethods.PlaneToQuaternion(Plane.WorldXY, centerOfGravity), momentOfInertia);
+            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane, loadData);
 
             // Outputs
             DA.SetData(0, robotTool);

@@ -10,7 +10,6 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
@@ -114,7 +113,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a single Joint Target"); }
+            get { return "Defines a single Joint Target"; }
         }
         #endregion
 
@@ -168,7 +167,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -258,7 +257,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.ABB.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.ABB.Actions.IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is JointTarget action)
                 {

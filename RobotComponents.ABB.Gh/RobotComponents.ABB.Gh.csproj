@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
@@ -35,20 +35,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto, Version=2.3.6591.18824, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Eto.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="GH_IO, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
-      <HintPath>..\packages\Grasshopper.6.0.18016.23451\lib\net45\GH_IO.dll</HintPath>
+    <Reference Include="GH_IO, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.7.0.20314.3001\lib\net45\GH_IO.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Grasshopper, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
-      <HintPath>..\packages\Grasshopper.6.0.18016.23451\lib\net45\Grasshopper.dll</HintPath>
+    <Reference Include="Grasshopper, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.7.0.20314.3001\lib\net45\Grasshopper.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Rhino.UI, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\Rhino.UI.dll</HintPath>
+    <Reference Include="Rhino.UI, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Rhino.UI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="RhinoCommon, Version=6.0.18016.23451, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.6.0.18016.23451\lib\net45\RhinoCommon.dll</HintPath>
+    <Reference Include="RhinoCommon, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,7 +71,9 @@
     <Compile Include="Components\Code Generation\Instructions\PathAccelerationLimitationComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\PulseDigitalOutputComponent.cs" />
     <Compile Include="Components\Code Generation\Instructions\VelocitySetComponent.cs" />
-    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitation.cs" />
+    <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitationComponent.cs" />
+    <Compile Include="Components\Definitions\GetAxisPlanesFromKinematicsParametersComponent.cs" />
+    <Compile Include="Components\Definitions\GetKinematicsParametersComponent.cs" />
     <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructConfigurationDataComponent.cs" />
@@ -133,7 +140,7 @@
     <Compile Include="Components\Controller Utility\Set Signals\SetDigitalInputComponent.cs" />
     <Compile Include="Components\Controller Utility\Set Signals\SetDigitalOutputComponent.cs" />
     <Compile Include="Components\Controller Utility\Run Programs\UploadProgramComponent.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1010_4_0_475_Component.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1010_1_5_0_37_Component _OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\RobotPresetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\InverseKinematicsComponent_OBSOLETE3.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromPlanesComponent_OBSOLETE.cs" />
@@ -148,7 +155,7 @@
     <Compile Include="Obsolete\v1\RAPIDGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Components\Code Generation\Value Lists\InequalitySymbolValueList.cs" />
     <Compile Include="Components\Code Generation\Instructions\WaitAIComponent.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1520ID_4_1_50_Component.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1520ID_4_1_50_Component_OBSOLETE.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOffComponent.cs" />
     <Compile Include="Components\Multi Move\SyncMoveOnComponent.cs" />
     <Compile Include="Components\Multi Move\WaitSyncTaskComponent.cs" />
@@ -179,11 +186,11 @@
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructJointTargetComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobotJointPosistionComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructRobotTargetComponent.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_475_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1100_4_0_58_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1300_11_0_90_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1300_10_1_15_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1300_7_1_40_Component.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1100_4_0_475_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1100_4_0_58_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1300_11_0_90_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1300_10_1_15_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1300_7_1_40_Component_OBSOLETE.cs" />
     <Compile Include="Components\Definitions\RobotPresetComponent.cs" />
     <Compile Include="Components\Simulation\ForwardKinematicsComponent.cs" />
     <Compile Include="Components\Simulation\PathGeneratorComponent.cs" />
@@ -193,28 +200,28 @@
     <Compile Include="Components\Code Generation\Instructions\MoveComponent.cs" />
     <Compile Include="Obsolete\v1\ZoneDataComponent_OBSOLETE.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructZoneDataComponent.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6640_185_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6650S_200_3_00_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6650S_125_3_50_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_300_2_70_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_245_3_00_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_205_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_200_2_60_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_175_3_05_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_155_2_85_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_150_3_20_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6790_205_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6700_235_2_65_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB7600_150_3_50_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB7600_340_2_80_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6790_235_2_65_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB7600_500_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB7600_400_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB7600_325_3_10_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6650S_90_3_90_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6640_235_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6620_150_2_20_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6650_200_2_75_Component.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6640_185_2_80_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6650S_200_3_00_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6650S_125_3_50_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_300_2_70_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_245_3_00_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_205_2_80_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_200_2_60_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_175_3_05_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_155_2_85_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_150_3_20_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6790_205_2_80_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6700_235_2_65_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB7600_150_3_50_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB7600_340_2_80_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6790_235_2_65_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB7600_500_2_55_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB7600_400_2_55_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB7600_325_3_10_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6650S_90_3_90_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6640_235_2_55_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6620_150_2_20_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6650_200_2_75_Component_OBSOLETE.cs" />
     <Compile Include="Obsolete\v1\RobotToolFromQuaternionComponent_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\GetObjectManager.cs" />
     <Compile Include="Obsolete\v1\Controller Utility\GetPlaneComponent_OBSOLETE.cs" />
@@ -241,21 +248,21 @@
     <Compile Include="Components\Deconstruct\Definitions\DeconstructRobotToolComponent.cs" />
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructSpeedDataComponent.cs" />
     <Compile Include="Components\Definitions\ExternalLinearAxisComponent.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1200_5_90_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1200_7_70_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB120_3_0_58_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB140_6_0_81_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1600_X_1_20_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1600_X_1_45_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB1660ID_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB2600ID_15_1_85_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB2600ID_8_2_00_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB2600_12_1_85_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB2600_X_1_65_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB4600_20_2_50_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB4600_40_2_55_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB4600_X_2_05_Component.cs" />
-    <Compile Include="Components\Definitions\Presets\IRB6650_125_3_20_Component.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1200_5_90_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1200_7_70_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB120_3_0_58_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB140_6_0_81_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1600_X_1_20_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1600_X_1_45_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB1660ID_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB2600ID_15_1_85_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB2600ID_8_2_00_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB2600_12_1_85_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB2600_X_1_65_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB4600_20_2_50_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB4600_40_2_55_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB4600_X_2_05_Component_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\Presets\IRB6650_125_3_20_Component_OBSOLETE.cs" />
     <Compile Include="Components\Definitions\RobotComponent.cs" />
     <Compile Include="Components\Definitions\RobotToolComponent.cs" />
     <Compile Include="Components\Simulation\InverseKinematicsComponent.cs" />
@@ -288,6 +295,7 @@
     </Compile>
     <Compile Include="RobotComponentsIcon.cs" />
     <Compile Include="RobotComponentsInfo.cs" />
+    <Compile Include="Utils\DisplaySettings.cs" />
     <Compile Include="Utils\DocumentManager.cs" />
     <Compile Include="Parameters\Actions\Param_ActionGroup.cs" />
     <Compile Include="Parameters\Actions\Param_Action.cs" />
@@ -586,12 +594,6 @@
     <None Include="Resources\IRB6790_Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\OldCodeLine_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\OldComment_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\JointTarget_Icon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -810,6 +812,33 @@
   <ItemGroup>
     <None Include="Resources\CirclePathMode_Parameter_Icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AccelerationSet_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VelocitySet_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AccelerationSet_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VelocitySet_Parameter_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetKinematicsParaeters_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GetAxisPlanesFromKinematicsParaeters_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PathAccelerationLimitation_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DeconstructPathAccelerationLimitation_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PathAccelerationLimitation_Parameter_Icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -830,14 +859,15 @@ Erase "$(TargetPath)"</PostBuildEvent>
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
-  <Import Project="..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets')" />
+  <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.6.0.18016.23451\build\net45\RhinoCommon.targets'))" />
-    <Error Condition="!Exists('..\packages\Grasshopper.6.0.18016.23451\build\net45\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Grasshopper.6.0.18016.23451\build\net45\Grasshopper.targets'))" />
+    <Error Condition="!Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets'))" />
+    <Error Condition="!Exists('..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets'))" />
   </Target>
-  <Import Project="..\packages\Grasshopper.6.0.18016.23451\build\net45\Grasshopper.targets" Condition="Exists('..\packages\Grasshopper.6.0.18016.23451\build\net45\Grasshopper.targets')" />
+  <Import Project="..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets" Condition="Exists('..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" />
 </Project>

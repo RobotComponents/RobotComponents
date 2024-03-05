@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ActionUnGroup_Icon; ; } 
+            get { return Properties.Resources.ActionUnGroup_Icon; ; }
         }
 
         /// <summary>

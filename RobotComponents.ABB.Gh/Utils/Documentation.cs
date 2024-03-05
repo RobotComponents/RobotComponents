@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Components.CodeGeneration;
 using RobotComponents.ABB.Gh.Components.ControllerUtility;
@@ -14,7 +15,6 @@ using RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration;
 using RobotComponents.ABB.Gh.Components.Deconstruct.Definitions;
 using RobotComponents.ABB.Gh.Components.Simulation;
 using RobotComponents.ABB.Gh.Components.Definitions;
-using RobotComponents.ABB.Gh.Components.Definitions.Presets;
 using RobotComponents.ABB.Gh.Components.MultiMove;
 using RobotComponents.ABB.Gh.Components.Utilities;
 using RobotComponents.ABB.Gh.Parameters.Actions;
@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Static class that contains all the data (e.g. links to pages) that is relevant for our documentation.
     /// </summary>
-    public static class Documentation
+    internal static class Documentation
     {
         /// <summary>
         /// Dictionary that contains all the links to the documention of the different component types.
@@ -121,53 +121,8 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(RobotToolComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Tool/" },
             { typeof(WorkObjectComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Work%20Object/" },
             { typeof(LoadDataComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
-            #endregion
-
-            #region Definitions: Robot presets
-            { typeof(IRB1010_1_5_0_37_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1100_4_0_475_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1100_4_0_58_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB120_3_0_58_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1200_5_90_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1200_7_70_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1300_10_1_15_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1300_11_0_90_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1300_7_1_40_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB140_6_0_81_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1520ID_4_1_50_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1600_X_1_20_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1600_X_1_45_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB1660ID_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB2600_12_1_85_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB2600_X_1_65_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB2600ID_15_1_85_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB2600ID_8_2_00_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB4600_20_2_50_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB4600_40_2_55_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB4600_X_2_05_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6620_150_2_20_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6640_185_2_80_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6640_235_2_55_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6650_125_3_20_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6650_200_2_75_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6650S_125_3_50_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6650S_200_3_00_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6650S_90_3_90_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_150_3_20_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_155_2_85_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_175_3_05_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_200_2_60_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_205_2_80_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_235_2_65_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_245_3_00_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6700_300_2_70_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6790_235_2_65_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB6790_205_2_80_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB7600_150_3_50_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB7600_325_3_10_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB7600_340_2_80_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB7600_400_2_55_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
-            { typeof(IRB7600_500_2_55_Component), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/Robot%20Presets/" },
+            { typeof(GetKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
+            { typeof(GetAxisPlanesFromKinematicsParametersComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Definitions/" }, // TODO
             #endregion
 
             #region Multi Move
@@ -186,7 +141,7 @@ namespace RobotComponents.ABB.Gh.Utils
             #region Utilities
             { typeof(FlipPlaneXComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20Y/" },
-            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, 
+            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" },
             { typeof(PlaneToQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },
@@ -204,7 +159,7 @@ namespace RobotComponents.ABB.Gh.Utils
             { typeof(Param_ExternalJointPosition), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/External%20Joint%20Position/" },
             { typeof(Param_Action), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action/"},
             { typeof(Param_ActionGroup), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Action%20Group/"},
-            { typeof(Param_SetAnalogOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" }, 
+            { typeof(Param_SetAnalogOutput), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Analog%20Output/" },
             { typeof(Param_LinearConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Linear%20Configuration%20Control/"},
             { typeof(Param_JointConfigurationControl), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Set%20Joint%20Configuration%20Control/"},
             { typeof(Param_CodeLine), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Parameters/Actions/Code%20Line/"},
@@ -249,10 +204,25 @@ namespace RobotComponents.ABB.Gh.Utils
         {
             try
             {
-                Process.Start(url);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    Process.Start(url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else
+                {
+                    Process.Start(url);
+                }
             }
             catch
-            { 
+            {
                 // We do nothing if the browser could not be opened
             }
         }

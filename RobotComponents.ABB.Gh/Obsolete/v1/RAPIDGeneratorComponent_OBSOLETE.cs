@@ -11,7 +11,6 @@ using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -26,11 +25,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class RAPIDGeneratorComponent_OBSOLETE : GH_Component
     {
         #region fields
-        private RAPIDGenerator _rapidGenerator;
-        private bool _firstMovementIsMoveAbsJ = true;
-        private bool _raiseWarnings = false;
-        private List<string> _programModule = new List<string>();
-        private List<string> _systemModule = new List<string>();
+        private readonly List<string> _programModule = new List<string>();
+        private readonly List<string> _systemModule = new List<string>();
         #endregion
 
         /// <summary>
@@ -70,8 +66,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list); 
-            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list); 
+            pManager.Register_StringParam("Program Module", "PM", "RAPID Program Module", GH_ParamAccess.list);
+            pManager.Register_StringParam("System Module", "SM", "RAPID System Module", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -83,7 +79,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robInfo = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             string programName = "";
             string systemName = "";
             List<string> customCodeLines = new List<string>() { };
@@ -97,79 +93,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!DA.GetDataList(4, customCodeLines)) { customCodeLines = new List<string>() { }; }
             if (!DA.GetData(5, ref update)) { update = true; }
 
-            // Checks if module name exceeds max character limit for RAPID Code
-            if (HelperMethods.StringExeedsCharacterLimit32(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name exceeds character limit of 32 characters.");
-            }
-            if (HelperMethods.StringExeedsCharacterLimit32(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name exceeds character limit of 32 characters.");
-            }
-
-            // Checks if module name starts with a number
-            if (HelperMethods.StringStartsWithNumber(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name starts with a number which is not allowed in RAPID Code.");
-            }
-            if (HelperMethods.StringStartsWithNumber(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name starts with a number which is not allowed in RAPID Code.");
-            }
-
-            // Check if module name contains special character
-            if (HelperMethods.StringStartsWithNumber(programName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Program module name onstains special characters.");
-            }
-            if (HelperMethods.StringStartsWithNumber(systemName))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "System module name onstains special characters.");
-            }
-
-            // Updates the rapid Progam and System code
-            if (update == true)
-            {
-                // Initiaties the rapidGenerator
-                _rapidGenerator = new RAPIDGenerator(robInfo, actions, programName, systemName, "main");
-
-                // Generator code
-                _rapidGenerator.CreateProgramModule();
-                _rapidGenerator.CreateSystemModule(customCodeLines);
-                _programModule = _rapidGenerator.ProgramModule;
-                _systemModule = _rapidGenerator.SystemModule;
-
-                // Check if the first movement is an absolute joint movement. 
-                _firstMovementIsMoveAbsJ = _rapidGenerator.IsFirstMovementMoveAbsJ;
-
-                // Raise warnings?
-                if (_rapidGenerator.ErrorText.Count != 0)
-                {
-                    _raiseWarnings = true;
-                }
-                else
-                {
-                    _raiseWarnings = false;
-                }
-            }
-
-            // Checks if first Movement is MoveAbsJ
-            if (_firstMovementIsMoveAbsJ == false)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The first movement is not set as an absolute joint movement.");
-            }
-
-            // Show warning messages
-            if (_raiseWarnings == true)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Only axis values of absolute joint movements are checked.");
-
-                for (int i = 0; i < _rapidGenerator.ErrorText.Count; i++)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _rapidGenerator.ErrorText[i]);
-                    if (i == 30) { break; }
-                }
-            }
+            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "This component is OBSOLETE and is not operational anymore. Please select the new component from the toolbar.");
 
             // Output
             DA.SetDataList(0, _programModule);

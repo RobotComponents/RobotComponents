@@ -28,7 +28,7 @@ namespace RobotComponents.ABB.Presets
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns></returns>
-        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool, IList<ExternalAxis> externalAxes = null)
+        public static Robot GetRobotPreset(RobotPreset preset, Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
         {
             // Check Robot Tool data
             if (tool == null)
@@ -39,18 +39,18 @@ namespace RobotComponents.ABB.Presets
             // Check External Axes 
             if (externalAxes == null)
             {
-                externalAxes = new List<ExternalAxis>() { };
+                externalAxes = new List<IExternalAxis>() { };
             }
 
-            else if (preset == RobotPreset.EMPTY)
+            if (preset == RobotPreset.EMPTY)
             {
                 return new Robot();
             }
-            if (preset == RobotPreset.IRB1010_1_5_037)
+            else if (preset == RobotPreset.IRB1010_1_5_037)
             {
                 return IRB1010_15_037.GetRobot(positionPlane, tool, externalAxes);
             }
-            if (preset == RobotPreset.IRB1100_4_0475)
+            else if (preset == RobotPreset.IRB1100_4_0475)
             {
                 return IRB1100_4_0475.GetRobot(positionPlane, tool, externalAxes);
             }
@@ -90,25 +90,41 @@ namespace RobotComponents.ABB.Presets
             {
                 return IRB1520ID_4_150.GetRobot(positionPlane, tool, externalAxes);
             }
-            else if (preset == RobotPreset.IRB1600_X_120)
+            else if (preset == RobotPreset.IRB1600_6_120)
             {
-                return IRB1600_X_120.GetRobot(positionPlane, tool, externalAxes);
+                return IRB1600_6_120.GetRobot(positionPlane, tool, externalAxes);
             }
-            else if (preset == RobotPreset.IRB1600_X_145)
+            else if (preset == RobotPreset.IRB1600_6_145)
             {
-                return IRB1600_X_145.GetRobot(positionPlane, tool, externalAxes);
+                return IRB1600_6_145.GetRobot(positionPlane, tool, externalAxes);
             }
-            else if (preset == RobotPreset.IRB1660ID_X_155)
+            else if (preset == RobotPreset.IRB1600_10_120)
             {
-                return IRB1660ID_X_155.GetRobot(positionPlane, tool, externalAxes);
+                return IRB1600_10_120.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB1600_10_145)
+            {
+                return IRB1600_10_145.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB1660ID_4_155)
+            {
+                return IRB1660ID_4_155.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB1660ID_6_155)
+            {
+                return IRB1660ID_6_155.GetRobot(positionPlane, tool, externalAxes);
             }
             else if (preset == RobotPreset.IRB2600_12_185)
             {
                 return IRB2600_12_185.GetRobot(positionPlane, tool, externalAxes);
             }
-            else if (preset == RobotPreset.IRB2600_X_165)
+            else if (preset == RobotPreset.IRB2600_12_165)
             {
-                return IRB2600_X_165.GetRobot(positionPlane, tool, externalAxes);
+                return IRB2600_12_165.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB2600_20_165)
+            {
+                return IRB2600_20_165.GetRobot(positionPlane, tool, externalAxes);
             }
             else if (preset == RobotPreset.IRB2600ID_15_185)
             {
@@ -126,9 +142,9 @@ namespace RobotComponents.ABB.Presets
             {
                 return IRB4600_40_255.GetRobot(positionPlane, tool, externalAxes);
             }
-            else if (preset == RobotPreset.IRB4600_X_205)
+            else if (preset == RobotPreset.IRB4600_45_205)
             {
-                return IRB4600_X_205.GetRobot(positionPlane, tool, externalAxes);
+                return IRB4600_45_205.GetRobot(positionPlane, tool, externalAxes);
             }
             else if (preset == RobotPreset.IRB6620_150_220)
             {
@@ -218,6 +234,22 @@ namespace RobotComponents.ABB.Presets
             {
                 return IRB7600_500_255.GetRobot(positionPlane, tool, externalAxes);
             }
+            else if (preset == RobotPreset.IRB4600_60_205)
+            {
+                return IRB4600_45_205.GetRobot(positionPlane, tool, externalAxes);
+            }
+            //else if (preset == RobotPreset.CRB15000_5_095)
+            //{
+            //    return CRB15000_5_095.GetRobot(positionPlane, tool, externalAxes);
+            //}
+            //else if (preset == RobotPreset.CRB15000_12_127)
+            //{
+            //    return CRB15000_12_127.GetRobot(positionPlane, tool, externalAxes);
+            //}
+            //else if (preset == RobotPreset.CRB15000_10_152)
+            //{
+            //    return CRB15000_10_152.GetRobot(positionPlane, tool, externalAxes);
+            //}
             else
             {
                 throw new Exception("Could not find the data of the defined Robot preset type.");

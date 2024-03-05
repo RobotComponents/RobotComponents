@@ -38,7 +38,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
-        {           
+        {
             pManager.AddNumberParameter("Acceleration", "A", "Defines the acceleration and deceleration as a percentage (20-100) of the normal values as a Number.", GH_ParamAccess.item, 100);
             pManager.AddNumberParameter("Ramp", "R", "Defines the rate at which acceleration and deceleration increases as a percentage (10-100) of the normal values as a Number.", GH_ParamAccess.item, 100);
         }
@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_AccelerationSet(), "Acceleration Set", "AS", "Resulting Acceleration Set instruction");   
+            pManager.RegisterParam(new Param_AccelerationSet(), "Acceleration Set", "AS", "Resulting Acceleration Set instruction");
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             // Input variables
             double acceleration = 100;
             double ramp = 100;
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref acceleration)) { return; }
             if (!DA.GetData(1, ref ramp)) { return; }
@@ -80,8 +80,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            //get { return GH_Exposure.secondary | GH_Exposure.obscure; }
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary | GH_Exposure.obscure; }
         }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.AccelerationSet_Icon; }
         }
 
         /// <summary>

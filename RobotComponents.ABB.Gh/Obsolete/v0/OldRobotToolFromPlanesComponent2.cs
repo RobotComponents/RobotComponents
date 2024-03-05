@@ -79,7 +79,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool");
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             get { return Properties.Resources.ToolPlane_Icon; }
         }
- 
+
         /// <summary>
         /// Each component must have a unique Guid to identify it. 
         /// It is vital this Guid doesn't change otherwise old ghx files 

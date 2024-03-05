@@ -24,8 +24,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
     public class RobotComponent : GH_Component
     {
         public RobotComponent()
-          : base("Robot", "Rob",
-              "Defines a robot which is needed for Code Generation and Simulation"
+          : base("Robot", "Robot",
+              "Defines a robot which is needed for code generation and simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Robot(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);   
+            pManager.RegisterParam(new Param_Robot(), "Robot", "R", "Resulting Robot", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             Plane userPositionPlane = Plane.WorldXY;
             Plane mountingFrame = Plane.Unset;
             RobotTool tool = null;
-            List<ExternalAxis> externalAxes = new List<ExternalAxis>();
+            List<IExternalAxis> externalAxes = new List<IExternalAxis>();
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
@@ -83,7 +83,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             if (!DA.GetData(4, ref userPositionPlane)) { return; }
             if (!DA.GetData(5, ref mountingFrame)) { return; }
             if (!DA.GetData(6, ref tool)) { tool = new RobotTool(); }
-            if (!DA.GetDataList(7, externalAxes)) { externalAxes = new List<ExternalAxis>() { }; }
+            if (!DA.GetDataList(7, externalAxes)) { externalAxes = new List<IExternalAxis>() { }; }
 
             // Construct empty robot
             Robot robot = new Robot();

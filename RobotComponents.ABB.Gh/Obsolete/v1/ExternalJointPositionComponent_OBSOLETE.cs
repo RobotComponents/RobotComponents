@@ -93,7 +93,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Variables
             GH_Structure<GH_String> names;
-            GH_Structure<GH_Number> externalAxisValuesA = new GH_Structure<GH_Number>(); 
+            GH_Structure<GH_Number> externalAxisValuesA = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesB = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesC = new GH_Structure<GH_Number>();
             GH_Structure<GH_Number> externalAxisValuesD = new GH_Structure<GH_Number>();
@@ -107,7 +107,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // External axis A
             if (Params.Input.Any(x => x.Name == externalAxisParameters[0].Name))
             {
-                if (!DA.GetDataTree(externalAxisParameters[0].Name, out externalAxisValuesA)) 
+                if (!DA.GetDataTree(externalAxisParameters[0].Name, out externalAxisValuesA))
                 {
                     externalAxisValuesA = new GH_Structure<GH_Number>();
                     externalAxisValuesA.Branches.Add(new List<GH_Number>() { new GH_Number(9e9) });

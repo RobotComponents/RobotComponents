@@ -122,7 +122,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;
@@ -164,7 +164,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Get the index number of the current target
-            int index = (int)(((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider));
+            int index = (int)((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider);
 
             // Calculate foward kinematics
             forwardKinematics.HideMesh = !_previewMesh;
@@ -663,7 +663,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     double trans;
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == true)
+                    if (_forwardKinematics[i].IsInLimits == true)
                     {
                         color = Color.FromArgb(225, 225, 225);
                         trans = 0.0;

@@ -10,7 +10,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Dynamic
 {
@@ -22,7 +21,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
     /// It has no effect on the execution of the program.
     /// </remarks>
     [Serializable()]
-    public class Comment : Action, IDynamic, ISerializable
+    public class Comment : IAction, IDynamic, ISerializable
     {
         #region fields
         private string _comment;
@@ -37,7 +36,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <param name="context"> The context of this deserialization. </param>
         protected Comment(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _comment = (string)info.GetValue("Comment", typeof(string));
             _type = (CodeType)info.GetValue("Code Type", typeof(CodeType));
         }
@@ -50,7 +49,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Comment", _comment, typeof(string));
             info.AddValue("Code Type", _type, typeof(CodeType));
         }
@@ -123,7 +122,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// A deep copy of the Comment instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new Comment(this);
         }
@@ -159,7 +158,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return _type == CodeType.Declaration ? $"! {_comment}" : "";
         }
@@ -171,19 +170,19 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return _type == CodeType.Instruction ? $"! {_comment}" : "";
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_type == CodeType.Declaration)
             {
@@ -196,18 +195,7 @@ namespace RobotComponents.ABB.Actions.Dynamic
                     RAPIDGenerator.ProgramDeclarationComments.Add("    ");
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-            if (_type == CodeType.Instruction)
+            else if (_type == CodeType.Instruction)
             {
                 if (_comment != "")
                 {
@@ -225,13 +213,13 @@ namespace RobotComponents.ABB.Actions.Dynamic
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
-            get 
+            get
             {
                 if (_comment == null) { return false; }
                 if (_comment == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
@@ -254,5 +242,4 @@ namespace RobotComponents.ABB.Actions.Dynamic
         }
         #endregion
     }
-
 }

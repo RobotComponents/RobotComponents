@@ -118,6 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AccelerationSet_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AccelerationSet_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AccelerationSet_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AccelerationSet_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ActionGroup_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ActionGroup_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -205,6 +211,9 @@
   <data name="DeconstructMovement_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructMovement_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="DeconstructPathAccelerationLimitation_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeconstructPathAccelerationLimitation_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="DeconstructRobotInfoComponent_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DeconstructRobotInfoComponent_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -268,6 +277,9 @@
   <data name="GetAnalogOutput_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetAnalogOutput_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="GetAxisPlanesFromKinematicsParameters_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GetAxisPlanesFromKinematicsParaeters_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="GetAxisValues_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetAxisValues_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -288,6 +300,9 @@
   </data>
   <data name="GetJointTarget_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetJointTarget_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetKinematicsParameters_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GetKinematicsParaeters_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="GetPlane_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GetPlane_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -424,6 +439,12 @@
   <data name="Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="PathAccelerationLimitation_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PathAccelerationLimitation_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PathAccelerationLimitation_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PathAccelerationLimitation_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="PathGen_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PathGen_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -552,6 +573,12 @@
   </data>
   <data name="Upload_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Upload_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VelocitySet_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\VelocitySet_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VelocitySet_Parameter_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\VelocitySet_Parameter_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="WaitAI_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\WaitAI_Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

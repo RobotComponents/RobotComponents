@@ -65,6 +65,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Check the operating system
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is only supported on Windows operating systems.");
+                return;
+            }
+
             // Input variables
             string name = "";
 
@@ -75,7 +82,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             try
             {
                 Signal signal = _controller.GetAnalogInput(name, out int index);
-                
+
                 if (index == -1)
                 {
                     if (_controller.IsEmpty == true)
@@ -202,20 +209,17 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (signals.Count > 1)
             {
-                PickSignalForm frm = new PickSignalForm(signals);
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-                frm.ShowDialog();
-                int index = frm.Index;
+                PickSignalForm form = new PickSignalForm(signals);
+                bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
-                if (index < 0)
+                if (result)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No signal picked from the menu!");
-                    return false;
+                    name = form.Signal.Name;
+                    return true;
                 }
                 else
                 {
-                    name = signals[index].Name;
-                    return true;
+                    return false;
                 }
             }
 

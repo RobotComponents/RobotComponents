@@ -78,7 +78,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_ExternalRotationalAxis(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");   
+            pManager.RegisterParam(new Param_ExternalRotationalAxis(), "External Rotational Axis", "ERA", "Resulting External Rotational Axis");
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             // Input variables
             string name = "";
-            Plane axisPlane= Plane.WorldXY;
+            Plane axisPlane = Plane.WorldXY;
             Interval limits = new Interval(0, 0);
             List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
@@ -163,7 +163,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             get { return new Guid("81B3F16F-1E26-4E30-BC5B-1FEA030D837F"); }
         }
         #endregion
-        
+
         #region menu item
         /// <summary>
         /// Adds the additional items to the context menu of the component. 

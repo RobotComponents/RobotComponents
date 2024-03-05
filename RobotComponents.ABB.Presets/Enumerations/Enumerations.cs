@@ -63,17 +63,17 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// <summary>
         /// IRB1600-X/1.2
         /// </summary>
-        IRB1600_X_120,
+        IRB1600_6_120,
 
         /// <summary>
-        /// IRB1600-X/1.45
+        /// IRB1600-6/1.45
         /// </summary>
-        IRB1600_X_145,
+        IRB1600_6_145,
 
         /// <summary>
-        /// IRB1660ID-X/1.55
+        /// IRB1660ID-4/1.55
         /// </summary>
-        IRB1660ID_X_155,
+        IRB1660ID_4_155,
 
         /// <summary>
         /// IRB2600-12/1.85
@@ -81,9 +81,9 @@ namespace RobotComponents.ABB.Presets.Enumerations
         IRB2600_12_185,
 
         /// <summary>
-        /// IRB2600-X/1.65
+        /// IRB2600-12/1.65
         /// </summary>
-        IRB2600_X_165,
+        IRB2600_12_165,
 
         /// <summary>
         /// IRB2600ID-15/1.85
@@ -106,9 +106,9 @@ namespace RobotComponents.ABB.Presets.Enumerations
         IRB4600_40_255,
 
         /// <summary>
-        /// IRB4600-X/2.05
+        /// IRB4600-45/2.05
         /// </summary>
-        IRB4600_X_205,
+        IRB4600_45_205,
 
         /// <summary>
         /// IRB6620-150/2.2
@@ -228,6 +228,46 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// <summary>
         /// IRB1010ID-1.5/0.37
         /// </summary>
-        IRB1010_1_5_037
+        IRB1010_1_5_037,
+
+        /// <summary>
+        /// IRB1600-10/1.2
+        /// </summary>
+        IRB1600_10_120,
+
+        /// <summary>
+        /// IRB1600-10/1.45
+        /// </summary>
+        IRB1600_10_145,
+
+        /// <summary>
+        /// IRB1660ID-6/1.55
+        /// </summary>
+        IRB1660ID_6_155,
+
+        /// <summary>
+        /// IRB2600-20/1.65
+        /// </summary>
+        IRB2600_20_165,
+
+        /// <summary>
+        /// IRB4600-60/2.05
+        /// </summary>
+        IRB4600_60_205
+
+        // <summary>
+        // CRB15000-5/0.95
+        // </summary>
+        //CRB15000_5_095,
+
+        // <summary>
+        // CRB15000-12/1.27
+        // </summary>
+        //CRB15000_12_127,
+
+        // <summary>
+        // CRB15000-10/1.52
+        // </summary>
+        //CRB15000_10_152
     }
 }

@@ -13,7 +13,7 @@ namespace RobotComponents.ABB.Gh.Utils
     /// <summary>
     /// Represents the interface for components that are managed by the document object manager.
     /// </summary>
-    public interface IObjectManager
+    internal interface IObjectManager
     {
         #region methods
         /// <summary>

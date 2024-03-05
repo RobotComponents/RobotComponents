@@ -11,7 +11,7 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;
@@ -371,14 +371,17 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
+            if (Value == null)
             {
-                return; 
+                return;
             }
 
             if (Value.Mesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                if (Value.Mesh.IsValid)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.Mesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
             }
         }
 

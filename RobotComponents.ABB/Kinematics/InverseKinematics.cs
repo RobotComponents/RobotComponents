@@ -10,8 +10,8 @@ using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
+using RobotComponents.Generic.Kinematics;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
 
@@ -20,41 +20,53 @@ namespace RobotComponents.ABB.Kinematics
     /// <summary>
     /// Represent the Inverse Kinematics for a 6-axis spherical Robot and its attached external axes.
     /// </summary>
+    /// <remarks>
+    /// Solution order:
+    /// 
+    /// Sol.    Wrist center            Wrist center            Axis 5 angle
+    /// Cfx     relative to axis 1      relative to lower arm
+    ///         
+    /// 0       In front of             In front of             Positive
+    /// 1       In front of             In front of             Negative
+    /// 2       In front of             Behind                  Positive
+    /// 3       In front of             Behind                  Negative     
+    /// 4       Behind                  In front of             Positive
+    /// 5       Behind                  In front of             Negative
+    /// 6       Behind                  Behind                  Positive
+    /// 7       Behind                  Behind                  Negative
+    /// </remarks>
     public class InverseKinematics
     {
         #region fields
         private Robot _robot;
         private RobotTool _robotTool;
         private Movement _movement;
-        private Plane _positionPlane; 
+        private Plane _positionPlane;
         private Plane _globalTargetPlane;
         private Plane _globalEndPlane;
         private Plane _localEndPlane;
-        private bool _inLimits = true;
+        private bool _isInLimits = true;
+        private bool _shoulderSingularity = false;
         private bool _elbowSingularity = false;
         private bool _wristSingularity = false;
-        private readonly bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
-        private readonly bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private bool[] _shoulderSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private bool[] _elbowSingularities = Enumerable.Repeat(false, 8).ToArray();
+        private bool[] _wristSingularities = Enumerable.Repeat(false, 8).ToArray();
         private readonly List<string> _errorText = new List<string>();
-        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8];
+        private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8].Select(item => new RobotJointPosition()).ToArray();
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
 
         // Constants
         private const double _pi = Math.PI;
-        private const double _2pi = 2 * _pi;
         private const double _rad2deg = 180 / _pi;
 
-        // OPW kinematics solver fields
-        private readonly double[] _offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
-        private readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
-        private readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
-        private readonly double[] _theta1 = new double[8];
-        private readonly double[] _theta2 = new double[8];
-        private readonly double[] _theta3 = new double[8];
-        private readonly double[] _theta4 = new double[8];
-        private readonly double[] _theta5 = new double[8];
-        private readonly double[] _theta6 = new double[8];
+        // Kinematics solver fields
+        private static readonly double[] _offsets = new double[6] { 0, 0, -_pi / 2, 0, 0, 0 };
+        private static readonly int[] _order = new int[8] { 0, 4, 1, 5, 2, 6, 3, 7 };
+        private static readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
+        private readonly OPWKinematics _opw = new OPWKinematics();
+        private readonly OPWKinematics _wok = new OPWKinematics();
         #endregion
 
         #region constructors
@@ -63,48 +75,15 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         public InverseKinematics()
         {
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
         }
 
         /// <summary>
-        /// Initializes a new instance of the Inverse Kinematics class from a Movement.
+        /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
-        /// <param name="movement"> The Movement. </param>
         /// <param name="robot"> The Robot. </param>
-        public InverseKinematics(Movement movement, Robot robot)
+        public InverseKinematics(Robot robot)
         {
             _robot = robot;
-            _movement = movement;
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
-            Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the Inverse Kinematics class from a Target.
-        /// </summary>
-        /// <remarks>
-        /// The target will be casted to a robot movement with a default work object (wobj0).
-        /// </remarks>
-        /// <param name="target"> The Target </param>
-        /// <param name="robot"> The Robot. </param>
-        public InverseKinematics(ITarget target, Robot robot)
-        {
-            _robot = robot;
-            _movement = new Movement(target);
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
             Initialize();
         }
 
@@ -115,20 +94,12 @@ namespace RobotComponents.ABB.Kinematics
         public InverseKinematics(InverseKinematics inverseKinematics)
         {
             _robot = inverseKinematics.Robot.Duplicate();
-            _movement = inverseKinematics.Movement.Duplicate();
-
-            for (int i = 0; i < 8; i++)
-            {
-                _robotJointPositions[i] = new RobotJointPosition();
-            }
-
-            Initialize();
-
+            _robotJointPositions = inverseKinematics.RobotJointPositions.Select(item => item.Duplicate()).ToArray();
             _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
             _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
-
             _errorText = new List<string>(inverseKinematics.ErrorText);
-            _inLimits = inverseKinematics.InLimits;
+            _isInLimits = inverseKinematics.IsInLimits;
+            Initialize();
         }
 
         /// <summary>
@@ -163,14 +134,26 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         private void Initialize()
         {
-            _robotTool = _movement.RobotTool.Name == "" ? _robot.Tool : _movement.RobotTool;
+            _opw.Signs = _signs;
+            _opw.Offsets = _offsets;
+            _opw.A1 = _robot.A1;
+            _opw.A2 = _robot.A2;
+            _opw.B = _robot.B;
+            _opw.C1 = _robot.C1;
+            _opw.C2 = _robot.C2;
+            _opw.C3 = _robot.C3;
+            _opw.C4 = _robot.C4;
 
-            if (_movement.Target is RobotTarget)
-            {
-                _globalTargetPlane = _movement.GetPosedGlobalTargetPlane();
-                GetPositionPlane();
-                GetEndPlanes();
-            }
+            _wok.Signs = _signs;
+            _wok.Offsets = _offsets;
+            _wok.A1 = _robot.A1;
+            _wok.A2 = _robot.A2;
+            //_wok.A3 = _robot.A3;
+            _wok.B = _robot.B;
+            _wok.C1 = _robot.C1;
+            _wok.C2 = _robot.C2;
+            _wok.C3 = _robot.C3;
+            _wok.C4 = _robot.C4;
         }
 
         /// <summary>
@@ -188,13 +171,32 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Calculates the inverse kinematics solution.
         /// </summary>
-        public void Calculate()
+        /// <param name="movement"> The movement to calculate the solution for. </param>
+        public void Calculate(Movement movement)
         {
             ClearCurrentSolutions();
+            SetMovement(movement);
             CalculateRobotJointPosition();
             CalculateExternalJointPosition();
             CheckInternalAxisLimits();
             CheckExternalAxisLimits();
+        }
+
+        /// <summary>
+        /// Sets the movement and associated fields.
+        /// </summary>
+        /// <param name="movement"> The movement to be set. </param>
+        private void SetMovement(Movement movement)
+        {
+            _movement = movement;
+            _globalTargetPlane = _movement.GetPosedGlobalTargetPlane();
+            _robotTool = _movement.RobotTool.Name == "" ? _robot.Tool : _movement.RobotTool;
+
+            if (_movement.Target is RobotTarget)
+            {
+                GetPositionPlane();
+                GetEndPlanes();
+            }
         }
 
         /// <summary>
@@ -203,170 +205,65 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// This method does not check the internal axis limits.
         /// </remarks>
-        public void CalculateRobotJointPosition()
+        private void CalculateRobotJointPosition()
         {
             ResetRobotJointPositions();
 
             if (_movement.Target is RobotTarget robotTarget)
             {
-                // Wrist position
-                Point3d c = new Point3d(_localEndPlane.PointAt(0, 0, -_robot.C4));
-
-                // Positioning part parameters: part 1
-                double nx1 = Math.Sqrt(c.X * c.X + c.Y * c.Y - _robot.B * _robot.B) - _robot.A1;
-                double k_2 = _robot.A2 * _robot.A2 + _robot.C3 * _robot.C3;
-                double k = Math.Sqrt(k_2);
-
-                // Joint position 1
-                double theta1_i = Math.Atan2(c.Y, c.X) - Math.Atan2(_robot.B, nx1 + _robot.A1);
-                double theta1_ii = Math.Atan2(c.Y, c.X) + Math.Atan2(_robot.B, nx1 + _robot.A1) - _pi;
-                _theta1[0] = theta1_i;
-                _theta1[1] = theta1_i;
-                _theta1[2] = theta1_ii;
-                _theta1[3] = theta1_ii;
-                _theta1[4] = theta1_i;
-                _theta1[5] = theta1_i;
-                _theta1[6] = theta1_ii;
-                _theta1[7] = theta1_ii;
-
-                // Positioning part parameters: part 2
-                double s1_2 = nx1 * nx1 + (c.Z - _robot.C1) * (c.Z - _robot.C1);
-                double s2_2 = (nx1 + 2.0 * _robot.A1) * (nx1 + 2.0 * _robot.A1) + (c.Z - _robot.C1) * (c.Z - _robot.C1);
-                double s1 = Math.Sqrt(s1_2);
-                double s2 = Math.Sqrt(s2_2);
-
-                // Joint position 2
-                double acos1 = Math.Acos((s1_2 + _robot.C2 * _robot.C2 - k_2) / (2.0 * s1 * _robot.C2));
-                double acos2 = Math.Acos((s2_2 + _robot.C2 * _robot.C2 - k_2) / (2.0 * s2 * _robot.C2));
-                if (double.IsNaN(acos1)) { acos1 = 0; }
-                if (double.IsNaN(acos2)) { acos2 = 0; }
-                double theta2_i = -acos1 + Math.Atan2(nx1, c.Z - _robot.C1);
-                double theta2_ii = acos1 + Math.Atan2(nx1, c.Z - _robot.C1);
-                double theta2_iii = -acos2 - Math.Atan2(nx1 + 2.0 * _robot.A1, c.Z - _robot.C1);
-                double theta2_iv = acos2 - Math.Atan2(nx1 + 2.0 * _robot.A1, c.Z - _robot.C1);
-                _theta2[0] = theta2_i;
-                _theta2[1] = theta2_ii;
-                _theta2[2] = theta2_iii;
-                _theta2[3] = theta2_iv;
-                _theta2[4] = theta2_i;
-                _theta2[5] = theta2_ii;
-                _theta2[6] = theta2_iii;
-                _theta2[7] = theta2_iv;
-
-                // Joint position 3
-                double acos3 = Math.Acos((s1_2 - _robot.C2 * _robot.C2 - k_2) / (2.0 * _robot.C2 * k));
-                double acos4 = Math.Acos((s2_2 - _robot.C2 * _robot.C2 - k_2) / (2.0 * _robot.C2 * k));
-                if (double.IsNaN(acos3)) { acos3 = 0; }
-                if (double.IsNaN(acos4)) { acos4 = 0; }
-                double theta3_i = acos3 - Math.Atan2(_robot.A2, _robot.C3);
-                double theta3_ii = -acos3 - Math.Atan2(_robot.A2, _robot.C3);
-                double theta3_iii = acos4 - Math.Atan2(_robot.A2, _robot.C3);
-                double theta3_iv = -acos4 - Math.Atan2(_robot.A2, _robot.C3);
-                _theta3[0] = theta3_i;
-                _theta3[1] = theta3_ii;
-                _theta3[2] = theta3_iii;
-                _theta3[3] = theta3_iv;
-                _theta3[4] = theta3_i;
-                _theta3[5] = theta3_ii;
-                _theta3[6] = theta3_iii;
-                _theta3[7] = theta3_iv;
-
-                // Orientation part parameters
-                double e11 = _localEndPlane.XAxis.X;
-                double e12 = _localEndPlane.YAxis.X;
-                double e13 = _localEndPlane.ZAxis.X;
-                double e21 = _localEndPlane.XAxis.Y;
-                double e22 = _localEndPlane.YAxis.Y;
-                double e23 = _localEndPlane.ZAxis.Y;
-                double e31 = _localEndPlane.XAxis.Z;
-                double e32 = _localEndPlane.YAxis.Z;
-                double e33 = _localEndPlane.ZAxis.Z;
-
-                // Calculate joint postion 4, 5 and 6
-                for (int i = 0; i < 8; i++)
+                // OPW kinematics solver
+                if (_robot.A3 == 0)
                 {
-                    double sin1 = Math.Sin(_theta1[i]);
-                    double sin23 = Math.Sin(_theta2[i] + _theta3[i]);
-                    double cos1 = Math.Cos(_theta1[i]);
-                    double cos23 = Math.Cos(_theta2[i] + _theta3[i]);
-                    double m = e13 * sin23 * cos1 + e23 * sin23 * sin1 + e33 * cos23;
+                    // Calculate inverse kinematics
+                    _opw.Inverse(_localEndPlane);
 
-                    // Joint 4
-                    double theta4_p = Math.Atan2(e23 * cos1 - e13 * sin1, e13 * cos23 * cos1 + e23 * cos23 * sin1 - e33 * sin23);
-                    _theta4[i] = i < 4 ? theta4_p : theta4_p + _pi;
+                    // Set Robot Joint Positions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            _robotJointPositions[i][j] = _rad2deg * _opw.Solutions[_order[i]][j];
+                        }
+                    }
 
-                    // Joint 5
-                    double theta5_p = Math.Atan2(Math.Sqrt(1 - m * m), m);
-                    _theta5[i] = i < 4 ? theta5_p : -theta5_p;
-                    _wristSingularities[i] = Math.Abs(_theta5[i]) < 1e-3;
+                    // Select solution
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
 
-                    // Joint 6
-                    double theta6_p = Math.Atan2(e12 * sin23 * cos1 + e22 * sin23 * sin1 + e32 * cos23, -e11 * sin23 * cos1 - e21 * sin23 * sin1 - e31 * cos23);
-                    _theta6[i] = i < 4 ? theta6_p : theta6_p - _pi;
+                    _wristSingularities = _order.Select(index => _opw.IsWristSingularity[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _opw.IsElbowSingularity[index]).ToArray();
+                    _shoulderSingularities = _order.Select(index => _opw.IsShoulderSingularity[index]).ToArray();
+
+                    _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
+                    _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
+                    _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
                 }
 
-                // Elbow singularities
-                if (acos1 == 0)
-                {
-                    _elbowSingularities[0] = true;
-                    _elbowSingularities[1] = true;
-                    _elbowSingularities[4] = true;
-                    _elbowSingularities[5] = true;
-                }
+                // Wrist Offset kinematics solver
                 else
                 {
-                    _elbowSingularities[0] = false;
-                    _elbowSingularities[1] = false;
-                    _elbowSingularities[4] = false;
-                    _elbowSingularities[5] = false;
-                }
-                if (acos2 == 0)
-                {
-                    _elbowSingularities[2] = true;
-                    _elbowSingularities[3] = true;
-                    _elbowSingularities[6] = true;
-                    _elbowSingularities[7] = true;
-                }
-                else
-                {
-                    _elbowSingularities[2] = false;
-                    _elbowSingularities[3] = false;
-                    _elbowSingularities[6] = false;
-                    _elbowSingularities[7] = false;
-                }
+                    // Calculate inverse kinematics
+                    _wok.Inverse(_localEndPlane);
 
-                // Check if the values are within -pi till pi
-                for (int i = 0; i < 8; i++)
-                {
-                    _theta1[i] = _theta1[i] > _pi ? _theta1[i] - _2pi : _theta1[i];
-                    _theta1[i] = _theta1[i] < -_pi ? _theta1[i] + _2pi : _theta1[i];
-                    _theta2[i] = _theta2[i] > _pi ? _theta2[i] - _2pi : _theta2[i];
-                    _theta2[i] = _theta2[i] < -_pi ? _theta2[i] + _2pi : _theta2[i];
-                    _theta3[i] = _theta3[i] > _pi ? _theta3[i] - _2pi : _theta3[i];
-                    _theta3[i] = _theta3[i] < -_pi ? _theta3[i] + _2pi : _theta3[i];
-                    _theta4[i] = _theta4[i] > _pi ? _theta4[i] - _2pi : _theta4[i];
-                    _theta4[i] = _theta4[i] < -_pi ? _theta4[i] + _2pi : _theta4[i];
-                    _theta5[i] = _theta5[i] > _pi ? _theta5[i] - _2pi : _theta5[i];
-                    _theta5[i] = _theta5[i] < -_pi ? _theta5[i] + _2pi : _theta5[i];
-                    _theta6[i] = _theta6[i] > _pi ? _theta6[i] - _2pi : _theta6[i];
-                    _theta6[i] = _theta6[i] < -_pi ? _theta6[i] + _2pi : _theta6[i];
-                }
+                    // Set Robot Joint Positions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 6; j++)
+                        {
+                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j]; 
+                        }
+                    }
 
-                // Set Robot Joint Positions
-                for (int i = 0; i < 8; i++)
-                {
-                    _robotJointPositions[i][0] = Math.Sign(_signs[0]) * _rad2deg * (_theta1[_order[i]] + _offsets[0]);
-                    _robotJointPositions[i][1] = Math.Sign(_signs[1]) * _rad2deg * (_theta2[_order[i]] + _offsets[1]);
-                    _robotJointPositions[i][2] = Math.Sign(_signs[2]) * _rad2deg * (_theta3[_order[i]] + _offsets[2]);
-                    _robotJointPositions[i][3] = Math.Sign(_signs[3]) * _rad2deg * (_theta4[_order[i]] + _offsets[3]);
-                    _robotJointPositions[i][4] = Math.Sign(_signs[4]) * _rad2deg * (_theta5[_order[i]] + _offsets[4]);
-                    _robotJointPositions[i][5] = Math.Sign(_signs[5]) * _rad2deg * (_theta6[_order[i]] + _offsets[5]);
-                }
+                    // Select solution
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
 
-                // Select solution
-                _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
-                _wristSingularity = _wristSingularities[_order[robotTarget.ConfigurationData.Cfx]];
-                _elbowSingularity = _elbowSingularities[_order[robotTarget.ConfigurationData.Cfx]];
+                    _wristSingularities = _order.Select(index => _wok.IsWristSingularity[index]).ToArray();
+                    _elbowSingularities = _order.Select(index => _wok.IsElbowSingularity[index]).ToArray();
+                    _shoulderSingularities = _order.Select(index => _wok.IsShoulderSingularity[index]).ToArray();
+
+                    _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
+                    _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
+                    _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
+                }
             }
 
             else if (_movement.Target is JointTarget jointTarget)
@@ -404,7 +301,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             double min = diff.Sum();
-    
+
             _robotJointPosition = _robotJointPosition.Duplicate();
 
             // Check for flipping axis 4 and 6 (if this is within the axis limits)
@@ -442,8 +339,9 @@ namespace RobotComponents.ABB.Kinematics
                                 if (sum < min)
                                 {
                                     _robotJointPosition = _robotJointPositions[i].Duplicate();
-                                    _wristSingularity = _wristSingularities[_order[i]];
-                                    _elbowSingularity = _elbowSingularities[_order[i]];
+                                    _shoulderSingularity = _shoulderSingularities[i];
+                                    _wristSingularity = _wristSingularities[i];
+                                    _elbowSingularity = _elbowSingularities[i];
                                     min = sum;
                                 }
 
@@ -467,12 +365,26 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Calculates the External Joint Position for a given movement.
+        /// </summary>
+        /// <param name="movement"> The movement to calculate the external joint position for. </param>
+        /// <remarks>
+        /// Interally used in situation where only the external joint positions needs to be 
+        /// computed and not the robot joint position. 
+        /// </remarks>
+        internal void CalculateExternalJointPosition(Movement movement)
+        {
+            SetMovement(movement);
+            CalculateExternalJointPosition();
+        }
+
+        /// <summary>
         /// Calculates the External Joint Position of the Inverse Kinematics solution.
         /// </summary>
         /// <remarks>
         /// This method does not check the external axis limits. 
         /// </remarks>
-        public void CalculateExternalJointPosition()
+        private void CalculateExternalJointPosition()
         {
             // Clear current solution
             ResetExternalJointPosition();
@@ -485,7 +397,7 @@ namespace RobotComponents.ABB.Kinematics
                 // Calculates the position of the external axes for each external axis
                 for (int i = 0; i < _robot.ExternalAxes.Count; i++)
                 {
-                    ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                    IExternalAxis externalAxis = _robot.ExternalAxes[i];
                     Interval axisLimits = _robot.ExternalAxes[i].AxisLimits;
                     int logic = externalAxis.AxisNumber;
 
@@ -573,19 +485,10 @@ namespace RobotComponents.ABB.Kinematics
             ResetExternalJointPosition();
 
             _errorText.Clear();
-            _inLimits = true;
+            _isInLimits = true;
             _wristSingularity = false;
             _elbowSingularity = false;
-
-            for (int i = 0; i < 8; i++)
-            {
-                _elbowSingularities[i] = false;
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                _wristSingularities[i] = false;
-            }
+            _shoulderSingularity = false;
         }
 
         /// <summary>
@@ -634,7 +537,7 @@ namespace RobotComponents.ABB.Kinematics
             // Check if an external axis is attached to the robot 
             for (int i = 0; i < _robot.ExternalAxes.Count; i++)
             {
-                ExternalAxis externalAxis = _robot.ExternalAxes[i];
+                IExternalAxis externalAxis = _robot.ExternalAxes[i];
                 int logic = externalAxis.AxisNumber;
 
                 // Moves Robot?
@@ -683,21 +586,26 @@ namespace RobotComponents.ABB.Kinematics
             for (int i = 0; i < _robotJointPosition.Length; i++)
             {
                 if (_robot.InternalAxisLimits[i].IncludesParameter(_robotJointPosition[i], false) == false)
-                { 
-                    _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot axis {i + 1} is not in range.");
-                    _inLimits = false;
+                {
+                    _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of robot joint {i + 1} is not in range.");
+                    _isInLimits = false;
                 }
             }
 
             if (_wristSingularity == true)
             {
-                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is close to wrist singularity.");
+                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The robot is near a wrist singularity.");
             }
 
             if (_elbowSingularity == true)
             {
                 _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The target is out of reach (elbow singularity).");
-                _inLimits = false;
+                _isInLimits = false;
+            }
+
+            if (_shoulderSingularity == true)
+            {
+                _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The robot is near a shoulder singularity.");
             }
         }
 
@@ -714,7 +622,7 @@ namespace RobotComponents.ABB.Kinematics
                 if (_robot.ExternalAxes[i].AxisLimits.IncludesParameter(_externalJointPosition[number], false) == false)
                 {
                     _errorText.Add($"Movement {_movement.Target.Name}\\{_movement.WorkObject.Name}: The position of external logical axis {logic} is not in range.");
-                    _inLimits = false;
+                    _isInLimits = false;
                 }
             }
         }
@@ -741,34 +649,8 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         public Robot Robot
         {
-            get 
-            { 
-                return _robot; 
-            }
-            set 
-            { 
-                _robot = value;
-                ReInitialize();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the Movement.
-        /// </summary>
-        /// <remarks>
-        /// The target and work object are obtained from this movement.
-        /// </remarks>
-        public Movement Movement
-        {
-            get 
-            { 
-                return _movement; 
-            }
-            set 
-            { 
-                _movement = value;
-                ReInitialize();
-            }
+            get { return _robot; }
+            set { _robot = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -818,9 +700,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets a value indicating whether or not the internal and external values are within their limits.
         /// </summary>
-        public bool InLimits
+        public bool IsInLimits
         {
-            get { return _inLimits; }
+            get { return _isInLimits; }
         }
         #endregion
     }

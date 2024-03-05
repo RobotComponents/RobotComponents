@@ -10,7 +10,6 @@ using GH_IO.Serialization;
 // RobotComponentsLibs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Dynamic;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -195,7 +194,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is CodeLine action)
                 {

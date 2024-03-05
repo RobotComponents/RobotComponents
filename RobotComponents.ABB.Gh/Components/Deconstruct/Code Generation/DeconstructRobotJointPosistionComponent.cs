@@ -108,7 +108,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.DeconstructRobotJointPosition_Icon; } 
+            get { return Properties.Resources.DeconstructRobotJointPosition_Icon; }
         }
 
         /// <summary>

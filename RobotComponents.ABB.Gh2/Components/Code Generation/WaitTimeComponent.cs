@@ -3,12 +3,6 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System Libs
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 // Grasshopper Libs
 using Grasshopper.Components;
 using Grasshopper.UI;
@@ -22,9 +16,9 @@ namespace RobotComponents.ABB.Gh2.Components.Code_Generation
     public sealed class WaitTimeComponent : Component
     {
         public WaitTimeComponent()
-            : base(new Nomen("Wait for Time", 
-                "Defines an instruction to wait a given amount of time between two other RAPID instructions.", 
-                "Robot Components", 
+            : base(new Nomen("Wait for Time",
+                "Defines an instruction to wait a given amount of time between two other RAPID instructions.",
+                "Robot Components",
                 "Code Generation"))
         {
             Threading = ThreadingState.UiSingleThreaded;

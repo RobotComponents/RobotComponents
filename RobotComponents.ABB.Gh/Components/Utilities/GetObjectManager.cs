@@ -16,7 +16,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
     /// <summary>
     /// RobotComponents Get Object Manager component. An inherent from the GH_Component Class.
     /// </summary>
-    public class GetObjectManager: GH_Component
+    public class GetObjectManager : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the FlipPlaneComponent class.

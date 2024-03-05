@@ -11,7 +11,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
@@ -23,13 +22,13 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// This action is used to define the robot axis positions in degrees.
     /// </remarks>
     [Serializable()]
-    public class RobotJointPosition : Action, IDeclaration, IJointPosition, ISerializable
+    public class RobotJointPosition : IAction, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "robjoint";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "robjoint";
+        private string _name = "";
         private double _val1;
         private double _val2;
         private double _val3;
@@ -48,9 +47,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected RobotJointPosition(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Axis value 1", typeof(double));
             _val2 = (double)info.GetValue("Axis value 2", typeof(double));
@@ -68,7 +67,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -87,10 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public RobotJointPosition()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -110,10 +105,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
             _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
             _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
@@ -128,10 +119,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalJointPositions"> The user defined internal joint positions as a collection.</param>
         public RobotJointPosition(IList<double> internalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             double[] values = CheckAxisValues(internalJointPositions);
 
             _val1 = values[0];
@@ -154,10 +141,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rax_6"> The position of robot axis 6 in degrees from the calibration position.</param>
         public RobotJointPosition(string name, double rax_1, double rax_2 = _defaultValue, double rax_3 = _defaultValue, double rax_4 = _defaultValue, double rax_5 = _defaultValue, double rax_6 = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
-
             _val1 = double.IsNaN(rax_1) ? _defaultValue : rax_1;
             _val2 = double.IsNaN(rax_2) ? _defaultValue : rax_2;
             _val3 = double.IsNaN(rax_3) ? _defaultValue : rax_3;
@@ -173,12 +157,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="internalJointPositions"> The user defined internal joint positions as a colection.</param>
         public RobotJointPosition(string name, IList<double> internalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
             double[] values = CheckAxisValues(internalJointPositions);
             
+            _name = name;
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];
@@ -221,7 +202,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Robot Joint Position instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new RobotJointPosition(this);
         }
@@ -259,7 +240,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"></param>
         private RobotJointPosition(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 6)
             {
@@ -518,7 +499,7 @@ namespace RobotComponents.ABB.Actions.Declarations
                 {
                     new DivideByZeroException();
                 }
-                
+
                 this[i] /= jointPosition[i];
             }
         }
@@ -566,12 +547,12 @@ namespace RobotComponents.ABB.Actions.Declarations
         {
             string code = "";
 
-            code += $"[{ _val1:0.##}, ";
-            code += $"{ _val2:0.##}, ";
-            code += $"{ _val3:0.##}, ";
-            code += $"{ _val4:0.##}, ";
-            code += $"{ _val5:0.##}, ";
-            code += $"{ _val6:0.##}]";
+            code += $"[{_val1:0.##}, ";
+            code += $"{_val2:0.##}, ";
+            code += $"{_val3:0.##}, ";
+            code += $"{_val4:0.##}, ";
+            code += $"{_val5:0.##}, ";
+            code += $"{_val6:0.##}]";
 
             return code;
         }
@@ -583,7 +564,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -603,19 +584,19 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -626,34 +607,23 @@ namespace RobotComponents.ABB.Actions.Declarations
                 }
             }
         }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-        }
         #endregion
 
         #region properties
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
-            get 
-            { 
+            get
+            {
                 if (double.IsNaN(_val1)) { return false; }
                 if (double.IsNaN(_val2)) { return false; }
                 if (double.IsNaN(_val3)) { return false; }
                 if (double.IsNaN(_val4)) { return false; }
                 if (double.IsNaN(_val5)) { return false; }
                 if (double.IsNaN(_val6)) { return false; }
-                return true; 
+                return true;
             }
         }
 

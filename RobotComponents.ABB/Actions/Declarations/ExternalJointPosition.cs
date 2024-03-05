@@ -11,25 +11,24 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
     /// <summary>
-    /// Represents an External Joint Position declaration.. 
+    /// Represents an External Joint Position declaration.
     /// </summary>
     /// <remarks>
     /// This action is used to defined define the axis positions of external axes, positioners and workpiece manipulators.
     /// </remarks>
     [Serializable()]
-    public class ExternalJointPosition : Action, IDeclaration, IJointPosition, ISerializable
+    public class ExternalJointPosition : IAction, IDeclaration, IJointPosition, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "extjoint";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "extjoint";
+        private string _name = "";
         private double _val1;
         private double _val2;
         private double _val3;
@@ -48,9 +47,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization.</param>
         protected ExternalJointPosition(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _val1 = (double)info.GetValue("Value 1", typeof(double));
             _val2 = (double)info.GetValue("Value 2", typeof(double));
@@ -68,7 +67,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -87,10 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ExternalJointPosition()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = _defaultValue;
             _val2 = _defaultValue;
             _val3 = _defaultValue;
@@ -111,10 +106,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
             _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
             _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
@@ -129,10 +120,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPositions"> The list with the positions of the external logical axes. </param>
         public ExternalJointPosition(IList<double> externalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
-
             double[] values = CheckAxisValues(new List<double>(externalJointPositions).ToArray());
 
             _val1 = values[0];
@@ -155,10 +142,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="Eax_f"> The position of the external logical axis “f” expressed in degrees or mm. </param>
         public ExternalJointPosition(string name, double Eax_a, double Eax_b = _defaultValue, double Eax_c = _defaultValue, double Eax_d = _defaultValue, double Eax_e = _defaultValue, double Eax_f = _defaultValue)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
-
             _val1 = double.IsNaN(Eax_a) ? _defaultValue : Eax_a;
             _val2 = double.IsNaN(Eax_b) ? _defaultValue : Eax_b;
             _val3 = double.IsNaN(Eax_c) ? _defaultValue : Eax_c;
@@ -174,12 +158,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPositions"> The collection with the position of the external logical axes. </param>
         public ExternalJointPosition(string name, IList<double> externalJointPositions)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = name;
-
             double[] values = CheckAxisValues(externalJointPositions);
 
+            _name = name;
             _val1 = values[0];
             _val2 = values[1];
             _val3 = values[2];
@@ -222,7 +203,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the External Joint Position instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new ExternalJointPosition(this);
         }
@@ -260,7 +241,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"></param>
         private ExternalJointPosition(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 6)
             {
@@ -562,7 +543,7 @@ namespace RobotComponents.ABB.Actions.Declarations
 
             // Copy definied joint positions
             for (int i = 0; i < n; i++)
-            {   
+            {
                 result[i] = double.IsNaN(axisValues[i]) ? _defaultValue : axisValues[i];
             }
 
@@ -605,7 +586,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID data code line in case a variable name is defined. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -625,19 +606,19 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -648,24 +629,13 @@ namespace RobotComponents.ABB.Actions.Declarations
                 }
             }
         }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-        }
         #endregion
 
         #region properties
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

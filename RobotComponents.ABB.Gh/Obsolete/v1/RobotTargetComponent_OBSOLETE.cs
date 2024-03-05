@@ -101,8 +101,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Catch inputs
             if (!DA.GetDataTree(0, out names)) { return; } // Fixed index
             if (!DA.GetDataTree(1, out planes)) { return; } // Fixed index
-            if (Params.Input.Any(x => x.Name == parameters[0].Name)) 
-            {            
+            if (Params.Input.Any(x => x.Name == parameters[0].Name))
+            {
                 if (!DA.GetDataTree(parameters[0].Name, out referencePlanes)) { return; }
             }
             if (Params.Input.Any(x => x.Name == "Axis Configuration"))

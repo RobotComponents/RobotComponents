@@ -68,7 +68,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool"); 
+            pManager.RegisterParam(new Param_RobotTool(), "Robot Tool", "RT", "Resulting Robot Tool");
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             if (!DA.GetData(2, ref attachmentPlane)) { return; }
             if (!DA.GetData(3, ref toolPlane)) { return; };
             if (!DA.GetData(4, ref loadData)) { loadData = new LoadData() { Name = "" }; };
-           
+
             // Replace spaces
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 

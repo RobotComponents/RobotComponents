@@ -63,7 +63,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + "----------"
                 + Environment.NewLine
                 + Environment.NewLine
-                + "The components of the controller utility category use the ABB PC SDK (version 2023.4). For more information, see https://developercenter.robotstudio.com/pc-sdk."
+                + "The components of the controller utility category use the ABB PC SDK (version 2024.1). For more information, see https://developercenter.robotstudio.com/pc-sdk."
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components uses the OPW kinematics solver as described in the paper "

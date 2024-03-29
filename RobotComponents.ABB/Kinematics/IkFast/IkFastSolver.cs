@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Kinematics.IKFast.Geometry;
 
 namespace RobotComponents.ABB.Kinematics.IKFast
@@ -29,9 +30,10 @@ namespace RobotComponents.ABB.Kinematics.IKFast
     {
         #region
         private int _numSolutions = 0;
-        private RobotJointPosition _robotJointPosition = new RobotJointPosition();
         private List<RobotJointPosition> _robotJointPositions = new List<RobotJointPosition>();
+        private List<RobotJointPosition> _robotJointPositionsArranged = new List<RobotJointPosition>();
         private readonly Plane _base = Plane.WorldYZ;
+        private Robot _robot;
 
         // Constants
         private const double _pi = Math.PI;
@@ -42,9 +44,9 @@ namespace RobotComponents.ABB.Kinematics.IKFast
         /// <summary>
         /// Initializes a new instance of the Inverse Kinematics class.
         /// </summary>
-        public IKFastSolver()
+        public IKFastSolver(Robot robot)
         {
-
+            _robot = robot;
         }
         #endregion
 
@@ -53,7 +55,6 @@ namespace RobotComponents.ABB.Kinematics.IKFast
         {
             _numSolutions = 0;
             _robotJointPositions.Clear();
-            _robotJointPosition.Reset();
         }
 
         /// <summary>
@@ -66,6 +67,13 @@ namespace RobotComponents.ABB.Kinematics.IKFast
             if (!System.Environment.Is64BitOperatingSystem)
             {
                 throw new Exception("The IKFast Kinematics Solver cannot be used. The operating system is not 64-bit.");
+            }
+
+            // Check that robot matches
+            // TODO refactor to avoid this.
+            if (_robot.Name != "CRB15000-5/0.95")
+            {
+                throw new Exception("Robot does not match function call.");
             }
 
             // Reset the solution
@@ -97,7 +105,7 @@ namespace RobotComponents.ABB.Kinematics.IKFast
                 }
             }
 
-            _robotJointPosition = _robotJointPositions.DefaultIfEmpty(new RobotJointPosition()).Last();
+            ArrangeJointPositions();
         }
 
         /// <summary>
@@ -110,6 +118,12 @@ namespace RobotComponents.ABB.Kinematics.IKFast
             if (!System.Environment.Is64BitOperatingSystem)
             {
                 throw new Exception("The IKFast Kinematics Solver cannot be used. The operating system is not 64-bit.");
+            }
+
+            // Check that robot matches
+            if (_robot.Name != "CRB15000-10/152")
+            {
+                throw new Exception("Robot does not match function call.");
             }
 
             // Reset the solution
@@ -141,11 +155,101 @@ namespace RobotComponents.ABB.Kinematics.IKFast
                 }
             }
 
-            _robotJointPosition = _robotJointPositions.DefaultIfEmpty(new RobotJointPosition()).Last();
+            ArrangeJointPositions();
         }
 
         /// <summary>
-        /// Sort the list of robot joint positions according to a policy.
+        /// Arrange joint positions according to the configuration parameter Cfx.
+        /// </summary>
+        /// <remarks>
+        /// The resulting list consists of 8 joint positions, where missing solutions
+        /// from ikfast are filled with default values (9e9). The definition of the
+        /// Cfx parameter is taken from InverseKinematics.cs (main branch).
+        /// </remarks>
+        private void ArrangeJointPositions()
+        {
+            // Cfx parameter defintion:
+            //
+            // Sol.    Wrist center            Wrist center            Axis 5 angle
+            // Cfx     relative to axis 1      relative to lower arm
+            //         
+            // 0       In front of             In front of             Positive
+            // 1       In front of             In front of             Negative
+            // 2       In front of             Behind                  Positive
+            // 3       In front of             Behind                  Negative     
+            // 4       Behind                  In front of             Positive
+            // 5       Behind                  In front of             Negative
+            // 6       Behind                  Behind                  Positive
+            // 7       Behind                  Behind                  Negative
+            // 
+            // Wrist center:    Point on axis 6 closest to axis 5; taking center point
+            //                  of mechanical axis 6 for simplicity.
+            // Lower arm:       Center point of the mechanical axis 4 (assumably).
+
+            ForwardKinematics fk = new ForwardKinematics(_robot, true);
+
+            // Initialize 8 robot joint positions with default values
+            for (int i=0; i<8; i++)
+            {
+                _robotJointPositionsArranged.Add(new RobotJointPosition(9e9, 9e9, 9e9, 9e9, 9e9, 9e9));
+            }
+
+            RobotJointPosition jointPos;
+            Transform[] transforms;
+
+            for (int i = 0; i < NumSolutions; i++)
+            {
+
+                jointPos = _robotJointPositions[i];
+                fk.Calculate(jointPos);
+                transforms = fk.RobotTransforms;
+
+                // Get wrist center point x position:
+                double wcp_x = fk.RobotTransforms[5].M03;
+
+                // Get lower arm x position:
+                double lowerArm_x = fk.RobotTransforms[3].M03;
+
+                // Get the angle of axis 5
+                double axis_5 = jointPos[4];
+
+                if (wcp_x >= 0.0 && wcp_x >= lowerArm_x && axis_5 >= 0.0)
+                {
+                    _robotJointPositionsArranged[0] = jointPos;
+                }
+                else if (wcp_x >= 0.0 && wcp_x >= lowerArm_x && axis_5 < 0.0)
+                {
+                    _robotJointPositionsArranged[1] = jointPos;
+                }
+                else if (wcp_x >= 0.0 && wcp_x < lowerArm_x && axis_5 >= 0.0)
+                {
+                    _robotJointPositionsArranged[2] = jointPos;
+                }
+                else if (wcp_x >= 0.0 && wcp_x < lowerArm_x && axis_5 < 0.0)
+                {
+                    _robotJointPositionsArranged[3] = jointPos;
+                }
+                else if (wcp_x < 0.0 && wcp_x >= lowerArm_x && axis_5 >= 0.0)
+                {
+                    _robotJointPositionsArranged[4] = jointPos;
+                }
+                else if (wcp_x < 0.0 && wcp_x >= lowerArm_x && axis_5 < 0.0)
+                {
+                    _robotJointPositionsArranged[5] = jointPos;
+                }
+                else if (wcp_x < 0.0 && wcp_x < lowerArm_x && axis_5 >= 0.0)
+                {
+                    _robotJointPositionsArranged[6] = jointPos;
+                }
+                else if (wcp_x < 0.0 && wcp_x < lowerArm_x && axis_5 < 0.0)
+                {
+                    _robotJointPositionsArranged[7] = jointPos;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sort joint positions according to the ConfigurationComparer.
         /// </summary>
         public void SortJointPositions()
         {
@@ -159,19 +263,11 @@ namespace RobotComponents.ABB.Kinematics.IKFast
 
         #region properties
         /// <summary>
-        /// Gets the latest calculated Robot Joint Position.
-        /// </summary>
-        public RobotJointPosition RobotJointPosition
-        {
-            get { return _robotJointPosition; }
-        }
-
-        /// <summary>
         /// Gets all calculated Robot Joint Positions.
         /// </summary>
         public List<RobotJointPosition> RobotJointPositions
         {
-            get { return _robotJointPositions; }
+            get { return _robotJointPositionsArranged; }
         }
 
         /// <summary>

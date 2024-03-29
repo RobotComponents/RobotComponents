@@ -49,7 +49,7 @@ namespace RobotComponents.ABB.Kinematics
         private OPWKinematics _opw = new OPWKinematics();
 
         //IKFast solver fields
-        private IKFastSolver _ikfast = new IKFastSolver();
+        private IKFastSolver _ikfast;
         #endregion
 
         #region constructors
@@ -234,6 +234,8 @@ namespace RobotComponents.ABB.Kinematics
             _opw.C2 = _robot.C2;
             _opw.C3 = _robot.C3;
             _opw.C4 = _robot.C4;
+
+            _ikfast = new IKFastSolver(_robot);
         }
 
         /// <summary>
@@ -296,18 +298,10 @@ namespace RobotComponents.ABB.Kinematics
                         _errorText.Add(e.Message);
                     }
 
-                    // Select solution: Needs to be improved (match with configuratin data of ABB, check with RobotStudio)
+                    // Copy over the solutions
                     for (int i = 0; i < 8; i++)
                     {
-                        if (i > _ikfast.NumSolutions - 1)
-                        {
-                            // High values to make it certain the solution will not be selected by the "CalculateClosestRobotJointPosition" method
-                            _robotJointPositions[i] = new RobotJointPosition(9e9, 9e9, 9e9, 9e9, 9e9, 9e9);
-                        }
-                        else
-                        {
-                            _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
-                        }
+                        _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
                     }
 
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
@@ -319,7 +313,6 @@ namespace RobotComponents.ABB.Kinematics
                     try
                     {
                         _ikfast.Compute_CRB15000_10_152(_localEndPlane);
-                        _ikfast.SortJointPositions();
 
                         #region DEBUG: Write results in Rhino command line
                         Rhino.RhinoApp.WriteLine($"IKFast found {_ikfast.NumSolutions} solutions (joint positions in deg).");
@@ -338,18 +331,10 @@ namespace RobotComponents.ABB.Kinematics
                         _errorText.Add(e.Message);
                     }
 
-                    // Select solution: Needs to be improved (match with configuratin data of ABB, check with RobotStudio)
+                    // Copy over the solutions
                     for (int i = 0; i < 8; i++)
                     {
-                        if (i > _ikfast.NumSolutions - 1)
-                        {
-                            // High values to make it certain the solution will not be selected by the "CalculateClosestRobotJointPosition" method
-                            _robotJointPositions[i] = new RobotJointPosition(9e9, 9e9, 9e9, 9e9, 9e9, 9e9);
-                        }
-                        else
-                        {
-                            _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
-                        }
+                        _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
                     }
 
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];

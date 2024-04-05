@@ -155,8 +155,8 @@ namespace RobotComponents.Generic.Kinematics
             double cz1 = (_c2 * cos2) + (_k * Math.Cos(theta[1] + theta[2] + _psi3));
 
             // Wrist position
-            double cx0 = (cx1 * cos1) - (cy1 * sin2);
-            double cy0 = (cx1 * sin1) + (cy1 * cos2);
+            double cx0 = (cx1 * cos1) - (cy1 * sin1);
+            double cy0 = (cx1 * sin1) + (cy1 * cos1);
             double cz0 = cz1 + _c1;
 
             // Matrix Rce: Wrist orientation

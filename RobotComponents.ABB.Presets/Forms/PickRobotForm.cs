@@ -45,6 +45,10 @@ namespace RobotComponents.ABB.Presets.Forms
             _robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
             _robotPresets = _robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
 
+            // Set EMPTY as first item
+            _robotPresets.Remove(RobotPreset.EMPTY);
+            _robotPresets.Insert(0, RobotPreset.EMPTY);
+
             // Controls
             Button button = new Button() { Text = "OK" };
             _box = new ComboBox()

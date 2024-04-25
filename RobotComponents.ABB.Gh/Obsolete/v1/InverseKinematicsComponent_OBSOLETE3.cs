@@ -131,7 +131,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Default previous robot joint position
-            if (DA.Iteration > _previousRobotJointPositions.Count - 1)
+            if (DA.Iteration >= _previousRobotJointPositions.Count)
             {
                 _previousRobotJointPositions.Add(new RobotJointPosition());
             }
@@ -174,9 +174,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             base.AfterSolveInstance();
 
-            if (_previousRobotJointPositions.Count > RunCount)
+            if (RunCount != -1)
             {
-                _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - 1);
+                if (_previousRobotJointPositions.Count > RunCount)
+                {
+                    _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - RunCount);
+                }
             }
         }
 

@@ -138,7 +138,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
 
             // Fill list if needed
-            if (DA.Iteration > _calculated.Count - 1)
+            if (DA.Iteration >= _calculated.Count)
             {
                 _calculated.Add(false);
             }
@@ -147,7 +147,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (update == true | _calculated[DA.Iteration] == false)
             {
                 // Create the path generator
-                if (DA.Iteration > _pathGenerators.Count - 1)
+                if (DA.Iteration >= _pathGenerators.Count)
                 {
                     _pathGenerators.Add(new PathGenerator(robot));
                 }
@@ -245,14 +245,17 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             base.AfterSolveInstance();
 
-            if (_pathGenerators.Count > RunCount)
+            if (RunCount != -1)
             {
-                _pathGenerators.RemoveRange(RunCount, _pathGenerators.Count - 1);
-            }
+                if (_pathGenerators.Count > RunCount)
+                {
+                    _pathGenerators.RemoveRange(RunCount, _pathGenerators.Count - RunCount);
+                }
 
-            if (_calculated.Count > RunCount)
-            {
-                _calculated.RemoveRange(RunCount, _calculated.Count - 1);
+                if (_calculated.Count > RunCount)
+                {
+                    _calculated.RemoveRange(RunCount, _calculated.Count - RunCount);
+                }
             }
         }
 

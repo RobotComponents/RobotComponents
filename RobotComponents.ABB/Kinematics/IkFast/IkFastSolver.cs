@@ -26,7 +26,7 @@ namespace RobotComponents.ABB.Kinematics.IKFast
     /// This class wraps the ikfast library generated for the CRB15000-5/0.95 robot (GoFa 5). 
     /// So far, this is the only robot supported.
     /// </remarks>
-    internal class IKFastSolver
+    public class IKFastSolver
     {
         #region
         private int _numSolutions = 0;
@@ -189,20 +189,20 @@ namespace RobotComponents.ABB.Kinematics.IKFast
             ForwardKinematics fk = new ForwardKinematics(_robot, true);
 
             // Initialize 8 robot joint positions with default values
+            _robotJointPositionsArranged.Clear();
+
             for (int i=0; i<8; i++)
             {
                 _robotJointPositionsArranged.Add(new RobotJointPosition(9e9, 9e9, 9e9, 9e9, 9e9, 9e9));
             }
 
             RobotJointPosition jointPos;
-            Transform[] transforms;
 
             for (int i = 0; i < NumSolutions; i++)
             {
 
                 jointPos = _robotJointPositions[i];
                 fk.Calculate(jointPos);
-                transforms = fk.RobotTransforms;
 
                 // Get wrist center point x position:
                 double wcp_x = fk.RobotTransforms[5].M03;

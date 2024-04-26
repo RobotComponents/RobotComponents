@@ -245,6 +245,10 @@ namespace RobotComponents.ABB.Kinematics.IKFast
                 {
                     _robotJointPositionsArranged[7] = jointPos;
                 }
+                else 
+                {
+                    _robotJointPositionsArranged.Add(jointPos);
+                }
             }
         }
 

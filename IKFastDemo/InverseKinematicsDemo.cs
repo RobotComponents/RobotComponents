@@ -14,6 +14,7 @@ using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Presets;
+using RobotComponents.ABB.Presets.Robots;
 
 namespace IkfastDemo
 {
@@ -52,14 +53,20 @@ namespace IkfastDemo
             Console.WriteLine("*** Inverse Kinematics Demo ***");
             Console.WriteLine("");
 
+            /*
+            Plane tcp = new Plane(new Point3d(0, 0, 0), Vector3d.XAxis, Vector3d.YAxis);
+            RobotTool tool1 = new RobotTool("tool1", new Mesh(), Plane.WorldXY, tcp);
+            */
+
+            // Set non trivial tcp and tool
             Plane tcp = new Plane(new Point3d(20, 40, 80), Vector3d.XAxis, Vector3d.YAxis);
             RobotTool tool1 = new RobotTool("tool1", new Mesh(), Plane.WorldXY, tcp);
 
-            Robot robot_CRB15000_5_095 = Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldYZ, tool1);
-            //Robot robot_CRB15000_10_152 = Factory.GetRobotPreset(RobotPreset.CRB15000_10_152, Plane.WorldYZ, tool1);
-
-            ShowRobotIK(robot_CRB15000_5_095);
-            //ShowRobotIK(robot_CRB15000_10_152);
+            // Compute IK of robots with non-trivial base pose.
+            ShowRobotIK(Factory.GetRobotPreset(RobotPreset.CRB15000_5_095, Plane.WorldYZ, tool1));
+            //ShowRobotIK(CRB15000_10_152.GetRobot(Plane.WorldYZ, tool1));  // Preset seems to be not implemented yet
+            //ShowRobotIK(Factory.GetRobotPreset(RobotPreset.IRB1010_1_5_037, Plane.WorldXY, tool1));
+            
         }
 
         static void ShowRobotIK(Robot robot)
@@ -69,16 +76,26 @@ namespace IkfastDemo
 
             // Initialize kinematics solvers
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-            InverseKinematics inverseKinematics = new InverseKinematics(robot);
 
             // Create a robot target from a given robot joint position
             RobotJointPosition robotJointPosition = new RobotJointPosition(-40, 30, -60, 70, 50, 45);
+            //RobotJointPosition robotJointPosition = new RobotJointPosition(40, 30, 60, 70, 50, 45);
+            //RobotJointPosition robotJointPosition = new RobotJointPosition(0, 0, 0, 0, 0, 0);
+
             forwardKinematics.Calculate(robotJointPosition);
             Plane toolEndPlane = forwardKinematics.TCPPlane;
             RobotTarget robotTarget = new RobotTarget(toolEndPlane);
 
             // Calcuate solutions
-            inverseKinematics.Movement.Target = robotTarget;
+            // TODO debug late target passing
+            // Passing the movement target after the simple instructor call seems fail in the 
+            // computation of target planes. I guess the order of method calls inside InverseKinematics
+            // needs to be modified. 
+            // I.e. these two lines fail:
+            //InverseKinematics inverseKinematics = new InverseKinematics(robot);
+            //inverseKinematics.Movement.Target = robotTarget; 
+
+            InverseKinematics inverseKinematics = new InverseKinematics(robot, robotTarget);
             inverseKinematics.Calculate();
 
             // Write IK error text

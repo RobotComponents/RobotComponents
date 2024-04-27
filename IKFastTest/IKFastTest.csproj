@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{32FDB79E-9D2B-4425-89CA-576163380866}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IKFastTest</RootNamespace>
+    <AssemblyName>IKFastTest</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IKFastSolverTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestInit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RobotComponents.ABB.Presets\RobotComponents.ABB.Presets.csproj">
+      <Project>{15938314-61c9-44e9-b0e9-6e5cb15825f6}</Project>
+      <Name>RobotComponents.ABB.Presets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
+      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
+      <Name>RobotComponents.ABB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
+      <Project>{f7ea2eb3-c653-4839-8843-f82c828a4b21}</Project>
+      <Name>RobotComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MSTest.TestAdapter">
+      <Version>3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>3.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Rhino.Inside">
+      <Version>7.0.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>Copy "$(SolutionDir)\DLLs\ikfast\libblas.dll" "$(TargetDir)\libblas.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh_64-1.dll" "$(TargetDir)\libgcc_s_seh_64-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh-1.dll" "$(TargetDir)\libgcc_s_seh-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libstdc++-6.dll" "$(TargetDir)\libstdc++-6.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran_64-3.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthread-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll" 
+
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_5_095.dll" "$(TargetDir)\rcik_CRB15000_5_095.dll" 
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_10_152.dll" "$(TargetDir)\rcik_CRB15000_10_152.dll"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

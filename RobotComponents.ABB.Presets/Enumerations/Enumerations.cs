@@ -255,10 +255,10 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// </summary>
         IRB4600_60_205
 
-        // <summary>
-        // CRB15000-5/0.95
-        // </summary>
-        //CRB15000_5_095,
+        /// <summary>
+        /// CRB15000-5/0.95
+        /// </summary>
+        CRB15000_5_095
 
         // <summary>
         // CRB15000-12/1.27

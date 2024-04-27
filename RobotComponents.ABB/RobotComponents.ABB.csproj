@@ -47,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
@@ -102,6 +103,11 @@
     <Compile Include="Actions\RAPIDGenerator.cs" />
     <Compile Include="Definitions\IMechanicalUnit.cs" />
     <Compile Include="Definitions\RobotTool.cs" />
+    <Compile Include="Kinematics\IKFast\ConfigurationComparer.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Quaternion.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Vector3d.cs" />
+    <Compile Include="Kinematics\IKFast\Geometry\Vector6d.cs" />
+    <Compile Include="Kinematics\IKFast\IKFastSolver.cs" />
     <Compile Include="Kinematics\InverseKinematics.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -151,8 +157,19 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>Copy "$(SolutionDir)\DLLs\ikfast\libblas.dll" "$(TargetDir)\libblas.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh_64-1.dll" "$(TargetDir)\libgcc_s_seh_64-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgcc_s_seh-1.dll" "$(TargetDir)\libgcc_s_seh-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libstdc++-6.dll" "$(TargetDir)\libstdc++-6.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libgfortran_64-3.dll" "$(TargetDir)\libgfortran_64-3.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libwinpthread-1.dll" "$(TargetDir)\libwinpthread-1.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\libquadmath-0.dll" "$(TargetDir)\libquadmath-0.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapack.dll" "$(TargetDir)\liblapack.dll"
+Copy "$(SolutionDir)\DLLs\ikfast\liblapacke.dll" "$(TargetDir)\liblapacke.dll" 
+
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_5_095.dll" "$(TargetDir)\rcik_CRB15000_5_095.dll" 
+Copy "$(SolutionDir)\DLLs\ikfast\rcik_CRB15000_10_152.dll" "$(TargetDir)\rcik_CRB15000_10_152.dll"
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug32|AnyCPU' ">
     <StartArguments>
@@ -160,6 +177,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files (x86)\Rhinoceros 5\System\Rhino4.exe</StartProgram>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>
@@ -171,6 +189,7 @@
     <StartAction>Program</StartAction>
     <Prefer32Bit>false</Prefer32Bit>
     <DocumentationFile>bin\RobotComponents.ABB.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

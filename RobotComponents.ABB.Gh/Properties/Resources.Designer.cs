@@ -303,6 +303,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CRB15000_Icon {
+            get {
+                object obj = ResourceManager.GetObject("CRB15000_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap DeconstructConfigurationData_Icon {
             get {
                 object obj = ResourceManager.GetObject("DeconstructConfigurationData_Icon", resourceCulture);

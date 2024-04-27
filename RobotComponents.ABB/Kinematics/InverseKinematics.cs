@@ -14,6 +14,7 @@ using RobotComponents.Generic.Kinematics;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Kinematics.IKFast;
 
 namespace RobotComponents.ABB.Kinematics
 {
@@ -67,6 +68,9 @@ namespace RobotComponents.ABB.Kinematics
         private static readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
         private readonly OPWKinematics _opw = new OPWKinematics();
         private readonly OPWKinematics _wok = new OPWKinematics();
+
+        //IKFast solver fields
+        private IKFastSolver _ikfast;
         #endregion
 
         #region constructors
@@ -154,6 +158,8 @@ namespace RobotComponents.ABB.Kinematics
             _wok.C2 = _robot.C2;
             _wok.C3 = _robot.C3;
             _wok.C4 = _robot.C4;
+
+            _ikfast = new IKFastSolver(_robot);
         }
 
         /// <summary>
@@ -236,6 +242,72 @@ namespace RobotComponents.ABB.Kinematics
                     _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
                     _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
                     _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
+                  
+                else if (_robot.Name == "CRB15000-5/0.95")
+                {
+                    try
+                    {
+                        _ikfast.Compute_CRB15000_5_095(_localEndPlane);
+
+                        #region DEBUG: Write results in Rhino command line
+                        Rhino.RhinoApp.WriteLine($"IKFast found {_ikfast.NumSolutions} solutions (joint positions in deg).");
+
+                        for (int i = 0; i < _ikfast.RobotJointPositions.Count; i++)
+                        {
+                            Rhino.RhinoApp.WriteLine(_ikfast.RobotJointPositions[i].ToString());
+                        }
+
+                        Rhino.RhinoApp.WriteLine("");
+                        #endregion
+
+                    }
+                    catch (Exception e)
+                    {
+                        _errorText.Add(e.Message);
+                    }
+
+                    // Copy over the solutions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
+                    }
+
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _wristSingularity = false;
+                    _elbowSingularity = false;
+                }
+                else if(_robot.Name == "CRB15000-10/152")
+                {
+                    try
+                    {
+                        _ikfast.Compute_CRB15000_10_152(_localEndPlane);
+
+                        #region DEBUG: Write results in Rhino command line
+                        Rhino.RhinoApp.WriteLine($"IKFast found {_ikfast.NumSolutions} solutions (joint positions in deg).");
+
+                        for (int i = 0; i < _ikfast.RobotJointPositions.Count; i++)
+                        {
+                            Rhino.RhinoApp.WriteLine(_ikfast.RobotJointPositions[i].ToString());
+                        }
+
+                        Rhino.RhinoApp.WriteLine("");
+                        #endregion
+
+                    }
+                    catch (Exception e)
+                    {
+                        _errorText.Add(e.Message);
+                    }
+
+                    // Copy over the solutions
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _robotJointPositions[i] = _ikfast.RobotJointPositions[i];
+                    }
+
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _wristSingularity = false;
+                    _elbowSingularity = false;
                 }
 
                 // Wrist Offset kinematics solver
@@ -255,7 +327,6 @@ namespace RobotComponents.ABB.Kinematics
 
                     // Select solution
                     _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
-
                     _wristSingularities = _order.Select(index => _wok.IsWristSingularity[index]).ToArray();
                     _elbowSingularities = _order.Select(index => _wok.IsElbowSingularity[index]).ToArray();
                     _shoulderSingularities = _order.Select(index => _wok.IsShoulderSingularity[index]).ToArray();

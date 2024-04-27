@@ -16,12 +16,9 @@ using RobotComponents.ABB.Kinematics.IKFast;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Presets;
-using RobotComponents.ABB.Presets.Robots;
 using RobotComponents.ABB.Presets.Enumerations;
 // Rhino Libs
-using Rhino;
 using Rhino.Geometry;
-using RobotComponents.ABB.Actions.Interfaces;
 
 
 namespace IKFastTest

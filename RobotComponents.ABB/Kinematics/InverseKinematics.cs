@@ -242,7 +242,7 @@ namespace RobotComponents.ABB.Kinematics
                     _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
                     _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
                     _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
-                  
+                }
                 else if (_robot.Name == "CRB15000-5/0.95")
                 {
                     try
@@ -276,7 +276,7 @@ namespace RobotComponents.ABB.Kinematics
                     _wristSingularity = false;
                     _elbowSingularity = false;
                 }
-                else if(_robot.Name == "CRB15000-10/152")
+                else if (_robot.Name == "CRB15000-10/152")
                 {
                     try
                     {
@@ -321,7 +321,7 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j]; 
+                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j];
                         }
                     }
 

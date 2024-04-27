@@ -13,8 +13,8 @@ using RobotComponents.ABB.Presets.Enumerations;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Presets;
-using RobotComponents.ABB.Presets.Robots;
 
 namespace IkfastDemo
 {
@@ -95,8 +95,8 @@ namespace IkfastDemo
             //InverseKinematics inverseKinematics = new InverseKinematics(robot);
             //inverseKinematics.Movement.Target = robotTarget; 
 
-            InverseKinematics inverseKinematics = new InverseKinematics(robot, robotTarget);
-            inverseKinematics.Calculate();
+            InverseKinematics inverseKinematics = new InverseKinematics(robot);
+            inverseKinematics.Calculate(new Movement(robotTarget));
 
             // Write IK error text
             if (inverseKinematics.ErrorText.Count != 0)

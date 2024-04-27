@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// Initializes a new instance of the DeconstructRobotTool class.
         /// </summary>
         public OldDeconstructExternalRotationalAxisComponent()
-          : base("Deconstruct External Rotational Axis", "DeConERA", 
+          : base("Deconstruct External Rotational Axis", "DeConERA",
               "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

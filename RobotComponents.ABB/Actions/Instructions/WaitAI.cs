@@ -10,7 +10,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -21,12 +20,12 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// This action is used to wait until a value of a analog input is set.
     /// </remarks>
     [Serializable()]
-    public class WaitAI : Action, IInstruction, ISerializable
+    public class WaitAI : IAction, IInstruction, ISerializable
     {
         #region fields
-        private string _name; 
-        private double _value; 
-        private InequalitySymbol _inequalitySymbol; 
+        private string _name;
+        private double _value;
+        private InequalitySymbol _inequalitySymbol;
         private double _maxTime;
         #endregion
 
@@ -38,11 +37,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected WaitAI(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
             _value = (double)info.GetValue("Value", typeof(double));
             _inequalitySymbol = (InequalitySymbol)info.GetValue("Inequality Symbol", typeof(InequalitySymbol));
-            _maxTime = version >= 1004000 ? (double)info.GetValue("Max Time", typeof(double)) : -1;
+            _maxTime = (double)info.GetValue("Max Time", typeof(double));
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Name", _name, typeof(string));
             info.AddValue("Value", _value, typeof(double));
             info.AddValue("Inequality Symbol", _value, typeof(InequalitySymbol));
@@ -123,7 +122,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Wait AI instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new WaitAI(this);
         }
@@ -159,7 +158,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -171,33 +170,22 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return $"WaitAI {_name}, \\{Enum.GetName(typeof(InequalitySymbol), _inequalitySymbol)}, {_value}" +
                 $"{(_maxTime > 0 ? $"\\MaxTime:={_maxTime:0.###}" : "")};";
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -205,20 +193,20 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                return true; 
+                return true;
             }
         }
 
         /// <summary>
         /// Gets or sets the desired state of the analog input signal.
         /// </summary>
-        public double Value 
+        public double Value
         {
             get { return _value; }
             set { _value = value; }
@@ -227,8 +215,8 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets or sets the name of the analog input signal.
         /// </summary>
-        public string Name 
-        { 
+        public string Name
+        {
             get { return _name; }
             set { _name = value; }
         }

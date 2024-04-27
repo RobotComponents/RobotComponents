@@ -6,11 +6,11 @@
 // System Libs
 using System;
 using System.Linq;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 // Rhino Libs
 using Rhino.Geometry;
+using Rhino.Display;
 //Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -142,14 +142,14 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             }
 
             // Default previous robot joint position
-            if (DA.Iteration > _previousRobotJointPositions.Count - 1)
+            if (DA.Iteration >= _previousRobotJointPositions.Count)
             {
                 _previousRobotJointPositions.Add(new RobotJointPosition());
             }
-            
+
             // Calculate the robot pose
-            _inverseKinematics.Add(new InverseKinematics(robot, movement));
-            _inverseKinematics[DA.Iteration].Calculate();
+            _inverseKinematics.Add(new InverseKinematics(robot));
+            _inverseKinematics[DA.Iteration].Calculate(movement);
 
             // Closest Robot Joint Position
             if (closestRobotJointPosition == true && reset == false && movement.Target is RobotTarget && movement.MovementType != MovementType.MoveAbsJ)
@@ -169,7 +169,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (_hideMesh == false | _outputMeshParameter == true)
             {
                 ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition); 
+                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition);
                 _forwardKinematics.Add(forwardKinematics);
             }
 
@@ -190,9 +190,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             base.AfterSolveInstance();
 
-            if (_previousRobotJointPositions.Count > RunCount)
+            if (RunCount != -1)
             {
-                _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - 1);
+                if (_previousRobotJointPositions.Count > RunCount)
+                {
+                    _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - RunCount);
+                }
             }
         }
 
@@ -532,28 +535,18 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
-                    // Initiate the display color and transparancy of the robot mesh
-                    Color color;
-                    double trans;
-
-                    // Set the display color and transparancy of the robot mesh
-                    if (_inverseKinematics[i].InLimits == true)
-                    {
-                        color = Color.FromArgb(225, 225, 225);
-                        trans = 0.0;
-                    }
-                    else
-                    {
-                        color = Color.FromArgb(150, 0, 0);
-                        trans = 0.5;
-                    }
+                    // Initiate the display color and transparancy of the mechanical unit mesh
+                    DisplayMaterial displayMaterial = _inverseKinematics[i].IsInLimits ? DisplaySettings.DisplayMaterialInLimits : DisplaySettings.DisplayMaterialOutsideLimits;
 
                     // Display internal axis meshes
                     for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)
                     {
-                        if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                        if (_forwardKinematics[i].PosedRobotMeshes[j] != null)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                            if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                            {
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
+                            }
                         }
                     }
 
@@ -562,9 +555,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     {
                         for (int k = 0; k < _forwardKinematics[i].PosedExternalAxisMeshes[j].Count; k++)
                         {
-                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k] != null)
                             {
-                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], new Rhino.Display.DisplayMaterial(color, trans));
+                                if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                                {
+                                    args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], displayMaterial);
+                                }
                             }
                         }
                     }

@@ -24,7 +24,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// Initializes a new instance of the DeconstructConfigurationData class.
         /// </summary>
         public DeconstructConfigurationDataComponent()
-          : base("Deconstruct Configuration Data", "DeConConf", 
+          : base("Deconstruct Configuration Data", "DeConConf",
               "Deconstructs a Configuration Data component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -44,8 +44,8 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-        {        
-            pManager.Register_StringParam("Name", "N", "Name as string",GH_ParamAccess.item);
+        {
+            pManager.Register_StringParam("Name", "N", "Name as string", GH_ParamAccess.item);
             pManager.Register_IntegerParam("CF1", "CF1", "The current quadrant of axis 1 as a number");
             pManager.Register_IntegerParam("CF4", "CF4", "The current quadrant of axis 4 as a number");
             pManager.Register_IntegerParam("CF6", "CF6", "The current quadrant of axis 6 as a number");

@@ -12,7 +12,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
@@ -26,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_RobotTarget() 
+        public GH_RobotTarget()
         {
             this.Value = null;
         }
@@ -169,7 +168,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -275,7 +274,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is RobotTarget action)
                 {

@@ -66,6 +66,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Check the operating system
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is only supported on Windows operating systems.");
+                return;
+            }
+
             // Declare input variables
             string domain = "";
             string type = "";
@@ -163,25 +170,27 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="e"> The event data. </param>
         private void MenuItemClick(object sender, EventArgs e)
         {
-            PickConfigurationDomainPathForm frm = new PickConfigurationDomainPathForm(_controller);
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-            frm.ShowDialog();
+            PickConfigurationDomainPathForm form = new PickConfigurationDomainPathForm(_controller);
+            bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
-            string[] values = new string[4] { frm.Domain, frm.Type, frm.Instance, frm.Attribute};
-
-            for (int i = 0; i < 4; i++)
+            if (result)
             {
-                if (this.Params.Input[i + 1].Sources.Count == 1 && this.Params.Input[i + 1].Sources[0] is GH_Panel panel)
-                {
-                    panel.SetUserText(values[i]);
-                }
-                else
-                {
-                    HelperMethods.CreatePanel(this, values[i], i + 1);
-                }
-            }
+                string[] values = new string[4] { form.Domain, form.Type, form.Instance, form.Attribute };
 
-            this.ExpireSolution(true);
+                for (int i = 0; i < 4; i++)
+                {
+                    if (this.Params.Input[i + 1].Sources.Count == 1 && this.Params.Input[i + 1].Sources[0] is GH_Panel panel)
+                    {
+                        panel.SetUserText(values[i]);
+                    }
+                    else
+                    {
+                        HelperMethods.CreatePanel(this, values[i], i + 1);
+                    }
+                }
+
+                this.ExpireSolution(true);
+            }
         }
         #endregion
     }

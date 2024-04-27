@@ -90,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
             {
                 Text = "Not available",
                 Visible = false
-            }; 
+            };
 
             return item;
         }

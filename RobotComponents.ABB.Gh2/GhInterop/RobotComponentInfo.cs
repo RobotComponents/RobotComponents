@@ -14,16 +14,16 @@ namespace RobotComponents.ABB.Gh2.GhInterop
 {
     public class PluginInfo : Plugin
     {
-        public static readonly Guid PluginId = new Guid ("{60765982-3CAC-4DBC-B55E-E9E68E70381F}");
+        public static readonly Guid PluginId = new Guid("{60765982-3CAC-4DBC-B55E-E9E68E70381F}");
         public PluginInfo()
-            : base(PluginId, 
-                  new Nomen("Robot Components ABB", "Intuitive robot programming."), 
+            : base(PluginId,
+                  new Nomen("Robot Components ABB", "Intuitive robot programming."),
                   typeof(PluginInfo).Assembly.GetName().Version)
         {
             _icon = null;
         }
 
-        private IIcon _icon;
+        private readonly IIcon _icon;
 
         public override string Author => "Robot Components";
 

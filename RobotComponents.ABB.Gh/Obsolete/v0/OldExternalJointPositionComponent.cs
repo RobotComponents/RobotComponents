@@ -172,7 +172,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 return false;
             }
             // Don't allow for insert if all variable input parameters are already added
-            else if (side == GH_ParameterSide.Input && index == (externalAxisParameters.Length))
+            else if (side == GH_ParameterSide.Input && index == externalAxisParameters.Length)
             {
                 return false;
             }

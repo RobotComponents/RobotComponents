@@ -6,63 +6,107 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
+// Eto libs
+using Eto.Forms;
+using Eto.Drawing;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
     /// <summary>
     /// Represents the pick signal form class.
     /// </summary>
-    public partial class PickSignalForm : Form
+    public class PickSignalForm : Dialog<bool>
     {
         #region fields
-        private int _index = 0;
         private readonly List<Signal> _signals;
+        private Signal _signal;
+        private readonly Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelValue = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelType = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelMinValue = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelMaxValue = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelAccesLevel = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly ComboBox _box = new ComboBox() { Height = _height };
+
+        private const int _height = 21;
         #endregion
 
         #region constructors
         /// <summary>
-        /// Constructs a pick signal form.
+        /// Constructs the form.
         /// </summary>
-        /// <param name="items"> The items to fill the form with. </param>
-        public PickSignalForm(List<Signal> items)
+        /// <param name="signals"> List with signals to pick an item from. </param>
+        public PickSignalForm(List<Signal> signals)
         {
-            InitializeComponent();
+            // Main layout
+            Title = "Controller signals";
+            MinimumSize = new Size(600, 420);
+            Resizable = false;
+            Padding = 20;
 
-            _signals = items;
+            // Signals
+            _signals = signals;
 
-            for (int i = 0; i < _signals.Count; i++)
-            {
-                comboBox1.Items.Add(_signals[i].Name);
-            }
+            // Controls
+            Button button = new Button() { Text = "OK" };
+            _box = new ComboBox() { DataStore = _signals.ConvertAll(item => item.Name), Height = _height };
+
+            // Assign events
+            button.Click += ButtonClick;
+            _box.SelectedIndexChanged += IndexChanged;
+
+            // Select index
+            _box.SelectedIndex = 0;
+
+            // Labels
+            Label selectLabel = new Label() { Text = "Select a signal", Font = new Font(SystemFont.Bold), Height = _height };
+            Label infoLabel = new Label() { Text = "Signal info", Font = new Font(SystemFont.Bold), Height = _height };
+
+            // Layout
+            DynamicLayout layout = new DynamicLayout() { Padding = 0, Spacing = new Size(8, 4) };
+            layout.AddSeparateRow(selectLabel);
+            layout.AddSeparateRow(_box);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(infoLabel);
+            layout.AddSeparateRow(new Label() { Text = "Name", Height = _height }, _labelName);
+            layout.AddSeparateRow(new Label() { Text = "Value", Height = _height }, _labelValue);
+            layout.AddSeparateRow(new Label() { Text = "Type", Height = _height }, _labelType);
+            layout.AddSeparateRow(new Label() { Text = "Minimum value", Height = _height }, _labelMinValue);
+            layout.AddSeparateRow(new Label() { Text = "Maximum value", Height = _height }, _labelMaxValue);
+            layout.AddSeparateRow(new Label() { Text = "Acces level", Height = _height }, _labelAccesLevel);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(button);
+
+            Content = layout;
         }
         #endregion
 
         #region methods
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void IndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = _signals[comboBox1.SelectedIndex].Name;
-            this.labelValueInfo.Text = _signals[comboBox1.SelectedIndex].Value.ToString();
-            this.labelTypeInfo.Text = _signals[comboBox1.SelectedIndex].SignalABB.Type.ToString();
-            this.labelMinValueInfo.Text = _signals[comboBox1.SelectedIndex].MinValue.ToString();
-            this.labelMaxValueInfo.Text = _signals[comboBox1.SelectedIndex].MaxValue.ToString();
-            this.labelAccesLevelInfo.Text = _signals[comboBox1.SelectedIndex].AccesLevel;
+            _labelName.Text = _signals[_box.SelectedIndex].Name;
+            _labelValue.Text = _signals[_box.SelectedIndex].Value.ToString();
+            _labelType.Text = _signals[_box.SelectedIndex].SignalABB.Type.ToString();
+            _labelMinValue.Text = _signals[_box.SelectedIndex].MinValue.ToString();
+            _labelMaxValue.Text = _signals[_box.SelectedIndex].MaxValue.ToString();
+            _labelAccesLevel.Text = _signals[_box.SelectedIndex].AccesLevel;
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            _index = comboBox1.SelectedIndex;
-            this.Close();
+            _signal = _signals[_box.SelectedIndex];
+            Close(true);
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// Gets the index of the picked signal. 
+        /// Gets the picked signal.
         /// </summary>
-        public int Index
+        public Signal Signal
         {
-            get { return _index; }
+            get { return _signal; }
         }
         #endregion
     }

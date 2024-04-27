@@ -55,7 +55,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_CirclePathMode(), "Circle Path Mode", "CPM", "Resulting Circle Path Mode", GH_ParamAccess.item);   
+            pManager.RegisterParam(new Param_CirclePathMode(), "Circle Path Mode", "CPM", "Resulting Circle Path Mode", GH_ParamAccess.item);
         }
 
         /// <summary>

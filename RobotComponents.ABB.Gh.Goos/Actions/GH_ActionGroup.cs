@@ -184,7 +184,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -220,7 +220,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is ActionGroup action)
                 {
@@ -245,16 +245,16 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             {
                 GH_GeometryGroup groupGoo = source as GH_GeometryGroup;
                 List<IGH_GeometricGoo> goos = groupGoo.Objects;
-                List<Action> actions = new List<Action>() { };
+                List<IAction> actions = new List<IAction>() { };
                 bool nonAction = false;
 
                 for (int i = 0; i < goos.Count; i++)
                 {
-                    if (goos[i] is GH_GeometricGoo<Action> geometricGoo)
+                    if (goos[i] is GH_GeometricGoo<IAction> geometricGoo)
                     {
                         actions.Add(geometricGoo.Value);
                     }
-                    else if (goos[i] is GH_Goo<Action> goo)
+                    else if (goos[i] is GH_Goo<IAction> goo)
                     {
                         actions.Add(goo.Value);
                     }

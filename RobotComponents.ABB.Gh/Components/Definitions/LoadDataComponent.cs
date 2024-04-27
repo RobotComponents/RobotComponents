@@ -65,7 +65,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_LoadData(), "Load Data", "LD", "Resulting Load Data");   
+            pManager.RegisterParam(new Param_LoadData(), "Load Data", "LD", "Resulting Load Data");
         }
 
         /// <summary>

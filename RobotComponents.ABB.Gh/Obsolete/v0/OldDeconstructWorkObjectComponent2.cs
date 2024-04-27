@@ -23,7 +23,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// Initializes a new instance of the DeconstructWorkObject class.
         /// </summary>
         public OldDeconstructWorkObjectComponent2()
-          : base("Deconstruct Work Object", "DeConTar", 
+          : base("Deconstruct Work Object", "DeConTar",
               "Deconstructs a Work Object into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

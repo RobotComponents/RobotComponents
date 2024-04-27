@@ -8,7 +8,7 @@ using Grasshopper.Kernel.Types;
 using GH_IO;
 using GH_IO.Serialization;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;
@@ -173,7 +173,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 else { target = (Q)(object)new GH_Point(Value.CenterOfGravity); }
                 return true;
             }
-            
+
             //Cast to Vector
             if (typeof(Q).IsAssignableFrom(typeof(GH_Vector)))
             {

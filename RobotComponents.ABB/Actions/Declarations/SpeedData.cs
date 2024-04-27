@@ -12,7 +12,6 @@ using System.Collections.Generic;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
@@ -24,18 +23,18 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// This action is used to specify the velocity at which both the robot and the external axes move.
     /// </remarks>
     [Serializable()]
-    public class SpeedData : Action, IDeclaration, ISerializable
+    public class SpeedData : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "speeddata";
-        private string _name; 
-        private double _v_tcp; 
-        private double _v_ori; 
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "speeddata";
+        private string _name = "";
+        private double _v_tcp;
+        private double _v_ori;
         private double _v_leax;
-        private double _v_reax; 
-        private bool _isPredefined; 
+        private double _v_reax;
+        private bool _isPredefined;
         private readonly bool _isExactPredefinedValue;
 
         private static readonly string[] _validPredefinedNames = new string[] { "v5", "v10", "v20", "v30", "v40", "v50", "v60", "v80", "v100", "v150", "v200", "v300", "v400", "v500", "v600", "v800", "v1000", "v1500", "v2000", "v2500", "v3000", "v4000", "v5000", "v6000", "v7000" };
@@ -51,9 +50,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected SpeedData(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _v_tcp = (double)info.GetValue("v_tcp", typeof(double));
             _v_ori = (double)info.GetValue("v_ori", typeof(double));
@@ -71,7 +70,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Name", _name, typeof(string));
@@ -103,8 +102,6 @@ namespace RobotComponents.ABB.Actions.Declarations
             _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -124,8 +121,6 @@ namespace RobotComponents.ABB.Actions.Declarations
             _isExactPredefinedValue = (v_tcp - tcp) == 0;
 
             // Set other fields
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = $"v{tcp}";
             _v_tcp = tcp;
             _v_ori = 500;
@@ -143,9 +138,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _v_tcp = v_tcp;
             _v_ori = v_ori;
             _v_leax = v_leax;
@@ -164,8 +156,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="v_reax"> The velocity of rotating external axes in degrees/s. </param>
         public SpeedData(string name, double v_tcp, double v_ori = 500, double v_leax = 5000, double v_reax = 1000)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _v_tcp = v_tcp;
             _v_ori = v_ori;
@@ -229,7 +219,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Speed Data instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new SpeedData(this);
         }
@@ -245,7 +235,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"></param>
         private SpeedData(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             _isPredefined = _validPredefinedNames.Contains(_name);
 
@@ -340,7 +330,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined.
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_isPredefined == false && _name != "")
             {
@@ -362,19 +352,19 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_isPredefined == false)
             {
@@ -388,24 +378,13 @@ namespace RobotComponents.ABB.Actions.Declarations
                 }
             }
         }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-        }
         #endregion
 
         #region properties
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {
@@ -536,40 +515,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         public static Dictionary<string, double> ValidPredefinedData
         {
             get { return _validPredefinedNames.Zip(_validPredefinedValues, (s, i) => new { s, i }).ToDictionary(item => item.s, item => item.i); }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a predefined speeddata. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
-        public bool PreDefined
-        {
-            get { return _isPredefined; }
-            set { _isPredefined = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata is a user definied speeddata. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsPredefined instead.", false)]
-        public bool UserDefinied
-        {
-            get { return !_isPredefined; }
-            set { _isPredefined = !value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this speeddata was constructed from an exact predefined speeddata value. 
-        /// </summary>
-        /// <remarks>
-        /// If false, the nearest predefined speedata or a custom speeddata was used. 
-        /// </remarks>
-        [Obsolete("This property is obsolete and will be removed in v3. Use IsExactPredefinedValue instead.", false)]
-        public bool ExactPredefinedValue
-        {
-            get { return _isExactPredefinedValue; }
         }
         #endregion
     }

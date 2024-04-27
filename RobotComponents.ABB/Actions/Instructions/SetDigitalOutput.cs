@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -20,7 +19,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// This action is used to set the value (state) of a digital output signal.
     /// </remarks>
     [Serializable()]
-    public class SetDigitalOutput : Action, IInstruction, ISerializable
+    public class SetDigitalOutput : IAction, IInstruction, ISerializable
     {
         #region fields
         private string _name;
@@ -37,10 +36,10 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected SetDigitalOutput(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
-            _delay = version < 2001000 ? 0 : (double)info.GetValue("Delay", typeof(double));
-            _sync = version < 2001000 ? false : (bool)info.GetValue("Sync", typeof(bool));
+            _delay = (double)info.GetValue("Delay", typeof(double));
+            _sync = (bool)info.GetValue("Sync", typeof(bool));
             _value = (bool)info.GetValue("Value", typeof(bool));
         }
 
@@ -52,7 +51,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Delay", _delay, typeof(double));
             info.AddValue("Sync", _sync, typeof(bool));
             info.AddValue("Name", _name, typeof(string));
@@ -121,7 +120,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Set Digital Output instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new SetDigitalOutput(this);
         }
@@ -157,7 +156,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -169,37 +168,26 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line.
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             string result = $"SetDO ";
 
             // Sync and delay cannot be combined. Sync is leading. 
             result += _sync ? "\\Sync, " : (_delay > 0 ? $"\\SDelay:={_delay:0.###}, " : "");
-            result += $"{ _name}, ";
+            result += $"{_name}, ";
             result += _value ? "1;" : "0;";
 
             return result;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
-        {
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
@@ -209,7 +197,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

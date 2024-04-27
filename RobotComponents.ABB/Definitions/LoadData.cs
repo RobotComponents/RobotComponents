@@ -11,7 +11,7 @@ using System.Security.Permissions;
 using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
 
@@ -24,10 +24,10 @@ namespace RobotComponents.ABB.Definitions
     public class LoadData : ISerializable, IDeclaration
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "loaddata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.PERS;
+        private const string _datatype = "loaddata";
+        private string _name = "";
         private double _mass;
         private Point3d _centerOfGravity;
         private Quaternion _axesOfMoment;
@@ -42,9 +42,9 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected LoadData(SerializationInfo info, StreamingContext context)
         {
-            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _scope = (Scope)info.GetValue("Scope", typeof(Scope));
-            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType)); 
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _mass = (double)info.GetValue("Mass", typeof(double));
             _centerOfGravity = (Point3d)info.GetValue("Center of Gravity", typeof(Point3d));
@@ -60,7 +60,7 @@ namespace RobotComponents.ABB.Definitions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -77,8 +77,6 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         public LoadData()
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = "load0";
             _mass = 0.001;
             _centerOfGravity = new Point3d(0, 0, 0.001);
@@ -89,15 +87,13 @@ namespace RobotComponents.ABB.Definitions
         /// <summary>
         /// Initializes a new instance of the Load Data class.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="mass"></param>
-        /// <param name="centerOfGravity"></param>
-        /// <param name="axesOfMoment"></param>
-        /// <param name="inertialMoments"></param>
+        /// <param name="name"> The variable name of the load data declaration. </param>
+        /// <param name="mass"> The weight of the tool in kg. </param>
+        /// <param name="centerOfGravity"> The position of the center of gravity of the load. </param>
+        /// <param name="axesOfMoment"> The orientation of the load coordinate system defined by the principal inertial axes of the tool load. </param>
+        /// <param name="inertialMoments"> The moment of inertia of the load in kgm2. </param>
         public LoadData(string name, double mass, Point3d centerOfGravity, Quaternion axesOfMoment, Vector3d inertialMoments)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.PERS;
             _name = name;
             _mass = mass;
             _centerOfGravity = centerOfGravity;
@@ -151,7 +147,7 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="rapidData"></param>
         private LoadData(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 11)
             {
@@ -292,13 +288,13 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "" && _name != "load0")
             {
@@ -376,7 +372,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the position of the center of gravity of the load.
+        /// Gets or sets the position of the center of gravity of the load.
         /// </summary>
         public Point3d CenterOfGravity
         {
@@ -385,7 +381,7 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
-        /// Gets the orientation of the load coordinate system defined by the principal inertial axes of the tool load. 
+        /// Gets or sets the orientation of the load coordinate system defined by the principal inertial axes of the tool load. 
         /// </summary>
         /// <remarks>
         /// Expressed in the wrist coordinate system as a quaternion (q1, q2, q3, q4).

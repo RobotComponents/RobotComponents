@@ -26,18 +26,24 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <param name="tool"> The Robot Tool. </param>
         /// <param name="externalAxes"> The external axes attached to the Robot. </param>
         /// <returns> The Robot preset. </returns>
-        public static Robot GetRobot(Plane positionPlane, RobotTool tool, IList<ExternalAxis> externalAxes = null)
-        { 
+        public static Robot GetRobot(Plane positionPlane, RobotTool tool = null, IList<IExternalAxis> externalAxes = null)
+        {
             string name = "IRB1200-5/0.9";
             List<Mesh> meshes = GetMeshes();
             List<Plane> axisPlanes = GetAxisPlanes();
             List<Interval> axisLimits = GetAxisLimits();
             Plane mountingFrame = GetToolMountingFrame();
 
+            // Check Robot Tool data
+            if (tool == null)
+            {
+                tool = new RobotTool();
+            }
+
             // Make empty list with external axes if the value is null
             if (externalAxes == null)
             {
-                externalAxes = new List<ExternalAxis>() { };
+                externalAxes = new List<IExternalAxis>() { };
             }
 
             // Override the position plane when an external axis is coupled that moves the robot
@@ -152,10 +158,10 @@ namespace RobotComponents.ABB.Presets.Robots
         public static Plane GetToolMountingFrame()
         {
             Plane mountingFrame = new Plane(
-                new Point3d(533, 0, 889.1), 
+                new Point3d(533, 0, 889.1),
                 new Vector3d(1, 0, 0));
 
-            mountingFrame.Rotate(Math.PI* -0.5, mountingFrame.Normal);
+            mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);
 
             return mountingFrame;
         }

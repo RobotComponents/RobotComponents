@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return Properties.Resources.ExternalJointPosition_Parameter_Icon; } 
+            get { return Properties.Resources.ExternalJointPosition_Parameter_Icon; }
         }
 
         /// <summary>

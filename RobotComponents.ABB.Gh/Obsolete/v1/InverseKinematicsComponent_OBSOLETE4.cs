@@ -131,14 +131,14 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Default previous robot joint position
-            if (DA.Iteration > _previousRobotJointPositions.Count - 1)
+            if (DA.Iteration >= _previousRobotJointPositions.Count)
             {
                 _previousRobotJointPositions.Add(new RobotJointPosition());
             }
-            
+
             // Calculate the robot pose
-            _inverseKinematics.Add(new InverseKinematics(robot, movement));
-            _inverseKinematics[DA.Iteration].Calculate();
+            _inverseKinematics.Add(new InverseKinematics(robot));
+            _inverseKinematics[DA.Iteration].Calculate(movement);
 
             // Closest Robot Joint Position
             if (closestRobotJointPosition == true && reset == false && movement.Target is RobotTarget && movement.MovementType != MovementType.MoveAbsJ)
@@ -158,7 +158,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!_hideMesh)
             {
                 ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
-                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition); 
+                forwardKinematics.Calculate(_inverseKinematics[DA.Iteration].RobotJointPosition, _inverseKinematics[DA.Iteration].ExternalJointPosition);
                 _forwardKinematics.Add(forwardKinematics);
             }
 
@@ -174,9 +174,12 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             base.AfterSolveInstance();
 
-            if (_previousRobotJointPositions.Count > RunCount)
+            if (RunCount != -1)
             {
-                _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - 1);
+                if (_previousRobotJointPositions.Count > RunCount)
+                {
+                    _previousRobotJointPositions.RemoveRange(RunCount, _previousRobotJointPositions.Count - RunCount);
+                }
             }
         }
 
@@ -455,7 +458,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     double trans;
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == true)
+                    if (_forwardKinematics[i].IsInLimits == true)
                     {
                         color = Color.FromArgb(225, 225, 225);
                         trans = 0.0;

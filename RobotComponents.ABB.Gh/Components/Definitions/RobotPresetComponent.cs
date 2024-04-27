@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
@@ -14,7 +13,6 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Gh.Utils;
@@ -36,7 +34,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
 
         public RobotPresetComponent()
           : base("Robot Preset", "RobPres",
-              "Defines a robot which is needed for Code Generation and Simulation"
+              "Defines a robot which is needed for code generation and simulation"
              + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
               "Robot Components ABB", "Definitions")
@@ -73,11 +71,11 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             Plane positionPlane = Plane.WorldXY;
             RobotTool tool = null;
-            List<ExternalAxis> externalAxis = new List<ExternalAxis>();
+            List<IExternalAxis> externalAxis = new List<IExternalAxis>();
 
             if (!DA.GetData(0, ref positionPlane)) { return; }
             if (!DA.GetData(1, ref tool)) { tool = new RobotTool(); }
-            if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<ExternalAxis>() { }; }
+            if (!DA.GetDataList(2, externalAxis)) { externalAxis = new List<IExternalAxis>() { }; }
 
             Robot robot = new Robot();
 
@@ -214,28 +212,26 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// <returns> The picked Robot preset. </returns>
         private RobotPreset GetRobotPreset()
         {
-            // Create the form with all the available robot presets
-            List<RobotPreset> robotPresets = Enum.GetValues(typeof(RobotPreset)).Cast<RobotPreset>().ToList();
-            robotPresets.Remove(RobotPreset.EMPTY);
-            robotPresets = robotPresets.OrderBy(c => Enum.GetName(typeof(RobotPreset), c)).ToList();
-            PickRobotForm frm = new PickRobotForm(robotPresets);
+            RobotPreset robotPreset;
 
-            // Display the form
-            Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-            frm.ShowDialog();
+            PickRobotForm form = new PickRobotForm();
+            bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
-            // Return the index number of the picked controller
-            int index = frm.Index;
-
-            // Return a null value when the picked index is incorrect. 
-            if (index < 0)
+            if (result)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
-                return RobotPreset.EMPTY;
+                robotPreset = form.RobotPreset;
+            }
+            else
+            {
+                robotPreset = _robotPreset;
             }
 
-            // Select the picked robot
-            return robotPresets[index];
+            if (robotPreset == RobotPreset.EMPTY)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No Robot picked from menu!");
+            }
+
+            return robotPreset;
         }
         #endregion
     }

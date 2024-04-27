@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new OldAutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");   
+            pManager.RegisterParam(new OldAutoAxisConfigParameter(), "Set Auto Axis Configuration", "SAAC", "Resulting Set Auto Axis Configuration instruction");
         }
 
         /// <summary>

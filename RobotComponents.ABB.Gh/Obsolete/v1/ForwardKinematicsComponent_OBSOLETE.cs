@@ -29,7 +29,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
     /// RobotComponents Forward Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
     [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
-    public class ForwardKinematicsComponent_OBSOLETE : GH_Component 
+    public class ForwardKinematicsComponent_OBSOLETE : GH_Component
     {
         #region fields
         private readonly List<ForwardKinematics> _forwardKinematics = new List<ForwardKinematics>();
@@ -101,13 +101,13 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!DA.GetData(2, ref externalJointPosition)) { externalJointPosition = new ExternalJointPosition(); }
 
             // Calcuate the robot pose
-            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, robotJointPosition, externalJointPosition, _hideMesh);
-            forwardKinematics.Calculate();
+            ForwardKinematics forwardKinematics = new ForwardKinematics(robot, _hideMesh);
+            forwardKinematics.Calculate(robotJointPosition, externalJointPosition);
 
             // Check the values
             for (int i = 0; i < forwardKinematics.ErrorText.Count; i++)
             {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, forwardKinematics.ErrorText[i]);
             }
 
             // Add to list with FK
@@ -119,7 +119,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             // Fill data tree with meshes
             if (_hideMesh == false)
             {
-                meshes = (this.GetPosedMeshesDataTree(DA.Iteration));
+                meshes = this.GetPosedMeshesDataTree(DA.Iteration);
             }
 
             // Output
@@ -281,7 +281,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     double trans;
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == true)
+                    if (_forwardKinematics[i].IsInLimits == true)
                     {
                         color = Color.FromArgb(225, 225, 225);
                         trans = 0.0;
@@ -333,7 +333,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             // Data tree path
             GH_Path path = new GH_Path(new int[2] { iteration, 0 });
-            
+
             // Save the posed meshes
             for (int i = 0; i < posedInternalAxisMeshes.Count; i++)
             {

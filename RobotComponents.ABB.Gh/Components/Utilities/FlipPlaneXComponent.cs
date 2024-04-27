@@ -5,7 +5,6 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -37,7 +36,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item, Plane.WorldXY); 
+            pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item, Plane.WorldXY);
         }
 
         /// <summary>

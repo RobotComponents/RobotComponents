@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
-using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
@@ -28,7 +27,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// Initializes a new instance of the DeconstructMovement class.
         /// </summary>
         public DeconstructMovementComponent_OBSOLETE()
-          : base("Deconstruct Move", "DeConMove", 
+          : base("Deconstruct Move", "DeConMove",
               "Deconstructs a Move component into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

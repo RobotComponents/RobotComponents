@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
         /// Initializes a new instance of the DeconstructrobotComponent class.
         /// </summary>
         public DeconstructRobotComponent()
-          : base("Deconstruct Robot", "DeRob", 
+          : base("Deconstruct Robot", "DeRob",
               "Deconstructs a Robot component into its parameters"
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -225,9 +225,12 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 
             for (int i = 0; i < _meshes.Count; i++)
             {
-                if (_meshes[i].IsValid)
+                if (_meshes[i] != null)
                 {
-                    result.Union(_meshes[i].GetBoundingBox(false));
+                    if (_meshes[i].IsValid)
+                    {
+                        result.Union(_meshes[i].GetBoundingBox(false));
+                    }
                 }
             }
 
@@ -259,9 +262,12 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
             // Display the meshes
             for (int i = 0; i != _meshes.Count; i++)
             {
-                if (_meshes[i].IsValid)
+                if (_meshes[i] != null)
                 {
-                    args.Display.DrawMeshShaded(_meshes[i], material);
+                    if (_meshes[i].IsValid)
+                    {
+                        args.Display.DrawMeshShaded(_meshes[i], material);
+                    }
                 }
             }
         }

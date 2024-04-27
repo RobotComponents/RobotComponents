@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
     /// <summary>
     /// External Axis Goo wrapper class, makes sure the External Axis class can be used in Grasshopper.
     /// </summary>
-    public class GH_ExternalAxis : GH_GeometricGoo<ExternalAxis>, IGH_PreviewData, GH_ISerializable
+    public class GH_ExternalAxis : GH_GeometricGoo<IExternalAxis>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
@@ -34,7 +34,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// Data constructor: Creates an External Axis Goo instance from an External Axis instance.
         /// </summary>
         /// <param name="externalAxis"> External Axis Value to store inside this Goo instance. </param>
-        public GH_ExternalAxis(ExternalAxis externalAxis)
+        public GH_ExternalAxis(IExternalAxis externalAxis)
         {
             this.Value = externalAxis;
         }
@@ -70,7 +70,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         public GH_ExternalAxis DuplicateExternalAxisGoo()
         {
             if (Value == null) { return new GH_ExternalAxis(); }
-            else  { return new GH_ExternalAxis(Value.DuplicateExternalAxis()); }
+            else { return new GH_ExternalAxis(Value.DuplicateExternalAxis()); }
         }
         #endregion
 
@@ -165,7 +165,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -298,9 +298,9 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast from External Axis
-            if (typeof(ExternalAxis).IsAssignableFrom(source.GetType()))
+            if (typeof(IExternalAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = source as ExternalAxis;
+                Value = source as IExternalAxis;
                 return true;
             }
 
@@ -315,7 +315,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             //Cast from External Linear Axis
             if (typeof(ExternalLinearAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = source as ExternalAxis;
+                Value = source as IExternalAxis;
                 return true;
             }
 
@@ -330,7 +330,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             //Cast from External Rotatioanl Axis
             if (typeof(ExternalRotationalAxis).IsAssignableFrom(source.GetType()))
             {
-                Value = source as ExternalAxis;
+                Value = source as IExternalAxis;
                 return true;
             }
 
@@ -359,10 +359,10 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                 return null;
             }
 
-            else if (Value is ExternalAxis)
+            else if (Value is IExternalAxis)
             {
                 // Get value and duplicate
-                ExternalAxis externalAxis = Value.DuplicateExternalAxis();
+                IExternalAxis externalAxis = Value.DuplicateExternalAxis();
                 // Transform
                 externalAxis.Transform(xform);
                 // Make new Goo instance
@@ -404,19 +404,25 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <param name="args"> Drawing arguments. </param>
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null) 
-            { 
-                return; 
+            if (Value == null)
+            {
+                return;
             }
 
             if (Value.BaseMesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                if (Value.BaseMesh.IsValid)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.BaseMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
             }
 
             if (Value.LinkMesh != null)
             {
-                args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                if (Value.LinkMesh.IsValid)
+                {
+                    args.Pipeline.DrawMeshShaded(Value.LinkMesh, new Rhino.Display.DisplayMaterial(System.Drawing.Color.FromArgb(225, 225, 225), 0));
+                }
             }
         }
 
@@ -466,7 +472,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (ExternalAxis)Serialization.ByteArrayToObject(array);
+            this.Value = (IExternalAxis)Serialization.ByteArrayToObject(array);
 
             return true;
         }

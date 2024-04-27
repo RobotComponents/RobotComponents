@@ -15,7 +15,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.Utils;
 using RobotComponents.ABB.Gh.Goos.Definitions;
@@ -186,7 +185,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -345,22 +344,6 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
                 return true;
             }
 
-            //Cast to Digital Output Goo
-            if (typeof(Q).IsAssignableFrom(typeof(GH_DigitalOutput)))
-            {
-                if (Value == null) { target = (Q)(object)new GH_DigitalOutput(); }
-                else { target = (Q)(object)new GH_DigitalOutput(Value.DigitalOutput); }
-                return true;
-            }
-
-            //Cast to Digital Output
-            if (typeof(Q).IsAssignableFrom(typeof(DigitalOutput)))
-            {
-                if (Value == null) { target = (Q)(object)null; }
-                else { target = (Q)(object)Value.DigitalOutput; }
-                return true;
-            }
-
             //Cast to Set Digital Output Goo
             if (typeof(Q).IsAssignableFrom(typeof(GH_SetDigitalOutput)))
             {
@@ -422,7 +405,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.ABB.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.ABB.Actions.IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is Movement action)
                 {

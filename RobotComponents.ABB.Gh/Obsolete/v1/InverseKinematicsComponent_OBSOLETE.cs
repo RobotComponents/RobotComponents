@@ -81,8 +81,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             if (!DA.GetData(1, ref movement)) { return; }
 
             // Calculate the robot pose
-            _inverseKinematics = new InverseKinematics(robot, movement);
-            _inverseKinematics.Calculate();
+            _inverseKinematics = new InverseKinematics(robot);
+            _inverseKinematics.Calculate(movement);
 
             // Check the values
             for (int i = 0; i < _inverseKinematics.ErrorText.Count; i++)
@@ -92,7 +92,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             // Set forward kinematics (for visualization)
             _forwardKinematics = new ForwardKinematics(robot);
-            
+
             // Output
             DA.SetData(0, _inverseKinematics.RobotJointPosition);
             DA.SetData(1, _inverseKinematics.ExternalJointPosition);
@@ -214,7 +214,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                 _forwardKinematics.Calculate(_inverseKinematics.RobotJointPosition, _inverseKinematics.ExternalJointPosition);
 
                 // Set the display color and transparancy of the robot mesh
-                if (_forwardKinematics.InLimits == true)
+                if (_forwardKinematics.IsInLimits == true)
                 {
                     color = Color.FromArgb(225, 225, 225);
                     trans = 0.0;

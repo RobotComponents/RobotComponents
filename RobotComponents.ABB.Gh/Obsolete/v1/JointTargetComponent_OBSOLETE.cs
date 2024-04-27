@@ -119,9 +119,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
             _objectManager = DocumentManager.GetDocumentObjectManager(doc);
             _objectManager.CheckVariableNames(this);
 
-            if (doc != null) 
-            { 
-                doc.ObjectsDeleted += this.DocumentObjectsDeleted; 
+            if (doc != null)
+            {
+                doc.ObjectsDeleted += this.DocumentObjectsDeleted;
             }
             #endregion
         }

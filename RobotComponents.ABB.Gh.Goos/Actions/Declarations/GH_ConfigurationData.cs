@@ -10,7 +10,6 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
@@ -105,7 +104,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeName
         {
-            get { return ("Configuration Data"); }
+            get { return "Configuration Data"; }
         }
 
         /// <summary>
@@ -113,7 +112,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// </summary>
         public override string TypeDescription
         {
-            get { return ("Defines a Configuration Data"); }
+            get { return "Defines a Configuration Data"; }
         }
         #endregion
 
@@ -151,7 +150,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -235,7 +234,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is ConfigurationData action)
                 {

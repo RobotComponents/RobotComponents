@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
     /// <summary>
     /// Action Goo wrapper class, makes sure the Action class can be used in Grasshopper.
     /// </summary>
-    public class GH_Action : GH_GeometricGoo<Action>, IGH_PreviewData, GH_ISerializable
+    public class GH_Action : GH_GeometricGoo<IAction>, IGH_PreviewData, GH_ISerializable
     {
         #region constructors
         /// <summary>
@@ -37,7 +37,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
         /// Data constructor: Creates an Action Goo instance from an Action instance.
         /// </summary>
         /// <param name="action"> Action Value to store inside this Goo instance. </param>
-        public GH_Action(Action action)
+        public GH_Action(IAction action)
         {
             this.Value = action;
         }
@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
         public GH_Action DuplicateActionGoo()
         {
             if (Value == null) { return null; }
-            else if (Value is Action) { return new GH_Action(Value.DuplicateAction()); }
+            else if (Value is IAction) { return new GH_Action(Value.DuplicateAction()); }
             else { return null; }
         }
         #endregion
@@ -167,7 +167,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
                 return true;
             }
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value; }
@@ -188,9 +188,9 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             if (source == null) { return false; }
 
             //Cast from Action
-            if (typeof(Action).IsAssignableFrom(source.GetType()))
+            if (typeof(IAction).IsAssignableFrom(source.GetType()))
             {
-                Value = source as Action;
+                Value = source as IAction;
                 return true;
             }
 
@@ -207,16 +207,16 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             {
                 GH_GeometryGroup groupGoo = source as GH_GeometryGroup;
                 List<IGH_GeometricGoo> goos = groupGoo.Objects;
-                List<Action> actions = new List<Action>() { };
+                List<IAction> actions = new List<IAction>() { };
                 bool nonAction = false;
 
                 for (int i = 0; i < goos.Count; i++)
                 {
-                    if (goos[i] is GH_GeometricGoo<Action> geometricGoo)
+                    if (goos[i] is GH_GeometricGoo<IAction> geometricGoo)
                     {
                         actions.Add(geometricGoo.Value);
                     }
-                    else if (goos[i] is GH_Goo<Action> goo)
+                    else if (goos[i] is GH_Goo<IAction> goo)
                     {
                         actions.Add(goo.Value);
                     }
@@ -353,7 +353,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions
             }
 
             byte[] array = reader.GetByteArray(IoKey);
-            this.Value = (Action)Serialization.ByteArrayToObject(array);
+            this.Value = (IAction)Serialization.ByteArrayToObject(array);
 
             return true;
         }

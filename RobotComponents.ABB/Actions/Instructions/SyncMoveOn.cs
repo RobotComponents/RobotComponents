@@ -10,7 +10,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 
 namespace RobotComponents.ABB.Actions.Instructions
@@ -19,11 +18,11 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// Represents the SyncMoveOn instruction that starts a sequence of synchronized movements.
     /// </summary>
     [Serializable()]
-    public class SyncMoveOn : Action, IInstruction, ISyncident, ISerializable
+    public class SyncMoveOn : IAction, IInstruction, ISyncident, ISerializable
     {
         #region fields
         private VariableType _variableType;
-        private string _syncident; 
+        private string _syncident;
         private TaskList _taskList;
         private double _timeOut;
         #endregion
@@ -36,11 +35,11 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected SyncMoveOn(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _syncident = (string)info.GetValue("Sync ID", typeof(string));
             _taskList = (TaskList)info.GetValue("Task List", typeof(TaskList));
-            _timeOut = version >= 1004000 ? (double)info.GetValue("Time Out", typeof(double)) : -1;
+            _timeOut = (double)info.GetValue("Time Out", typeof(double));
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Sync ID", _syncident, typeof(string));
             info.AddValue("Task List", _taskList, typeof(TaskList));
@@ -78,7 +77,7 @@ namespace RobotComponents.ABB.Actions.Instructions
             _variableType = VariableType.VAR;
             _syncident = name;
             _taskList = tasks;
-            _timeOut = timeOut; 
+            _timeOut = timeOut;
         }
 
         /// <summary>
@@ -131,7 +130,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// </summary>
         /// <returns> 
         /// A deep copy of the SyncMoveOn instance as an Action. </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new SyncMoveOn(this);
         }
@@ -163,7 +162,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return $"{Enum.GetName(typeof(VariableType), _variableType)} syncident {_syncident};";
         }
@@ -175,38 +174,28 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return $"SyncMoveOn {_syncident}, {_taskList.Name}{(_timeOut > 0 ? $"\\TimeOut:={_timeOut:0.###}" : "")};";
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
-            _taskList.ToRAPIDDeclaration(RAPIDGenerator);
+            _taskList.ToRAPIDGenerator(RAPIDGenerator);
 
             if (!RAPIDGenerator.Syncidents.ContainsKey(_syncident))
             {
                 RAPIDGenerator.Syncidents.Add(_syncident, this);
                 RAPIDGenerator.ProgramDeclarationsMultiMove.Add("    " + ToRAPIDDeclaration(RAPIDGenerator.Robot));
             }
-        }
 
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
             RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
             RAPIDGenerator.IsSynchronized = true;
         }
@@ -216,13 +205,13 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {
                 if (_syncident == null) { return false; }
                 if (_syncident == "") { return false; }
-                if (_taskList.IsValid == false ) { return false; }
+                if (_taskList.IsValid == false) { return false; }
                 return true;
             }
         }
@@ -264,18 +253,6 @@ namespace RobotComponents.ABB.Actions.Instructions
         {
             get { return _timeOut; }
             set { _timeOut = value; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets or sets the variable type. 
-        /// </summary>
-        [Obsolete("This property is obsolete and will be removed in v3. Use VariableType instead.", false)]
-        public VariableType ReferenceType
-        {
-            get { return _variableType; }
-            set { _variableType = value; }
         }
         #endregion
     }

@@ -120,8 +120,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             }
 
             // Calculate the robot pose
-            _inverseKinematics = new InverseKinematics(_robot, movement);
-            _inverseKinematics.Calculate();
+            _inverseKinematics = new InverseKinematics(_robot);
+            _inverseKinematics.Calculate(movement);
 
             // Closest Robot Joint Position
             if (closestRobotJointPosition == true && reset == false && movement.Target is RobotTarget && movement.MovementType != MovementType.MoveAbsJ)
@@ -266,7 +266,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         {
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
-            
+
             try
             {
                 _previousRobotJointPosition = (RobotJointPosition)RobotComponents.Utils.Serialization.ByteArrayToObject(reader.GetByteArray("Previous Robot Joint Position"));
@@ -439,7 +439,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
                     double trans;
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == true)
+                    if (_forwardKinematics[i].IsInLimits == true)
                     {
                         color = Color.FromArgb(225, 225, 225);
                         trans = 0.0;

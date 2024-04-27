@@ -60,7 +60,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_TaskList(), "Task List", "TL", "Resulting Task List declaration.");   
+            pManager.RegisterParam(new Param_TaskList(), "Task List", "TL", "Resulting Task List declaration.");
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
             // Input variables
             string name = "";
             List<string> taskNames = new List<string>();
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }
             if (!DA.GetDataList(1, taskNames)) { return; }

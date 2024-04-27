@@ -5,60 +5,101 @@
 
 // System Libs
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+// Eto libs
+using Eto.Forms;
+using Eto.Drawing;
 
 namespace RobotComponents.ABB.Controllers.Forms
 {
     /// <summary>
     /// Represents the pick controller form class.
     /// </summary>
-    public partial class PickControllerForm : Form
+    public class PickControllerForm : Dialog<bool>
     {
         #region fields
-        private int _index = 0;
+        private Controller _controller;
+        private readonly Label _labelName = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelSystemName = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelIpAdress = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelRobotWareVersion = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelVirtual = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly Label _labelOperatingMode = new Label() { Text = "-", TextAlignment = TextAlignment.Right, Height = _height };
+        private readonly ComboBox _box = new ComboBox() { Height = _height };
+
+        private const int _height = 21;
         #endregion
 
         #region constructors
         /// <summary>
-        /// Constructs the form from a given list with items.
+        /// Constructs the form.
         /// </summary>
-        /// <param name="items"> Items to fill the form with. </param>
-        public PickControllerForm(List<string> items)
+        public PickControllerForm()
         {
-            InitializeComponent();
+            // Main layout
+            Title = "Controller";
+            MinimumSize = new Size(600, 420);
+            Resizable = false;
+            Padding = 20;
 
-            for (int i = 0; i < items.Count; i++)
-            {
-                comboBox1.Items.Add(items[i]);
-            }
+            // Controls
+            Button button = new Button() { Text = "OK" };
+            _box = new ComboBox() { DataStore = Controller.Controllers.ConvertAll(item => item.Name), Height = _height };
+
+            // Assign events
+            button.Click += ButtonClick;
+            _box.SelectedIndexChanged += IndexChanged;
+
+            // Select index
+            _box.SelectedIndex = 0;
+
+            // Labels
+            Label selectLabel = new Label() { Text = "Select a controller", Font = new Font(SystemFont.Bold), Height = _height };
+            Label infoLabel = new Label() { Text = "Controller info", Font = new Font(SystemFont.Bold), Height = _height };
+
+            // Layout
+            DynamicLayout layout = new DynamicLayout() { Padding = 0, Spacing = new Size(8, 4) };
+            layout.AddSeparateRow(selectLabel);
+            layout.AddSeparateRow(_box);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(infoLabel);
+            layout.AddSeparateRow(new Label() { Text = "Name", Height = _height }, _labelName); ;
+            layout.AddSeparateRow(new Label() { Text = "System name", Height = _height }, _labelSystemName);
+            layout.AddSeparateRow(new Label() { Text = "IP adress", Height = _height }, _labelIpAdress);
+            layout.AddSeparateRow(new Label() { Text = "RobotWare version", Height = _height }, _labelRobotWareVersion);
+            layout.AddSeparateRow(new Label() { Text = "Is virtual", Height = _height }, _labelVirtual);
+            layout.AddSeparateRow(new Label() { Text = "Operating mode", Height = _height }, _labelOperatingMode);
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(new Label() { Text = " ", Height = _height });
+            layout.AddSeparateRow(button);
+
+            Content = layout;
         }
         #endregion
 
         #region methods
-        private void Button1Click(object sender, EventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            _index = comboBox1.SelectedIndex;
-            this.Close();
+            _controller = Controller.Controllers[_box.SelectedIndex];
+            Close(true);
         }
-
-        private void ComboBoxSelectedIndexChanged(object sender, EventArgs e)
+        private void IndexChanged(object sender, EventArgs e)
         {
-            this.labelNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.Name;
-            this.labelSystemNameInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.SystemName;
-            this.labelIPInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.IPAddress.ToString();
-            this.labelIsVirtualInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.IsVirtual.ToString();
-            this.labelOperationModeInfo.Text = Controller.Controllers[comboBox1.SelectedIndex].ControllerABB.OperatingMode.ToString();
+            _labelName.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.Name;
+            _labelSystemName.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.SystemName;
+            _labelIpAdress.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.IPAddress.ToString();
+            _labelRobotWareVersion.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.RobotWareVersion.ToString();
+            _labelVirtual.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.IsVirtual.ToString();
+            _labelOperatingMode.Text = Controller.Controllers[_box.SelectedIndex].ControllerABB.OperatingMode.ToString();
         }
         #endregion
 
         #region properties
         /// <summary>
-        /// Gets the picked index.
+        /// Gets the picked controller.
         /// </summary>
-        public int Index
+        public Controller Controller
         {
-            get { return _index; }
+            get { return _controller; }
         }
         #endregion
     }

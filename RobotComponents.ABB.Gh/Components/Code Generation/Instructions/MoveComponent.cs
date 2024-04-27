@@ -16,7 +16,6 @@ using GH_IO.Serialization;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Actions.Declarations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
@@ -93,7 +92,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");   
+            pManager.RegisterParam(new Param_Movement(), "Movement", "M", "Resulting Move instruction");
         }
 
         /// <summary>

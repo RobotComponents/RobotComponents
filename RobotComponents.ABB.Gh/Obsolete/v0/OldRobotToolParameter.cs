@@ -14,7 +14,7 @@ using Grasshopper.Kernel;
 using RobotComponents.ABB.Gh.Goos.Definitions;
 
 namespace RobotComponents.ABB.Gh.Obsolete
-{ 
+{
     /// <summary>
     /// Robot Tool parameter
     /// </summary>

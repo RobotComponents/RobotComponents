@@ -12,7 +12,6 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.Utils;
 
@@ -27,7 +26,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// Blank constructor
         /// </summary>
-        public GH_Target() 
+        public GH_Target()
         {
             this.Value = null;
         }
@@ -189,12 +188,12 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             if (typeof(Q).IsAssignableFrom(typeof(GH_Action)))
             {
                 if (Value == null) { target = (Q)(object)new GH_Action(); }
-                else { target = (Q)(object)new GH_Action(Value as RobotComponents.ABB.Actions.Action); }
+                else { target = (Q)(object)new GH_Action(Value as RobotComponents.ABB.Actions.IAction); }
                 return true;
             }
 
             //Cast to Action
-            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.Action)))
+            if (typeof(Q).IsAssignableFrom(typeof(RobotComponents.ABB.Actions.IAction)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)Value; }
@@ -265,7 +264,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
             }
 
             //Cast from Action
-            if (typeof(RobotComponents.ABB.Actions.Action).IsAssignableFrom(source.GetType()))
+            if (typeof(RobotComponents.ABB.Actions.IAction).IsAssignableFrom(source.GetType()))
             {
                 if (source is ITarget action)
                 {

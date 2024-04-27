@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.PathAccelerationLimitation_Parameter_Icon; }
         }
 
         /// <summary>
@@ -58,8 +58,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         /// </summary>
         public override GH_Exposure Exposure
         {
-            //get { return GH_Exposure.tertiary | GH_Exposure.obscure; ; }
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.tertiary | GH_Exposure.obscure; ; }
         }
 
         /// <summary>

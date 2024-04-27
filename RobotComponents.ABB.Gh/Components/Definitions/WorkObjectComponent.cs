@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Resulting Work Object");   
+            pManager.RegisterParam(new Param_WorkObject(), "Work Object", "WO", "Resulting Work Object");
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             // Input variables
             string name = "wobj1";
             Plane plane = Plane.WorldXY;
-            ExternalAxis externalAxis = null;
+            IExternalAxis externalAxis = null;
 
             // Catch the input data
             if (!DA.GetData(0, ref name)) { return; }

@@ -6,11 +6,11 @@
 // System Libs
 using System;
 using System.Linq;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
 // Rhino Libs
 using Rhino.Geometry;
+using Rhino.Display;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -129,7 +129,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             // Input variables
             Robot robot = new Robot();
-            List<RobotComponents.ABB.Actions.Action> actions = new List<RobotComponents.ABB.Actions.Action>();
+            List<RobotComponents.ABB.Actions.IAction> actions = new List<RobotComponents.ABB.Actions.IAction>();
             int interpolations = 0;
             double interpolationSlider = 0;
             bool update = false;
@@ -148,7 +148,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             ForwardKinematics forwardKinematics = new ForwardKinematics(robot);
 
             // Fill list if needed
-            if (DA.Iteration > _calculated.Count - 1)
+            if (DA.Iteration >= _calculated.Count)
             {
                 _calculated.Add(false);
             }
@@ -157,7 +157,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (update == true | _calculated[DA.Iteration] == false)
             {
                 // Create the path generator
-                if (DA.Iteration > _pathGenerators.Count - 1)
+                if (DA.Iteration >= _pathGenerators.Count)
                 {
                     _pathGenerators.Add(new PathGenerator(robot));
                 }
@@ -174,7 +174,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             }
 
             // Get the index number of the current target
-            int index = (int)(((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider));
+            int index = (int)((_pathGenerators[DA.Iteration].Planes.Count - 1) * interpolationSlider);
 
             // Calculate forward kinematics
             if (_previewMesh == true | _outputMesh == true)
@@ -272,14 +272,17 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             base.AfterSolveInstance();
 
-            if (_pathGenerators.Count > RunCount)
+            if (RunCount != -1)
             {
-                _pathGenerators.RemoveRange(RunCount, _pathGenerators.Count - 1);
-            }
+                if (_pathGenerators.Count > RunCount)
+                {
+                    _pathGenerators.RemoveRange(RunCount, _pathGenerators.Count - RunCount);
+                }
 
-            if (_calculated.Count > RunCount)
-            {
-                _calculated.RemoveRange(RunCount, _calculated.Count - 1);
+                if (_calculated.Count > RunCount)
+                {
+                    _calculated.RemoveRange(RunCount, _calculated.Count - RunCount);
+                }
             }
         }
 
@@ -735,31 +738,31 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             {
                 for (int i = 0; i < _forwardKinematics.Count; i++)
                 {
-                    // Initiate the display color and transparancy of the robot mesh
-                    Color color;
-                    double trans;
+                    // Initiate the display color and transparancy of the mechanical unit mesh
+                    DisplayMaterial displayMaterial;
 
                     // Interpolation step
-                    int index = (int)(((_pathGenerators[i].InLimits.Count - 1) * _interpolations[i]));
+                    int index = (int)((_pathGenerators[i].IsInLimits.Count - 1) * _interpolations[i]);
 
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].InLimits == false | _pathGenerators[i].InLimits[index] == false)
+                    if (_forwardKinematics[i].IsInLimits == false | _pathGenerators[i].IsInLimits[index] == false)
                     {
-                        color = Color.FromArgb(150, 0, 0);
-                        trans = 0.5;
+                        displayMaterial = DisplaySettings.DisplayMaterialOutsideLimits;
                     }
                     else
                     {
-                        color = Color.FromArgb(225, 225, 225);
-                        trans = 0.0;
+                        displayMaterial = DisplaySettings.DisplayMaterialInLimits;
                     }
 
                     // Display internal axis meshes
                     for (int j = 0; j < _forwardKinematics[i].PosedRobotMeshes.Count; j++)
                     {
-                        if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                        if (_forwardKinematics[i].PosedRobotMeshes[j] != null)
                         {
-                            args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], new Rhino.Display.DisplayMaterial(color, trans));
+                            if (_forwardKinematics[i].PosedRobotMeshes[j].IsValid)
+                            {
+                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedRobotMeshes[j], displayMaterial);
+                            }
                         }
                     }
 
@@ -768,9 +771,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     {
                         for (int k = 0; k < _forwardKinematics[i].PosedExternalAxisMeshes[j].Count; k++)
                         {
-                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                            if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k] != null)
                             {
-                                args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], new Rhino.Display.DisplayMaterial(color, trans));
+                                if (_forwardKinematics[i].PosedExternalAxisMeshes[j][k].IsValid)
+                                {
+                                    args.Display.DrawMeshShaded(_forwardKinematics[i].PosedExternalAxisMeshes[j][k], displayMaterial);
+                                }
                             }
                         }
                     }

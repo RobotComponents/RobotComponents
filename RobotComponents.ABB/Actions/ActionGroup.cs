@@ -17,11 +17,11 @@ namespace RobotComponents.ABB.Actions
     /// Represents a group of Actions.
     /// </summary>
     [Serializable()]
-    public class ActionGroup : Action, ISerializable
+    public class ActionGroup : IAction, ISerializable
     {
         #region fields
         private string _name;
-        private List<Action> _actions;
+        private List<IAction> _actions;
         #endregion
 
         #region (de)serialization
@@ -32,9 +32,9 @@ namespace RobotComponents.ABB.Actions
         /// <param name="context"> The context of this deserialization. </param>
         protected ActionGroup(SerializationInfo info, StreamingContext context)
         {
-            // int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            // // Version version = (int)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _name = (string)info.GetValue("Name", typeof(string));
-            _actions = (List<Action>)info.GetValue("Actions", typeof(List<Action>));
+            _actions = (List<IAction>)info.GetValue("Actions", typeof(List<IAction>));
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace RobotComponents.ABB.Actions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Actions", _actions, typeof(List<Action>));
+            info.AddValue("Actions", _actions, typeof(List<IAction>));
         }
         #endregion
 
@@ -58,17 +58,17 @@ namespace RobotComponents.ABB.Actions
         public ActionGroup()
         {
             _name = "";
-            _actions = new List<Action>() { };
+            _actions = new List<IAction>() { };
         }
 
         /// <summary>
         /// Initializes a new instance of the Action Group class with an empty name.
         /// </summary>
         /// <param name="actions"> The list with actions. </param>
-        public ActionGroup(IList<Action> actions)
+        public ActionGroup(IList<IAction> actions)
         {
             _name = "";
-            _actions = new List<Action>(actions);
+            _actions = new List<IAction>(actions);
         }
 
         /// <summary>
@@ -76,10 +76,10 @@ namespace RobotComponents.ABB.Actions
         /// </summary>
         /// <param name="name"> The name of the Action Group. </param>
         /// <param name="actions"> The list with actions. </param>
-        public ActionGroup(string name, IList<Action> actions)
+        public ActionGroup(string name, IList<IAction> actions)
         {
             _name = name;
-            _actions = new List<Action>(actions);
+            _actions = new List<IAction>(actions);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// A deep copy of the Action Group instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new ActionGroup(this);
         }
@@ -148,7 +148,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The duplicate of the list with actions. 
         /// </returns>
-        public List<Action> DuplicateToList()
+        public List<IAction> DuplicateToList()
         {
             return _actions.ConvertAll(action => action.DuplicateAction());
         }
@@ -159,7 +159,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The duplicate of the list with actions as an array. 
         /// </returns>
-        public Action[] DuplicateToArray()
+        public IAction[] DuplicateToArray()
         {
             return _actions.ConvertAll(action => action.DuplicateAction()).ToArray();
         }
@@ -168,7 +168,7 @@ namespace RobotComponents.ABB.Actions
         /// Adds and action to the end of this action group.
         /// </summary>
         /// <param name="action"></param>
-        public void Add(Action action)
+        public void Add(IAction action)
         {
             _actions.Add(action);
         }
@@ -177,9 +177,9 @@ namespace RobotComponents.ABB.Actions
         /// Adds the elements of the specified collection with actions to the end of this action group.
         /// </summary>
         /// <param name="collection"> The colleciton with actions. </param>
-        public void AddRange(IList<Action> collection)
+        public void AddRange(IList<IAction> collection)
         {
-            _actions.AddRange(new List<Action>(collection));
+            _actions.AddRange(new List<IAction>(collection));
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The index of value if found in the list; otherwise, -1. 
         /// </returns>
-        public int IndexOf(Action action)
+        public int IndexOf(IAction action)
         {
             return _actions.IndexOf(action);
         }
@@ -207,7 +207,7 @@ namespace RobotComponents.ABB.Actions
         /// </summary>
         /// <param name="index"> The zero-based index at which value should be inserted. </param>
         /// <param name="action"> The object to insert into the list. </param>
-        public void Insert(int index, Action action)
+        public void Insert(int index, IAction action)
         {
             _actions.Insert(index, action);
         }
@@ -219,7 +219,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// True if the Action is found in the list; otherwise, false. 
         /// </returns>
-        public bool Contains(Action action)
+        public bool Contains(IAction action)
         {
             return _actions.Contains(action);
         }
@@ -228,7 +228,7 @@ namespace RobotComponents.ABB.Actions
         /// Removes the first occurrence of a specific object from the List.
         /// </summary>
         /// <param name="action"> The object to remove from the IList. </param>
-        public void Remove(Action action)
+        public void Remove(IAction action)
         {
             _actions.Remove(action);
         }
@@ -247,7 +247,7 @@ namespace RobotComponents.ABB.Actions
         /// </summary>
         /// <param name="array"> The one-dimensional Array that is the destination of the elements copied from ICollection. The Array must have zero-based indexing. </param>
         /// <param name="index"> The zero-based index in array at which copying begins. </param>
-        public void CopyTo(Action[] array, int index)
+        public void CopyTo(IAction[] array, int index)
         {
             _actions.CopyTo(array, index);
         }
@@ -258,9 +258,9 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// List with Actions. 
         /// </returns>
-        public List<Action> Ungroup()
+        public List<IAction> Ungroup()
         {
-            List<Action> result = new List<Action>() { };
+            List<IAction> result = new List<IAction>() { };
 
             for (int i = 0; i < _actions.Count; i++)
             {
@@ -284,7 +284,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The RAPID data string of all declarative actions as one string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             string result = "";
 
@@ -308,7 +308,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The RAPID code line of a instructive actions as one string.
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             string result = "";
 
@@ -326,28 +326,13 @@ namespace RobotComponents.ABB.Actions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
-        {
-            for (int i = 0; i < _actions.Count; i++)
-            {
-                _actions[i].ToRAPIDDeclaration(RAPIDGenerator);
-            }
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -356,13 +341,14 @@ namespace RobotComponents.ABB.Actions
 
             for (int i = 0; i < _actions.Count; i++)
             {
-                _actions[i].ToRAPIDInstruction(RAPIDGenerator);
+                _actions[i].ToRAPIDGenerator(RAPIDGenerator);
             }
 
             if (_name != "")
             {
                 RAPIDGenerator.ProgramInstructions.Add("    " + "    " + $"! End of group: {_name}");
             }
+
         }
         #endregion
 
@@ -370,7 +356,7 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {
@@ -392,7 +378,7 @@ namespace RobotComponents.ABB.Actions
         /// <summary>
         /// Gets or sets the collection with Actions.
         /// </summary>
-        public List<Action> Actions
+        public List<IAction> Actions
         {
             get { return _actions; }
             set { _actions = value; }
@@ -413,7 +399,7 @@ namespace RobotComponents.ABB.Actions
         /// <returns> 
         /// The Action located at the given index. 
         /// </returns>
-        public Action this[int index]
+        public IAction this[int index]
         {
             get { return _actions[index]; }
             set { _actions[index] = value; }

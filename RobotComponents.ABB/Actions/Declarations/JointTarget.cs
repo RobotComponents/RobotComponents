@@ -3,7 +3,7 @@
 // as published by the Free Software Foundation. For more information and 
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
-// System lib
+// System Libs
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -12,7 +12,6 @@ using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
-using RobotComponents.ABB.Actions.Interfaces;
 using RobotComponents.ABB.Utils;
 
 namespace RobotComponents.ABB.Actions.Declarations
@@ -24,13 +23,13 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// This action is used to define each individual axis position, for both the robot and the external axes.
     /// </remarks>
     [Serializable()]
-    public class JointTarget : Action, ITarget, IDeclaration, ISerializable
+    public class JointTarget : IAction, ITarget, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "jointtarget";
-        private string _name; 
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "jointtarget";
+        private string _name = "";
         private RobotJointPosition _robotJointPosition;
         private ExternalJointPosition _externalJointPosition;
         #endregion
@@ -43,9 +42,9 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected JointTarget(SerializationInfo info, StreamingContext context)
         {
-            int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
-            _scope = version >= 2000000 ? (Scope)info.GetValue("Scope", typeof(Scope)) : Scope.GLOBAL;
-            _variableType = version >= 2000000 ? (VariableType)info.GetValue("Variable Type", typeof(VariableType)) : (VariableType)info.GetValue("Reference Type", typeof(VariableType));
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            _scope = (Scope)info.GetValue("Scope", typeof(Scope));
+            _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
             _robotJointPosition = (RobotJointPosition)info.GetValue("Robot Joint Position", typeof(RobotJointPosition));
             _externalJointPosition = (ExternalJointPosition)info.GetValue("External Joint Position", typeof(ExternalJointPosition));
@@ -59,7 +58,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -82,9 +81,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(RobotJointPosition robotJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
         }
@@ -96,8 +92,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="robotJointPosition"> The robot joint position. </param>
         public JointTarget(string name, RobotJointPosition robotJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = new ExternalJointPosition();
@@ -110,9 +104,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
         }
@@ -125,8 +116,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="externalJointPosition"> The External Joint Position</param>
         public JointTarget(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _robotJointPosition = robotJointPosition;
             _externalJointPosition = externalJointPosition;
@@ -184,7 +173,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Joint Target instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new JointTarget(this);
         }
@@ -200,7 +189,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"> The RAPID data string. </param>
         private JointTarget(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 12)
             {
@@ -370,7 +359,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined.
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -390,22 +379,22 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
-            _robotJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
-            _externalJointPosition.ToRAPIDDeclaration(RAPIDGenerator);
+            _robotJointPosition.ToRAPIDGenerator(RAPIDGenerator);
+            _externalJointPosition.ToRAPIDGenerator(RAPIDGenerator);
 
             if (_name != "")
             {
@@ -416,24 +405,13 @@ namespace RobotComponents.ABB.Actions.Declarations
                 }
             }
         }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-        }
         #endregion
 
         #region properties
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

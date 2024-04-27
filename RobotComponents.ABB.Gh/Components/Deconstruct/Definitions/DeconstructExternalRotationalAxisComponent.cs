@@ -21,10 +21,10 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
     public class DeconstructExternalRotationalAxisComponent : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the DeconstructRobotTool class.
+        /// Initializes a new instance of the DeconstructExternalRotationalAxisComponent class.
         /// </summary>
         public DeconstructExternalRotationalAxisComponent()
-          : base("Deconstruct External Rotational Axis", "DeConERA", 
+          : base("Deconstruct External Rotational Axis", "DeConERA",
               "Deconstructs an External Rotational Axis component into its parameters."
          + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

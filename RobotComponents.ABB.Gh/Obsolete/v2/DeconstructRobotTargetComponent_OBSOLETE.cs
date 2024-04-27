@@ -25,7 +25,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         /// Initializes a new instance of the DeconstructTarget class.
         /// </summary>
         public DeconstructRobotTargetComponent_OBSOLETE()
-          : base("Deconstruct Robot Target", "DeConRobTar", 
+          : base("Deconstruct Robot Target", "DeConRobTar",
               "Deconstructs a Robot Target into its parameters."
                 + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
@@ -51,7 +51,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             pManager.Register_IntegerParam("Axis Configuration", "AC", "Axis Configuration as int.");
             pManager.RegisterParam(new Param_ExternalJointPosition(), "External Joint Position", "EJ", "The positions of the external logical axes as an External Joint Position");
         }
-   
+
         /// <summary>
         /// This is the method that actually does the work.
         /// </summary>

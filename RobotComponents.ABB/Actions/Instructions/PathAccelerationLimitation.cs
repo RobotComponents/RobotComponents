@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Instructions
 {
@@ -21,8 +20,7 @@ namespace RobotComponents.ABB.Actions.Instructions
     /// acceleration and/or TCP deceleration along the movement path.
     /// </remarks>
     [Serializable()]
-    [Obsolete("This class is a work in progress and could undergo changes in the current major release.", false)]
-    public class PathAccelerationLimitation : Action, IInstruction, ISerializable
+    public class PathAccelerationLimitation : IAction, IInstruction, ISerializable
     {
         #region fields
         private bool _accelerationLimitation;
@@ -39,7 +37,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="context"> The context of this deserialization. </param>
         protected PathAccelerationLimitation(SerializationInfo info, StreamingContext context)
         {
-            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _accelerationLimitation = (bool)info.GetValue("Acceleration Limitation", typeof(bool));
             _accelerationMax = (double)info.GetValue("Acceleration Max", typeof(double));
             _decelerationLimitation = (bool)info.GetValue("Deceleration Limitation", typeof(bool));
@@ -54,7 +52,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Acceleration Limitation", _accelerationLimitation, typeof(bool));
             info.AddValue("Acceleration Max", _accelerationMax, typeof(double));
             info.AddValue("Deceleration Limitation", _accelerationLimitation, typeof(bool));
@@ -79,7 +77,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <param name="decelerationMax"> The absolute value of the deceleration limitation in m/s^2. </param>
         public PathAccelerationLimitation(bool accelerationLimitation, double accelerationMax, bool decelerationLimitation, double decelerationMax)
         {
-            _accelerationLimitation = accelerationLimitation; 
+            _accelerationLimitation = accelerationLimitation;
             _accelerationMax = accelerationMax;
             _decelerationLimitation = decelerationLimitation;
             _decelerationMax = decelerationMax;
@@ -125,7 +123,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// A deep copy of the Path Acceleration Limitation instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new PathAccelerationLimitation(this);
         }
@@ -157,7 +155,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// An empty string. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             return string.Empty;
         }
@@ -169,7 +167,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <returns> 
         /// The RAPID code line. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             string acceleration = _accelerationLimitation == false ? "FALSE" : $"TRUE\\AccMax:={_accelerationMax}";
             string deceleration = _decelerationLimitation == false ? "FALSE" : $"TRUE\\DecelMax:={_decelerationMax}";
@@ -177,26 +175,15 @@ namespace RobotComponents.ABB.Actions.Instructions
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
-        }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot)); 
+            RAPIDGenerator.ProgramInstructions.Add("    " + "    " + ToRAPIDInstruction(RAPIDGenerator.Robot));
         }
         #endregion
 
@@ -204,7 +191,7 @@ namespace RobotComponents.ABB.Actions.Instructions
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

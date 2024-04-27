@@ -64,7 +64,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
             get
             {
                 // If you want to provide this parameter on the toolbars, use something other than hidden.
-                return GH_Exposure.hidden; 
+                return GH_Exposure.hidden;
             }
         }
 

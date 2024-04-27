@@ -78,7 +78,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_ExternalLinearAxis(), "External Linear Axis", "ELA", "Resulting External Linear Axis");   
+            pManager.RegisterParam(new Param_ExternalLinearAxis(), "External Linear Axis", "ELA", "Resulting External Linear Axis");
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             // Input variables
             string name = "";
             Plane attachmentPlane = Plane.WorldXY;
-            Vector3d axis = new Vector3d(0,0,0);
+            Vector3d axis = new Vector3d(0, 0, 0);
             Interval limits = new Interval(0, 0);
             List<Mesh> baseMeshes = new List<Mesh>();
             List<Mesh> linkMeshes = new List<Mesh>();
@@ -117,7 +117,7 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             {
                 if (!DA.GetData(_variableInputParameters[1].Name, ref movesRobot))
                 {
-                    movesRobot = true; 
+                    movesRobot = true;
                 }
             }
 

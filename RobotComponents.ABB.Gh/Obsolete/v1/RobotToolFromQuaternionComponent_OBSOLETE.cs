@@ -107,7 +107,8 @@ namespace RobotComponents.ABB.Gh.Obsolete
             name = HelperMethods.ReplaceSpacesAndRemoveNewLines(name);
 
             // Create the robot tool
-            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, x, y, z, quat1, quat2, quat3, quat4);
+            Plane toolPlane = ABB.Utils.HelperMethods.QuaternionToPlane(x, y, z, quat1, quat2, quat3, quat4);
+            RobotTool robotTool = new RobotTool(name, meshes, attachmentPlane, toolPlane);
 
             // Outputs
             DA.SetData(0, robotTool);

@@ -11,7 +11,7 @@ using GH_IO.Serialization;
 // Rhino Libs
 using Rhino.Geometry;
 // RobotComponents Libs
-using RobotComponents.ABB.Actions.Interfaces;
+using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Goos.Actions.Declarations;
 using RobotComponents.Utils;
@@ -143,7 +143,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
         /// <returns> The world aligned boundingbox of the transformed geometry. </returns>
         public override BoundingBox GetBoundingBox(Transform xform)
         {
-            return BoundingBox.Empty; 
+            return BoundingBox.Empty;
         }
         #endregion
 
@@ -197,7 +197,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
             }
 
             //Cast to External Axis
-            if (typeof(Q).IsAssignableFrom(typeof(ExternalAxis)))
+            if (typeof(Q).IsAssignableFrom(typeof(IExternalAxis)))
             {
                 if (Value == null) { target = (Q)(object)null; }
                 else { target = (Q)(object)Value.ExternalAxis; }
@@ -284,7 +284,7 @@ namespace RobotComponents.ABB.Gh.Goos.Definitions
                     return false;
                 }
             }
-            
+
             return false;
         }
         #endregion

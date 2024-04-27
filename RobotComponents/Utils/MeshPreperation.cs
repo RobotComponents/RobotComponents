@@ -36,7 +36,7 @@ namespace RobotComponents.Utils
             {
                 result = mesh;
             }
-            
+
             //result.UnifyNormals(); // <-- decreases the display quality
             result.Normals.ComputeNormals();
             result.FaceNormals.ComputeFaceNormals();

@@ -64,6 +64,13 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            // Check the operating system
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "This component is only supported on Windows operating systems.");
+                return;
+            }
+
             // Input variables
             bool update = false;
 
@@ -74,7 +81,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (update || _fromMenu)
             {
                 bool succeeded = this.GetController();
-                
+
                 if (succeeded)
                 {
                     _picked = true;
@@ -258,22 +265,23 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             else if (Controller.Controllers.Count > 1)
             {
-                PickControllerForm frm = new PickControllerForm(Controller.Controllers.ConvertAll(item => item.Name));
-                Grasshopper.GUI.GH_WindowsFormUtil.CenterFormOnScreen(frm, false);
-                frm.ShowDialog();
-                int index = frm.Index;
+                PickControllerForm form = new PickControllerForm();
+                bool result = form.ShowModal(Grasshopper.Instances.EtoDocumentEditor);
 
-                if (index < 0)
+                if (result)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from the menu!");
-                    _controller = new Controller();
+                    _controller = form.Controller;
+                    _controller.Initiliaze();
+                    return true;
+                }
+                else if (_controller.IsEmpty)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No controller picked from menu!");
                     return false;
                 }
                 else
                 {
-                    _controller = Controller.Controllers[index];
-                    _controller.Initiliaze();
-                    return true;
+                    return false;
                 }
             }
 

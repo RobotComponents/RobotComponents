@@ -2,25 +2,31 @@
 	"creators": [
 		{
 			"name": "Arjen Deetman",
-			"orcid": "0000-0001-6756-5151"
+			"orcid": "0000-0001-6756-5151",
+			"affiliation": ["Independent developer", "Universität Kassel"]
+		}
+		{
+			"name": "Gabriel Rumpf",
+			"affiliation": "Universität Kassel"
 		},
 		{
-			"name": "Gabriel Rumpf"
-		},
-		{
-			"name": "Benedikt Wannemacher"
+			"name": "Benedikt Wannemacher",
+			"affiliation": "Universität Kassel"
 		},
 		{
 			"name": "Mohamed Dawod",
-			"orcid": "0000-0003-2171-2966"
+			"orcid": "0000-0003-2171-2966",
+			"affiliation": "Universität Kassel"
 		},
 		{
 			"name": "Zuardin Akbar",
-			"orcid": "0000-0002-8606-5483"
+			"orcid": "0000-0002-8606-5483",
+			"affiliation": "Universität Kassel"
 		},
 		{
 			"name": "Andrea Rossi",
-			"orcid": "0000-0003-1680-7717"
+			"orcid": "0000-0003-1680-7717",
+			"affiliation": "Universität Kassel"
 		}
 	],
 

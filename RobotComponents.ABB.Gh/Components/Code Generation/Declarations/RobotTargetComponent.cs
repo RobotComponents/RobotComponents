@@ -73,7 +73,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             pManager.AddTextParameter("Name", "N", "Name as text", GH_ParamAccess.item, string.Empty);
             pManager.AddPlaneParameter("Plane", "P", "Plane as Plane", GH_ParamAccess.item);
             pManager.AddParameter(new Param_ConfigurationData(), "Configuration Data", "CD", "Robot configuration as Configuration Data", GH_ParamAccess.item);
-            
+
             pManager[2].Optional = true;
         }
 

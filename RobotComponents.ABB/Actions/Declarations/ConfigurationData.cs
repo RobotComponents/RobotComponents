@@ -11,7 +11,6 @@ using System.Security.Permissions;
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Enumerations;
 using RobotComponents.ABB.Utils;
-using RobotComponents.ABB.Actions.Interfaces;
 
 namespace RobotComponents.ABB.Actions.Declarations
 {
@@ -19,13 +18,13 @@ namespace RobotComponents.ABB.Actions.Declarations
     /// Represents the Configuration Data declaration. 
     /// </summary>
     [Serializable()]
-    public class ConfigurationData : Action, IDeclaration, ISerializable
+    public class ConfigurationData : IAction, IDeclaration, ISerializable
     {
         #region fields
-        private Scope _scope;
-        private VariableType _variableType;
-        private static readonly string _datatype = "confdata";
-        private string _name;
+        private Scope _scope = Scope.GLOBAL;
+        private VariableType _variableType = VariableType.VAR;
+        private const string _datatype = "confdata";
+        private string _name = "";
         private int _cf1;
         private int _cf4;
         private int _cf6;
@@ -40,7 +39,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="context"> The context of this deserialization. </param>
         protected ConfigurationData(SerializationInfo info, StreamingContext context)
         {
-            //int version = (int)info.GetValue("Version", typeof(int)); // <-- use this if the (de)serialization changes
+            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _scope = (Scope)info.GetValue("Scope", typeof(Scope));
             _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
@@ -58,7 +57,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Version", VersionNumbering.CurrentVersionAsInt, typeof(int));
+            info.AddValue("Version", VersionNumbering.Version, typeof(Version));
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
@@ -75,7 +74,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </summary>
         public ConfigurationData()
         {
-        
+
         }
 
         /// <summary>
@@ -87,9 +86,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="cfx"> The current robot configuration. </param>
         public ConfigurationData(int cf1, int cf4, int cf6, int cfx)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
-            _name = "";
             _cf1 = cf1;
             _cf4 = cf4;
             _cf6 = cf6;
@@ -106,8 +102,6 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="cfx"> The current robot configuration. </param>
         public ConfigurationData(string name, int cf1, int cf4, int cf6, int cfx)
         {
-            _scope = Scope.GLOBAL;
-            _variableType = VariableType.VAR;
             _name = name;
             _cf1 = cf1;
             _cf4 = cf4;
@@ -156,7 +150,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// A deep copy of the Configuration Data instance as an Action. 
         /// </returns>
-        public override Action DuplicateAction()
+        public IAction DuplicateAction()
         {
             return new ConfigurationData(this);
         }
@@ -172,7 +166,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <param name="rapidData"> The RAPID data string. </param>
         private ConfigurationData(string rapidData)
         {
-            this.SetDataFromString(rapidData, out string[] values);
+            this.SetRapidDataFromString(rapidData, out string[] values);
 
             if (values.Length == 4)
             {
@@ -263,7 +257,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// The RAPID code line in case a variable name is defined. 
         /// </returns>
-        public override string ToRAPIDDeclaration(Robot robot)
+        public string ToRAPIDDeclaration(Robot robot)
         {
             if (_name != "")
             {
@@ -283,19 +277,19 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// <returns> 
         /// An emptry string. 
         /// </returns>
-        public override string ToRAPIDInstruction(Robot robot)
+        public string ToRAPIDInstruction(Robot robot)
         {
             return string.Empty;
         }
 
         /// <summary>
-        /// Creates declarations in the RAPID program module inside the RAPID Generator. 
+        /// Creates declarations and instructions in the RAPID program module inside the RAPID Generator.
         /// </summary>
         /// <remarks>
         /// This method is called inside the RAPID generator.
         /// </remarks>
         /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDDeclaration(RAPIDGenerator RAPIDGenerator)
+        public void ToRAPIDGenerator(RAPIDGenerator RAPIDGenerator)
         {
             if (_name != "")
             {
@@ -306,24 +300,13 @@ namespace RobotComponents.ABB.Actions.Declarations
                 }
             }
         }
-
-        /// <summary>
-        /// Creates instructions in the RAPID program module inside the RAPID Generator.
-        /// </summary>
-        /// <remarks>
-        /// This method is called inside the RAPID generator.
-        /// </remarks>
-        /// <param name="RAPIDGenerator"> The RAPID Generator. </param>
-        public override void ToRAPIDInstruction(RAPIDGenerator RAPIDGenerator)
-        {
-        }
         #endregion
 
         #region properties
         /// <summary>
         /// Gets a value indicating whether or not the object is valid.
         /// </summary>
-        public override bool IsValid
+        public bool IsValid
         {
             get
             {

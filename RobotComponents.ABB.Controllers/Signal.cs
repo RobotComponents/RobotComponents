@@ -4,7 +4,6 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 // Rhino Libs
 using Rhino.Geometry;
 // ABB Libs
@@ -22,7 +21,7 @@ namespace RobotComponents.ABB.Controllers
     public class Signal
     {
         #region fields
-        private IOSystemDomainNS.Signal _signal;
+        private readonly IOSystemDomainNS.Signal _signal;
         private Interval _limits = new Interval();
         private string _name = "";
         private bool _isEmpty = true;
@@ -202,11 +201,11 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         public bool IsValid
         {
-            get 
-            { 
+            get
+            {
                 if (_signal == null) { return false; }
                 if (_signal.Type == IOSystemDomainNS.SignalType.Unknown) { return false; }
-                return true; 
+                return true;
             }
         }
 
@@ -239,8 +238,8 @@ namespace RobotComponents.ABB.Controllers
         /// </summary>
         public float Value
         {
-            get 
-            { 
+            get
+            {
                 if (!_isEmpty) { return _signal.Value; }
                 else { return 0; }
             }

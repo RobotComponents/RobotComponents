@@ -38,7 +38,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public ConfigurationDataComponent()
-          : base("Configuration Data", "CD", 
+          : base("Configuration Data", "CD",
               "Defines a configuration data declaration for robot targets."
                + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,

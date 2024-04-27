@@ -35,7 +35,7 @@ namespace RobotComponents.ABB.Kinematics
         private readonly List<Movement> _movements; // The movements of the path
         private readonly List<RobotJointPosition> _robotJointPositions; // The robot joint positions needed to follow the path
         private readonly List<ExternalJointPosition> _externalJointPositions; // The external joint position needed to follow the path
-        private readonly List<bool> _inLimits; // Indicates whether or not the joint positions are within their limits
+        private readonly List<bool> _isInLimits; // Indicates whether or not the joint positions are within their limits
         private List<string> _errorText = new List<string>(); // List with collected error messages
 
         private bool _isFirstMovementMoveAbsJ; // Bool that indicates if the first movemement is an absolute joint movement
@@ -44,7 +44,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _linearConfigurationControl; // Defines if the configuration control for linear movements is enabled
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private CirPathMode _cirPathMode; // Defines the circle path mode
-        private int _interpolations; // Defines the number of interpolations between two targets
+        private int _interpolations = 5; // Defines the number of interpolations between two targets
         private double _time; // Estimate of the total program time
         #endregion
 
@@ -67,7 +67,7 @@ namespace RobotComponents.ABB.Kinematics
             _movements = new List<Movement>();
             _robotJointPositions = new List<RobotJointPosition>();
             _externalJointPositions = new List<ExternalJointPosition>();
-            _inLimits = new List<bool>();
+            _isInLimits = new List<bool>();
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _initialTool = robot.Tool.DuplicateWithoutMesh();
         }
@@ -103,7 +103,7 @@ namespace RobotComponents.ABB.Kinematics
             _externalJointPositions.Clear();
             _planes.Clear();
             _paths.Clear();
-            _inLimits.Clear();
+            _isInLimits.Clear();
             _errorText.Clear();
 
             // Reinitiate starting values
@@ -129,7 +129,7 @@ namespace RobotComponents.ABB.Kinematics
             _externalJointPositions.Add(externalJointPosition);
             _movements.Add(new Movement(MovementType.MoveAbsJ, new JointTarget(robotJointPosition, externalJointPosition), new SpeedData(5)));
             _planes.Add(_robot.ForwardKinematics.TCPPlane);
-            _inLimits.Add(true);
+            _isInLimits.Add(true);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace RobotComponents.ABB.Kinematics
         /// </summary>
         /// <param name="actions"> The list with Actions. </param>
         /// <param name="interpolations"> The amount of interpolations between two targets. </param>
-        public void Calculate(IList<Actions.Action> actions, int interpolations)
+        public void Calculate(IList<Actions.IAction> actions, int interpolations = 5)
         {
             _robot.ForwardKinematics.HideMesh = true;
             _interpolations = interpolations;
@@ -145,7 +145,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Actions.Action> ungrouped = new List<Actions.Action>() { };
+            List<Actions.IAction> ungrouped = new List<Actions.IAction>() { };
 
             for (int i = 0; i < actions.Count; i++)
             {
@@ -231,12 +231,12 @@ namespace RobotComponents.ABB.Kinematics
                 _robotJointPositions.RemoveRange(0, interpolations);
                 _externalJointPositions.RemoveRange(0, interpolations);
                 _planes.RemoveRange(0, interpolations);
-                _inLimits.RemoveRange(0, interpolations);
+                _isInLimits.RemoveRange(0, interpolations);
             }
 
             // Remove first path
             _paths.RemoveAt(0);
-            
+
             // Remove duplicates from error text
             _errorText = _errorText.Distinct().ToList();
         }
@@ -290,8 +290,7 @@ namespace RobotComponents.ABB.Kinematics
             SetRobotTool(movement);
 
             // Get the final joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.Calculate();
+            _robot.InverseKinematics.Calculate(movement);
 
             // Joint configuration control
             if (_jointConfigurationControl == false && movement.MovementType != MovementType.MoveAbsJ)
@@ -307,9 +306,9 @@ namespace RobotComponents.ABB.Kinematics
             _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
 
             // Interpolate
-            InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition, movement, _robot.InverseKinematics.InLimits);
+            InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition, movement, _robot.InverseKinematics.IsInLimits);
         }
-        
+
         /// <summary>
         /// Calculates the interpolated path for a linear movement.
         /// </summary>
@@ -320,29 +319,28 @@ namespace RobotComponents.ABB.Kinematics
             SetRobotTool(movement);
 
             // Points for path
-            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin};
+            List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
 
             // Get the final external joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.CalculateExternalJointPosition();
+            _robot.InverseKinematics.CalculateExternalJointPosition(movement);
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
             ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
             externalJointPositionChange.Substract(_externalJointPositions.Last());
             externalJointPositionChange.Divide(_interpolations);
-                                          
+
             // First target plane in WORLD coordinate space
             Plane plane1 = _planes.Last();
 
             // Second target plane in WORK OBJECT coordinate space 
             RobotTarget robotTarget = movement.Target as RobotTarget;
-            Plane plane2 = robotTarget.Plane; 
+            Plane plane2 = robotTarget.Plane;
 
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                IExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
                 Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
                 plane1.Transform(trans);
             }
@@ -373,7 +371,7 @@ namespace RobotComponents.ABB.Kinematics
                 double t = dt * (i + 1);
 
                 // Interpolate position and orientation
-                Point3d point = (1 - t) * plane1.Origin + t * plane2.Origin;
+                Point3d point = ((1 - t) * plane1.Origin) + (t * plane2.Origin);
                 Quaternion quat = HelperMethods.Slerp(quat1, quat2, t);
 
                 // Plane: the target plane in WORK OBJECT coordinate space
@@ -386,21 +384,20 @@ namespace RobotComponents.ABB.Kinematics
                 newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
 
                 // Calculate joint positions
-                _robot.InverseKinematics.Movement = newMovement;
-                _robot.InverseKinematics.Calculate();
+                _robot.InverseKinematics.Calculate(newMovement);
 
                 // Configuration control
                 if (_linearConfigurationControl == false)
                 {
                     _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
                 }
-                
+
                 // Check for wrist singularity
                 if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
-                { 
-                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                {
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The robot is near a wrist singularity.");
                 }
-                
+
                 // Add te calculated joint positions and plane to the class property
                 _robotJointPositions.Add(_robot.InverseKinematics.RobotJointPosition.Duplicate());
                 _externalJointPositions.Add(_robot.InverseKinematics.ExternalJointPosition.Duplicate());
@@ -416,7 +413,7 @@ namespace RobotComponents.ABB.Kinematics
                 _movements.Add(newMovement.DuplicateWithoutMesh());
 
                 // Axis limits check
-                _inLimits.Add(_robot.InverseKinematics.InLimits);
+                _isInLimits.Add(_robot.InverseKinematics.IsInLimits);
 
                 // Only add the other point if this point is different
                 if (points[points.Count - 1] != globalPlane.Origin)
@@ -437,7 +434,7 @@ namespace RobotComponents.ABB.Kinematics
                 else
                 {
                     _time += movement.Time;
-                }    
+                }
             }
             else
             {
@@ -488,8 +485,7 @@ namespace RobotComponents.ABB.Kinematics
             List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
 
             // Get the final external joint positions of this movement
-            _robot.InverseKinematics.Movement = movement;
-            _robot.InverseKinematics.CalculateExternalJointPosition();
+            _robot.InverseKinematics.CalculateExternalJointPosition(movement);
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
@@ -503,7 +499,7 @@ namespace RobotComponents.ABB.Kinematics
             // Circular point in WORK OBJECT coordinate space
             if (movement.CircularPoint.Plane == Plane.Unset)
             {
-                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: No circular point defined.");
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: No circular point defined.");
             }
 
             Plane planeCirPoint = movement.CircularPoint.Plane;
@@ -515,7 +511,7 @@ namespace RobotComponents.ABB.Kinematics
             // Correction for rotation of the target plane on a movable work object
             if (movement.WorkObject.ExternalAxis != null)
             {
-                ExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
+                IExternalAxis externalAxis = movement.WorkObject.ExternalAxis;
                 Transform trans = externalAxis.CalculateTransformationMatrix(_externalJointPositions.Last() * -1, out _);
                 plane1.Transform(trans);
             }
@@ -529,32 +525,32 @@ namespace RobotComponents.ABB.Kinematics
 
             if (arc.IsValid == false)
             {
-                throw new Exception($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
+                throw new Exception($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Arc is not valid. Did you define the circular point correctly?");
             }
 
             if (arc.AngleDegrees > 240)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Circle is too large (> 240 degrees).");
             }
 
             Curve circle = arc.ToNurbsCurve();
             circle.Domain = new Interval(0, 1);
-            
+
             // Check the RAPID conditions
             // Minimum distance between start and ToPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(plane2.Origin) < 0.1)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
             }
             // Minimum distance between start and CirPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(planeCirPoint.Origin) < 0.1)
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
             }
             // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
             if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, planeCirPoint.Origin - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
             {
-                _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
+                _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
             }
             // Circle Path Mode specific restrictions
             if (_cirPathMode == CirPathMode.CirPointOri)
@@ -563,7 +559,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 if (param < 0.25 | param > 0.75)
                 {
-                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{ movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
+                    _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The circle Point is not between 0.25 and 0.75 of the circle movement which is required for the CirPointOri mode.");
                 }
             }
 
@@ -697,13 +693,12 @@ namespace RobotComponents.ABB.Kinematics
                 newMovement.CircularPoint.Plane = new Plane(circle.PointAt(dt * (i + 0.5)), newMovement.CircularPoint.Plane.XAxis, newMovement.CircularPoint.Plane.YAxis);
 
                 // Calculate joint positions
-                _robot.InverseKinematics.Movement = newMovement;
-                _robot.InverseKinematics.Calculate();
+                _robot.InverseKinematics.Calculate(newMovement);
 
                 // Check for wrist singularity
                 if (Math.Sign(_robot.InverseKinematics.RobotJointPosition[4]) * Math.Sign(_robotJointPositions.Last()[4]) < 0)
                 {
-                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The target is close to wrist singularity.");
+                    _errorText.Add($"Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The robot is near a wrist singularity.");
                 }
 
                 // Add te calculated joint positions and plane to the class property
@@ -721,7 +716,7 @@ namespace RobotComponents.ABB.Kinematics
                 _movements.Add(newMovement.DuplicateWithoutMesh());
 
                 // Axis limits check
-                _inLimits.Add(_robot.InverseKinematics.InLimits);
+                _isInLimits.Add(_robot.InverseKinematics.IsInLimits);
 
                 // Only add the other point if this point is different
                 if (points[points.Count - 1] != globalPlane.Origin)
@@ -756,8 +751,8 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="towardsRobotJointPosition"> The final Robot Joint Position of the joint movement. </param>
         /// <param name="towardsExternalJointPosition"> The final External Joint Position of the joint movement. </param>
         /// <param name="movement"> The movement that belongs to the given joint positions. </param>
-        /// <param name="inLimits"> Indicates whether or not the calculated solution is within limits </param>
-        private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition, Movement movement, bool inLimits = true)
+        /// <param name="isInLimits"> Indicates whether or not the calculated solution is within limits </param>
+        private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition, Movement movement, bool isInLimits = true)
         {
             // Calculate the joint position value change per interpolation
             RobotJointPosition robotJointPositionChange = towardsRobotJointPosition.Duplicate();
@@ -787,7 +782,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 // Planes
                 _robot.ForwardKinematics.Calculate(newRobotJointPosition, newExternalJointPosition);
-                _inLimits.Add(!_robot.ForwardKinematics.InLimits | !inLimits ? false : true);
+                _isInLimits.Add(!_robot.ForwardKinematics.IsInLimits | !isInLimits ? false : true);
                 _planes.Add(_robot.ForwardKinematics.TCPPlane);
 
                 // Points
@@ -812,7 +807,7 @@ namespace RobotComponents.ABB.Kinematics
                     // Correction for rotation of the target plane on a movable work object
                     if (newMovement.WorkObject.ExternalAxis != null)
                     {
-                        ExternalAxis externalAxis = newMovement.WorkObject.ExternalAxis;
+                        IExternalAxis externalAxis = newMovement.WorkObject.ExternalAxis;
                         Transform trans2 = externalAxis.CalculateTransformationMatrix(newExternalJointPosition * -1, out _);
                         plane.Transform(trans2);
                     }
@@ -864,7 +859,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <returns> 
         /// Specifies whether the first movement type is an absolute joint movement. 
         /// </returns>
-        private bool CheckFirstMovement(IList<Actions.Action> actions)
+        private bool CheckFirstMovement(IList<Actions.IAction> actions)
         {
             for (int i = 0; i != actions.Count; i++)
             {
@@ -922,7 +917,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <remarks>
         /// For every move instruction a curve is constructed. 
         /// </remarks>
-        public List<Curve> Paths 
+        public List<Curve> Paths
         {
             get { return _paths; }
         }
@@ -936,7 +931,7 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
-        /// Gets the calculated Robot Joint Position.
+        /// Gets the calculated Robot Joint Positions.
         /// </summary>
         public List<RobotJointPosition> RobotJointPositions
         {
@@ -954,9 +949,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets the value indicating whether or not the internal and external values are within their limits.
         /// </summary>
-        public List<bool> InLimits
+        public List<bool> IsInLimits
         {
-            get { return _inLimits; }
+            get { return _isInLimits; }
         }
 
         /// <summary>
@@ -971,17 +966,6 @@ namespace RobotComponents.ABB.Kinematics
         /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
         /// </summary>
         public bool IsFirstMovementMoveAbsJ
-        {
-            get { return _isFirstMovementMoveAbsJ; }
-        }
-        #endregion
-
-        #region obsolete
-        /// <summary>
-        /// Gets a value indicating whether or not the first movement is an Absolute Joint Movement.
-        /// </summary>
-        [Obsolete("This property is OBSOLETE and will be removed in v3. Use IsFirstMovementMoveAbsJ instead.", false)]
-        public bool FirstMovementIsMoveAbsJ
         {
             get { return _isFirstMovementMoveAbsJ; }
         }

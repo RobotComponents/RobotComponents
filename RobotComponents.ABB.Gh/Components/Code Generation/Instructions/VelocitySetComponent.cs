@@ -48,7 +48,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.RegisterParam(new Param_VelocitySet(), "Velocity Set", "VS", "Resulting Velocity Set instruction");   
+            pManager.RegisterParam(new Param_VelocitySet(), "Velocity Set", "VS", "Resulting Velocity Set instruction");
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             // Input variables
             double @override = 100;
             double max = 250;
-            
+
             // Catch the input data
             if (!DA.GetData(0, ref @override)) { return; }
             if (!DA.GetData(1, ref max)) { return; }
@@ -80,8 +80,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         public override GH_Exposure Exposure
         {
-            //get { return GH_Exposure.secondary | GH_Exposure.obscure; }
-            get { return GH_Exposure.hidden; }
+            get { return GH_Exposure.secondary | GH_Exposure.obscure; }
         }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
-            get { return null; }
+            get { return Properties.Resources.VelocitySet_Icon; }
         }
 
         /// <summary>

@@ -89,12 +89,10 @@ x.x.0 ---> PATCH version when you make backward-compatible bug fixes
 Versions that were not released on [Food4Rhino](https://www.food4rhino.com/app/robot-components) are marked as pre-release. 
 
 ## Used by
-
 An overview of the projects wherein the software is used can be found [here](USED_BY.md). 
 
 ## License
-Copyright (c) 2018-2020 EDEK Uni Kassel
-
+Copyright (c) 2018-2020 EDEK Uni Kassel\
 Copyright (c) 2020-2024 Arjen Deetman
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 

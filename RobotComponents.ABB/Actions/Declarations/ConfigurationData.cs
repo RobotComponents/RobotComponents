@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Actions.Declarations
     {
         #region fields
         private Scope _scope = Scope.GLOBAL;
-        private VariableType _variableType = VariableType.VAR;
+        private VariableType _variableType = VariableType.CONST;
         private const string _datatype = "confdata";
         private string _name = "";
         private int _cf1;

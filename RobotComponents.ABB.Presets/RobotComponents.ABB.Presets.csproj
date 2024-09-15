@@ -115,6 +115,10 @@
     <Compile Include="Robots\IRB7600_325_310.cs" />
     <Compile Include="Robots\IRB7600_340_280.cs" />
     <Compile Include="Robots\IRB7600_400_255.cs" />
+    <Compile Include="Robots\IRB5710_70_270_LID.cs" />
+    <Compile Include="Robots\IRB5710_90_230_LID.cs" />
+    <Compile Include="Robots\IRB5710_90_270.cs" />
+    <Compile Include="Robots\IRB5710_110_230.cs" />
     <Compile Include="Robots\IRB7600_500_255.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1121,6 +1125,90 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CRB15000_10_1_52_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_30_LID_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_90_2_70_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_110_2_30_link_6.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_0.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_4.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_5.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IRB5710_70_2_70_LID_link_6.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />

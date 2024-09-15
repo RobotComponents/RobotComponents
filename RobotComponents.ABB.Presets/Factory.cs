@@ -238,6 +238,22 @@ namespace RobotComponents.ABB.Presets
             {
                 return IRB4600_45_205.GetRobot(positionPlane, tool, externalAxes);
             }
+            else if (preset == RobotPreset.IRB5710_110_230)
+            {
+                return IRB5710_110_230.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB5710_90_270)
+            {
+                return IRB5710_90_270.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB5710_70_270_LID)
+            {
+                return IRB5710_70_270_LID.GetRobot(positionPlane, tool, externalAxes);
+            }
+            else if (preset == RobotPreset.IRB5710_90_230_LID)
+            {
+                return IRB5710_90_230_LID.GetRobot(positionPlane, tool, externalAxes);
+            }
             //else if (preset == RobotPreset.CRB15000_5_095)
             //{
             //    return CRB15000_5_095.GetRobot(positionPlane, tool, externalAxes);

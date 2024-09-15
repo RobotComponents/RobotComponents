@@ -22,7 +22,7 @@ namespace RobotComponents
         /// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
         /// x.x.0 ---> BUILD version when you make backwards compatible bug fixes
         /// </remarks>
-        public const string CurrentVersion = "3.0.2";
+        public const string CurrentVersion = "3.0.3";
 
         /// <summary>
         /// Gets the current version.
@@ -33,6 +33,6 @@ namespace RobotComponents
         /// x.0.x ---> MINOR version when you add functionality in a backwards compatible manner,
         /// x.x.0 ---> BUILD version when you make backwards compatible bug fixes
         /// </remarks>
-        public static Version Version = new Version(3, 0, 2);
+        public static Version Version = new Version(3, 0, 3);
     }
 }

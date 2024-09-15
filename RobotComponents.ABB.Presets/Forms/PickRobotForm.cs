@@ -124,6 +124,7 @@ namespace RobotComponents.ABB.Presets.Forms
                 name = ReplaceFirst(name, "/7", "/7.");
                 name = ReplaceFirst(name, "/8", "/8.");
                 name = ReplaceFirst(name, "/9", "/9.");
+                name = ReplaceFirst(name, "_LID", "-LID");
 
                 return name;
             }

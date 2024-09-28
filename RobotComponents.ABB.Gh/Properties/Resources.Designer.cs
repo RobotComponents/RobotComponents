@@ -1583,6 +1583,16 @@ namespace RobotComponents.ABB.Gh.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap VariableNameCheck_Icon {
+            get {
+                object obj = ResourceManager.GetObject("VariableNameCheck_Icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap VelocitySet_Icon {
             get {
                 object obj = ResourceManager.GetObject("VelocitySet_Icon", resourceCulture);

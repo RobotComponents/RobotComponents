@@ -141,7 +141,8 @@ namespace RobotComponents.ABB.Gh.Utils
             #region Utilities
             { typeof(FlipPlaneXComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20X/" },
             { typeof(FlipPlaneYComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Flip%20Plane%20Y/" },
-            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" },
+            { typeof(GetObjectManager), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
+            { typeof(CheckVariableNamesComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/" }, // TODO
             { typeof(PlaneToQuaternionComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20to%20Quarternion/" },
             { typeof(PlaneVisualizerComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Plane%20Visualizer/" },
             { typeof(QuaternionToPlaneComponent), "https://robotcomponents.github.io/RobotComponents-Documentation/docs/Utility/Quaternion%20to%20Plane/" },

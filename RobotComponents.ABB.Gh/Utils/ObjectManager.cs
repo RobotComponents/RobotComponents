@@ -20,8 +20,9 @@ namespace RobotComponents.ABB.Gh.Utils
     {
         #region fields
         private readonly string _id;
-        private readonly Dictionary<Guid, GH_Component> _components;
-        private readonly List<string> _names;
+        private readonly Dictionary<Guid, GH_Component> _components = new Dictionary<Guid, GH_Component>();
+        private readonly List<string> _names = new List<string>() { "tool0", "wobj0", "load0" };
+        private bool _isCheckingVariableNames = true;
         #endregion
 
         #region constructors
@@ -31,8 +32,6 @@ namespace RobotComponents.ABB.Gh.Utils
         internal ObjectManager(string id)
         {
             _id = id;
-            _components = new Dictionary<Guid, GH_Component>();
-            _names = new List<string>() { "tool0", "wobj0", "load0" };
 
             _names.AddRange(SpeedData.ValidPredefinedNames);
             _names.AddRange(ZoneData.ValidPredefinedNames);
@@ -57,71 +56,103 @@ namespace RobotComponents.ABB.Gh.Utils
         {
             if (component is IObjectManager managedComponent)
             {
-                // Adds component to collection
-                if (!_components.ContainsKey(component.InstanceGuid))
+                if (_isCheckingVariableNames)
                 {
-                    _components.Add(component.InstanceGuid, component);
+                    // Adds component to collection
+                    if (!_components.ContainsKey(component.InstanceGuid))
+                    {
+                        _components.Add(component.InstanceGuid, component);
+                    }
+
+                    // Remove registered variable names
+                    for (int i = 0; i < managedComponent.Registered.Count; i++)
+                    {
+                        _names.Remove(managedComponent.Registered[i]);
+                    }
+
+                    managedComponent.Registered.Clear();
+                    _names.Remove(managedComponent.LastName);
+                    managedComponent.IsUnique = true;
+
+                    // Run SolveInstance on other components with no unique name to check if their name is now available
+                    UpdateComponents();
+
+                    for (int i = 0; i < managedComponent.ToRegister.Count; i++)
+                    {
+                        // Duplicate varialble name
+                        if (_names.Contains(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The variable name \"" + managedComponent.ToRegister[i] + "\" is aleady in use.");
+                            managedComponent.IsUnique = false;
+                            managedComponent.LastName = "";
+                            break;
+                        }
+
+                        // Empty variable name
+                        else if (managedComponent.ToRegister[i] == string.Empty)
+                        {
+                            managedComponent.LastName = "";
+                            break;
+                        }
+
+                        // Register unique variable names
+                        else
+                        {
+                            managedComponent.Registered.Add(managedComponent.ToRegister[i]);
+                            _names.Add(managedComponent.ToRegister[i]);
+
+                            managedComponent.LastName = managedComponent.ToRegister[i];
+                        }
+
+                        // Checks if variable name exceeds max character limit for RAPID Code
+                        if (HelperMethods.StringExeedsCharacterLimit32(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name exceeds character limit of 32 characters.");
+                            break;
+                        }
+
+                        // Checks if variable name starts with a number
+                        if (HelperMethods.StringStartsWithNumber(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with a number which is not allowed in RAPID Code.");
+                            break;
+                        }
+
+                        // Check for special characters
+                        if (HelperMethods.StringHasSpecialCharacters(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name contains special characters which is not allowed in RAPID Code.");
+                            break;
+                        }
+                    }
                 }
-
-                // Remove registered variable names
-                for (int i = 0; i < managedComponent.Registered.Count; i++)
+                else
                 {
-                    _names.Remove(managedComponent.Registered[i]);
-                }
+                    // Set to to false since the values are not checked
+                    managedComponent.IsUnique = false;
 
-                managedComponent.Registered.Clear();
-                _names.Remove(managedComponent.LastName);
-                managedComponent.IsUnique = true;
-
-                // Run SolveInstance on other components with no unique name to check if their name is now available
-                this.UpdateComponents();
-
-                for (int i = 0; i < managedComponent.ToRegister.Count; i++)
-                {
-                    // Duplicate varialble name
-                    if (_names.Contains(managedComponent.ToRegister[i]))
+                    for (int i = 0; i < managedComponent.ToRegister.Count; i++)
                     {
-                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "The variable name \"" + managedComponent.ToRegister[i] + "\" is aleady in use.");
-                        managedComponent.IsUnique = false;
-                        managedComponent.LastName = "";
-                        break;
-                    }
+                        // Checks if variable name exceeds max character limit for RAPID Code
+                        if (HelperMethods.StringExeedsCharacterLimit32(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name exceeds character limit of 32 characters.");
+                            break;
+                        }
 
-                    // Empty variable name
-                    else if (managedComponent.ToRegister[i] == string.Empty)
-                    {
-                        managedComponent.LastName = "";
-                        break;
-                    }
+                        // Checks if variable name starts with a number
+                        if (HelperMethods.StringStartsWithNumber(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with a number which is not allowed in RAPID Code.");
+                            break;
+                        }
 
-                    // Register unique variable names
-                    else
-                    {
-                        managedComponent.Registered.Add(managedComponent.ToRegister[i]);
-                        _names.Add(managedComponent.ToRegister[i]);
-
-                        managedComponent.LastName = managedComponent.ToRegister[i];
-                    }
-
-                    // Checks if variable name exceeds max character limit for RAPID Code
-                    if (Utils.HelperMethods.StringExeedsCharacterLimit32(managedComponent.ToRegister[i]))
-                    {
-                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name exceeds character limit of 32 characters.");
-                        break;
-                    }
-
-                    // Checks if variable name starts with a number
-                    if (Utils.HelperMethods.StringStartsWithNumber(managedComponent.ToRegister[i]))
-                    {
-                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name starts with a number which is not allowed in RAPID Code.");
-                        break;
-                    }
-
-                    // Check for special characters
-                    if (Utils.HelperMethods.StringHasSpecialCharacters(managedComponent.ToRegister[i]))
-                    {
-                        component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name contains special characters which is not allowed in RAPID Code.");
-                        break;
+                        // Check for special characters
+                        if (HelperMethods.StringHasSpecialCharacters(managedComponent.ToRegister[i]))
+                        {
+                            component.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Variable name contains special characters which is not allowed in RAPID Code.");
+                            break;
+                        }
                     }
                 }
             }
@@ -144,7 +175,11 @@ namespace RobotComponents.ABB.Gh.Utils
                 }
 
                 _components.Remove(component.InstanceGuid);
-                this.UpdateComponents();
+
+                if (_isCheckingVariableNames)
+                {
+                    UpdateComponents();
+                }
             }
         }
 
@@ -209,6 +244,23 @@ namespace RobotComponents.ABB.Gh.Utils
         public List<string> Names
         {
             get { return _names; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating if the variable names throughout the document are checked for duplicates. 
+        /// </summary>
+        public bool IsCheckingVariableNames
+        {
+            get 
+            { 
+                return _isCheckingVariableNames; 
+            }
+            set
+            {
+                bool _oldValue = _isCheckingVariableNames;
+                _isCheckingVariableNames = value;
+                if (_oldValue != value) { UpdateComponents(); };   
+            }
         }
         #endregion
     }

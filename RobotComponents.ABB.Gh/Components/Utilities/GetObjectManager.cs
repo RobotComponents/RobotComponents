@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
     public class GetObjectManager : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the FlipPlaneComponent class.
+        /// Initializes a new instance of the GetObjectManager class.
         /// </summary>
         public GetObjectManager()
           : base("Get Object Manager", "Get Object Manager",
@@ -62,7 +62,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.septenary | GH_Exposure.obscure; }
+            get { return GH_Exposure.senary | GH_Exposure.obscure; }
         }
 
         /// <summary>

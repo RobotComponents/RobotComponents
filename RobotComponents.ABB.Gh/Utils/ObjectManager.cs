@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Declarations;
+using RobotComponents.ABB.Gh.Components.Utilities;
 
 namespace RobotComponents.ABB.Gh.Utils
 {
@@ -21,6 +22,7 @@ namespace RobotComponents.ABB.Gh.Utils
         #region fields
         private readonly string _id;
         private readonly Dictionary<Guid, GH_Component> _components = new Dictionary<Guid, GH_Component>();
+        private readonly Dictionary<Guid, CheckVariableNamesComponent> _checkVariableNamesComponents = new Dictionary<Guid, CheckVariableNamesComponent>();
         private readonly List<string> _names = new List<string>() { "tool0", "wobj0", "load0" };
         private bool _isCheckingVariableNames = true;
         #endregion
@@ -236,6 +238,15 @@ namespace RobotComponents.ABB.Gh.Utils
         public Dictionary<Guid, GH_Component> Components
         {
             get { return _components; }
+        }
+
+        /// <summary>
+        /// Gets the dictionary with all the Check Variable Names components used in this object manager. 
+        /// The components are stored based on there unique GUID.
+        /// </summary>
+        public Dictionary<Guid, CheckVariableNamesComponent> CheckVariableNamesComponents
+        {
+            get { return _checkVariableNamesComponents; }
         }
 
         /// <summary>

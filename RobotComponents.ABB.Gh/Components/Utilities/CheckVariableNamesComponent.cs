@@ -5,6 +5,7 @@
 
 // System Libs
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
@@ -18,6 +19,11 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
     /// </summary>
     public class CheckVariableNamesComponent : GH_Component
     {
+        #region fields
+        private ObjectManager _objectManager;
+        private GH_Document _doc;
+        #endregion
+
         /// <summary>
         /// Initializes a new instance of the SetCheckVariableNamesComponent class.
         /// </summary>
@@ -46,6 +52,16 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         }
 
         /// <summary>
+        /// Override this method if you want to be called before the first call to SolveInstance.
+        /// </summary>
+        protected override void BeforeSolveInstance()
+        {
+            base.BeforeSolveInstance();
+
+            _doc = OnPingDocument();
+        }
+
+        /// <summary>
         /// This is the method that actually does the work.
         /// </summary>
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
@@ -58,11 +74,62 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
             if (!DA.GetData(0, ref check)) { return; }
 
             // Get object manager
-            ObjectManager objectManager = DocumentManager.GetDocumentObjectManager(this.OnPingDocument());
-            
+            _objectManager = DocumentManager.GetDocumentObjectManager(_doc);
+
+            // Add component to collection
+            if (!_objectManager.CheckVariableNamesComponents.ContainsKey(InstanceGuid))
+            {
+                _objectManager.CheckVariableNamesComponents.Add(InstanceGuid, this);
+            }
+
             // Set value
-            objectManager.IsCheckingVariableNames = check;
+            if (_objectManager.CheckVariableNamesComponents.Count == 1 & RunCount == 1)
+            {
+                _objectManager.IsCheckingVariableNames = check;
+            }
+            else if (_objectManager.CheckVariableNamesComponents.Count > 1)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The check variable names parameter was not changed. Only use one Check Variable Names component per document.");
+            }
+            else
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "The check variable names parameter was not changed. Only one item is allowed as input.");
+            }
         }
+
+        /// <summary>
+        /// Override this method if you want to be called after the last call to SolveInstance.
+        /// </summary>
+        protected override void AfterSolveInstance()
+        {
+            base.AfterSolveInstance();
+
+            if (_doc != null)
+            {
+                _doc.ObjectsDeleted += DocumentObjectsDeleted;
+            }
+        }
+
+        #region object manager
+        /// <summary>
+        /// Detect if the components gets removed from the canvas and deletes the 
+        /// objects created with this components from the object manager. 
+        /// </summary>
+        /// <param name="sender"> The object that raises the event. </param>
+        /// <param name="e"> The event data. </param>
+        public void DocumentObjectsDeleted(object sender, GH_DocObjectEventArgs e)
+        {
+            if (e.Objects.Contains(this))
+            {
+                _objectManager.CheckVariableNamesComponents.Remove(this.InstanceGuid);
+
+                foreach (KeyValuePair<Guid, CheckVariableNamesComponent> entry in _objectManager.CheckVariableNamesComponents)
+                {
+                    entry.Value.ExpireSolution(true);
+                }
+            }
+        }
+        #endregion      
 
         #region properties
         /// <summary>

@@ -227,7 +227,7 @@ namespace RobotComponents.ABB.Kinematics
                     }
 
                     // Select solution
-                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx].Duplicate();
 
                     _wristSingularities = _order.Select(index => _opw.IsWristSingularity[index]).ToArray();
                     _elbowSingularities = _order.Select(index => _opw.IsElbowSingularity[index]).ToArray();
@@ -254,7 +254,7 @@ namespace RobotComponents.ABB.Kinematics
                     }
 
                     // Select solution
-                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx];
+                    _robotJointPosition = _robotJointPositions[robotTarget.ConfigurationData.Cfx].Duplicate();
 
                     _wristSingularities = _order.Select(index => _wok.IsWristSingularity[index]).ToArray();
                     _elbowSingularities = _order.Select(index => _wok.IsElbowSingularity[index]).ToArray();
@@ -263,6 +263,29 @@ namespace RobotComponents.ABB.Kinematics
                     _wristSingularity = _wristSingularities[robotTarget.ConfigurationData.Cfx];
                     _elbowSingularity = _elbowSingularities[robotTarget.ConfigurationData.Cfx];
                     _shoulderSingularity = _shoulderSingularities[robotTarget.ConfigurationData.Cfx];
+                }
+
+                // Check configuration data cf1, cf4 and cf6
+                int cf1 = (int)Math.Floor(_robotJointPosition[0] / 90);
+                int cf4 = (int)Math.Floor(_robotJointPosition[3] / 90);
+                int cf6 = (int)Math.Floor(_robotJointPosition[5] / 90);
+                double diff1 = robotTarget.ConfigurationData.Cf1 - cf1;
+                double diff4 = robotTarget.ConfigurationData.Cf4 - cf4;
+                double diff6 = robotTarget.ConfigurationData.Cf6 - cf6;
+
+                if (robotTarget.ConfigurationData.Cf1 != cf1 && diff1 % 4 == 0)
+                {
+                    _robotJointPosition[0] += diff1 / 4 * 360;
+                }
+
+                if (robotTarget.ConfigurationData.Cf4 != cf4 && diff4 % 4 == 0)
+                {
+                    _robotJointPosition[3] += diff4 / 4 * 360;
+                }
+
+                if (robotTarget.ConfigurationData.Cf6 != cf6 && diff6 % 4 == 0)
+                {
+                    _robotJointPosition[5] += diff6 / 4 * 360;
                 }
             }
 

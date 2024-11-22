@@ -307,7 +307,7 @@ namespace RobotComponents.Generic.Kinematics
                 // Joint 5
                 double theta5_p = Math.Atan2(Math.Sqrt(1 - (m * m)), m);
                 _solutions[i][4] = i < 4 ? theta5_p : -theta5_p;
-                _wristSingularities[i] = Math.Abs(_solutions[i][4]) < 1e-3;
+                _wristSingularities[i] = Math.Abs(_solutions[i][4]) < 0.02;
 
                 // Joint 6
                 double theta6_p = Math.Atan2((e12 * sin23 * cos1) + (e22 * sin23 * sin1) + (e32 * cos23), (-e11 * sin23 * cos1) - (e21 * sin23 * sin1) - (e31 * cos23));

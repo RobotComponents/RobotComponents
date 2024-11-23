@@ -306,7 +306,7 @@ namespace RobotComponents.ABB.Kinematics
             _errorText.AddRange(_robot.InverseKinematics.ErrorText.ConvertAll(item => string.Copy(item)));
 
             // Interpolate
-            InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition, movement, _robot.InverseKinematics.IsInLimits);
+            InterpolateJointMovement(towardsRobotJointPosition, towardsExternalJointPosition, movement);
         }
 
         /// <summary>
@@ -751,8 +751,7 @@ namespace RobotComponents.ABB.Kinematics
         /// <param name="towardsRobotJointPosition"> The final Robot Joint Position of the joint movement. </param>
         /// <param name="towardsExternalJointPosition"> The final External Joint Position of the joint movement. </param>
         /// <param name="movement"> The movement that belongs to the given joint positions. </param>
-        /// <param name="isInLimits"> Indicates whether or not the calculated solution is within limits </param>
-        private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition, Movement movement, bool isInLimits = true)
+        private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition, Movement movement)
         {
             // Calculate the joint position value change per interpolation
             RobotJointPosition robotJointPositionChange = towardsRobotJointPosition.Duplicate();
@@ -782,7 +781,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 // Planes
                 _robot.ForwardKinematics.Calculate(newRobotJointPosition, newExternalJointPosition);
-                _isInLimits.Add(!_robot.ForwardKinematics.IsInLimits | !isInLimits ? false : true);
+                _isInLimits.Add(_robot.ForwardKinematics.IsInLimits);
                 _planes.Add(_robot.ForwardKinematics.TCPPlane);
 
                 // Points

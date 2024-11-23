@@ -741,11 +741,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     // Initiate the display color and transparancy of the mechanical unit mesh
                     DisplayMaterial displayMaterial;
 
-                    // Interpolation step
-                    int index = (int)((_pathGenerators[i].IsInLimits.Count - 1) * _interpolations[i]);
-
                     // Set the display color and transparancy of the robot mesh
-                    if (_forwardKinematics[i].IsInLimits == false | _pathGenerators[i].IsInLimits[index] == false)
+                    if (_forwardKinematics[i].IsInLimits == false)
                     {
                         displayMaterial = DisplaySettings.DisplayMaterialOutsideLimits;
                     }

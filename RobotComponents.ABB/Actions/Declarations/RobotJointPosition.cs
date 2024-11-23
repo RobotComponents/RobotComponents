@@ -360,6 +360,38 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
+        /// Computes the square norm of this joint position relative to another Robot Joint Position.
+        /// </summary>
+        /// <param name="robotJointPosition"> The Robot Joint Position. </param>
+        /// <returns> 
+        /// The square norm of this joint position. 
+        /// </returns>
+        public double NormSq(RobotJointPosition robotJointPosition)
+        {
+            double sum = 0;
+
+            for (int i = 0; i < 6; i++)
+            {
+                double diff = robotJointPosition[i] - this[i];
+                sum += diff * diff;
+            }
+
+            return sum;
+        }
+
+        /// <summary>
+        /// Computes the norm of this joint position relative to another Robot Joint Position.
+        /// </summary>
+        /// <param name="robotJointPosition"> The Robot Joint Position. </param>
+        /// <returns> 
+        /// The norm of the joint position. 
+        /// </returns>
+        public double Norm(RobotJointPosition robotJointPosition)
+        {
+            return Math.Sqrt(NormSq(robotJointPosition));
+        }
+
+        /// <summary>
         /// Computes the square norm of this joint position.
         /// </summary>
         /// <returns> 
@@ -367,7 +399,14 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// </returns>
         public double NormSq()
         {
-            return (_val1 * _val1) + (_val2 * _val2) + (_val3 * _val3) + (_val4 * _val4) + (_val5 * _val5) + (_val6 * _val6);
+            double sum = 0;
+
+            for (int i = 0; i < 6; i++)
+            {
+                sum += this[i] * this[i];
+            }
+
+            return sum;
         }
 
         /// <summary>

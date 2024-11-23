@@ -312,71 +312,35 @@ namespace RobotComponents.ABB.Kinematics
         /// <returns> The closest Robot Joint Position. </returns>
         public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
         {
-            RobotJointPosition diff;
-            double sum;
-
-            // First, check the selected axis configuration
-            diff = _robotJointPosition - prevJointPosition;
-
-            for (int i = 0; i < 6; i++)
-            {
-                diff[i] = Math.Sqrt(diff[i] * diff[i]);
-            }
-
-            double min = diff.Sum();
-
-            _robotJointPosition = _robotJointPosition.Duplicate();
-
-            // Check for flipping axis 4 and 6 (if this is within the axis limits)
-            double[] joint4 = new double[3] { -360, 0, 360 };
-            double[] joint6 = new double[3] { -360, 0, 360 };
+            // First, check the current position
+            double norm = prevJointPosition.Norm(_robotJointPosition);
+            double min = norm;
 
             for (int i = 0; i < _robotJointPositions.Length; i++)
             {
-                for (int j = 0; j < joint4.Length; j++)
+                GetSmallestAngleDifference(prevJointPosition[0], _robotJointPositions[i][0], out int fullRotations1);
+                GetSmallestAngleDifference(prevJointPosition[3], _robotJointPositions[i][3], out int fullRotations4);
+                GetSmallestAngleDifference(prevJointPosition[5], _robotJointPositions[i][5], out int fullRotations6);
+            
+                _robotJointPositions[i][0] += fullRotations1 * 360;
+                _robotJointPositions[i][3] += fullRotations4 * 360;
+                _robotJointPositions[i][5] += fullRotations6 * 360;
+
+                // Norm 
+                norm = prevJointPosition.Norm(_robotJointPositions[i]);
+
+                if (norm < min)
                 {
-                    // Check axis 4
-                    if (_robot.InternalAxisLimits[3].IncludesParameter(_robotJointPositions[i][3] + joint4[j], false) == true)
-                    {
-                        // Add value to axis 4
-                        _robotJointPositions[i][3] += joint4[j];
-
-                        for (int k = 0; k < joint6.Length; k++)
-                        {
-                            // Check axis 6
-                            if (_robot.InternalAxisLimits[5].IncludesParameter(_robotJointPositions[i][5] + joint6[k], false) == true)
-                            {
-                                // Add value to axis 6
-                                _robotJointPositions[i][5] += joint6[k];
-
-                                // Check the configuration (min. rotation)
-                                diff = _robotJointPositions[i] - prevJointPosition;
-
-                                for (int l = 0; l < 6; l++)
-                                {
-                                    diff[l] = Math.Sqrt(diff[l] * diff[l]);
-                                }
-
-                                sum = diff.Sum();
-
-                                if (sum < min)
-                                {
-                                    _robotJointPosition = _robotJointPositions[i].Duplicate();
-                                    _shoulderSingularity = _shoulderSingularities[i];
-                                    _wristSingularity = _wristSingularities[i];
-                                    _elbowSingularity = _elbowSingularities[i];
-                                    min = sum;
-                                }
-
-                                // Reset axis 6 (substract value from axis 6)
-                                _robotJointPositions[i][5] -= joint6[k];
-                            }
-                        }
-
-                        // Reset axis 4 (substract value from axis 4)
-                        _robotJointPositions[i][3] -= joint4[j];
-                    }
+                    _robotJointPosition = _robotJointPositions[i].Duplicate();
+                    _shoulderSingularity = _shoulderSingularities[i];
+                    _wristSingularity = _wristSingularities[i];
+                    _elbowSingularity = _elbowSingularities[i];
+                    min = norm;
                 }
+
+                _robotJointPositions[i][0] -= fullRotations1 * 360;
+                _robotJointPositions[i][3] -= fullRotations4 * 360;
+                _robotJointPositions[i][5] -= fullRotations6 * 360;
             }
 
             // Check axis limits
@@ -385,6 +349,22 @@ namespace RobotComponents.ABB.Kinematics
             CheckExternalAxisLimits();
 
             return _robotJointPosition;
+        }
+
+        /// <summary>
+        /// Calculates the smallest angular difference between two angles, accounting for full rotations.
+        /// </summary>
+        /// <param name="prev"> The previous angle in degrees. </param>
+        /// <param name="current"> The current angle in degrees. </param>
+        /// <param name="fullRotations"> The number of full rotations needed to get to the smallest angle difference. </param>
+        /// <returns> The smallest angular difference in degrees. </returns>
+        private double GetSmallestAngleDifference(double prev, double current, out int fullRotations)
+        {
+            double diff = prev - current;
+            fullRotations = (int)Math.Round((diff) / 360);
+            diff -= fullRotations * 360;
+
+            return diff;
         }
 
         /// <summary>
@@ -572,7 +552,6 @@ namespace RobotComponents.ABB.Kinematics
                         if (_movement.Target.ExternalJointPosition[logic] == 9e9)
                         {
                             // Alternative strategy: take the global end plane
-
                             externalLinearAxis.AxisCurve.ClosestPoint(_globalTargetPlane.Origin, out double param);
                             _positionPlane.Origin = externalLinearAxis.AxisCurve.PointAt(param);
                         }

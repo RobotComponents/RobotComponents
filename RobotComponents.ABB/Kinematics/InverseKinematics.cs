@@ -309,8 +309,11 @@ namespace RobotComponents.ABB.Kinematics
         /// This method is typically used for using Linear and Joint Configuration control inside the Path Generator.
         /// </remarks>
         /// <param name="prevJointPosition"> The previous Robot Joint Position. </param>
+        /// <param name="includeJoint1"> indicating whether or not joint 1 is included for corrections of +/- 360 degree rotations. </param>
+        /// <param name="includeJoint4"> indicating whether or not joint 4 is included for corrections of +/- 360 degree rotations. </param>
+        /// <param name="includeJoint6"> indicating whether or not joint 6 is included for corrections of +/- 360 degree rotations. </param>
         /// <returns> The closest Robot Joint Position. </returns>
-        public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition)
+        public RobotJointPosition CalculateClosestRobotJointPosition(RobotJointPosition prevJointPosition, bool includeJoint1 = true, bool includeJoint4 = true, bool includeJoint6 = true)
         {
             // First, check the current position
             double norm = prevJointPosition.Norm(_robotJointPosition);
@@ -322,9 +325,9 @@ namespace RobotComponents.ABB.Kinematics
                 GetSmallestAngleDifference(prevJointPosition[3], _robotJointPositions[i][3], out int fullRotations4);
                 GetSmallestAngleDifference(prevJointPosition[5], _robotJointPositions[i][5], out int fullRotations6);
             
-                _robotJointPositions[i][0] += fullRotations1 * 360;
-                _robotJointPositions[i][3] += fullRotations4 * 360;
-                _robotJointPositions[i][5] += fullRotations6 * 360;
+                _robotJointPositions[i][0] += includeJoint1 ? fullRotations1 * 360 : 0;
+                _robotJointPositions[i][3] += includeJoint4 ? fullRotations4 * 360 : 0;
+                _robotJointPositions[i][5] += includeJoint6 ? fullRotations6 * 360 : 0;
 
                 // Norm 
                 norm = prevJointPosition.Norm(_robotJointPositions[i]);
@@ -338,9 +341,9 @@ namespace RobotComponents.ABB.Kinematics
                     min = norm;
                 }
 
-                _robotJointPositions[i][0] -= fullRotations1 * 360;
-                _robotJointPositions[i][3] -= fullRotations4 * 360;
-                _robotJointPositions[i][5] -= fullRotations6 * 360;
+                _robotJointPositions[i][0] -= includeJoint1 ? fullRotations1 * 360 : 0;
+                _robotJointPositions[i][3] -= includeJoint4 ? fullRotations4 * 360 : 0;
+                _robotJointPositions[i][5] -= includeJoint6 ? fullRotations6 * 360 : 0;
             }
 
             // Check axis limits

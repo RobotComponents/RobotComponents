@@ -307,7 +307,7 @@ namespace RobotComponents.ABB.Kinematics
             // Joint configuration control
             if (_jointConfigurationControl == false && movement.MovementType != MovementType.MoveAbsJ)
             {
-                _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last());
+                _robot.InverseKinematics.CalculateClosestRobotJointPosition(_robotJointPositions.Last(), false);
             }
 
             // Get the Robot Joint Positions

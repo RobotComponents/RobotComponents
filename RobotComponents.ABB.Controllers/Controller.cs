@@ -953,6 +953,27 @@ namespace RobotComponents.ABB.Controllers
                 Log(status);
                 return false;
             }
+            
+            if (module.Count < 2)
+            {
+                status = "Could not upload the module: No module defined.";
+                Log(status);
+                return false;
+            }
+                
+            if (!module[0].StartsWith("MODULE "))
+            {
+                status = "Could not upload the module: The provided module is invalid. Provide a module that starts with MODULE.";
+                Log(status);
+                return false;
+            }
+           
+            if (!module[module.Count - 1].Equals("ENDMODULE"))
+            {
+                status = "Could not upload the module: The provided module is invalid. Provide a module that ends with ENDMODULE.";
+                Log(status);
+                return false;
+            }
             #endregion
 
             #region write temporary file to local directory
@@ -973,33 +994,24 @@ namespace RobotComponents.ABB.Controllers
                 return false;
             }
 
-            if (module.Count != 0)
-            {
-                string filePath = Path.Combine(_localDirectory, "temp.mod");
+            string filePathLocal = Path.Combine(_localDirectory, "temp.mod");
 
-                try
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePathLocal, false))
                 {
-                    using (StreamWriter writer = new StreamWriter(filePath, false))
+                    for (int i = 0; i < module.Count; i++)
                     {
-                        for (int i = 0; i < module.Count; i++)
-                        {
-                            writer.WriteLine(module[i]);
-                        }
+                        writer.WriteLine(module[i]);
                     }
+                }
 
-                    status = "Wrote the module to the local temporary directory.";
-                    Log(status);
-                }
-                catch (Exception ex)
-                {
-                    status = $"Could not write the module to the local temporary directory: {ex.Message}";
-                    Log(status);
-                    return false;
-                }
+                status = "Wrote the module to the local temporary directory.";
+                Log(status);
             }
-            else
+            catch (Exception ex)
             {
-                status = "Could not upload the module: No module defined.";
+                status = $"Could not write the module to the local temporary directory: {ex.Message}";
                 Log(status);
                 return false;
             }
@@ -1043,8 +1055,8 @@ namespace RobotComponents.ABB.Controllers
                     _controller.AuthenticationSystem.DemandGrant(ControllersNS.Grant.LoadRapidProgram);
 
                     // Load the new program from the drive
-                    string filePath = Path.Combine(_remoteDirectory, "temp.mod");
-                    task.LoadModuleFromFile(filePath, RapidDomainNS.RapidLoadMode.Replace);
+                    string filePathRemote = Path.Combine(_remoteDirectory, "temp.mod");
+                    task.LoadModuleFromFile(filePathRemote, RapidDomainNS.RapidLoadMode.Replace);
 
                     status = "Loaded the module from the filesystem of the controller to the controller task.";
                     Log(status);

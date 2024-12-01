@@ -249,7 +249,7 @@ namespace RobotComponents.ABB.Kinematics
                     {
                         for (int j = 0; j < 6; j++)
                         {
-                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j]; 
+                            _robotJointPositions[i][j] = _rad2deg * _wok.Solutions[_order[i]][j];
                         }
                     }
 
@@ -266,27 +266,9 @@ namespace RobotComponents.ABB.Kinematics
                 }
 
                 // Check configuration data cf1, cf4 and cf6
-                int cf1 = (int)Math.Floor(_robotJointPosition[0] / 90);
-                int cf4 = (int)Math.Floor(_robotJointPosition[3] / 90);
-                int cf6 = (int)Math.Floor(_robotJointPosition[5] / 90);
-                double diff1 = robotTarget.ConfigurationData.Cf1 - cf1;
-                double diff4 = robotTarget.ConfigurationData.Cf4 - cf4;
-                double diff6 = robotTarget.ConfigurationData.Cf6 - cf6;
-
-                if (robotTarget.ConfigurationData.Cf1 != cf1 && diff1 % 4 == 0)
-                {
-                    _robotJointPosition[0] += diff1 / 4 * 360;
-                }
-
-                if (robotTarget.ConfigurationData.Cf4 != cf4 && diff4 % 4 == 0)
-                {
-                    _robotJointPosition[3] += diff4 / 4 * 360;
-                }
-
-                if (robotTarget.ConfigurationData.Cf6 != cf6 && diff6 % 4 == 0)
-                {
-                    _robotJointPosition[5] += diff6 / 4 * 360;
-                }
+                AdjustJoint(0, robotTarget.ConfigurationData.Cf1);
+                AdjustJoint(3, robotTarget.ConfigurationData.Cf4);
+                AdjustJoint(5, robotTarget.ConfigurationData.Cf6);
             }
 
             else if (_movement.Target is JointTarget jointTarget)
@@ -297,6 +279,42 @@ namespace RobotComponents.ABB.Kinematics
             else
             {
                 _robotJointPosition = new RobotJointPosition();
+            }
+        }
+
+        /// <summary>
+        /// Adjusts the position of a robot joint to align with the target configuration quadrant.
+        /// </summary>
+        /// <param name="jointPositionIndex">
+        /// The index of the joint position in the _robotJointPosition array. 
+        /// Represents which joint's position to adjust (e.g., 0 for Joint 1, 3 for Joint 4, etc.).
+        /// </param>
+        /// <param name="targetCf"> 
+        /// The target configuration quadrant for the joint. 
+        /// This is a value indicating the desired 90-degree quadrant (e.g., 0, 1, 2, or 3).
+        /// /// </param>
+        /// <remarks>
+        /// This method calculates the current configuration quadrant of the specified joint based on its 
+        /// position in degrees, determines the difference between the current and target configuration, 
+        /// and applies the minimal number of full 360-degree rotations to align the joint with the target 
+        /// configuration. The adjustment is cyclic, using modulo arithmetic to account for the repeating 
+        /// nature of quadrants.
+        /// </remarks>
+        private void AdjustJoint(int jointPositionIndex, int targetCf)
+        {
+            int cf = (int)Math.Floor(_robotJointPosition[jointPositionIndex] / 90);
+            double diff = targetCf - cf;
+
+            if (targetCf != cf && diff % 4 == 0)
+            {
+                _robotJointPosition[jointPositionIndex] += diff / 4 * 360;
+            }
+            else if ((_robotJointPosition[jointPositionIndex] / 90) % 1 == 0)
+            {
+                if (targetCf != (cf + 1) && (diff + 1) % 4 == 0)
+            {
+                    _robotJointPosition[jointPositionIndex] += (diff + 1) / 4 * 360;
+                }
             }
         }
 

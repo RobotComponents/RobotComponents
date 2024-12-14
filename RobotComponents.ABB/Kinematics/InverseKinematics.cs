@@ -56,6 +56,7 @@ namespace RobotComponents.ABB.Kinematics
         private readonly RobotJointPosition[] _robotJointPositions = new RobotJointPosition[8].Select(item => new RobotJointPosition()).ToArray();
         private RobotJointPosition _robotJointPosition = new RobotJointPosition();
         private ExternalJointPosition _externalJointPosition = new ExternalJointPosition();
+        private ConfigurationData _configurationData = new ConfigurationData();
 
         // Constants
         private const double _pi = Math.PI;
@@ -67,6 +68,7 @@ namespace RobotComponents.ABB.Kinematics
         private static readonly int[] _signs = new int[6] { 1, 1, 1, 1, 1, 1 };
         private readonly OPWKinematics _opw = new OPWKinematics();
         private readonly OPWKinematics _wok = new OPWKinematics();
+        private int _selectedSolution = -1;
         #endregion
 
         #region constructors
@@ -97,6 +99,7 @@ namespace RobotComponents.ABB.Kinematics
             _robotJointPositions = inverseKinematics.RobotJointPositions.Select(item => item.Duplicate()).ToArray();
             _robotJointPosition = inverseKinematics.RobotJointPosition.Duplicate();
             _externalJointPosition = inverseKinematics.ExternalJointPosition.Duplicate();
+            _configurationData = inverseKinematics.ConfigurationData.Duplicate();
             _errorText = new List<string>(inverseKinematics.ErrorText);
             _isInLimits = inverseKinematics.IsInLimits;
             Initialize();
@@ -269,6 +272,10 @@ namespace RobotComponents.ABB.Kinematics
                 AdjustJoint(0, robotTarget.ConfigurationData.Cf1);
                 AdjustJoint(3, robotTarget.ConfigurationData.Cf4);
                 AdjustJoint(5, robotTarget.ConfigurationData.Cf6);
+
+                // Set configuration data
+                _selectedSolution = robotTarget.ConfigurationData.Cfx;
+                SetConfigurationData(robotTarget.ConfigurationData.Name);
             }
 
             else if (_movement.Target is JointTarget jointTarget)
@@ -280,6 +287,20 @@ namespace RobotComponents.ABB.Kinematics
             {
                 _robotJointPosition = new RobotJointPosition();
             }
+        }
+
+        /// <summary>
+        /// Sets the configuation data for the latest set Robot Joint Position.
+        /// </summary>
+        /// /// <param name="variableName"> Optional variable name of the configuration data. </param>
+        private void SetConfigurationData(string variableName = "")
+        {
+            int cf1 = (int)Math.Floor(_robotJointPosition[0] / 90);
+            int cf4 = (int)Math.Floor(_robotJointPosition[3] / 90);
+            int cf6 = (int)Math.Floor(_robotJointPosition[5] / 90);
+            int cfx = _selectedSolution;
+
+            _configurationData = new ConfigurationData(variableName, cf1, cf4, cf6, cfx);
         }
 
         /// <summary>
@@ -312,7 +333,7 @@ namespace RobotComponents.ABB.Kinematics
             else if ((_robotJointPosition[jointPositionIndex] / 90) % 1 == 0)
             {
                 if (targetCf != (cf + 1) && (diff + 1) % 4 == 0)
-            {
+                {
                     _robotJointPosition[jointPositionIndex] += (diff + 1) / 4 * 360;
                 }
             }
@@ -342,7 +363,7 @@ namespace RobotComponents.ABB.Kinematics
                 GetSmallestAngleDifference(prevJointPosition[0], _robotJointPositions[i][0], out int fullRotations1);
                 GetSmallestAngleDifference(prevJointPosition[3], _robotJointPositions[i][3], out int fullRotations4);
                 GetSmallestAngleDifference(prevJointPosition[5], _robotJointPositions[i][5], out int fullRotations6);
-            
+
                 _robotJointPositions[i][0] += includeJoint1 ? fullRotations1 * 360 : 0;
                 _robotJointPositions[i][3] += includeJoint4 ? fullRotations4 * 360 : 0;
                 _robotJointPositions[i][5] += includeJoint6 ? fullRotations6 * 360 : 0;
@@ -356,6 +377,7 @@ namespace RobotComponents.ABB.Kinematics
                     _shoulderSingularity = _shoulderSingularities[i];
                     _wristSingularity = _wristSingularities[i];
                     _elbowSingularity = _elbowSingularities[i];
+                    _selectedSolution = i;
                     min = norm;
                 }
 
@@ -368,6 +390,7 @@ namespace RobotComponents.ABB.Kinematics
             _errorText.Clear();
             CheckInternalAxisLimits();
             CheckExternalAxisLimits();
+            SetConfigurationData(_configurationData.Name);
 
             return _robotJointPosition;
         }
@@ -710,6 +733,14 @@ namespace RobotComponents.ABB.Kinematics
         public ExternalJointPosition ExternalJointPosition
         {
             get { return _externalJointPosition; }
+        }
+
+        /// <summary>
+        /// Gets the configuration data of the latest calculated Robot Joint Position.
+        /// </summary>
+        public ConfigurationData ConfigurationData
+        {
+            get { return _configurationData; }
         }
 
         /// <summary>

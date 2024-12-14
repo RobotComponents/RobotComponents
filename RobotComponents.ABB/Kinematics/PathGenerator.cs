@@ -174,22 +174,26 @@ namespace RobotComponents.ABB.Kinematics
                 {
                     _jointConfigurationControl = jointConfigurationControl.IsActive;
 
+                    /* 
                     if (jointConfigurationControl.IsActive == false)
                     {
                         _errorText.Insert(0, "Joint Configuration Control Off is roughly estimated by the Path Generator. " +
                             "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
                     }
+                    */
                 }
 
                 else if (ungrouped[i] is LinearConfigurationControl linearConfigurationControl)
                 {
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
 
+                    /*
                     if (linearConfigurationControl.IsActive == false)
                     {
                         _errorText.Insert(0, "Linear Configuration Control Off is roughly estimated by the Path Generator. " +
                             "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
                     }
+                    */
                 }
 
                 else if (ungrouped[i] is CirclePathMode circlePathMode)

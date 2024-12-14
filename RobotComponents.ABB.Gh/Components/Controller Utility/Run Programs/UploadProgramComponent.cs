@@ -24,10 +24,11 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
     public class UploadProgramComponent : GH_Component
     {
         #region fields
-        private Controller _controller;
+        private Controller _controller = new Controller();
         private bool _fromMenu = true;
         private string _taskName = "-";
         private string _status = "-";
+        private bool _succeeded = true;
         #endregion
 
         /// <summary>
@@ -91,27 +92,27 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
             if (_fromMenu)
             {
                 _fromMenu = false;
-                this.GetTaskName();
+                _succeeded = GetTaskName();
                 this.Message = _taskName;
                 this.ExpirePreview(true);
             }
 
             if (upload)
             {
-                if (module.Count != 0 & _taskName != "-")
+                if (_taskName == "-")
                 {
-                    _controller.UploadModule(_taskName, module, out _status);
-                }
-                else if (module.Count == 0)
-                {
-                    _status = "No module defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
-                }
-                else if (_taskName == "-")
-                {
+                    _succeeded = false;
                     _status = "No task defined.";
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
                 }
+                else
+                {
+                    _succeeded = _controller.UploadModule(_taskName, module, out _status);
+                }
+            }
+
+            if (_succeeded == false)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
             }
 
             // Output
@@ -227,10 +228,15 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <returns> Indicates whether or not a task was picked successfully. </returns>
         private bool GetTaskName()
         {
-            if (_controller.TaskNames.Count == 0)
+            if (_controller.IsEmpty)
             {
-                _status = "No task found!";
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task found!");
+                _status = "The controller is empty.";
+                return false;
+            }
+
+            else if (_controller.TaskNames.Count == 0)
+            {
+                _status = "No task found.";
                 return false;
             }
 
@@ -252,17 +258,14 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
                     _taskName = form.TaskName;
                     return true;
                 }
-                else if (_taskName == "-")
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "No task picked from menu!");
-                    return false;
-                }
                 else
                 {
+                    _status = "No task picked from the menu";
                     return false;
                 }
             }
 
+            _status = "No task picked from the menu.";
             return false;
         }
         #endregion

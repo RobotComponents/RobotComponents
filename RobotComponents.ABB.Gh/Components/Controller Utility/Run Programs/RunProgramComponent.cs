@@ -23,6 +23,7 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         #region fields
         private Controller _controller;
         private string _status = "-";
+        private bool _succeeded = true;
         #endregion
 
         /// <summary>
@@ -88,15 +89,22 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 
             if (run)
             {
-                _controller.RunProgram(out _status);
+                _succeeded = _controller.RunProgram(out _status);
             }
+
             if (stop)
             {
-                _controller.StopProgram(out _status);
+                _succeeded = _controller.StopProgram(out _status);
             }
+
             if (reset)
             {
-                _controller.ResetProgramPointers(out _status);
+                _succeeded = _controller.ResetProgramPointers(out _status);
+            }
+
+            if (_succeeded == false)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, _status);
             }
 
             // Output

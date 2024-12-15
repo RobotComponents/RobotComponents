@@ -410,6 +410,17 @@ namespace RobotComponents.ABB.Actions.Declarations
         }
 
         /// <summary>
+        /// Normalizes the robot joint positions to ensure they are within the range of -180 to 180 degrees.
+        /// </summary>
+        public void Normalize()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                this[i] = ((this[i] + 180) % 360 + 360) % 360 - 180;
+            }
+        }
+
+        /// <summary>
         /// Sets all the elements in the joint position back to its default value (0.0).
         /// </summary>
         public void Reset()

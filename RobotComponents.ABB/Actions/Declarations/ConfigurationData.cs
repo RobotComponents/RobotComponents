@@ -25,10 +25,10 @@ namespace RobotComponents.ABB.Actions.Declarations
         private VariableType _variableType = VariableType.CONST;
         private const string _datatype = "confdata";
         private string _name = "";
-        private int _cf1;
-        private int _cf4;
-        private int _cf6;
-        private int _cfx;
+        private int _cf1 = 0;
+        private int _cf4 = 0;
+        private int _cf6 = 0;
+        private int _cfx = 0;
         #endregion
 
         #region (de)serialization

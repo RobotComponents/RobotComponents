@@ -77,7 +77,7 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
                 + Environment.NewLine
                 + "Copyright (c) 2018-2020 EDEK Uni Kassel"
                 + Environment.NewLine
-                + "Copyright (c) 2020-2024 Arjen Deetman"
+                + "Copyright (c) 2020-2025 Arjen Deetman"
                 + Environment.NewLine
                 + Environment.NewLine
                 + "Robot Components is free software; you can redistribute it and/or modify it under "

@@ -72,7 +72,7 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 Robot Components is a free-to-use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate it if you would cite if you used it. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite all versions of Robot Components in publications use:
 
 ```
-Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2024). 
+Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2018). 
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```
@@ -93,7 +93,7 @@ An overview of the projects wherein the software is used can be found [here](USE
 
 ## License
 Copyright (c) 2018-2020 EDEK Uni Kassel\
-Copyright (c) 2020-2024 Arjen Deetman
+Copyright (c) 2020-2025 Arjen Deetman
 
 Robot Components is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 3.0 as published by the Free Software Foundation. 
 

@@ -46,7 +46,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private CirPathMode _cirPathMode; // Defines the circle path mode
         private int _interpolations = 5; // Defines the number of interpolations between two targets
-        private double _time = 0; // Estimate of the total program time
+        private double _programTime = 0; // Estimate of the total program time
         #endregion
 
         #region constructors
@@ -115,7 +115,7 @@ namespace RobotComponents.ABB.Kinematics
             _jointConfigurationControl = true;
             _isFirstMovementMoveAbsJ = false;
             _cirPathMode = CirPathMode.PathFrame;
-            _time = 0;
+            _programTime = 0;
 
             // Add initial positions
             RobotJointPosition robotJointPosition = new RobotJointPosition();
@@ -179,7 +179,7 @@ namespace RobotComponents.ABB.Kinematics
 
                 else if (ungrouped[i] is WaitTime waitTime)
                 {
-                    _time += waitTime.Duration;
+                    _programTime += waitTime.Duration;
                 }
 
                 else if (ungrouped[i] is Movement movement)
@@ -908,11 +908,11 @@ namespace RobotComponents.ABB.Kinematics
 
                 if (movement.Time < 0)
                 {
-                    _time += _paths.Last().GetLength() / movement.SpeedData.V_TCP;
+                    _programTime += _paths.Last().GetLength() / movement.SpeedData.V_TCP;
                 }
                 else
                 {
-                    _time += movement.Time;
+                    _programTime += movement.Time;
                 }
             }
             else
@@ -1073,9 +1073,9 @@ namespace RobotComponents.ABB.Kinematics
         /// <summary>
         /// Gets an estimation of the program time in seconds. 
         /// </summary>
-        public double Time
+        public double ProgramTime
         {
-            get { return _time; }
+            get { return _programTime; }
         }
         #endregion
     }

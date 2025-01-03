@@ -330,6 +330,9 @@ namespace RobotComponents.ABB.Kinematics
             quat1.Unitize();
             quat2.Unitize();
 
+            // Linear curve (in work object coordinatie space)
+            Line line = new Line(plane1.Origin, plane2.Origin);
+
             // Normalized increment
             double dt = 1.0 / _interpolations;
 
@@ -405,7 +408,17 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Generate path curve
-            GeneratePathCurve(points, movement);
+            GeneratePathCurve(points);
+
+            // Program time
+            if (movement.Time < 0)
+            {
+                _programTime += line.Length / movement.SpeedData.V_TCP;
+            }
+            else
+            {
+                _programTime += movement.Time;
+            }
         }
 
         /// <summary>
@@ -449,6 +462,7 @@ namespace RobotComponents.ABB.Kinematics
 
             // Points for path
             List<Point3d> points = new List<Point3d>() { _planes.Last().Origin };
+            List<Point3d> pointsWorkObject = new List<Point3d>() {};
 
             // Get the final external joint positions of this movement
             _robot.InverseKinematics.CalculateExternalJointPosition(movement);
@@ -484,7 +498,7 @@ namespace RobotComponents.ABB.Kinematics
             Transform orient = Transform.ChangeBasis(Plane.WorldXY, movement.WorkObject.GlobalWorkObjectPlane);
             plane1.Transform(orient);
 
-            // Circular curve
+            // Circular curve (in work object coordinatie space)
             Arc arc = new Arc(plane1.Origin, planeCirPoint.Origin, plane2.Origin);
 
             if (arc.IsValid == false)
@@ -700,7 +714,17 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Generate path curve
-            GeneratePathCurve(points, movement);
+            GeneratePathCurve(points);
+
+            // Program time
+            if (movement.Time < 0)
+            {
+                _programTime += arc.Length / movement.SpeedData.V_TCP;
+            }
+            else
+            {
+                _programTime += movement.Time;
+            }
         }
 
         /// <summary>
@@ -793,7 +817,20 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Generate path curve
-            GeneratePathCurve(points, movement);
+            GeneratePathCurve(points);
+
+            // Program time
+            if (_paths.Last() != null)
+            {
+                if (movement.Time < 0)
+                {
+                    _programTime += _paths.Last().GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _programTime += movement.Time;
+                }
+            }
         }
 
         /// <summary>
@@ -899,21 +936,11 @@ namespace RobotComponents.ABB.Kinematics
         /// Generates a path curve based on the provided points and movement.
         /// </summary>
         /// <param name="points"> The list of points to create the path curve from. </param>
-        /// <param name="movement"> The movement containing time and speed data. </param>
-        private void GeneratePathCurve(List<Point3d> points, Movement movement)
+        private void GeneratePathCurve(List<Point3d> points)
         {
             if (points.Count > 1)
             {
                 _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
-
-                if (movement.Time < 0)
-                {
-                    _programTime += _paths.Last().GetLength() / movement.SpeedData.V_TCP;
-                }
-                else
-                {
-                    _programTime += movement.Time;
-                }
             }
             else
             {

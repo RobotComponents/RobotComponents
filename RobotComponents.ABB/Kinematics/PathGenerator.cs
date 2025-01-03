@@ -35,6 +35,7 @@ namespace RobotComponents.ABB.Kinematics
         private readonly List<Movement> _movements; // The movements of the path
         private readonly List<RobotJointPosition> _robotJointPositions; // The robot joint positions needed to follow the path
         private readonly List<ExternalJointPosition> _externalJointPositions; // The external joint position needed to follow the path
+        private readonly List<ConfigurationData> _configurationDatas; // The configurations datas for each robot joint position
         private readonly List<bool> _isInLimits; // Indicates whether or not the joint positions are within their limits
         private List<string> _errorText = new List<string>(); // List with collected error messages
 
@@ -45,7 +46,7 @@ namespace RobotComponents.ABB.Kinematics
         private bool _jointConfigurationControl; // Defines if the configuration control for joint movements is enabled
         private CirPathMode _cirPathMode; // Defines the circle path mode
         private int _interpolations = 5; // Defines the number of interpolations between two targets
-        private double _time; // Estimate of the total program time
+        private double _time = 0; // Estimate of the total program time
         #endregion
 
         #region constructors
@@ -67,6 +68,7 @@ namespace RobotComponents.ABB.Kinematics
             _movements = new List<Movement>();
             _robotJointPositions = new List<RobotJointPosition>();
             _externalJointPositions = new List<ExternalJointPosition>();
+            _configurationDatas = new List<ConfigurationData>();
             _isInLimits = new List<bool>();
             _robot = robot.Duplicate(); // Since we might swap tools and therefore change the robot tool we make a deep copy
             _initialTool = robot.Tool.DuplicateWithoutMesh();
@@ -101,6 +103,7 @@ namespace RobotComponents.ABB.Kinematics
             _movements.Clear();
             _robotJointPositions.Clear();
             _externalJointPositions.Clear();
+            _configurationDatas.Clear();
             _planes.Clear();
             _paths.Clear();
             _isInLimits.Clear();
@@ -127,6 +130,7 @@ namespace RobotComponents.ABB.Kinematics
 
             _robotJointPositions.Add(robotJointPosition);
             _externalJointPositions.Add(externalJointPosition);
+            _configurationDatas.Add(new ConfigurationData());
             _movements.Add(new Movement(MovementType.MoveAbsJ, new JointTarget(robotJointPosition, externalJointPosition), new SpeedData(5)));
             _planes.Add(_robot.ForwardKinematics.TCPPlane);
             _isInLimits.Add(true);
@@ -145,19 +149,7 @@ namespace RobotComponents.ABB.Kinematics
             Reset();
 
             // Ungroup actions
-            List<Actions.IAction> ungrouped = new List<Actions.IAction>() { };
-
-            for (int i = 0; i < actions.Count; i++)
-            {
-                if (actions[i] is ActionGroup group)
-                {
-                    ungrouped.AddRange(group.Ungroup());
-                }
-                else
-                {
-                    ungrouped.Add(actions[i]);
-                }
-            }
+            IList<Actions.IAction> ungrouped = UngroupActions(actions);
 
             // Check fist movement
             _isFirstMovementMoveAbsJ = CheckFirstMovement(ungrouped);
@@ -173,27 +165,11 @@ namespace RobotComponents.ABB.Kinematics
                 else if (ungrouped[i] is JointConfigurationControl jointConfigurationControl)
                 {
                     _jointConfigurationControl = jointConfigurationControl.IsActive;
-
-                    /* 
-                    if (jointConfigurationControl.IsActive == false)
-                    {
-                        _errorText.Insert(0, "Joint Configuration Control Off is roughly estimated by the Path Generator. " +
-                            "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
-                    }
-                    */
                 }
 
                 else if (ungrouped[i] is LinearConfigurationControl linearConfigurationControl)
                 {
                     _linearConfigurationControl = linearConfigurationControl.IsActive;
-
-                    /*
-                    if (linearConfigurationControl.IsActive == false)
-                    {
-                        _errorText.Insert(0, "Linear Configuration Control Off is roughly estimated by the Path Generator. " +
-                            "For accurate results, verify your program using Robot Studio, where a precise simulation can be achieved.");
-                    }
-                    */
                 }
 
                 else if (ungrouped[i] is CirclePathMode circlePathMode)
@@ -246,6 +222,7 @@ namespace RobotComponents.ABB.Kinematics
                 _movements.RemoveRange(0, interpolations);
                 _robotJointPositions.RemoveRange(0, interpolations);
                 _externalJointPositions.RemoveRange(0, interpolations);
+                _configurationDatas.RemoveRange(0, interpolations);
                 _planes.RemoveRange(0, interpolations);
                 _isInLimits.RemoveRange(0, interpolations);
             }
@@ -255,22 +232,6 @@ namespace RobotComponents.ABB.Kinematics
 
             // Remove duplicates from error text
             _errorText = _errorText.Distinct().ToList();
-        }
-
-        /// <summary>
-        /// Sets the correct Robot Tool for the defined movement.
-        /// </summary>
-        /// <param name="movement"> The Movement to set the Robot Tool for. </param>
-        private void SetRobotTool(Movement movement)
-        {
-            if (movement.RobotTool == null || movement.RobotTool.Name == "")
-            {
-                _robot.Tool = _currentTool;
-            }
-            else
-            {
-                _robot.Tool = movement.RobotTool;
-            }
         }
 
         /// <summary>
@@ -342,9 +303,7 @@ namespace RobotComponents.ABB.Kinematics
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
-            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
-            externalJointPositionChange.Substract(_externalJointPositions.Last());
-            externalJointPositionChange.Divide(_interpolations);
+            ExternalJointPosition externalJointPositionChange = CalculateExternalJointPositionChange(towardsExternalJointPosition);
 
             // First target plane in WORLD coordinate space
             Plane plane1 = _planes.Last();
@@ -372,7 +331,7 @@ namespace RobotComponents.ABB.Kinematics
             quat2.Unitize();
 
             // Normalized increment
-            double dt = (double)1 / _interpolations;
+            double dt = 1.0 / _interpolations;
 
             // New movement
             Movement newMovement = movement.DuplicateWithoutMesh();
@@ -397,7 +356,7 @@ namespace RobotComponents.ABB.Kinematics
                 newExternalJointPosition.Add(externalJointPositionChange);
 
                 // Update movement
-                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData, newExternalJointPosition);
+                newMovement.Target = new RobotTarget(robotTarget.Name, plane, robotTarget.ConfigurationData.Duplicate(), newExternalJointPosition);
 
                 // Calculate joint positions
                 _robot.InverseKinematics.Calculate(newMovement);
@@ -425,6 +384,13 @@ namespace RobotComponents.ABB.Kinematics
                 Plane globalPlane = newMovement.GetPosedGlobalTargetPlane();
                 _planes.Add(globalPlane);
 
+                // Update configuration data
+                if (newMovement.Target is RobotTarget target)
+                {
+                    target.ConfigurationData = _robot.InverseKinematics.ConfigurationData;
+                    _configurationDatas.Add(target.ConfigurationData.Duplicate());
+                }
+
                 // Add movement
                 _movements.Add(newMovement.DuplicateWithoutMesh());
 
@@ -439,23 +405,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Generate path curve
-            if (points.Count > 1)
-            {
-                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
-
-                if (movement.Time < 0)
-                {
-                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
-                }
-                else
-                {
-                    _time += movement.Time;
-                }
-            }
-            else
-            {
-                _paths.Add(null);
-            }
+            GeneratePathCurve(points, movement);
         }
 
         /// <summary>
@@ -505,9 +455,7 @@ namespace RobotComponents.ABB.Kinematics
             ExternalJointPosition towardsExternalJointPosition = _robot.InverseKinematics.ExternalJointPosition.Duplicate();
 
             // External Joint Position change
-            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
-            externalJointPositionChange.Substract(_externalJointPositions.Last());
-            externalJointPositionChange.Divide(_interpolations);
+            ExternalJointPosition externalJointPositionChange = CalculateExternalJointPositionChange(towardsExternalJointPosition);
 
             // First target plane in WORLD coordinate space
             Plane plane1 = _planes.Last();
@@ -558,16 +506,19 @@ namespace RobotComponents.ABB.Kinematics
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and end point is smaller than 0.1 mm.");
             }
+
             // Minimum distance between start and CirPoint is 0.1 mm
             if (plane1.Origin.DistanceTo(planeCirPoint.Origin) < 0.1)
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: Distance between the start and circular point is smaller than 0.1 mm.");
             }
+
             // Minimum angle between CirPoint and ToPoint from the start point is 1 degree
             if (Math.Abs(Vector3d.VectorAngle(plane2.Origin - plane1.Origin, planeCirPoint.Origin - plane1.Origin)) < Rhino.RhinoMath.ToRadians(1.0))
             {
                 _errorText.Add($"Circular Movement {movement.Target.Name}\\{movement.WorkObject.Name}: The angle between the circular point and start point is smaller than 1 degree.");
             }
+
             // Circle Path Mode specific restrictions
             if (_cirPathMode == CirPathMode.CirPointOri)
             {
@@ -580,7 +531,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Normalized interpolation step
-            double dt = (double)1 / _interpolations;
+            double dt = 1.0 / _interpolations;
 
             // Orientation interpolation
             Quaternion quat1 = HelperMethods.PlaneToQuaternion(plane1);
@@ -728,6 +679,13 @@ namespace RobotComponents.ABB.Kinematics
                 Plane globalPlane = newMovement.GetPosedGlobalTargetPlane();
                 _planes.Add(globalPlane);
 
+                // Update configuration data
+                if (newMovement.Target is RobotTarget target)
+                {
+                    target.ConfigurationData = _robot.InverseKinematics.ConfigurationData;
+                    _configurationDatas.Add(target.ConfigurationData.Duplicate());
+                }
+
                 // Add movement
                 _movements.Add(newMovement.DuplicateWithoutMesh());
 
@@ -742,23 +700,7 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             // Generate path curve
-            if (points.Count > 1)
-            {
-                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
-
-                if (movement.Time < 0)
-                {
-                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
-                }
-                else
-                {
-                    _time += movement.Time;
-                }
-            }
-            else
-            {
-                _paths.Add(null);
-            }
+            GeneratePathCurve(points, movement);
         }
 
         /// <summary>
@@ -770,12 +712,8 @@ namespace RobotComponents.ABB.Kinematics
         private void InterpolateJointMovement(RobotJointPosition towardsRobotJointPosition, ExternalJointPosition towardsExternalJointPosition, Movement movement)
         {
             // Calculate the joint position value change per interpolation
-            RobotJointPosition robotJointPositionChange = towardsRobotJointPosition.Duplicate();
-            robotJointPositionChange.Substract(_robotJointPositions.Last());
-            robotJointPositionChange.Divide(_interpolations);
-            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
-            externalJointPositionChange.Substract(_externalJointPositions.Last());
-            externalJointPositionChange.Divide(_interpolations);
+            RobotJointPosition robotJointPositionChange = CalculateRobotJointPositionChange(towardsRobotJointPosition);
+            ExternalJointPosition externalJointPositionChange = CalculateExternalJointPositionChange(towardsExternalJointPosition);
 
             // New joint positions
             RobotJointPosition newRobotJointPosition = _robotJointPositions.Last().Duplicate();
@@ -814,6 +752,9 @@ namespace RobotComponents.ABB.Kinematics
                     string name = robotTarget1.Name == string.Empty ? string.Empty : $"{robotTarget1.Name}_jt";
                     newMovement.Target = new JointTarget(name, newRobotJointPosition.Duplicate(), newExternalJointPosition.Duplicate());
                     newMovement.Target.ExternalJointPosition.Name = movement.Target.ExternalJointPosition.Name;
+
+                    ConfigurationData configurationData = ConfigurationDataFromRobotJointPosition(robotTarget1.ConfigurationData.Name, newRobotJointPosition, newExternalJointPosition);
+                    _configurationDatas.Add(configurationData);
                 }
                 else if (newMovement.Target is RobotTarget robotTarget2)
                 {
@@ -831,38 +772,28 @@ namespace RobotComponents.ABB.Kinematics
                     plane.Transform(trans);
 
                     robotTarget2.Plane = plane;
+                    robotTarget2.ConfigurationData = ConfigurationDataFromRobotJointPosition(robotTarget2.ConfigurationData.Name, newRobotJointPosition, newExternalJointPosition);
                     robotTarget2.ExternalJointPosition = newExternalJointPosition.Duplicate();
                     robotTarget2.ExternalJointPosition.Name = movement.Target.ExternalJointPosition.Name;
                     newMovement.Target = robotTarget2;
+
+                    _configurationDatas.Add(robotTarget2.ConfigurationData.Duplicate());
                 }
                 else if (newMovement.Target is JointTarget jointTarget)
                 {
                     jointTarget.RobotJointPosition = newRobotJointPosition.Duplicate();
                     jointTarget.ExternalJointPosition = newExternalJointPosition.Duplicate();
                     newMovement.Target = jointTarget;
+
+                    ConfigurationData configurationData = ConfigurationDataFromRobotJointPosition("", newRobotJointPosition, newExternalJointPosition);
+                    _configurationDatas.Add(configurationData);
                 }
 
                 _movements.Add(newMovement);
             }
 
             // Generate path curve
-            if (points.Count > 1)
-            {
-                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
-
-                if (movement.Time < 0)
-                {
-                    _time += _paths[_paths.Count - 1].GetLength() / movement.SpeedData.V_TCP;
-                }
-                else
-                {
-                    _time += movement.Time;
-                }
-            }
-            else
-            {
-                _paths.Add(null);
-            }
+            GeneratePathCurve(points, movement);
         }
 
         /// <summary>
@@ -893,6 +824,152 @@ namespace RobotComponents.ABB.Kinematics
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Sets the correct Robot Tool for the defined movement.
+        /// </summary>
+        /// <param name="movement"> The Movement to set the Robot Tool for. </param>
+        private void SetRobotTool(Movement movement)
+        {
+            if (movement.RobotTool == null || movement.RobotTool.Name == "")
+            {
+                _robot.Tool = _currentTool;
+            }
+            else
+            {
+                _robot.Tool = movement.RobotTool;
+            }
+        }
+
+        /// <summary>
+        /// Returns a list with ungrouped actions. 
+        /// </summary>
+        /// <param name="actions"> The list with actions to ungroup. </param>
+        /// <returns> A list of ungrouped actions. </returns>
+        private IList<Actions.IAction> UngroupActions(IList<Actions.IAction> actions)
+        {
+            // Ungroup actions
+            List<Actions.IAction> ungrouped = new List<Actions.IAction>() { };
+
+            for (int i = 0; i < actions.Count; i++)
+            {
+                if (actions[i] is ActionGroup group)
+                {
+                    ungrouped.AddRange(group.Ungroup());
+                }
+                else
+                {
+                    ungrouped.Add(actions[i]);
+                }
+            }
+
+            return ungrouped;
+        }
+
+        /// <summary>
+        /// Calculates the change in robot joint position for interpolation.
+        /// </summary>
+        /// <param name="towardsRobotJointPosition"> The final robot joint position of the movement. </param>
+        /// <returns> The change in robot joint position per interpolation step. </returns>
+        private RobotJointPosition CalculateRobotJointPositionChange(RobotJointPosition towardsRobotJointPosition)
+        {
+            RobotJointPosition robotJointPositionChange = towardsRobotJointPosition.Duplicate();
+            robotJointPositionChange.Subtract(_robotJointPositions.Last());
+            robotJointPositionChange.Divide(_interpolations);
+
+            return robotJointPositionChange;
+        }
+
+        /// <summary>
+        /// Calculates the change in external joint position for interpolation.
+        /// </summary>
+        /// <param name="towardsExternalJointPosition"> The final external joint position of the movement. </param>
+        /// <returns> The change in external joint position per interpolation step. </returns>
+        private ExternalJointPosition CalculateExternalJointPositionChange(ExternalJointPosition towardsExternalJointPosition)
+        {
+            ExternalJointPosition externalJointPositionChange = towardsExternalJointPosition.Duplicate();
+            externalJointPositionChange.Subtract(_externalJointPositions.Last());
+            externalJointPositionChange.Divide(_interpolations);
+
+            return externalJointPositionChange;
+        }
+
+        /// <summary>
+        /// Generates a path curve based on the provided points and movement.
+        /// </summary>
+        /// <param name="points"> The list of points to create the path curve from. </param>
+        /// <param name="movement"> The movement containing time and speed data. </param>
+        private void GeneratePathCurve(List<Point3d> points, Movement movement)
+        {
+            if (points.Count > 1)
+            {
+                _paths.Add(Curve.CreateInterpolatedCurve(points, 3));
+
+                if (movement.Time < 0)
+                {
+                    _time += _paths.Last().GetLength() / movement.SpeedData.V_TCP;
+                }
+                else
+                {
+                    _time += movement.Time;
+                }
+            }
+            else
+            {
+                _paths.Add(null);
+            }
+        }
+
+        /// <summary>
+        /// Computes the configuration data for a given robot joint position and external joint position.
+        /// </summary>
+        /// <param name="name">The name of the configuration data being generated.</param>
+        /// <param name="robotJointPosition">The robot joint position used for configuration data computation.</param>
+        /// <param name="externalJointPosition">The external joint position used for configuration data computation.</param>
+        /// <returns>
+        /// A <see cref="ConfigurationData"/> object containing the calculated configuration data, including the configuration flags for the robot's joints.
+        /// </returns>
+        /// <remarks>
+        /// This method uses forward kinematics (FK) and inverse kinematics (IK) calculations to determine 
+        /// the robot's configuration data based on its joint positions. It identifies the closest matching 
+        /// configuration using the minimum norm between the normalized joint positions and the IK solutions.
+        /// </remarks>
+        private ConfigurationData ConfigurationDataFromRobotJointPosition(string name, RobotJointPosition robotJointPosition, ExternalJointPosition externalJointPosition)
+        {
+            _robot.ForwardKinematics.Calculate(robotJointPosition, externalJointPosition);
+            _robot.InverseKinematics.Calculate(new Movement(new RobotTarget("", _robot.ForwardKinematics.TCPPlane, new ConfigurationData(), externalJointPosition)));
+
+            int cf1 = (int)Math.Floor(robotJointPosition[0] / 90);
+            int cf4 = (int)Math.Floor(robotJointPosition[3] / 90);
+            int cf6 = (int)Math.Floor(robotJointPosition[5] / 90);
+            int cfx = 0;
+
+            double error = double.MaxValue;
+
+            RobotJointPosition duplicate = robotJointPosition.Duplicate();
+            duplicate.Normalize();
+
+            for (int i = 0; i < 8; i++)
+            {
+                RobotJointPosition normalized = _robot.InverseKinematics.RobotJointPositions[i].Duplicate();
+                normalized.Normalize();
+
+                double norm = duplicate.Norm(normalized);
+
+                if (norm < error)
+                {
+                    error = norm;
+                    cfx = i;
+
+                    if (norm < 1e-3)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return new ConfigurationData(name, cf1, cf4, cf6, cfx);
         }
         #endregion
 
@@ -962,6 +1039,14 @@ namespace RobotComponents.ABB.Kinematics
         }
 
         /// <summary>
+        /// Gets the calculated Configuration Datas.
+        /// </summary>
+        public List<ConfigurationData> ConfigurationDatas
+        { 
+            get { return _configurationDatas; } 
+        }
+
+        /// <summary>
         /// Gets the value indicating whether or not the internal and external values are within their limits.
         /// </summary>
         public List<bool> IsInLimits
@@ -983,6 +1068,14 @@ namespace RobotComponents.ABB.Kinematics
         public bool IsFirstMovementMoveAbsJ
         {
             get { return _isFirstMovementMoveAbsJ; }
+        }
+
+        /// <summary>
+        /// Gets an estimation of the program time in seconds. 
+        /// </summary>
+        public double Time
+        {
+            get { return _time; }
         }
         #endregion
     }

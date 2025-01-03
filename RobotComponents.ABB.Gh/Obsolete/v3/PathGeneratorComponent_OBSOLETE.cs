@@ -26,12 +26,13 @@ using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Simulation
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
     /// </summary>
-    public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class PathGeneratorComponent_OBSOLETE3 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private readonly List<PathGenerator> _pathGenerators = new List<PathGenerator>();
@@ -45,12 +46,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         private bool _outputRobotEndPlanes = false;
         private bool _outputRobotJointPosition = false;
         private bool _outputRobotJointPositions = false;
-        private bool _outputConfigurationData = false;
-        private bool _outputConfigurationDatas = false;
         private bool _outputExternalAxisPlanes = false;
         private bool _outputExternalJointPosition = false;
         private bool _outputExternalJointPositions = false;
-        private bool _outputProgramTime = false;
         private bool _outputErrorMessages = false;
         private bool _outputMesh = false;
         private bool _previewPath = true;
@@ -62,7 +60,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public PathGeneratorComponent()
+        public PathGeneratorComponent_OBSOLETE3()
           : base("Path Generator", "PG",
               "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -76,7 +74,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <summary>
         /// Stores the variable output parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[15]
+        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[12]
         {
             new Param_Curve() { Name = "Path", NickName = "P", Description = "The whole tool path as list with curves", Access = GH_ParamAccess.list},
             new Param_Movement() { Name = "Movement", NickName = "M", Description = "The current move object.", Access = GH_ParamAccess.item},
@@ -85,12 +83,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             new Param_Plane() { Name = "Robot End Planes", NickName = "EPs", Description = "The positions and orientations of the tool TCP of the whole path", Access = GH_ParamAccess.list},
             new Param_RobotJointPosition() { Name = "Robot Joint Position", NickName = "RJ", Description = "The current Robot Joint Position", Access = GH_ParamAccess.item},
             new Param_RobotJointPosition() { Name = "Robot Joint Positions", NickName = "RJs", Description = "The Robot Joint Positions of the whole path", Access = GH_ParamAccess.list},
-            new Param_ConfigurationData() { Name = "Configuration Data", NickName = "CD", Description = "The current Configuration Data", Access = GH_ParamAccess.item},
-            new Param_ConfigurationData() { Name = "Configurations Datas", NickName = "CDs", Description = "The Configuration Datas of the whole path", Access = GH_ParamAccess.list},
             new Param_Plane() { Name = "External Axis Planes", NickName = "EAP", Description = "The current position and orientation of the external axes", Access = GH_ParamAccess.list},
             new Param_ExternalJointPosition() { Name = "External Joint Position", NickName = "EJ", Description = "The current External Joint Position", Access = GH_ParamAccess.item},
             new Param_ExternalJointPosition() { Name = "External Joint Positions", NickName = "EJs", Description = "The External Joint Positions of the whole path", Access = GH_ParamAccess.list},
-            new Param_Number() { Name = "Time", NickName = "T", Description = "An estimation of the program time in minutes", Access = GH_ParamAccess.item},
             new Param_String() { Name = "Error messages", NickName = "E", Description = "The error messages collected during the generation of the path", Access = GH_ParamAccess.list},
             new Param_Mesh() { Name = "Posed Meshes", NickName = "PM", Description = "Posed Robot and External Axis meshes.", Access = GH_ParamAccess.tree},
         };
@@ -247,41 +242,26 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[7].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[7].NickName));
-                DA.SetData(ind, _pathGenerators[DA.Iteration].ConfigurationDatas[index]);
+                DA.SetDataList(ind, forwardKinematics.PosedExternalAxisPlanes);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[8].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[8].NickName));
-                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ConfigurationDatas);
+                DA.SetData(ind, _pathGenerators[DA.Iteration].ExternalJointPositions[index]);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[9].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[9].NickName));
-                DA.SetDataList(ind, forwardKinematics.PosedExternalAxisPlanes);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ExternalJointPositions);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[10].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[10].NickName));
-                DA.SetData(ind, _pathGenerators[DA.Iteration].ExternalJointPositions[index]);
+                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ErrorText);
             }
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[11].NickName)))
             {
                 ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[11].NickName));
-                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ExternalJointPositions);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[12].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[12].NickName));
-                DA.SetData(ind, _pathGenerators[DA.Iteration].ProgramTime / 60);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[13].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[13].NickName));
-                DA.SetDataList(ind, _pathGenerators[DA.Iteration].ErrorText);
-            }
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[14].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[14].NickName));
                 DA.SetDataTree(ind, this.GetPosedMeshesDataTree(DA.Iteration));
             }
         }
@@ -314,7 +294,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -322,7 +302,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -341,7 +321,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("8EFB8932-41EB-48EF-8B09-798843A8610C"); }
+            get { return new Guid("12238C25-90ED-497B-8103-798C2F9C82B3"); }
         }
         #endregion
 
@@ -362,12 +342,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             Menu_AppendItem(menu, "Output all Robot End Planes", MenuItemClickOutputRobotEndPlanes, true, _outputRobotEndPlanes);
             Menu_AppendItem(menu, "Output current Robot Joint Position", MenuItemClickOutputRobotJointPosition, true, _outputRobotJointPosition);
             Menu_AppendItem(menu, "Output all Robot Joint Positions", MenuItemClickOutputRobotJointPositions, true, _outputRobotJointPositions);
-            Menu_AppendItem(menu, "Output current Configuration Data", MenuItemClickOutputConfigurationData, true, _outputConfigurationData);
-            Menu_AppendItem(menu, "Output all Configuration Datas", MenuItemClickOutputConfigurationDatas, true, _outputConfigurationDatas);
             Menu_AppendItem(menu, "Output current External Axis Planes", MenuItemClickOutputExternalAxisPlanes, true, _outputExternalAxisPlanes);
             Menu_AppendItem(menu, "Output current External Joint Position", MenuItemClickOutputExternalJointPosition, true, _outputExternalJointPosition);
             Menu_AppendItem(menu, "Output all External Joint Positions", MenuItemClickOutputExternalJointPositions, true, _outputExternalJointPositions);
-            Menu_AppendItem(menu, "Output Program Time", MenuItemClickOutputProgramTime, true, _outputProgramTime);
             Menu_AppendItem(menu, "Output all Error Messages", MenuItemClickOutputErrorMessages, true, _outputErrorMessages);
             Menu_AppendItem(menu, "Output Posed Meshes", MenuItemClickOutputMesh, true, _outputMesh);
             Menu_AppendSeparator(menu);
@@ -479,30 +456,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Output Configuration Data" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputConfigurationData(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output current Configuration Data");
-            _outputConfigurationData = !_outputConfigurationData;
-            AddOutputParameter(7);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output Configuration Datas" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputConfigurationDatas(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output all Configuration Datas");
-            _outputConfigurationDatas = !_outputConfigurationDatas;
-            AddOutputParameter(8);
-        }
-
-        /// <summary>
         /// Handles the event when the custom menu item "Output External Axis Planes" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -511,7 +464,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current External Axis Planes");
             _outputExternalAxisPlanes = !_outputExternalAxisPlanes;
-            AddOutputParameter(9);
+            AddOutputParameter(7);
         }
 
         /// <summary>
@@ -523,7 +476,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output current External Joint Position");
             _outputExternalJointPosition = !_outputExternalJointPosition;
-            AddOutputParameter(10);
+            AddOutputParameter(8);
         }
 
         /// <summary>
@@ -535,19 +488,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all External Joint Positions");
             _outputExternalJointPositions = !_outputExternalJointPositions;
-            AddOutputParameter(11);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Output Program Time" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputProgramTime(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output Program Time");
-            _outputProgramTime = !_outputProgramTime;
-            AddOutputParameter(12);
+            AddOutputParameter(9);
         }
 
         /// <summary>
@@ -559,7 +500,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output all Error Messages");
             _outputErrorMessages = !_outputErrorMessages;
-            AddOutputParameter(13);
+            AddOutputParameter(10);
         }
 
         /// <summary>
@@ -571,12 +512,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output Posed Meshes");
             _outputMesh = !_outputMesh;
-            AddOutputParameter(14);
+            AddOutputParameter(11);
 
             // Disable default mesh preview
             if (_outputMesh == true)
             {
-                IGH_Param param = Params.Output.Find(x => x.NickName.Equality(_variableOutputParameters[14].NickName));
+                IGH_Param param = Params.Output.Find(x => x.NickName.Equality(_variableOutputParameters[11].NickName));
 
                 if (param is IGH_PreviewObject previewObject)
                 {
@@ -612,12 +553,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             writer.SetBoolean("Output Robot End Planes", _outputRobotEndPlanes);
             writer.SetBoolean("Output Robot Joint Position", _outputRobotJointPosition);
             writer.SetBoolean("Output Robot Joint Positions", _outputRobotJointPositions);
-            writer.SetBoolean("Output Configuration Data", _outputConfigurationData);
-            writer.SetBoolean("Output Configuration Datas", _outputConfigurationDatas);
             writer.SetBoolean("Output External Axis Planes", _outputExternalAxisPlanes);
             writer.SetBoolean("Output External Joint Position", _outputExternalJointPosition);
             writer.SetBoolean("Output External Joint Positions", _outputExternalJointPositions);
-            writer.SetBoolean("Output Program Time", _outputProgramTime);
             writer.SetBoolean("Output Error Messages", _outputErrorMessages);
             writer.SetBoolean("Output Posed Meshes", _outputMesh);
             return base.Write(writer);
@@ -639,12 +577,9 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             _outputRobotEndPlanes = reader.GetBoolean("Output Robot End Planes");
             _outputRobotJointPosition = reader.GetBoolean("Output Robot Joint Position");
             _outputRobotJointPositions = reader.GetBoolean("Output Robot Joint Positions");
-            _outputConfigurationData = reader.GetBoolean("Output Configuration Data");
-            _outputConfigurationDatas = reader.GetBoolean("Output Configuration Datas");
             _outputExternalAxisPlanes = reader.GetBoolean("Output External Axis Planes");
             _outputExternalJointPosition = reader.GetBoolean("Output External Joint Position");
             _outputExternalJointPositions = reader.GetBoolean("Output External Joint Positions");
-            _outputProgramTime = reader.GetBoolean("Output Program Time");
             _outputErrorMessages = reader.GetBoolean("Output Error Messages");
             _outputMesh = reader.GetBoolean("Output Posed Meshes");
             return base.Read(reader);

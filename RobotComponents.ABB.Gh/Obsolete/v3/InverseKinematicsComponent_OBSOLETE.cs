@@ -28,12 +28,13 @@ using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
 using RobotComponents.ABB.Kinematics;
 using RobotComponents.ABB.Gh.Utils;
 
-namespace RobotComponents.ABB.Gh.Components.Simulation
+namespace RobotComponents.ABB.Gh.Obsolete
 {
     /// <summary>
     /// RobotComponents Invesere Kinematics component. An inherent from the GH_Component Class.
     /// </summary>
-    public class InverseKinematicsComponent : GH_Component, IGH_VariableParameterComponent
+    [Obsolete("This component is OBSOLETE and will be removed in the future.", false)]
+    public class InverseKinematicsComponent_OBSOLETE5 : GH_Component, IGH_VariableParameterComponent
     {
         #region fields
         private readonly List<InverseKinematics> _inverseKinematics = new List<InverseKinematics>();
@@ -41,7 +42,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         private readonly List<RobotJointPosition> _previousRobotJointPositions = new List<RobotJointPosition>();
         private bool _closestRobotJointPosition = false;
         private bool _hideMesh = false;
-        private bool _outputConfigurationDataParameter = false;
         private bool _outputMeshParameter = false;
         private readonly int _fixedParamNumInput = 2;
         private readonly int _fixedParamNumOutput = 2;
@@ -52,7 +52,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InverseKinematicsComponent()
+        public InverseKinematicsComponent_OBSOLETE5()
           : base("Inverse Kinematics", "IK",
               "Computes the axis values for a defined ABB robot based on an Action: Movement."
                 + System.Environment.NewLine + System.Environment.NewLine +
@@ -75,9 +75,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// <summary>
         /// Stores the variable output parameters in an array.
         /// </summary>
-        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[2]
+        private readonly IGH_Param[] _variableOutputParameters = new IGH_Param[1]
         {
-            new Param_ConfigurationData() { Name = "Configuration Data", NickName = "CD", Description = "The Configuration Data of the calculated robot pose.", Access = GH_ParamAccess.item},
             new Param_Mesh() { Name = "Posed Meshes", NickName = "PM", Description = "Posed Robot and External Axis meshes.", Access = GH_ParamAccess.tree}
         };
 
@@ -176,20 +175,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             }
 
             // Output
-            int ind;
             DA.SetData(0, _inverseKinematics[DA.Iteration].RobotJointPosition);
             DA.SetData(1, _inverseKinematics[DA.Iteration].ExternalJointPosition);
 
             if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[0].NickName)))
             {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
-                DA.SetData(ind, _inverseKinematics[DA.Iteration].ConfigurationData);
-            }
-
-            if (Params.Output.Any(x => x.NickName.Equality(_variableOutputParameters[1].NickName)))
-            {
-                ind = Params.Output.FindIndex(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
-                DA.SetDataTree(ind, this.GetPosedMeshesDataTree(DA.Iteration));
+                DA.SetDataTree(2, this.GetPosedMeshesDataTree(DA.Iteration));
             }
         }
 
@@ -216,7 +207,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override GH_Exposure Exposure
         {
-            get { return GH_Exposure.primary; }
+            get { return GH_Exposure.hidden; }
         }
 
         /// <summary>
@@ -224,7 +215,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override bool Obsolete
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>
@@ -243,7 +234,7 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("65EDAD08-1507-4CA3-B656-3F07675AC9AD"); }
+            get { return new Guid("90F8402F-09EB-417A-80E3-66A4FCF12682"); }
         }
         #endregion
 
@@ -256,8 +247,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Preview Posed Meshes", MenuItemClickHideMesh, true, !_hideMesh);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Output Configuration Data", MenuItemClickOutputConfigurationData, true, _outputConfigurationDataParameter);
             Menu_AppendItem(menu, "Output Posed Meshes", MenuItemClickOutputMesh, true, _outputMeshParameter);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Closest Robot Joint Position", MenuItemClickClosestRobotJointPosition, true, _closestRobotJointPosition);
@@ -289,18 +278,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         }
 
         /// <summary>
-        /// Handles the event when the custom menu item "Output Configuration Data" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickOutputConfigurationData(object sender, EventArgs e)
-        {
-            RecordUndoEvent("Output Configuration Data");
-            _outputConfigurationDataParameter = !_outputConfigurationDataParameter;
-            AddOutputParameter(0);
-        }
-
-        /// <summary>
         /// Handles the event when the custom menu item "Output Posed Meshes" is clicked. 
         /// </summary>
         /// <param name="sender"> The object that raises the event. </param>
@@ -309,12 +286,12 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         {
             RecordUndoEvent("Output Posed Meshes");
             _outputMeshParameter = !_outputMeshParameter;
-            AddOutputParameter(1);
+            AddOutputParameter(0);
 
             // Disable default mesh preview
             if (_outputMeshParameter == true)
             {
-                IGH_Param param = Params.Output.Find(x => x.NickName.Equality(_variableOutputParameters[1].NickName));
+                IGH_Param param = Params.Output.Find(x => x.NickName.Equality(_variableOutputParameters[0].NickName));
 
                 if (param is IGH_PreviewObject previewObject)
                 {
@@ -344,7 +321,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         public override bool Write(GH_IWriter writer)
         {
             writer.SetBoolean("Set Hide Mesh", _hideMesh);
-            writer.SetBoolean("Output Configuration Data", _outputConfigurationDataParameter);
             writer.SetBoolean("Output Posed Meshes", _outputMeshParameter);
             writer.SetBoolean("Closest Robot Joint Position", _closestRobotJointPosition);
             writer.SetByteArray("Previous Robot Joint Positions", RobotComponents.Utils.Serialization.ObjectToByteArray(_previousRobotJointPositions));
@@ -359,7 +335,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         public override bool Read(GH_IReader reader)
         {
             _hideMesh = reader.GetBoolean("Set Hide Mesh");
-            _outputConfigurationDataParameter = reader.GetBoolean("Output Configuration Data");
             _outputMeshParameter = reader.GetBoolean("Output Posed Meshes");
             _closestRobotJointPosition = reader.GetBoolean("Closest Robot Joint Position");
             _previousRobotJointPositions.Clear();

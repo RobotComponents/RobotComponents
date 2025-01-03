@@ -74,6 +74,8 @@
     <Compile Include="Components\Deconstruct\Code Generation\DeconstructPathAccelerationLimitationComponent.cs" />
     <Compile Include="Components\Definitions\GetAxisPlanesFromKinematicsParametersComponent.cs" />
     <Compile Include="Components\Definitions\GetKinematicsParametersComponent.cs" />
+    <Compile Include="Obsolete\v3\InverseKinematicsComponent_OBSOLETE.cs" />
+    <Compile Include="Obsolete\v3\PathGeneratorComponent_OBSOLETE.cs" />
     <Compile Include="Components\Utilities\CheckVariableNamesComponent.cs" />
     <Compile Include="Obsolete\v2\DeconstructRobotTargetComponent_OBSOLETE.cs" />
     <Compile Include="Obsolete\v2\RobotTargetComponent_OBSOLETE2.cs" />

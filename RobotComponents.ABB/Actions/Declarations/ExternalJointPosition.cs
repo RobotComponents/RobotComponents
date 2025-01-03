@@ -397,7 +397,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
         /// <param name="value"> The number to be substracted. </param>
-        public void Substract(double value)
+        public void Subtract(double value)
         {
             for (int i = 0; i < 6; i++)
             {
@@ -415,7 +415,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </remarks>
         /// <param name="jointPosition"> The External Joint Position to be substracted. </param>
-        public void Substract(ExternalJointPosition jointPosition)
+        public void Subtract(ExternalJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
             {
@@ -1019,5 +1019,50 @@ namespace RobotComponents.ABB.Actions.Declarations
             return result;
         }
         #endregion
+
+        #region OBSOLETE
+        /// <summary>
+        /// Substracts a constant number from the values inside this Joint Position.
+        /// </summary>
+        /// <param name="value"> The number to be substracted. </param>
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
+        public void Substract(double value)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue)
+                {
+                    this[i] -= value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Substracts the values of an External Joint Position from the values inside this Joint Position. 
+        /// </summary>
+        /// <remarks>
+        /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
+        /// </remarks>
+        /// <param name="jointPosition"> The External Joint Position to be substracted. </param>
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
+        public void Substract(ExternalJointPosition jointPosition)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (this[i] != _defaultValue && jointPosition[i] != _defaultValue)
+                {
+                    this[i] -= jointPosition[i];
+                }
+                else if (this[i] == _defaultValue && this[i] == _defaultValue)
+                {
+                    this[i] = _defaultValue;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Mismatch between two External Joint Positions. A definied joint position [on index {i}] is combined with an undefinied joint position.");
+                }
+            }
+        }
+        #endregion  
     }
 }

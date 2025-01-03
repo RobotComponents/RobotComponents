@@ -895,7 +895,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Value 1 - value 1, value 2 - value 2, value 3 - value 3 etc.
         /// </remarks>
         /// <param name="jointPosition"> The Robot Joint Position to be substracted. </param>
-        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Substract instead.", false)]
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
         public void Substract(RobotJointPosition jointPosition)
         {
             for (int i = 0; i < 6; i++)
@@ -908,7 +908,7 @@ namespace RobotComponents.ABB.Actions.Declarations
         /// Substracts a constant number from the values inside this Joint Position.
         /// </summary>
         /// <param name="value"> The number to be substracted. </param>
-        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Substract instead.", false)]
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use Subtract instead.", false)]
         public void Substract(double value)
         {
             for (int i = 0; i < 6; i++)

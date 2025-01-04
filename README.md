@@ -30,9 +30,15 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 
 ### Installation
 
-If you are using **Rhino 7 or higher**, you can install Robot Components via the **Package Manager**. For other versions, download the latest release directly from the repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components).
+If you are using **Rhino 7 or higher**, you can install Robot Components via the **Package Manager**. For other versions, download the latest release directly from the repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components). 
 
 After downloading, unzip the archive and copy all files into the Grasshopper Components folder (in Grasshopper, navigate to *File > Special Folders > Components Folder*). Ensure that all files are unblocked by right-clicking each file, selecting *Properties*, and clicking *Unblock* on the *General* tab. Restart Rhino, and you're ready to go!
+
+Robot Components supports the following Rhino versions:  
+
+- **Version 3 (v3):** Compatible with Rhino 7 or higher.  
+- **Version 2 (v2):** Compatible with Rhino 6 or higher.  
+- **Version 1 (v1):** Compatible with Rhino 5 or higher. 
 
 ### Example Files and Documentation
 

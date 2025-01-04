@@ -38,7 +38,9 @@ Robot Components supports the following Rhino versions:
 
 - **Version 3 (v3):** Compatible with Rhino 7 or higher.  
 - **Version 2 (v2):** Compatible with Rhino 6 or higher.  
-- **Version 1 (v1):** Compatible with Rhino 5 or higher. 
+- **Version 1 (v1):** Compatible with Rhino 5 or higher.
+
+With each latest release, we aim to support the latest two major Rhino versions. 
 
 ### Example Files and Documentation
 

@@ -27,9 +27,7 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - [Robot Components API](https://robotcomponents.github.io/RobotComponents-API-Documentation/index.html) to develop your custom components using either Python or C#
 
 ## Getting Started
-
 ### Installation
-
 If you are using **Rhino 7 or higher**, you can install Robot Components via the **Package Manager**. For other versions, download the latest release directly from the repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components). 
 
 After downloading, unzip the archive and copy all files into the Grasshopper Components folder (in Grasshopper, navigate to *File > Special Folders > Components Folder*). Ensure that all files are unblocked by right-clicking each file, selecting *Properties*, and clicking *Unblock* on the *General* tab. Restart Rhino, and you're ready to go!
@@ -42,12 +40,10 @@ Robot Components supports the following Rhino versions:
 
 With each latest release, we aim to support the latest two major Rhino versions. 
 
-### Example Files and Documentation
-
+### Example files and documentation
 Explore a collection of example files demonstrating Robot Components' main features in the repository's [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles) folder. Comprehensive documentation for Grasshopper is available on our [documentation website](https://robotcomponents.github.io/RobotComponents-Documentation/) and API documentation can be found [here](https://robotcomponents.github.io/RobotComponents-API-Documentation/index.html).
 
-### Controller Utility Components
-
+### Controller utility components
 To use the components in the **Controller Utility** section, you must also install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the **ABB Robot Communication Runtime**. You can download the runtime directly from [this link](https://github.com/RobotComponents/RobotComponents/raw/main/Utility/ABB%20Communication%20Runtime/ABB%20Robot%20Communication%20Runtime%202024.1.zip).
 
 The latest release of Robot Components is built and tested against **ABB PC SDK version 2024.1** (ABB Robot Communication Runtime 2024.1). Compatibility with older versions of the runtime is not guaranteed. Additionally, the **Controller Utility** components are supported only on **Windows operating systems**.
@@ -55,7 +51,6 @@ The latest release of Robot Components is built and tested against **ABB PC SDK 
 If you encounter issues with establishing a real-time connection from Grasshopper, please contact us for assistance.
 
 ### Quick Links
-
 For easy sharing of the download link and documentation (e.g., with students), you can also use our [Linktree](https://linktr.ee/RobotComponents).
 
 

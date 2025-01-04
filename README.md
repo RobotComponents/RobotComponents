@@ -27,13 +27,29 @@ Robot Components is a plugin for intuitive robot programming for ABB robots insi
 - [Robot Components API](https://robotcomponents.github.io/RobotComponents-API-Documentation/index.html) to develop your custom components using either Python or C#
 
 ## Getting Started
-If you use Rhino 7 or higher you can install Robot Components via the package manager. For other versions, you can download the latest release directly from this repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or [Food4Rhino](https://www.food4rhino.com/app/robot-components). Unzip the downloaded archive and copy all files in the Grasshopper Components folder (in GH, File > Special Folders > Components Folder). Make sure that all the files are unblocked (right-click on the file and select Properties from the menu. Click Unblock on the General tab). Restart Rhino and you are ready to go! 
 
-In case you want to use the components from the Controller Utility section you additionally have to install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the ABB Robot Communication Runtime (you can download it by clicking [here](https://github.com/RobotComponents/RobotComponents/raw/main/Utility/ABB%20Communication%20Runtime/ABB%20Robot%20Communication%20Runtime%202024.1.zip)). The latest release is built and tested against the ABB PC SDK version 2024.1 (ABB Robot Communication Runtime 2024.1). We do not guarantee that the Controller Utility components work with older versions of the ABB Robot Communication Runtime. Besides that, the components from the Controller Utility section are only supported on Windows operating systems. Please contact us if you have problems with establishing a real-time connection from Grasshopper.
+### Installation
 
-You can find a collection of example files demonstrating the main features of Robot Components in this repository in the folder [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles). You can find the Grasshopper documentation website [here](https://robotcomponents.github.io/RobotComponents-Documentation/). The documentation website of the API [here](https://robotcomponents.github.io/RobotComponents-API-Documentation/index.html).
+If you are using **Rhino 7 or higher**, you can install Robot Components via the **Package Manager**. For other versions, download the latest release directly from the repository's [releases page](https://github.com/RobotComponents/RobotComponents/releases) or from [Food4Rhino](https://www.food4rhino.com/app/robot-components).
 
-For easy sharing of the download link and the documentation (with e.g. students) you can also use our [linktree](https://linktr.ee/RobotComponents).
+After downloading, unzip the archive and copy all files into the Grasshopper Components folder (in Grasshopper, navigate to *File > Special Folders > Components Folder*). Ensure that all files are unblocked by right-clicking each file, selecting *Properties*, and clicking *Unblock* on the *General* tab. Restart Rhino, and you're ready to go!
+
+### Example Files and Documentation
+
+Explore a collection of example files demonstrating Robot Components' main features in the repository's [Example Files](https://github.com/RobotComponents/RobotComponents/tree/master/ExampleFiles) folder. Comprehensive documentation for Grasshopper is available on our [documentation website](https://robotcomponents.github.io/RobotComponents-Documentation/) and API documentation can be found [here](https://robotcomponents.github.io/RobotComponents-API-Documentation/index.html).
+
+### Controller Utility Components
+
+To use the components in the **Controller Utility** section, you must also install [Robot Studio](https://new.abb.com/products/robotics/robotstudio) or the **ABB Robot Communication Runtime**. You can download the runtime directly from [this link](https://github.com/RobotComponents/RobotComponents/raw/main/Utility/ABB%20Communication%20Runtime/ABB%20Robot%20Communication%20Runtime%202024.1.zip).
+
+The latest release of Robot Components is built and tested against **ABB PC SDK version 2024.1** (ABB Robot Communication Runtime 2024.1). Compatibility with older versions of the runtime is not guaranteed. Additionally, the **Controller Utility** components are supported only on **Windows operating systems**.
+
+If you encounter issues with establishing a real-time connection from Grasshopper, please contact us for assistance.
+
+### Quick Links
+
+For easy sharing of the download link and documentation (e.g., with students), you can also use our [Linktree](https://linktr.ee/RobotComponents).
+
 
 ## Credits
 <picture>
@@ -45,13 +61,13 @@ For easy sharing of the download link and the documentation (with e.g. students)
   <img alt="Light color mode" src="Utility/Logo/logo_arjen_black.png">
 </picture>
 
-Robot Components is an open-source project that was initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://www.uni-kassel.de/fb06/institute/architektur/fachgebiete/experimentelles-und-digitales-entwerfen-und-konstruieren/home). The plugin is currently further developed and maintained by [Arjen Deetman](http://www.arjendeetman.nl). All developers and contributors are listed [here](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md).
+Robot Components is an open-source project that was initiated by the chair of [Experimental and Digital Design and Construction of the University of Kassel](https://www.uni-kassel.de/fb06/institute/architektur/fachgebiete/experimentelles-und-digitales-entwerfen-und-konstruieren/home). The plugin is currently being actively developed and maintained by [Arjen Deetman](http://www.arjendeetman.nl). A complete list of developers and contributors is available [here](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md).
 
-Robot Components uses the ABB PC SDK for real-time connection to ABB Robots, you can find the SDK used in this project [here](https://developercenter.robotstudio.com/pc-sdk).
+Robot Components integrates the ABB PC SDK for real-time communication with ABB robots. You can access the SDK used in this project [here](https://developercenter.robotstudio.com/pc-sdk).
 
-Robot Components uses the OPW kinematics solver as described in the paper ['_An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist_'](https://www.researchgate.net/publication/264212870_An_Analytical_Solution_of_the_Inverse_Kinematics_Problem_of_Industrial_Serial_Manipulators_with_an_Ortho-parallel_Basis_and_a_Spherical_Wrist) by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
+Robot Components utilizes the OPW kinematics solver, as described in the paper ['_An Analytical Solution of the Inverse Kinematics Problem of Industrial Serial Manipulators with an Ortho-parallel Basis and a Spherical Wrist_'](https://www.researchgate.net/publication/264212870_An_Analytical_Solution_of_the_Inverse_Kinematics_Problem_of_Industrial_Serial_Manipulators_with_an_Ortho-parallel_Basis_and_a_Spherical_Wrist) by Mathias Brandstötter, Arthur Angerer, and Michael Hofbaur.
 
-We would like to acknowledge [Jose Luis Garcia del Castillo](https://github.com/garciadelcastillo) and [Vicente Soler](https://github.com/visose) for making their Grasshopper plugins [RobotExMachina](https://github.com/RobotExMachina) and [Robots](https://github.com/visose/Robots) available. Even our approach is different it was helpful for us to see how you implemented certain functionalities and approached certain issues. 
+We would like to acknowledge [Jose Luis Garcia del Castillo](https://github.com/garciadelcastillo) and [Vicente Soler](https://github.com/visose) for their Grasshopper plugins [RobotExMachina](https://github.com/RobotExMachina) and [Robots](https://github.com/visose/Robots). While our approach differs, it was helpful for us to see how they implemented certain functionalities and approached certain issues. 
 
 ## Known Issues
 Known issues are listed [here](https://github.com/RobotComponents/RobotComponents/issues). If you find a bug, please help us solve it by filing a [report](https://github.com/RobotComponents/RobotComponents/issues/new).

@@ -53,7 +53,6 @@ If you encounter issues with establishing a real-time connection from Grasshoppe
 ### Quick Links
 For easy sharing of the download link and documentation (e.g., with students), you can also use our [Linktree](https://linktr.ee/RobotComponents).
 
-
 ## Credits
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="Utility/Logo/edek_logo_white.png">
@@ -87,15 +86,18 @@ Please have a look at the open [issues](https://github.com/RobotComponents/Robot
 
 **Adding support for other brands**: Robot Components is developed to intuitively program ABB robots inside Grasshopper. At the moment we have no plans to implement the support for other robot brands. However, we have a few ideas about how to implement this and since we want to keep Robot Components as intuitive as possible we kindly ask you to contact one of the [developers](https://github.com/RobotComponents/RobotComponents/blob/master/AUTHORS.md) first in case if you want to implement other robot brands. We are happy to contribute to and support this development.
 
-## Cite Robot Components
-Robot Components is a free-to-use Grasshopper plugin and does not legally bind you to cite it. However, we have invested time and effort in creating Robot Components, and we would appreciate it if you would cite if you used it. Please use our [DOI from Zenodo](https://doi.org/10.5281/zenodo.5773814). To cite all versions of Robot Components in publications use:
+## Cite
+Robot Components is a free-to-use Grasshopper plugin, and we kindly ask you to cite it if used. By citing the software, you recognize the work that went into its development and allow us to track its usage, making it easier to secure funding for further improvements. More importantly, citing the software and providing details on the tools used ensures that results can be reproduced. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in-depth discussion.
+
+To cite all versions of Robot Components - as a reference to the whole project - in publications, use:
 
 ```
 Arjen Deetman, Gabriel Rumpf, Benedikt Wannemacher, Mohamed Dawod, Zuardin Akbar, & Andrea Rossi (2018). 
 Robot Components: Intuitive Robot Programming for ABB Robots inside of Rhinoceros Grasshopper.
 Zenodo. https://doi.org/10.5281/zenodo.5773814
 ```
-Note that there are two reasons for citing the software used. One is giving recognition to the work done by others which we already addressed. The other is giving details on the system used so that experiments can be replicated. For this, you should cite the version of Robot Components that is used. On our [Zenodo page](https://doi.org/10.5281/zenodo.5773814) you can find how to cite specific versions. See [How to cite and describe software](https://software.ac.uk/how-cite-software) for more details and an in-depth discussion.
+
+On our [Zenodo page](https://doi.org/10.5281/zenodo.5773814) you can find how to cite specific versions.
 
 ## Version numbering
 Robot Components uses the following [Semantic Versioning](https://semver.org/) scheme: 

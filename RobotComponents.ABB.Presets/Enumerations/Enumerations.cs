@@ -273,7 +273,27 @@ namespace RobotComponents.ABB.Presets.Enumerations
         /// <summary>
         /// IRB5710-90/2.30-LID
         /// </summary>
-        IRB5710_90_230_LID
+        IRB5710_90_230_LID,
+
+        /// <summary>
+        /// IRB5720-125/3.00
+        /// </summary>
+        IRB5720_125_300,
+
+        /// <summary>
+        /// IRB5720-180/2.60
+        /// </summary>
+        IRB5720_180_260,
+
+        /// <summary>
+        /// IRB5720-155/2.60-LID
+        /// </summary>
+        IRB5720_155_260_LID,
+
+        /// <summary>
+        /// IRB5720-90/3.00-LID
+        /// </summary>
+        IRB5720_90_300_LID
 
         // <summary>
         // CRB15000-5/0.95

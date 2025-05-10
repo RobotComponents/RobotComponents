@@ -22,18 +22,18 @@ namespace RobotComponents.ABB.Gh.Components
         /// <summary>
         /// Empty constructor. 
         /// </summary>
-        public GH_RobotComponent() : base()
+        protected GH_RobotComponent() : base()
         {
         }
 
         /// <summary>
-        /// 
+        /// Constructs a generic Robot Components component. 
         /// </summary>
         /// <param name="name"> Name of the component. </param>
-        /// <param name="nickname"> Nicknme of the component. </param>
+        /// <param name="nickname"> Nickname of the component. </param>
         /// <param name="category"> Category in which this component belongs. </param>
-        /// <param name="description"> Description of the object. </param>
-        public GH_RobotComponent(string name, string nickname, string category, string description) : 
+        /// <param name="description"> Description of the component. </param>
+        protected GH_RobotComponent(string name, string nickname, string category, string description) : 
             base(name, nickname, description + System.Environment.NewLine + System.Environment.NewLine +
                 "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion, "Robot Components ABB", category)
         {

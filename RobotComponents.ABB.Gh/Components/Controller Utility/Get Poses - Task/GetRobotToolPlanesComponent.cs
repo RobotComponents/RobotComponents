@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
@@ -20,9 +19,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets the robot tool planes from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets the robot tool planes from a defined controller.
     /// </summary>
-    public class GetRobotToolPlanesComponent : GH_Component
+    public class GetRobotToolPlanesComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller;
@@ -32,14 +31,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the GetRobotToolPlaneComponent class.
         /// </summary>
-        public GetRobotToolPlanesComponent()
-          : base("Get Robot Tool Planes", "GetEP",
-              "Gets the current robot tool planes from an ABB controller."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+        public GetRobotToolPlanesComponent() : base("Get Robot Tool Planes", "GetEP", "Controller Utility",
+              "Gets the current robot tool planes from an ABB controller.")
         {
         }
 
@@ -134,29 +127,6 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         public override Guid ComponentGuid
         {
             get { return new Guid("9D61E009-D6C4-4553-BFA4-5981B7B6F66E"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

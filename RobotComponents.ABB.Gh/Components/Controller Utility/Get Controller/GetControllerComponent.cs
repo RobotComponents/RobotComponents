@@ -13,14 +13,13 @@ using GH_IO.Serialization;
 using RobotComponents.ABB.Controllers;
 using RobotComponents.ABB.Controllers.Forms;
 using RobotComponents.ABB.Gh.Parameters.Controllers;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets an ABB controller from the network. An inherent from the GH_Component Class.
+    /// Represents the component that gets an ABB controller from the network.
     /// </summary>
-    public class GetControllerComponent : GH_Component
+    public class GetControllerComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller = new Controller();
@@ -31,14 +30,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the GetControllerComponent class.
         /// </summary>
-        public GetControllerComponent()
-          : base("Get Controller", "GetCont",
-              "Connects to a real or virtual ABB controller."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+        public GetControllerComponent() : base("Get Controller", "GetCont", "Controller Utility",
+              "Connects to a real or virtual ABB controller.")
         {
         }
 
@@ -153,19 +146,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Controller", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

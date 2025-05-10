@@ -5,32 +5,25 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // Rhino Libs
 using Rhino.Geometry;
-// RobotComponents Libs
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Utilities
 {
     /// <summary>
-    /// RobotComponents convert quarternion to plane component. An inherent from the GH_Component Class.
+    /// RobotComponents convert quarternion to plane component.
     /// </summary>
-    public class QuaternionToPlaneComponent : GH_Component
+    public class QuaternionToPlaneComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the QuarernionToPlane class
         /// </summary>
-        public QuaternionToPlaneComponent()
-          : base("Quaternion to Plane", "QtoP",
+        public QuaternionToPlaneComponent() : base("Quaternion to Plane", "QtoP", "Utility",
               "Converts quaternion values to a plane."
                 + "The first value a is the real part, while the rest multiplies i, j and k, that are imaginary. "
-                + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk"
-                + System.Environment.NewLine + System.Environment.NewLine
-                + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Utility")
+                + System.Environment.NewLine + System.Environment.NewLine + "quarternion = a + bi + ci + dk")
         {
         }
 
@@ -119,29 +112,6 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public override Guid ComponentGuid
         {
             get { return new Guid("3AFD4001-E0F2-46E7-A885-19ADB3118D50"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

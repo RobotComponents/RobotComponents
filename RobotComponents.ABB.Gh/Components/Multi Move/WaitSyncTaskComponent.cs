@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -21,9 +20,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.MultiMove
 {
     /// <summary>
-    /// RobotComponents Action : Wait Sync Task component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Wait Sync Task component.
     /// </summary>
-    public class WaitSyncTaskComponent : GH_Component, IObjectManager
+    public class WaitSyncTaskComponent : GH_RobotComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_WaitSyncTask> _tree = new GH_Structure<GH_WaitSyncTask>();
@@ -39,12 +38,8 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public WaitSyncTaskComponent()
-          : base("Wait Sync Task", "WST",
-              "Defines a Wait Sync Task synchronization point for Multi Move programming."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Multi Move")
+        public WaitSyncTaskComponent() : base("Wait Sync Task", "WST", "Multi Move",
+              "Defines a Wait Sync Task synchronization point for Multi Move programming.")
         {
         }
 
@@ -164,29 +159,6 @@ namespace RobotComponents.ABB.Gh.Components.MultiMove
         public override Guid ComponentGuid
         {
             get { return new Guid("90823561-0B38-4A88-8D3D-324A5EF8B3DC"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 

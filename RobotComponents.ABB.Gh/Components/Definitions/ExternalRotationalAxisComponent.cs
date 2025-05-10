@@ -17,14 +17,13 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Parameters.Definitions;
 using RobotComponents.ABB.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents External Rotational Axis component. An inherent from the GH_Component Class.
+    /// RobotComponents External Rotational Axis component.
     /// </summary>
-    public class ExternalRotationalAxisComponent : GH_Component, IGH_VariableParameterComponent
+    public class ExternalRotationalAxisComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private bool _axisLogicNumber = false;
@@ -37,12 +36,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ExternalRotationalAxisComponent()
-          : base("External Rotational Axis", "External Rotational Axis",
-              "Defines an External Rotational Axis."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        public ExternalRotationalAxisComponent() : base("External Rotational Axis", "External Rotational Axis", "Definitions",
+              "Defines an External Rotational Axis.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -174,19 +169,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Set Axis Logic Number", MenuItemClickAxisLogic, true, _axisLogicNumber);
             Menu_AppendItem(menu, "Set Moves Robot", MenuItemClickMovesRobot, true, _movesRobot);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

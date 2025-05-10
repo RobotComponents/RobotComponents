@@ -29,9 +29,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Simulation
 {
     /// <summary>
-    /// RobotComponents Path Generator component. An inherent from the GH_Component Class.
+    /// RobotComponents Path Generator component.
     /// </summary>
-    public class PathGeneratorComponent : GH_Component, IGH_VariableParameterComponent
+    public class PathGeneratorComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private readonly List<PathGenerator> _pathGenerators = new List<PathGenerator>();
@@ -62,12 +62,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public PathGeneratorComponent()
-          : base("Path Generator", "PG",
-              "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Simulation")
+        public PathGeneratorComponent() : base("Path Generator", "PG", "Simulation",
+              "Generates and displays an approximation of the movement path for a defined ABB robot based on a list of Actions.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -370,8 +366,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             Menu_AppendItem(menu, "Output Program Time", MenuItemClickOutputProgramTime, true, _outputProgramTime);
             Menu_AppendItem(menu, "Output all Error Messages", MenuItemClickOutputErrorMessages, true, _outputErrorMessages);
             Menu_AppendItem(menu, "Output Posed Meshes", MenuItemClickOutputMesh, true, _outputMesh);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
+
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>
@@ -583,17 +579,6 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
                     previewObject.Hidden = true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
 
         /// <summary>

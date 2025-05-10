@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
     /// constructing the value list this component will be deleted. This component only calls 
     /// the method to create the value list and defines the location of the values list. 
     /// </summary>
-    public class ZoneDataValueList : GH_Component
+    public class ZoneDataValueList : GH_RobotComponent
     {
         #region fields
         private bool _created = false;
@@ -33,12 +33,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public ZoneDataValueList()
-          : base("Predefined Zone Data", "PZD",
-              "Defines a value list with predefined zone data"
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public ZoneDataValueList() : base("Predefined Zone Data", "PZD", "Code Generation", 
+              "Defines a value list with predefined zone data.")
         {
         }
 

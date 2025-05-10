@@ -24,9 +24,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Target component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Target component.
     /// </summary>
-    public class RobotTargetComponent : GH_Component, IGH_VariableParameterComponent, IObjectManager
+    public class RobotTargetComponent : GH_RobotComponent, IGH_VariableParameterComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotTarget> _tree = new GH_Structure<GH_RobotTarget>();
@@ -45,12 +45,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotTargetComponent()
-          : base("Robot Target", "RT",
-              "Defines a Robot Target declaration for an Instruction : Movement or Inverse Kinematics component."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public RobotTargetComponent() : base("Robot Target", "RT", "Code Generation",
+              "Defines a Robot Target declaration for a Move instruction or Inverse Kinematics component.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -207,19 +203,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Reference Plane", MenuItemClickReferencePlane, true, _setReferencePlane);
             Menu_AppendItem(menu, "External Joint Position", MenuItemClickExternalJointPosition, true, _setExternalJointPosition);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

@@ -26,7 +26,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetLogComponent class.
         /// </summary>
         public GetLogComponent() : base("Get Log", "GL", "Controller Utility",
-              "Connects to a real or virtual ABB controller and extracts the log messages from it.")
+              "Connects to a real or virtual ABB controller and extracts the log messages from it."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

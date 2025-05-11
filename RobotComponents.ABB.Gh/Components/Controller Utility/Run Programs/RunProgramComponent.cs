@@ -28,7 +28,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the RunProgramComponent class.
         /// </summary>
         public RunProgramComponent() : base("Run Program", "RP", "Controller Utility",
-              "Starts and stops RAPID programs directly on a real or virtual ABB controller.")
+              "Starts and stops RAPID programs directly on a real or virtual ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

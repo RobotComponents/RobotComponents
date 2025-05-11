@@ -30,7 +30,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetRobotJointPositionComponent class.
         /// </summary>
         public GetRobotJointPositionsComponent() : base("Get Robot Joint Positions", "GetJP", "Controller Utility",
-              "Gets the current robot joint position from an ABB controller.")
+              "Gets the current robot joint position from an ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

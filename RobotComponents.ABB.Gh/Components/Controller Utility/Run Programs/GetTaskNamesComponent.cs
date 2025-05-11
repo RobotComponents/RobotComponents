@@ -26,7 +26,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetTaskNameComponent class.
         /// </summary>
         public GetTaskNamesComponent() : base("Get Task Names", "GTN", "Controller Utility",
-              "Gets the task names from an ABB robot controller.")
+              "Gets the task names from an ABB robot controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

@@ -31,7 +31,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the SetAnalogOutputComponent class.
         /// </summary>
         public SetAnalogOutputComponent() : base("Set Analog Output", "SetAO", "Controller Utility",
-              "Changes the state of a defined analog output from an ABB controller in realtime.")
+              "Changes the state of a defined analog output from an ABB controller in realtime."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

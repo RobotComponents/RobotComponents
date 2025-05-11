@@ -30,7 +30,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetRobotTargetsComponent class.
         /// </summary>
         public GetRobotTargetsComponent() : base("Get Robot Targets", "GetRT", "Controller Utility",
-              "Gets the current robot targets from an ABB controller.")
+              "Gets the current robot targets from an ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

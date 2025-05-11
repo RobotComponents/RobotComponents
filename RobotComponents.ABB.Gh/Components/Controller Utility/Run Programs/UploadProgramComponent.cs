@@ -35,7 +35,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the UploadProgramComponent class.
         /// </summary>
         public UploadProgramComponent() : base("Upload Program", "UP", "Controller Utility",
-              "Uploads RAPID modules directly to a real or virtual ABB controller.")
+              "Uploads RAPID modules directly to a real or virtual ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
             this.Message = _taskName;
         }

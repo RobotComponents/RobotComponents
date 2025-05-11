@@ -31,7 +31,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetControllerComponent class.
         /// </summary>
         public GetControllerComponent() : base("Get Controller", "GetCont", "Controller Utility",
-              "Connects to a real or virtual ABB controller.")
+              "Connects to a real or virtual ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

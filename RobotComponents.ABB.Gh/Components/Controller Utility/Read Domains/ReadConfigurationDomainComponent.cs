@@ -30,7 +30,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the ReadConfigurationDomain class.
         /// </summary>
         public ReadConfigurationDomainComponent() : base("Read Configuration Domain", "ReadConf", "Controller Utility",
-              "Connects to a real or virtual ABB controller and extracts data from the configuration domain.")
+              "Connects to a real or virtual ABB controller and extracts data from the configuration domain."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

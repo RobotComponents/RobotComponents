@@ -31,7 +31,9 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// Initializes a new instance of the GetAnalogInputComponent class.
         /// </summary>
         public GetAnalogInputComponent() : base("Get Analog Input", "GetAI", "Controller Utility",
-              "Gets the signal of a defined analog input from an ABB controller.")
+              "Gets the signal of a defined analog input from an ABB controller."
+                + System.Environment.NewLine + System.Environment.NewLine +
+                "This component uses the ABB PC SDK.")
         {
         }
 

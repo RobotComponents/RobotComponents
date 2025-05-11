@@ -16,17 +16,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     /// <summary>
     /// Circle Path Mode parameter
     /// </summary>
-    public class Param_CirclePathMode : GH_PersistentParam<GH_CirclePathMode>
+    public class Param_CirclePathMode : GH_RobotParam<GH_CirclePathMode>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<GH_CirclePathMode> class
+        /// Initializes a new instance of the GH_RobotParam<GH_CirclePathMode> class
         /// </summary>
-        public Param_CirclePathMode()
-          : base(new GH_InstanceDescription("Circle Path Mode Parameter", "CPMP",
-                "Contains the data of a Circle Path Mode."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_CirclePathMode() : base("Circle Path Mode Parameter", "CPMP", "Parameters",
+                "Contains the data of a Circle Path Mode.")
         {
         }
 
@@ -69,40 +65,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
         {
             get { return new Guid("6CBF906A-44E8-4852-A817-84CDBA533E53"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_CirclePathMode> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_CirclePathMode value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
 }

@@ -292,6 +292,7 @@
     <Compile Include="Parameters\Controllers\Param_Signal.cs" />
     <Compile Include="Parameters\Definitions\Param_MechanicalUnit.cs" />
     <Compile Include="Parameters\Definitions\Param_LoadData.cs" />
+    <Compile Include="Parameters\GH_RobotParam.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

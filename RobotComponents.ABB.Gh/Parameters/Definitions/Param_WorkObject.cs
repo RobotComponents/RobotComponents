@@ -18,17 +18,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     /// <summary>
     /// Work Object parameter
     /// </summary>
-    public class Param_WorkObject : GH_PersistentGeometryParam<GH_WorkObject>, IGH_PreviewObject
+    public class Param_WorkObject : GH_RobotParam<GH_WorkObject>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_WorkObject> class
+        /// Initializes a new instance of the GH_RobotParam<GH_WorkObject> class
         /// </summary>
-        public Param_WorkObject()
-          : base(new GH_InstanceDescription("Work Object Parameter", "WO",
-                "Contains the data of a Work Object."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_WorkObject() : base("Work Object Parameter", "WO", "Parameters",
+                "Contains the data of a Work Object.")
         {
         }
 
@@ -71,41 +67,6 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         {
             get { return new Guid("93B62157-9384-4053-B95E-1A6F12CE1030"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_WorkObject> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_WorkObject value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
 
         #region preview methods
         /// <summary>
@@ -159,6 +120,4 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         }
         #endregion
     }
-
-
 }

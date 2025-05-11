@@ -16,17 +16,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     /// <summary>
     /// Target parameter
     /// </summary>
-    public class Param_Target : GH_PersistentParam<GH_Target>
+    public class Param_Target : GH_RobotParam<GH_Target>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<TargetGoo> class
+        /// Initializes a new instance of the GH_RobotParam<TargetGoo> class
         /// </summary>
-        public Param_Target()
-          : base(new GH_InstanceDescription("Target Parameter", "T",
-                "Contains the data of a Target declaration."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_Target() : base("Target Parameter", "T", "Parameters",
+                "Contains the data of a Target declaration.")
         {
         }
 
@@ -69,42 +65,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
         {
             get { return new Guid("F2A7AF5B-13E9-4480-8316-B84670ABF954"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_Target> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_Target value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
-
     }
-
 }

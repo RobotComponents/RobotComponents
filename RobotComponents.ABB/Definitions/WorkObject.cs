@@ -30,10 +30,10 @@ namespace RobotComponents.ABB.Definitions
         private string _name = "";
         private bool _robotHold;
         private bool _fixedFrame;
-        private Plane _plane;
+        private Plane _objectFrame;
         private Plane _userFrame;
         private Plane _globalPlane;
-        private Quaternion _orientation;
+        private Quaternion _objectFrameOrientation;
         private Quaternion _userFrameOrientation;
         private IExternalAxis _externalAxis;
         #endregion
@@ -50,7 +50,7 @@ namespace RobotComponents.ABB.Definitions
             _scope = (Scope)info.GetValue("Scope", typeof(Scope));
             _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
-            _plane = (Plane)info.GetValue("Plane", typeof(Plane));
+            _objectFrame = (Plane)info.GetValue("Plane", typeof(Plane)); // TODO: Remove, use Object Frame instead
             _externalAxis = (IExternalAxis)info.GetValue("External Axis", typeof(IExternalAxis));
             _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
             _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
@@ -70,10 +70,11 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Plane", _plane, typeof(Plane));
+            info.AddValue("Plane", _objectFrame, typeof(Plane)); // TODO: Remove, use Object Frame instead
             info.AddValue("External Axis", _externalAxis, typeof(IExternalAxis));
             info.AddValue("Robot Hold", _robotHold, typeof(bool));
             info.AddValue("User Frame", _userFrame, typeof(Plane));
+            info.AddValue("Object Frame", _objectFrame, typeof(Plane));
         }
         #endregion
 
@@ -84,7 +85,7 @@ namespace RobotComponents.ABB.Definitions
         public WorkObject()
         {
             _name = "wobj0";
-            _plane = Plane.WorldXY;
+            _objectFrame = Plane.WorldXY;
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
@@ -96,11 +97,11 @@ namespace RobotComponents.ABB.Definitions
         /// Initializes a new instance of the Work Object class with a fixed work object.
         /// </summary>
         /// <param name="name"> The work object name, must be unique. </param>
-        /// <param name="plane"> The work object coordinate system. </param>
-        public WorkObject(string name, Plane plane)
+        /// <param name="objectFrame"> The object frame as a Plane. </param>
+        public WorkObject(string name, Plane objectFrame)
         {
             _name = name;
-            _plane = plane;
+            _objectFrame = objectFrame;
             _externalAxis = null;
             _robotHold = false;
             _userFrame = Plane.WorldXY;
@@ -109,18 +110,36 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Work Object class with a fixed work object.
+        /// </summary>
+        /// <param name="name"> The work object name, must be unique. </param>
+        /// <param name="userFrame"> The user frame as a Plane. </param>
+        /// <param name="objectFrame"> The object frame as a Plane. </param>
+        public WorkObject(string name, Plane userFrame, Plane objectFrame)
+        {
+            _name = name;
+            _objectFrame = objectFrame;
+            _externalAxis = null;
+            _robotHold = false;
+            _userFrame = userFrame;
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Work Object class with a movable work object.
         /// </summary>
         /// <param name="name"> The work object name, must be unique. </param>
-        /// <param name="plane"> The work object coordinate system. </param>
+        /// <param name="userFrame"> The user frame as a Plane. </param>
+        /// <param name="objectFrame"> The object frame as a Plane.  </param>
         /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
-        public WorkObject(string name, Plane plane, IExternalAxis externalAxis)
+        public WorkObject(string name, Plane userFrame, Plane objectFrame, IExternalAxis externalAxis)
         {
             _name = name;
-            _plane = plane;
+            _objectFrame = objectFrame;
             _externalAxis = externalAxis;
             _robotHold = false;
-            _userFrame = Plane.WorldXY;
+            _userFrame = userFrame;
 
             Initialize();
         }
@@ -135,7 +154,7 @@ namespace RobotComponents.ABB.Definitions
             _scope = workObject.Scope;
             _variableType = workObject.VariableType;
             _name = workObject.Name;
-            _plane = new Plane(workObject.Plane);
+            _objectFrame = new Plane(workObject.ObjectFrame);
             _userFrame = new Plane(workObject.UserFrame);
             _globalPlane = new Plane(workObject.GlobalWorkObjectPlane);
             _robotHold = workObject.RobotHold;
@@ -211,7 +230,6 @@ namespace RobotComponents.ABB.Definitions
                 double d = double.Parse(values[9]);
                 _userFrame = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
-
                 x = double.Parse(values[10]);
                 y = double.Parse(values[11]);
                 z = double.Parse(values[12]);
@@ -219,7 +237,7 @@ namespace RobotComponents.ABB.Definitions
                 b = double.Parse(values[14]);
                 c = double.Parse(values[15]);
                 d = double.Parse(values[16]);
-                _plane = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
+                _objectFrame = HelperMethods.QuaternionToPlane(x, y, z, a, b, c, d);
 
                 CalculateOrientation();
                 CalculateUserFrameOrientation();
@@ -291,7 +309,7 @@ namespace RobotComponents.ABB.Definitions
         /// </summary>
         private void CalculateOrientation()
         {
-            _orientation = HelperMethods.PlaneToQuaternion(_plane);
+            _objectFrameOrientation = HelperMethods.PlaneToQuaternion(_objectFrame);
         }
 
         /// <summary>
@@ -308,7 +326,7 @@ namespace RobotComponents.ABB.Definitions
         private void CalculateGlobalWorkObjectPlane()
         {
             // Create a deep copy of the work object plane
-            _globalPlane = new Plane(_plane);
+            _globalPlane = new Plane(_objectFrame);
 
             // Re-orient the plane
             Transform orient1 = Transform.PlaneToPlane(Plane.WorldXY, _userFrame);
@@ -382,11 +400,11 @@ namespace RobotComponents.ABB.Definitions
                 $"{_userFrameOrientation.C:0.#######}, {_userFrameOrientation.D:0.#######}]], ";
 
             // Add object frame coordinate < oframe of pose > < trans of pos >
-            result += $"[[{_plane.Origin.X:0.####}, {_plane.Origin.Y:0.####}, {_plane.Origin.Z:0.####}], ";
+            result += $"[[{_objectFrame.Origin.X:0.####}, {_objectFrame.Origin.Y:0.####}, {_objectFrame.Origin.Z:0.####}], ";
 
             // Add object frame orientation < oframe of pose > < rot of orient >
-            result += $"[{_orientation.A:0.#######}, {_orientation.B:0.#######}, " +
-                $"{_orientation.C:0.#######}, {_orientation.D:0.#######}]]]";
+            result += $"[{_objectFrameOrientation.A:0.#######}, {_objectFrameOrientation.B:0.#######}, " +
+                $"{_objectFrameOrientation.C:0.#######}, {_objectFrameOrientation.D:0.#######}]]]";
 
             return result;
         }
@@ -452,8 +470,8 @@ namespace RobotComponents.ABB.Definitions
             {
                 if (_name == null) { return false; }
                 if (_name == "") { return false; }
-                if (_plane == null) { return false; }
-                if (_plane == Plane.Unset) { return false; }
+                if (_objectFrame == null) { return false; }
+                if (_objectFrame == Plane.Unset) { return false; }
                 if (_userFrame == null) { return false; }
                 if (_userFrame == Plane.Unset) { return false; }
                 return true;
@@ -524,10 +542,10 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// The object coordinate system is defined in the user coordinate system.
         /// </remarks>
-        public Plane Plane
+        public Plane ObjectFrame
         {
-            get { return _plane; }
-            set { _plane = value; ReInitialize(); }
+            get { return _objectFrame; }
+            set { _objectFrame = value; ReInitialize(); }
         }
 
         /// <summary>
@@ -561,6 +579,21 @@ namespace RobotComponents.ABB.Definitions
         public Plane GlobalWorkObjectPlane
         {
             get { return _globalPlane; }
+        }
+        #endregion
+
+        #region obsolete
+        /// <summary>
+        /// Gets or set the work object coordinate system as a plane (e.g. the position of the current work object).
+        /// </summary>
+        /// <remarks>
+        /// The object coordinate system is defined in the user coordinate system.
+        /// </remarks>
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use ObjectFrame instead.", false)]
+        public Plane Plane
+        {
+            get { return _objectFrame; }
+            set { _objectFrame = value; ReInitialize(); }
         }
         #endregion
     }

@@ -86,7 +86,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
             // Output
             DA.SetData(0, workObject.Name);
-            DA.SetData(1, workObject.Plane);
+            DA.SetData(1, workObject.ObjectFrame);
             DA.SetData(2, workObject.ExternalAxis);
         }
 

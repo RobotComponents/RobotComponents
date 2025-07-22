@@ -145,6 +145,23 @@ namespace RobotComponents.ABB.Definitions
         }
 
         /// <summary>
+        /// Initializes a new instance of the Work Object class with a movable work object.
+        /// </summary>
+        /// <param name="name"> The work object name, must be unique. </param>
+        /// <param name="objectFrame"> The object frame as a Plane.  </param>
+        /// <param name="externalAxis"> The coupled external axis (mechanical unit) that moves the work object. </param>
+        public WorkObject(string name, Plane objectFrame, IExternalAxis externalAxis)
+        {
+            _name = name;
+            _objectFrame = objectFrame;
+            _externalAxis = externalAxis;
+            _robotHold = false;
+            _userFrame = Plane.WorldXY;
+
+            Initialize();
+        }
+
+        /// <summary>
         /// Initializes a new instance of the Work Object class by duplicating an existing Work Object instance. 
         /// </summary>
         /// <param name="workObject"> The Work Object instance to duplicate. </param>

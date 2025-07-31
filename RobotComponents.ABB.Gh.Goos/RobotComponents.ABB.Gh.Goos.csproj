@@ -1,162 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4853E4FA-0246-486C-9F1A-0620896690C3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net48</TargetFramework>
     <RootNamespace>RobotComponents.ABB.Gh.Goos</RootNamespace>
     <AssemblyName>RobotComponents.ABB.Gh.Goos</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <IncludeSymbols>False</IncludeSymbols>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Eto.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GH_IO, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
-      <HintPath>..\packages\Grasshopper.7.0.20314.3001\lib\net45\GH_IO.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Grasshopper, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
-      <HintPath>..\packages\Grasshopper.7.0.20314.3001\lib\net45\Grasshopper.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Rhino.UI, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\Rhino.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="RhinoCommon, Version=7.0.20314.3000, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoCommon.7.0.20314.3001\lib\net45\RhinoCommon.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <None Include="..\..\RobotComponents\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="Actions\Declarations\GH_ConfigurationData.cs" />
-    <Compile Include="Actions\GH_Action.cs" />
-    <Compile Include="Actions\GH_Syncident.cs" />
-    <Compile Include="Actions\Instructions\GH_AccelerationSet.cs" />
-    <Compile Include="Actions\Instructions\GH_CirclePathMode.cs" />
-    <Compile Include="Actions\Instructions\GH_PathAccelerationLimitation.cs" />
-    <Compile Include="Actions\Instructions\GH_PulseDigitalOutput.cs" />
-    <Compile Include="Actions\Instructions\GH_SyncMoveOn.cs" />
-    <Compile Include="Actions\Instructions\GH_SyncMoveOff.cs" />
-    <Compile Include="Actions\Instructions\GH_VelocitySet.cs" />
-    <Compile Include="Actions\Instructions\GH_WaitAI.cs" />
-    <Compile Include="Actions\Instructions\GH_WaitSyncTask.cs" />
-    <Compile Include="Actions\Declarations\GH_TaskList.cs" />
-    <Compile Include="Actions\Instructions\GH_LinearConfigurationControl.cs" />
-    <Compile Include="Actions\Instructions\GH_JointConfigurationControl.cs" />
-    <Compile Include="Actions\Instructions\GH_Instruction.cs" />
-    <Compile Include="Actions\Dynamic\GH_Dynamic.cs" />
-    <Compile Include="Actions\Declarations\GH_Declaration.cs" />
-    <Compile Include="Actions\Instructions\GH_SetAnalogOutput.cs" />
-    <Compile Include="Actions\Declarations\GH_ExternalJointPosition.cs" />
-    <Compile Include="Actions\Declarations\GH_JointTarget.cs" />
-    <Compile Include="Actions\Declarations\GH_RobotJointPosition.cs" />
-    <Compile Include="Controllers\GH_Controller.cs" />
-    <Compile Include="Controllers\GH_Signal.cs" />
-    <Compile Include="Definitions\GH_MechanicalUnit.cs" />
-    <Compile Include="Actions\Dynamic\GH_CodeLine.cs" />
-    <Compile Include="Actions\Dynamic\GH_Comment.cs" />
-    <Compile Include="Actions\Instructions\GH_SetDigitalOutput.cs" />
-    <Compile Include="Actions\Declarations\GH_RobotTarget.cs" />
-    <Compile Include="Actions\Declarations\GH_ZoneData.cs" />
-    <Compile Include="Actions\Instructions\GH_WaitDI.cs" />
-    <Compile Include="Actions\GH_ActionGroup.cs" />
-    <Compile Include="Definitions\GH_ExternalAxis.cs" />
-    <Compile Include="Definitions\GH_ExternalLinearAxis.cs" />
-    <Compile Include="Definitions\GH_ExternalRotationalAxis.cs" />
-    <Compile Include="Actions\Instructions\GH_Movement.cs" />
-    <Compile Include="Actions\Instructions\GH_OverrideRobotTool.cs" />
-    <Compile Include="Definitions\GH_LoadData.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Definitions\GH_Robot.cs" />
-    <Compile Include="Definitions\GH_RobotTool.cs" />
-    <Compile Include="Actions\Declarations\GH_SpeedData.cs" />
-    <Compile Include="Actions\Declarations\GH_Target.cs" />
-    <Compile Include="Actions\Instructions\GH_WaitTime.cs" />
-    <Compile Include="Definitions\GH_WorkObject.cs" />
+    <PackageReference Include="RhinoCommon" Version="7.0.20314.3001" />
+    <PackageReference Include="Grasshopper" Version="7.0.20314.3001" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\RobotComponents.ABB.Controllers\RobotComponents.ABB.Controllers.csproj">
-      <Project>{4d8169cc-20cf-4597-b304-331eed09278b}</Project>
-      <Name>RobotComponents.ABB.Controllers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj">
-      <Project>{496ba2ce-d067-42b3-bd7f-d1bb429a4987}</Project>
-      <Name>RobotComponents.ABB</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj">
-      <Project>{f7ea2eb3-c653-4839-8843-f82c828a4b21}</Project>
-      <Name>RobotComponents</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\RobotComponents\RobotComponents.csproj" />
+    <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj" />
+    <ProjectReference Include="..\RobotComponents.ABB.Controllers.\RobotComponents.ABB.Controllers.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <FallbackCulture>en-US</FallbackCulture>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartProgram>C:\Program Files\Rhino 6\System\Rhino.exe</StartProgram>
-    <StartArguments>
-    </StartArguments>
-    <StartAction>Program</StartAction>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <Import Project="..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.7.0.20314.3001\build\RhinoCommon.targets'))" />
-    <Error Condition="!Exists('..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets'))" />
-  </Target>
-  <Import Project="..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets" Condition="Exists('..\packages\Grasshopper.7.0.20314.3001\build\Grasshopper.targets')" />
+
 </Project>

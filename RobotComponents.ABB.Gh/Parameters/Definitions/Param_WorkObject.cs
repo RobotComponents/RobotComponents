@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     public class Param_WorkObject : GH_RobotParam<GH_WorkObject>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_WorkObject> class
+        /// Initializes a new instance of the Param_WorkObject class
         /// </summary>
         public Param_WorkObject() : base("Work Object Parameter", "WO", "Parameters",
                 "Contains the data of a Work Object.")

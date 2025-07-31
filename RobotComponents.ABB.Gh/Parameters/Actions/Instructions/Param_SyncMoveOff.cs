@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_SyncMoveOff : GH_RobotParam<GH_SyncMoveOff>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_SyncMoveOff> class
+        /// Initializes a new instance of the Param_SyncMoveOff class
         /// </summary>
         public Param_SyncMoveOff() : base("Sync Move Off Parameter", "SMOff", "Parameters",
                 "Contains the data of a Sync Move Off synchronization point.")

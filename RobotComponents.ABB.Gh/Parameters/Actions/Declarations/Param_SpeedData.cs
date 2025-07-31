@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_SpeedData : GH_RobotParam<GH_SpeedData>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_SpeedData> class
+        /// Initializes a new instance of the Param_SpeedData class
         /// </summary>
         public Param_SpeedData() : base("Speed Data Parameter", "SD", "Parameters",
                 "Contains the data of a Speed Data declaration.")

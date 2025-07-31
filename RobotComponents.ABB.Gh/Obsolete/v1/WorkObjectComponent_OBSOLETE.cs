@@ -33,6 +33,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private bool _isUnique = true;
         #endregion
 
+        /// <summary>
+        /// Initializes a new instnace of the WorkOjbectComponent class.
+        /// </summary>
         public WorkObjectComponent_OBSOLETE()
           : base("Work Object", "WorkObj",
               "Defines a new work object."

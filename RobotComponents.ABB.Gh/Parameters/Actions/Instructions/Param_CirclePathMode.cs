@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_CirclePathMode : GH_RobotParam<GH_CirclePathMode>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_CirclePathMode> class
+        /// Initializes a new instance of the Param_CirclePathMode class
         /// </summary>
         public Param_CirclePathMode() : base("Circle Path Mode Parameter", "CPMP", "Parameters",
                 "Contains the data of a Circle Path Mode.")

@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_ExternalJointPosition : GH_RobotParam<GH_ExternalJointPosition>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<ExternalJointPositionGoo> class
+        /// Initializes a new instance of the Param_ExternalJointPosition class
         /// </summary>
         public Param_ExternalJointPosition() : base("Ext Joint Position Parameter", "EJ", "Parameters",
                 "Containts the data of an External Joint Position declaration.")

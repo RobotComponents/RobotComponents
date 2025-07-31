@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     public class Param_ExternalLinearAxis : GH_RobotParam<GH_ExternalLinearAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_ExternalLinearAxis> class
+        /// Initializes a new instance of the Param_ExternalLinearAxis class
         /// </summary>
         public Param_ExternalLinearAxis() : base("External Linear Axis", "ELA", "Parameters",
                 "Contains the data of an External Linear Axis.")

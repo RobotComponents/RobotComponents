@@ -33,6 +33,11 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         private bool _isUnique = true;
         #endregion
 
+        /// <summary>
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
+        /// </summary>
         public LoadDataComponent() : base("Load Data", "LoDa", "Definitions",
               "Defines load data.")
         {

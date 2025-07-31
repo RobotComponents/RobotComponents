@@ -31,6 +31,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private string _lastName = "";
         private bool _isUnique = true;
 
+        /// <summary>
+        /// Initializes a new instance of the WorkOjectComponent class.
+        /// </summary>
         public OldWorkObjectComponent2()
           : base("Work Object", "WorkObj",
               "Defines a new work object."

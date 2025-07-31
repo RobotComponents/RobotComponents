@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions
     public class Param_ActionGroup : GH_RobotParam<GH_ActionGroup>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<ActionGroupGoo> class
+        /// Initializes a new instance of the Param_ActionGroup class
         /// </summary>
         public Param_ActionGroup() : base("Action Group Parameter", "AG", "Parameters",
                 "Contains the data of any Action Group.")

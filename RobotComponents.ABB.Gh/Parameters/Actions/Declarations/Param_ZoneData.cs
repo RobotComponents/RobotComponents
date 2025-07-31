@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_ZoneData : GH_RobotParam<GH_ZoneData>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_ZoneData> class
+        /// Initializes a new instance of the Param_ZoneData class
         /// </summary>
         public Param_ZoneData() : base("Zone Data Parameter", "ZD", "Parameters",
                 "Contains the data of a Zone Data declaration.")

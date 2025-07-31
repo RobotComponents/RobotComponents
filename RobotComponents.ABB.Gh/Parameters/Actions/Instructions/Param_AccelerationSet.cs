@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_AccelerationSet : GH_RobotParam<GH_AccelerationSet>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_AccelerationSet> class
+        /// Initializes a new instance of the Param_AccelerationSet class
         /// </summary>
         public Param_AccelerationSet() : base("Acceleration Set Parameter", "ASP", "Parameters",
                 "Contains the data of a Acceleration Set instruction.")

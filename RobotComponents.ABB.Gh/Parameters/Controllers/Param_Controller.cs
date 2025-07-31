@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Controllers
     public class Param_Controller : GH_RobotParam<GH_Controller>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_Controller> class
+        /// Initializes a new instance of the Param_Controller class
         /// </summary>
         public Param_Controller() : base("Controller Parameter", "CP", "Parameters",
                 "Contains the data of a Controller.")

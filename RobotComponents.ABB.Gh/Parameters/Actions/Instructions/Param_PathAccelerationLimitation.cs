@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_PathAccelerationLimitation : GH_RobotParam<GH_PathAccelerationLimitation>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_PathAccelerationLimitation> class
+        /// Initializes a new instance of the Param_PathAccelerationLimitation class
         /// </summary>
         public Param_PathAccelerationLimitation() : base("Path Acceleration Limitation Parameter", "PALP", "Parameters",
                 "Contains the data of a Path Acceleration Limitation instruction.")

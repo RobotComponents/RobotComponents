@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Dynamic
     public class Param_CodeLine : GH_RobotParam<GH_CodeLine>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_CodeLine> class
+        /// Initializes a new instance of the Param_CodeLine class
         /// </summary>
         public Param_CodeLine() : base("Code Line Parameter", "CLP", "Parameters",
                 "Contains the data of a Code Line.")

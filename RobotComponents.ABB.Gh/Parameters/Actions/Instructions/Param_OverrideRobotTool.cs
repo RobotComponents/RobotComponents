@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_OverrideRobotTool : GH_RobotParam<GH_OverrideRobotTool>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<OverrideRobotToolGoo> class
+        /// Initializes a new instance of the Param_OverrideRobotTool class
         /// </summary>
         public Param_OverrideRobotTool() : base("Override Robot Tool Parameter", "ORT", "Parameters",
                 "Contains the data of a Override Robot Tool instruction.")

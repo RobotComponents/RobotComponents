@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     public class Param_LoadData : GH_RobotParam<GH_LoadData>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_LoadData> class
+        /// Initializes a new instance of the Param_LoadData class
         /// </summary>
         public Param_LoadData() : base("Load Data Parameter", "LDP", "Parameters",
                 "Contains the data of a Load Data declaration.")

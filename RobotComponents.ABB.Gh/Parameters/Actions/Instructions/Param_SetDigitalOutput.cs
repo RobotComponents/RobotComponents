@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_SetDigitalOutput : GH_RobotParam<GH_SetDigitalOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_SetDigitalOutput> class
+        /// Initializes a new instance of the Param_SetDigitalOutput class
         /// </summary>
         public Param_SetDigitalOutput() : base("Set Digital Output Parameter", "SDOP", "Parameters",
                 "Contains the data of a Set Digital Output instruction.")

@@ -20,7 +20,9 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
     public class GetAxisPlanesFromKinematicsParametersComponent : GH_RobotComponent
     {
         /// <summary>
-        /// Initializes a new instance of the KinematicsParametersToAxisPlanesComponent class.
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
         public GetAxisPlanesFromKinematicsParametersComponent() : base("Get Axis Planes from Kinematics Parameters", "KiPa2AxPl", "Definitions",
               "Gets the robot axis planes from the given robot kinematics parameters.")

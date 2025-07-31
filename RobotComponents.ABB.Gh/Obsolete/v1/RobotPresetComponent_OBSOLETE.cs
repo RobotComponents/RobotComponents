@@ -33,6 +33,9 @@ namespace RobotComponents.ABB.Gh.Obsolete
         private bool _fromMenu = false;
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the RobotPresetComponent class.
+        /// </summary>
         public RobotPresetComponent_OBSOLETE()
           : base("Robot Preset", "RobPres",
               "Defines a robot which is needed for Code Generation and Simulation"

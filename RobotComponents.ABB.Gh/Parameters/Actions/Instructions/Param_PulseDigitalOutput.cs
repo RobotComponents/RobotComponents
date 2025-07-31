@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_PulseDigitalOutput : GH_RobotParam<GH_PulseDigitalOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_PulseDigitalOutput> class
+        /// Initializes a new instance of the Param_PulseDigitalOutput class
         /// </summary>
         public Param_PulseDigitalOutput() : base("Pulse Digital Output Parameter", "PDOP", "Parameters",
                 "Contains the data of a Pulse Digital Output instruction.")

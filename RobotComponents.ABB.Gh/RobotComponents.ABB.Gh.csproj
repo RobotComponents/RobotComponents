@@ -5,6 +5,7 @@
     <RootNamespace>RobotComponents.ABB.Gh</RootNamespace>
     <AssemblyName>RobotComponents.ABB.Gh</AssemblyName>
     <OutputType>Library</OutputType>
+    <DocumentationFile>bin\RobotComponents.ABB.Gh.xml</DocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <IncludeSymbols>False</IncludeSymbols>

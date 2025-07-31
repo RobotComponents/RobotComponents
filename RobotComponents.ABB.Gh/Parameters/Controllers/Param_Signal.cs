@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Controllers
     public class Param_Signal : GH_RobotParam<GH_Signal>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_Signal> class
+        /// Initializes a new instance of the Param_Signal class
         /// </summary>
         public Param_Signal() : base("Signal Parameter", "SP", "Parameters",
                 "Contains the data of a Signal.")

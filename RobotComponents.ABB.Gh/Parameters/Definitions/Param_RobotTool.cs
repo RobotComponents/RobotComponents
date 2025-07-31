@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     public class Param_RobotTool : GH_RobotParam<GH_RobotTool>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_RobotTool> class
+        /// Initializes a new instance of the Param_RobotToo class
         /// </summary>
         public Param_RobotTool() : base("Robot Tool", "RT", "Parameters",
                 "Contains the data of a Robot Tool.")

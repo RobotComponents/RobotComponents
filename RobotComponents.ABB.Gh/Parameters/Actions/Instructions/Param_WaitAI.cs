@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_WaitAI : GH_RobotParam<GH_WaitAI>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_WaitAI> class
+        /// Initializes a new instance of the Param_WaitAI class
         /// </summary>
         public Param_WaitAI() : base("Wait for Analog Input Parameter", "WAI", "Parameters",
                 "Contains the data of a Wait for Analog Input instruction.")

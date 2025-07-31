@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
     public class OldExternalAxisParameter : GH_PersistentGeometryParam<GH_ExternalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalAxis> class
+        /// Initializes a new instance of the ExternalAxisParameter class
         /// </summary>
         public OldExternalAxisParameter()
           : base(new GH_InstanceDescription("External Axis", "EA",
@@ -83,16 +83,33 @@ namespace RobotComponents.ABB.Gh.Obsolete
 
         // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
         #region disable pick parameters
+        /// <summary>
+        /// Disables picking of multiple values through the Grasshopper UI.
+        /// Always returns GH_GetterResult.cancel to block user interaction.
+        /// </summary>
+        /// <param name="values"> The list intended to store picked values (unused). </param>
+        /// <returns> GH_GetterResult.cancel to indicate the operation is canceled. </returns>
         protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalAxis> values)
         {
             return GH_GetterResult.cancel;
         }
 
+        /// <summary>
+        /// Disables picking of a single value through the Grasshopper UI.
+        /// Always returns GH_GetterResult.cancel to block user interaction.
+        /// </summary>
+        /// <param name="value"> The variable intended to store the picked value (unused). </param>
+        /// <returns> GH_GetterResult.cancel to indicate the operation is canceled. </returns>
         protected override GH_GetterResult Prompt_Singular(ref GH_ExternalAxis value)
         {
             return GH_GetterResult.cancel;
         }
 
+        /// <summary>
+        /// Overrides the context menu item for setting multiple values.
+        /// Returns a hidden menu item labeled "Not available".
+        /// </summary>
+        /// <returns> A hidden ToolStripMenuItem instance. </returns>
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
@@ -103,6 +120,11 @@ namespace RobotComponents.ABB.Gh.Obsolete
             return item;
         }
 
+        /// <summary>
+        /// Overrides the context menu item for setting multiple values.
+        /// Returns a hidden menu item labeled "Not available".
+        /// </summary>
+        /// <returns> A hidden ToolStripMenuItem instance. </returns>
         protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
         {
             System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem

@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_WaitSyncTask : GH_RobotParam<GH_WaitSyncTask>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_WaitSyncTask> class
+        /// Initializes a new instance of the Param_WaitSyncTask class
         /// </summary>
         public Param_WaitSyncTask() : base("Wait Sync Task Parameter", "WST", "Parameters",
                 "Contains the data of a Wait Sync Task synchronization point.")

@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_WaitTime : GH_RobotParam<GH_WaitTime>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_WaitTime> class
+        /// Initializes a new instance of the Param_WaitTime class
         /// </summary>
         public Param_WaitTime() : base("Wait for Time Parameter", "WT", "Parameters",
                 "Contains the data of a Wait for Time instruction.")

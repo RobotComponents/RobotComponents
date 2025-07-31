@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_RobotJointPosition : GH_RobotParam<GH_RobotJointPosition>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<RobotJointPositionGoo> class
+        /// Initializes a new instance of the Param_RobotJointPosition class
         /// </summary>
         public Param_RobotJointPosition() : base("Robot Joint Position Parameter", "RJ", "Parameters",
                 "Contains the data of a Robot Joint Position declaration.")

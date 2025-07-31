@@ -31,6 +31,11 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         private bool _fromMenu = false;
         #endregion
 
+        /// <summary>
+        /// Each implementation of GH_Component must provide a public constructor without any arguments.
+        /// Category represents the Tab in which the component will appear, Subcategory the panel. 
+        /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
+        /// </summary>
         public RobotPresetComponent() : base("Robot Preset", "RobPres", "Definitions",
               "Defines a robot which is needed for code generation and simulation.")
         {

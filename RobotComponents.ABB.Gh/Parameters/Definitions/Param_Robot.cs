@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     public class Param_Robot : GH_RobotParam<GH_Robot>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_Robot> class
+        /// Initializes a new instance of the Param_Robot class
         /// </summary>
         public Param_Robot(): base("Robot", "R", "Parameters",
                 "Contains the data of a Robot.")

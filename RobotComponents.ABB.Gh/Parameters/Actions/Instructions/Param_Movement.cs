@@ -21,7 +21,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_Movement : GH_RobotParam<GH_Movement>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<MovementGoo> class
+        /// Initializes a new instance of the Param_Movement class.
         /// </summary>
         public Param_Movement() : base("Move Parameter", "M", "Parameters",
                 "Contains the data of a Move instruction.")

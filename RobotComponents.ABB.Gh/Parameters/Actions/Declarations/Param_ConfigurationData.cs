@@ -18,7 +18,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_ConfigurationData : GH_RobotParam<GH_ConfigurationData>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_ConfigurationData> class
+        /// Initializes a new instance of the Param_ConfigurationData class
         /// </summary>
         public Param_ConfigurationData() : base("Configuration Data Parameter", "CD", "Parameters",
                 "Contains the data of a Configuration Data declaration.")

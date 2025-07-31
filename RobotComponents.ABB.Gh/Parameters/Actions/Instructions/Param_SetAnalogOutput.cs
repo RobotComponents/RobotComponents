@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_SetAnalogOutput : GH_RobotParam<GH_SetAnalogOutput>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_AnalogOutput> class
+        /// Initializes a new instance of the Param_SetAnalogOutput class
         /// </summary>
         public Param_SetAnalogOutput() : base("Set Analog Output Parameter", "SAOP", "Parameters",
                 "Contains the data of a Set Analog Output instruction.")

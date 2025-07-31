@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Dynamic
     public class Param_Comment : GH_RobotParam<GH_Comment>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_Comment> class
+        /// Initializes a new instance of the Param_Comment class
         /// </summary>
         public Param_Comment() : base("Comment Parameter", "C", "Parameters",
                 "Contains the data of a Comment.")

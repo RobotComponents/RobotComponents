@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_WaitDI : GH_RobotParam<GH_WaitDI>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_WaitDI> class
+        /// Initializes a new instance of the Param_WaitDI class
         /// </summary>
         public Param_WaitDI() : base("Wait for Digital Input Parameter", "WDI", "Parameters",
                 "Contains the data of a Wait for Digital Input instruction.")

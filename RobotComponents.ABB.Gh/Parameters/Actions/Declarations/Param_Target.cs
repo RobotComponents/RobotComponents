@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_Target : GH_RobotParam<GH_Target>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<TargetGoo> class
+        /// Initializes a new instance of the Param_Targe class
         /// </summary>
         public Param_Target() : base("Target Parameter", "T", "Parameters",
                 "Contains the data of a Target declaration.")

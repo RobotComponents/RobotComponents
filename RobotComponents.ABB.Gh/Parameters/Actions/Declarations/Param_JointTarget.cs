@@ -18,7 +18,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_JointTarget : GH_RobotParam<GH_JointTarget>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<JointTargetGoo> class
+        /// Initializes a new instance of the Param_JointTarget class
         /// </summary>
         public Param_JointTarget()
           : base("Joint Target Parameter", "JT", "Parameters",

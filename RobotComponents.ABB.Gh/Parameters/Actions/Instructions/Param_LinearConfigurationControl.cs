@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_LinearConfigurationControl : GH_RobotParam<GH_LinearConfigurationControl>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_LinearConfigurationControl> class
+        /// Initializes a new instance of the Param_LinearConfigurationControl class
         /// </summary>
         public Param_LinearConfigurationControl() : base("Linear Configuration Control Parameter", "LCCP", "Parameters",
                 "Contains the data of a Linear Configuration Control instruction.")

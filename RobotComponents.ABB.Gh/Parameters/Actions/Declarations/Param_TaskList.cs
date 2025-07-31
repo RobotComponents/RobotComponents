@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     public class Param_TaskList : GH_RobotParam<GH_TaskList>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_TaskList> class
+        /// Initializes a new instance of the Param_TaskList class
         /// </summary>
         public Param_TaskList() : base("Task List Parameter", "TL", "Parameters",
                 "Contains the data of a Task List declaration.")

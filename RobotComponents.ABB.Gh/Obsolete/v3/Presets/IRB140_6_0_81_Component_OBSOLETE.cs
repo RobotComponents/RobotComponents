@@ -87,7 +87,7 @@ namespace RobotComponents.ABB.Gh.Obsolete
         }
 
         #region properties
-        //// <summary>
+        /// <summary>
         /// Override the component exposure (makes the tab subcategory).
         /// Can be set to hidden, primary, secondary, tertiary, quarternary, quinary, senary, septenary, dropdown and obscure
         /// </summary>

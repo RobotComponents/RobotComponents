@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_VelocitySet : GH_RobotParam<GH_VelocitySet>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_VelocitySet> class
+        /// Initializes a new instance of the Param_VelocitySet class
         /// </summary>
         public Param_VelocitySet() : base("Velocity Set Parameter", "VSP", "Parameters",
                 "Contains the data of a Velocity Set instruction.")

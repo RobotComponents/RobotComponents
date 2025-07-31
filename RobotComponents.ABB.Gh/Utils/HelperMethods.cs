@@ -136,7 +136,6 @@ namespace RobotComponents.ABB.Gh.Utils
         /// <summary>
         /// Creates the panel with the signal name and connects it to the input parameter
         /// </summary>
-        /// <param name="text"> Text to place inside the panel. </param>
         /// <param name="component"> Component to connect to. </param>
         /// <param name="text"> Text to place inside the panel. </param>
         /// <param name="index"> Index of the input to connect the panel to. </param>

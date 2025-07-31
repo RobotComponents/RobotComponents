@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_SyncMoveOn : GH_RobotParam<GH_SyncMoveOn>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_SyncMoveOn> class
+        /// Initializes a new instance of the Param_SyncMoveOn class
         /// </summary>
         public Param_SyncMoveOn() : base("Sync Move On Parameter", "SMOn", "Parameters",
                 "Contains the data of a Sync Move On synchronization point.")

@@ -19,7 +19,7 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Instructions
     public class Param_JointConfigurationControl : GH_RobotParam<GH_JointConfigurationControl>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_RobotParam<GH_JointConfigurationControl> class
+        /// Initializes a new instance of the Param_JointConfigurationControl class
         /// </summary>
         public Param_JointConfigurationControl()  : base("Joint Configuration Control Parameter", "JCCP", "Parameters",
                 "Contains the data of a Joint Configuration Control instruction.")

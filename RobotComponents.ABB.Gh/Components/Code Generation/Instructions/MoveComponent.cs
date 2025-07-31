@@ -26,9 +26,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Movement component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Movement component.
     /// </summary>
-    public class MoveComponent : GH_Component, IGH_VariableParameterComponent
+    public class MoveComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private bool _add = false;
@@ -47,12 +47,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, subcategory the panel. 
         /// If you use non-existing tab or panel names new tabs/panels will automatically be created.
         /// </summary>
-        public MoveComponent()
-          : base("Move", "M",
-              "Defines a joint, linear or circular movement instruction."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public MoveComponent() : base("Move", "M", "Code Generation",
+              "Defines a joint, linear or circular movement instruction.")
 
         {
             // Create the component label with a message
@@ -328,19 +324,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
             Menu_AppendItem(menu, "Override Robot Tool", MenuItemClickRobotTool, true, _overrideRobotToolInputParam);
             Menu_AppendItem(menu, "Override Work Object", MenuItemClickWorkObject, true, _overrideWorkObjectInputParam);
             Menu_AppendItem(menu, "Set Digital Output", MenuItemClickDigitalOutput, true, _digitalOutputInputParam);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

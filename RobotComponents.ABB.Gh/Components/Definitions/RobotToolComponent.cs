@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -21,9 +20,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Tool component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot Tool component.
     /// </summary>
-    public class RobotToolComponent : GH_Component, IObjectManager
+    public class RobotToolComponent : GH_RobotComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotTool> _tree = new GH_Structure<GH_RobotTool>();
@@ -39,12 +38,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         /// Category represents the Tab in which the component will appear,  Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolComponent()
-          : base("Robot Tool", "RobTool",
-              "Generates a robot tool based on attachment and effector planes."
-            + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        public RobotToolComponent() : base("Robot Tool", "RobTool", "Definitions",
+              "Generates a robot tool based on attachment and effector planes.")
         {
         }
 
@@ -173,29 +168,6 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         public override Guid ComponentGuid
         {
             get { return new Guid("69F6DF47-A0E2-45EC-BC24-38460DFE11C6"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 

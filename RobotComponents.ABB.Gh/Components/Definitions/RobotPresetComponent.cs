@@ -15,7 +15,6 @@ using Rhino.Geometry;
 // RobotComponents Libs
 using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 using RobotComponents.ABB.Presets;
 using RobotComponents.ABB.Presets.Forms;
 using RobotComponents.ABB.Presets.Enumerations;
@@ -23,21 +22,17 @@ using RobotComponents.ABB.Presets.Enumerations;
 namespace RobotComponents.ABB.Gh.Components.Definitions
 {
     /// <summary>
-    /// RobotComponents Robot Preset component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot Preset component.
     /// </summary>
-    public class RobotPresetComponent : GH_Component
+    public class RobotPresetComponent : GH_RobotComponent
     {
         #region fields
         private RobotPreset _robotPreset = RobotPreset.EMPTY;
         private bool _fromMenu = false;
         #endregion
 
-        public RobotPresetComponent()
-          : base("Robot Preset", "RobPres",
-              "Defines a robot which is needed for code generation and simulation"
-             + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Definitions")
+        public RobotPresetComponent() : base("Robot Preset", "RobPres", "Definitions",
+              "Defines a robot which is needed for code generation and simulation.")
         {
             this.Message = "-";
         }
@@ -153,19 +148,8 @@ namespace RobotComponents.ABB.Gh.Components.Definitions
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Robot Preset", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

@@ -5,29 +5,24 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Gh.Parameters.Actions;
 using RobotComponents.ABB.Actions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Utilities
 {
     /// <summary>
-    /// RobotComponents Ungroup Actions component. An inherent from the GH_Component Class.
+    /// RobotComponents Ungroup Actions component.
     /// </summary>
-    public class UngroupActionsComponent : GH_Component
+    public class UngroupActionsComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the FlipPlaneComponent class.
         /// </summary>
-        public UngroupActionsComponent()
-          : base("Ungroup Actions", "Ungroup",
-              "Ungroup a set of Actions."
-                + System.Environment.NewLine + System.Environment.NewLine + "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Utility")
+        public UngroupActionsComponent() : base("Ungroup Actions", "Ungroup", "Utility",
+              "Ungroup a set of Actions.")
         {
         }
 
@@ -95,29 +90,6 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public override Guid ComponentGuid
         {
             get { return new Guid("91B0E8F6-BA1F-4480-8E85-1315E01CB625"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

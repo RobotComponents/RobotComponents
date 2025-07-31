@@ -19,9 +19,9 @@ using RobotComponents.ABB.Controllers.Forms;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that gets digital inputs from a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that gets digital inputs from a defined controller.
     /// </summary>
-    public class GetDigitalInputComponent : GH_Component
+    public class GetDigitalInputComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller;
@@ -30,14 +30,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the GetDigitalInputComponent class.
         /// </summary>
-        public GetDigitalInputComponent()
-          : base("Get Digital Input", "GetDI",
+        public GetDigitalInputComponent() : base("Get Digital Input", "GetDI", "Controller Utility",
               "Gets the signal of a defined digital input from an ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+                "This component uses the ABB PC SDK.")
         {
         }
 
@@ -148,19 +144,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Signal", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

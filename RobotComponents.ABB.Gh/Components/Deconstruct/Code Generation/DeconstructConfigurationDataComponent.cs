@@ -5,30 +5,24 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Deconstruct Configuration Data component. An inherent from the GH_Component Class.
+    /// RobotComponents Deconstruct Configuration Data component.
     /// </summary>
-    public class DeconstructConfigurationDataComponent : GH_Component
+    public class DeconstructConfigurationDataComponent : GH_RobotComponent
     {
         /// <summary>
         /// Initializes a new instance of the DeconstructConfigurationData class.
         /// </summary>
-        public DeconstructConfigurationDataComponent()
-          : base("Deconstruct Configuration Data", "DeConConf",
-              "Deconstructs a Configuration Data component into its parameters."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Deconstruct")
+        public DeconstructConfigurationDataComponent() : base("Deconstruct Configuration Data", "DeConConf", "Deconstruct",
+              "Deconstructs a Configuration Data component into its parameters.")
         {
         }
 
@@ -113,29 +107,6 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("5220758E-7864-46E1-AACD-AED9F21FC41E"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

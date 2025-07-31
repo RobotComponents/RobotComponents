@@ -31,9 +31,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.Simulation
 {
     /// <summary>
-    /// RobotComponents Invesere Kinematics component. An inherent from the GH_Component Class.
+    /// RobotComponents Invesere Kinematics component.
     /// </summary>
-    public class InverseKinematicsComponent : GH_Component, IGH_VariableParameterComponent
+    public class InverseKinematicsComponent : GH_RobotComponent, IGH_VariableParameterComponent
     {
         #region fields
         private readonly List<InverseKinematics> _inverseKinematics = new List<InverseKinematics>();
@@ -52,12 +52,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InverseKinematicsComponent()
-          : base("Inverse Kinematics", "IK",
-              "Computes the axis values for a defined ABB robot based on an Action: Movement."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Simulation")
+        public InverseKinematicsComponent() : base("Inverse Kinematics", "IK", "Simulation",
+              "Computes the axis values for a defined ABB robot based on an Action: Movement.")
         {
             // Create the component label with a message
             Message = "EXTENDABLE";
@@ -261,19 +257,8 @@ namespace RobotComponents.ABB.Gh.Components.Simulation
             Menu_AppendItem(menu, "Output Posed Meshes", MenuItemClickOutputMesh, true, _outputMeshParameter);
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Closest Robot Joint Position", MenuItemClickClosestRobotJointPosition, true, _closestRobotJointPosition);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu); 
         }
 
         /// <summary>

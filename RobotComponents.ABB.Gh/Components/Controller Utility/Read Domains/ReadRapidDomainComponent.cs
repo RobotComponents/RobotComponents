@@ -18,9 +18,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that reads values from the rapid domain. An inherent from the GH_Component Class.
+    /// Represents the component that reads values from the rapid domain.
     /// </summary>
-    public class ReadRapidDomainComponent : GH_Component
+    public class ReadRapidDomainComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller;
@@ -29,14 +29,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the ReadConfigurationDomain class.
         /// </summary>
-        public ReadRapidDomainComponent()
-          : base("Read Rapid Domain", "ReadRapid",
+        public ReadRapidDomainComponent() : base("Read Rapid Domain", "ReadRapid", "Controller Utility",
               "Connects to a real or virtual ABB controller and extracts data from the rapid domain."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+                "This component uses the ABB PC SDK.")
         {
         }
 
@@ -145,19 +141,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Path", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

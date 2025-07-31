@@ -19,9 +19,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.ControllerUtility
 {
     /// <summary>
-    /// Represents the component that uploads modules to a defined controller. An inherent from the GH_Component Class.
+    /// Represents the component that uploads modules to a defined controller.
     /// </summary>
-    public class UploadProgramComponent : GH_Component
+    public class UploadProgramComponent : GH_RobotComponent
     {
         #region fields
         private Controller _controller = new Controller();
@@ -34,14 +34,10 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         /// <summary>
         /// Initializes a new instance of the UploadProgramComponent class.
         /// </summary>
-        public UploadProgramComponent()
-          : base("Upload Program", "UP",
+        public UploadProgramComponent() : base("Upload Program", "UP", "Controller Utility",
               "Uploads RAPID modules directly to a real or virtual ABB controller."
                 + System.Environment.NewLine + System.Environment.NewLine +
-                "This component uses the ABB PC SDK." +
-                System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Controller Utility")
+                "This component uses the ABB PC SDK.")
         {
             this.Message = _taskName;
         }
@@ -163,19 +159,8 @@ namespace RobotComponents.ABB.Gh.Components.ControllerUtility
         {
             Menu_AppendSeparator(menu);
             Menu_AppendItem(menu, "Pick Task", MenuItemClick);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
 
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
+            base.AppendAdditionalComponentMenuItems(menu);
         }
 
         /// <summary>

@@ -18,17 +18,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
     /// <summary>
     /// External Rotational Axis parameter
     /// </summary>
-    public class Param_ExternalRotationalAxis : GH_PersistentGeometryParam<GH_ExternalRotationalAxis>, IGH_PreviewObject
+    public class Param_ExternalRotationalAxis : GH_RobotParam<GH_ExternalRotationalAxis>, IGH_PreviewObject
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentGeometryParam<GH_ExternalRotationalAxis> class
+        /// Initializes a new instance of the GH_RobotParam<GH_ExternalRotationalAxis> class
         /// </summary>
-        public Param_ExternalRotationalAxis()
-          : base(new GH_InstanceDescription("External Rotational Axis", "ERA",
-                "Contains the data of an External Rotational Axis."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_ExternalRotationalAxis() : base("External Rotational Axis", "ERA", "Parameters",
+                "Contains the data of an External Rotational Axis.")
         {
         }
 
@@ -74,41 +70,6 @@ namespace RobotComponents.ABB.Gh.Parameters.Definitions
         {
             get { return new Guid("1D0F0BA2-92F7-428D-9F8D-20D93945157C"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalRotationalAxis> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalRotationalAxis value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
 
         #region preview methods
         /// <summary>

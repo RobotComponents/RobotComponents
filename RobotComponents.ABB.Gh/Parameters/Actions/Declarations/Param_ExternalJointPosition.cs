@@ -16,17 +16,13 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
     /// <summary>
     /// Ext Joint Position parameter
     /// </summary>
-    public class Param_ExternalJointPosition : GH_PersistentParam<GH_ExternalJointPosition>
+    public class Param_ExternalJointPosition : GH_RobotParam<GH_ExternalJointPosition>
     {
         /// <summary>
-        /// Initializes a new instance of the GH_PersistentParam<ExternalJointPositionGoo> class
+        /// Initializes a new instance of the GH_RobotParam<ExternalJointPositionGoo> class
         /// </summary>
-        public Param_ExternalJointPosition()
-          : base(new GH_InstanceDescription("Ext Joint Position Parameter", "EJ",
-                "Containts the data of an External Joint Position declaration."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components : v" + RobotComponents.VersionNumbering.CurrentVersion,
-                "Robot Components ABB", "Parameters"))
+        public Param_ExternalJointPosition() : base("Ext Joint Position Parameter", "EJ", "Parameters",
+                "Containts the data of an External Joint Position declaration.")
         {
         }
 
@@ -69,40 +65,5 @@ namespace RobotComponents.ABB.Gh.Parameters.Actions.Declarations
         {
             get { return new Guid("EEC1FAF4-3054-4511-89F3-B747CEEA7E74"); }
         }
-
-        // We do not allow users to pick parameters, therefore the following 4 methods disable all this ui.
-        #region disable pick parameters
-        protected override GH_GetterResult Prompt_Plural(ref List<GH_ExternalJointPosition> values)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override GH_GetterResult Prompt_Singular(ref GH_ExternalJointPosition value)
-        {
-            return GH_GetterResult.cancel;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomSingleValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-
-        protected override System.Windows.Forms.ToolStripMenuItem Menu_CustomMultiValueItem()
-        {
-            System.Windows.Forms.ToolStripMenuItem item = new System.Windows.Forms.ToolStripMenuItem
-            {
-                Text = "Not available",
-                Visible = false
-            };
-
-            return item;
-        }
-        #endregion
     }
 }

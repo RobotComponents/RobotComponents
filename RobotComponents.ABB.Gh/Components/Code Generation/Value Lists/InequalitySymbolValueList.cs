@@ -22,7 +22,7 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
     /// constructing the value list this component will be deleted. This component only calls 
     /// the method to create the value list and defines the location of the values list. 
     /// </summary>
-    public class InequalitySymbolValueList : GH_Component
+    public class InequalitySymbolValueList : GH_RobotComponent
     {
         #region fields
         private bool _created = false;
@@ -33,12 +33,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration.ValueLists
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public InequalitySymbolValueList()
-          : base("Inequality Symbols", "IS",
-              "Defines a value list with inequality symbols."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public InequalitySymbolValueList() : base("Inequality Symbols", "IS", "Code Generation",
+              "Defines a value list with inequality symbols.")
         {
         }
 

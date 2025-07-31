@@ -5,32 +5,26 @@
 
 // System Libs
 using System;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
 using RobotComponents.ABB.Actions.Instructions;
 using RobotComponents.ABB.Gh.Parameters.Actions.Instructions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Acceleration Set component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Acceleration Set component.
     /// </summary>
-    public class AccelerationSetComponent : GH_Component
+    public class AccelerationSetComponent : GH_RobotComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public AccelerationSetComponent()
-          : base("Acceleration Set", "AS",
-              "Defines an instruction to override the acceleration and decceleration values."
-               + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public AccelerationSetComponent() : base("Acceleration Set", "AS", "Code Generation",
+              "Defines an instruction to override the acceleration and decceleration values.")
         {
         }
 
@@ -108,29 +102,6 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("39F78FC0-5D07-4FC0-9860-EBBDBF7801C6"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

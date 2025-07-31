@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
@@ -19,9 +18,9 @@ using RobotComponents.ABB.Gh.Utils;
 namespace RobotComponents.ABB.Gh.Components.CodeGeneration
 {
     /// <summary>
-    /// RobotComponents Action : Robot Joint Position component. An inherent from the GH_Component Class.
+    /// RobotComponents Action : Robot Joint Position component.
     /// </summary>
-    public class RobotJointPositionComponent : GH_Component, IObjectManager
+    public class RobotJointPositionComponent : GH_RobotComponent, IObjectManager
     {
         #region fields
         private GH_Structure<GH_RobotJointPosition> _tree = new GH_Structure<GH_RobotJointPosition>();
@@ -37,12 +36,8 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         /// Category represents the Tab in which the component will appear, Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotJointPositionComponent()
-          : base("Robot Joint Position", "RJ",
-              "Defines a Robot Joint Position for a Joint Target declaration."
-                + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Code Generation")
+        public RobotJointPositionComponent() : base("Robot Joint Position", "RJ", "Code Generation",
+              "Defines a Robot Joint Position for a Joint Target declaration.")
         {
         }
 
@@ -170,29 +165,6 @@ namespace RobotComponents.ABB.Gh.Components.CodeGeneration
         public override Guid ComponentGuid
         {
             get { return new Guid("AC5D283B-EF6F-4D0B-A347-D24F87BD13AF"); }
-        }
-        #endregion
-
-        #region menu items
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
 

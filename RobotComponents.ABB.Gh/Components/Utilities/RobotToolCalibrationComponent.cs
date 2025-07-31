@@ -6,7 +6,6 @@
 // System Libs
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 // Grasshopper Libs
 using Grasshopper.Kernel;
 // RobotComponents Libs
@@ -15,26 +14,21 @@ using RobotComponents.ABB.Definitions;
 using RobotComponents.ABB.Utils;
 using RobotComponents.ABB.Gh.Parameters.Actions.Declarations;
 using RobotComponents.ABB.Gh.Parameters.Definitions;
-using RobotComponents.ABB.Gh.Utils;
 
 namespace RobotComponents.ABB.Gh.Components.Utilities
 {
     /// <summary>
-    /// RobotComponents Robot Tool Calibration component. An inherent from the GH_Component Class.
+    /// RobotComponents Robot Tool Calibration component.
     /// </summary>
-    public class RobotToolCalibrationComponent : GH_Component
+    public class RobotToolCalibrationComponent : GH_RobotComponent
     {
         /// <summary>
         /// Each implementation of GH_Component must provide a public constructor without any arguments.
         /// Category represents the Tab in which the component will appear,  Subcategory the panel. 
         /// If you use non-existing tab or panel names, new tabs/panels will automatically be created.
         /// </summary>
-        public RobotToolCalibrationComponent()
-          : base("Robot Tool Calibration", "ToolCal",
-              "EXPERIMENTAL: Calculates the robot tool TCP from given joint positions."
-            + System.Environment.NewLine + System.Environment.NewLine +
-                "Robot Components: v" + RobotComponents.VersionNumbering.CurrentVersion,
-              "Robot Components ABB", "Utility")
+        public RobotToolCalibrationComponent() : base("Robot Tool Calibration", "ToolCal", "Utility",
+              "EXPERIMENTAL: Calculates the robot tool TCP from given joint positions.")
         {
         }
 
@@ -136,29 +130,6 @@ namespace RobotComponents.ABB.Gh.Components.Utilities
         public override Guid ComponentGuid
         {
             get { return new Guid("72FB2BFD-9A28-4CBE-9586-242CD29DE1E1"); }
-        }
-        #endregion
-
-        #region menu item
-        /// <summary>
-        /// Adds the additional items to the context menu of the component. 
-        /// </summary>
-        /// <param name="menu"> The context menu of the component. </param>
-        protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
-        {
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Documentation", MenuItemClickComponentDoc, Properties.Resources.WikiPage_MenuItem_Icon);
-        }
-
-        /// <summary>
-        /// Handles the event when the custom menu item "Documentation" is clicked. 
-        /// </summary>
-        /// <param name="sender"> The object that raises the event. </param>
-        /// <param name="e"> The event data. </param>
-        private void MenuItemClickComponentDoc(object sender, EventArgs e)
-        {
-            string url = Documentation.ComponentWeblinks[this.GetType()];
-            Documentation.OpenBrowser(url);
         }
         #endregion
     }

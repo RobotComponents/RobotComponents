@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// <summary>
         /// Data constructor: Creates a Sync Move On Goo instance from Sync Move On instance.
         /// </summary>
-        /// <param name="SyncMoveOn"> Sync Move On Value to store inside this Goo instance. </param>
+        /// <param name="syncMoveOn"> Sync Move On Value to store inside this Goo instance. </param>
         public GH_SyncMoveOn(SyncMoveOn syncMoveOn)
         {
             this.Value = syncMoveOn;

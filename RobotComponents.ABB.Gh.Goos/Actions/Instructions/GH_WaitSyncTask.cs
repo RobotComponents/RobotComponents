@@ -31,7 +31,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// <summary>
         /// Data constructor: Creates a Wait Sync Task Goo instance from Wait Sync Task instance.
         /// </summary>
-        /// <param name="WaitSyncTask"> Wait Sync Task Value to store inside this Goo instance. </param>
+        /// <param name="waitSyncTask"> Wait Sync Task Value to store inside this Goo instance. </param>
         public GH_WaitSyncTask(WaitSyncTask waitSyncTask)
         {
             this.Value = waitSyncTask;

@@ -5,6 +5,7 @@
     <RootNamespace>RobotComponents.ABB.Gh.Goos</RootNamespace>
     <AssemblyName>RobotComponents.ABB.Gh.Goos</AssemblyName>
     <OutputType>Library</OutputType>
+    <DocumentationFile>bin\RobotComponents.ABB.Gh.Goos.xml</DocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <IncludeSymbols>False</IncludeSymbols>

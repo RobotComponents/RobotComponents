@@ -42,7 +42,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         /// Data constructor: Creates a Circle Path Mode Goo instance from another Circle Path Mode Goo instance.
         /// This creates a shallow copy of the passed Circle Path Mode Goo instance. 
         /// </summary>
-        /// <param name="irclePathModeGoo"> Circle Path Mode Goo instance to copy. </param>
+        /// <param name="circlePathModeGoo"> Circle Path Mode Goo instance to copy. </param>
         public GH_CirclePathMode(GH_CirclePathMode circlePathModeGoo)
         {
             if (circlePathModeGoo == null)

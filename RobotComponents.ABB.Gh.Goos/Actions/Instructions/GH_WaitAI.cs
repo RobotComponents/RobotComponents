@@ -63,10 +63,10 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Instructions
         #endregion
 
         #region properties
-        public override bool IsValid
         /// <summary>
         /// Gets a value indicating whether or not the current value is valid.
         /// </summary>
+        public override bool IsValid
         {
             get
             {

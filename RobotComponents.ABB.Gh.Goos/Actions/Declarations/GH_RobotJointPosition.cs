@@ -32,7 +32,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Declarations
         /// <summary>
         /// Data constructor
         /// </summary>
-        /// <param name="RobotJointPosition"> Robot Joint Position Value to store inside this Goo instance. </param>
+        /// <param name="robotJointPosition"> Robot Joint Position Value to store inside this Goo instance. </param>
         public GH_RobotJointPosition(RobotJointPosition robotJointPosition)
         {
             this.Value = robotJointPosition;

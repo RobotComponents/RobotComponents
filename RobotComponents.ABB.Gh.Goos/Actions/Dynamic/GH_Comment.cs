@@ -121,7 +121,7 @@ namespace RobotComponents.ABB.Gh.Goos.Actions.Dynamic
         /// Attempt a cast to type Q.
         /// </summary>
         /// <typeparam name="Q"> Type to cast to.  </typeparam>
-        /// <param name="comment"> Pointer to target of cast. </param>
+        /// <param name="target"> Pointer to target of cast. </param>
         /// <returns> True on success, false on failure. </returns>
         public override bool CastTo<Q>(ref Q target)
         {

@@ -207,7 +207,7 @@ namespace RobotComponents.ABB.Gh.Utils
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    Process.Start(url);
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
@@ -219,7 +219,7 @@ namespace RobotComponents.ABB.Gh.Utils
                 }
                 else
                 {
-                    Process.Start(url);
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                 }
             }
             catch

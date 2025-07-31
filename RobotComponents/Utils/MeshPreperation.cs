@@ -9,7 +9,7 @@ using Rhino.Geometry;
 namespace RobotComponents.Utils
 {
     /// <summary>
-    /// Represents serialization methods 
+    /// Represents mesh preperation methods. 
     /// </summary>
     public static class MeshPreperation
     {

@@ -66,7 +66,7 @@ namespace RobotComponents.ABB.Gh.Components.Deconstruct.Definitions
 
                 // Output
                 DA.SetData(0, workObject.Name);
-                DA.SetData(1, workObject.Plane);
+                DA.SetData(1, workObject.ObjectFrame);
                 DA.SetData(2, workObject.ExternalAxis);
             }
         }

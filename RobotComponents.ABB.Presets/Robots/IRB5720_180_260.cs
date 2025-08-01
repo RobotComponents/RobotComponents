@@ -72,13 +72,13 @@ namespace RobotComponents.ABB.Presets.Robots
         {
             List<Mesh> meshes = new List<Mesh>
             {
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_0)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_1)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_2)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_3)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_4)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_5)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_2_60_link_6))
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_0)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_1)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_2)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_3)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_4)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_5)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB5720_180_260_link_6))
             };
 
             return meshes;

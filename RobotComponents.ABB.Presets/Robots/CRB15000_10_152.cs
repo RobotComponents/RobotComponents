@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
@@ -69,68 +70,18 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The list with robot meshes. </returns>
         public static List<Mesh> GetMeshes()
         {
-            List<Mesh> meshes = new List<Mesh>() { };
-            string linkString;
-
-            // Base
-            linkString = Properties.Resources.CRB15000_10_1_52_link_0;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 1
-            linkString = Properties.Resources.CRB15000_10_1_52_link_1;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 2
-            linkString = Properties.Resources.CRB15000_10_1_52_link_2;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 3
-            linkString = Properties.Resources.CRB15000_10_1_52_link_3;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 4
-            linkString = Properties.Resources.CRB15000_10_1_52_link_4;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 5
-            linkString = Properties.Resources.CRB15000_10_1_52_link_5;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 6
-            linkString = Properties.Resources.CRB15000_10_1_52_link_6;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            List<Mesh> meshes = new List<Mesh>
+            {
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_0)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_1)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_2)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_3)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_4)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_5)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_10_152_link_6))
+            };
 
             return meshes;
-        }
-
-        /// <summary>
-        /// Returns the list with the axis planes in robot coordinate space. 
-        /// </summary>
-        /// <returns> The list with axis planes. </returns>
-        public static List<Plane> GetAxisPlanes()
-        {
-            List<Plane> axisPlanes = new List<Plane>() { };
-
-            // Axis 1
-            axisPlanes.Add(new Plane(
-                new Point3d(0, 0, 0),
-                new Vector3d(0, 0, 1)));
-            // Axis 2
-            axisPlanes.Add(new Plane(
-                new Point3d(150, 0, 400),
-                new Vector3d(0, 1, 0)));
-            // Axis 3
-            axisPlanes.Add(new Plane(
-                new Point3d(150, 0, 1107),
-                new Vector3d(0, 1, 0)));
-            // Axis 4
-            axisPlanes.Add(new Plane(
-                new Point3d(246, 0, 1217),
-                new Vector3d(1, 0, 0)));
-            // Axis 5
-            axisPlanes.Add(new Plane(
-                new Point3d(787, 0, 1217),
-                new Vector3d(0, 1, 0)));
-            // Axis 6
-            axisPlanes.Add(new Plane(
-                new Point3d(888, 0, 1297),
-                new Vector3d(1, 0, 0)));
-
-            return axisPlanes;
         }
 
         /// <summary>
@@ -139,16 +90,28 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The list with axis limits. </returns>
         public static List<Interval> GetAxisLimits()
         {
-            List<Interval> axisLimits = new List<Interval> { };
-
-            axisLimits.Add(new Interval(-270, 270));
-            axisLimits.Add(new Interval(-180, 180));
-            axisLimits.Add(new Interval(-225, 85));
-            axisLimits.Add(new Interval(-180, 180));
-            axisLimits.Add(new Interval(-180, 180));
-            axisLimits.Add(new Interval(-270, 270));
+            List<Interval> axisLimits = new List<Interval>
+            {
+                new Interval(-270, 270),
+                new Interval(-180, 180),
+                new Interval(-225, 85),
+                new Interval(-180, 180),
+                new Interval(-180, 180),
+                new Interval(-270, 270)
+            };
 
             return axisLimits;
+        }
+
+        /// <summary>
+        /// Returns the list with the axis planes in robot coordinate space. 
+        /// </summary>
+        /// <returns> Returns a list with planes. </returns>
+        public static List<Plane> GetAxisPlanes()
+        {
+            Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 150, -110, -80, 0, 400, 707, 637, 101, out _);
+
+            return axisPlanes.ToList();
         }
 
         /// <summary>
@@ -157,11 +120,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The tool mounting frame. </returns>
         public static Plane GetToolMountingFrame()
         {
-            Plane mountingFrame = new Plane(
-                new Point3d(888, 0, 1297),
-                new Vector3d(1, 0, 0));
-
-            mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);
+            Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 150, -110, -80, 0, 400, 707, 637, 101, out Plane mountingFrame);
 
             return mountingFrame;
         }

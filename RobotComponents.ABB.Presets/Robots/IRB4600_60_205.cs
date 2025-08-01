@@ -6,6 +6,7 @@
 // System Libs
 using System;
 using System.Collections.Generic;
+using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
@@ -69,68 +70,18 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The list with robot meshes. </returns>
         public static List<Mesh> GetMeshes()
         {
-            List<Mesh> meshes = new List<Mesh>() { };
-            string linkString;
-
-            // Base
-            linkString = Properties.Resources.IRB4600_X_2_05_link_0;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 1
-            linkString = Properties.Resources.IRB4600_X_2_05_link_1;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 2
-            linkString = Properties.Resources.IRB4600_X_2_05_link_2;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 3
-            linkString = Properties.Resources.IRB4600_X_2_05_link_3;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 4
-            linkString = Properties.Resources.IRB4600_X_2_05_link_4;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 5
-            linkString = Properties.Resources.IRB4600_X_2_05_link_5;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 6
-            linkString = Properties.Resources.IRB4600_X_2_05_link_6;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            List<Mesh> meshes = new List<Mesh>
+            {
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_0)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_1)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_2)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_3)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_4)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_5)),
+                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.IRB4600_X_205_link_6))
+            };
 
             return meshes;
-        }
-
-        /// <summary>
-        /// Returns the list with the axis planes in robot coordinate space. 
-        /// </summary>
-        /// <returns> Returns a list with planes. </returns>
-        public static List<Plane> GetAxisPlanes()
-        {
-            List<Plane> axisPlanes = new List<Plane>() { };
-
-            // Axis 1
-            axisPlanes.Add(new Plane(
-                new Point3d(0, 0, 0),
-                new Vector3d(0, 0, 1)));
-            // Axis 2
-            axisPlanes.Add(new Plane(
-                new Point3d(175.0, 0, 495),
-                new Vector3d(0, 1, 0)));
-            // Axis 3
-            axisPlanes.Add(new Plane(
-                new Point3d(175, 0, 495.00 + 900),
-                new Vector3d(0, 1, 0)));
-            // Axis 4
-            axisPlanes.Add(new Plane(
-                new Point3d(505.60, 0, 495.00 + 900.00 + 175),
-                new Vector3d(1, 0, 0)));
-            // Axis 5
-            axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0, 0, 495.00 + 900.00 + 175),
-                new Vector3d(0, 1, 0)));
-            // Axis 6
-            axisPlanes.Add(new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
-                new Vector3d(1, 0, 0)));
-
-            return axisPlanes;
         }
 
         /// <summary>
@@ -139,16 +90,28 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The list with axis limits. </returns>
         public static List<Interval> GetAxisLimits()
         {
-            List<Interval> axisLimits = new List<Interval> { };
-
-            axisLimits.Add(new Interval(-180, 180));
-            axisLimits.Add(new Interval(-90, 150));
-            axisLimits.Add(new Interval(-180, 75));
-            axisLimits.Add(new Interval(-400, 400));
-            axisLimits.Add(new Interval(-125, 120));
-            axisLimits.Add(new Interval(-400, 400));
+            List<Interval> axisLimits = new List<Interval>
+            {
+                new Interval(-180, 180),
+                new Interval(-90, 150),
+                new Interval(-180, 75),
+                new Interval(-400, 400),
+                new Interval(-125, 120),
+                new Interval(-400, 400)
+            };
 
             return axisLimits;
+        }
+
+        /// <summary>
+        /// Returns the list with the axis planes in robot coordinate space. 
+        /// </summary>
+        /// <returns> Returns a list with planes. </returns>
+        public static List<Plane> GetAxisPlanes()
+        {
+            Plane[] axisPlanes = Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 175, -175, 0, 0, 495, 900, 960, 135, out _);
+
+            return axisPlanes.ToList();
         }
 
         /// <summary>
@@ -157,11 +120,7 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The tool mounting frame. </returns>
         public static Plane GetToolMountingFrame()
         {
-            Plane mountingFrame = new Plane(
-                new Point3d(175.0 + 960.0 + 135.0, 0, 495.00 + 900.00 + 175),
-                new Vector3d(1, 0, 0));
-
-            mountingFrame.Rotate(-0.5 * Math.PI, mountingFrame.Normal);
+            Robot.GetAxisPlanesFromKinematicsParameters(Plane.WorldXY, 175, -175, 0, 0, 495, 900, 960, 135, out Plane mountingFrame);
 
             return mountingFrame;
         }

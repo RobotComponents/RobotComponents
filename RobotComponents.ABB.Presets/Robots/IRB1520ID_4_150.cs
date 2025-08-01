@@ -73,25 +73,25 @@ namespace RobotComponents.ABB.Presets.Robots
             string linkString;
 
             // Base
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_0;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_0;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 1
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_1;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_1;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 2
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_2;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_2;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 3
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_3;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_3;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 4
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_4;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_4;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 5
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_5;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_5;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
             // Axis 6
-            linkString = Properties.Resources.IRB1520ID_4_1_50_link_6;
+            linkString = Properties.Resources.IRB1520ID_4_150_link_6;
             meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
 
             return meshes;

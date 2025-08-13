@@ -4,6 +4,7 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
+using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -20,6 +21,8 @@ namespace RobotComponents.Utils
         /// </summary>
         /// <param name="obj"> The common object. </param>
         /// <returns> The byte array. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed after it has been replaced with a modern standard. " +
+            "The current approach is not recommended and is deprecated in .NET Core/.NET 8.0.", false)]
         public static byte[] ObjectToByteArray(object obj)
         {
             if (obj == null) { return null; }
@@ -39,6 +42,8 @@ namespace RobotComponents.Utils
         /// </summary>
         /// <param name="data"> The byte array. </param>
         /// <returns> The common object. </returns>
+        [Obsolete("This method is OBSOLETE and will be removed after it has been replaced with a modern standard. " +
+            "The current approach is not recommended and is deprecated in .NET Core/.NET 8.0.", false)]
         public static object ByteArrayToObject(byte[] data)
         {
             if (data == null) return null;

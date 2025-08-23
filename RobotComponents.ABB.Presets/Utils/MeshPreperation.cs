@@ -16,8 +16,9 @@ using Rhino.Geometry;
 // Eto Libs
 using Eto.Forms;
 // Robot Components Libs
+using RobotComponents.ABB.Definitions;
+using RobotComponents.ABB.Presets.Enumerations;
 using static RobotComponents.Utils.MeshPreperation;
-using static RobotComponents.Utils.Serialization;
 
 namespace RobotComponents.ABB.Presets.Utils
 {
@@ -85,8 +86,8 @@ namespace RobotComponents.ABB.Presets.Utils
         public static void ImportStepsRobotLinks()
         {
             RhinoDoc doc = RhinoDoc.ActiveDoc;
-
             List<string> labels = new List<string>();
+
             for (int i = 0; i < _layerNamesRobotLinks.Count; i++)
             {
                 string name = _layerNamesRobotLinks[i];
@@ -127,7 +128,7 @@ namespace RobotComponents.ABB.Presets.Utils
         {
             // Get active Rhino doc
             RhinoDoc doc = RhinoDoc.ActiveDoc;
-            string path = Path.GetDirectoryName(doc.Path);
+            string directory = Path.GetDirectoryName(doc.Path);
 
             // Get base name for files
             string baseName = Path.GetFileNameWithoutExtension(doc.Name).Replace('-', '_');
@@ -162,12 +163,12 @@ namespace RobotComponents.ABB.Presets.Utils
                     mesh = Repair(mesh);
                     mesh = Repair(mesh);
 
-                    // Serialize the mesh to a byte array and then to a Base64 string
-                    string serializedMesh = Convert.ToBase64String(ObjectToByteArray(mesh));
+                    // Serialize the mesh to a JSON string
+                    string serializedMesh = mesh.ToJSON(null);
 
                     // Write to file
-                    string filename = Path.Combine(path, $"{baseName}_{layerNames[i]}.txt");
-                    File.WriteAllText(filename, serializedMesh);
+                    string filePath = Path.Combine(directory, $"{baseName}_{layerNames[i]}.txt");
+                    File.WriteAllText(filePath, serializedMesh);
                 }
 
                 // Add to list
@@ -484,6 +485,35 @@ namespace RobotComponents.ABB.Presets.Utils
             }
 
             return breps;
+        }
+
+        /// <summary>
+        /// Converts all current Robot Preset meshes to JSON and writes them to .txt files.
+        /// </summary>
+        /// <param name="directory"> Directory where to save the JSON files with serialized meshes. </param>
+        [Obsolete("Warning: Use this method carefully. It is intended for developer use only and may change without notice.", false)]
+        public static void ConvertCurrentRobotPresetMeshesToJSON(string directory)
+        {
+            // Get presets
+            foreach (RobotPreset preset in Enum.GetValues(typeof(RobotPreset)))
+            {
+                if (preset != RobotPreset.EMPTY)
+                {
+                    Robot robot = Factory.GetRobotPreset(preset, Plane.WorldXY);
+                    string baseName = preset.ToString();
+
+                    for (int i = 0; i < 7; i++)
+                    {
+                        // Serialize to JSON
+                        Mesh mesh = robot.Meshes[i];
+                        string json = mesh.ToJSON(null);
+
+                        // Write to file
+                        string filePath = Path.Combine(directory, $"{baseName}_link_{i}.txt");
+                        File.WriteAllText(filePath, json);
+                    }
+                }
+            }
         }
         #endregion
     }

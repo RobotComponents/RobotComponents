@@ -19,7 +19,7 @@ using Eto.Forms;
 using static RobotComponents.Utils.MeshPreperation;
 using static RobotComponents.Utils.Serialization;
 
-namespace RobotComponents.ABB.Utils
+namespace RobotComponents.ABB.Presets.Utils
 {
     /// <summary>
     /// Represents methods to prepare the robot meshes. 

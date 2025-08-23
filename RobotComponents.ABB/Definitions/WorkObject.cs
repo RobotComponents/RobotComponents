@@ -46,14 +46,14 @@ namespace RobotComponents.ABB.Definitions
         /// <param name="context"> The context of this deserialization. </param>
         protected WorkObject(SerializationInfo info, StreamingContext context)
         {
-            //Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
+            Version version = (Version)info.GetValue("Version", typeof(Version)); // <-- use this if the (de)serialization changes
             _scope = (Scope)info.GetValue("Scope", typeof(Scope));
             _variableType = (VariableType)info.GetValue("Variable Type", typeof(VariableType));
             _name = (string)info.GetValue("Name", typeof(string));
-            _objectFrame = (Plane)info.GetValue("Plane", typeof(Plane)); // TODO: Remove, use Object Frame instead
+            _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
+            _objectFrame = version < new Version(4, 0, 0) ? (Plane)info.GetValue("Plane", typeof(Plane)) : (Plane)info.GetValue("Object Frame", typeof(Plane));
             _externalAxis = (IExternalAxis)info.GetValue("External Axis", typeof(IExternalAxis));
             _robotHold = (bool)info.GetValue("Robot Hold", typeof(bool));
-            _userFrame = (Plane)info.GetValue("User Frame", typeof(Plane));
 
             Initialize();
         }
@@ -70,11 +70,10 @@ namespace RobotComponents.ABB.Definitions
             info.AddValue("Scope", _scope, typeof(Scope));
             info.AddValue("Variable Type", _variableType, typeof(VariableType));
             info.AddValue("Name", _name, typeof(string));
-            info.AddValue("Plane", _objectFrame, typeof(Plane)); // TODO: Remove, use Object Frame instead
-            info.AddValue("External Axis", _externalAxis, typeof(IExternalAxis));
-            info.AddValue("Robot Hold", _robotHold, typeof(bool));
             info.AddValue("User Frame", _userFrame, typeof(Plane));
             info.AddValue("Object Frame", _objectFrame, typeof(Plane));
+            info.AddValue("External Axis", _externalAxis, typeof(IExternalAxis));
+            info.AddValue("Robot Hold", _robotHold, typeof(bool));
         }
         #endregion
 
@@ -606,7 +605,7 @@ namespace RobotComponents.ABB.Definitions
         /// <remarks>
         /// The object coordinate system is defined in the user coordinate system.
         /// </remarks>
-        [Obsolete("This method is OBSOLETE and will be removed in vesion 4. Use ObjectFrame instead.", false)]
+        [Obsolete("This method is OBSOLETE and will be removed in vesion 5. Use ObjectFrame instead.", false)]
         public Plane Plane
         {
             get { return _objectFrame; }

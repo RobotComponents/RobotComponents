@@ -4,14 +4,12 @@
 // the LICENSE file, see <https://github.com/RobotComponents/RobotComponents>.
 
 // System Libs
-using System;
 using System.Collections.Generic;
 using System.Linq;
 // Rhino Libs
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Presets.Robots
 {
@@ -72,13 +70,13 @@ namespace RobotComponents.ABB.Presets.Robots
         {
             List<Mesh> meshes = new List<Mesh>
             {
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_0)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_1)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_2)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_3)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_4)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_5)),
-                (Mesh)Serialization.ByteArrayToObject(Convert.FromBase64String(Properties.Resources.CRB15000_5_095_link_6))
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_0) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_1) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_2) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_3) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_4) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_5) as Mesh,
+                Mesh.FromJSON(Properties.Resources.CRB15000_5_095_link_6) as Mesh,
             };
 
             return meshes;

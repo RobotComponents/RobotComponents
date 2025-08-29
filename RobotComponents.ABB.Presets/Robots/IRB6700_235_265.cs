@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Rhino.Geometry;
 // Robot Components Libs
 using RobotComponents.ABB.Definitions;
-using RobotComponents.Utils;
 
 namespace RobotComponents.ABB.Presets.Robots
 {
@@ -69,32 +68,37 @@ namespace RobotComponents.ABB.Presets.Robots
         /// <returns> The list with robot meshes. </returns>
         public static List<Mesh> GetMeshes()
         {
-            List<Mesh> meshes = new List<Mesh>() { };
-            string linkString;
-
-            // Base
-            linkString = Properties.Resources.IRB6700_235_265_link_0;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 1
-            linkString = Properties.Resources.IRB6700_235_265_link_1;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 2
-            linkString = Properties.Resources.IRB6700_235_265_link_2;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 3
-            linkString = Properties.Resources.IRB6700_235_265_link_3;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 4
-            linkString = Properties.Resources.IRB6700_235_265_link_4;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 5
-            linkString = Properties.Resources.IRB6700_235_265_link_5;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
-            // Axis 6
-            linkString = Properties.Resources.IRB6700_235_265_link_6;
-            meshes.Add((Mesh)Serialization.ByteArrayToObject(System.Convert.FromBase64String(linkString)));
+            List<Mesh> meshes = new List<Mesh>
+            {
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_0) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_1) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_2) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_3) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_4) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_5) as Mesh,
+                Mesh.FromJSON(Properties.Resources.IRB6700_235_265_link_6) as Mesh,
+            };
 
             return meshes;
+        }
+
+        /// <summary>
+        /// Returns the list with axis limits.  
+        /// </summary>
+        /// <returns> The list with axis limits. </returns>
+        public static List<Interval> GetAxisLimits()
+        {
+            List<Interval> axisLimits = new List<Interval>
+            {
+                new Interval(-170, 170),
+                new Interval(-65, 85),
+                new Interval(-180, 70),
+                new Interval(-300, 300),
+                new Interval(-130, 130),
+                new Interval(-360, 360)
+            };
+
+            return axisLimits;
         }
 
         /// <summary>
@@ -131,24 +135,6 @@ namespace RobotComponents.ABB.Presets.Robots
                 new Vector3d(1, 0, 0)));
 
             return axisPlanes;
-        }
-
-        /// <summary>
-        /// Returns the list with axis limits.  
-        /// </summary>
-        /// <returns> The list with axis limits. </returns>
-        public static List<Interval> GetAxisLimits()
-        {
-            List<Interval> axisLimits = new List<Interval> { };
-
-            axisLimits.Add(new Interval(-170, 170));
-            axisLimits.Add(new Interval(-65, 85));
-            axisLimits.Add(new Interval(-180, 70));
-            axisLimits.Add(new Interval(-300, 300));
-            axisLimits.Add(new Interval(-130, 130));
-            axisLimits.Add(new Interval(-360, 360));
-
-            return axisLimits;
         }
 
         /// <summary>

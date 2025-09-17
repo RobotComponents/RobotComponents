@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -19,7 +19,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="RhinoCommon" Version="8.0.23304.9001" />
+    <PackageReference Include="Grasshopper2" Version="2.0.9225-wip.14825" />
+    <PackageReference Include="RhinoCommon" Version="8.11.24254.15001" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,15 +28,6 @@
     <ProjectReference Include="..\RobotComponents.ABB\RobotComponents.ABB.csproj" />
     <ProjectReference Include="..\RobotComponents.ABB.Presets\RobotComponents.ABB.Presets.csproj" />
     <ProjectReference Include="..\RobotComponents.ABB.Controllers.\RobotComponents.ABB.Controllers.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Grasshopper2">
-      <HintPath>..\DLLs\Grasshopper2.dll</HintPath>
-    </Reference>
-    <Reference Include="GrasshopperIO">
-      <HintPath>..\DLLs\GrasshopperIO.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

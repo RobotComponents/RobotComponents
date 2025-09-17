@@ -10,8 +10,8 @@
 // For license details, see the LICENSE file in the project root.
 
 // Grasshopper Libs
-using Grasshopper.Components;
-using Grasshopper.UI;
+using Grasshopper2.Components;
+using Grasshopper2.UI;
 using GrasshopperIO;
 // Robot Components Libs
 using RobotComponents.ABB.Actions.Instructions;

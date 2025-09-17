@@ -12,9 +12,9 @@
 // System Libs
 using System;
 // Grasshopper Libs
-using Grasshopper.Framework;
-using Grasshopper.UI;
-using Grasshopper.UI.Icon;
+using Grasshopper2.Framework;
+using Grasshopper2.UI;
+using Grasshopper2.UI.Icon;
 
 namespace RobotComponents.ABB.Gh2.GhInterop
 {
@@ -35,8 +35,8 @@ namespace RobotComponents.ABB.Gh2.GhInterop
 
         public override IIcon Icon => _icon;
 
-        public override string LicenseDescription => "GPL v3";
+        public override string LicenceDescription => "GPL v3";
 
-        public override string LicenseAgreement => "GPL v3";
+        public override string LicenceAgreement => "GPL v3";
     }
 }
